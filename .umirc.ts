@@ -12,7 +12,8 @@ export default defineConfig({
       component: '@/layouts/index',
       routes: [
         { exact: true, path: '/', component: '@/pages/index' },
-        { exact: true, path: '/config', component: '@/pages/config' },
+        { exact: true, path: '/scheduler', component: '@/pages/index' },
+        { exact: true, path: '/cdn', component: '@/pages/cdn' },
       ],
     },
   ],

@@ -1,24 +1,26 @@
-import { Menu, Search, Nav, Shell, Radio } from '@alicloudfe/components';
+import React, { useState, useEffect } from 'react';
+import { Search, Nav, Shell } from '@alicloudfe/components';
 import '@alicloudfe/components/dist/hybridcloud.css';
 import '../global.css';
 
 const { SubNav, Item } = Nav;
 
 export default function Layout({ children, location, route, history, match }) {
-  const header = <span className="fusion">FUSION</span>;
-  const footer = (
-    <a className="login-in" href="javascript:;">
-      Login in
-    </a>
-  );
+  const [key, setKey] = useState(['scheduler']);
+
+  useEffect(() => {
+    const temp = location.pathname.split('/')[1];
+    setKey(temp.length ? [temp] : ['scheduler']);
+  }, [location.pathname]);
 
   return (
-    <Shell className={'iframe-hack'} style={{ border: '1px solid #eee' }}>
+    <Shell className={'iframe-hack'}>
       <Shell.Branding>
-        <div className="rectangular"></div>
-        <span style={{ marginLeft: 10 }}>蜻蜓-文件分发</span>
+        <div className="rectangular" />
+        <div className="divide" />
+        <span style={{ marginLeft: 8 }}>蜻蜓-文件分发</span>
       </Shell.Branding>
-      <Shell.Navigation direction="hoz">
+      <Shell.Navigation direction="hoz" collapse>
         <Search
           key="2"
           shape="simple"
@@ -33,14 +35,28 @@ export default function Layout({ children, location, route, history, match }) {
           className="avatar"
           alt="用户头像"
         />
-        <span style={{ marginLeft: 10 }}>MyName</span>
+        {/* <span style={{ marginLeft: 10 }}>MyName</span> */}
       </Shell.Action>
 
-      <Shell.Navigation>
-        <Nav embeddable aria-label="global navigation">
-          <SubNav icon="account" label="配置管理">
-            <Item icon="account">Scheduler配置</Item>
-            <Item icon="account">CDN配置</Item>
+      <Shell.Navigation trigger={null}>
+        <Nav
+          embeddable
+          aria-label="global navigation"
+          defaultOpenAll
+          defaultSelectedKeys={['scheduler']}
+          selectedKeys={key}
+          onSelect={(v) => {
+            setKey(v);
+            window.location.assign(`/${v[0]}`);
+          }}
+        >
+          <SubNav icon="account" label="配置管理" key="config">
+            <Item icon="account" key="scheduler">
+              Scheduler配置
+            </Item>
+            <Item icon="account" key="cdn">
+              CDN配置
+            </Item>
           </SubNav>
         </Nav>
       </Shell.Navigation>

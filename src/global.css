@@ -1,6 +1,19 @@
 body {
   width: 100%;
   height: 100%;
+  --shell-light-header-background: #26282B;
+  --shell-light-header-color: #ffffff;
+  --shell-light-navigation-ver-background: #F7F7F7;
+  --shell-light-content-background: #ffffff;
+  --shell-light-navigation-ver-width: 248px;
+  --nav-normal-item-childselected-text-style: 600;
+  --nav-normal-item-childselected-text-color: #1A1A1A;
+  --nav-normal-sub-nav-selected-bg-color: #EBF7F1;
+  --nav-normal-sub-nav-selected-text-color: #23B066;
+  --search-simple-corner: 16px;
+  --search-simple-dark-color: #5A5A5A;
+  --input-hover-border-color: #5A5A5A;
+  --input-hover-bg-color: #333333;
 }
 #root {
   width: 100%;
@@ -12,12 +25,24 @@ body {
   border-radius: 50%;
   vertical-align: middle;
 }
+.divide {
+  width: 1px;
+  height: 10px;
+  background: #848484;
+  margin-left: 8px;
+}
 .rectangular {
-  width: 32px;
-  height: 32px;
-  background: rgba(0, 0, 0, 0.04);
+  width: 80px;
+  height: 22px;
+  background-image: url('./public/logo.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }
 .iframe-hack {
   width: 100%;
-  height: 500px;
+  height: 100%;
+}
+ 
+.next-shell-content-inner {
+  height: 100%;
 }

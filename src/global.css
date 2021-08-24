@@ -32,3 +32,4 @@ body {
 .site-layout-background {
   background: #fff;
 }
+@import '~antd/dist/antd.css';

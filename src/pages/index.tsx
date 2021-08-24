@@ -85,12 +85,19 @@ export default function IndexPage() {
             type="text"
             style={{
               marginRight: 16,
+              fontSize: 12,
             }}
           >
             <CopyOutlined />
             添加集群
           </Button>
-          <Button type="text" className={styles.newBtn}>
+          <Button
+            type="text"
+            className={styles.newBtn}
+            style={{
+              fontSize: 12,
+            }}
+          >
             <CopyOutlined />
             批量更新
           </Button>
@@ -146,7 +153,22 @@ export default function IndexPage() {
           </div>
         </div>
         <div className={styles.right}>
-          <div className={styles.infoTitle}>属性信息</div>
+          <Descriptions title="属性信息">
+            {info.map((sub: any, idx: number) => {
+              return (
+                <Descriptions.Item
+                  label={sub.label}
+                  key={idx}
+                  labelStyle={{
+                    width: '120px',
+                  }}
+                >
+                  {sub.value}
+                </Descriptions.Item>
+              );
+            })}
+          </Descriptions>
+          {/* <div className={styles.infoTitle}>属性信息</div>
           <div className={styles.info}>
             {info.map((sub, idx) => {
               return (
@@ -156,7 +178,7 @@ export default function IndexPage() {
                 </div>
               );
             })}
-          </div>
+          </div> */}
           <div className={styles.divideLine} />
           <div className={styles.infoTitle}>Scheduler实例</div>
           <Table columns={columns} primaryKey="id" />

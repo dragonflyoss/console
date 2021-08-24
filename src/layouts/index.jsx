@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Nav, Shell } from '@alicloudfe/components';
-import '@alicloudfe/components/dist/hybridcloud.css';
+import { Layout, Menu, Breadcrumb, Divider } from 'antd';
+import { UnorderedListOutlined } from '@ant-design/icons';
 import '../global.css';
 
-const { SubNav, Item } = Nav;
+const { SubMenu } = Menu;
+const { Header, Content, Sider } = Layout;
 
-export default function Layout({ children, location, route, history, match }) {
+export default function BasicLayout({
+  children,
+  location,
+  route,
+  history,
+  match,
+}) {
   const [key, setKey] = useState(['scheduler']);
+  const [path, setPath] = useState([]);
 
   useEffect(() => {
     const temp = location.pathname.split('/')[1];
@@ -14,54 +22,57 @@ export default function Layout({ children, location, route, history, match }) {
   }, [location.pathname]);
 
   return (
-    <Shell className={'iframe-hack'}>
-      <Shell.Branding>
-        <div className="rectangular" />
-        <div className="divide" />
-        <span style={{ marginLeft: 8 }}>蜻蜓-文件分发</span>
-      </Shell.Branding>
-      <Shell.Navigation direction="hoz" collapse>
-        <Search
-          key="2"
-          shape="simple"
-          type="dark"
-          palceholder="Search"
-          style={{ width: '200px' }}
-        />
-      </Shell.Navigation>
-      <Shell.Action>
-        <img
-          src="https://img.alicdn.com/tfs/TB1.ZBecq67gK0jSZFHXXa9jVXa-904-826.png"
-          className="avatar"
-          alt="用户头像"
-        />
-        {/* <span style={{ marginLeft: 10 }}>MyName</span> */}
-      </Shell.Action>
-
-      <Shell.Navigation trigger={null}>
-        <Nav
-          embeddable
-          aria-label="global navigation"
-          defaultOpenAll
-          defaultSelectedKeys={['scheduler']}
-          selectedKeys={key}
-          onSelect={(v) => {
-            setKey(v);
-            window.location.assign(`/${v[0]}`);
+    <Layout>
+      <Header className="header">
+        <div className="logo" />
+        <Divider
+          type="vertical"
+          style={{
+            color: '#ffffff',
+            borderColor: '#ffffff',
           }}
-        >
-          <SubNav icon="account" label="配置管理" key="config">
-            <Item icon="account" key="scheduler">
-              Scheduler配置
-            </Item>
-            <Item icon="account" key="cdn">
-              CDN配置
-            </Item>
-          </SubNav>
-        </Nav>
-      </Shell.Navigation>
-
-      <Shell.Content>{children}</Shell.Content>
-    </Shell>
+        />
+        蜻蜓-文件分发
+      </Header>
+      <Layout>
+        <Sider width={200} className="site-layout-background">
+          <Menu
+            mode="inline"
+            defaultSelectedKeys={['scheduler']}
+            defaultOpenKeys={['config']}
+            selectedKeys={key}
+            style={{ height: '100%', borderRight: 0 }}
+            onClick={(v) => {
+              window.location.assign(`/${v.key}`);
+            }}
+          >
+            <SubMenu
+              key="config"
+              icon={<UnorderedListOutlined />}
+              title="配置管理"
+            >
+              <Menu.Item key="scheduler">Scheduler配置</Menu.Item>
+              <Menu.Item key="cdn">CDN配置</Menu.Item>
+            </SubMenu>
+          </Menu>
+        </Sider>
+        <Layout style={{ padding: '0 24px 24px' }}>
+          <Breadcrumb style={{ margin: '16px 0' }}>
+            <Breadcrumb.Item>配置管理</Breadcrumb.Item>
+            <Breadcrumb.Item>{key[0].toUpperCase()}配置</Breadcrumb.Item>
+          </Breadcrumb>
+          <Content
+            className="site-layout-background"
+            style={{
+              padding: 24,
+              margin: 0,
+              minHeight: 280,
+            }}
+          >
+            {children}
+          </Content>
+        </Layout>
+      </Layout>
+    </Layout>
   );
 }

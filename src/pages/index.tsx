@@ -1,31 +1,75 @@
 import { useState } from 'react';
 import {
-  Breadcrumb,
   Menu,
-  Search,
+  Input,
   Select,
   Checkbox,
   Button,
-  Icon,
   Table,
   Pagination,
-} from '@alicloudfe/components';
+  Descriptions,
+} from 'antd';
+import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
 import { clusters, info } from '../../mock/data';
 import styles from './index.less';
 
-const { Group: CheckboxGroup } = Checkbox;
-const { CheckboxItem, Divider } = Menu;
-
+const { Search } = Input;
 // scheduler
 export default function IndexPage() {
   const [isHover, setHover] = useState(0);
   const [checkKeys, setCheck] = useState([]);
+
+  const columns = [
+    {
+      title: '主机名',
+      dataIndex: 'id',
+      align: 'left',
+      key: 'id',
+    },
+    {
+      title: 'IP',
+      dataIndex: 'ip',
+      align: 'left',
+      key: 'ip',
+    },
+    {
+      title: 'VIP',
+      dataIndex: 'vip',
+      align: 'left',
+      key: 'vip',
+    },
+    {
+      title: 'SN',
+      dataIndex: 'sn',
+      align: 'left',
+      key: 'sn',
+    },
+    {
+      title: 'ServerPort',
+      dataIndex: 'serverport',
+      align: 'left',
+      key: 'serverport',
+    },
+    {
+      title: '操作',
+      dataIndex: 'id',
+      align: 'left',
+      render: (t: number, r: any, i: number) => {
+        return (
+          <div className={styles.operation}>
+            <Button type="text">修改</Button>
+            <div className={styles.divide} />
+            <Button type="text">禁用</Button>
+            <div className={styles.divide} />
+            <Button type="text">删除</Button>
+          </div>
+        );
+      },
+    },
+  ];
+
   return (
     <div className={styles.main}>
-      <Breadcrumb>
-        <Breadcrumb.Item link="/">配置管理</Breadcrumb.Item>
-        <Breadcrumb.Item link="/scheduler">Scheduler配置</Breadcrumb.Item>
-      </Breadcrumb>
       <h1 className={styles.title}>Scheduler配置</h1>
       <div className={styles.content}>
         <div className={styles.left}>
@@ -37,74 +81,76 @@ export default function IndexPage() {
             }}
           />
           <Button
-            text
-            type="primary"
+            className={styles.newBtn}
+            type="text"
             style={{
               marginRight: 16,
             }}
           >
-            <Icon type="add" />
+            <CopyOutlined />
             添加集群
           </Button>
-          <Button text type="primary">
-            <Icon type="list" />
+          <Button type="text" className={styles.newBtn}>
+            <CopyOutlined />
             批量更新
           </Button>
           <div className={styles.clusters}>
-            <Menu className="my-menu">
-              {clusters.map((sub) => {
+            <Checkbox.Group
+              style={{ width: '100%' }}
+              onChange={(v: any) => {
+                setCheck(v);
+              }}
+            >
+              {clusters.map((sub: any) => {
                 return (
-                  <CheckboxItem
+                  <Checkbox
                     key={sub.value}
+                    value={sub.value}
                     onMouseEnter={() => {
                       setHover(sub.value);
                     }}
                     onMouseLeave={() => {
                       setHover(0);
                     }}
-                    checked={checkKeys.indexOf(sub.value) > -1}
-                    onChange={(check, e) => {
-                      console.log(e, check);
-                      // const index = checkKeys.indexOf(v);
-                      // if (check && index === -1) {
-                      //   setCheck(pre => {
-                      //     return pre.push(v);
-                      //   });
-                      // } else if (!check && index > -1) {
-                      //   setCheck(pre => {
-                      //     return [
-                      //       ...pre.slice(0, index),
-                      //       ...pre.slice(index + 1),
-                      //     ]
-                      //   })
-                      // }
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      margin: 0,
+                      height: 32,
+                      lineHeight: '32px',
                     }}
                   >
                     {sub.label}
                     {isHover === sub.value ? (
                       <div className={styles.activeButton}>
-                        <Button text>
-                          <Icon type="copy" />
+                        <Button
+                          type="text"
+                          className={styles.newBtn}
+                          style={{
+                            marginRight: 4,
+                          }}
+                        >
+                          <CopyOutlined />
                         </Button>
-                        <Button text>
-                          <Icon type="ashbin" />
+                        <Button type="text" className={styles.newBtn}>
+                          <DeleteOutlined />
                         </Button>
                       </div>
                     ) : (
                       <div />
                     )}
-                  </CheckboxItem>
+                  </Checkbox>
                 );
               })}
-            </Menu>
+            </Checkbox.Group>
           </div>
         </div>
         <div className={styles.right}>
           <div className={styles.infoTitle}>属性信息</div>
           <div className={styles.info}>
-            {info.map((sub) => {
+            {info.map((sub, idx) => {
               return (
-                <div className={styles.subInfo}>
+                <div className={styles.subInfo} key={idx}>
                   <div className={styles.label}>{sub.label}:</div>
                   <div className={styles.value}>{sub.value}</div>
                 </div>
@@ -113,8 +159,13 @@ export default function IndexPage() {
           </div>
           <div className={styles.divideLine} />
           <div className={styles.infoTitle}>Scheduler实例</div>
-          <Table />
-          <Pagination />
+          <Table columns={columns} primaryKey="id" />
+          <Pagination
+            style={{
+              marginTop: 12,
+              float: 'right',
+            }}
+          />
         </div>
       </div>
     </div>

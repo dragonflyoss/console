@@ -8,9 +8,10 @@ import {
   Table,
   Pagination,
   Descriptions,
+  Divider,
 } from 'antd';
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
-import { clusters, info } from '../../mock/data';
+import { clusters, info, tableData } from '../../mock/data';
 import styles from './index.less';
 
 const { Search } = Input;
@@ -22,9 +23,9 @@ export default function IndexPage() {
   const columns = [
     {
       title: '主机名',
-      dataIndex: 'id',
+      dataIndex: 'name',
       align: 'left',
-      key: 'id',
+      key: 'name',
     },
     {
       title: 'IP',
@@ -52,15 +53,16 @@ export default function IndexPage() {
     },
     {
       title: '操作',
-      dataIndex: 'id',
+      dataIndex: 'name',
       align: 'left',
+      width: '20%',
       render: (t: number, r: any, i: number) => {
         return (
           <div className={styles.operation}>
             <Button type="text">修改</Button>
-            <div className={styles.divide} />
+            <Divider type="vertical" />
             <Button type="text">禁用</Button>
-            <div className={styles.divide} />
+            <Divider type="vertical" />
             <Button type="text">删除</Button>
           </div>
         );
@@ -181,13 +183,13 @@ export default function IndexPage() {
           </div> */}
           <div className={styles.divideLine} />
           <div className={styles.infoTitle}>Scheduler实例</div>
-          <Table columns={columns} primaryKey="id" />
-          <Pagination
+          <Table dataSource={tableData} columns={columns} primaryKey="name" />
+          {/* <Pagination
             style={{
               marginTop: 12,
               float: 'right',
             }}
-          />
+          /> */}
         </div>
       </div>
     </div>

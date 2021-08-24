@@ -40,3 +40,46 @@ export const info = [
     type: 'dialog',
   },
 ];
+
+export const tableData = [
+  {
+    id: 1,
+    name: '主机1',
+    ip: '22.33.223',
+    vip: '190.32.112',
+    sn: 2314,
+    serverport: 80,
+  },
+  {
+    id: 1,
+    name: '主机1',
+    ip: '22.33.223',
+    vip: '190.32.112',
+    sn: 2314,
+    serverport: 80,
+  },
+  {
+    id: 1,
+    name: '主机1',
+    ip: '22.33.223',
+    vip: '190.32.112',
+    sn: 2314,
+    serverport: 80,
+  },
+  {
+    id: 1,
+    name: '主机1',
+    ip: '22.33.223',
+    vip: '190.32.112',
+    sn: 2314,
+    serverport: 80,
+  },
+  {
+    id: 1,
+    name: '主机1',
+    ip: '22.33.223',
+    vip: '190.32.112',
+    sn: 2314,
+    serverport: 80,
+  },
+];

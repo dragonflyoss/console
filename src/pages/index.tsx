@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { request } from 'umi';
 import {
   Menu,
   Input,
@@ -9,16 +10,177 @@ import {
   Pagination,
   Descriptions,
   Divider,
+  Modal,
 } from 'antd';
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
 import { clusters, info, tableData } from '../../mock/data';
+import CodeEditor from '@/components/codeEditor';
 import styles from './index.less';
 
+const clustersSchema = [
+  {
+    label: '基本信息',
+    children: [
+      {
+        label: '集群名称',
+        value: '',
+        require: true,
+      },
+      {
+        label: '描述',
+        value: '',
+      },
+      {
+        label: '地域',
+        value: '',
+      },
+      {
+        label: '关联CDN集群信息',
+        value: '',
+      },
+    ],
+  },
+  {
+    label: '配置信息',
+    children: [
+      {
+        label: 'Scheduler集群配置信息',
+        value: '',
+        type: 'editor',
+        require: true,
+      },
+      {
+        label: '客户端配置信息',
+        type: 'editor',
+        value: '',
+      },
+    ],
+  },
+];
 const { Search } = Input;
 // scheduler
 export default function IndexPage() {
+  // scheduler clusters
+  const [sClusters, setClusters] = useState([]);
+  // cluster item status
   const [isHover, setHover] = useState(0);
+  // checked clusters
   const [checkKeys, setCheck] = useState([]);
+
+  const [scheduler, setSchedulers] = useState([]);
+  // table current page
+  const [current, setCurrent] = useState(1);
+
+  // dialog title
+  const [dTitle, setDTitle] = useState('');
+  // dialog visible
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    getClusters();
+    getSchedulers(current);
+  }, []);
+
+  const getSchedulers = async (v: number) => {
+    const res = await request('/api/v1/schedulers', {
+      params: {
+        page: v,
+        per_page: 10,
+      },
+    });
+    console.log(res);
+    if (res.response === 200) {
+      setSchedulers(res.schema);
+    } else {
+    }
+  };
+
+  const createScheduler = async (config: any) => {
+    const res = await request('/api/v1/schedulers', {
+      method: 'post',
+      params: {
+        Scheduler: config,
+      },
+    });
+    console.log(res);
+  };
+
+  const getSchedulerById = async (id: string) => {
+    const res = await request('/api/v1/schedulers', {
+      params: {
+        id,
+      },
+    });
+    console.log(res);
+  };
+
+  const updateSchedulerById = async (id: string, config: any) => {
+    const res = await request('/api/v1/schedulers', {
+      method: 'patch',
+      params: {
+        id,
+        Scheduler: config,
+      },
+    });
+    console.log(res);
+  };
+
+  const deleteSchedulerById = async (id: string) => {
+    const res = await request('/api/v1/schedulers', {
+      method: 'delete',
+      params: {
+        id,
+      },
+    });
+    console.log(res);
+  };
+
+  const getClusters = async () => {
+    const res = await request('/api/v1/scheduler-clusters', {
+      params: {
+        page: 1,
+        per_page: 10,
+      },
+    });
+    console.log(res);
+  };
+
+  const getClusterById = async (id: string) => {
+    const res = await request('/api/v1/scheduler-clusters', {
+      params: {
+        id,
+      },
+    });
+    console.log(res);
+  };
+
+  const createClusters = async (config: any) => {
+    const res = await request('/api/v1/scheduler-clusters', {
+      method: 'post',
+      params: {
+        SchedulerCluster: config,
+      },
+    });
+  };
+
+  const updateClusterById = async (id: string, config: any) => {
+    const res = await request('/api/v1/scheduler-clusters', {
+      method: 'patch',
+      params: {
+        id,
+        SchedulerCluster: config,
+      },
+    });
+  };
+
+  const deleteClusterById = async (id: number) => {
+    const res = await request('/api/v1/scheduler-clusters', {
+      method: 'delete',
+      params: {
+        id,
+      },
+    });
+  };
 
   const columns = [
     {
@@ -155,7 +317,10 @@ export default function IndexPage() {
           </div>
         </div>
         <div className={styles.right}>
-          <Descriptions title="属性信息">
+          <Descriptions
+            title="属性信息"
+            extra={<Button type="link">修改</Button>}
+          >
             {info.map((sub: any, idx: number) => {
               return (
                 <Descriptions.Item
@@ -163,9 +328,23 @@ export default function IndexPage() {
                   key={idx}
                   labelStyle={{
                     width: '120px',
+                    alignItems: 'center',
                   }}
                 >
-                  {sub.value}
+                  {sub.type === 'dialog' ? (
+                    <Button
+                      type="link"
+                      className={styles.newBtn}
+                      onClick={() => {
+                        setDTitle(sub.label);
+                        setVisible(true);
+                      }}
+                    >
+                      查看详情
+                    </Button>
+                  ) : (
+                    <div>{sub.value}</div>
+                  )}
                 </Descriptions.Item>
               );
             })}
@@ -192,6 +371,20 @@ export default function IndexPage() {
           /> */}
         </div>
       </div>
+      <Modal
+        visible={visible}
+        title={dTitle}
+        onCancel={() => setVisible(false)}
+        onOk={() => setVisible(false)}
+      >
+        <CodeEditor
+          code={''}
+          height={200}
+          options={{
+            readOnly: true,
+          }}
+        />
+      </Modal>
     </div>
   );
 }

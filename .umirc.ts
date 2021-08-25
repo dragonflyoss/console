@@ -18,9 +18,14 @@ export default defineConfig({
     },
   ],
   locale: {
-    default: 'zh-CN', //默认语言 zh-CN
+    default: 'en-US', //默认语言 en-US
     baseNavigator: true, // 为true时，用navigator.language的值作为默认语言
     antd: true, // 是否启用antd的<LocaleProvider />
   },
   fastRefresh: {},
+  proxy: {
+    '/api/v1': {
+      target: 'localhost:8080', // dep env
+    },
+  },
 });

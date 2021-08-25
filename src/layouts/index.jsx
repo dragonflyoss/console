@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Breadcrumb, Divider } from 'antd';
 import { UnorderedListOutlined } from '@ant-design/icons';
+import { Link } from 'umi';
 import '../global.css';
 
 const { SubMenu } = Menu;
@@ -43,7 +44,7 @@ export default function BasicLayout({
             selectedKeys={key}
             style={{ height: '100%', borderRight: 0 }}
             onClick={(v) => {
-              window.location.assign(`/${v.key}`);
+              // window.location.assign(`/${v.key}`);
             }}
           >
             <SubMenu
@@ -51,8 +52,12 @@ export default function BasicLayout({
               icon={<UnorderedListOutlined />}
               title="配置管理"
             >
-              <Menu.Item key="scheduler">Scheduler配置</Menu.Item>
-              <Menu.Item key="cdn">CDN配置</Menu.Item>
+              <Menu.Item key="scheduler">
+                <Link to="/scheduler">Scheduler配置</Link>
+              </Menu.Item>
+              <Menu.Item key="cdn">
+                <Link to="/cdn">CDN配置</Link>
+              </Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>

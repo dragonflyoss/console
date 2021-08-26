@@ -184,10 +184,10 @@ export default function IndexPage() {
 
   const columns = [
     {
-      title: '主机名',
-      dataIndex: 'name',
+      title: 'HostName',
+      dataIndex: 'host_name',
       align: 'left',
-      key: 'name',
+      key: 'host_name',
     },
     {
       title: 'IP',
@@ -202,16 +202,31 @@ export default function IndexPage() {
       key: 'vip',
     },
     {
-      title: 'SN',
-      dataIndex: 'sn',
+      title: 'Location',
+      dataIndex: 'location',
       align: 'left',
-      key: 'sn',
+      key: 'location',
     },
     {
-      title: 'ServerPort',
-      dataIndex: 'serverport',
+      title: 'IDC',
+      dataIndex: 'idc',
       align: 'left',
-      key: 'serverport',
+      key: 'idc',
+    },
+    {
+      title: 'Port',
+      dataIndex: 'port',
+      align: 'left',
+      key: 'port',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      align: 'left',
+      key: 'status',
+      render: (v: string) => {
+        return <div>{v}</div>;
+      },
     },
     {
       title: '操作',
@@ -222,8 +237,6 @@ export default function IndexPage() {
         return (
           <div className={styles.operation}>
             <Button type="text">修改</Button>
-            <Divider type="vertical" />
-            <Button type="text">禁用</Button>
             <Divider type="vertical" />
             <Button type="text">删除</Button>
           </div>

@@ -1,14 +1,8 @@
-body {
-  width: 100%;
-  height: 100%;
-}
 #root {
-  width: 100%;
   height: 100%;
 }
-
 .ant-layout {
-  height: 100%;
+  /* height: 100%; */
 }
 
 .header {
@@ -31,5 +25,9 @@ body {
 
 .site-layout-background {
   background: #fff;
+}
+
+.ant-table-container {
+  min-height: 300px
 }
 @import '~antd/dist/antd.css';

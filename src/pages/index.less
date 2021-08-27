@@ -1,79 +1,54 @@
 .main {
-  height: 100%;
-  overflow: auto;
-}
-.title {
-  font-size: 24px;
-}
-
-.content {
   display: flex;
   height: 100%;
   .left {
-    width: 178px;
-    position: relative;
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 1px;
-      height: calc(100% - 20px);
-      background-color: #eaeaea;
-    }
-    .clusters {
-      margin-top: 8px;
-      .activeButton {
-        position: absolute;
-        top: 0;
-        right: 18px;
-        z-index: 999;
-      }
-    }
+    flex: 0 0 60%;
+    background: url(../public/bg-login.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
   }
   .right {
     flex: 1;
-    padding-left: 16px;
-    .infoTitle {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .info {
-      display: flex;
-      flex-wrap: wrap;
-      .subInfo {
-        flex: 0 0 33%;
-        display: flex;
-        padding: 12px 0;
-        color: #5a5a5a;
-        .label {
-          flex: 0 0 40%;
-        }
-        .value {
-          flex: 1;
-          padding-right: 40px;
-          max-width: 180px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-      }
-    }
-    .divideLine {
-      height: 1px;
-      width: calc(100% - 12px);
-      background: #eaeaea;
-      margin: 16px 0;
-    }
-    .operation {
+    padding: 16px;
+    position: relative;
+    .header {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      .title {
+        display: flex;
+        align-items: center;
+        position: relative;
+        &::before {
+          content: '';
+          position: absolute;
+          top: 8px;
+          left: 80px;
+          height: 8px;
+          width: 1px;
+          margin: 0 8px;
+          background: #848484;
+        }
+      }
+      .logo {
+        width: 80px;
+        height: 24px;
+        background: url(../public/logo-dark.png) 100% 100% no-repeat;
+        margin-right: 17px;
+      }
+      .i18n {
+        color: #848484;
+      }
+    }
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 300px;
+      background: url('../public/temp.png') 100% 100% no-repeat;
     }
   }
-}
-
-.newBtn {
-  padding: 0;
-  height: auto;
 }

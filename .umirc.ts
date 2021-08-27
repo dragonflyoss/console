@@ -7,12 +7,17 @@ export default defineConfig({
   },
   routes: [
     {
+      exact: true,
+      path: '/login',
+      component: '@/pages/index',
+    },
+    {
       exact: false,
       path: '/',
       component: '@/layouts/index',
       routes: [
-        { exact: true, path: '/', component: '@/pages/index' },
-        { exact: true, path: '/scheduler', component: '@/pages/index' },
+        { exact: true, path: '/', component: '@/pages/scheduler' },
+        { exact: true, path: '/scheduler', component: '@/pages/scheduler' },
         { exact: true, path: '/cdn', component: '@/pages/cdn' },
       ],
     },
@@ -25,7 +30,7 @@ export default defineConfig({
   fastRefresh: {},
   proxy: {
     '/api/v1': {
-      target: 'localhost:8080', // dep env
+      target: 'http://11.122.75.66', // dep env
     },
   },
 });

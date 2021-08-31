@@ -5,7 +5,7 @@ const CodeEditor = (props) => {
   return (
     <MonacoEditor
       width="100%"
-      height={height || '100%'}
+      height={height || '100px'}
       language={language || 'json'}
       theme="vs-dark"
       value={code}

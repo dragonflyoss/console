@@ -11,58 +11,32 @@ import {
   Descriptions,
   Divider,
   Modal,
+  Drawer,
+  Form,
+  Tabs,
 } from 'antd';
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
-import { clusters, info, tableData } from '../../../mock/data';
+import { info, tableData } from '../../../mock/data';
 import CodeEditor from '@/components/codeEditor';
 import styles from './index.less';
 
-const clustersSchema = [
-  {
-    label: '基本信息',
-    children: [
-      {
-        label: '集群名称',
-        value: '',
-        require: true,
-      },
-      {
-        label: '描述',
-        value: '',
-      },
-      {
-        label: '地域',
-        value: '',
-      },
-      {
-        label: '关联CDN集群信息',
-        value: '',
-      },
-    ],
-  },
-  {
-    label: '配置信息',
-    children: [
-      {
-        label: 'Scheduler集群配置信息',
-        value: '',
-        type: 'editor',
-        require: true,
-      },
-      {
-        label: '客户端配置信息',
-        type: 'editor',
-        value: '',
-      },
-    ],
-  },
-];
 const { Search } = Input;
+const comsKeys = {
+  select: Select,
+  json: CodeEditor,
+  input: Input,
+};
+
 // scheduler
 export default function IndexPage() {
   // scheduler clusters
   const [sClusters, setClusters] = useState([]);
+  // cdn scheduler clusters
+  const [cClusters, setCdnClusters] = useState([]);
+  // security groups
+  const [secGroups, setGroup] = useState([]);
   // cluster item status
+  const [isClick, setClick] = useState(0);
   const [isHover, setHover] = useState(0);
   // checked clusters
   const [checkKeys, setCheck] = useState([]);
@@ -73,10 +47,22 @@ export default function IndexPage() {
 
   // dialog title
   const [dTitle, setDTitle] = useState('');
-  // dialog visible
+  // json dialog visible
   const [visible, setVisible] = useState(false);
-  // dialog content
-  const [dContent, setDContent] = useState('');
+  // form dialog visible
+  const [formVisible, setFormVisible] = useState(false);
+  // form dialog content
+  const [formInfo, setFormInfo] = useState({});
+  // json dialog content
+  const [json, setJson] = useState('');
+
+  // drawer visible
+  // const [drawVisible, setDrawVisible] = useState(false);
+
+  const formOps = {
+    cdn_cluster_id: cClusters,
+    SecurityGroupID: secGroups,
+  };
 
   useEffect(() => {
     getClusters();
@@ -88,6 +74,7 @@ export default function IndexPage() {
       params: {
         page: v,
         per_page: 10,
+        SchedulerClusterID: 1, // TODO no need
       },
     });
     if (res) {
@@ -142,6 +129,35 @@ export default function IndexPage() {
     }
   };
 
+  const getCDNClusters = async () => {
+    const res = await request('/api/v1/cdn-clusters');
+    if (res && res.length > 0) {
+      setCdnClusters(
+        res.map((el) => {
+          return {
+            label: el.name,
+            value: el.id,
+          };
+        }),
+      );
+    }
+  };
+
+  const getSecGroups = async () => {
+    const res = await request('/api/v1/security-groups');
+    if (res && res.length > 0) {
+      console.log(res);
+      setGroup(
+        res.map((el) => {
+          return {
+            label: el.name,
+            value: el.domain,
+          };
+        }),
+      );
+    }
+  };
+
   const getClusterById = async (id: string) => {
     const res = await request('/api/v1/scheduler-clusters', {
       params: {
@@ -154,10 +170,12 @@ export default function IndexPage() {
   const createClusters = async (config: any) => {
     const res = await request('/api/v1/scheduler-clusters', {
       method: 'post',
-      params: {
-        SchedulerCluster: config,
-      },
+      params: config,
     });
+    console.log(res);
+    if (res) {
+      setFormVisible(false);
+    }
   };
 
   const updateClusterById = async (id: string, config: any) => {
@@ -230,12 +248,13 @@ export default function IndexPage() {
       dataIndex: 'name',
       align: 'left',
       width: '20%',
+      key: 'name',
       render: (t: number, r: any, i: number) => {
         return (
           <div className={styles.operation}>
-            <Button type="text">修改</Button>
+            <Button type="text">Update</Button>
             <Divider type="vertical" />
-            <Button type="text">删除</Button>
+            <Button type="text">Delete</Button>
           </div>
         );
       },
@@ -259,12 +278,16 @@ export default function IndexPage() {
               className={styles.newBtn}
               type="text"
               style={{
-                marginRight: 16,
+                marginRight: 8,
                 fontSize: 12,
+              }}
+              onClick={() => {
+                setFormVisible(true);
+                setDTitle('Add Cluster');
               }}
             >
               <CopyOutlined />
-              添加集群
+              Add Cluster
             </Button>
             <Button
               type="text"
@@ -274,7 +297,7 @@ export default function IndexPage() {
               }}
             >
               <CopyOutlined />
-              批量更新
+              Batch Update
             </Button>
           </div>
           <div className={styles.clusters}>
@@ -284,11 +307,14 @@ export default function IndexPage() {
                 setCheck(v);
               }}
             >
-              {sClusters.map((sub: any) => {
+              {sClusters.map((sub: any, idx: number) => {
                 return (
                   <Checkbox
                     key={sub.id}
                     value={sub.id}
+                    onClick={() => {
+                      setClick(idx);
+                    }}
                     onMouseEnter={() => {
                       setHover(sub.id);
                     }}
@@ -303,7 +329,15 @@ export default function IndexPage() {
                       lineHeight: '32px',
                     }}
                   >
-                    <div className={styles.checkLabel} title={sub.name}>
+                    <div
+                      className={styles.checkLabel}
+                      title={sub.name}
+                      style={{
+                        background: isClick === idx ? '#EBF7F1' : 'transparent',
+                        color:
+                          isClick === idx ? '#23B066' : 'rgba(0, 0, 0, 0.85)',
+                      }}
+                    >
                       {sub.name}
                     </div>
                     {isHover === sub.id ? (
@@ -333,48 +367,59 @@ export default function IndexPage() {
         <div className={styles.right}>
           <Descriptions
             title="属性信息"
-            extra={<Button type="link">修改</Button>}
+            extra={
+              <Button
+                type="link"
+                onClick={() => {
+                  setFormVisible(true);
+                }}
+              >
+                Update
+              </Button>
+            }
           >
             {info.map((sub: any, idx: number) => {
               return (
                 <Descriptions.Item
-                  label={sub.label}
+                  label={sub.key}
                   key={idx}
                   labelStyle={{
                     width: '120px',
                     alignItems: 'center',
                   }}
                 >
-                  {sub.type === 'dialog' ? (
+                  {sub.type === 'json' ? (
                     <Button
                       type="link"
                       className={styles.newBtn}
                       onClick={() => {
-                        setDTitle(sub.label);
-                        setDContent(sub.value);
+                        // 默认第一个集群选中
+                        let temp = (sClusters[isClick] || {})[sub.key] || '';
+                        if (typeof temp !== 'string') {
+                          try {
+                            temp = JSON.stringify(temp, null, 2);
+                          } catch (e) {
+                            console.log(e);
+                          }
+                        }
+                        setDTitle(sub.key);
+                        setJson(temp);
                         setVisible(true);
                       }}
                     >
-                      查看详情
+                      View Details
                     </Button>
                   ) : (
-                    <div>{sub.value}</div>
+                    <div>
+                      {(sClusters[isClick] || {})[sub.key] === 0
+                        ? (sClusters[isClick] || {})[sub.key]
+                        : '--'}
+                    </div>
                   )}
                 </Descriptions.Item>
               );
             })}
           </Descriptions>
-          {/* <div className={styles.infoTitle}>属性信息</div>
-          <div className={styles.info}>
-            {info.map((sub, idx) => {
-              return (
-                <div className={styles.subInfo} key={idx}>
-                  <div className={styles.label}>{sub.label}:</div>
-                  <div className={styles.value}>{sub.value}</div>
-                </div>
-              );
-            })}
-          </div> */}
           <div className={styles.divideLine} />
           <div className={styles.infoTitle}>Scheduler实例</div>
           <Table dataSource={tableData} columns={columns} primaryKey="name" />
@@ -393,12 +438,123 @@ export default function IndexPage() {
         onOk={() => setVisible(false)}
       >
         <CodeEditor
-          code={dContent}
+          code={json}
           height={200}
           options={{
             readOnly: true,
           }}
         />
+      </Modal>
+      <Modal
+        visible={formVisible}
+        title={dTitle}
+        onCancel={() => setFormVisible(false)}
+        onOk={() => setFormVisible(false)}
+        bodyStyle={{
+          paddingLeft: 0,
+        }}
+        footer={[
+          <Button
+            key="back"
+            onClick={() => {
+              setFormInfo({});
+              setFormVisible(false);
+            }}
+          >
+            Return
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            onClick={() => {
+              // const temp = {
+              //   "name": "test2",
+              //   "bio": "test",
+              //   "cdn_cluster_id": 1,
+              //   "scopes": "{}",
+              //   "config": "{}",
+              //   "client_config": "{}",
+              //   security_group_domain: "0"
+              // }
+              createClusters(formInfo);
+            }}
+          >
+            Submit
+          </Button>,
+        ]}
+      >
+        <Tabs tabPosition={'left'}>
+          <Tabs.TabPane tab="basic info" key="1">
+            <Form
+              labelAlign="left"
+              layout="vertical"
+              onValuesChange={(cv, v) => {
+                setFormInfo((pre) => {
+                  return {
+                    ...pre,
+                    ...cv,
+                  };
+                });
+              }}
+            >
+              {info.map((sub: any) => {
+                const Content = comsKeys[sub.type || 'input'];
+                if (!sub.hide && sub.tab === '1') {
+                  return (
+                    <Form.Item
+                      name={sub.key}
+                      key={sub.key}
+                      label={sub.key}
+                      {...(sub.formprops || {})}
+                    >
+                      <Content
+                        {...sub.props}
+                        onClick={() => {
+                          if (sub.key === 'cdn_cluster_id') {
+                            getCDNClusters();
+                          } else if (sub.key === 'SecurityGroupID') {
+                            getSecGroups();
+                          }
+                        }}
+                        options={formOps[sub.key] || {}}
+                      />
+                    </Form.Item>
+                  );
+                }
+              })}
+            </Form>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="configs" key="2">
+            <Form
+              labelAlign="left"
+              layout="vertical"
+              onValuesChange={(cv, v) => {
+                setFormInfo((pre) => {
+                  return {
+                    ...pre,
+                    ...cv,
+                  };
+                });
+              }}
+            >
+              {info.map((sub: any) => {
+                const Content = comsKeys[sub.type || 'input'];
+                if (!sub.hide && sub.tab === '2') {
+                  return (
+                    <Form.Item
+                      name={sub.key}
+                      key={sub.key}
+                      label={sub.key}
+                      {...(sub.formprops || {})}
+                    >
+                      <Content {...(sub.props || {})} />
+                    </Form.Item>
+                  );
+                }
+              })}
+            </Form>
+          </Tabs.TabPane>
+        </Tabs>
       </Modal>
     </div>
   );

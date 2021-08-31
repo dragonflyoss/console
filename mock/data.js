@@ -19,48 +19,101 @@ export const clusters = [
 
 export const info = [
   {
+    key: 'id',
     label: '集群ID',
-    value: 'asdsd',
+    value: '',
+    hide: true, // when create should hide
+    tab: '1',
   },
   {
+    key: 'name',
     label: '集群名称',
-    value: 'asdsd',
+    value: '',
+    tab: '1',
+    formprops: {
+      required: true,
+    },
+    props: {
+      placeholder: 'Please enter cluster name',
+    },
   },
   {
+    key: 'bio',
     label: '描述',
-    value: 'asdsd',
+    value: '',
+    tab: '1',
+    formprops: {
+      tooltip: 'description',
+    },
+    props: {
+      placeholder: 'Please enter cluster description',
+    },
   },
   {
-    label: '作用域',
-    value: '{}',
-    type: 'dialog',
-  },
-  {
+    key: 'cdn_cluster_id',
     label: '关联CDN集群',
-    value: '我是集群信息我是集群信...',
+    value: '',
+    type: 'select',
+    tab: '1',
+    props: {
+      placeholder: 'Please enter cdn cluster id',
+    },
   },
   {
+    key: 'SecurityGroupID',
+    label: 'SecurityGroupID',
+    value: '',
+    type: 'select',
+    tab: '1',
+    props: {
+      placeholder: 'Please enter SecurityGroupID',
+    },
+  },
+  {
+    key: 'scopes',
+    label: '作用域',
+    value: '',
+    type: 'json',
+    tab: '1',
+  },
+  {
+    key: 'config',
     label: '配置信息',
-    value: '{}',
-    type: 'dialog',
+    value: '',
+    type: 'json',
+    tab: '2',
+    formprops: {
+      tooltip: 'scheduler cluster config info',
+      required: true,
+    },
   },
   {
+    key: 'client_config',
     label: '客户端配置信息',
-    value: '{}',
-    type: 'dialog',
+    value: '',
+    type: 'json',
+    tab: '2',
+    formprops: {
+      required: true,
+    },
   },
   {
+    key: 'created_at',
     label: '创建时间',
-    value: '2021-07-01 10:06:41',
+    value: '',
+    hide: true,
   },
   {
+    key: 'updated_at',
     label: '更新时间',
-    value: '2021-07-01 10:06:41',
+    value: '',
+    hide: true,
   },
 ];
 
 export const tableData = [
   {
+    key: 1,
     id: 1,
     host_name: '主机1',
     ip: '22.33.223',
@@ -71,6 +124,7 @@ export const tableData = [
     status: 'active',
   },
   {
+    key: 2,
     id: 1,
     host_name: '主机1',
     ip: '22.33.223',
@@ -81,6 +135,7 @@ export const tableData = [
     status: 'inactive',
   },
   {
+    key: 3,
     id: 1,
     host_name: '主机1',
     ip: '22.33.223',
@@ -91,6 +146,7 @@ export const tableData = [
     status: 'active',
   },
   {
+    key: 4,
     id: 1,
     host_name: '主机1',
     ip: '22.33.223',
@@ -101,6 +157,7 @@ export const tableData = [
     status: 'inactive',
   },
   {
+    key: 5,
     id: 1,
     host_name: '主机1',
     ip: '22.33.223',
@@ -111,6 +168,7 @@ export const tableData = [
     status: 'active',
   },
   {
+    key: 6,
     id: 1,
     host_name: '主机1',
     ip: '22.33.223',
@@ -121,6 +179,7 @@ export const tableData = [
     status: 'active',
   },
   {
+    key: 7,
     id: 1,
     host_name: '主机1',
     ip: '22.33.223',
@@ -131,6 +190,7 @@ export const tableData = [
     status: 'inactive',
   },
   {
+    key: 8,
     id: 1,
     host_name: '主机1',
     ip: '22.33.223',
@@ -141,6 +201,7 @@ export const tableData = [
     status: 'active',
   },
   {
+    key: 9,
     id: 1,
     host_name: '主机1',
     ip: '22.33.223',
@@ -151,6 +212,7 @@ export const tableData = [
     status: 'active',
   },
   {
+    key: 10,
     id: 1,
     host_name: '主机1',
     ip: '22.33.223',
@@ -161,6 +223,7 @@ export const tableData = [
     status: 'inactive',
   },
   {
+    key: 11,
     id: 1,
     host_name: '主机1',
     ip: '22.33.223',

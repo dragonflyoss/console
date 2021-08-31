@@ -1,17 +1,6 @@
 import { useState, useEffect } from 'react';
 import { request } from 'umi';
-import {
-  Menu,
-  Input,
-  Select,
-  Checkbox,
-  Button,
-  Table,
-  Pagination,
-  Descriptions,
-  Divider,
-  Modal,
-} from 'antd';
+import { Menu, Input } from 'antd';
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons';
 import styles from './index.less';
 

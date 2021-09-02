@@ -1,7 +1,7 @@
 import { defineConfig } from 'umi';
 
 export default defineConfig({
-  title: 'Dragonfly-文件分发',
+  title: 'Dragonfly',
   nodeModulesTransform: {
     type: 'none',
   },

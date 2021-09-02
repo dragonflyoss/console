@@ -325,3 +325,93 @@ export const cdnInfo = [
     hide: true,
   },
 ];
+
+export const loginSchema = [
+  {
+    label: 'Account',
+    name: 'name',
+  },
+  {
+    label: 'Password',
+    name: 'password',
+  },
+];
+
+export const signSchema = [
+  {
+    label: 'Account',
+    name: 'name',
+    formprops: {
+      rules: [
+        {
+          required: true,
+          message: 'Please enter your account name!',
+        },
+        ({ getFieldValue }) => ({
+          validator(_, value) {
+            const test = /^[0-9a-zA-Z]*$/;
+            if (test.test(getFieldValue('name'))) {
+              return Promise.resolve();
+            }
+            return Promise.reject(
+              new Error('English letters and numbers only!'),
+            );
+          },
+        }),
+      ],
+    },
+  },
+  {
+    label: 'Email',
+    name: 'email',
+    formprops: {
+      rules: [
+        {
+          type: 'email',
+          message: 'The input is not valid E-mail!',
+        },
+        {
+          message: 'Please input your E-mail!',
+        },
+      ],
+    },
+  },
+  {
+    label: 'Password',
+    name: 'password',
+    formprops: {
+      hasFeedback: true,
+      rules: [
+        {
+          required: true,
+          message: 'Please input your password!',
+        },
+      ],
+    },
+  },
+  {
+    label: 'Confirm Password',
+    name: 'passwordT',
+    formprops: {
+      required: true,
+      dependencies: ['password'],
+      hasFeedback: true,
+      rules: [
+        {
+          required: true,
+          message: 'Please confirm your password!',
+        },
+        ({ getFieldValue }) => ({
+          validator(_, value) {
+            if (!value || getFieldValue('password') === value) {
+              return Promise.resolve();
+            }
+            return Promise.reject(
+              new Error('The two passwords that you entered do not match!'),
+            );
+          },
+        }),
+      ],
+    },
+  },
+];

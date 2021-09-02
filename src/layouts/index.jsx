@@ -50,21 +50,21 @@ export default function BasicLayout({
             <SubMenu
               key="config"
               icon={<UnorderedListOutlined />}
-              title="配置管理"
+              title="Config Management"
             >
               <Menu.Item key="scheduler">
-                <Link to="/scheduler">Scheduler配置</Link>
+                <Link to="/scheduler">Scheduler Config</Link>
               </Menu.Item>
               <Menu.Item key="cdn">
-                <Link to="/cdn">CDN配置</Link>
+                <Link to="/cdn">CDN Config</Link>
               </Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>配置管理</Breadcrumb.Item>
-            <Breadcrumb.Item>{key[0].toUpperCase()}配置</Breadcrumb.Item>
+            <Breadcrumb.Item>Config Management</Breadcrumb.Item>
+            <Breadcrumb.Item>{key[0].toUpperCase()} Config</Breadcrumb.Item>
           </Breadcrumb>
           <Content
             className="site-layout-background"

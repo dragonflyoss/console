@@ -140,10 +140,9 @@ export default function IndexPage() {
   };
 
   const updateSchedulerById = async (id: string, config: any) => {
-    const res = await request('/api/v1/schedulers', {
+    const res = await request(`/api/v1/schedulers/${id}`, {
       method: 'patch',
       params: {
-        id,
         Scheduler: config,
       },
     });
@@ -225,7 +224,7 @@ export default function IndexPage() {
   };
 
   const updateClusterById = async (config: any) => {
-    const res = await request('/api/v1/scheduler-clusters', {
+    const res = await request(`/api/v1/scheduler-clusters/${config.id}`, {
       method: 'patch',
       data: config,
     });
@@ -292,7 +291,7 @@ export default function IndexPage() {
       },
     },
     {
-      title: '操作',
+      title: 'Operation',
       dataIndex: 'id',
       align: 'left',
       width: '20%',
@@ -539,7 +538,7 @@ export default function IndexPage() {
             })}
           </Descriptions>
           <div className={styles.divideLine} />
-          <div className={styles.infoTitle}>Scheduler实例</div>
+          <div className={styles.infoTitle}>Scheduler</div>
           <Table
             dataSource={scheduler}
             columns={columns}
@@ -649,6 +648,10 @@ export default function IndexPage() {
                       key={sub.key}
                       label={sub.key}
                       {...(sub.formprops || {})}
+                      shouldUpdate={(prevValues, curValues) => {
+                        console.log(prevValues, curValues);
+                        return prevValues.additional !== curValues.additional;
+                      }}
                     >
                       <Content
                         {...sub.props}

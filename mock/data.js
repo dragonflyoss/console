@@ -252,3 +252,76 @@ export const updateOptions = [
     type: 'json',
   },
 ];
+
+export const cdnOptions = [
+  {
+    label: 'security_group_id',
+    value: 'security_group_id',
+    type: 'select',
+  },
+  {
+    label: 'config',
+    value: 'config',
+    type: 'json',
+  },
+];
+
+export const cdnInfo = [
+  {
+    key: 'id',
+    label: '集群ID',
+    hide: true, // when create should hide
+    tab: '1',
+  },
+  {
+    key: 'name',
+    label: '集群名称',
+    tab: '1',
+    formprops: {
+      required: true,
+    },
+    props: {
+      placeholder: 'Please enter cluster name',
+    },
+  },
+  {
+    key: 'bio',
+    label: '描述',
+    tab: '1',
+    formprops: {
+      tooltip: 'description',
+    },
+    props: {
+      placeholder: 'Please enter cluster description',
+    },
+  },
+  {
+    key: 'security_group_id',
+    label: 'security_group_id',
+    type: 'select',
+    tab: '1',
+    props: {
+      placeholder: 'Please enter SecurityGroupID',
+    },
+  },
+  {
+    key: 'config',
+    label: '配置信息',
+    type: 'json',
+    tab: '2',
+    formprops: {
+      tooltip: 'scheduler cluster config info',
+      required: true,
+    },
+  },
+  {
+    key: 'created_at',
+    label: '创建时间',
+    hide: true,
+  },
+  {
+    key: 'updated_at',
+    label: '更新时间',
+    hide: true,
+  },
+];

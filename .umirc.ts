@@ -30,7 +30,7 @@ export default defineConfig({
   fastRefresh: {},
   proxy: {
     '/api/v1': {
-      target: 'http://11.122.75.66', // dep env
+      target: 'http://11.122.75.66:8080', // dep env
     },
   },
 });

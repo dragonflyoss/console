@@ -21,14 +21,12 @@ export const info = [
   {
     key: 'id',
     label: '集群ID',
-    value: '',
     hide: true, // when create should hide
     tab: '1',
   },
   {
     key: 'name',
     label: '集群名称',
-    value: '',
     tab: '1',
     formprops: {
       required: true,
@@ -40,7 +38,6 @@ export const info = [
   {
     key: 'bio',
     label: '描述',
-    value: '',
     tab: '1',
     formprops: {
       tooltip: 'description',
@@ -52,7 +49,6 @@ export const info = [
   {
     key: 'cdn_cluster_id',
     label: '关联CDN集群',
-    value: '',
     type: 'select',
     tab: '1',
     props: {
@@ -60,9 +56,8 @@ export const info = [
     },
   },
   {
-    key: 'SecurityGroupID',
-    label: 'SecurityGroupID',
-    value: '',
+    key: 'security_group_id',
+    label: 'security_group_id',
     type: 'select',
     tab: '1',
     props: {
@@ -72,14 +67,12 @@ export const info = [
   {
     key: 'scopes',
     label: '作用域',
-    value: '',
     type: 'json',
     tab: '1',
   },
   {
     key: 'config',
     label: '配置信息',
-    value: '',
     type: 'json',
     tab: '2',
     formprops: {
@@ -90,7 +83,6 @@ export const info = [
   {
     key: 'client_config',
     label: '客户端配置信息',
-    value: '',
     type: 'json',
     tab: '2',
     formprops: {
@@ -100,13 +92,11 @@ export const info = [
   {
     key: 'created_at',
     label: '创建时间',
-    value: '',
     hide: true,
   },
   {
     key: 'updated_at',
     label: '更新时间',
-    value: '',
     hide: true,
   },
 ];
@@ -232,5 +222,33 @@ export const tableData = [
     idc: 2314,
     port: 80,
     status: 'active',
+  },
+];
+
+export const updateOptions = [
+  {
+    label: 'cdn_cluster_id',
+    value: 'cdn_cluster_id',
+    type: 'select',
+  },
+  {
+    label: 'security_group_id',
+    value: 'security_group_id',
+    type: 'select',
+  },
+  {
+    label: 'scopes',
+    value: 'scopes',
+    type: 'json',
+  },
+  {
+    label: 'config',
+    value: 'config',
+    type: 'json',
+  },
+  {
+    label: 'client_config',
+    value: 'client_config',
+    type: 'json',
   },
 ];

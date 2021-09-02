@@ -1,7 +1,7 @@
 import { defineConfig } from 'umi';
 
 export default defineConfig({
-  title: '蜻蜓-文件分发',
+  title: 'Dragonfly-文件分发',
   nodeModulesTransform: {
     type: 'none',
   },
@@ -32,5 +32,8 @@ export default defineConfig({
     '/api/v1': {
       target: 'http://11.122.75.66:8080', // dep env
     },
+  },
+  theme: {
+    'primary-color': '#23B066',
   },
 });

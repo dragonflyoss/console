@@ -754,7 +754,10 @@ export default function CDN() {
           {checkKeys.map((subKey) => {
             return (
               <Tag closable key={subKey} onClose={(v) => console.log(v)}>
-                {cClusters.filter((e) => e.id.toString() === subKey)[0].name}
+                {(
+                  (cClusters.filter((e) => e.id.toString() === subKey) ||
+                    [])[0] || {}
+                ).name || ''}
               </Tag>
             );
           })}

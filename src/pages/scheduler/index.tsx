@@ -164,9 +164,10 @@ export default function IndexPage() {
           if (typeof sub[el] === 'number') {
             sub[el] = sub[el].toString();
           }
-          sub['cdn_clusters'] = sub['cdn_clusters'].length
-            ? sub['cdn_clusters'][0].id
-            : '';
+          sub['cdn_clusters'] = 1;
+          // sub['cdn_clusters'].length
+          //   ? sub['cdn_clusters'][0].id
+          //   : '';
           sub['created_at'] = moment(
             new Date(sub['created_at']).valueOf(),
           ).format('YYYY-MM-DD HH:MM:SS');
@@ -175,7 +176,6 @@ export default function IndexPage() {
           ).format('YYYY-MM-DD HH:MM:SS');
         });
       });
-      console.log(res);
       setClusters(res);
     }
   };

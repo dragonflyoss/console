@@ -51,7 +51,7 @@ export default function BasicLayout({
     const res = await request(`/api/v1/users/${id}`, {
       method: 'get',
     });
-    console.log(res);
+    setUser(res);
   };
 
   const signout = async () => {
@@ -69,7 +69,7 @@ export default function BasicLayout({
           pointerEvents: 'none',
         }}
       >
-        Hello, admin
+        Hello, {user.name || user.id || 'Admin'}
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="1">

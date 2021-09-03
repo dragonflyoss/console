@@ -8,7 +8,6 @@ export default defineConfig({
   routes: [
     { exact: true, path: '/signin', component: '@/pages/index' },
     { exact: true, path: '/signup', component: '@/pages/index' },
-    { exact: true, path: '/signout', component: '@/pages/index' },
     {
       exact: false,
       path: '/',

@@ -20,8 +20,10 @@ import {
   CopyOutlined,
   DeleteOutlined,
   MinusCircleOutlined,
-  UserDeleteOutlined,
+  AppstoreAddOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
+import moment from 'moment';
 import { cdnInfo, cdnOptions } from '../../../mock/data';
 import CodeEditor from '@/components/codeEditor';
 import styles from './index.less';
@@ -105,30 +107,19 @@ export default function CDN() {
     }
   };
 
-  const createScheduler = async (config: any) => {
-    const res = await request('/api/v1/schedulers', {
-      method: 'post',
+  const updateSchedulerById = async (id: string, config: any) => {
+    const res = await request(`/api/v1/schedulers/${id}`, {
+      method: 'patch',
       data: config,
     });
-    console.log(res);
-  };
-
-  const updateSchedulerById = async (id: string, config: any) => {
-    const res = await request('/api/v1/schedulers', {
-      method: 'patch',
-      params: {
-        id,
-        Scheduler: config,
-      },
-    });
-    console.log(res);
+    getSchedulers();
   };
 
   const deleteSchedulerById = async (id: number) => {
     const res = await request(`/api/v1/schedulers/${id}`, {
       method: 'delete',
     });
-    getSchedulers(current);
+    getSchedulers();
   };
 
   const getCDNClusters = async () => {
@@ -139,6 +130,12 @@ export default function CDN() {
           if (typeof sub[el] === 'number') {
             sub[el] = sub[el].toString();
           }
+          sub['created_at'] = moment(
+            new Date(sub['created_at']).valueOf(),
+          ).format('YYYY-MM-DD HH:MM:SS');
+          sub['updated_at'] = moment(
+            new Date(sub['updated_at']).valueOf(),
+          ).format('YYYY-MM-DD HH:MM:SS');
         });
       });
       setCdnClusters(res);
@@ -172,7 +169,7 @@ export default function CDN() {
   };
 
   const updateClusterById = async (config: any) => {
-    const res = await request('/api/v1/cdn-clusters', {
+    const res = await request(`/api/v1/cdn-clusters/${config.id}`, {
       method: 'patch',
       data: config,
     });
@@ -184,12 +181,10 @@ export default function CDN() {
   };
 
   const deleteClusterById = async (id: number) => {
-    const res = await request('/api/v1/cdn-clusters', {
+    const res = await request(`/api/v1/cdn-clusters/${id}`, {
       method: 'delete',
-      params: {
-        id,
-      },
     });
+    getCDNClusters();
   };
 
   const columns = [
@@ -342,7 +337,7 @@ export default function CDN() {
                 setDTitle('Add Cluster');
               }}
             >
-              <CopyOutlined />
+              <AppstoreAddOutlined />
               Add Cluster
             </Button>
             <Button
@@ -356,7 +351,7 @@ export default function CDN() {
               }}
               disabled={!checkKeys.length}
             >
-              <CopyOutlined />
+              <EditOutlined />
               Batch Update
             </Button>
           </div>
@@ -438,7 +433,6 @@ export default function CDN() {
                 type="link"
                 onClick={() => {
                   setDTitle('Update Cluster');
-                  console.log(isClick);
                   const temp = [];
                   cdnInfo.map((sub) => {
                     if (sub.key === 'id' || sub.key === 'name') {
@@ -484,11 +478,14 @@ export default function CDN() {
             {cdnInfo.map((sub: any, idx: number) => {
               return (
                 <Descriptions.Item
-                  label={sub.key}
+                  label={sub.en_US}
                   key={idx}
                   labelStyle={{
                     width: '120px',
                     alignItems: 'center',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   {sub.type === 'json' ? (

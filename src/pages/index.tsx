@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { request } from 'umi';
-import { Input, Form, Button } from 'antd';
+import { Input, Form, Button, message } from 'antd';
 import { loginSchema, signSchema } from '../../mock/data';
 import styles from './index.less';
 
+const comsKey = {
+  password: Input.Password,
+};
 // login
 export default function IndexPage({ location }) {
   const [hasAccount, setAccount] = useState(true);
@@ -14,22 +17,27 @@ export default function IndexPage({ location }) {
   }, [location.pathname]);
 
   const signin = async (params: any) => {
-    const res = await request('/user/signin', {
+    const res = await request('/api/v1/users/signin', {
       method: 'post',
       data: params,
     });
     if (res) {
-      // window.location.assign('/scheduler');
+      document.cookie = `jwt2=${res.token};${res.expire}`;
+      window.location.assign('/scheduler');
+    } else {
+      message.error('Incorrect authentication credentials');
     }
   };
 
   const signup = async (params: any) => {
-    const res = await request('/user/signup', {
+    const res = await request('/api/v1/users/signup', {
       method: 'post',
       data: params,
     });
     if (res) {
       window.location.assign('/signin');
+    } else {
+      message.error('Incorrect');
     }
   };
 
@@ -59,6 +67,7 @@ export default function IndexPage({ location }) {
           >
             {hasAccount
               ? loginSchema.map((sub: any) => {
+                  const Content = comsKey[sub.name] || Input;
                   return (
                     <Form.Item
                       label={sub.label}
@@ -66,11 +75,12 @@ export default function IndexPage({ location }) {
                       name={sub.name}
                       {...sub.formprops}
                     >
-                      <Input />
+                      <Content />
                     </Form.Item>
                   );
                 })
               : signSchema.map((sub: any) => {
+                  const Content = comsKey[sub.name] || Input;
                   return (
                     <Form.Item
                       label={sub.label}
@@ -78,7 +88,7 @@ export default function IndexPage({ location }) {
                       name={sub.name}
                       {...sub.formprops}
                     >
-                      <Input />
+                      <Content />
                     </Form.Item>
                   );
                 })}

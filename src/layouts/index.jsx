@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Breadcrumb, Divider, Avatar, Dropdown } from 'antd';
-import { ControlOutlined } from '@ant-design/icons';
-import { Link } from 'umi';
+import {
+  Layout,
+  Menu,
+  Breadcrumb,
+  Divider,
+  Avatar,
+  Dropdown,
+  Button,
+} from 'antd';
+import { SettingOutlined } from '@ant-design/icons';
+import { Link, request } from 'umi';
+import { decode } from 'jsonwebtoken';
 import '../global.css';
 
 const { SubMenu } = Menu;
@@ -20,7 +29,37 @@ export default function BasicLayout({
   useEffect(() => {
     const temp = location.pathname.split('/')[1];
     setKey(temp.length ? [temp] : ['scheduler']);
+    const jwt2 = getCookie('jwt2');
+    const userInfo = decode(jwt2, 'jwt');
+    const { id } = userInfo;
+    getUserById(id);
   }, [location.pathname]);
+
+  const getCookie = (name) => {
+    const dict = document.cookie
+      .split(';')
+      .map((x) => x.trim().split('='))
+      .reduce((pre, [k, v]) => {
+        pre[k] = v;
+        return pre;
+      }, {});
+
+    return name ? dict[name] : dict;
+  };
+
+  const getUserById = async (id) => {
+    const res = await request(`/api/v1/users/${id}`, {
+      method: 'get',
+    });
+    console.log(res);
+  };
+
+  const signout = async () => {
+    const res = await request('/api/v1/users/signout', {
+      method: 'post',
+    });
+    window.location.assign('/signin');
+  };
 
   const menu = (
     <Menu>
@@ -34,7 +73,9 @@ export default function BasicLayout({
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="1">
-        <a href="/signout">Sign Out</a>
+        <Button type="text" onClick={() => signout()}>
+          Sign Out
+        </Button>
       </Menu.Item>
     </Menu>
   );
@@ -61,7 +102,7 @@ export default function BasicLayout({
             size="small"
             gap={4}
           >
-            {'admin'}
+            {user.name || user.id || 'Admin'}
           </Avatar>
         </Dropdown>
       </Header>
@@ -79,7 +120,7 @@ export default function BasicLayout({
           >
             <SubMenu
               key="config"
-              icon={<ControlOutlined />}
+              icon={<SettingOutlined />}
               title="Configuration"
             >
               <Menu.Item key="scheduler">

@@ -23,6 +23,7 @@ export const info = [
     label: '集群ID',
     hide: true, // when create should hide
     tab: '1',
+    en_US: 'ID',
   },
   {
     key: 'name',
@@ -34,6 +35,7 @@ export const info = [
     props: {
       placeholder: 'Please enter cluster name',
     },
+    en_US: 'Name',
   },
   {
     key: 'bio',
@@ -45,15 +47,17 @@ export const info = [
     props: {
       placeholder: 'Please enter cluster description',
     },
+    en_US: 'Description',
   },
   {
-    key: 'cdn_cluster_id',
+    key: 'cdn_clusters',
     label: '关联CDN集群',
     type: 'select',
     tab: '1',
     props: {
       placeholder: 'Please enter cdn cluster id',
     },
+    en_US: 'Cdn Clusters',
   },
   {
     key: 'security_group_id',
@@ -63,12 +67,14 @@ export const info = [
     props: {
       placeholder: 'Please enter SecurityGroupID',
     },
+    en_US: 'Security Group Id',
   },
   {
     key: 'scopes',
     label: '作用域',
     type: 'json',
     tab: '1',
+    en_US: 'Scopes',
   },
   {
     key: 'config',
@@ -79,6 +85,7 @@ export const info = [
       tooltip: 'scheduler cluster config info',
       required: true,
     },
+    en_US: 'Config',
   },
   {
     key: 'client_config',
@@ -88,16 +95,19 @@ export const info = [
     formprops: {
       required: true,
     },
+    en_US: 'Client Config',
   },
   {
     key: 'created_at',
     label: '创建时间',
     hide: true,
+    en_US: 'Create Time',
   },
   {
     key: 'updated_at',
     label: '更新时间',
     hide: true,
+    en_US: 'Update Time',
   },
 ];
 
@@ -272,6 +282,7 @@ export const cdnInfo = [
     label: '集群ID',
     hide: true, // when create should hide
     tab: '1',
+    en_US: 'ID',
   },
   {
     key: 'name',
@@ -283,6 +294,7 @@ export const cdnInfo = [
     props: {
       placeholder: 'Please enter cluster name',
     },
+    en_US: 'Name',
   },
   {
     key: 'bio',
@@ -294,6 +306,7 @@ export const cdnInfo = [
     props: {
       placeholder: 'Please enter cluster description',
     },
+    en_US: 'Description',
   },
   {
     key: 'security_group_id',
@@ -303,6 +316,7 @@ export const cdnInfo = [
     props: {
       placeholder: 'Please enter SecurityGroupID',
     },
+    en_US: 'Security Group Id',
   },
   {
     key: 'config',
@@ -313,16 +327,19 @@ export const cdnInfo = [
       tooltip: 'scheduler cluster config info',
       required: true,
     },
+    en_US: 'Config',
   },
   {
     key: 'created_at',
     label: '创建时间',
     hide: true,
+    en_US: 'Create Time',
   },
   {
     key: 'updated_at',
     label: '更新时间',
     hide: true,
+    en_US: 'Update Time',
   },
 ];
 

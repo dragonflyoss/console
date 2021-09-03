@@ -23,6 +23,7 @@ import {
   AppstoreAddOutlined,
   EditOutlined,
 } from '@ant-design/icons';
+import moment from 'moment';
 import { info, updateOptions } from '../../../mock/data';
 import CodeEditor from '@/components/codeEditor';
 import styles from './index.less';
@@ -163,8 +164,18 @@ export default function IndexPage() {
           if (typeof sub[el] === 'number') {
             sub[el] = sub[el].toString();
           }
+          sub['cdn_clusters'] = sub['cdn_clusters'].length
+            ? sub['cdn_clusters'][0].id
+            : '';
+          sub['created_at'] = moment(
+            new Date(sub['created_at']).valueOf(),
+          ).format('YYYY-MM-DD HH:MM:SS');
+          sub['updated_at'] = moment(
+            new Date(sub['updated_at']).valueOf(),
+          ).format('YYYY-MM-DD HH:MM:SS');
         });
       });
+      console.log(res);
       setClusters(res);
     }
   };
@@ -537,11 +548,14 @@ export default function IndexPage() {
             {info.map((sub: any, idx: number) => {
               return (
                 <Descriptions.Item
-                  label={sub.key}
+                  label={sub.en_US}
                   key={idx}
                   labelStyle={{
                     width: '120px',
                     alignItems: 'center',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   {sub.type === 'json' ? (
@@ -600,6 +614,15 @@ export default function IndexPage() {
                 >
                   Return
                 </Button>,
+                <Button
+                  key="submit"
+                  onClick={() => {
+                    console.log();
+                    // setVisible(false);
+                  }}
+                >
+                  Submit
+                </Button>,
               ]
             : null
         }
@@ -609,6 +632,9 @@ export default function IndexPage() {
           height={200}
           options={{
             readOnly: !dTitle.includes('Update'),
+          }}
+          onChange={(v) => {
+            console.log(v);
           }}
         />
       </Modal>

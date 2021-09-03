@@ -14,6 +14,7 @@ import {
   Tabs,
   Popconfirm,
   Tag,
+  Popover,
 } from 'antd';
 import {
   CopyOutlined,
@@ -45,6 +46,8 @@ export default function CDN() {
   const [checkKeys, setCheck] = useState([]);
 
   const [scheduler, setSchedulers] = useState([]);
+  // table current page
+  const [current, setCurrent] = useState(1);
 
   // dialog title
   const [dTitle, setDTitle] = useState('');
@@ -121,14 +124,11 @@ export default function CDN() {
     console.log(res);
   };
 
-  const deleteSchedulerById = async (id: string) => {
-    const res = await request('/api/v1/schedulers', {
+  const deleteSchedulerById = async (id: number) => {
+    const res = await request(`/api/v1/schedulers/${id}`, {
       method: 'delete',
-      data: {
-        id,
-      },
     });
-    console.log(res);
+    getSchedulers(current);
   };
 
   const getCDNClusters = async () => {
@@ -198,24 +198,52 @@ export default function CDN() {
       dataIndex: 'host_name',
       align: 'left',
       key: 'host_name',
+      ellipsis: true,
+      width: 140,
     },
     {
       title: 'IP',
       dataIndex: 'ip',
       align: 'left',
       key: 'ip',
-    },
-    {
-      title: 'VIP',
-      dataIndex: 'vips',
-      align: 'left',
-      key: 'vips',
+      ellipsis: true,
+      width: 140,
     },
     {
       title: 'Location',
       dataIndex: 'location',
       align: 'left',
       key: 'location',
+      ellipsis: true,
+    },
+    {
+      title: 'VIPS',
+      dataIndex: 'vips',
+      align: 'left',
+      key: 'vips',
+      width: 70,
+      ellipsis: true,
+      render: (v: string) => {
+        const res = v.split(',');
+        const content = (
+          <div>
+            {res.map((el) => {
+              return <p key={el}>{el}</p>;
+            })}
+          </div>
+        );
+        return (
+          <Popover content={content} title="VIPS">
+            <div
+              style={{
+                cursor: 'pointer',
+              }}
+            >
+              {v}
+            </div>
+          </Popover>
+        );
+      },
     },
     {
       title: 'IDC',
@@ -235,7 +263,7 @@ export default function CDN() {
       align: 'left',
       key: 'status',
       render: (v: string) => {
-        return <div>{v}</div>;
+        return <Tag color={v === 'active' ? 'green' : 'cyan'}>{v}</Tag>;
       },
     },
     {
@@ -282,7 +310,7 @@ export default function CDN() {
 
   return (
     <div className={styles.main}>
-      <h1 className={styles.title}>CDN Config</h1>
+      <h1 className={styles.title}>CDN Cluster</h1>
       <div className={styles.content}>
         <div className={styles.left}>
           <Search

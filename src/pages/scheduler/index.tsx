@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { request } from 'umi';
 import {
-  Menu,
   Input,
   Select,
   Checkbox,
   Button,
   Table,
-  Pagination,
   Descriptions,
   Divider,
   Modal,
@@ -16,12 +14,14 @@ import {
   Tabs,
   Popconfirm,
   Tag,
+  Popover,
 } from 'antd';
 import {
   CopyOutlined,
   DeleteOutlined,
   MinusCircleOutlined,
-  UserDeleteOutlined,
+  AppstoreAddOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
 import { info, updateOptions } from '../../../mock/data';
 import CodeEditor from '@/components/codeEditor';
@@ -90,7 +90,7 @@ export default function IndexPage() {
     getSchedulers(current);
     // mock
     // createScheduler({
-    //   "host_name": "test1",
+    //   "host_name": "test15",
     //   "idc": "2",
     //   "ip": "22.3445.112.23",
     //   "location": "22",
@@ -99,7 +99,7 @@ export default function IndexPage() {
     //   },
     //   "port": 60,
     //   scheduler_cluster_id: 1,
-    //   "vips": "2"
+    //   "vips": "2,23,45,62,1"
     // });
   }, []);
 
@@ -142,21 +142,16 @@ export default function IndexPage() {
   const updateSchedulerById = async (id: string, config: any) => {
     const res = await request(`/api/v1/schedulers/${id}`, {
       method: 'patch',
-      params: {
-        Scheduler: config,
-      },
+      data: config,
     });
     console.log(res);
   };
 
   const deleteSchedulerById = async (id: string) => {
-    const res = await request('/api/v1/schedulers', {
+    const res = await request(`/api/v1/schedulers/${id}`, {
       method: 'delete',
-      data: {
-        id,
-      },
     });
-    console.log(res);
+    getSchedulers(current);
   };
 
   const getClusters = async () => {
@@ -215,6 +210,9 @@ export default function IndexPage() {
     const res = await request('/api/v1/scheduler-clusters', {
       method: 'post',
       data: config,
+      errorHandler: (err) => {
+        console.log(err);
+      },
     });
     if (res) {
       setFormVisible(false);
@@ -236,11 +234,8 @@ export default function IndexPage() {
   };
 
   const deleteClusterById = async (id: number) => {
-    const res = await request('/api/v1/scheduler-clusters', {
+    const res = await request(`/api/v1/scheduler-cluster/${id}`, {
       method: 'delete',
-      params: {
-        id,
-      },
     });
   };
 
@@ -250,24 +245,52 @@ export default function IndexPage() {
       dataIndex: 'host_name',
       align: 'left',
       key: 'host_name',
+      ellipsis: true,
+      width: 140,
     },
     {
       title: 'IP',
       dataIndex: 'ip',
       align: 'left',
       key: 'ip',
-    },
-    {
-      title: 'VIP',
-      dataIndex: 'vips',
-      align: 'left',
-      key: 'vips',
+      ellipsis: true,
+      width: 140,
     },
     {
       title: 'Location',
       dataIndex: 'location',
       align: 'left',
       key: 'location',
+      ellipsis: true,
+    },
+    {
+      title: 'VIPS',
+      dataIndex: 'vips',
+      align: 'left',
+      key: 'vips',
+      width: 70,
+      ellipsis: true,
+      render: (v: string) => {
+        const res = v.split(',');
+        const content = (
+          <div>
+            {res.map((el) => {
+              return <p key={el}>{el}</p>;
+            })}
+          </div>
+        );
+        return (
+          <Popover content={content} title="VIPS">
+            <div
+              style={{
+                cursor: 'pointer',
+              }}
+            >
+              {v}
+            </div>
+          </Popover>
+        );
+      },
     },
     {
       title: 'IDC',
@@ -287,7 +310,7 @@ export default function IndexPage() {
       align: 'left',
       key: 'status',
       render: (v: string) => {
-        return <div>{v}</div>;
+        return <Tag color={v === 'active' ? 'green' : 'cyan'}>{v}</Tag>;
       },
     },
     {
@@ -334,7 +357,7 @@ export default function IndexPage() {
 
   return (
     <div className={styles.main}>
-      <h1 className={styles.title}>Scheduler Config</h1>
+      <h1 className={styles.title}>Scheduler Cluster</h1>
       <div className={styles.content}>
         <div className={styles.left}>
           <Search
@@ -366,7 +389,7 @@ export default function IndexPage() {
                 setDTitle('Add Cluster');
               }}
             >
-              <CopyOutlined />
+              <AppstoreAddOutlined />
               Add Cluster
             </Button>
             <Button
@@ -380,7 +403,7 @@ export default function IndexPage() {
               }}
               disabled={!checkKeys.length}
             >
-              <CopyOutlined />
+              <EditOutlined />
               Batch Update
             </Button>
           </div>
@@ -432,10 +455,22 @@ export default function IndexPage() {
                           style={{
                             marginRight: 4,
                           }}
+                          onClick={() => {
+                            createClusters({
+                              ...sub,
+                              name: `${sub.name}_copy`,
+                            });
+                          }}
                         >
                           <CopyOutlined />
                         </Button>
-                        <Button type="text" className={styles.newBtn}>
+                        <Button
+                          type="text"
+                          className={styles.newBtn}
+                          onClick={() => {
+                            deleteClusterById(sub.id);
+                          }}
+                        >
                           <DeleteOutlined />
                         </Button>
                       </div>
@@ -554,7 +589,20 @@ export default function IndexPage() {
         visible={visible}
         title={dTitle}
         onCancel={() => setVisible(false)}
-        onOk={() => setVisible(false)}
+        footer={
+          dTitle.includes('Update')
+            ? [
+                <Button
+                  key="back"
+                  onClick={() => {
+                    setVisible(false);
+                  }}
+                >
+                  Return
+                </Button>,
+              ]
+            : null
+        }
       >
         <CodeEditor
           value={json}

@@ -19,7 +19,7 @@ export default function IndexPage({ location }) {
       data: params,
     });
     if (res) {
-      window.location.assign('/scheduler');
+      // window.location.assign('/scheduler');
     }
   };
 

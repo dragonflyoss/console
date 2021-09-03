@@ -5,16 +5,22 @@ import { loginSchema, signSchema } from '../../mock/data';
 import styles from './index.less';
 
 // login
-export default function IndexPage() {
+export default function IndexPage({ location }) {
   const [hasAccount, setAccount] = useState(true);
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (location.pathname.includes('up')) {
+      setAccount(false);
+    }
+  }, [location.pathname]);
 
-  const login = async (params: any) => {
+  const signin = async (params: any) => {
     const res = await request('/user/signin', {
       method: 'post',
       data: params,
     });
-    console.log(res);
+    if (res) {
+      window.location.assign('/scheduler');
+    }
   };
 
   const signup = async (params: any) => {
@@ -22,21 +28,21 @@ export default function IndexPage() {
       method: 'post',
       data: params,
     });
-    console.log(res);
+    if (res) {
+      window.location.assign('/signin');
+    }
   };
 
   return (
     <div className={styles.main}>
-      <div className={styles.left} />
+      {/* <div className={styles.left} /> */}
       <div className={styles.right}>
         <div className={styles.header}>
-          <div className={styles.title}>
-            <div className={styles.logo} />
-            蜻蜓-文件分发
-          </div>
-          <div className={styles.i18n}>English</div>
+          <div className={styles.title}>{/* 蜻蜓-文件分发 */}</div>
+          {/* <div className={styles.i18n}>简体中文</div> */}
         </div>
         <div className={styles.content}>
+          <div className={styles.logo} />
           <div className={styles.welcome}>
             {hasAccount ? 'Hello, Welcome to Dragonfly' : 'Sign up'}
           </div>
@@ -45,11 +51,10 @@ export default function IndexPage() {
             layout="vertical"
             onFinish={(v) => {
               if (hasAccount) {
-                login(v);
+                signin(v);
               } else {
                 signup(v);
               }
-              window.location.assign('/scheduler');
             }}
           >
             {hasAccount
@@ -79,16 +84,26 @@ export default function IndexPage() {
                 })}
             {hasAccount ? (
               <div className={styles.check}>
-                has not Account ?
-                <Button type="link" onClick={() => setAccount(false)}>
-                  Register
+                Have not account ?
+                <Button
+                  type="link"
+                  onClick={() => {
+                    window.location.assign('/signup');
+                  }}
+                >
+                  Sign Up
                 </Button>
               </div>
             ) : (
               <div className={styles.check}>
-                has Account ?
-                <Button type="link" onClick={() => setAccount(true)}>
-                  Login
+                Already have an account ?
+                <Button
+                  type="link"
+                  onClick={() => {
+                    window.location.assign('/signin');
+                  }}
+                >
+                  Sign In
                 </Button>
               </div>
             )}
@@ -100,7 +115,7 @@ export default function IndexPage() {
                   width: '100%',
                 }}
               >
-                {hasAccount ? 'Login' : 'Register'}
+                {hasAccount ? 'Sign In' : 'Sign Up'}
               </Button>
             </Form.Item>
           </Form>

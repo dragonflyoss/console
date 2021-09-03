@@ -1,6 +1,9 @@
 .main {
   display: flex;
   height: 100%;
+  background: url(../public/bg-login-white.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
   .left {
     flex: 0 0 60%;
     background: url(../public/bg-login.png);
@@ -14,31 +17,26 @@
     .header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       font-size: 12px;
       .title {
         display: flex;
         align-items: center;
         position: relative;
-        &::before {
-          content: '';
-          position: absolute;
-          top: 8px;
-          left: 80px;
-          height: 8px;
-          width: 1px;
-          margin: 0 8px;
-          background: #848484;
-        }
-      }
-      .logo {
-        width: 80px;
-        height: 24px;
-        background: url(../public/logo-dark.png) 100% 100% no-repeat;
-        margin-right: 17px;
+        // &::before {
+        //   content: '';
+        //   position: absolute;
+        //   top: 8px;
+        //   left: 80px;
+        //   height: 8px;
+        //   width: 1px;
+        //   margin: 0 8px;
+        //   background: #848484;
+        // }
       }
       .i18n {
         color: #848484;
+        cursor: not-allowed;
       }
     }
     .content {
@@ -47,11 +45,17 @@
       left: 50%;
       transform: translate(-50%, -50%);
       width: 300px;
-      // height: 300px;
-      // background: url('../public/temp.png') 100% 100% no-repeat;
+      .logo {
+        width: 150px;
+        height: 46px;
+        background: url(../public/logo-dark.svg) no-repeat;
+        background-size: 100% 100%;
+        margin: 0 auto 16px auto;
+      }
       .welcome {
         font-size: 24px;
         margin-bottom: 32px;
+        color: #1a1a1a;
       }
       .check {
         margin-bottom: 16px;

@@ -95,7 +95,7 @@ export default function CDN() {
         per_page: 50,
       },
     });
-    if (res) {
+    if (res && typeof res === 'object') {
       setSchedulers(
         res.map((sub) => {
           return {
@@ -124,7 +124,7 @@ export default function CDN() {
 
   const getCDNClusters = async () => {
     const res = await request('/api/v1/cdn-clusters');
-    if (res && res.length > 0) {
+    if (res && typeof res === 'object' && res.length > 0) {
       res.map((sub) => {
         Object.keys(sub).map((el) => {
           if (typeof sub[el] === 'number') {

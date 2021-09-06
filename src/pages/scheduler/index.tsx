@@ -111,7 +111,7 @@ export default function IndexPage() {
         per_page: 50,
       },
     });
-    if (res) {
+    if (res && typeof res === 'object') {
       setSchedulers(
         res.map((sub) => {
           return {
@@ -157,7 +157,7 @@ export default function IndexPage() {
 
   const getClusters = async () => {
     const res = await request('/api/v1/scheduler-clusters');
-    if (res && res.length > 0) {
+    if (res && typeof res === 'object' && res.length > 0) {
       // number to string
       res.map((sub) => {
         Object.keys(sub).map((el) => {

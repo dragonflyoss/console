@@ -22,7 +22,6 @@ export default function IndexPage({ location }) {
       data: params,
     });
     if (res) {
-      document.cookie = `jwt2=${res.token};${res.expire}`;
       window.location.assign('/scheduler');
     } else {
       message.error('Incorrect authentication credentials');

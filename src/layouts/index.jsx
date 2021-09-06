@@ -10,6 +10,7 @@ import {
 } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { Link, request } from 'umi';
+import Cookies from 'js-cookie';
 import { decode } from 'jsonwebtoken';
 import '../global.css';
 
@@ -27,25 +28,12 @@ export default function BasicLayout({
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    const temp = location.pathname.split('/')[1];
+    const temp = location.pathname.split('/')?.[1];
     setKey(temp.length ? [temp] : ['scheduler']);
-    const jwt2 = getCookie('jwt2');
-    const userInfo = decode(jwt2, 'jwt');
-    const { id } = userInfo;
+    const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
+    const { id = 1 } = userInfo;
     getUserById(id);
   }, [location.pathname]);
-
-  const getCookie = (name) => {
-    const dict = document.cookie
-      .split(';')
-      .map((x) => x.trim().split('='))
-      .reduce((pre, [k, v]) => {
-        pre[k] = v;
-        return pre;
-      }, {});
-
-    return name ? dict[name] : dict;
-  };
 
   const getUserById = async (id) => {
     const res = await request(`/api/v1/users/${id}`, {

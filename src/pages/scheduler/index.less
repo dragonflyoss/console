@@ -1,0 +1,100 @@
+.main {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+.title {
+  font-size: 24px;
+}
+
+.content {
+  display: flex;
+  height: auto;
+  .left {
+    width: 200px;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 1px;
+      height: calc(100% - 20px);
+      background-color: #eaeaea;
+    }
+    .clusters {
+      margin-top: 8px;
+      .checkLabel {
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        border-radius: 2px;
+        padding: 0 8px;
+      }
+      .activeButton {
+        position: absolute;
+        top: 0;
+        right: 18px;
+        z-index: 999;
+      }
+    }
+  }
+  .right {
+    flex: 1;
+    padding-left: 16px;
+    .infoTitle {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .info {
+      display: flex;
+      flex-wrap: wrap;
+      .subInfo {
+        flex: 0 0 33%;
+        display: flex;
+        padding: 12px 0;
+        color: #5a5a5a;
+        .label {
+          flex: 0 0 40%;
+        }
+        .value {
+          flex: 1;
+          padding-right: 40px;
+          max-width: 180px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+    .divideLine {
+      height: 1px;
+      width: calc(100% - 12px);
+      background: #eaeaea;
+      margin: 16px 0;
+    }
+    .operation {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.newBtn {
+  padding: 0;
+  height: auto;
+}
+
+.drawerContainer {
+  display: flex;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.drawerLabel {
+  color: #5a5a5a;
+  font-size: 12px;
+  margin-bottom: 4px;
+}

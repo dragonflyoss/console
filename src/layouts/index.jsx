@@ -1,51 +1,142 @@
-import { Menu, Search, Nav, Shell, Radio } from '@alicloudfe/components';
-import '@alicloudfe/components/dist/hybridcloud.css';
+import React, { useState, useEffect } from 'react';
+import {
+  Layout,
+  Menu,
+  Breadcrumb,
+  Divider,
+  Avatar,
+  Dropdown,
+  Button,
+} from 'antd';
+import { SettingOutlined } from '@ant-design/icons';
+import { Link, request } from 'umi';
+import Cookies from 'js-cookie';
+import { decode } from 'jsonwebtoken';
 import '../global.css';
 
-const { SubNav, Item } = Nav;
+const { SubMenu } = Menu;
+const { Header, Content, Sider } = Layout;
 
-export default function Layout({ children, location, route, history, match }) {
-  const header = <span className="fusion">FUSION</span>;
-  const footer = (
-    <a className="login-in" href="javascript:;">
-      Login in
-    </a>
+export default function BasicLayout({
+  children,
+  location,
+  route,
+  history,
+  match,
+}) {
+  const [key, setKey] = useState(['scheduler']);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const temp = location.pathname.split('/')?.[1];
+    setKey(temp.length ? [temp] : ['scheduler']);
+    const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
+    const { id = 1 } = userInfo;
+    getUserById(id);
+  }, [location.pathname]);
+
+  const getUserById = async (id) => {
+    const res = await request(`/api/v1/users/${id}`, {
+      method: 'get',
+    });
+    setUser(res);
+  };
+
+  const signout = async () => {
+    const res = await request('/api/v1/users/signout', {
+      method: 'post',
+    });
+    window.location.assign('/signin');
+  };
+
+  const menu = (
+    <Menu>
+      <Menu.Item
+        key="0"
+        style={{
+          pointerEvents: 'none',
+        }}
+      >
+        Hello, {user.name || user.id || 'Admin'}
+      </Menu.Item>
+      <Menu.Divider />
+      <Menu.Item key="1">
+        <Button type="text" onClick={() => signout()}>
+          Sign Out
+        </Button>
+      </Menu.Item>
+    </Menu>
   );
 
   return (
-    <Shell className={'iframe-hack'} style={{ border: '1px solid #eee' }}>
-      <Shell.Branding>
-        <div className="rectangular"></div>
-        <span style={{ marginLeft: 10 }}>蜻蜓-文件分发</span>
-      </Shell.Branding>
-      <Shell.Navigation direction="hoz">
-        <Search
-          key="2"
-          shape="simple"
-          type="dark"
-          palceholder="Search"
-          style={{ width: '200px' }}
-        />
-      </Shell.Navigation>
-      <Shell.Action>
-        <img
-          src="https://img.alicdn.com/tfs/TB1.ZBecq67gK0jSZFHXXa9jVXa-904-826.png"
-          className="avatar"
-          alt="用户头像"
-        />
-        <span style={{ marginLeft: 10 }}>MyName</span>
-      </Shell.Action>
-
-      <Shell.Navigation>
-        <Nav embeddable aria-label="global navigation">
-          <SubNav icon="account" label="配置管理">
-            <Item icon="account">Scheduler配置</Item>
-            <Item icon="account">CDN配置</Item>
-          </SubNav>
-        </Nav>
-      </Shell.Navigation>
-
-      <Shell.Content>{children}</Shell.Content>
-    </Shell>
+    <Layout>
+      <Header className="header">
+        <div className="logo" />
+        {/* <Divider
+          type="vertical"
+          style={{
+            color: '#ffffff',
+            borderColor: '#ffffff',
+          }}
+        /> */}
+        {/* 蜻蜓-文件分发 */}
+        <Dropdown overlay={menu} trigger={['click']}>
+          <Avatar
+            style={{
+              backgroundColor: '#23B066',
+              verticalAlign: 'middle',
+              cursor: 'pointer',
+            }}
+            size="small"
+            gap={4}
+          >
+            {user.name || user.id || 'Admin'}
+          </Avatar>
+        </Dropdown>
+      </Header>
+      <Layout>
+        <Sider width={200} className="site-layout-background">
+          <Menu
+            mode="inline"
+            defaultSelectedKeys={['scheduler']}
+            defaultOpenKeys={['config']}
+            selectedKeys={key}
+            style={{ height: '100%', borderRight: 0 }}
+            onClick={(v) => {
+              // window.location.assign(`/${v.key}`);
+            }}
+          >
+            <SubMenu
+              key="config"
+              icon={<SettingOutlined />}
+              title="Configuration"
+            >
+              <Menu.Item key="scheduler">
+                <Link to="/scheduler">Scheduler Cluster</Link>
+              </Menu.Item>
+              <Menu.Item key="cdn">
+                <Link to="/cdn">CDN Cluster</Link>
+              </Menu.Item>
+            </SubMenu>
+          </Menu>
+        </Sider>
+        <Layout style={{ padding: '0 24px 24px' }}>
+          <Breadcrumb style={{ margin: '16px 0' }}>
+            <Breadcrumb.Item>Configuration</Breadcrumb.Item>
+            <Breadcrumb.Item>{key[0]} Cluster</Breadcrumb.Item>
+          </Breadcrumb>
+          <Content
+            className="site-layout-background"
+            style={{
+              padding: 24,
+              margin: 0,
+              minHeight: 280,
+            }}
+          >
+            {children}
+          </Content>
+        </Layout>
+      </Layout>
+    </Layout>
   );
 }

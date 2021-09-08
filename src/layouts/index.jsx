@@ -8,7 +8,7 @@ import {
   Dropdown,
   Button,
 } from 'antd';
-import { SettingOutlined } from '@ant-design/icons';
+import { SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, request } from 'umi';
 import Cookies from 'js-cookie';
 import { decode } from 'jsonwebtoken';
@@ -24,12 +24,12 @@ export default function BasicLayout({
   history,
   match,
 }) {
-  const [key, setKey] = useState(['scheduler']);
+  const [key, setKey] = useState(['Scheduler']);
   const [user, setUser] = useState({});
 
   useEffect(() => {
     const temp = location.pathname.split('/')?.[1];
-    setKey(temp.length ? [temp] : ['scheduler']);
+    setKey(temp.length ? [temp] : ['Scheduler']);
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
     const { id = 1 } = userInfo;
     getUserById(id);
@@ -71,22 +71,25 @@ export default function BasicLayout({
   return (
     <Layout>
       <Header className="header">
-        <div className="logo" />
-        {/* <Divider
-          type="vertical"
-          style={{
-            color: '#ffffff',
-            borderColor: '#ffffff',
-          }}
-        /> */}
-        {/* 蜻蜓-文件分发 */}
+        <div className="left-info">
+          <div className="logo" />
+          <Divider
+            type="vertical"
+            style={{
+              color: '#ffffff',
+              borderColor: '#ffffff',
+            }}
+          />
+          Dragonfly
+        </div>
         <Dropdown overlay={menu} trigger={['click']}>
           <Avatar
             style={{
-              backgroundColor: '#23B066',
+              // backgroundColor: '#23B066',
               verticalAlign: 'middle',
               cursor: 'pointer',
             }}
+            icon={<UserOutlined />}
             size="small"
             gap={4}
           >
@@ -111,11 +114,11 @@ export default function BasicLayout({
               icon={<SettingOutlined />}
               title="Configuration"
             >
-              <Menu.Item key="scheduler">
-                <Link to="/scheduler">Scheduler Cluster</Link>
+              <Menu.Item key="Scheduler">
+                <Link to="/Scheduler">Scheduler Cluster</Link>
               </Menu.Item>
-              <Menu.Item key="cdn">
-                <Link to="/cdn">CDN Cluster</Link>
+              <Menu.Item key="CDN">
+                <Link to="/CDN">CDN Cluster</Link>
               </Menu.Item>
             </SubMenu>
           </Menu>

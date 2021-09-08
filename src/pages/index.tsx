@@ -6,15 +6,16 @@ import styles from './index.less';
 
 const comsKey = {
   password: Input.Password,
+  passwordT: Input.Password,
 };
 // login
 export default function IndexPage({ location }) {
   const [hasAccount, setAccount] = useState(true);
-  useEffect(() => {
-    if (location.pathname.includes('up')) {
-      setAccount(false);
-    }
-  }, [location.pathname]);
+  // useEffect(() => {
+  //   if (location.pathname.includes('up')) {
+  //     setAccount(false);
+  //   }
+  // }, [location.pathname]);
 
   const signin = async (params: any) => {
     const res = await request('/api/v1/users/signin', {
@@ -22,7 +23,8 @@ export default function IndexPage({ location }) {
       data: params,
     });
     if (res) {
-      window.location.assign('/scheduler');
+      message.success('Success');
+      window.location.assign('/Scheduler');
     } else {
       message.error('Incorrect authentication credentials');
     }
@@ -34,7 +36,8 @@ export default function IndexPage({ location }) {
       data: params,
     });
     if (res) {
-      window.location.assign('/signin');
+      message.success('Success');
+      setAccount(true);
     } else {
       message.error('Incorrect');
     }
@@ -97,7 +100,7 @@ export default function IndexPage({ location }) {
                 <Button
                   type="link"
                   onClick={() => {
-                    window.location.assign('/signup');
+                    setAccount(false);
                   }}
                 >
                   Sign Up
@@ -109,7 +112,7 @@ export default function IndexPage({ location }) {
                 <Button
                   type="link"
                   onClick={() => {
-                    window.location.assign('/signin');
+                    setAccount(true);
                   }}
                 >
                   Sign In

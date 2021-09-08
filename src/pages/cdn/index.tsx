@@ -15,6 +15,8 @@ import {
   Popconfirm,
   Tag,
   Popover,
+  Tooltip,
+  message,
 } from 'antd';
 import {
   CopyOutlined,
@@ -47,7 +49,7 @@ export default function CDN() {
   // checked clusters
   const [checkKeys, setCheck] = useState([]);
 
-  const [scheduler, setSchedulers] = useState([]);
+  const [cdns, setCDNs] = useState([]);
   // table current page
   const [current, setCurrent] = useState(1);
 
@@ -61,6 +63,8 @@ export default function CDN() {
   const [json, setJson] = useState('');
   // form dialog visible
   const [formVisible, setFormVisible] = useState(false);
+  const [updateVisible, setUpdateVisible] = useState(false);
+  const [updateInfo, setUpdateInfo] = useState({});
   // json dialog visible
   const [visible, setVisible] = useState(false);
 
@@ -85,18 +89,28 @@ export default function CDN() {
 
   useEffect(() => {
     getCDNClusters();
-    getSchedulers();
+    getCDNs();
+    // mock
+    // createCDN({
+    //   "host_name": "test3",
+    //   "idc": "2",
+    //   "ip": "22.3445.112.23",
+    //   "location": "22",
+    //   download_port: 80,
+    //   "port": 60,
+    //   cdn_cluster_id: 1,
+    // });
   }, []);
 
-  const getSchedulers = async () => {
-    const res = await request('/api/v1/schedulers', {
+  const getCDNs = async () => {
+    const res = await request('/api/v1/cdns', {
       params: {
         page: 1,
         per_page: 50,
       },
     });
     if (res && typeof res === 'object') {
-      setSchedulers(
+      setCDNs(
         res.map((sub) => {
           return {
             ...sub,
@@ -107,19 +121,32 @@ export default function CDN() {
     }
   };
 
-  const updateSchedulerById = async (id: string, config: any) => {
-    const res = await request(`/api/v1/schedulers/${id}`, {
+  const updateCDNById = async (id: string, config: any) => {
+    const res = await request(`/api/v1/cdns/${id}`, {
       method: 'patch',
       data: config,
     });
-    getSchedulers();
+    if (res) {
+      getCDNs();
+      setVisible(false);
+      message.success('Update Success');
+    }
   };
 
-  const deleteSchedulerById = async (id: number) => {
-    const res = await request(`/api/v1/schedulers/${id}`, {
+  const deleteCDNById = async (id: number) => {
+    const res = await request(`/api/v1/cdns/${id}`, {
       method: 'delete',
     });
-    getSchedulers();
+    getCDNs();
+    message.success('Delete Success');
+  };
+
+  const createCDN = async (config: any) => {
+    const res = await request('/api/v1/cdns', {
+      method: 'post',
+      data: config,
+    });
+    console.log(res);
   };
 
   const getCDNClusters = async () => {
@@ -162,6 +189,7 @@ export default function CDN() {
       data: config,
     });
     if (res) {
+      message.success('Create Success');
       setFormVisible(false);
       getCDNClusters();
       setFormSchema(cdnInfo);
@@ -174,7 +202,9 @@ export default function CDN() {
       data: config,
     });
     if (res) {
+      message.success('Update Success');
       setFormVisible(false);
+      setDrawVisible(false);
       getCDNClusters();
       setFormSchema(cdnInfo);
     }
@@ -184,6 +214,7 @@ export default function CDN() {
     const res = await request(`/api/v1/cdn-clusters/${id}`, {
       method: 'delete',
     });
+    message.success('Delete Success');
     getCDNClusters();
   };
 
@@ -193,50 +224,37 @@ export default function CDN() {
       dataIndex: 'host_name',
       align: 'left',
       key: 'host_name',
-      ellipsis: true,
-      width: 140,
+      render: (v: string) => {
+        return (
+          <Tooltip title={v}>
+            <div className={styles.tableItem}>{v}</div>
+          </Tooltip>
+        );
+      },
     },
     {
       title: 'IP',
       dataIndex: 'ip',
       align: 'left',
       key: 'ip',
-      ellipsis: true,
-      width: 140,
+      render: (v: string) => {
+        return (
+          <Tooltip title={v}>
+            <div className={styles.tableItem}>{v}</div>
+          </Tooltip>
+        );
+      },
     },
     {
       title: 'Location',
       dataIndex: 'location',
       align: 'left',
       key: 'location',
-      ellipsis: true,
-    },
-    {
-      title: 'VIPS',
-      dataIndex: 'vips',
-      align: 'left',
-      key: 'vips',
-      width: 70,
-      ellipsis: true,
       render: (v: string) => {
-        const res = v.split(',');
-        const content = (
-          <div>
-            {res.map((el) => {
-              return <p key={el}>{el}</p>;
-            })}
-          </div>
-        );
         return (
-          <Popover content={content} title="VIPS">
-            <div
-              style={{
-                cursor: 'pointer',
-              }}
-            >
-              {v}
-            </div>
-          </Popover>
+          <Tooltip title={v}>
+            <div className={styles.tableItem}>{v}</div>
+          </Tooltip>
         );
       },
     },
@@ -245,18 +263,33 @@ export default function CDN() {
       dataIndex: 'idc',
       align: 'left',
       key: 'idc',
+      render: (v: string) => {
+        return (
+          <Tooltip title={v}>
+            <div className={styles.tableItem}>{v}</div>
+          </Tooltip>
+        );
+      },
     },
     {
-      title: 'Port',
-      dataIndex: 'port',
-      align: 'left',
-      key: 'port',
+      title: 'Download Port',
+      dataIndex: 'download_port',
+      align: 'center',
+      key: 'download_port',
+      render: (v: string) => {
+        return (
+          <Tooltip title={v}>
+            <div className={styles.tableItem}>{v}</div>
+          </Tooltip>
+        );
+      },
     },
     {
       title: 'Status',
       dataIndex: 'status',
       align: 'left',
       key: 'status',
+      width: 120,
       render: (v: string) => {
         return <Tag color={v === 'active' ? 'green' : 'cyan'}>{v}</Tag>;
       },
@@ -265,22 +298,23 @@ export default function CDN() {
       title: 'Operation',
       dataIndex: 'id',
       align: 'left',
-      width: '20%',
+      width: 140,
       key: 'id',
       render: (t: number, r: any, i: number) => {
         return (
           <div className={styles.operation}>
             <Button
               type="link"
+              className={styles.newBtn}
               onClick={() => {
                 let res = '';
                 try {
-                  res = JSON.stringify(r.net_config, null, 2);
+                  res = JSON.stringify(r, null, 2);
                 } catch (e) {
                   console.log(e);
                 }
-                setDTitle('Update Scheduler');
-                setJson(res);
+                setDTitle('Update CDN');
+                setUpdateInfo(res);
                 setVisible(true);
               }}
             >
@@ -290,12 +324,14 @@ export default function CDN() {
             <Popconfirm
               title="Are you sure to delete this Scheduler?"
               onConfirm={() => {
-                deleteSchedulerById(t);
+                deleteCDNById(t);
               }}
               okText="Yes"
               cancelText="No"
             >
-              <Button type="link">Delete</Button>
+              <Button type="link" className={styles.newBtn}>
+                Delete
+              </Button>
             </Popconfirm>
           </div>
         );
@@ -335,6 +371,9 @@ export default function CDN() {
                 setFormVisible(true);
                 setFormSchema(cdnInfo);
                 setDTitle('Add Cluster');
+                setTimeout(() => {
+                  setUpdateVisible(true);
+                }, 50);
               }}
             >
               <AppstoreAddOutlined />
@@ -430,7 +469,8 @@ export default function CDN() {
             title="Cluster Info"
             extra={
               <Button
-                type="link"
+                type="primary"
+                size="small"
                 onClick={() => {
                   setDTitle('Update Cluster');
                   const temp = [];
@@ -469,6 +509,9 @@ export default function CDN() {
                   });
                   setFormSchema(temp);
                   setFormVisible(true);
+                  setTimeout(() => {
+                    setUpdateVisible(true);
+                  }, 50);
                 }}
               >
                 Update
@@ -517,14 +560,14 @@ export default function CDN() {
             })}
           </Descriptions>
           <div className={styles.divideLine} />
-          <div className={styles.infoTitle}>Scheduler</div>
+          <div className={styles.infoTitle}>CDN</div>
           <Table
-            dataSource={scheduler}
+            dataSource={cdns}
             columns={columns}
             primaryKey="name"
             pagination={{
               pageSize: 10,
-              total: scheduler.length,
+              total: cdns.length,
             }}
           />
         </div>
@@ -533,13 +576,44 @@ export default function CDN() {
         visible={visible}
         title={dTitle}
         onCancel={() => setVisible(false)}
-        onOk={() => setVisible(false)}
+        footer={
+          dTitle.includes('Update')
+            ? [
+                <Button
+                  key="back"
+                  onClick={() => {
+                    setVisible(false);
+                  }}
+                >
+                  Return
+                </Button>,
+                <Button
+                  key="submit"
+                  type="primary"
+                  onClick={() => {
+                    let res = {};
+                    try {
+                      res = JSON.parse(updateInfo);
+                      updateCDNById(res.id, res);
+                    } catch (e) {
+                      console.log(e);
+                    }
+                  }}
+                >
+                  Submit
+                </Button>,
+              ]
+            : null
+        }
       >
         <CodeEditor
-          value={json}
+          value={dTitle.includes('Update') ? updateInfo : json}
           height={200}
           options={{
             readOnly: !dTitle.includes('Update'),
+          }}
+          onChange={(v) => {
+            setUpdateInfo(v);
           }}
         />
       </Modal>
@@ -550,6 +624,7 @@ export default function CDN() {
           setFormInfo({});
           setFormSchema(cdnInfo);
           setFormVisible(false);
+          setUpdateVisible(false);
         }}
         bodyStyle={{
           paddingLeft: 0,
@@ -561,6 +636,7 @@ export default function CDN() {
               setFormInfo({});
               setFormSchema(cdnInfo);
               setFormVisible(false);
+              setUpdateVisible(false);
             }}
           >
             Return
@@ -608,76 +684,78 @@ export default function CDN() {
           </Button>,
         ]}
       >
-        <Tabs tabPosition={'left'}>
-          <Tabs.TabPane tab="basic info" key="1">
-            <Form
-              labelAlign="left"
-              layout="vertical"
-              onValuesChange={(cv, v) => {
-                setFormInfo((pre) => {
-                  return {
-                    ...pre,
-                    ...cv,
-                  };
-                });
-              }}
-            >
-              {formSchema.map((sub: any) => {
-                const Content = comsKeys[sub.type || 'input'];
-                if (!sub.hide && sub.tab === '1') {
-                  return (
-                    <Form.Item
-                      name={sub.key}
-                      key={sub.key}
-                      label={sub.key}
-                      {...(sub.formprops || {})}
-                    >
-                      <Content
-                        {...sub.props}
-                        onClick={() => {
-                          if (sub.key === 'security_group_id') {
-                            getSecGroups();
-                          }
-                        }}
-                        options={formOps[sub.key] || {}}
-                      />
-                    </Form.Item>
-                  );
-                }
-              })}
-            </Form>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="configs" key="2">
-            <Form
-              labelAlign="left"
-              layout="vertical"
-              onValuesChange={(cv, v) => {
-                setFormInfo((pre) => {
-                  return {
-                    ...pre,
-                    ...cv,
-                  };
-                });
-              }}
-            >
-              {formSchema.map((sub: any) => {
-                const Content = comsKeys[sub.type || 'input'];
-                if (!sub.hide && sub.tab === '2') {
-                  return (
-                    <Form.Item
-                      name={sub.key}
-                      key={sub.key}
-                      label={sub.key}
-                      {...(sub.formprops || {})}
-                    >
-                      <Content {...(sub.props || {})} />
-                    </Form.Item>
-                  );
-                }
-              })}
-            </Form>
-          </Tabs.TabPane>
-        </Tabs>
+        {updateVisible ? (
+          <Tabs tabPosition={'left'}>
+            <Tabs.TabPane tab="basic info" key="1">
+              <Form
+                labelAlign="left"
+                layout="vertical"
+                onValuesChange={(cv, v) => {
+                  setFormInfo((pre) => {
+                    return {
+                      ...pre,
+                      ...cv,
+                    };
+                  });
+                }}
+              >
+                {formSchema.map((sub: any) => {
+                  const Content = comsKeys[sub.type || 'input'];
+                  if (!sub.hide && sub.tab === '1') {
+                    return (
+                      <Form.Item
+                        name={sub.key}
+                        key={sub.key}
+                        label={sub.key}
+                        {...(sub.formprops || {})}
+                      >
+                        <Content
+                          {...sub.props}
+                          onClick={() => {
+                            if (sub.key === 'security_group_id') {
+                              getSecGroups();
+                            }
+                          }}
+                          options={formOps[sub.key] || {}}
+                        />
+                      </Form.Item>
+                    );
+                  }
+                })}
+              </Form>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="configs" key="2">
+              <Form
+                labelAlign="left"
+                layout="vertical"
+                onValuesChange={(cv, v) => {
+                  setFormInfo((pre) => {
+                    return {
+                      ...pre,
+                      ...cv,
+                    };
+                  });
+                }}
+              >
+                {formSchema.map((sub: any) => {
+                  const Content = comsKeys[sub.type || 'input'];
+                  if (!sub.hide && sub.tab === '2') {
+                    return (
+                      <Form.Item
+                        name={sub.key}
+                        key={sub.key}
+                        label={sub.key}
+                        {...(sub.formprops || {})}
+                      >
+                        <Content {...(sub.props || {})} />
+                      </Form.Item>
+                    );
+                  }
+                })}
+              </Form>
+            </Tabs.TabPane>
+          </Tabs>
+        ) : null}
       </Modal>
       <Drawer
         title="Update Scheduler Clusters"
@@ -824,7 +902,7 @@ export default function CDN() {
                       });
                       setTimeout(() => {
                         setDrawLoading(false);
-                      }, 100);
+                      }, 50);
                     }}
                     style={{
                       marginLeft: 8,
@@ -848,7 +926,7 @@ export default function CDN() {
               });
               setTimeout(() => {
                 setDrawLoading(false);
-              }, 100);
+              }, 50);
             }}
           >
             <CopyOutlined />

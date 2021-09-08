@@ -9,7 +9,7 @@ export const request: RequestConfig = {
         errorCode: res.status,
         success: res.ok,
         error: resData.errors,
-        errorMessage: resData.errors,
+        errorMessage: resData.message || resData.errors,
       };
     },
   },

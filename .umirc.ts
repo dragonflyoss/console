@@ -5,17 +5,21 @@ export default defineConfig({
   nodeModulesTransform: {
     type: 'none',
   },
+  favicon: '/static/logo-dragonfly.faab8a98.png',
   routes: [
+    {
+      exact: true,
+      path: '/',
+      component: '@/pages/index',
+    },
     { exact: true, path: '/signin', component: '@/pages/index' },
-    { exact: true, path: '/signup', component: '@/pages/index' },
     {
       exact: false,
       path: '/',
       component: '@/layouts/index',
       routes: [
-        { exact: true, path: '/', component: '@/pages/scheduler' },
-        { exact: true, path: '/scheduler', component: '@/pages/scheduler' },
-        { exact: true, path: '/cdn', component: '@/pages/cdn' },
+        { exact: true, path: '/Scheduler', component: '@/pages/scheduler' },
+        { exact: true, path: '/CDN', component: '@/pages/cdn' },
       ],
     },
   ],
@@ -25,7 +29,6 @@ export default defineConfig({
     antd: true,
   },
   fastRefresh: {},
-  proxy: {},
   theme: {
     'primary-color': '#23B066',
   },

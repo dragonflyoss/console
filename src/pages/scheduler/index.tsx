@@ -15,6 +15,8 @@ import {
   Popconfirm,
   Tag,
   Popover,
+  message,
+  Tooltip,
 } from 'antd';
 import {
   CopyOutlined,
@@ -59,20 +61,22 @@ export default function IndexPage() {
   const [visible, setVisible] = useState(false);
   // form dialog visible
   const [formVisible, setFormVisible] = useState(false);
+  const [updateVisible, setUpdateVisible] = useState(false);
   // form dialog content
   const [formInfo, setFormInfo] = useState({});
   // form dialog schema
   const [formSchema, setFormSchema] = useState(info);
   // json dialog content
   const [json, setJson] = useState('');
+  const [updateInfo, setUpdateInfo] = useState({});
 
   // drawer visible
   const [drawVisible, setDrawVisible] = useState(false);
   // drawer content
   const [drawContent, setDrawContent] = useState([
     {
-      label: 'cdn_cluster_id',
-      value: 'cdn_cluster_id',
+      label: 'cdn_clusters',
+      value: 'cdn_clusters',
       type: 'select',
       key: 1,
     },
@@ -82,7 +86,7 @@ export default function IndexPage() {
   const [drawLoading, setDrawLoading] = useState(false);
 
   const formOps = {
-    cdn_cluster_id: cClusters,
+    cdn_clusters: cClusters,
     security_group_id: secGroups,
   };
 
@@ -140,18 +144,24 @@ export default function IndexPage() {
     console.log(res);
   };
 
-  const updateSchedulerById = async (id: string, config: any) => {
+  const updateSchedulerById = async (id: number, config: any) => {
     const res = await request(`/api/v1/schedulers/${id}`, {
       method: 'patch',
       data: config,
     });
     console.log(res);
+    if (res) {
+      message.success('Update Success');
+      setVisible(false);
+      getSchedulers(current);
+    }
   };
 
   const deleteSchedulerById = async (id: string) => {
     const res = await request(`/api/v1/schedulers/${id}`, {
       method: 'delete',
     });
+    message.success('Delete Success');
     getSchedulers(current);
   };
 
@@ -226,6 +236,7 @@ export default function IndexPage() {
       },
     });
     if (res) {
+      message.success('Create Success');
       setFormVisible(false);
       getClusters();
       setFormSchema(info);
@@ -238,9 +249,20 @@ export default function IndexPage() {
       data: config,
     });
     if (res) {
-      setFormVisible(false);
-      getClusters();
+      message.success('Update Success');
       setFormSchema(info);
+      setDrawContent([
+        {
+          label: 'cdn_clusters',
+          value: 'cdn_clusters',
+          type: 'select',
+          key: 1,
+        },
+      ]);
+      setDrawOptions(updateOptions);
+      setFormVisible(false);
+      setDrawVisible(false);
+      getClusters();
     }
   };
 
@@ -248,6 +270,7 @@ export default function IndexPage() {
     const res = await request(`/api/v1/scheduler-cluster/${id}`, {
       method: 'delete',
     });
+    message.success('Delete Success');
   };
 
   const columns = [
@@ -257,7 +280,13 @@ export default function IndexPage() {
       align: 'left',
       key: 'host_name',
       ellipsis: true,
-      width: 140,
+      render: (v: string) => {
+        return (
+          <Tooltip title={v}>
+            <div className={styles.tableItem}>{v}</div>
+          </Tooltip>
+        );
+      },
     },
     {
       title: 'IP',
@@ -265,21 +294,33 @@ export default function IndexPage() {
       align: 'left',
       key: 'ip',
       ellipsis: true,
-      width: 140,
+      render: (v: string) => {
+        return (
+          <Tooltip title={v}>
+            <div className={styles.tableItem}>{v}</div>
+          </Tooltip>
+        );
+      },
     },
     {
       title: 'Location',
       dataIndex: 'location',
       align: 'left',
       key: 'location',
-      ellipsis: true,
+      render: (v: string) => {
+        return (
+          <Tooltip title={v}>
+            <div className={styles.tableItem}>{v}</div>
+          </Tooltip>
+        );
+      },
     },
     {
       title: 'VIPS',
       dataIndex: 'vips',
       align: 'left',
       key: 'vips',
-      width: 70,
+      width: 80,
       ellipsis: true,
       render: (v: string) => {
         const res = v.split(',');
@@ -292,13 +333,7 @@ export default function IndexPage() {
         );
         return (
           <Popover content={content} title="VIPS">
-            <div
-              style={{
-                cursor: 'pointer',
-              }}
-            >
-              {v}
-            </div>
+            <div className={styles.tableItem}>{v}</div>
           </Popover>
         );
       },
@@ -308,18 +343,37 @@ export default function IndexPage() {
       dataIndex: 'idc',
       align: 'left',
       key: 'idc',
+      width: 90,
+      ellipsis: true,
+      render: (v: string) => {
+        return (
+          <Tooltip title={v}>
+            <div className={styles.tableItem}>{v}</div>
+          </Tooltip>
+        );
+      },
     },
     {
       title: 'Port',
       dataIndex: 'port',
       align: 'left',
       key: 'port',
+      width: 80,
+      ellipsis: true,
+      render: (v: number) => {
+        return (
+          <Tooltip title={v}>
+            <div className={styles.tableItem}>{v}</div>
+          </Tooltip>
+        );
+      },
     },
     {
       title: 'Status',
       dataIndex: 'status',
       align: 'left',
       key: 'status',
+      width: 120,
       render: (v: string) => {
         return <Tag color={v === 'active' ? 'green' : 'cyan'}>{v}</Tag>;
       },
@@ -328,22 +382,23 @@ export default function IndexPage() {
       title: 'Operation',
       dataIndex: 'id',
       align: 'left',
-      width: '20%',
+      width: 140,
       key: 'id',
       render: (t: number, r: any, i: number) => {
         return (
           <div className={styles.operation}>
             <Button
+              className={styles.newBtn}
               type="link"
               onClick={() => {
                 let res = '';
                 try {
-                  res = JSON.stringify(r.net_config, null, 2);
+                  res = JSON.stringify(r, null, 2);
                 } catch (e) {
                   console.log(e);
                 }
                 setDTitle('Update Scheduler');
-                setJson(res);
+                setUpdateInfo(res);
                 setVisible(true);
               }}
             >
@@ -358,7 +413,9 @@ export default function IndexPage() {
               okText="Yes"
               cancelText="No"
             >
-              <Button type="link">Delete</Button>
+              <Button type="link" className={styles.newBtn}>
+                Delete
+              </Button>
             </Popconfirm>
           </div>
         );
@@ -395,9 +452,12 @@ export default function IndexPage() {
                 fontSize: 12,
               }}
               onClick={() => {
-                setFormVisible(true);
                 setFormSchema(info);
+                setFormVisible(true);
                 setDTitle('Add Cluster');
+                setTimeout(() => {
+                  setUpdateVisible(true);
+                }, 50);
               }}
             >
               <AppstoreAddOutlined />
@@ -432,6 +492,7 @@ export default function IndexPage() {
                     value={sub.id}
                     onClick={() => {
                       setClick(idx);
+                      setFormSchema(info);
                     }}
                     onMouseEnter={() => {
                       setHover(sub.id);
@@ -499,7 +560,8 @@ export default function IndexPage() {
             title="Cluster Info"
             extra={
               <Button
-                type="link"
+                type="primary"
+                size="small"
                 onClick={() => {
                   setDTitle('Update Cluster');
                   console.log(sClusters[isClick]);
@@ -539,6 +601,9 @@ export default function IndexPage() {
                   });
                   setFormSchema(temp);
                   setFormVisible(true);
+                  setTimeout(() => {
+                    setUpdateVisible(true);
+                  }, 50);
                 }}
               >
                 Update
@@ -616,9 +681,15 @@ export default function IndexPage() {
                 </Button>,
                 <Button
                   key="submit"
+                  type="primary"
                   onClick={() => {
-                    console.log();
-                    // setVisible(false);
+                    let res = {};
+                    try {
+                      res = JSON.parse(updateInfo);
+                      updateSchedulerById(res.id, res);
+                    } catch (e) {
+                      console.log(e);
+                    }
                   }}
                 >
                   Submit
@@ -628,21 +699,24 @@ export default function IndexPage() {
         }
       >
         <CodeEditor
-          value={json}
+          value={dTitle.includes('Update') ? updateInfo : json}
           height={200}
           options={{
             readOnly: !dTitle.includes('Update'),
           }}
           onChange={(v) => {
-            console.log(v);
+            setUpdateInfo(v);
           }}
         />
       </Modal>
       <Modal
         visible={formVisible}
         title={dTitle}
-        onCancel={() => setFormVisible(false)}
-        onOk={() => setFormVisible(false)}
+        onCancel={() => {
+          setFormVisible(false);
+          setFormSchema(info);
+          setUpdateVisible(false);
+        }}
         bodyStyle={{
           paddingLeft: 0,
         }}
@@ -651,6 +725,7 @@ export default function IndexPage() {
             key="back"
             onClick={() => {
               setFormInfo({});
+              setUpdateVisible(false);
               setFormVisible(false);
             }}
           >
@@ -699,82 +774,80 @@ export default function IndexPage() {
           </Button>,
         ]}
       >
-        <Tabs tabPosition={'left'}>
-          <Tabs.TabPane tab="basic info" key="1">
-            <Form
-              labelAlign="left"
-              layout="vertical"
-              onValuesChange={(cv, v) => {
-                setFormInfo((pre) => {
-                  return {
-                    ...pre,
-                    ...cv,
-                  };
-                });
-              }}
-            >
-              {formSchema.map((sub: any) => {
-                const Content = comsKeys[sub.type || 'input'];
-                if (!sub.hide && sub.tab === '1') {
-                  return (
-                    <Form.Item
-                      name={sub.key}
-                      key={sub.key}
-                      label={sub.key}
-                      {...(sub.formprops || {})}
-                      shouldUpdate={(prevValues, curValues) => {
-                        console.log(prevValues, curValues);
-                        return prevValues.additional !== curValues.additional;
-                      }}
-                    >
-                      <Content
-                        {...sub.props}
-                        onClick={() => {
-                          if (sub.key === 'cdn_cluster_id') {
-                            getCDNClusters();
-                          } else if (sub.key === 'security_group_id') {
-                            getSecGroups();
-                          }
-                        }}
-                        options={formOps[sub.key] || {}}
-                      />
-                    </Form.Item>
-                  );
-                }
-              })}
-            </Form>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="configs" key="2">
-            <Form
-              labelAlign="left"
-              layout="vertical"
-              onValuesChange={(cv, v) => {
-                setFormInfo((pre) => {
-                  return {
-                    ...pre,
-                    ...cv,
-                  };
-                });
-              }}
-            >
-              {formSchema.map((sub: any) => {
-                const Content = comsKeys[sub.type || 'input'];
-                if (!sub.hide && sub.tab === '2') {
-                  return (
-                    <Form.Item
-                      name={sub.key}
-                      key={sub.key}
-                      label={sub.key}
-                      {...(sub.formprops || {})}
-                    >
-                      <Content {...(sub.props || {})} />
-                    </Form.Item>
-                  );
-                }
-              })}
-            </Form>
-          </Tabs.TabPane>
-        </Tabs>
+        {updateVisible ? (
+          <Tabs tabPosition={'left'}>
+            <Tabs.TabPane tab="basic info" key="1">
+              <Form
+                labelAlign="left"
+                layout="vertical"
+                onValuesChange={(cv, v) => {
+                  setFormInfo((pre) => {
+                    return {
+                      ...pre,
+                      ...cv,
+                    };
+                  });
+                }}
+              >
+                {formSchema.map((sub: any) => {
+                  const Content = comsKeys[sub.type || 'input'];
+                  if (!sub.hide && sub.tab === '1') {
+                    return (
+                      <Form.Item
+                        name={sub.key}
+                        key={sub.key}
+                        label={sub.key}
+                        {...(sub.formprops || {})}
+                      >
+                        <Content
+                          {...sub.props}
+                          onClick={() => {
+                            if (sub.key === 'cdn_clusters') {
+                              getCDNClusters();
+                            } else if (sub.key === 'security_group_id') {
+                              getSecGroups();
+                            }
+                          }}
+                          options={formOps[sub.key] || {}}
+                        />
+                      </Form.Item>
+                    );
+                  }
+                })}
+              </Form>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="configs" key="2">
+              <Form
+                labelAlign="left"
+                layout="vertical"
+                onValuesChange={(cv, v) => {
+                  setFormInfo((pre) => {
+                    return {
+                      ...pre,
+                      ...cv,
+                    };
+                  });
+                }}
+              >
+                {formSchema.map((sub: any) => {
+                  const Content = comsKeys[sub.type || 'input'];
+                  if (!sub.hide && sub.tab === '2') {
+                    return (
+                      <Form.Item
+                        name={sub.key}
+                        key={sub.key}
+                        label={sub.key}
+                        {...(sub.formprops || {})}
+                      >
+                        <Content {...(sub.props || {})} />
+                      </Form.Item>
+                    );
+                  }
+                })}
+              </Form>
+            </Tabs.TabPane>
+          </Tabs>
+        ) : null}
       </Modal>
       <Drawer
         title="Update Scheduler Clusters"
@@ -783,8 +856,8 @@ export default function IndexPage() {
           setDrawVisible(false);
           setDrawContent([
             {
-              label: 'cdn_cluster_id',
-              value: 'cdn_cluster_id',
+              label: 'cdn_clusters',
+              value: 'cdn_clusters',
               type: 'select',
               key: 1,
             },
@@ -800,8 +873,8 @@ export default function IndexPage() {
               setDrawVisible(false);
               setDrawContent([
                 {
-                  label: 'cdn_cluster_id',
-                  value: 'cdn_cluster_id',
+                  label: 'cdn_clusters',
+                  value: 'cdn_clusters',
                   type: 'select',
                   key: 1,
                 },
@@ -820,6 +893,7 @@ export default function IndexPage() {
             onClick={() => {
               const config = {};
               drawContent.forEach((sub) => {
+                console.log(sub);
                 let res = sub.update;
                 if (typeof sub.update === 'string') {
                   try {
@@ -829,6 +903,9 @@ export default function IndexPage() {
                   }
                 }
                 config[sub.value] = res;
+                if (sub.value === 'cdn_clusters') {
+                  config['cdn_cluster_id'] = res;
+                }
               });
               checkKeys.forEach((id) => {
                 updateClusterById({
@@ -850,8 +927,15 @@ export default function IndexPage() {
         >
           {checkKeys.map((subKey) => {
             return (
-              <Tag closable key={subKey} onClose={(v) => console.log(v)}>
-                {sClusters.filter((e) => e.id.toString() === subKey)[0].name}
+              <Tag
+                closable={false}
+                key={subKey}
+                onClose={(v) => {
+                  checkKeys.splice(checkKeys.indexOf(subKey), 1);
+                  setCheck(checkKeys);
+                }}
+              >
+                {sClusters.filter((e) => e.id.toString() === subKey)?.[0].name}
               </Tag>
             );
           })}
@@ -892,7 +976,7 @@ export default function IndexPage() {
                   }}
                   options={formOps[el.value] || {}}
                   onClick={() => {
-                    if (el.value === 'cdn_cluster_id') {
+                    if (el.value === 'cdn_clusters') {
                       getCDNClusters(); // TODO when render get
                     } else if (el.value === 'security_group_id') {
                       getSecGroups();

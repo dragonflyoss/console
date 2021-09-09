@@ -191,11 +191,11 @@ export default function CDN() {
       method: 'post',
       data: config,
     });
+    setJson('');
     res.then((r) => {
       message.success('Create Success');
       setFormVisible(false);
       setCopyVisible(false);
-      setJson('');
       setFormSchema(cdnInfo);
       setUpdateInfo({});
       getCDNClusters();
@@ -221,6 +221,13 @@ export default function CDN() {
       method: 'delete',
     });
     res.then(() => {
+      setCheck((pre) => {
+        pre.splice(
+          pre.findIndex((item) => item === id.toString()),
+          1,
+        );
+        return pre;
+      });
       message.success('Delete Success');
       getCDNClusters();
     });

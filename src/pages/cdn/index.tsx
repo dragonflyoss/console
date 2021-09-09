@@ -67,6 +67,7 @@ export default function CDN() {
   const [updateInfo, setUpdateInfo] = useState({});
   // json dialog visible
   const [visible, setVisible] = useState(false);
+  const [copyVisible, setCopyVisible] = useState(false);
 
   // drawer visible
   const [drawVisible, setDrawVisible] = useState(false);
@@ -121,24 +122,26 @@ export default function CDN() {
     }
   };
 
-  const updateCDNById = async (id: string, config: any) => {
-    const res = await request(`/api/v1/cdns/${id}`, {
+  const updateCDNById = (id: string, config: any) => {
+    const res = request(`/api/v1/cdns/${id}`, {
       method: 'patch',
       data: config,
     });
-    if (res) {
+    res.then(() => {
       getCDNs();
       setVisible(false);
       message.success('Update Success');
-    }
+    });
   };
 
-  const deleteCDNById = async (id: number) => {
-    const res = await request(`/api/v1/cdns/${id}`, {
+  const deleteCDNById = (id: number) => {
+    const res = request(`/api/v1/cdns/${id}`, {
       method: 'delete',
     });
-    getCDNs();
-    message.success('Delete Success');
+    res.then(() => {
+      message.success('Delete Success');
+      getCDNs();
+    });
   };
 
   const createCDN = async (config: any) => {
@@ -183,39 +186,44 @@ export default function CDN() {
     }
   };
 
-  const createClusters = async (config: any) => {
-    const res = await request('/api/v1/cdn-clusters', {
+  const createClusters = (config: any) => {
+    const res = request('/api/v1/cdn-clusters', {
       method: 'post',
       data: config,
     });
-    if (res) {
+    res.then((r) => {
       message.success('Create Success');
       setFormVisible(false);
-      getCDNClusters();
+      setCopyVisible(false);
+      setJson('');
       setFormSchema(cdnInfo);
-    }
+      setUpdateInfo({});
+      getCDNClusters();
+    });
   };
 
-  const updateClusterById = async (config: any) => {
-    const res = await request(`/api/v1/cdn-clusters/${config.id}`, {
+  const updateClusterById = (config: any) => {
+    const res = request(`/api/v1/cdn-clusters/${config.id}`, {
       method: 'patch',
       data: config,
     });
-    if (res) {
+    res.then(() => {
       message.success('Update Success');
       setFormVisible(false);
       setDrawVisible(false);
       getCDNClusters();
       setFormSchema(cdnInfo);
-    }
+    });
   };
 
-  const deleteClusterById = async (id: number) => {
-    const res = await request(`/api/v1/cdn-clusters/${id}`, {
+  const deleteClusterById = (id: number) => {
+    const res = request(`/api/v1/cdn-clusters/${id}`, {
       method: 'delete',
     });
-    message.success('Delete Success');
-    getCDNClusters();
+    res.then(() => {
+      message.success('Delete Success');
+      getCDNClusters();
+    });
   };
 
   const columns = [
@@ -442,6 +450,10 @@ export default function CDN() {
                           style={{
                             marginRight: 4,
                           }}
+                          onClick={() => {
+                            setUpdateInfo(sub);
+                            setCopyVisible(true);
+                          }}
                         >
                           <CopyOutlined />
                         </Button>
@@ -572,6 +584,46 @@ export default function CDN() {
           />
         </div>
       </div>
+      <Modal
+        visible={copyVisible}
+        title="Copy this Cluster"
+        width={300}
+        onCancel={() => setCopyVisible(false)}
+        footer={[
+          <Button
+            key="back"
+            onClick={() => {
+              setCopyVisible(false);
+              setJson('');
+            }}
+          >
+            Return
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            onClick={() => {
+              createClusters({
+                ...updateInfo,
+                name: json,
+              });
+            }}
+          >
+            Submit
+          </Button>,
+        ]}
+      >
+        name
+        <Input
+          placeholder="Please enter the name"
+          onChange={(e) => {
+            setJson(e.target.value);
+          }}
+          style={{
+            marginTop: 8,
+          }}
+        />
+      </Modal>
       <Modal
         visible={visible}
         title={dTitle}

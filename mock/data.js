@@ -237,7 +237,7 @@ export const tableData = [
 
 export const updateOptions = [
   {
-    label: 'Cdn Clusters',
+    label: 'CDN Clusters',
     value: 'cdn_clusters',
     type: 'select',
   },

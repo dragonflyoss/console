@@ -399,7 +399,7 @@ export default function IndexPage() {
       render: (t: number, r: any, i: number) => {
         return (
           <div className={styles.operation}>
-            <Button
+            {/* <Button
               className={styles.newBtn}
               type="link"
               onClick={() => {
@@ -416,7 +416,7 @@ export default function IndexPage() {
             >
               Update
             </Button>
-            <Divider type="vertical" />
+            <Divider type="vertical" /> */}
             <Popconfirm
               title="Are you sure to delete this Scheduler?"
               onConfirm={() => {
@@ -687,7 +687,7 @@ export default function IndexPage() {
               setJson('');
             }}
           >
-            Return
+            Cancel
           </Button>,
           <Button
             key="submit"
@@ -727,7 +727,7 @@ export default function IndexPage() {
                     setVisible(false);
                   }}
                 >
-                  Return
+                  Cancel
                 </Button>,
                 <Button
                   key="submit"
@@ -779,7 +779,7 @@ export default function IndexPage() {
               setFormVisible(false);
             }}
           >
-            Return
+            Cancel
           </Button>,
           <Button
             key="submit"
@@ -846,7 +846,7 @@ export default function IndexPage() {
                       <Form.Item
                         name={sub.key}
                         key={sub.key}
-                        label={sub.key}
+                        label={sub.en_US}
                         {...(sub.formprops || {})}
                       >
                         <Content
@@ -886,7 +886,7 @@ export default function IndexPage() {
                       <Form.Item
                         name={sub.key}
                         key={sub.key}
-                        label={sub.key}
+                        label={sub.en_US}
                         {...(sub.formprops || {})}
                       >
                         <Content {...(sub.props || {})} />
@@ -935,7 +935,7 @@ export default function IndexPage() {
               marginRight: 8,
             }}
           >
-            Return
+            Cancel
           </Button>,
           <Button
             key="submit"

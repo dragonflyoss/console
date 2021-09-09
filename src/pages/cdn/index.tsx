@@ -311,7 +311,7 @@ export default function CDN() {
       render: (t: number, r: any, i: number) => {
         return (
           <div className={styles.operation}>
-            <Button
+            {/* <Button
               type="link"
               className={styles.newBtn}
               onClick={() => {
@@ -328,7 +328,7 @@ export default function CDN() {
             >
               Update
             </Button>
-            <Divider type="vertical" />
+            <Divider type="vertical" /> */}
             <Popconfirm
               title="Are you sure to delete this Scheduler?"
               onConfirm={() => {
@@ -597,7 +597,7 @@ export default function CDN() {
               setJson('');
             }}
           >
-            Return
+            Cancel
           </Button>,
           <Button
             key="submit"
@@ -637,7 +637,7 @@ export default function CDN() {
                     setVisible(false);
                   }}
                 >
-                  Return
+                  Cancel
                 </Button>,
                 <Button
                   key="submit"
@@ -691,7 +691,7 @@ export default function CDN() {
               setUpdateVisible(false);
             }}
           >
-            Return
+            Cancel
           </Button>,
           <Button
             key="submit"
@@ -758,7 +758,7 @@ export default function CDN() {
                       <Form.Item
                         name={sub.key}
                         key={sub.key}
-                        label={sub.key}
+                        label={sub.en_US}
                         {...(sub.formprops || {})}
                       >
                         <Content
@@ -796,7 +796,7 @@ export default function CDN() {
                       <Form.Item
                         name={sub.key}
                         key={sub.key}
-                        label={sub.key}
+                        label={sub.en_US}
                         {...(sub.formprops || {})}
                       >
                         <Content {...(sub.props || {})} />
@@ -845,7 +845,7 @@ export default function CDN() {
               marginRight: 8,
             }}
           >
-            Return
+            Cancel
           </Button>,
           <Button
             key="submit"

@@ -2,6 +2,7 @@
   height: 100%;
   width: 100%;
   position: relative;
+  overflow: auto;
 }
 .title {
   font-size: 24px;
@@ -104,4 +105,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+&::-webkit-scrollbar {
+  background: transparent;
+  width: 6px;
+  height: 6px;
+}
+
+&::-webkit-scrollbar-thumb {
+  background: transparent;
 }

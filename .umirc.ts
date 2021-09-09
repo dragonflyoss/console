@@ -15,11 +15,24 @@ export default defineConfig({
     { exact: true, path: '/signin', component: '@/pages/index' },
     {
       exact: false,
-      path: '/',
+      path: '/configuration',
       component: '@/layouts/index',
       routes: [
-        { exact: true, path: '/schedulers', component: '@/pages/scheduler' },
-        { exact: true, path: '/cdns', component: '@/pages/cdn' },
+        {
+          exact: true,
+          path: '/configuration/',
+          component: '@/pages/scheduler',
+        },
+        {
+          exact: true,
+          path: '/configuration/scheduler-cluster',
+          component: '@/pages/scheduler',
+        },
+        {
+          exact: true,
+          path: '/configuration/cdn-cluster',
+          component: '@/pages/cdn',
+        },
         { component: '@/pages/404' },
       ],
     },

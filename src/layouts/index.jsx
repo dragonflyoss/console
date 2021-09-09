@@ -24,12 +24,12 @@ export default function BasicLayout({
   history,
   match,
 }) {
-  const [key, setKey] = useState(['schedulers']);
+  const [key, setKey] = useState(['scheduler-cluster']);
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    const temp = location.pathname.split('/')?.[1];
-    setKey(temp.length ? [temp] : ['schedulers']);
+    const temp = location.pathname.split('/')?.[2];
+    setKey(temp.length ? [temp] : ['scheduler-cluster']);
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
     if (userInfo.id) {
       getUserById(userInfo.id);
@@ -104,7 +104,7 @@ export default function BasicLayout({
         <Sider width={200} className="site-layout-background">
           <Menu
             mode="inline"
-            defaultSelectedKeys={['schedulers']}
+            defaultSelectedKeys={['scheduler-cluster']}
             defaultOpenKeys={['config']}
             selectedKeys={key}
             style={{ height: '100%', borderRight: 0 }}
@@ -117,23 +117,34 @@ export default function BasicLayout({
               icon={<SettingOutlined />}
               title="Configuration"
             >
-              <Menu.Item key="schedulers">
-                <Link to="/schedulers">Scheduler Cluster</Link>
+              <Menu.Item key="scheduler-cluster">
+                <Link to="/configuration/scheduler-cluster">
+                  Scheduler Cluster
+                </Link>
               </Menu.Item>
-              <Menu.Item key="cdns">
-                <Link to="/cdns">CDN Cluster</Link>
+              <Menu.Item key="cdn-cluster">
+                <Link to="/configuration/cdn-cluster">CDN Cluster</Link>
               </Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Configuration</Breadcrumb.Item>
             <Breadcrumb.Item>
-              {key[0].includes('cdn')
-                ? key[0].toUpperCase()
-                : key[0].replace(/^\S/, (s) => s.toUpperCase())}{' '}
-              Cluster
+              {location.pathname
+                .split('/')?.[1]
+                .replace(/^\S/, (s) => s.toUpperCase())}
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              {key[0]
+                .split('-')
+                .map((e) =>
+                  e.includes('cdn')
+                    ? e.toUpperCase()
+                    : e.replace(/^\S/, (s) => s.toUpperCase()),
+                )
+                .toString()
+                .replace(/,/, ' ')}
             </Breadcrumb.Item>
           </Breadcrumb>
           <Content

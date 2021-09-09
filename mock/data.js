@@ -55,7 +55,7 @@ export const info = [
     type: 'select',
     tab: '1',
     props: {
-      placeholder: 'Please enter CDN cluster id',
+      placeholder: 'Please enter CDN cluster ID',
     },
     en_US: 'CDN Clusters',
   },
@@ -67,7 +67,7 @@ export const info = [
     props: {
       placeholder: 'Please enter SecurityGroupID',
     },
-    en_US: 'Security Group Id',
+    en_US: 'Security Group ID',
   },
   {
     key: 'scopes',
@@ -237,27 +237,27 @@ export const tableData = [
 
 export const updateOptions = [
   {
-    label: 'cdn_clusters',
+    label: 'Cdn Clusters',
     value: 'cdn_clusters',
     type: 'select',
   },
   {
-    label: 'security_group_id',
+    label: 'Security Group ID',
     value: 'security_group_id',
     type: 'select',
   },
   {
-    label: 'scopes',
+    label: 'Scope',
     value: 'scopes',
     type: 'json',
   },
   {
-    label: 'config',
+    label: 'Config',
     value: 'config',
     type: 'json',
   },
   {
-    label: 'client_config',
+    label: 'Client Config',
     value: 'client_config',
     type: 'json',
   },
@@ -265,12 +265,12 @@ export const updateOptions = [
 
 export const cdnOptions = [
   {
-    label: 'security_group_id',
+    label: 'Security Group ID',
     value: 'security_group_id',
     type: 'select',
   },
   {
-    label: 'config',
+    label: 'Config',
     value: 'config',
     type: 'json',
   },
@@ -316,7 +316,7 @@ export const cdnInfo = [
     props: {
       placeholder: 'Please enter SecurityGroupID',
     },
-    en_US: 'Security Group Id',
+    en_US: 'Security Group ID',
   },
   {
     key: 'config',

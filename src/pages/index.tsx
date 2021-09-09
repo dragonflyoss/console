@@ -16,7 +16,7 @@ export default function IndexPage({ location }) {
   useEffect(() => {
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
     if (userInfo.id) {
-      window.location.assign('/schedulers');
+      window.location.assign('/configuration/scheduler-cluster');
     }
   }, []);
 
@@ -27,7 +27,7 @@ export default function IndexPage({ location }) {
     });
     if (res) {
       message.success('Success');
-      window.location.assign('/schedulers');
+      window.location.assign('/configuration/scheduler-cluster');
     } else {
       message.error('Incorrect authentication credentials');
     }

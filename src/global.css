@@ -38,3 +38,14 @@
 .ant-table-container {
   min-height: 300px
 }
+
+.ant-spin-blur {
+  height: 100%;
+}
+.ant-spin-nested-loading > div > .ant-spin {
+  max-height: 1000px;
+}
+
+.ant-spin-container {
+  height: 100%;
+}

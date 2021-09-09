@@ -234,19 +234,16 @@ export default function IndexPage() {
     const res = request('/api/v1/scheduler-clusters', {
       method: 'post',
       data: config,
-      errorHandler: (err) => {
-        console.log(err);
-      },
     });
     res.then((r) => {
       message.success('Create Success');
       setCopyVisible(false);
       setFormVisible(false);
-      setJson('');
       setUpdateInfo({});
       setFormSchema(info);
       getClusters();
     });
+    setJson('');
   };
 
   const updateClusterById = (config: any) => {
@@ -278,7 +275,13 @@ export default function IndexPage() {
     });
     res
       .then((r) => {
-        console.log(r);
+        setCheck((pre) => {
+          pre.splice(
+            pre.findIndex((item) => item === id.toString()),
+            1,
+          );
+          return pre;
+        });
         message.success('Delete Success');
         getClusters();
       })
@@ -499,67 +502,69 @@ export default function IndexPage() {
             >
               {sClusters.map((sub: any, idx: number) => {
                 return (
-                  <Checkbox
-                    key={sub.id}
-                    value={sub.id}
-                    onClick={() => {
-                      setClick(idx);
-                      setFormSchema(info);
-                    }}
-                    onMouseEnter={() => {
-                      setHover(sub.id);
-                    }}
-                    onMouseLeave={() => {
-                      setHover(0);
-                    }}
-                    style={{
-                      position: 'relative',
-                      width: '100%',
-                      margin: 0,
-                      height: 32,
-                      lineHeight: '32px',
-                    }}
-                  >
-                    <div
-                      className={styles.checkLabel}
-                      title={sub.name}
+                  <Tooltip title={sub.name}>
+                    <Checkbox
+                      key={sub.id}
+                      value={sub.id}
+                      onClick={() => {
+                        setClick(idx);
+                        setFormSchema(info);
+                      }}
+                      onMouseEnter={() => {
+                        setHover(sub.id);
+                      }}
+                      onMouseLeave={() => {
+                        setHover(0);
+                      }}
                       style={{
-                        background: isClick === idx ? '#EBF7F1' : 'transparent',
-                        color:
-                          isClick === idx ? '#23B066' : 'rgba(0, 0, 0, 0.85)',
+                        position: 'relative',
+                        width: '100%',
+                        margin: 0,
+                        height: 32,
+                        lineHeight: '32px',
                       }}
                     >
-                      {sub.name}
-                    </div>
-                    {isHover === sub.id ? (
-                      <div className={styles.activeButton}>
-                        <Button
-                          type="text"
-                          className={styles.newBtn}
-                          style={{
-                            marginRight: 4,
-                          }}
-                          onClick={() => {
-                            setUpdateInfo(sub);
-                            setCopyVisible(true);
-                          }}
-                        >
-                          <CopyOutlined />
-                        </Button>
-                        <Button
-                          type="text"
-                          className={styles.newBtn}
-                          onClick={() => {
-                            deleteClusterById(sub.id);
-                          }}
-                        >
-                          <DeleteOutlined />
-                        </Button>
+                      <div
+                        className={styles.checkLabel}
+                        style={{
+                          background:
+                            isClick === idx ? '#EBF7F1' : 'transparent',
+                          color:
+                            isClick === idx ? '#23B066' : 'rgba(0, 0, 0, 0.85)',
+                        }}
+                      >
+                        {sub.name}
                       </div>
-                    ) : (
-                      <div />
-                    )}
-                  </Checkbox>
+                      {isHover === sub.id ? (
+                        <div className={styles.activeButton}>
+                          <Button
+                            type="text"
+                            className={styles.newBtn}
+                            style={{
+                              marginRight: 4,
+                            }}
+                            onClick={() => {
+                              setUpdateInfo(sub);
+                              setCopyVisible(true);
+                            }}
+                          >
+                            <CopyOutlined />
+                          </Button>
+                          <Button
+                            type="text"
+                            className={styles.newBtn}
+                            onClick={() => {
+                              deleteClusterById(sub.id);
+                            }}
+                          >
+                            <DeleteOutlined />
+                          </Button>
+                        </div>
+                      ) : (
+                        <div />
+                      )}
+                    </Checkbox>
+                  </Tooltip>
                 );
               })}
             </Checkbox.Group>

@@ -55,9 +55,9 @@ export const info = [
     type: 'select',
     tab: '1',
     props: {
-      placeholder: 'Please enter cdn cluster id',
+      placeholder: 'Please enter CDN cluster id',
     },
-    en_US: 'Cdn Clusters',
+    en_US: 'CDN Clusters',
   },
   {
     key: 'security_group_id',
@@ -74,7 +74,7 @@ export const info = [
     label: '作用域',
     type: 'json',
     tab: '1',
-    en_US: 'Scopes',
+    en_US: 'Scope',
   },
   {
     key: 'config',
@@ -237,8 +237,8 @@ export const tableData = [
 
 export const updateOptions = [
   {
-    label: 'cdn_cluster_id',
-    value: 'cdn_cluster_id',
+    label: 'cdn_clusters',
+    value: 'cdn_clusters',
     type: 'select',
   },
   {

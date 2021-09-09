@@ -18,10 +18,12 @@ export default defineConfig({
       path: '/',
       component: '@/layouts/index',
       routes: [
-        { exact: true, path: '/Scheduler', component: '@/pages/scheduler' },
-        { exact: true, path: '/CDN', component: '@/pages/cdn' },
+        { exact: true, path: '/schedulers', component: '@/pages/scheduler' },
+        { exact: true, path: '/cdns', component: '@/pages/cdn' },
+        { component: '@/pages/404' },
       ],
     },
+    { component: '@/pages/404' },
   ],
   locale: {
     default: 'en-US', // en-US

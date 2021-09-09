@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { request } from 'umi';
 import { Input, Form, Button, message } from 'antd';
+import Cookies from 'js-cookie';
+import { decode } from 'jsonwebtoken';
 import { loginSchema, signSchema } from '../../mock/data';
 import styles from './index.less';
 
@@ -11,11 +13,12 @@ const comsKey = {
 // login
 export default function IndexPage({ location }) {
   const [hasAccount, setAccount] = useState(true);
-  // useEffect(() => {
-  //   if (location.pathname.includes('up')) {
-  //     setAccount(false);
-  //   }
-  // }, [location.pathname]);
+  useEffect(() => {
+    const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
+    if (userInfo.id) {
+      window.location.assign('/schedulers');
+    }
+  }, []);
 
   const signin = async (params: any) => {
     const res = await request('/api/v1/users/signin', {
@@ -24,7 +27,7 @@ export default function IndexPage({ location }) {
     });
     if (res) {
       message.success('Success');
-      window.location.assign('/Scheduler');
+      window.location.assign('/schedulers');
     } else {
       message.error('Incorrect authentication credentials');
     }

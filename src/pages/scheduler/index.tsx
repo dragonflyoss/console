@@ -24,6 +24,7 @@ import {
   MinusCircleOutlined,
   AppstoreAddOutlined,
   EditOutlined,
+  ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import moment from 'moment';
 import { info, updateOptions } from '../../../mock/data';
@@ -70,6 +71,7 @@ export default function IndexPage() {
   const [json, setJson] = useState('');
   const [updateInfo, setUpdateInfo] = useState({});
 
+  const [copyVisible, setCopyVisible] = useState(false);
   // drawer visible
   const [drawVisible, setDrawVisible] = useState(false);
   // drawer content
@@ -144,25 +146,26 @@ export default function IndexPage() {
     console.log(res);
   };
 
-  const updateSchedulerById = async (id: number, config: any) => {
-    const res = await request(`/api/v1/schedulers/${id}`, {
+  const updateSchedulerById = (id: number, config: any) => {
+    const res = request(`/api/v1/schedulers/${id}`, {
       method: 'patch',
       data: config,
     });
-    console.log(res);
-    if (res) {
+    res.then((e) => {
       message.success('Update Success');
       setVisible(false);
       getSchedulers(current);
-    }
+    });
   };
 
-  const deleteSchedulerById = async (id: string) => {
-    const res = await request(`/api/v1/schedulers/${id}`, {
+  const deleteSchedulerById = (id: string) => {
+    const res = request(`/api/v1/schedulers/${id}`, {
       method: 'delete',
     });
-    message.success('Delete Success');
-    getSchedulers(current);
+    res.then((v) => {
+      message.success('Delete Success');
+      getSchedulers(current);
+    });
   };
 
   const getClusters = async () => {
@@ -227,28 +230,31 @@ export default function IndexPage() {
     console.log(res);
   };
 
-  const createClusters = async (config: any) => {
-    const res = await request('/api/v1/scheduler-clusters', {
+  const createClusters = (config: any) => {
+    const res = request('/api/v1/scheduler-clusters', {
       method: 'post',
       data: config,
       errorHandler: (err) => {
         console.log(err);
       },
     });
-    if (res) {
+    res.then((r) => {
       message.success('Create Success');
+      setCopyVisible(false);
       setFormVisible(false);
-      getClusters();
+      setJson('');
+      setUpdateInfo({});
       setFormSchema(info);
-    }
+      getClusters();
+    });
   };
 
-  const updateClusterById = async (config: any) => {
-    const res = await request(`/api/v1/scheduler-clusters/${config.id}`, {
+  const updateClusterById = (config: any) => {
+    const res = request(`/api/v1/scheduler-clusters/${config.id}`, {
       method: 'patch',
       data: config,
     });
-    if (res) {
+    res.then((r) => {
       message.success('Update Success');
       setFormSchema(info);
       setDrawContent([
@@ -263,14 +269,20 @@ export default function IndexPage() {
       setFormVisible(false);
       setDrawVisible(false);
       getClusters();
-    }
+    });
   };
 
-  const deleteClusterById = async (id: number) => {
-    const res = await request(`/api/v1/scheduler-cluster/${id}`, {
+  const deleteClusterById = (id: number) => {
+    const res = request(`/api/v1/scheduler-clusters/${id}`, {
       method: 'delete',
     });
-    message.success('Delete Success');
+    res
+      .then((r) => {
+        console.log(r);
+        message.success('Delete Success');
+        getClusters();
+      })
+      .catch((v) => {});
   };
 
   const columns = [
@@ -387,7 +399,7 @@ export default function IndexPage() {
       render: (t: number, r: any, i: number) => {
         return (
           <div className={styles.operation}>
-            <Button
+            {/* <Button
               className={styles.newBtn}
               type="link"
               onClick={() => {
@@ -404,7 +416,7 @@ export default function IndexPage() {
             >
               Update
             </Button>
-            <Divider type="vertical" />
+            <Divider type="vertical" /> */}
             <Popconfirm
               title="Are you sure to delete this Scheduler?"
               onConfirm={() => {
@@ -528,10 +540,8 @@ export default function IndexPage() {
                             marginRight: 4,
                           }}
                           onClick={() => {
-                            createClusters({
-                              ...sub,
-                              name: `${sub.name}_copy`,
-                            });
+                            setUpdateInfo(sub);
+                            setCopyVisible(true);
                           }}
                         >
                           <CopyOutlined />
@@ -665,6 +675,46 @@ export default function IndexPage() {
         </div>
       </div>
       <Modal
+        visible={copyVisible}
+        title="Copy this Cluster"
+        width={300}
+        onCancel={() => setCopyVisible(false)}
+        footer={[
+          <Button
+            key="back"
+            onClick={() => {
+              setCopyVisible(false);
+              setJson('');
+            }}
+          >
+            Cancel
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            onClick={() => {
+              createClusters({
+                ...updateInfo,
+                name: json,
+              });
+            }}
+          >
+            Submit
+          </Button>,
+        ]}
+      >
+        name
+        <Input
+          placeholder="Please enter the name"
+          onChange={(e) => {
+            setJson(e.target.value);
+          }}
+          style={{
+            marginTop: 8,
+          }}
+        />
+      </Modal>
+      <Modal
         visible={visible}
         title={dTitle}
         onCancel={() => setVisible(false)}
@@ -677,7 +727,7 @@ export default function IndexPage() {
                     setVisible(false);
                   }}
                 >
-                  Return
+                  Cancel
                 </Button>,
                 <Button
                   key="submit"
@@ -729,7 +779,7 @@ export default function IndexPage() {
               setFormVisible(false);
             }}
           >
-            Return
+            Cancel
           </Button>,
           <Button
             key="submit"
@@ -796,7 +846,7 @@ export default function IndexPage() {
                       <Form.Item
                         name={sub.key}
                         key={sub.key}
-                        label={sub.key}
+                        label={sub.en_US}
                         {...(sub.formprops || {})}
                       >
                         <Content
@@ -836,7 +886,7 @@ export default function IndexPage() {
                       <Form.Item
                         name={sub.key}
                         key={sub.key}
-                        label={sub.key}
+                        label={sub.en_US}
                         {...(sub.formprops || {})}
                       >
                         <Content {...(sub.props || {})} />
@@ -885,7 +935,7 @@ export default function IndexPage() {
               marginRight: 8,
             }}
           >
-            Return
+            Cancel
           </Button>,
           <Button
             key="submit"

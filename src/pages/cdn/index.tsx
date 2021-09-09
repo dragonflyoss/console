@@ -67,6 +67,7 @@ export default function CDN() {
   const [updateInfo, setUpdateInfo] = useState({});
   // json dialog visible
   const [visible, setVisible] = useState(false);
+  const [copyVisible, setCopyVisible] = useState(false);
 
   // drawer visible
   const [drawVisible, setDrawVisible] = useState(false);
@@ -121,24 +122,26 @@ export default function CDN() {
     }
   };
 
-  const updateCDNById = async (id: string, config: any) => {
-    const res = await request(`/api/v1/cdns/${id}`, {
+  const updateCDNById = (id: string, config: any) => {
+    const res = request(`/api/v1/cdns/${id}`, {
       method: 'patch',
       data: config,
     });
-    if (res) {
+    res.then(() => {
       getCDNs();
       setVisible(false);
       message.success('Update Success');
-    }
+    });
   };
 
-  const deleteCDNById = async (id: number) => {
-    const res = await request(`/api/v1/cdns/${id}`, {
+  const deleteCDNById = (id: number) => {
+    const res = request(`/api/v1/cdns/${id}`, {
       method: 'delete',
     });
-    getCDNs();
-    message.success('Delete Success');
+    res.then(() => {
+      message.success('Delete Success');
+      getCDNs();
+    });
   };
 
   const createCDN = async (config: any) => {
@@ -183,39 +186,44 @@ export default function CDN() {
     }
   };
 
-  const createClusters = async (config: any) => {
-    const res = await request('/api/v1/cdn-clusters', {
+  const createClusters = (config: any) => {
+    const res = request('/api/v1/cdn-clusters', {
       method: 'post',
       data: config,
     });
-    if (res) {
+    res.then((r) => {
       message.success('Create Success');
       setFormVisible(false);
-      getCDNClusters();
+      setCopyVisible(false);
+      setJson('');
       setFormSchema(cdnInfo);
-    }
+      setUpdateInfo({});
+      getCDNClusters();
+    });
   };
 
-  const updateClusterById = async (config: any) => {
-    const res = await request(`/api/v1/cdn-clusters/${config.id}`, {
+  const updateClusterById = (config: any) => {
+    const res = request(`/api/v1/cdn-clusters/${config.id}`, {
       method: 'patch',
       data: config,
     });
-    if (res) {
+    res.then(() => {
       message.success('Update Success');
       setFormVisible(false);
       setDrawVisible(false);
       getCDNClusters();
       setFormSchema(cdnInfo);
-    }
+    });
   };
 
-  const deleteClusterById = async (id: number) => {
-    const res = await request(`/api/v1/cdn-clusters/${id}`, {
+  const deleteClusterById = (id: number) => {
+    const res = request(`/api/v1/cdn-clusters/${id}`, {
       method: 'delete',
     });
-    message.success('Delete Success');
-    getCDNClusters();
+    res.then(() => {
+      message.success('Delete Success');
+      getCDNClusters();
+    });
   };
 
   const columns = [
@@ -303,7 +311,7 @@ export default function CDN() {
       render: (t: number, r: any, i: number) => {
         return (
           <div className={styles.operation}>
-            <Button
+            {/* <Button
               type="link"
               className={styles.newBtn}
               onClick={() => {
@@ -320,7 +328,7 @@ export default function CDN() {
             >
               Update
             </Button>
-            <Divider type="vertical" />
+            <Divider type="vertical" /> */}
             <Popconfirm
               title="Are you sure to delete this Scheduler?"
               onConfirm={() => {
@@ -441,6 +449,10 @@ export default function CDN() {
                           className={styles.newBtn}
                           style={{
                             marginRight: 4,
+                          }}
+                          onClick={() => {
+                            setUpdateInfo(sub);
+                            setCopyVisible(true);
                           }}
                         >
                           <CopyOutlined />
@@ -573,6 +585,46 @@ export default function CDN() {
         </div>
       </div>
       <Modal
+        visible={copyVisible}
+        title="Copy this Cluster"
+        width={300}
+        onCancel={() => setCopyVisible(false)}
+        footer={[
+          <Button
+            key="back"
+            onClick={() => {
+              setCopyVisible(false);
+              setJson('');
+            }}
+          >
+            Cancel
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            onClick={() => {
+              createClusters({
+                ...updateInfo,
+                name: json,
+              });
+            }}
+          >
+            Submit
+          </Button>,
+        ]}
+      >
+        name
+        <Input
+          placeholder="Please enter the name"
+          onChange={(e) => {
+            setJson(e.target.value);
+          }}
+          style={{
+            marginTop: 8,
+          }}
+        />
+      </Modal>
+      <Modal
         visible={visible}
         title={dTitle}
         onCancel={() => setVisible(false)}
@@ -585,7 +637,7 @@ export default function CDN() {
                     setVisible(false);
                   }}
                 >
-                  Return
+                  Cancel
                 </Button>,
                 <Button
                   key="submit"
@@ -639,7 +691,7 @@ export default function CDN() {
               setUpdateVisible(false);
             }}
           >
-            Return
+            Cancel
           </Button>,
           <Button
             key="submit"
@@ -706,7 +758,7 @@ export default function CDN() {
                       <Form.Item
                         name={sub.key}
                         key={sub.key}
-                        label={sub.key}
+                        label={sub.en_US}
                         {...(sub.formprops || {})}
                       >
                         <Content
@@ -744,7 +796,7 @@ export default function CDN() {
                       <Form.Item
                         name={sub.key}
                         key={sub.key}
-                        label={sub.key}
+                        label={sub.en_US}
                         {...(sub.formprops || {})}
                       >
                         <Content {...(sub.props || {})} />
@@ -793,7 +845,7 @@ export default function CDN() {
               marginRight: 8,
             }}
           >
-            Return
+            Cancel
           </Button>,
           <Button
             key="submit"

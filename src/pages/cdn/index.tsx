@@ -91,16 +91,6 @@ export default function CDN() {
   useEffect(() => {
     getCDNClusters();
     getCDNs();
-    // mock
-    // createCDN({
-    //   "host_name": "test3",
-    //   "idc": "2",
-    //   "ip": "22.3445.112.23",
-    //   "location": "22",
-    //   download_port: 80,
-    //   "port": 60,
-    //   cdn_cluster_id: 1,
-    // });
   }, []);
 
   const getCDNs = async () => {

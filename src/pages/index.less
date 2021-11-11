@@ -1,15 +1,36 @@
 .main {
+  position: relative;
   display: flex;
   height: 100%;
-  background: url(../public/bg-login-white.png);
+  background-color: #25282b;
+  background-image: url(../public/bg-login-opacity.png);
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  .left {
-    flex: 0 0 60%;
-    background: url(../public/bg-login.png);
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
+  color: #ffffff;
+
+  label {
+    color: #ffffff;
   }
+  .animation-canvas {
+    position: absolute;
+    border: 10px solid #2e3135;
+    // border-top: 10px solid #2E3135;
+    transform-origin: center;
+    transform: translateX(-50%) matrix(0.866025, -0.5, 0.866025, 0.5, 0, 0);
+    // transform: translateX(-50%);
+    left: 50%;
+    // bottom: -50%;
+    top: -50%;
+  }
+
+  // .left {
+  //   flex: 0 0 60%;
+  //   background: #25282B;
+  //   // background: url(../public/bg-login.png);
+  //   background-size: 100% 100%;
+  //   background-repeat: no-repeat;
+  // }
+
   .right {
     flex: 1;
     padding: 16px;
@@ -50,14 +71,17 @@
         height: 46px;
         background: url(../public/logo-dark.svg) no-repeat;
         background-size: 100% 100%;
-        margin: 0 auto 16px auto;
+        // margin: 0 auto 16px auto;
+        margin-bottom: 16px;
+        margin-left: -8px;
       }
       .welcome {
         font-size: 24px;
         margin-bottom: 32px;
-        color: #1a1a1a;
+        // color: #1a1a1a;
       }
       .check {
+        color: #ffffff;
         margin-bottom: 16px;
       }
     }
@@ -67,4 +91,9 @@
 .loadingContainer {
   width: 100%;
   height: 100%;
+}
+
+.newBtn {
+  padding: 0;
+  height: auto;
 }

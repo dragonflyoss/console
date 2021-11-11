@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { request } from 'umi';
 import { Input, Form, Button, message, Spin } from 'antd';
+import { GithubOutlined, GoogleOutlined } from '@ant-design/icons';
 import Cookies from 'js-cookie';
 import { decode } from 'jsonwebtoken';
+import Particle from '@/components/particle';
 import { loginSchema, signSchema } from '../../mock/data';
 import styles from './index.less';
 
@@ -12,6 +14,15 @@ const comsKey = {
 };
 
 // login
+const particles = [];
+const particleCount = 600;
+let tick = 0;
+const unit = 30;
+const cols = 24;
+const rows = 24;
+const w = unit * cols;
+const h = unit * rows;
+
 export default function IndexPage({ location }) {
   const [hasAccount, setAccount] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -23,6 +34,45 @@ export default function IndexPage({ location }) {
     } else {
       setLoading(false);
     }
+
+    // 动效
+    const canvas = document.querySelector('#animation-canvas');
+    const ctx = canvas.getContext('2d');
+    const step = () => {
+      if (particles.length < particleCount) {
+        particles.push(new Particle(ctx));
+      }
+      let i = particles.length;
+      while (i--) {
+        particles[i].step();
+      }
+      tick++;
+    };
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      let i = particles.length;
+      while (i--) {
+        particles[i].draw();
+      }
+    };
+    const requestAnimationFrame =
+      window.requestAnimationFrame ||
+      ((cb) => {
+        setTimeout(cb, 0);
+      });
+    const loop = () => {
+      requestAnimationFrame(loop);
+      step();
+      draw();
+    };
+    const init = () => {
+      canvas.width = w;
+      canvas.height = h;
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.lineWidth = 2;
+      loop();
+    };
+    init();
   }, []);
 
   const signin = async (params: any) => {
@@ -59,7 +109,12 @@ export default function IndexPage({ location }) {
       wrapperClassName={styles.loadingContainer}
     >
       <div className={styles.main}>
-        {/* <div className={styles.left} /> */}
+        <div className={styles.left}>
+          <canvas
+            id="animation-canvas"
+            className={styles['animation-canvas']}
+          />
+        </div>
         <div className={styles.right}>
           <div className={styles.header}>
             <div className={styles.title}>{/* 蜻蜓-文件分发 */}</div>
@@ -108,6 +163,22 @@ export default function IndexPage({ location }) {
                       </Form.Item>
                     );
                   })}
+              <div className={styles.oauth}>
+                <Button type="link" className={styles.newBtn}>
+                  <GithubOutlined />
+                  Github
+                </Button>
+                <Button
+                  type="link"
+                  className={styles.newBtn}
+                  style={{
+                    marginLeft: 16,
+                  }}
+                >
+                  <GoogleOutlined />
+                  Google
+                </Button>
+              </div>
               {hasAccount ? (
                 <div className={styles.check}>
                   Have not account ?

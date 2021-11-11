@@ -95,19 +95,6 @@ export default function IndexPage() {
   useEffect(() => {
     getClusters();
     getSchedulers(current);
-    // mock
-    // createScheduler({
-    //   "host_name": "test15",
-    //   "idc": "2",
-    //   "ip": "22.3445.112.23",
-    //   "location": "22",
-    //   "net_config": {
-    //     "additionalProp1": {}
-    //   },
-    //   "port": 60,
-    //   scheduler_cluster_id: 1,
-    //   "vips": "2,23,45,62,1"
-    // });
   }, []);
 
   const getSchedulers = async (v: number) => {

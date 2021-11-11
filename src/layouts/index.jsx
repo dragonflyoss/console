@@ -8,7 +8,12 @@ import {
   Dropdown,
   Button,
 } from 'antd';
-import { SettingOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  SettingOutlined,
+  UserOutlined,
+  CloudServerOutlined,
+  FundOutlined,
+} from '@ant-design/icons';
 import { Link, request } from 'umi';
 import Cookies from 'js-cookie';
 import { decode } from 'jsonwebtoken';
@@ -26,6 +31,7 @@ export default function BasicLayout({
 }) {
   const [key, setKey] = useState(['scheduler-cluster']);
   const [user, setUser] = useState({});
+  const [role, setRole] = useState('guest');
 
   useEffect(() => {
     const temp = location.pathname.split('/')?.[2];
@@ -33,6 +39,7 @@ export default function BasicLayout({
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
     if (userInfo.id) {
       getUserById(userInfo.id);
+      getRoleByUser(userInfo.id);
     } else {
       window.location.assign('/signin');
     }
@@ -50,6 +57,13 @@ export default function BasicLayout({
       method: 'post',
     });
     window.location.assign('/signin');
+  };
+
+  const getRoleByUser = async (id) => {
+    const res = await request(`/api/v1/users/${id}/roles`, {
+      method: 'get',
+    });
+    setRole(res[0] || 'guest');
   };
 
   const menu = (
@@ -112,11 +126,7 @@ export default function BasicLayout({
               // window.location.assign(`/${v.key}`);
             }}
           >
-            <SubMenu
-              key="config"
-              icon={<SettingOutlined />}
-              title="Configuration"
-            >
+            <SubMenu key="config" icon={<FundOutlined />} title="Configuration">
               <Menu.Item key="scheduler-cluster">
                 <Link to="/configuration/scheduler-cluster">
                   Scheduler Cluster
@@ -124,6 +134,28 @@ export default function BasicLayout({
               </Menu.Item>
               <Menu.Item key="cdn-cluster">
                 <Link to="/configuration/cdn-cluster">CDN Cluster</Link>
+              </Menu.Item>
+            </SubMenu>
+            {role === 'root' ? (
+              <SubMenu key="setting" icon={<SettingOutlined />} title="Setting">
+                <Menu.Item key="permission">
+                  <Link to="/setting/permission">Premission</Link>
+                </Menu.Item>
+                <Menu.Item key="users">
+                  <Link to="/setting/users">Users</Link>
+                </Menu.Item>
+              </SubMenu>
+            ) : null}
+            <SubMenu
+              key="service"
+              icon={<CloudServerOutlined />}
+              title="Service"
+            >
+              <Menu.Item key="task">
+                <Link to="/service/task-list">Task</Link>
+              </Menu.Item>
+              <Menu.Item key="system-call">
+                <Link to="/service/system-call">SystemCall</Link>
               </Menu.Item>
             </SubMenu>
           </Menu>

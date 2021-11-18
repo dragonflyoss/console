@@ -14,9 +14,16 @@ import {
   Radio,
   Select,
   Tag,
+  Descriptions,
 } from 'antd';
-import { ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons';
+import {
+  ArrowLeftOutlined,
+  LoadingOutlined,
+  WarningOutlined,
+  CheckCircleOutlined,
+} from '@ant-design/icons';
 import { request } from 'umi';
+import moment from 'moment';
 import styles from './index.less';
 
 export default function PreHeat() {
@@ -84,11 +91,24 @@ export default function PreHeat() {
     });
     if (res) {
       message.success('create success');
+      setVisible(false);
       getTasks(1);
     } else {
-      message.success('create failed, pleace check u params');
+      message.error('create failed, pleace check u params');
     }
   };
+  
+  const updateTask = async (id: number, params: any) => {
+    const res = await request(`/api/v1/jobs/${id}`, {
+      method: 'patch',
+      data: params,
+    });
+    if (res) {
+      message.success('update success');
+    } else {
+      message.error('update failed, pleace check u params');
+    }
+  }
 
   const columns = [
     {
@@ -97,13 +117,15 @@ export default function PreHeat() {
       align: 'left',
       key: 'id',
       ellipsis: true,
+      width: 80
     },
     {
-      title: 'Name',
+      title: 'Description',
       dataIndex: 'bio',
       align: 'left',
       key: 'bio',
       ellipsis: true,
+      width: 120,
       render: (v: string, r: any) => {
         return (
           <Tooltip title={v}>
@@ -124,6 +146,7 @@ export default function PreHeat() {
       dataIndex: 'type',
       align: 'left',
       key: 'type',
+      width: 120,
       ellipsis: true,
     },
     {
@@ -132,12 +155,17 @@ export default function PreHeat() {
       align: 'left',
       key: 'created_at',
       ellipsis: true,
+      width: 200,
+      render: (v: string) => {
+        return moment(v).format('YYYY-MM-DD HH:mm:ss') || '-';
+      }
     },
     {
       title: 'Creator',
       dataIndex: 'user_id',
       align: 'left',
       key: 'user_id',
+      width: 100,
       ellipsis: true,
     },
     {
@@ -145,7 +173,7 @@ export default function PreHeat() {
       dataIndex: 'status',
       align: 'left',
       key: 'status',
-      ellipsis: true,
+      width: 110,
       render: (v: string) => {
         const colors = {
           PENDING: 'green',
@@ -160,33 +188,131 @@ export default function PreHeat() {
       key: 'args',
       ellipsis: true,
       render: (v: object) => {
-        return <div>{v['url']}</div>;
+        return (
+          <Tooltip
+            style={{
+              cursor: 'pointer',
+            }}
+          >
+            {v['url']}
+          </Tooltip>
+        );
       },
     },
   ];
+
+  const icons = {
+    FAILURE: (
+      <WarningOutlined
+        style={{
+          fontSize: 50,
+          color: '#FF5E44',
+        }}
+      />
+    ),
+    PENDING: (
+      <LoadingOutlined
+        style={{
+          fontSize: 50,
+          color: '#108ee9',
+        }}
+      />
+    ),
+    SUCCESS: (
+      <CheckCircleOutlined
+        style={{
+          fontSize: 50,
+          color: '#23B066',
+        }}
+      />
+    ),
+  };
+
+  const statusIcon = (key: string) => {
+    return icons[key];
+  };
 
   if (isDetail) {
     return (
       <div className={styles.main}>
         <h1 className={styles.title}>
           <ArrowLeftOutlined
-            onClick={() => setDetail(false)}
             style={{
+              cursor: 'pointer',
               marginRight: 8,
             }}
+            onClick={() => {
+              setDetail(false);
+              setTaskInfo({});
+            }}
           />
-          Task Detail
+          PreHeat
         </h1>
-        <div className={styles.content}>
-          <div className={styles.left}>
-            <LoadingOutlined
-              style={{
-                fontSize: 50,
-                color: '#108ee9',
-              }}
-            />
+        <div className={styles.detailContent}>
+          <div className={styles.detailHeader}>
+            <div className={styles.detailInfo}>
+              <Descriptions title="Base Info" size="small">
+                <Descriptions.Item label="Task Id" span={3}>
+                  {taskInfo.task_id || '-'}
+                </Descriptions.Item>
+                <Descriptions.Item label="Description" span={3}>
+                  {taskInfo.bio || '-'}
+                </Descriptions.Item>
+                <Descriptions.Item label="Created Time" span={3}>
+                  {moment(taskInfo.created_at).format('YYYY-MM-DD HH:mm:ss') ||
+                    '-'}
+                </Descriptions.Item>
+                <Descriptions.Item label="Update Time" span={3}>
+                  {moment(taskInfo.updated_at).format('YYYY-MM-DD HH:mm:ss') ||
+                    '-'}
+                </Descriptions.Item>
+                <Descriptions.Item label="Creator" span={3}>
+                  {taskInfo.user_id || '-'}
+                </Descriptions.Item>
+              </Descriptions>
+            </div>
+            <div className={styles.detailStatus}>
+              <div className={styles.detailStatusName}>Status</div>
+              <div className={styles.detailStatusOperation}>
+                {statusIcon(taskInfo.status || 'PENDING')} {taskInfo.status}
+                {taskInfo.status === 'FAILURE' || 'SUCCESS' ? (
+                  <Button
+                    type="primary"
+                    style={{
+                      marginLeft: 32,
+                    }}
+                    onClick={() => {
+                      updateTask(taskInfo.id, {
+                        status: taskInfo.status === 'FAILURE' ? 'SUCCESS' : 'FAILURE'
+                      });
+                    }}
+                  >
+                    {taskInfo.status === 'FAILURE' ? 'Open' : 'Close'}
+                  </Button>
+                ) : null}
+              </div>
+              {/* <div className={styles.detailStatusList}>
+                {
+                  Object.keys(icons).map(sub => {
+                    return (
+                      <div>{sub}</div>
+                    );
+                  })
+                }
+              </div> */}
+            </div>
           </div>
-          <div className={styles.right}></div>
+          <Descriptions title="More Details" size="small" bordered>
+            {taskInfo.args
+              ? Object.keys(taskInfo.args).map((sub) => {
+                  return (
+                    <Descriptions.Item label={sub} span={2}>
+                      {taskInfo.args[sub] || '-'}
+                    </Descriptions.Item>
+                  );
+                })
+              : null}
+          </Descriptions>
         </div>
       </div>
     );

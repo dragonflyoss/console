@@ -88,6 +88,18 @@ export default function IndexPage({ location }) {
     }
   };
 
+  const signinByOauth = async (name: string) => {
+    const res = await request( `/api/v1/user/signin/${name}`, {
+      method: 'get',
+    });
+    if (res) {
+      message.success('Success');
+      window.location.assign('/configuration/scheduler-cluster');
+    } else {
+      message.error('Incorrect Oauth');
+    }
+  };
+
   const signup = async (params: any) => {
     const res = await request('/api/v1/users/signup', {
       method: 'post',
@@ -164,7 +176,16 @@ export default function IndexPage({ location }) {
                     );
                   })}
               <div className={styles.oauth}>
-                <Button type="link" className={styles.newBtn}>
+                <Button
+                  type="link"
+                  className={styles.newBtn}
+                  onClick={() => {
+                    window.location.assign(
+                      `https://github.com/login/oauth/authorize?client_id=5188822d0fb0d7c149a4&redirect_uri=http://localhost:8000/signin`,
+                    );
+                    // signinByOauth();
+                  }}
+                >
                   <GithubOutlined />
                   Github
                 </Button>

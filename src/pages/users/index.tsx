@@ -29,12 +29,13 @@ export default function Users() {
   const [data, setData] = useState([]);
   const [visible, setVisible] = useState(false);
   const [role, setRole] = useState('guest');
+  const [userInfo, setUSerInfo] = useState({});
 
   useEffect(() => {
-    // getUsers();
+    getUsers();
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
     if (userInfo.id) {
-      getUserById(userInfo.id);
+      // getUserById(userInfo.id);
       getRoleByUser(userInfo.id);
     }
   }, []);
@@ -43,28 +44,37 @@ export default function Users() {
     const res = await request(`/api/v1/users/${id}`, {
       method: 'get',
     });
-    setData([res]);
+    if (res) {
+      setUSerInfo(res);
+      setVisible(true);
+    } else {
+      message.error('get user info error');
+      setVisible(true);
+    }
   };
 
-  const getRoleByUser = async (id) => {
+  const getRoleByUser = async (id: number) => {
     const res = await request(`/api/v1/users/${id}/roles`, {
       method: 'get',
     });
     setRole(res[0] || 'guest');
   };
 
-  // const getUsers = async () => {
-  //   // TODO get users
-  //   const res = await request('/api/v1/permissions', {
-  //     method: 'get'
-  //   });
-  //   if (res) {
-  //     console.log(res);
-  //   } else {
-  //     setData([]);
-  //     message.error('get user list error');
-  //   }
-  // };
+  const getUsers = async () => {
+    const res = await request('/api/v1/users', {
+      method: 'get',
+      params: {
+        page: 1,
+        per_page: 10
+      }
+    });
+    if (res) {
+      setData(res);
+    } else {
+      setData([]);
+      message.error('get user list error');
+    }
+  };
 
   const columns = [
     {
@@ -115,7 +125,7 @@ export default function Users() {
               className={styles.newBtn}
               type="link"
               onClick={() => {
-                setVisible(true);
+                getUserById(t);
               }}
             >
               Detail
@@ -183,7 +193,7 @@ export default function Users() {
           return (
             <div className={styles.drawerInfo}>
               <div className={styles.label}>{infos[el]}</div>
-              <div className={styles.value}>{(data[0] || {})[el] || role}</div>
+              <div className={styles.value}>{(userInfo || {})[el] || '-'}</div>
             </div>
           );
         })}

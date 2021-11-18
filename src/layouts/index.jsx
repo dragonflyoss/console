@@ -136,16 +136,21 @@ export default function BasicLayout({
                 <Link to="/configuration/cdn-cluster">CDN Cluster</Link>
               </Menu.Item>
             </SubMenu>
-            {role === 'root' ? (
-              <SubMenu key="setting" icon={<SettingOutlined />} title="Setting">
+            <SubMenu key="setting" icon={<SettingOutlined />} title="Setting">
+              {role === 'root' ? (
                 <Menu.Item key="permission">
                   <Link to="/setting/permission">Premission</Link>
                 </Menu.Item>
+              ) : null}
+              {role === 'root' ? (
                 <Menu.Item key="users">
                   <Link to="/setting/users">Users</Link>
                 </Menu.Item>
-              </SubMenu>
-            ) : null}
+              ) : null}
+              <Menu.Item key="oauth">
+                <Link to="/setting/oauth">Oauth</Link>
+              </Menu.Item>
+            </SubMenu>
             <SubMenu
               key="service"
               icon={<CloudServerOutlined />}

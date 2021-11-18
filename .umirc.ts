@@ -78,11 +78,12 @@ export default defineConfig({
           path: '/service/task-list',
           component: '@/pages/task',
         },
-        {
-          exact: true,
-          path: '/service/system-call',
-          component: '@/pages/systemCall',
-        },
+        // {
+        //   exact: true,
+        //   path: '/service/system-call',
+        //   component: '@/pages/systemCall',
+        // },
+        { component: '@/pages/404' },
       ],
     },
     { component: '@/pages/404' },

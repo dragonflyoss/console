@@ -21,14 +21,26 @@ import {
   LoadingOutlined,
   WarningOutlined,
   CheckCircleOutlined,
+  FileDoneOutlined,
+  PlayCircleOutlined,
+  ReloadOutlined,
 } from '@ant-design/icons';
 import { request } from 'umi';
+import CodeEditor from '@/components/codeEditor';
 import moment from 'moment';
+
 import styles from './index.less';
+
+let taskRetry = null;
+const defaultArgs = {
+  filters: "",
+  headers: {},
+};
 
 export default function PreHeat() {
   const [data, setData] = useState([]);
   const [cdnClusters, setCdnClusters] = useState([]);
+  const [schedulerClusters, setSchedulerClusters] = useState([]);
   const [taskInfo, setTaskInfo] = useState({});
 
   const [visible, setVisible] = useState(false);
@@ -38,6 +50,26 @@ export default function PreHeat() {
     getTasks(1);
     getCDNClusters();
   }, []);
+
+  useEffect(() => {
+    console.log(isDetail, taskInfo.state);
+    if (isDetail) {
+      taskRetry = setInterval(() => {
+        getTaskById(taskInfo.id);
+      }, 3000);
+    } else {
+      clearInterval(taskRetry);
+      taskRetry = null;
+    }
+  }, [isDetail]);
+
+  useEffect(() => {
+    console.log(111, taskInfo.state);
+    if (!['SUCCESS', 'FAILURE'].includes(taskInfo.state)) {
+      clearInterval(taskRetry);
+      taskRetry = null;
+    }
+  }, [taskInfo]);
 
   const [form] = Form.useForm();
 
@@ -169,10 +201,10 @@ export default function PreHeat() {
       ellipsis: true,
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
+      title: 'State',
+      dataIndex: 'state',
       align: 'left',
-      key: 'status',
+      key: 'state',
       width: 110,
       render: (v: string) => {
         const colors = {
@@ -207,6 +239,34 @@ export default function PreHeat() {
         style={{
           fontSize: 50,
           color: '#FF5E44',
+          marginRight: 12,
+        }}
+      />
+    ),
+    RECEIVED: (
+      <FileDoneOutlined
+        style={{
+          fontSize: 50,
+          color: '#108ee9',
+          marginRight: 12,
+        }}
+      />
+    ),
+    STARTED: (
+      <PlayCircleOutlined
+        style={{
+          fontSize: 50,
+          color: '#108ee9',
+          marginRight: 12,
+        }}
+      />
+    ),
+    RETRY: (
+      <ReloadOutlined
+        style={{
+          fontSize: 50,
+          color: '#108ee9',
+          marginRight: 12,
         }}
       />
     ),
@@ -215,6 +275,7 @@ export default function PreHeat() {
         style={{
           fontSize: 50,
           color: '#108ee9',
+          marginRight: 12,
         }}
       />
     ),
@@ -223,6 +284,7 @@ export default function PreHeat() {
         style={{
           fontSize: 50,
           color: '#23B066',
+          marginRight: 12,
         }}
       />
     ),
@@ -244,6 +306,7 @@ export default function PreHeat() {
             onClick={() => {
               setDetail(false);
               setTaskInfo({});
+              getTasks(1);
             }}
           />
           PreHeat
@@ -272,10 +335,11 @@ export default function PreHeat() {
               </Descriptions>
             </div>
             <div className={styles.detailStatus}>
-              <div className={styles.detailStatusName}>Status</div>
+              <div className={styles.detailStatusName}>State</div>
               <div className={styles.detailStatusOperation}>
-                {statusIcon(taskInfo.status || 'PENDING')} {taskInfo.status}
-                {taskInfo.status === 'FAILURE' || 'SUCCESS' ? (
+                {statusIcon(taskInfo.state || 'PENDING')} {taskInfo.state}
+                {/* No Need */}
+                {/* {taskInfo.status === 'FAILURE' || 'SUCCESS' ? (
                   <Button
                     type="primary"
                     style={{
@@ -289,7 +353,7 @@ export default function PreHeat() {
                   >
                     {taskInfo.status === 'FAILURE' ? 'Open' : 'Close'}
                   </Button>
-                ) : null}
+                ) : null} */}
               </div>
               {/* <div className={styles.detailStatusList}>
                 {
@@ -353,14 +417,24 @@ export default function PreHeat() {
           }}
           onOk={() => {
             const source = form.getFieldsValue();
+            let temp = source.params || {};
+
+            try {
+              temp = JSON.parse(temp);
+            } catch (e) {
+              console.log('Parse error', e);
+            }
+
             const params = {
               bio: source.bio || '--',
               type: source.type || 'preheat',
+              scheduler_cluster_ids: source.scheduler_cluster_ids || [],
+              cdn_cluster_ids: source.cdn_cluster_ids || [],
               args: {
                 type: source.preheatType || 'file',
                 url: source.url || '',
-                location: source.location || '',
-                cdn_cluster_ids: source.cdn_cluster_ids || [],
+                filter: source.filter|| '',
+                headers: temp,
               },
             };
             createTask(params);
@@ -371,13 +445,6 @@ export default function PreHeat() {
               <Radio value="preheat" defaultChecked={true}>
                 PreHeat
               </Radio>
-            </Form.Item>
-            <Form.Item
-              name="bio"
-              label="Description"
-              rules={[{ required: true, message: 'Description is required!' }]}
-            >
-              <Input />
             </Form.Item>
             <Form.Item
               name="preheatType"
@@ -398,6 +465,9 @@ export default function PreHeat() {
                 defaultValue="file"
               />
             </Form.Item>
+            <Form.Item name="bio" label="Description">
+              <Input />
+            </Form.Item>
             <Form.Item
               name="url"
               label="URL"
@@ -409,20 +479,22 @@ export default function PreHeat() {
               name="range"
               label="Range"
               shouldUpdate
+              style={{ marginBottom: 8 }}
               rules={[{ required: true, message: 'Range is required!' }]}
             >
               <Radio.Group
                 options={[
                   {
-                    label: 'Location',
-                    value: 'location',
+                    label: 'Scheduler Cluster',
+                    value: 'scheduler_cluster',
                   },
                   {
                     label: 'CDN Cluster',
-                    value: 'cdn cluster',
+                    value: 'cdn_cluster',
+                    disabled: true,
                   },
                 ]}
-                defaultValue="location"
+                defaultValue="scheduler_cluster"
               />
             </Form.Item>
             <Form.Item
@@ -432,14 +504,31 @@ export default function PreHeat() {
             >
               {({ getFieldValue }) =>
                 getFieldValue('range') !== 'cdn cluster' ? (
-                  <Form.Item name="location" label="Location">
-                    <Input />
-                  </Form.Item>
-                ) : (
-                  <Form.Item name="cdn_cluster_ids" label="CDN Clusters">
+                  <Form.Item
+                    name="scheduler_cluster_ids"
+                    style={{ marginBottom: 0 }}
+                  >
                     <Select
                       mode="multiple"
                       allowClear
+                      showArrow
+                      options={schedulerClusters}
+                      onChange={(v: any) => {
+                        form.setFieldsValue({
+                          scheduler_cluster_ids: v,
+                        });
+                      }}
+                    />
+                  </Form.Item>
+                ) : (
+                  <Form.Item
+                    name="cdn_cluster_ids"
+                    style={{ marginBottom: 0 }}
+                  >
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      showArrow
                       options={cdnClusters}
                       onChange={(v: any) => {
                         console.log(v);
@@ -451,6 +540,21 @@ export default function PreHeat() {
                   </Form.Item>
                 )
               }
+            </Form.Item>
+            <Form.Item name="filter" label="Filter">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Headers">
+              <CodeEditor
+                value={
+                  form.getFieldValue('params') ||
+                  JSON.stringify({}, null, 2)
+                }
+                height={100}
+                onChange={(v: any) => {
+                  form.setFieldsValue('params', v);
+                }}
+              />
             </Form.Item>
           </Form>
         </Modal>

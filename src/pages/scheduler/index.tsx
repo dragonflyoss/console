@@ -53,7 +53,7 @@ export default function IndexPage() {
   const [checkKeys, setCheck] = useState([]);
 
   const [scheduler, setSchedulers] = useState([]);
-  // table current page
+  // TODO table current page
   const [current, setCurrent] = useState(1);
 
   // dialog title
@@ -94,7 +94,6 @@ export default function IndexPage() {
 
   useEffect(() => {
     getClusters();
-    getSchedulers(current);
   }, []);
 
   const getSchedulers = async (v: number) => {
@@ -124,13 +123,24 @@ export default function IndexPage() {
     console.log(res);
   };
 
-  const getSchedulerById = async (id: string) => {
+  const getSchedulerByClusterId = async (id: string | number, v: number) => {
     const res = await request('/api/v1/schedulers', {
       params: {
-        id,
+        page: v,
+        per_page: 50,
+        scheduler_cluster_id: id,
       },
     });
-    console.log(res);
+    if (res && typeof res === 'object') {
+      setSchedulers(
+        res.map((sub) => {
+          return {
+            ...sub,
+            key: sub.id,
+          };
+        }),
+      );
+    }
   };
 
   const updateSchedulerById = (id: number, config: any) => {
@@ -141,7 +151,7 @@ export default function IndexPage() {
     res.then((e) => {
       message.success('Update Success');
       setVisible(false);
-      getSchedulers(current);
+      getSchedulerByClusterId(sClusters[isClick]?.id, 1);
     });
   };
 
@@ -151,7 +161,7 @@ export default function IndexPage() {
     });
     res.then((v) => {
       message.success('Delete Success');
-      getSchedulers(current);
+      getSchedulerByClusterId(sClusters[isClick]?.id, 1);
     });
   };
 
@@ -176,6 +186,8 @@ export default function IndexPage() {
           ).format('YYYY-MM-DD HH:MM:SS');
         });
       });
+
+      getSchedulerByClusterId(res[0].id, 1);
       setClusters(res);
     }
   };
@@ -299,7 +311,7 @@ export default function IndexPage() {
       render: (v: string) => {
         return (
           <Tooltip title={v}>
-            <div className={styles.tableItem}>{v}</div>
+            <div className={styles.tableItem}>{v || '-'}</div>
           </Tooltip>
         );
       },
@@ -312,7 +324,7 @@ export default function IndexPage() {
       render: (v: string) => {
         return (
           <Tooltip title={v}>
-            <div className={styles.tableItem}>{v}</div>
+            <div className={styles.tableItem}>{v || '-'}</div>
           </Tooltip>
         );
       },
@@ -335,7 +347,7 @@ export default function IndexPage() {
         );
         return (
           <Popover content={content} title="VIPS">
-            <div className={styles.tableItem}>{v}</div>
+            <div className={styles.tableItem}>{v || '-'}</div>
           </Popover>
         );
       },
@@ -350,7 +362,7 @@ export default function IndexPage() {
       render: (v: string) => {
         return (
           <Tooltip title={v}>
-            <div className={styles.tableItem}>{v}</div>
+            <div className={styles.tableItem}>{v || '-'}</div>
           </Tooltip>
         );
       },
@@ -365,19 +377,19 @@ export default function IndexPage() {
       render: (v: number) => {
         return (
           <Tooltip title={v}>
-            <div className={styles.tableItem}>{v}</div>
+            <div className={styles.tableItem}>{v || '-'}</div>
           </Tooltip>
         );
       },
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
+      title: 'State',
+      dataIndex: 'state',
       align: 'left',
-      key: 'status',
+      key: 'state',
       width: 120,
       render: (v: string) => {
-        return <Tag color={v === 'active' ? 'green' : 'cyan'}>{v}</Tag>;
+        return <Tag color={v === 'active' ? 'green' : 'cyan'}>{v || '-'}</Tag>;
       },
     },
     {
@@ -496,6 +508,7 @@ export default function IndexPage() {
                       onClick={() => {
                         setClick(idx);
                         setFormSchema(info);
+                        getSchedulerByClusterId(sub.id, 1);
                       }}
                       onMouseEnter={() => {
                         setHover(sub.id);

@@ -50,7 +50,7 @@ export default function CDN() {
   const [checkKeys, setCheck] = useState([]);
 
   const [cdns, setCDNs] = useState([]);
-  // table current page
+  // TODO table current page
   const [current, setCurrent] = useState(1);
 
   // dialog title
@@ -89,15 +89,15 @@ export default function CDN() {
   };
 
   useEffect(() => {
-    getCDNClusters();
-    getCDNs();
+    getCdnClusters();
   }, []);
 
-  const getCDNs = async () => {
+  const getCdnByClusterId = async (id: string | number) => {
     const res = await request('/api/v1/cdns', {
       params: {
         page: 1,
         per_page: 50,
+        cdn_cluster_id: id
       },
     });
     if (res && typeof res === 'object') {
@@ -118,7 +118,7 @@ export default function CDN() {
       data: config,
     });
     res.then(() => {
-      getCDNs();
+      getCdnByClusterId(cClusters[isClick]?.id);
       setVisible(false);
       message.success('Update Success');
     });
@@ -130,7 +130,7 @@ export default function CDN() {
     });
     res.then(() => {
       message.success('Delete Success');
-      getCDNs();
+      getCdnByClusterId(cClusters[isClick]?.id);
     });
   };
 
@@ -142,7 +142,7 @@ export default function CDN() {
     console.log(res);
   };
 
-  const getCDNClusters = async () => {
+  const getCdnClusters = async () => {
     const res = await request('/api/v1/cdn-clusters');
     if (res && typeof res === 'object' && res.length > 0) {
       res.map((sub) => {
@@ -158,6 +158,8 @@ export default function CDN() {
           ).format('YYYY-MM-DD HH:MM:SS');
         });
       });
+
+      getCdnByClusterId(res[0].id);
       setCdnClusters(res);
     }
   };
@@ -188,7 +190,7 @@ export default function CDN() {
       setCopyVisible(false);
       setFormSchema(cdnInfo);
       setUpdateInfo({});
-      getCDNClusters();
+      getCdnClusters();
     });
   };
 
@@ -201,7 +203,7 @@ export default function CDN() {
       message.success('Update Success');
       setFormVisible(false);
       setDrawVisible(false);
-      getCDNClusters();
+      getCdnClusters();
       setFormSchema(cdnInfo);
     });
   };
@@ -219,7 +221,7 @@ export default function CDN() {
         return pre;
       });
       message.success('Delete Success');
-      getCDNClusters();
+      getCdnClusters();
     });
   };
 
@@ -290,10 +292,10 @@ export default function CDN() {
       },
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
+      title: 'State',
+      dataIndex: 'state',
       align: 'left',
-      key: 'status',
+      key: 'state',
       width: 120,
       render: (v: string) => {
         return <Tag color={v === 'active' ? 'green' : 'cyan'}>{v}</Tag>;
@@ -360,7 +362,7 @@ export default function CDN() {
                 const f = cClusters.filter((sub) => sub.name.includes(v));
                 setCdnClusters(f);
               } else {
-                getCDNClusters();
+                getCdnClusters();
               }
             }}
           />
@@ -413,6 +415,7 @@ export default function CDN() {
                     value={sub.id}
                     onClick={() => {
                       setClick(idx);
+                      getCdnByClusterId(sub.id);
                     }}
                     onMouseEnter={() => {
                       setHover(sub.id);

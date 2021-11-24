@@ -93,7 +93,7 @@ export default function Users() {
       render: (v: string) => {
         return (
           <Tooltip title={v}>
-            <div className={styles.tableItem}>{v}</div>
+            <div className={styles.tableItem}>{v || '-'}</div>
           </Tooltip>
         );
       },
@@ -107,7 +107,7 @@ export default function Users() {
       render: (v: string) => {
         return (
           <Tooltip title={v}>
-            <div className={styles.tableItem}>{v}</div>
+            <div className={styles.tableItem}>{v || '-'}</div>
           </Tooltip>
         );
       },

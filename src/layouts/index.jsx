@@ -22,6 +22,8 @@ import '../global.css';
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
+const rootSubmenuKeys = ['config', 'service', 'setting'];
+
 export default function BasicLayout({
   children,
   location,
@@ -30,6 +32,7 @@ export default function BasicLayout({
   match,
 }) {
   const [key, setKey] = useState(['scheduler-cluster']);
+  const [openKeys, setOpenKeys] = useState(['config']);
   const [user, setUser] = useState({});
   const [role, setRole] = useState('guest');
 
@@ -118,14 +121,28 @@ export default function BasicLayout({
         <Sider width={200} className="site-layout-background">
           <Menu
             mode="inline"
-            defaultSelectedKeys={['scheduler-cluster']}
-            defaultOpenKeys={['config']}
             selectedKeys={key}
+            // openKeys={openKeys}
+            // 全展开
+            defaultOpenKeys={rootSubmenuKeys}
             style={{ height: '100%', borderRight: 0 }}
-            onClick={(v) => {
+            onClick={(item) => {
+              setKey([item.key]);
               // window.location.assign(`/${v.key}`);
             }}
+            // onOpenChange={(keys) => {
+            //   const rootSubmenuKeys = ['config', 'service', 'setting'];
+
+            //   const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
+            //   console.log(latestOpenKey, keys);
+            //   if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+            //     setOpenKeys(keys);
+            //   } else {
+            //     setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+            //   }
+            // }}
           >
+            {/* TODO 根据路由自动生成 */}
             <SubMenu key="config" icon={<FundOutlined />} title="Configuration">
               <Menu.Item key="scheduler-cluster">
                 <Link to="/configuration/scheduler-cluster">
@@ -134,6 +151,18 @@ export default function BasicLayout({
               </Menu.Item>
               <Menu.Item key="cdn-cluster">
                 <Link to="/configuration/cdn-cluster">CDN Cluster</Link>
+              </Menu.Item>
+              <Menu.Item key="application">
+                <Link to="/configuration/application">Application</Link>
+              </Menu.Item>
+            </SubMenu>
+            <SubMenu
+              key="service"
+              icon={<CloudServerOutlined />}
+              title="Service"
+            >
+              <Menu.Item key="task-list">
+                <Link to="/service/task-list">Task</Link>
               </Menu.Item>
             </SubMenu>
             <SubMenu key="setting" icon={<SettingOutlined />} title="Setting">
@@ -151,28 +180,16 @@ export default function BasicLayout({
                 <Link to="/setting/oauth">Oauth</Link>
               </Menu.Item>
             </SubMenu>
-            <SubMenu
-              key="service"
-              icon={<CloudServerOutlined />}
-              title="Service"
-            >
-              <Menu.Item key="task">
-                <Link to="/service/task-list">Task</Link>
-              </Menu.Item>
-              <Menu.Item key="system-call">
-                <Link to="/service/system-call">SystemCall</Link>
-              </Menu.Item>
-            </SubMenu>
           </Menu>
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>
+            <Breadcrumb.Item key="bread_0">
               {location.pathname
                 .split('/')?.[1]
                 .replace(/^\S/, (s) => s.toUpperCase())}
             </Breadcrumb.Item>
-            <Breadcrumb.Item>
+            <Breadcrumb.Item key="bread_1">
               {key[0]
                 .split('-')
                 .map((e) =>

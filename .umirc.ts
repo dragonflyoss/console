@@ -33,7 +33,11 @@ export default defineConfig({
           path: '/configuration/cdn-cluster',
           component: '@/pages/cdn',
         },
-        { component: '@/pages/404' },
+        {
+          exact: true,
+          path: '/configuration/application',
+          component: '@/pages/application',
+        },
       ],
     },
     {
@@ -78,11 +82,6 @@ export default defineConfig({
           path: '/service/task-list',
           component: '@/pages/task',
         },
-        // {
-        //   exact: true,
-        //   path: '/service/system-call',
-        //   component: '@/pages/systemCall',
-        // },
         { component: '@/pages/404' },
       ],
     },

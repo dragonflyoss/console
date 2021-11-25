@@ -27,13 +27,15 @@ import {
 } from '@ant-design/icons';
 import { request } from 'umi';
 import CodeEditor from '@/components/codeEditor';
+import Cookies from 'js-cookie';
+import { decode } from 'jsonwebtoken';
 import moment from 'moment';
 
 import styles from './index.less';
 
 let taskRetry = null;
 const defaultArgs = {
-  filters: "",
+  filters: '',
   headers: {},
 };
 
@@ -41,19 +43,28 @@ export default function PreHeat() {
   const [data, setData] = useState([]);
   const [cdnClusters, setCdnClusters] = useState([]);
   const [schedulerClusters, setSchedulerClusters] = useState([]);
-  const [taskInfo, setTaskInfo] = useState({});
 
-  const [visible, setVisible] = useState(false);
-  const [isDetail, setDetail] = useState(false);
+  const [taskInfo, setTaskInfo] = useState({});
+  const [userId, setUserId] = useState(null);
+
+  const [visible, setVisible] = useState(false); // create dialog
+  const [isDetail, setDetail] = useState(false); // detail page
+  const [isInfo, setInfo] = useState({
+    visible: false,
+    value: '',
+  }); // code editor
 
   useEffect(() => {
     getTasks(1);
-    getCDNClusters();
+    // getCDNClusters();
+    getSchedulerClusters();
+
+    const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
+    setUserId(userInfo.id);
   }, []);
 
   useEffect(() => {
-    console.log(isDetail, taskInfo.state);
-    if (isDetail) {
+    if (isDetail && !['SUCCESS', 'FAILURE'].includes(taskInfo.state)) {
       taskRetry = setInterval(() => {
         getTaskById(taskInfo.id);
       }, 3000);
@@ -64,8 +75,7 @@ export default function PreHeat() {
   }, [isDetail]);
 
   useEffect(() => {
-    console.log(111, taskInfo.state);
-    if (!['SUCCESS', 'FAILURE'].includes(taskInfo.state)) {
+    if (['SUCCESS', 'FAILURE'].includes(taskInfo.state)) {
       clearInterval(taskRetry);
       taskRetry = null;
     }
@@ -78,7 +88,7 @@ export default function PreHeat() {
       method: 'get',
       params: {
         page: v,
-        per_page: 10,
+        per_page: 50,
       },
     });
     if (res) {
@@ -98,6 +108,21 @@ export default function PreHeat() {
       setDetail(true);
     } else {
       message.error('get task detail error');
+    }
+  };
+
+  const getSchedulerClusters = async () => {
+    const res = await request('/api/v1/scheduler-clusters');
+    if (res && typeof res === 'object' && res.length > 0) {
+      setSchedulerClusters(
+        res.map((sub: any) => {
+          return {
+            ...sub,
+            label: sub.name,
+            value: sub.id,
+          };
+        }),
+      );
     }
   };
 
@@ -129,7 +154,7 @@ export default function PreHeat() {
       message.error('create failed, pleace check u params');
     }
   };
-  
+
   const updateTask = async (id: number, params: any) => {
     const res = await request(`/api/v1/jobs/${id}`, {
       method: 'patch',
@@ -140,7 +165,7 @@ export default function PreHeat() {
     } else {
       message.error('update failed, pleace check u params');
     }
-  }
+  };
 
   const columns = [
     {
@@ -149,7 +174,7 @@ export default function PreHeat() {
       align: 'left',
       key: 'id',
       ellipsis: true,
-      width: 80
+      width: 80,
     },
     {
       title: 'Description',
@@ -166,6 +191,7 @@ export default function PreHeat() {
               onClick={() => {
                 getTaskById(r.id);
               }}
+              className={styles.newBtn}
             >
               {v}
             </Button>
@@ -190,7 +216,7 @@ export default function PreHeat() {
       width: 200,
       render: (v: string) => {
         return moment(v).format('YYYY-MM-DD HH:mm:ss') || '-';
-      }
+      },
     },
     {
       title: 'Creator',
@@ -371,13 +397,49 @@ export default function PreHeat() {
               ? Object.keys(taskInfo.args).map((sub) => {
                   return (
                     <Descriptions.Item label={sub} span={2}>
-                      {taskInfo.args[sub] || '-'}
+                      {typeof taskInfo.args[sub] === 'object' ? (
+                        <Button
+                          type="link"
+                          className={styles.newBtn}
+                          onClick={() => {
+                            setInfo({
+                              visible: true,
+                              value:
+                                JSON.stringify(taskInfo.args[sub], null, 2) ||
+                                '',
+                            });
+                          }}
+                        >
+                          Details
+                        </Button>
+                      ) : (
+                        taskInfo.args[sub] || '-'
+                      )}
                     </Descriptions.Item>
                   );
                 })
               : null}
           </Descriptions>
         </div>
+        <Modal
+          visible={isInfo.visible}
+          title={'Detail'}
+          onCancel={() =>
+            setInfo({
+              visible: false,
+              value: '',
+            })
+          }
+          footer={null}
+        >
+          <CodeEditor
+            value={isInfo.value || ''}
+            height={200}
+            options={{
+              readOnly: true,
+            }}
+          />
+        </Modal>
       </div>
     );
   }
@@ -417,7 +479,7 @@ export default function PreHeat() {
           }}
           onOk={() => {
             const source = form.getFieldsValue();
-            let temp = source.params || {};
+            let temp = source.params || '{}';
 
             try {
               temp = JSON.parse(temp);
@@ -433,9 +495,10 @@ export default function PreHeat() {
               args: {
                 type: source.preheatType || 'file',
                 url: source.url || '',
-                filter: source.filter|| '',
+                filter: source.filter || '',
                 headers: temp,
               },
+              user_id: userId,
             };
             createTask(params);
           }}
@@ -521,10 +584,7 @@ export default function PreHeat() {
                     />
                   </Form.Item>
                 ) : (
-                  <Form.Item
-                    name="cdn_cluster_ids"
-                    style={{ marginBottom: 0 }}
-                  >
+                  <Form.Item name="cdn_cluster_ids" style={{ marginBottom: 0 }}>
                     <Select
                       mode="multiple"
                       allowClear
@@ -547,8 +607,7 @@ export default function PreHeat() {
             <Form.Item label="Headers">
               <CodeEditor
                 value={
-                  form.getFieldValue('params') ||
-                  JSON.stringify({}, null, 2)
+                  form.getFieldValue('params') || JSON.stringify({}, null, 2)
                 }
                 height={100}
                 onChange={(v: any) => {

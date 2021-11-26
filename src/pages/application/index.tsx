@@ -113,7 +113,7 @@ export default function Application() {
 
   const columns = [
     {
-      title: 'Id',
+      title: 'ID',
       dataIndex: 'id',
       align: 'left',
       key: 'id',
@@ -148,24 +148,24 @@ export default function Application() {
       ellipsis: true,
     },
     {
-      title: 'Created Time',
-      dataIndex: 'created_at',
+      title: 'Update Time',
+      dataIndex: 'updated_at',
       align: 'left',
-      key: 'created_at',
+      key: 'updated_at',
       ellipsis: true,
       width: 200,
       render: (v: string) => {
         return moment(v).format('YYYY-MM-DD HH:mm:ss') || '-';
       },
     },
-    {
-      title: 'Creator',
-      dataIndex: 'user_id',
-      align: 'left',
-      key: 'user_id',
-      width: 100,
-      ellipsis: true,
-    },
+    // {
+    //   title: 'Creator',
+    //   dataIndex: 'user_id',
+    //   align: 'left',
+    //   key: 'user_id',
+    //   width: 100,
+    //   ellipsis: true,
+    // },
     {
       title: 'State',
       dataIndex: 'state',
@@ -199,6 +199,16 @@ export default function Application() {
               Update
             </Button>
             <Divider type="vertical" />
+            {/* <Button
+              className={styles.newBtn}
+              type="link"
+              onClick={() => {
+                // getAppById(v);
+              }}
+            >
+              State
+            </Button>
+            <Divider type="vertical" /> */}
             <Popconfirm
               title="Are you sure to delete this Scheduler?"
               onConfirm={() => {
@@ -285,33 +295,26 @@ export default function Application() {
             >
               <Input />
             </Form.Item>
-            <Form.Item name="bio" label="Description">
+            <Form.Item
+              name="bio"
+              label="Description"
+              rules={[{ required: true, message: 'Name is required!' }]}
+            >
               <Input />
-            </Form.Item>
-            <Form.Item name="url" label="Url">
-              <Input />
-            </Form.Item>
-            <Form.Item name="download_rate_limit" label="Download Rate Limit">
-              <InputNumber min={0} max={100} />
             </Form.Item>
             <Form.Item
-              name="state"
-              label="State"
-              rules={[{ required: true, message: 'State is required!' }]}
+              name="url"
+              label="URL"
+              rules={[{ required: true, message: 'Name is required!' }]}
             >
-              <Radio.Group
-                options={[
-                  {
-                    label: 'Enable',
-                    value: 'enable',
-                  },
-                  {
-                    label: 'Disable',
-                    value: 'disable',
-                  },
-                ]}
-                defaultValue={'enable'}
-              />
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="download_rate_limit"
+              label="Download Rate Limit"
+              rules={[{ required: true, message: 'Name is required!' }]}
+            >
+              <InputNumber min={0} max={100} defaultValue={10} />
             </Form.Item>
           </Form>
         </Modal>

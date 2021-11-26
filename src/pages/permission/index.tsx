@@ -88,7 +88,7 @@ export default function Permission() {
 
   const columns = [
     {
-      title: 'Id',
+      title: 'ID',
       dataIndex: 'id',
       align: 'left',
       key: 'id',
@@ -130,7 +130,7 @@ export default function Permission() {
 
   const columns_role = [
     {
-      title: 'Id',
+      title: 'ID',
       dataIndex: 'id',
       align: 'left',
       key: 'id',

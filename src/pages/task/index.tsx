@@ -169,7 +169,7 @@ export default function PreHeat() {
 
   const columns = [
     {
-      title: 'Id',
+      title: 'ID',
       dataIndex: 'id',
       align: 'left',
       key: 'id',
@@ -200,7 +200,7 @@ export default function PreHeat() {
       },
     },
     {
-      title: 'Task Type',
+      title: 'Type',
       dataIndex: 'type',
       align: 'left',
       key: 'type',
@@ -341,7 +341,7 @@ export default function PreHeat() {
           <div className={styles.detailHeader}>
             <div className={styles.detailInfo}>
               <Descriptions title="Base Info" size="small">
-                <Descriptions.Item label="Task Id" span={3}>
+                <Descriptions.Item label="Task ID" span={3}>
                   {taskInfo.task_id || '-'}
                 </Descriptions.Item>
                 <Descriptions.Item label="Description" span={3}>
@@ -446,7 +446,7 @@ export default function PreHeat() {
 
   return (
     <div className={styles.main}>
-      <h1 className={styles.title}>Task List</h1>
+      <h1 className={styles.title}>Task</h1>
       <div className={styles.content}>
         <div
           style={{
@@ -504,9 +504,9 @@ export default function PreHeat() {
           }}
         >
           <Form layout="vertical" form={form}>
-            <Form.Item name="type" label="Task Type">
+            <Form.Item name="type" label="Type">
               <Radio value="preheat" defaultChecked={true}>
-                PreHeat
+                Preheat
               </Radio>
             </Form.Item>
             <Form.Item

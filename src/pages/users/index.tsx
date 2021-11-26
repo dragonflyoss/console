@@ -2,25 +2,30 @@ import { useState, useEffect } from 'react';
 import {
   Button,
   Table,
-  Tabs,
   message,
   Tooltip,
   Popconfirm,
   Divider,
   Drawer,
+  Tag,
+  Form,
+  Modal,
+  Radio,
 } from 'antd';
 import { request } from 'umi';
 import Cookies from 'js-cookie';
 import { decode } from 'jsonwebtoken';
+import moment from 'moment';
+
 import styles from './index.less';
 
 const infos = {
-  id: 'User Id',
+  id: 'User ID',
   name: 'Name',
   email: 'Email',
   phone: 'Phone',
   location: 'Location',
-  role: 'Role',
+  // role: 'Role',
   created_at: 'Create Time',
   updated_at: 'Update Time',
 };
@@ -28,15 +33,20 @@ const infos = {
 export default function Users() {
   const [data, setData] = useState([]);
   const [visible, setVisible] = useState(false);
+
   const [role, setRole] = useState('guest');
-  const [userInfo, setUSerInfo] = useState({});
+  const [userInfo, setUserInfo] = useState({});
+  const [userRoleInfo, setUserRoleInfo] = useState({
+    visible: false,
+    roles: 'guest',
+  });
 
   useEffect(() => {
     getUsers();
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
     if (userInfo.id) {
       // getUserById(userInfo.id);
-      getRoleByUser(userInfo.id);
+      // getRoleByUser(userInfo.id);
     }
   }, []);
 
@@ -45,11 +55,15 @@ export default function Users() {
       method: 'get',
     });
     if (res) {
-      setUSerInfo(res);
+      Object.keys(res).map((sub) => {
+        if (['created_at', 'updated_at'].includes(sub)) {
+          res[sub] = moment(res[sub]).format('YYYY-MM-DD HH:mm:ss') || '-';
+        }
+      });
+      setUserInfo(res);
       setVisible(true);
     } else {
       message.error('get user info error');
-      setVisible(true);
     }
   };
 
@@ -57,7 +71,18 @@ export default function Users() {
     const res = await request(`/api/v1/users/${id}/roles`, {
       method: 'get',
     });
-    setRole(res[0] || 'guest');
+    if (res) {
+      setUserRoleInfo({
+        visible: true,
+        roles: res[0] || 'guest',
+        id,
+      });
+      form.setFieldsValue({
+        roles: res[0] || 'guest',
+      });
+    } else {
+      message.error('Get Role Error');
+    }
   };
 
   const getUsers = async () => {
@@ -65,8 +90,8 @@ export default function Users() {
       method: 'get',
       params: {
         page: 1,
-        per_page: 10
-      }
+        per_page: 50,
+      },
     });
     if (res) {
       setData(res);
@@ -76,9 +101,26 @@ export default function Users() {
     }
   };
 
+  const addRoleForUser = async (id: number | string, role: string) => {
+    const res = await request(`/api/v1/users/${id}/roles/${role}`, {
+      method: 'put',
+    });
+    message.success('Update Success');
+    setUserRoleInfo({
+      visible: false,
+      roles: '',
+    });
+  };
+
+  const deleteRoleForUser = async (id: number | string, role: string) => {
+    await request(`/api/v1/users/${id}/roles/${role}`, {
+      method: 'delete',
+    });
+  };
+
   const columns = [
     {
-      title: 'Id',
+      title: 'ID',
       dataIndex: 'id',
       align: 'left',
       key: 'id',
@@ -113,11 +155,24 @@ export default function Users() {
       },
     },
     {
+      title: 'State',
+      dataIndex: 'state',
+      align: 'left',
+      key: 'state',
+      width: 110,
+      render: (v: string) => {
+        const colors = {
+          enable: 'green',
+        };
+        return <Tag color={colors[v]}>{v}</Tag>;
+      },
+    },
+    {
       title: 'Operation',
       dataIndex: 'id',
       align: 'left',
       key: 'id',
-      width: 300,
+      width: 160,
       render: (t: number, r: any, i: number) => {
         return (
           <div className={styles.operation}>
@@ -134,22 +189,14 @@ export default function Users() {
             <Button
               className={styles.newBtn}
               type="link"
-              disabled
               onClick={() => {
-                // const target = {
-                //   permission: [
-                //     {
-                //       ...r,
-                //     }
-                //   ],
-                //   role: r.object,
-                // };
-                // updateRole(target);
+                // 更新用户权限
+                getRoleByUser(t);
               }}
             >
               Update
             </Button>
-            <Divider type="vertical" />
+            {/* <Divider type="vertical" />
             <Popconfirm
               title="Are you sure to delete this user?"
               onConfirm={() => {
@@ -161,16 +208,18 @@ export default function Users() {
               <Button type="link" className={styles.newBtn} disabled>
                 Delete
               </Button>
-            </Popconfirm>
+            </Popconfirm> */}
           </div>
         );
       },
     },
   ];
 
+  const [form] = Form.useForm();
+
   return (
     <div className={styles.main}>
-      <h1 className={styles.title}>Users</h1>
+      <h1 className={styles.title}>User</h1>
       <div className={styles.content}>
         <Table
           dataSource={data}
@@ -198,6 +247,42 @@ export default function Users() {
           );
         })}
       </Drawer>
+      <Modal
+        visible={userRoleInfo.visible}
+        title="Update User's Role"
+        width={600}
+        onCancel={() => {
+          form.resetFields();
+          setUserRoleInfo({
+            visible: false,
+            roles: '',
+          });
+        }}
+        onOk={() => {
+          const source = form.getFieldsValue();
+          console.log(source, userRoleInfo);
+
+          deleteRoleForUser(userRoleInfo.id, userRoleInfo.roles);
+          addRoleForUser(userRoleInfo.id, source.roles);
+        }}
+      >
+        <Form
+          layout="vertical"
+          form={form}
+          initialValues={form.getFieldsValue() || {}}
+        >
+          <Form.Item
+            label="Role"
+            name="roles"
+            rules={[{ required: true, message: 'Please Check Your Role!' }]}
+          >
+            <Radio.Group>
+              <Radio value={'guest'}>Guest</Radio>
+              <Radio value={'root'}>Root</Radio>
+            </Radio.Group>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }

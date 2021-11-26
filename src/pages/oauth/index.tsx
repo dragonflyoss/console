@@ -14,13 +14,15 @@ export default function Oauth() {
     if (userInfo.id) {
       setUserId(userInfo.id);
       getOauth(userInfo.id);
-    };
+    }
   }, []);
 
   const onFinish = (values: any) => {
     console.log('Success:', values);
     createOauth(userId, values);
-    location.assign(`https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=http://localhost:8000/signin`);
+    location.assign(
+      `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=http://localhost:8000/signin`,
+    );
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -43,6 +45,10 @@ export default function Oauth() {
   const getOauth = async (id: number) => {
     const res = await request(`/api/v1/oauth`, {
       method: 'get',
+      params: {
+        page: 0,
+        per_page: 10,
+      },
     });
     console.log(res);
   };
@@ -95,7 +101,10 @@ export default function Oauth() {
             label="Application Name"
             name="name"
             rules={[
-              { required: true, message: 'Please input your Application Name!' },
+              {
+                required: true,
+                message: 'Please input your Application Name!',
+              },
             ]}
           >
             <Input />

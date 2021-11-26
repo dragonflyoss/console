@@ -121,6 +121,7 @@ export default function IndexPage({ location }) {
       wrapperClassName={styles.loadingContainer}
     >
       <div className={styles.main}>
+        <div className={styles.logo} />
         <div className={styles.left}>
           <canvas
             id="animation-canvas"
@@ -133,7 +134,6 @@ export default function IndexPage({ location }) {
             {/* <div className={styles.i18n}>简体中文</div> */}
           </div>
           <div className={styles.content}>
-            <div className={styles.logo} />
             <div className={styles.welcome}>
               {hasAccount ? 'Hello, Welcome to Dragonfly' : 'Sign up'}
             </div>
@@ -175,7 +175,7 @@ export default function IndexPage({ location }) {
                       </Form.Item>
                     );
                   })}
-              <div className={styles.oauth}>
+              {/* <div className={styles.oauth}>
                 <Button
                   type="link"
                   className={styles.newBtn}
@@ -199,7 +199,7 @@ export default function IndexPage({ location }) {
                   <GoogleOutlined />
                   Google
                 </Button>
-              </div>
+              </div> */}
               {hasAccount ? (
                 <div className={styles.check}>
                   Have not account ?

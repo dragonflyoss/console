@@ -172,8 +172,8 @@ export default function BasicLayout({
                 </Menu.Item>
               ) : null}
               {role === 'root' ? (
-                <Menu.Item key="users">
-                  <Link to="/setting/users">Users</Link>
+                <Menu.Item key="user">
+                  <Link to="/setting/user">User</Link>
                 </Menu.Item>
               ) : null}
               <Menu.Item key="oauth">

@@ -57,7 +57,7 @@ export default defineConfig({
         },
         {
           exact: true,
-          path: '/setting/users',
+          path: '/setting/user',
           component: '@/pages/users',
         },
         {
@@ -79,7 +79,7 @@ export default defineConfig({
         },
         {
           exact: true,
-          path: '/service/task-list',
+          path: '/service/task',
           component: '@/pages/task',
         },
         { component: '@/pages/404' },

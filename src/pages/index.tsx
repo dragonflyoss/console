@@ -26,11 +26,18 @@ const h = unit * rows;
 export default function IndexPage({ location }) {
   const [hasAccount, setAccount] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [oauthInfo, setOauthInfo] = useState({
+    hasOauth: false,
+    values: {},
+  });
 
   useEffect(() => {
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
+    console.log(userInfo);
     if (userInfo.id) {
-      window.location.assign('/configuration/scheduler-cluster');
+      // getOauthById(userInfo.id);
+      getUserById(userInfo.id);
+      //   window.location.assign('/configuration/scheduler-cluster');
     } else {
       setLoading(false);
     }
@@ -88,8 +95,8 @@ export default function IndexPage({ location }) {
     }
   };
 
-  const signinByOauth = async (name: string) => {
-    const res = await request( `/api/v1/user/signin/${name}`, {
+  const signinByOauth = async (name: string | number) => {
+    const res = await request(`/api/v1/user/signin/${name}/callback`, {
       method: 'get',
     });
     if (res) {
@@ -97,6 +104,17 @@ export default function IndexPage({ location }) {
       window.location.assign('/configuration/scheduler-cluster');
     } else {
       message.error('Incorrect Oauth');
+    }
+  };
+
+  const getUserById = async (id: number) => {
+    const res = await request(`/api/v1/users/${id}`, {
+      method: 'get',
+    });
+    if (res) {
+      signinByOauth(res.name);
+    } else {
+      message.error('get user info error');
     }
   };
 

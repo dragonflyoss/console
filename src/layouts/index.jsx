@@ -161,8 +161,8 @@ export default function BasicLayout({
               icon={<CloudServerOutlined />}
               title="Service"
             >
-              <Menu.Item key="task-list">
-                <Link to="/service/task-list">Task</Link>
+              <Menu.Item key="task">
+                <Link to="/service/task">Task</Link>
               </Menu.Item>
             </SubMenu>
             <SubMenu key="setting" icon={<SettingOutlined />} title="Setting">

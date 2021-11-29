@@ -8,49 +8,87 @@ import styles from './index.less';
 
 export default function Oauth() {
   const [userId, setUserId] = useState(null);
+  const [oauthInfo, setOauthInfo] = useState({
+    hasOauth: false,
+    values: {},
+  });
+
+  const [form] = Form.useForm();
 
   useEffect(() => {
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
     if (userInfo.id) {
       setUserId(userInfo.id);
-      getOauth(userInfo.id);
+      getOauthById(userInfo.id);
     }
   }, []);
 
   const onFinish = (values: any) => {
     console.log('Success:', values);
-    createOauth(userId, values);
-    location.assign(
-      `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=http://localhost:8000/signin`,
-    );
+    if (oauthInfo.hasOauth) {
+      updateOauthById(oauthInfo.values.id, oauthInfo.values);
+    } else {
+      createOauth(values);
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
 
-  const createOauth = async (id: number | null, params: any) => {
-    const res = await request(`/api/v1/oauth/${id}`, {
+  const createOauth = async (params: any) => {
+    const res = await request('/api/v1/oauth', {
       method: 'post',
       data: params,
     });
     if (res) {
       message.success('create oauth success');
-      getOauth(userId);
+      getOauthById(userId);
     } else {
       message.error('create failed, pleace check u params');
     }
   };
 
-  const getOauth = async (id: number) => {
-    const res = await request(`/api/v1/oauth`, {
-      method: 'get',
-      params: {
-        page: 0,
-        per_page: 10,
-      },
+  const updateOauthById = async (id: number | null, params: any) => {
+    const res = await request(`/api/v1/oauth/${id}`, {
+      method: 'patch',
+      data: params,
     });
-    console.log(res);
+    if (res) {
+      message.success('update oauth success');
+      getOauthById(userId);
+    } else {
+      message.error('update failed, pleace check u params');
+    }
+  };
+
+  const getOauthById = async (id: number) => {
+    const res = await request(`/api/v1/oauth/${id}`, {
+      method: 'get',
+    });
+
+    if (!res.message) {
+      setOauthInfo({
+        hasOauth: true,
+        values: res || {},
+      });
+      form.setFieldsValue(res);
+    } else {
+      setOauthInfo({
+        hasOauth: false,
+        values: {},
+      });
+      form.resetFields();
+    }
+  };
+
+  const deleteOauthById = async (id: number) => {
+    const res = await request(`/api/v1/oauth/${id}`, {
+      method: 'delete',
+    });
+
+    message.success('delete Oauth success');
+    form.resetFields();
   };
 
   return (
@@ -66,10 +104,11 @@ export default function Oauth() {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
+          form={form}
         >
           <Form.Item
             label="Oauth Type"
-            name="type"
+            name="name"
             rules={[
               { required: true, message: 'Please check your Oauth Typ!' },
             ]}
@@ -81,7 +120,7 @@ export default function Oauth() {
           </Form.Item>
           <Form.Item
             label="Client ID"
-            name="clientID"
+            name="client_id"
             rules={[
               { required: true, message: 'Please input your Client ID!' },
             ]}
@@ -90,16 +129,16 @@ export default function Oauth() {
           </Form.Item>
           <Form.Item
             label="Client Secret"
-            name="clientSecret"
+            name="client_secret"
             rules={[
               { required: true, message: 'Please input your Client Secret!' },
             ]}
           >
             <Input />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             label="Application Name"
-            name="name"
+            name="application"
             rules={[
               {
                 required: true,
@@ -108,7 +147,7 @@ export default function Oauth() {
             ]}
           >
             <Input />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             label="Description"
             name="bio"
@@ -130,6 +169,17 @@ export default function Oauth() {
           <Form.Item>
             <Button type="primary" htmlType="submit">
               Submit
+            </Button>
+            <Button
+              style={{
+                marginLeft: 12,
+              }}
+              disabled={!oauthInfo.hasOauth}
+              onClick={() => {
+                deleteOauthById(oauthInfo.values.id);
+              }}
+            >
+              Delete
             </Button>
           </Form.Item>
         </Form>

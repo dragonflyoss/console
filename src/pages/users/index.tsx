@@ -13,8 +13,6 @@ import {
   Radio,
 } from 'antd';
 import { request } from 'umi';
-import Cookies from 'js-cookie';
-import { decode } from 'jsonwebtoken';
 import moment from 'moment';
 
 import styles from './index.less';
@@ -43,11 +41,6 @@ export default function Users() {
 
   useEffect(() => {
     getUsers();
-    const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
-    if (userInfo.id) {
-      // getUserById(userInfo.id);
-      // getRoleByUser(userInfo.id);
-    }
   }, []);
 
   const getUserById = async (id: number) => {

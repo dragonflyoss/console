@@ -33,6 +33,55 @@ export default defineConfig({
           path: '/configuration/cdn-cluster',
           component: '@/pages/cdn',
         },
+        {
+          exact: true,
+          path: '/configuration/application',
+          component: '@/pages/application',
+        },
+      ],
+    },
+    {
+      exact: false,
+      path: '/setting',
+      component: '@/layouts/index',
+      routes: [
+        {
+          exact: true,
+          path: '/setting/',
+          component: '@/pages/permission',
+        },
+        {
+          exact: true,
+          path: '/setting/permission',
+          component: '@/pages/permission',
+        },
+        {
+          exact: true,
+          path: '/setting/user',
+          component: '@/pages/users',
+        },
+        {
+          exact: true,
+          path: '/setting/oauth',
+          component: '@/pages/oauth',
+        },
+      ],
+    },
+    {
+      exact: false,
+      path: '/service',
+      component: '@/layouts/index',
+      routes: [
+        {
+          exact: true,
+          path: '/service/',
+          component: '@/pages/task',
+        },
+        {
+          exact: true,
+          path: '/service/task',
+          component: '@/pages/task',
+        },
         { component: '@/pages/404' },
       ],
     },
@@ -42,6 +91,11 @@ export default defineConfig({
     default: 'en-US', // en-US
     baseNavigator: true,
     antd: true,
+  },
+  proxy: {
+    '/api/v1': {
+      target: 'http://11.122.75.66:8080', // dep env
+    },
   },
   fastRefresh: {},
   theme: {

@@ -17,6 +17,8 @@ import {
 import { Link, request } from 'umi';
 import Cookies from 'js-cookie';
 import { decode } from 'jsonwebtoken';
+import { ReactComponent as Logo } from '../public/logo-white.svg';
+
 import '../global.css';
 
 const { SubMenu } = Menu;
@@ -92,15 +94,16 @@ export default function BasicLayout({
     <Layout>
       <Header className="header">
         <div className="left-info">
-          <div className="logo" />
-          <Divider
+          <Logo style={{ width: 90, height: 22 }} />
+          {/* <div className="logo" /> */}
+          {/* <Divider
             type="vertical"
             style={{
               color: '#ffffff',
               borderColor: '#ffffff',
             }}
           />
-          Dragonfly
+          Dragonfly */}
         </div>
         <Dropdown overlay={menu} trigger={['click']}>
           <Avatar

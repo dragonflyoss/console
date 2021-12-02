@@ -220,14 +220,14 @@ export default function IndexPage({ location }) {
               </div> */}
               {hasAccount ? (
                 <div className={styles.check}>
-                  Have not account ?
+                  New to Dragonfly ?
                   <Button
                     type="link"
                     onClick={() => {
                       setAccount(false);
                     }}
                   >
-                    Sign Up
+                    Create an account.
                   </Button>
                 </div>
               ) : (

@@ -534,7 +534,13 @@ export default function PreHeat() {
             <Form.Item
               name="url"
               label="URL"
-              rules={[{ required: true, message: 'URL is required!' }]}
+              rules={[
+                {
+                  required: true,
+                  message: 'URL must conform to specifications.',
+                  type: 'url',
+                },
+              ]}
             >
               <Input />
             </Form.Item>

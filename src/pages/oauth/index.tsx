@@ -158,10 +158,14 @@ export default function Oauth() {
             <Input />
           </Form.Item>
           <Form.Item
-            label="Redirect Url"
+            label="Redirect URL"
             name="redirect_url"
             rules={[
-              { required: true, message: 'Please input your Redirect Url!' },
+              {
+                required: true,
+                message: 'URL must conform to specifications.',
+                type: 'url',
+              },
             ]}
           >
             <Input />

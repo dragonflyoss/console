@@ -21,13 +21,14 @@
 .left-info {
   display: flex;
   align-items: center;
+  margin-left: -4px;
 }
 
 .logo {
   float: left;
-  width: 20px;
+  width: 90px;
   height: 22px;
-  background: url('./public/logo-dragonfly.png');
+  background: url('./public/logo-white.svg');
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }

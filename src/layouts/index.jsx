@@ -17,6 +17,8 @@ import {
 import { Link, request } from 'umi';
 import Cookies from 'js-cookie';
 import { decode } from 'jsonwebtoken';
+import { ReactComponent as Logo } from '../public/logo-white.svg';
+
 import '../global.css';
 
 const { SubMenu } = Menu;
@@ -39,6 +41,7 @@ export default function BasicLayout({
   useEffect(() => {
     const temp = location.pathname.split('/')?.[2];
     setKey(temp.length ? [temp] : ['scheduler-cluster']);
+
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
     if (userInfo.id) {
       getUserById(userInfo.id);
@@ -77,7 +80,7 @@ export default function BasicLayout({
           pointerEvents: 'none',
         }}
       >
-        Hello, {user.name || user.id || 'Admin'}
+        {user.name || user.id || 'Admin'}
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="1">
@@ -92,15 +95,16 @@ export default function BasicLayout({
     <Layout>
       <Header className="header">
         <div className="left-info">
-          <div className="logo" />
-          <Divider
+          <Logo style={{ width: 90, height: 22 }} />
+          {/* <div className="logo" /> */}
+          {/* <Divider
             type="vertical"
             style={{
               color: '#ffffff',
               borderColor: '#ffffff',
             }}
           />
-          Dragonfly
+          Dragonfly */}
         </div>
         <Dropdown overlay={menu} trigger={['click']}>
           <Avatar
@@ -177,7 +181,7 @@ export default function BasicLayout({
                 </Menu.Item>
               ) : null}
               <Menu.Item key="oauth">
-                <Link to="/setting/oauth">Oauth</Link>
+                <Link to="/setting/oauth">OAuth</Link>
               </Menu.Item>
             </SubMenu>
           </Menu>

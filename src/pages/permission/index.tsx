@@ -121,7 +121,7 @@ export default function Permission() {
         }
         return (
           <Tooltip title={res}>
-            <div className={styles.tableItem}>{res}</div>
+            <div className={styles.tableItem}>{res.toUpperCase()}</div>
           </Tooltip>
         );
       },
@@ -163,7 +163,7 @@ export default function Permission() {
         }
         return (
           <Tooltip title={res}>
-            <div className={styles.tableItem}>{res}</div>
+            <div className={styles.tableItem}>{res.toUpperCase()}</div>
           </Tooltip>
         );
       },

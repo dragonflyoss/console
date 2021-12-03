@@ -27,17 +27,19 @@ export default function IndexPage({ location }) {
   const [hasAccount, setAccount] = useState(true);
   const [loading, setLoading] = useState(true);
   const [oauthInfo, setOauthInfo] = useState({
-    hasOauth: false,
-    values: {},
+    hasGithubOauth: false,
+    hasGoogleOauth: false,
+    githubOauth: {},
+    googleOauth: {},
   });
 
   useEffect(() => {
+    getOauth();
+
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
     console.log(userInfo);
     if (userInfo.id) {
-      // getOauthById(userInfo.id);
-      getUserById(userInfo.id);
-      //   window.location.assign('/configuration/scheduler-cluster');
+      window.location.assign('/configuration/scheduler-cluster');
     } else {
       setLoading(false);
     }
@@ -107,15 +109,47 @@ export default function IndexPage({ location }) {
     }
   };
 
-  const getUserById = async (id: number) => {
-    const res = await request(`/api/v1/users/${id}`, {
+  const signinByOauthType = (name: string | number) => {
+    const res = request(`/api/v1/user/signin/${name}`, {
       method: 'get',
     });
-    if (res) {
-      signinByOauth(res.name);
-    } else {
-      message.error('get user info error');
-    }
+    console.log(res);
+    // if (res) {
+    //   message.success('Success');
+    //   window.location.assign('/configuration/scheduler-cluster');
+    // } else {
+    //   message.error('Incorrect Oauth');
+    // }
+  };
+
+  const getOauth = async () => {
+    const res = await request('/api/v1/oauth', {
+      method: 'get',
+    });
+
+    let temp_github = {};
+    let temp_google = {};
+    let hasGithubOauth = false;
+    let hasGoogleOauth = false;
+
+    res.forEach((el: any) => {
+      if (el.name === 'github') {
+        temp_github = el;
+        hasGithubOauth = true;
+      } else if (el.name == 'google') {
+        temp_google = el;
+        hasGoogleOauth = true;
+      }
+    });
+
+    setLoading(false);
+
+    setOauthInfo({
+      hasGithubOauth,
+      hasGoogleOauth,
+      githubOauth: temp_github,
+      googleOauth: temp_google,
+    });
   };
 
   const signup = async (params: any) => {
@@ -193,41 +227,42 @@ export default function IndexPage({ location }) {
                       </Form.Item>
                     );
                   })}
-              {/* <div className={styles.oauth}>
-                <Button
-                  type="link"
-                  className={styles.newBtn}
-                  onClick={() => {
-                    window.location.assign(
-                      `https://github.com/login/oauth/authorize?client_id=5188822d0fb0d7c149a4&redirect_uri=http://localhost:8000/signin`,
-                    );
-                    // signinByOauth();
-                  }}
-                >
-                  <GithubOutlined />
-                  Github
-                </Button>
-                <Button
-                  type="link"
-                  className={styles.newBtn}
-                  style={{
-                    marginLeft: 16,
-                  }}
-                >
-                  <GoogleOutlined />
-                  Google
-                </Button>
-              </div> */}
+              <div className={styles.oauth}>
+                {oauthInfo.hasGithubOauth ? (
+                  <Button
+                    type="link"
+                    className={styles.newBtn}
+                    onClick={() => {
+                      window.location.assign('/api/v1/users/signin/github');
+                    }}
+                  >
+                    <GithubOutlined />
+                    Github
+                  </Button>
+                ) : null}
+                {oauthInfo.hasGoogleOauth ? (
+                  <Button
+                    type="link"
+                    className={styles.newBtn}
+                    style={{
+                      marginLeft: 16,
+                    }}
+                  >
+                    <GoogleOutlined />
+                    Google
+                  </Button>
+                ) : null}
+              </div>
               {hasAccount ? (
                 <div className={styles.check}>
-                  Have not account ?
+                  New to Dragonfly ?
                   <Button
                     type="link"
                     onClick={() => {
                       setAccount(false);
                     }}
                   >
-                    Sign Up
+                    Create an account.
                   </Button>
                 </div>
               ) : (

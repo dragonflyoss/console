@@ -157,7 +157,7 @@ export default function Users() {
         const colors = {
           enable: 'green',
         };
-        return <Tag color={colors[v]}>{v}</Tag>;
+        return <Tag color={colors[v]}>{v.toUpperCase()}</Tag>;
       },
     },
     {
@@ -242,7 +242,7 @@ export default function Users() {
       </Drawer>
       <Modal
         visible={userRoleInfo.visible}
-        title="Update User's Role"
+        title="Update User"
         width={600}
         onCancel={() => {
           form.resetFields();

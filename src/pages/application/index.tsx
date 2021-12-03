@@ -10,6 +10,7 @@ import {
   Form,
   Input,
   Radio,
+  Select,
   Tag,
   InputNumber,
 } from 'antd';
@@ -27,11 +28,15 @@ export default function Application() {
     visible: false,
     data: {},
   }); // infos
+  const [schedulerClusters, setSchedulerClusters] = useState([]);
+  const [cdnClusters, setCDNClusters] = useState([]);
 
   useEffect(() => {
     getApps(1);
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
     setUserId(userInfo.id);
+    getSchedulerClusters();
+    getCDNClusters();
   }, []);
 
   const [form] = Form.useForm();
@@ -111,6 +116,35 @@ export default function Application() {
     }
   };
 
+  const getSchedulerClusters = async () => {
+    const res = await request('/api/v1/scheduler-clusters');
+    if (res && typeof res === 'object' && res.length > 0) {
+      setSchedulerClusters(
+        res.map((sub: any) => {
+          return {
+            ...sub,
+            label: sub.name,
+            value: sub.id,
+          };
+        }),
+      );
+    }
+  };
+
+  const getCDNClusters = async () => {
+    const res = await request('/api/v1/cdn-clusters');
+    if (res && res.length > 0) {
+      setCDNClusters(
+        res.map((el) => {
+          return {
+            label: el.name,
+            value: el.id,
+          };
+        }),
+      );
+    }
+  };
+
   const columns = [
     {
       title: 'ID',
@@ -118,7 +152,8 @@ export default function Application() {
       align: 'left',
       key: 'id',
       ellipsis: true,
-      width: 80,
+      width: 60,
+      fixed: 'left',
     },
     {
       title: 'Name',
@@ -126,10 +161,11 @@ export default function Application() {
       align: 'left',
       key: 'name',
       ellipsis: true,
-      width: 120,
+      width: 80,
       render: (v: string, r: any) => {
         return <Tooltip title={v}>{v}</Tooltip>;
       },
+      fixed: 'left',
     },
     {
       title: 'Description',
@@ -140,12 +176,37 @@ export default function Application() {
       width: 110,
     },
     {
-      title: 'Download Rate Limit',
+      title: 'Download Rate Limit（times/s）',
       dataIndex: 'download_rate_limit',
       align: 'left',
       key: 'download_rate_limit',
-      width: 180,
+      width: 190,
       ellipsis: true,
+      render: (v: string, r: any) => {
+        return v;
+      },
+    },
+    // {
+    //   title: 'CDN Clusters',
+    //   dataIndex: 'cdn_clusters',
+    //   align: 'left',
+    //   key: 'cdn_clusters',
+    //   width: 130,
+    //   ellipsis: true,
+    //   render: (v: any, r: any) => {
+    //     return '-';
+    //   },
+    // },
+    {
+      title: 'Scheduler Clusters',
+      dataIndex: 'scheduler_clusters',
+      align: 'left',
+      key: 'scheduler_clusters',
+      width: 160,
+      ellipsis: true,
+      render: (v: any, r: any) => {
+        return '-';
+      },
     },
     {
       title: 'Update Time',
@@ -158,25 +219,29 @@ export default function Application() {
         return moment(v).format('YYYY-MM-DD HH:mm:ss') || '-';
       },
     },
-    // {
-    //   title: 'Creator',
-    //   dataIndex: 'user_id',
-    //   align: 'left',
-    //   key: 'user_id',
-    //   width: 100,
-    //   ellipsis: true,
-    // },
+    {
+      title: 'Creator',
+      dataIndex: 'user',
+      align: 'left',
+      key: 'user',
+      width: 100,
+      ellipsis: true,
+      render: (v: any, r: any) => {
+        return v.name || '-';
+      },
+    },
     {
       title: 'State',
       dataIndex: 'state',
       align: 'left',
       key: 'state',
       width: 80,
+      fixed: 'right',
       render: (v: string) => {
         const colors = {
           enable: 'green',
         };
-        return <Tag color={colors[v]}>{v}</Tag>;
+        return <Tag color={colors[v]}>{v.toUpperCase()}</Tag>;
       },
     },
     {
@@ -186,6 +251,7 @@ export default function Application() {
       key: 'id',
       width: 140,
       ellipsis: true,
+      fixed: 'right',
       render: (v: number | string, i: number, r: any) => {
         return (
           <div className={styles.operation}>
@@ -210,7 +276,7 @@ export default function Application() {
             </Button>
             <Divider type="vertical" /> */}
             <Popconfirm
-              title="Are you sure to delete this Scheduler?"
+              title="Are you sure to delete this Application?"
               onConfirm={() => {
                 deleteAppById(v);
               }}
@@ -259,6 +325,7 @@ export default function Application() {
           }}
           columns={columns}
           primaryKey="id"
+          scroll={{ x: 1500, y: 300 }}
         />
         <Modal
           visible={isInfo.visible}
@@ -298,23 +365,70 @@ export default function Application() {
             <Form.Item
               name="bio"
               label="Description"
-              rules={[{ required: true, message: 'Name is required!' }]}
+              rules={[{ required: true, message: 'Description is required!' }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               name="url"
               label="URL"
-              rules={[{ required: true, message: 'Name is required!' }]}
+              rules={[
+                {
+                  required: true,
+                  message: 'URL must conform to specifications.',
+                  type: 'url',
+                },
+              ]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               name="download_rate_limit"
               label="Download Rate Limit"
-              rules={[{ required: true, message: 'Name is required!' }]}
+              rules={[
+                { required: true, message: 'Download Rate Limit is required!' },
+              ]}
             >
-              <InputNumber min={0} max={100} defaultValue={10} />
+              <InputNumber
+                min={0}
+                max={65535}
+                defaultValue={10}
+                addonAfter={'times/s'}
+              />
+            </Form.Item>
+            {/* <Form.Item
+              name="cdn_clusters"
+              style={{ marginBottom: 0 }}
+              label="CDN Cluster"
+            >
+              <Select
+                mode="multiple"
+                allowClear
+                showArrow
+                options={cdnClusters}
+                // onChange={(v: any) => {
+                //   form.setFieldsValue({
+                //     cdn_clusters: v,
+                //   });
+                // }}
+              />
+            </Form.Item> */}
+            <Form.Item
+              name="scheduler_clusters"
+              style={{ marginBottom: 0 }}
+              label="Scheduler Cluster"
+            >
+              <Select
+                mode="multiple"
+                allowClear
+                showArrow
+                options={schedulerClusters}
+                // onChange={(v: any) => {
+                //   form.setFieldsValue({
+                //     scheduler_cluster_ids: v,
+                //   });
+                // }}
+              />
             </Form.Item>
           </Form>
         </Modal>

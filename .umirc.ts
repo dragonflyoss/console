@@ -92,11 +92,7 @@ export default defineConfig({
     baseNavigator: true,
     antd: true,
   },
-  proxy: {
-    '/api/v1': {
-      target: 'http://11.122.75.66:8080', // dep env
-    },
-  },
+  proxy: {},
   fastRefresh: {},
   theme: {
     'primary-color': '#23B066',

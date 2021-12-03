@@ -153,6 +153,7 @@ export default function Application() {
       key: 'id',
       ellipsis: true,
       width: 60,
+      fixed: 'left',
     },
     {
       title: 'Name',
@@ -164,6 +165,7 @@ export default function Application() {
       render: (v: string, r: any) => {
         return <Tooltip title={v}>{v}</Tooltip>;
       },
+      fixed: 'left',
     },
     {
       title: 'Description',
@@ -174,36 +176,36 @@ export default function Application() {
       width: 110,
     },
     {
-      title: 'Download Rate Limit',
+      title: 'Download Rate Limit（times/s）',
       dataIndex: 'download_rate_limit',
       align: 'left',
       key: 'download_rate_limit',
-      width: 130,
+      width: 190,
       ellipsis: true,
       render: (v: string, r: any) => {
-        return v + ' times/s';
+        return v;
       },
     },
-    {
-      title: 'CDN Clusters',
-      dataIndex: 'cdn_clusters',
-      align: 'left',
-      key: 'cdn_clusters',
-      width: 114,
-      ellipsis: true,
-      render: (v: any, r: any) => {
-        return v || '-';
-      },
-    },
+    // {
+    //   title: 'CDN Clusters',
+    //   dataIndex: 'cdn_clusters',
+    //   align: 'left',
+    //   key: 'cdn_clusters',
+    //   width: 130,
+    //   ellipsis: true,
+    //   render: (v: any, r: any) => {
+    //     return '-';
+    //   },
+    // },
     {
       title: 'Scheduler Clusters',
       dataIndex: 'scheduler_clusters',
       align: 'left',
       key: 'scheduler_clusters',
-      width: 130,
+      width: 160,
       ellipsis: true,
       render: (v: any, r: any) => {
-        return v || '-';
+        return '-';
       },
     },
     {
@@ -212,30 +214,34 @@ export default function Application() {
       align: 'left',
       key: 'updated_at',
       ellipsis: true,
-      width: 140,
+      width: 200,
       render: (v: string) => {
         return moment(v).format('YYYY-MM-DD HH:mm:ss') || '-';
       },
     },
-    // {
-    //   title: 'Creator',
-    //   dataIndex: 'user_id',
-    //   align: 'left',
-    //   key: 'user_id',
-    //   width: 100,
-    //   ellipsis: true,
-    // },
+    {
+      title: 'Creator',
+      dataIndex: 'user',
+      align: 'left',
+      key: 'user',
+      width: 100,
+      ellipsis: true,
+      render: (v: any, r: any) => {
+        return v.name || '-';
+      },
+    },
     {
       title: 'State',
       dataIndex: 'state',
       align: 'left',
       key: 'state',
       width: 80,
+      fixed: 'right',
       render: (v: string) => {
         const colors = {
           enable: 'green',
         };
-        return <Tag color={colors[v]}>{v}</Tag>;
+        return <Tag color={colors[v]}>{v.toUpperCase()}</Tag>;
       },
     },
     {
@@ -245,6 +251,7 @@ export default function Application() {
       key: 'id',
       width: 140,
       ellipsis: true,
+      fixed: 'right',
       render: (v: number | string, i: number, r: any) => {
         return (
           <div className={styles.operation}>
@@ -269,7 +276,7 @@ export default function Application() {
             </Button>
             <Divider type="vertical" /> */}
             <Popconfirm
-              title="Are you sure to delete this Scheduler?"
+              title="Are you sure to delete this Application?"
               onConfirm={() => {
                 deleteAppById(v);
               }}
@@ -318,6 +325,7 @@ export default function Application() {
           }}
           columns={columns}
           primaryKey="id"
+          scroll={{ x: 1500, y: 300 }}
         />
         <Modal
           visible={isInfo.visible}
@@ -388,7 +396,7 @@ export default function Application() {
                 addonAfter={'times/s'}
               />
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               name="cdn_clusters"
               style={{ marginBottom: 0 }}
               label="CDN Cluster"
@@ -404,7 +412,7 @@ export default function Application() {
                 //   });
                 // }}
               />
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item
               name="scheduler_clusters"
               style={{ marginBottom: 0 }}

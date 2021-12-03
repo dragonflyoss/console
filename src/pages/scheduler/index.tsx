@@ -240,6 +240,7 @@ export default function IndexPage() {
       setFormVisible(false);
       setUpdateInfo({});
       setFormSchema(info);
+      setFormInfo({});
       getClusters();
     });
     setJson('');
@@ -581,6 +582,8 @@ export default function IndexPage() {
                   setDTitle('Update Cluster');
                   console.log(sClusters[isClick]);
                   const temp = [];
+                  const source = sClusters[isClick] || {};
+
                   info.map((sub) => {
                     if (sub.key === 'id' || sub.key === 'name') {
                       sub = {
@@ -592,7 +595,6 @@ export default function IndexPage() {
                         },
                       };
                     }
-                    const source = sClusters[isClick] || {};
                     let res = '';
                     if (typeof source[sub.key] === 'object') {
                       try {
@@ -602,6 +604,15 @@ export default function IndexPage() {
                       } catch (e) {
                         console.log(e);
                       }
+                    } else if (sub.key === 'cdn_clusters') {
+                      console.log(source[sub.key]);
+                      // res = source[sub.key].map(el => {
+                      //   return {
+                      //     ...el,
+                      //     label: el.name,
+                      //     value: el.id
+                      //   }
+                      // });
                     } else {
                       res = source[sub.key];
                     }
@@ -614,6 +625,9 @@ export default function IndexPage() {
                     };
                     temp.push(sub);
                   });
+
+                  console.log(temp);
+                  setFormInfo(source);
                   setFormSchema(temp);
                   setFormVisible(true);
                   setTimeout(() => {
@@ -790,15 +804,16 @@ export default function IndexPage() {
             key="submit"
             type="primary"
             onClick={() => {
-              let temp_scope = {};
-              let temp_config = {};
-              let temp_client = {};
+              let temp_scope = formInfo.scopes || {};
+              let temp_config = formInfo.config || {};
+              let temp_client = formInfo.client_config || {};
+
               try {
-                if (formInfo.scopes) {
+                if (temp_scope && typeof temp_scope === 'string') {
                   temp_scope = JSON.parse(formInfo.scopes);
-                } else if (formInfo.config) {
+                } else if (temp_config && typeof temp_config === 'string') {
                   temp_config = JSON.parse(formInfo.config);
-                } else if (formInfo.client_config) {
+                } else if (temp_client && typeof temp_client === 'string') {
                   temp_client = JSON.parse(formInfo.client_config);
                 }
               } catch (e) {

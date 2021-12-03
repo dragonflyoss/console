@@ -97,7 +97,7 @@ export default function CDN() {
       params: {
         page: 1,
         per_page: 50,
-        cdn_cluster_id: id
+        cdn_cluster_id: id,
       },
     });
     if (res && typeof res === 'object') {
@@ -247,7 +247,7 @@ export default function CDN() {
       render: (v: string) => {
         return (
           <Tooltip title={v}>
-            <div className={styles.tableItem}>{v}</div>
+            <div className={styles.tableItem}>{v || '-'}</div>
           </Tooltip>
         );
       },
@@ -260,7 +260,7 @@ export default function CDN() {
       render: (v: string) => {
         return (
           <Tooltip title={v}>
-            <div className={styles.tableItem}>{v}</div>
+            <div className={styles.tableItem}>{v || '-'}</div>
           </Tooltip>
         );
       },
@@ -273,7 +273,7 @@ export default function CDN() {
       render: (v: string) => {
         return (
           <Tooltip title={v}>
-            <div className={styles.tableItem}>{v}</div>
+            <div className={styles.tableItem}>{v || '-'}</div>
           </Tooltip>
         );
       },
@@ -286,7 +286,7 @@ export default function CDN() {
       render: (v: string) => {
         return (
           <Tooltip title={v}>
-            <div className={styles.tableItem}>{v}</div>
+            <div className={styles.tableItem}>{v || '-'}</div>
           </Tooltip>
         );
       },
@@ -298,7 +298,9 @@ export default function CDN() {
       key: 'state',
       width: 120,
       render: (v: string) => {
-        return <Tag color={v === 'active' ? 'green' : 'cyan'}>{v}</Tag>;
+        return (
+          <Tag color={v === 'active' ? 'green' : 'cyan'}>{v.toUpperCase()}</Tag>
+        );
       },
     },
     {
@@ -337,7 +339,7 @@ export default function CDN() {
               cancelText="No"
             >
               <Button type="link" className={styles.newBtn}>
-                Delete
+                DELETE
               </Button>
             </Popconfirm>
           </div>

@@ -170,14 +170,20 @@ export default function IndexPage() {
     if (res && typeof res === 'object' && res.length > 0) {
       // number to string
       res.map((sub) => {
-        Object.keys(sub).map((el) => {
+        Object.keys(sub).forEach((el) => {
           if (typeof sub[el] === 'number') {
             sub[el] = sub[el].toString();
           }
-          sub['cdn_clusters'] = 1;
-          // sub['cdn_clusters'].length
-          //   ? sub['cdn_clusters'][0].id
-          //   : '';
+          let temp_cluster: any[] = [];
+          if (typeof sub['cdn_clusters'] === 'object') {
+            (sub['cdn_clusters'] || []).forEach((cluster: any) => {
+              temp_cluster.push(cluster.id || cluster || '');
+            }) || [];
+          } else {
+            temp_cluster = sub['cdn_clusters'];
+          }
+          // console.log(sub['cdn_clusters'], temp_cluster);
+          sub['cdn_clusters'] = Number(temp_cluster.toString());
           sub['created_at'] = moment(
             new Date(sub['created_at']).valueOf(),
           ).format('YYYY-MM-DD HH:MM:SS');
@@ -187,6 +193,7 @@ export default function IndexPage() {
         });
       });
 
+      // console.log(res);
       getSchedulerByClusterId(res[0].id, 1);
       setClusters(res);
     }
@@ -290,7 +297,7 @@ export default function IndexPage() {
 
   const columns = [
     {
-      title: 'HostName',
+      title: 'Hostname',
       dataIndex: 'host_name',
       align: 'left',
       key: 'host_name',
@@ -604,16 +611,19 @@ export default function IndexPage() {
                       } catch (e) {
                         console.log(e);
                       }
-                    } else if (sub.key === 'cdn_clusters') {
-                      console.log(source[sub.key]);
-                      // res = source[sub.key].map(el => {
-                      //   return {
-                      //     ...el,
-                      //     label: el.name,
-                      //     value: el.id
-                      //   }
-                      // });
-                    } else {
+                    }
+                    // else if (sub.key === 'cdn_clusters') {
+                    //   console.log(source[sub.key]);
+                    //   // res = source[sub.key].split(',');
+                    //   // res = source[sub.key].map(el => {
+                    //   //   return {
+                    //   //     ...el,
+                    //   //     label: el.name,
+                    //   //     value: el.id
+                    //   //   }
+                    //   // });
+                    // }
+                    else {
                       res = source[sub.key];
                     }
                     sub = {
@@ -626,7 +636,6 @@ export default function IndexPage() {
                     temp.push(sub);
                   });
 
-                  console.log(temp);
                   setFormInfo(source);
                   setFormSchema(temp);
                   setFormVisible(true);
@@ -963,7 +972,7 @@ export default function IndexPage() {
             onClick={() => {
               const config = {};
               drawContent.forEach((sub) => {
-                console.log(sub);
+                // console.log(sub);
                 let res = sub.update;
                 if (typeof sub.update === 'string') {
                   try {
@@ -1094,7 +1103,7 @@ export default function IndexPage() {
                 pre.push({
                   key: pre.length + 1,
                 });
-                console.log(pre);
+                // console.log(pre);
                 return pre;
               });
               setTimeout(() => {

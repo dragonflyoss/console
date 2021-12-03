@@ -227,7 +227,7 @@ export default function CDN() {
 
   const columns = [
     {
-      title: 'HostName',
+      title: 'Hostname',
       dataIndex: 'host_name',
       align: 'left',
       key: 'host_name',

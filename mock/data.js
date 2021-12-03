@@ -57,7 +57,7 @@ export const info = [
     props: {
       placeholder: 'Please enter CDN cluster ID',
     },
-    en_US: 'CDN Clusters',
+    en_US: 'CDN Cluster',
   },
   {
     key: 'security_group_id',

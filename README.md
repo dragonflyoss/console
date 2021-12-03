@@ -1,7 +1,5 @@
 # Dragonfly Console
 
-![alt][logo-linear]
-
 # Develop
 
 ## Getting Started

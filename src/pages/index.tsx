@@ -37,7 +37,6 @@ export default function IndexPage({ location }) {
     getOauth();
 
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
-    console.log(userInfo);
     if (userInfo.id) {
       window.location.assign('/configuration/scheduler-cluster');
     } else {
@@ -132,15 +131,17 @@ export default function IndexPage({ location }) {
     let hasGithubOauth = false;
     let hasGoogleOauth = false;
 
-    res.forEach((el: any) => {
-      if (el.name === 'github') {
-        temp_github = el;
-        hasGithubOauth = true;
-      } else if (el.name == 'google') {
-        temp_google = el;
-        hasGoogleOauth = true;
-      }
-    });
+    if (typeof res === 'object') {
+      res.forEach((el: any) => {
+        if (el.name === 'github') {
+          temp_github = el;
+          hasGithubOauth = true;
+        } else if (el.name == 'google') {
+          temp_google = el;
+          hasGoogleOauth = true;
+        }
+      });
+    }
 
     setLoading(false);
 

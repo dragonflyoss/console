@@ -78,7 +78,7 @@ export default function IndexPage() {
   const [drawContent, setDrawContent] = useState([
     {
       label: 'cdn_clusters',
-      value: 'cdn_clusters',
+      value: 'cdn_cluster_id',
       type: 'select',
       key: 1,
     },
@@ -88,12 +88,14 @@ export default function IndexPage() {
   const [drawLoading, setDrawLoading] = useState(false);
 
   const formOps = {
-    cdn_clusters: cClusters,
+    cdn_cluster_id: cClusters,
     security_group_id: secGroups,
   };
 
   useEffect(() => {
     getClusters();
+    getCDNClusters();
+    getSecGroups();
   }, []);
 
   const getSchedulers = async (v: number) => {
@@ -184,6 +186,7 @@ export default function IndexPage() {
           }
           // console.log(sub['cdn_clusters'], temp_cluster);
           sub['cdn_clusters'] = Number(temp_cluster.toString());
+          sub['cdn_cluster_id'] = Number(temp_cluster.toString());
           sub['created_at'] = moment(
             new Date(sub['created_at']).valueOf(),
           ).format('YYYY-MM-DD HH:MM:SS');
@@ -205,6 +208,7 @@ export default function IndexPage() {
       setCdnClusters(
         res.map((el) => {
           return {
+            ...el,
             label: el.name,
             value: el.id,
           };
@@ -264,7 +268,7 @@ export default function IndexPage() {
       setDrawContent([
         {
           label: 'cdn_clusters',
-          value: 'cdn_clusters',
+          value: 'cdn_cluster_id',
           type: 'select',
           key: 1,
         },
@@ -611,19 +615,7 @@ export default function IndexPage() {
                       } catch (e) {
                         console.log(e);
                       }
-                    }
-                    // else if (sub.key === 'cdn_clusters') {
-                    //   console.log(source[sub.key]);
-                    //   // res = source[sub.key].split(',');
-                    //   // res = source[sub.key].map(el => {
-                    //   //   return {
-                    //   //     ...el,
-                    //   //     label: el.name,
-                    //   //     value: el.id
-                    //   //   }
-                    //   // });
-                    // }
-                    else {
+                    } else {
                       res = source[sub.key];
                     }
                     sub = {
@@ -683,7 +675,13 @@ export default function IndexPage() {
                       View Details
                     </Button>
                   ) : (
-                    <div>{(sClusters[isClick] || {})[sub.key] || '--'}</div>
+                    <div>
+                      {sub.key === 'cdn_cluster_id'
+                        ? cClusters.filter(
+                            (e) => e.id === (sClusters[isClick] || {})[sub.key],
+                          )[0]?.name || ''
+                        : (sClusters[isClick] || {})[sub.key] || '--'}
+                    </div>
                   )}
                 </Descriptions.Item>
               );
@@ -815,7 +813,9 @@ export default function IndexPage() {
             onClick={() => {
               let temp_scope = formInfo.scopes || {};
               let temp_config = formInfo.config || {};
-              let temp_client = formInfo.client_config || {};
+              let temp_client = formInfo.client_config || {
+                load_limit: 100,
+              };
 
               try {
                 if (temp_scope && typeof temp_scope === 'string') {
@@ -881,7 +881,7 @@ export default function IndexPage() {
                         <Content
                           {...sub.props}
                           onClick={() => {
-                            if (sub.key === 'cdn_clusters') {
+                            if (sub.key === 'cdn_cluster_id') {
                               getCDNClusters();
                             } else if (sub.key === 'security_group_id') {
                               getSecGroups();
@@ -911,6 +911,7 @@ export default function IndexPage() {
                 {formSchema.map((sub: any) => {
                   const Content = comsKeys[sub.type || 'input'];
                   if (!sub.hide && sub.tab === '2') {
+                    let temp_props = sub.props || {};
                     return (
                       <Form.Item
                         name={sub.key}
@@ -918,7 +919,7 @@ export default function IndexPage() {
                         label={sub.en_US}
                         {...(sub.formprops || {})}
                       >
-                        <Content {...(sub.props || {})} />
+                        <Content {...temp_props} />
                       </Form.Item>
                     );
                   }
@@ -936,7 +937,7 @@ export default function IndexPage() {
           setDrawContent([
             {
               label: 'cdn_clusters',
-              value: 'cdn_clusters',
+              value: 'cdn_cluster_id',
               type: 'select',
               key: 1,
             },
@@ -953,7 +954,7 @@ export default function IndexPage() {
               setDrawContent([
                 {
                   label: 'cdn_clusters',
-                  value: 'cdn_clusters',
+                  value: 'cdn_cluster_id',
                   type: 'select',
                   key: 1,
                 },
@@ -1055,7 +1056,7 @@ export default function IndexPage() {
                   }}
                   options={formOps[el.value] || {}}
                   onClick={() => {
-                    if (el.value === 'cdn_clusters') {
+                    if (el.value === 'cdn_cluster_id') {
                       getCDNClusters(); // TODO when render get
                     } else if (el.value === 'security_group_id') {
                       getSecGroups();

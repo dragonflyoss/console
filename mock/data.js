@@ -50,7 +50,7 @@ export const info = [
     en_US: 'Description',
   },
   {
-    key: 'cdn_clusters',
+    key: 'cdn_cluster_id',
     label: '关联CDN集群',
     type: 'select',
     tab: '1',
@@ -94,6 +94,13 @@ export const info = [
     tab: '2',
     formprops: {
       required: true,
+      initialValue: JSON.stringify(
+        {
+          load_limit: 100,
+        },
+        null,
+        2,
+      ),
     },
     en_US: 'Client Config',
   },
@@ -326,6 +333,13 @@ export const cdnInfo = [
     formprops: {
       tooltip: 'scheduler cluster config info',
       required: true,
+      initialValue: JSON.stringify(
+        {
+          load_limit: 300,
+        },
+        null,
+        2,
+      ),
     },
     en_US: 'Config',
   },

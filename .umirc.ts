@@ -13,7 +13,18 @@ export default defineConfig({
       component: '@/pages/index',
     },
     { exact: true, path: '/signin', component: '@/pages/index' },
-    { exact: true, path: '/profile', component: '@/pages/profile' },
+    {
+      exact: false,
+      path: '/profile',
+      component: '@/layouts/index',
+      routes: [
+        {
+          exact: true,
+          path: '/profile',
+          component: '@/pages/profile',
+        },
+      ],
+    },
     {
       exact: false,
       path: '/configuration',

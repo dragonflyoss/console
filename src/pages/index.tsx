@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { request } from 'umi';
+import { request, history } from 'umi';
 import { Input, Form, Button, message, Spin } from 'antd';
 import { GithubOutlined, GoogleOutlined } from '@ant-design/icons';
 import Cookies from 'js-cookie';
@@ -32,13 +32,15 @@ export default function IndexPage({ location }) {
     githubOauth: {},
     googleOauth: {},
   });
+  const [isBoot, setIsBoot] = useState(false);
 
   useEffect(() => {
     getOauth();
 
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
     if (userInfo.id) {
-      window.location.assign('/configuration/scheduler-cluster');
+      getConfigById(userInfo.id);
+      // history.push('/configuration/scheduler-cluster');
     } else {
       setLoading(false);
     }
@@ -83,6 +85,16 @@ export default function IndexPage({ location }) {
     init();
   }, []);
 
+  const getConfigById = async (id: any) => {
+    const res = await request(`/api/v1/config/${id}`);
+    console.log(res);
+    if (res.is_boot) {
+      setIsBoot(true);
+    } else {
+      history.push('/configuration/scheduler-cluster');
+    }
+  };
+
   const signin = async (params: any) => {
     const res = await request('/api/v1/users/signin', {
       method: 'post',
@@ -90,7 +102,12 @@ export default function IndexPage({ location }) {
     });
     if (res) {
       message.success('Success');
-      window.location.assign('/configuration/scheduler-cluster');
+
+      const userInfo = decode(res.token, 'jwt') || {};
+      if (userInfo.id) {
+        getConfigById(userInfo.id);
+      }
+      // history.push('/configuration/scheduler-cluster');
     } else {
       message.error('Incorrect authentication credentials');
     }
@@ -102,7 +119,7 @@ export default function IndexPage({ location }) {
     });
     if (res) {
       message.success('Success');
-      window.location.assign('/configuration/scheduler-cluster');
+      history.push('/configuration/scheduler-cluster');
     } else {
       message.error('Incorrect Oauth');
     }
@@ -165,6 +182,9 @@ export default function IndexPage({ location }) {
       message.error('Incorrect');
     }
   };
+
+  if (isBoot) {
+  }
 
   return (
     <Spin

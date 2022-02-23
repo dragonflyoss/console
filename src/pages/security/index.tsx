@@ -364,7 +364,7 @@ export default function Security() {
                 getSecurityGroupById(v, 'association');
               }}
             >
-              Association
+              Add Rules
             </Button>
             <Divider type="vertical" />
             <Popconfirm

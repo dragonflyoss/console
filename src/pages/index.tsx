@@ -36,14 +36,14 @@ export default function IndexPage({ location }) {
 
   useEffect(() => {
     getOauth();
+    getConfigs();
 
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
+
     if (userInfo.id) {
-      getConfigById(userInfo.id);
-      // history.push('/configuration/scheduler-cluster');
-    } else {
-      setLoading(false);
+      history.push('/configuration/scheduler-cluster');
     }
+    setLoading(false);
 
     // 动效
     const canvas = document.querySelector('#animation-canvas');
@@ -85,13 +85,13 @@ export default function IndexPage({ location }) {
     init();
   }, []);
 
-  const getConfigById = async (id: any) => {
-    const res = await request(`/api/v1/config/${id}`);
+  const getConfigs = async () => {
+    const res = await request(`/api/v1/configs?name=is_boot`);
     console.log(res);
-    if (res.is_boot) {
-      setIsBoot(true);
-    } else {
+    if (res && res.length > 0) {
       history.push('/configuration/scheduler-cluster');
+    } else {
+      setIsBoot(true);
     }
   };
 
@@ -102,12 +102,7 @@ export default function IndexPage({ location }) {
     });
     if (res) {
       message.success('Success');
-
-      const userInfo = decode(res.token, 'jwt') || {};
-      if (userInfo.id) {
-        getConfigById(userInfo.id);
-      }
-      // history.push('/configuration/scheduler-cluster');
+      history.push('/configuration/scheduler-cluster');
     } else {
       message.error('Incorrect authentication credentials');
     }
@@ -183,8 +178,9 @@ export default function IndexPage({ location }) {
     }
   };
 
-  if (isBoot) {
-  }
+  // if (isBoot) {
+  //   return ();
+  // }
 
   return (
     <Spin

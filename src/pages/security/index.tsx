@@ -419,14 +419,14 @@ export default function Security() {
       width: 120,
       ellipsis: true,
     },
-    {
-      title: 'Proxy Domain',
-      dataIndex: 'proxy_domain',
-      align: 'left',
-      key: 'proxy_domain',
-      width: 100,
-      ellipsis: true,
-    },
+    // {
+    //   title: 'Proxy Domain',
+    //   dataIndex: 'proxy_domain',
+    //   align: 'left',
+    //   key: 'proxy_domain',
+    //   width: 100,
+    //   ellipsis: true,
+    // },
     {
       title: 'Update Time',
       dataIndex: 'updated_at',
@@ -502,14 +502,14 @@ export default function Security() {
       width: 120,
       ellipsis: true,
     },
-    {
-      title: 'Proxy Domain',
-      dataIndex: 'proxy_domain',
-      align: 'left',
-      key: 'proxy_domain',
-      width: 140,
-      ellipsis: true,
-    },
+    // {
+    //   title: 'Proxy Domain',
+    //   dataIndex: 'proxy_domain',
+    //   align: 'left',
+    //   key: 'proxy_domain',
+    //   width: 140,
+    //   ellipsis: true,
+    // },
     {
       title: 'Operation',
       dataIndex: 'id',
@@ -730,14 +730,13 @@ export default function Security() {
             rules={[
               {
                 required: true,
-                message: 'Domain must conform to specifications.',
-                type: 'url',
+                message: 'Domain is required!',
               },
             ]}
           >
             <Input />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             name="proxy_domain"
             label="Proxy Domain"
             rules={[
@@ -749,7 +748,7 @@ export default function Security() {
             ]}
           >
             <Input />
-          </Form.Item>
+          </Form.Item> */}
         </Form>
       </Modal>
       <Modal
@@ -768,8 +767,7 @@ export default function Security() {
           getSecurityGroups(1);
         }}
         width={600}
-        okText="Yes"
-        cancelText="No"
+        footer={false}
         onOk={() => {
           setAssociationInfo({
             data: {},

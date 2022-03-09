@@ -11,8 +11,6 @@ export default function Security() {
 
   const [form] = Form.useForm();
 
-  console.log(userInfo);
-
   const onFinish = (values: any) => {
     console.log('Success:', values);
   };
@@ -21,17 +19,17 @@ export default function Security() {
     console.log('Failed:', errorInfo);
   };
 
-  const updateUserById = async (params: any) => {
-    const res = await request('/api/v1/oauth', {
-      method: 'post',
-      data: params,
-    });
-    if (res) {
-      message.success('update success');
-    } else {
-      message.error('update failed, pleace check u params');
-    }
-  };
+  // const updateUserById = async (params: any) => {
+  //   const res = await request('/api/v1/oauth', {
+  //     method: 'post',
+  //     data: params,
+  //   });
+  //   if (res) {
+  //     message.success('update success');
+  //   } else {
+  //     message.error('update failed, pleace check u params');
+  //   }
+  // };
 
   return (
     <div className={styles.main}>
@@ -39,7 +37,17 @@ export default function Security() {
       <div className={styles.content}>
         <div className={styles.left}>
           <Avatar size={200} icon={<UserOutlined />} />
-          <Button onClick={() => setVisible(true)}>Edit Profile</Button>
+          <Button
+            onClick={() => {
+              setVisible(true);
+              console.log(userInfo);
+              if (userInfo) {
+                form.setFieldsValue(userInfo);
+              }
+            }}
+          >
+            Edit Profile
+          </Button>
         </div>
         {visible && (
           <div className={styles.right}>
@@ -54,19 +62,27 @@ export default function Security() {
               form={form}
             >
               <Form.Item label="Bio" name="bio">
-                <Input />
+                <Input placeholder="Please Enter Your Infos" />
               </Form.Item>
               <Form.Item label="Email" name="email" rules={[{ type: 'email' }]}>
-                <Input />
+                <Input placeholder="Please Enter Your Infos" />
               </Form.Item>
               <Form.Item label="Location" name="location">
-                <Input />
+                <Input placeholder="Please Enter Your Infos" />
               </Form.Item>
               <Form.Item label="Phone" name="phone">
-                <Input />
+                <Input placeholder="Please Enter Your Infos" />
               </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="submit">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  onClick={() => {
+                    const args = form.getFieldsValue();
+                    // updateUserById()
+                    console.log(args);
+                  }}
+                >
                   Save
                 </Button>
                 <Button

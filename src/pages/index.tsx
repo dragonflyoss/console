@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { request } from 'umi';
+import { request, history } from 'umi';
 import { Input, Form, Button, message, Spin } from 'antd';
 import { GithubOutlined, GoogleOutlined } from '@ant-design/icons';
 import Cookies from 'js-cookie';
@@ -32,16 +32,18 @@ export default function IndexPage({ location }) {
     githubOauth: {},
     googleOauth: {},
   });
+  const [isBoot, setIsBoot] = useState(false);
 
   useEffect(() => {
     getOauth();
+    getConfigs();
 
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
+
     if (userInfo.id) {
-      window.location.assign('/configuration/scheduler-cluster');
-    } else {
-      setLoading(false);
+      history.push('/configuration/scheduler-cluster');
     }
+    setLoading(false);
 
     // 动效
     const canvas = document.querySelector('#animation-canvas');
@@ -83,6 +85,16 @@ export default function IndexPage({ location }) {
     init();
   }, []);
 
+  const getConfigs = async () => {
+    const res = await request(`/api/v1/configs?name=is_boot`);
+    console.log(res);
+    if (res && res.length > 0) {
+      history.push('/configuration/scheduler-cluster');
+    } else {
+      setIsBoot(true);
+    }
+  };
+
   const signin = async (params: any) => {
     const res = await request('/api/v1/users/signin', {
       method: 'post',
@@ -90,7 +102,7 @@ export default function IndexPage({ location }) {
     });
     if (res) {
       message.success('Success');
-      window.location.assign('/configuration/scheduler-cluster');
+      history.push('/configuration/scheduler-cluster');
     } else {
       message.error('Incorrect authentication credentials');
     }
@@ -102,7 +114,7 @@ export default function IndexPage({ location }) {
     });
     if (res) {
       message.success('Success');
-      window.location.assign('/configuration/scheduler-cluster');
+      history.push('/configuration/scheduler-cluster');
     } else {
       message.error('Incorrect Oauth');
     }
@@ -165,6 +177,10 @@ export default function IndexPage({ location }) {
       message.error('Incorrect');
     }
   };
+
+  // if (isBoot) {
+  //   return ();
+  // }
 
   return (
     <Spin

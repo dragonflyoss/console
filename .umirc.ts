@@ -15,6 +15,18 @@ export default defineConfig({
     { exact: true, path: '/signin', component: '@/pages/index' },
     {
       exact: false,
+      path: '/profile',
+      component: '@/layouts/index',
+      routes: [
+        {
+          exact: true,
+          path: '/profile',
+          component: '@/pages/profile',
+        },
+      ],
+    },
+    {
+      exact: false,
       path: '/configuration',
       component: '@/layouts/index',
       routes: [
@@ -37,6 +49,11 @@ export default defineConfig({
           exact: true,
           path: '/configuration/application',
           component: '@/pages/application',
+        },
+        {
+          exact: true,
+          path: '/configuration/security',
+          component: '@/pages/security',
         },
       ],
     },
@@ -92,7 +109,11 @@ export default defineConfig({
     baseNavigator: true,
     antd: true,
   },
-  proxy: {},
+  proxy: {
+    '/api/v1': {
+      target: 'http://11.122.75.66:8080', // dep env
+    },
+  },
   fastRefresh: {},
   theme: {
     'primary-color': '#23B066',

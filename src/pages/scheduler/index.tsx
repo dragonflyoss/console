@@ -206,7 +206,7 @@ export default function IndexPage() {
     const res = await request('/api/v1/cdn-clusters');
     if (res && res.length > 0) {
       setCdnClusters(
-        res.map((el) => {
+        res.map((el: any) => {
           return {
             ...el,
             label: el.name,
@@ -221,10 +221,10 @@ export default function IndexPage() {
     const res = await request('/api/v1/security-groups');
     if (res && res.length > 0) {
       setGroup(
-        res.map((el) => {
+        res.map((el: any) => {
           return {
             label: el.name,
-            value: el.domain,
+            value: el.id,
           };
         }),
       );
@@ -886,6 +886,9 @@ export default function IndexPage() {
                             } else if (sub.key === 'security_group_id') {
                               getSecGroups();
                             }
+                          }}
+                          onChange={(v: any) => {
+                            console.log(v);
                           }}
                           options={formOps[sub.key] || {}}
                         />

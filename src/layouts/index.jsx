@@ -14,7 +14,7 @@ import {
   CloudServerOutlined,
   FundOutlined,
 } from '@ant-design/icons';
-import { Link, request } from 'umi';
+import { Link, request, history } from 'umi';
 import Cookies from 'js-cookie';
 import { decode } from 'jsonwebtoken';
 import { ReactComponent as Logo } from '../public/logo-white.svg';
@@ -33,14 +33,14 @@ export default function BasicLayout({
   history,
   match,
 }) {
-  const [key, setKey] = useState(['scheduler-cluster']);
+  const [key, setKey] = useState(['my']);
   const [openKeys, setOpenKeys] = useState(['config']);
   const [user, setUser] = useState({});
   const [role, setRole] = useState('guest');
 
   useEffect(() => {
-    const temp = location.pathname.split('/')?.[2];
-    setKey(temp.length ? [temp] : ['scheduler-cluster']);
+    const temp = location.pathname.split('/')?.[2] || [];
+    setKey(temp.length ? [temp] : ['my']);
 
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
     if (userInfo.id) {
@@ -56,6 +56,9 @@ export default function BasicLayout({
       method: 'get',
     });
     setUser(res);
+    history.push({
+      state: res,
+    });
   };
 
   const signout = async () => {
@@ -83,7 +86,12 @@ export default function BasicLayout({
         {user.name || user.id || 'Admin'}
       </Menu.Item>
       <Menu.Divider />
-      <Menu.Item key="1">
+      <Menu.Item key="profile">
+        <Button type="text" onClick={() => history.push('/profile')}>
+          Your Profile
+        </Button>
+      </Menu.Item>
+      <Menu.Item key="sign_out">
         <Button type="text" onClick={() => signout()}>
           Sign Out
         </Button>
@@ -158,6 +166,9 @@ export default function BasicLayout({
               </Menu.Item>
               <Menu.Item key="application">
                 <Link to="/configuration/application">Application</Link>
+              </Menu.Item>
+              <Menu.Item key="security">
+                <Link to="/configuration/security">Security</Link>
               </Menu.Item>
             </SubMenu>
             <SubMenu

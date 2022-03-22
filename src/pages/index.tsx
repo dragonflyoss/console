@@ -1,20 +1,25 @@
 import { useState, useEffect } from 'react';
 import { request, history } from 'umi';
-import { Input, Form, Button, message, Spin } from 'antd';
+import { Input, Form, Button, message, Spin, Steps, Select } from 'antd';
 import { GithubOutlined, GoogleOutlined } from '@ant-design/icons';
 import Cookies from 'js-cookie';
 import { decode } from 'jsonwebtoken';
 import Particle from '@/components/particle';
-import { loginSchema, signSchema } from '../../mock/data';
+import { loginSchema, signSchema, cdnInfo } from '../../mock/data';
+import CodeEditor from '@/components/codeEditor';
 import styles from './index.less';
 
+const { Step } = Steps;
 const comsKey = {
   password: Input.Password,
   passwordT: Input.Password,
+  select: Select,
+  json: CodeEditor,
+  input: Input,
 };
 
 // login
-const particles = [];
+const particles: any = [];
 const particleCount = 600;
 let tick = 0;
 const unit = 30;
@@ -23,7 +28,7 @@ const rows = 24;
 const w = unit * cols;
 const h = unit * rows;
 
-export default function IndexPage({ location }) {
+export default function IndexPage({}) {
   const [hasAccount, setAccount] = useState(true);
   const [loading, setLoading] = useState(true);
   const [oauthInfo, setOauthInfo] = useState({
@@ -33,65 +38,130 @@ export default function IndexPage({ location }) {
     googleOauth: {},
   });
   const [isBoot, setIsBoot] = useState(false);
+  const [current, setCurrent] = useState(0);
+  const [formInfo, setFormInfo] = useState({});
+  const [secGroups, setGroup] = useState([]);
+
+  const formOps = {
+    security_group_id: secGroups,
+  };
 
   useEffect(() => {
     getOauth();
-    getConfigs();
-
+    // deleteConfigById(3)
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
 
     if (userInfo.id) {
-      history.push('/configuration/scheduler-cluster');
+      getConfigs();
     }
     setLoading(false);
 
     // 动效
-    const canvas = document.querySelector('#animation-canvas');
-    const ctx = canvas.getContext('2d');
-    const step = () => {
-      if (particles.length < particleCount) {
-        particles.push(new Particle(ctx));
-      }
-      let i = particles.length;
-      while (i--) {
-        particles[i].step();
-      }
-      tick++;
-    };
-    const draw = () => {
-      ctx.clearRect(0, 0, w, h);
+    const canvas: any = document.querySelector('#animation-canvas');
+    const ctx: any = canvas?.getContext('2d');
+    if (canvas && ctx) {
+      init(canvas, ctx);
+    }
+  }, []);
+
+  const init = (canvas: any, ctx: any) => {
+    canvas.width = w;
+    canvas.height = h;
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineWidth = 2;
+    loop(ctx);
+  };
+
+  const requestAnimationFrame =
+    window.requestAnimationFrame ||
+    ((cb) => {
+      setTimeout(cb, 0);
+    });
+
+  const start = Date.now();
+  let myReq = undefined;
+
+  const loop = (ctx: any) => {
+    myReq = requestAnimationFrame(loop);
+    if (myReq > 1000) {
+      window.cancelAnimationFrame(myReq);
+    }
+    if (ctx) {
+      step(ctx);
+      draw(ctx);
+    }
+  };
+
+  const step = (ctx: any) => {
+    if (particles.length < particleCount) {
+      particles.push(new Particle(ctx));
+    }
+    let i = particles.length;
+    while (i--) {
+      particles[i].step();
+    }
+    tick++;
+  };
+
+  const draw = (ctx: any) => {
+    if (typeof ctx === 'object') {
+      ctx?.clearRect(0, 0, w, h);
       let i = particles.length;
       while (i--) {
         particles[i].draw();
       }
-    };
-    const requestAnimationFrame =
-      window.requestAnimationFrame ||
-      ((cb) => {
-        setTimeout(cb, 0);
-      });
-    const loop = () => {
-      requestAnimationFrame(loop);
-      step();
-      draw();
-    };
-    const init = () => {
-      canvas.width = w;
-      canvas.height = h;
-      ctx.globalCompositeOperation = 'lighter';
-      ctx.lineWidth = 2;
-      loop();
-    };
-    init();
-  }, []);
+    }
+  };
+
+  const deleteConfigById = async (id: number) => {
+    request(`/api/v1/configs/${id}`, {
+      method: 'delete',
+    });
+  };
 
   const getConfigs = async () => {
-    const res = await request(`/api/v1/configs?name=is_boot`);
-    console.log(res);
-    if (res && res.length > 0) {
-      history.push('/configuration/scheduler-cluster');
-    } else {
+    const res = await request('/api/v1/configs?name=is_boot');
+    if (
+      res?.length === 0 ||
+      (res?.filter((el: any) => el.name === 'is_boot') || [])[0].value === '0'
+    ) {
       setIsBoot(true);
+    } else if (
+      res &&
+      (res?.filter((el: any) => el.name === 'is_boot') || [])[0].value === '1'
+    ) {
+      message.success('Success');
+      history.push('/configuration/scheduler-cluster');
+    }
+  };
+
+  const createConfig = async () => {
+    request('/api/v1/configs', {
+      method: 'post',
+      data: {
+        name: 'is_boot',
+        value: '1',
+        user_id: 1,
+      },
+    }).then((value: any) => {
+      if (value.value === '1') {
+        message.success('Processing complete!');
+        setIsBoot(false);
+      }
+    });
+  };
+
+  const getSecGroups = async () => {
+    const res = await request('/api/v1/security-groups');
+    if (res && res.length > 0) {
+      setGroup(
+        res.map((el: any) => {
+          return {
+            label: el.name,
+            value: el.domain,
+          };
+        }),
+      );
     }
   };
 
@@ -101,8 +171,7 @@ export default function IndexPage({ location }) {
       data: params,
     });
     if (res) {
-      message.success('Success');
-      history.push('/configuration/scheduler-cluster');
+      getConfigs();
     } else {
       message.error('Incorrect authentication credentials');
     }
@@ -178,9 +247,133 @@ export default function IndexPage({ location }) {
     }
   };
 
-  // if (isBoot) {
-  //   return ();
-  // }
+  const next = () => {
+    setCurrent(current + 1);
+  };
+
+  const prev = () => {
+    setCurrent(current - 1);
+  };
+
+  const steps = [
+    {
+      title: 'First',
+      description: '',
+      content: 'First-content',
+    },
+    {
+      title: 'Second',
+      description: 'Create CDN Cluster',
+      content: '',
+    },
+    {
+      title: 'Third',
+      description: 'Create Scheduler Cluster',
+      content: 'Last-content',
+    },
+    {
+      title: 'Forth',
+      description: '',
+      content: 'Last-content',
+    },
+  ];
+
+  const createClusters = (config: any) => {
+    const res = request('/api/v1/cdn-clusters', {
+      method: 'post',
+      data: config,
+    });
+    res.then((r) => {
+      message.success('Create Success');
+    });
+  };
+
+  const createCdnCluster: any = () => {
+    return (
+      <Form
+        labelAlign="left"
+        // layout="vertical"
+        onValuesChange={(cv, v) => {
+          setFormInfo((pre) => {
+            return {
+              ...pre,
+              ...cv,
+            };
+          });
+        }}
+      >
+        {cdnInfo.map((sub: any) => {
+          const Content = comsKey[sub.type || 'input'];
+          if (!sub.hide && sub.tab === '1') {
+            return (
+              <Form.Item
+                name={sub.key}
+                key={sub.key}
+                label={sub.en_US}
+                {...(sub.formprops || {})}
+              >
+                <Content
+                  {...sub.props}
+                  onClick={() => {
+                    if (sub.key === 'security_group_id') {
+                      getSecGroups();
+                    }
+                  }}
+                  options={formOps[sub.key] || {}}
+                />
+              </Form.Item>
+            );
+          }
+        })}
+      </Form>
+    );
+  };
+
+  if (isBoot) {
+    return (
+      <div className={styles.main}>
+        <div className={styles.stepLogo} />
+        <div className={styles.overlop} />
+        <div className={styles.stepContainer}>
+          <Steps current={current}>
+            {steps.map((item) => (
+              <Step
+                key={item.title}
+                title={item.title}
+                description={item.description}
+              />
+            ))}
+          </Steps>
+          <div className={styles.stepContent}>
+            {current === 1 && createCdnCluster()}
+            {(current !== 1 || current !== 2) && steps[current].content}
+          </div>
+          <div className={styles.stepAction}>
+            {current < steps.length - 1 && (
+              <Button type="primary" onClick={() => next()}>
+                Next
+              </Button>
+            )}
+            {current === steps.length - 1 && (
+              <Button
+                type="primary"
+                onClick={() => {
+                  createConfig();
+                }}
+              >
+                Done
+              </Button>
+            )}
+            {current > 0 && (
+              <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+                Previous
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Spin

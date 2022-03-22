@@ -168,7 +168,7 @@ export default function CDN() {
     const res = await request('/api/v1/security-groups');
     if (res && res.length > 0) {
       setGroup(
-        res.map((el) => {
+        res.map((el: any) => {
           return {
             label: el.name,
             value: el.domain,

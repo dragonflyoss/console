@@ -247,7 +247,18 @@ export default function CDN() {
       render: (v: string) => {
         return (
           <Tooltip title={v}>
-            <div className={styles.tableItem}>{v || '-'}</div>
+            <Button
+              type={location.origin.includes('alibaba') ? 'link' : 'text'}
+              onClick={() => {
+                if (location.origin.includes('alibaba')) {
+                  window.open(
+                    `https://sa.alibaba-inc.com/ops/terminal.html?ip=${v}`,
+                  );
+                }
+              }}
+            >
+              {v || '-'}
+            </Button>
           </Tooltip>
         );
       },

@@ -1,20 +1,16 @@
 import { useState, useEffect } from 'react';
 import { request, history } from 'umi';
-import { Input, Form, Button, message, Spin, Steps, Select } from 'antd';
+import { Input, Form, Button, message, Spin } from 'antd';
 import { GithubOutlined, GoogleOutlined } from '@ant-design/icons';
 import Cookies from 'js-cookie';
 import { decode } from 'jsonwebtoken';
 import Particle from '@/components/particle';
-import { loginSchema, signSchema, cdnInfo } from '../../mock/data';
-import CodeEditor from '@/components/codeEditor';
+import { loginSchema, signSchema } from '../../mock/data';
 import styles from './index.less';
 
-const { Step } = Steps;
 const comsKey = {
   password: Input.Password,
   passwordT: Input.Password,
-  select: Select,
-  json: CodeEditor,
   input: Input,
 };
 
@@ -37,23 +33,12 @@ export default function IndexPage({}) {
     githubOauth: {},
     googleOauth: {},
   });
-  const [isBoot, setIsBoot] = useState(false);
-  const [current, setCurrent] = useState(0);
-  const [formInfo, setFormInfo] = useState({});
-  const [secGroups, setGroup] = useState([]);
-
-  const formOps = {
-    security_group_id: secGroups,
-  };
 
   useEffect(() => {
+    getConfigs();
     getOauth();
     // deleteConfigById(3)
-    const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
 
-    if (userInfo.id) {
-      getConfigs();
-    }
     setLoading(false);
 
     // 动效
@@ -125,43 +110,17 @@ export default function IndexPage({}) {
       res?.length === 0 ||
       (res?.filter((el: any) => el.name === 'is_boot') || [])[0].value === '0'
     ) {
-      setIsBoot(true);
+      history.push('/installation');
     } else if (
       res &&
       (res?.filter((el: any) => el.name === 'is_boot') || [])[0].value === '1'
     ) {
       message.success('Success');
-      history.push('/configuration/scheduler-cluster');
-    }
-  };
+      const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
 
-  const createConfig = async () => {
-    request('/api/v1/configs', {
-      method: 'post',
-      data: {
-        name: 'is_boot',
-        value: '1',
-        user_id: 1,
-      },
-    }).then((value: any) => {
-      if (value.value === '1') {
-        message.success('Processing complete!');
-        setIsBoot(false);
+      if (userInfo.id) {
+        history.push('/configuration/scheduler-cluster');
       }
-    });
-  };
-
-  const getSecGroups = async () => {
-    const res = await request('/api/v1/security-groups');
-    if (res && res.length > 0) {
-      setGroup(
-        res.map((el: any) => {
-          return {
-            label: el.name,
-            value: el.domain,
-          };
-        }),
-      );
     }
   };
 
@@ -246,134 +205,6 @@ export default function IndexPage({}) {
       message.error('Incorrect');
     }
   };
-
-  const next = () => {
-    setCurrent(current + 1);
-  };
-
-  const prev = () => {
-    setCurrent(current - 1);
-  };
-
-  const steps = [
-    {
-      title: 'First',
-      description: '',
-      content: 'First-content',
-    },
-    {
-      title: 'Second',
-      description: 'Create CDN Cluster',
-      content: '',
-    },
-    {
-      title: 'Third',
-      description: 'Create Scheduler Cluster',
-      content: 'Last-content',
-    },
-    {
-      title: 'Forth',
-      description: '',
-      content: 'Last-content',
-    },
-  ];
-
-  const createClusters = (config: any) => {
-    const res = request('/api/v1/cdn-clusters', {
-      method: 'post',
-      data: config,
-    });
-    res.then((r) => {
-      message.success('Create Success');
-    });
-  };
-
-  const createCdnCluster: any = () => {
-    return (
-      <Form
-        labelAlign="left"
-        // layout="vertical"
-        onValuesChange={(cv, v) => {
-          setFormInfo((pre) => {
-            return {
-              ...pre,
-              ...cv,
-            };
-          });
-        }}
-      >
-        {cdnInfo.map((sub: any) => {
-          const Content = comsKey[sub.type || 'input'];
-          if (!sub.hide && sub.tab === '1') {
-            return (
-              <Form.Item
-                name={sub.key}
-                key={sub.key}
-                label={sub.en_US}
-                {...(sub.formprops || {})}
-              >
-                <Content
-                  {...sub.props}
-                  onClick={() => {
-                    if (sub.key === 'security_group_id') {
-                      getSecGroups();
-                    }
-                  }}
-                  options={formOps[sub.key] || {}}
-                />
-              </Form.Item>
-            );
-          }
-        })}
-      </Form>
-    );
-  };
-
-  if (isBoot) {
-    return (
-      <div className={styles.main}>
-        <div className={styles.stepLogo} />
-        <div className={styles.overlop} />
-        <div className={styles.stepContainer}>
-          <Steps current={current}>
-            {steps.map((item) => (
-              <Step
-                key={item.title}
-                title={item.title}
-                description={item.description}
-              />
-            ))}
-          </Steps>
-          <div className={styles.stepContent}>
-            {current === 1 && createCdnCluster()}
-            {(current !== 1 || current !== 2) && steps[current].content}
-          </div>
-          <div className={styles.stepAction}>
-            {current < steps.length - 1 && (
-              <Button type="primary" onClick={() => next()}>
-                Next
-              </Button>
-            )}
-            {current === steps.length - 1 && (
-              <Button
-                type="primary"
-                onClick={() => {
-                  createConfig();
-                }}
-              >
-                Done
-              </Button>
-            )}
-            {current > 0 && (
-              <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-                Previous
-              </Button>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <Spin

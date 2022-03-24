@@ -1,0 +1,115 @@
+.main {
+  position: relative;
+  display: flex;
+  height: 100%;
+  background-color: #25282b;
+  background-image: url(../../public/bg-login-opacity.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  color: #ffffff;
+
+  .overlop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background: #323232;
+  }
+
+  .stepLogo {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 46px;
+    background: url(../../public/logo-dark.svg) no-repeat;
+    background-size: 100% 100%;
+    z-index: 999;
+  }
+
+  .stepContainer {
+    width: 100%;
+    height: 100%;
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .stepFlex {
+      display: flex;
+      flex: 1;
+      width: 100%;
+    }
+
+    .stepContent {
+      flex: 1;
+      min-height: 200px;
+      margin: auto;
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .stepAction {
+      flex: 0 0 30%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .stepActionTitle {
+        color: #fff;
+        font-size: 32px;
+        margin-bottom: 8px;
+      }
+
+      .stepActionContent {
+        margin-bottom: 8px;
+      }
+    }
+
+    .firstStepContent {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      position: relative;
+
+      .img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: auto;
+        width: 700px;
+        height: 380px;
+        border: none;
+        background-image: url('../../public/bg_install_01.jpg');
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        background-position: center;
+        box-shadow: 0 20px 20px rgba(0, 0, 0, 0.5);
+      }
+    }
+
+    .forthStepContent {
+      width: 100%;
+      height: 100%;
+      display: flex;
+
+      .img {
+        margin: auto;
+        width: 90%;
+        height: 90%;
+        border: none;
+        background-image: url('../../public/bg_install_02.png');
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        background-position: center;
+        box-shadow: 0 25px 5px rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
+}

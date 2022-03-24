@@ -24,7 +24,7 @@ import {
   MinusCircleOutlined,
   AppstoreAddOutlined,
   EditOutlined,
-  ExclamationCircleOutlined,
+  DesktopOutlined,
 } from '@ant-design/icons';
 import moment from 'moment';
 import { info, updateOptions } from '../../../mock/data';
@@ -323,7 +323,24 @@ export default function IndexPage() {
       render: (v: string) => {
         return (
           <Tooltip title={v}>
-            <div className={styles.tableItem}>{v || '-'}</div>
+            <Button
+              type={location.origin.includes('alibaba') ? 'link' : 'text'}
+              onClick={() => {
+                if (location.origin.includes('alibaba')) {
+                  window.open(
+                    `https://sa.alibaba-inc.com/ops/terminal.html?ip=${v}`,
+                  );
+                }
+              }}
+              style={{
+                overflow: 'auto',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <DesktopOutlined />
+              {v || '-'}
+            </Button>
           </Tooltip>
         );
       },

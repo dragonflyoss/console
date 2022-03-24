@@ -75,6 +75,27 @@ export const info = [
     type: 'json',
     tab: '1',
     en_US: 'Scope',
+    formprops: {
+      required: true,
+      initialValue: JSON.stringify(
+        {
+          idc: '',
+          location: {
+            area: '',
+            city: '',
+            country: '',
+            province: '',
+          },
+          net_topology: {
+            rack: '',
+            room: '',
+            site: '',
+          },
+        },
+        null,
+        2,
+      ),
+    },
   },
   {
     key: 'config',
@@ -331,7 +352,7 @@ export const cdnInfo = [
     type: 'json',
     tab: '2',
     formprops: {
-      tooltip: 'scheduler cluster config info',
+      tooltip: 'CDN cluster config info',
       required: true,
       initialValue: JSON.stringify(
         {

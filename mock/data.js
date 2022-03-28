@@ -29,6 +29,7 @@ export const info = [
     key: 'name',
     label: '集群名称',
     tab: '1',
+    noNeed: true,
     formprops: {
       required: true,
     },
@@ -316,6 +317,7 @@ export const cdnInfo = [
     key: 'name',
     label: '集群名称',
     tab: '1',
+    noNeed: true,
     formprops: {
       required: true,
     },

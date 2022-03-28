@@ -32,25 +32,25 @@ export default function Installation({}) {
     });
   };
 
-  const createClusters = (config: any) => {
-    const res = request('/api/v1/cdn-clusters', {
-      method: 'post',
+  const updateClustersById = (config: any) => {
+    const res = request('/api/v1/cdn-clusters/1', {
+      method: 'patch',
       data: config,
     });
     res.then((r) => {
-      message.success('Create Success');
+      message.success('Update Success');
       setFormInfo({});
       setCurrent(current + 1);
     });
   };
 
-  const createSchedulerClusters = (config: any) => {
-    const res = request('/api/v1/scheduler-clusters', {
-      method: 'post',
+  const updateSchedulerClustersById = (config: any) => {
+    const res = request('/api/v1/scheduler-clusters/1', {
+      method: 'patch',
       data: config,
     });
     res.then((r) => {
-      message.success('Create Success');
+      message.success('Update Success');
       setFormInfo({});
       setCurrent(current + 1);
     });
@@ -94,16 +94,18 @@ export default function Installation({}) {
         password: 'dragonfly',
       });
     } else if (current === 1) {
-      createClusters({
+      updateClustersById({
         ...formInfo,
         config: temp_config,
+        id: 1,
       });
     } else if (current === 2) {
-      createSchedulerClusters({
+      updateSchedulerClustersById({
         ...formInfo,
         scopes: temp_scope,
         config: temp_config,
         client_config: temp_client,
+        id: 1,
       });
     } else {
       setCurrent(current + 1);
@@ -117,7 +119,7 @@ export default function Installation({}) {
   const firstStep = () => {
     return (
       <div className={styles.firstStepContent}>
-        <div className={styles.img} />
+        {/* <div className={styles.img} /> */}
         <Form
           labelAlign="left"
           prefixCls="custom-form"
@@ -147,77 +149,88 @@ export default function Installation({}) {
 
   const secondStep = () => {
     return (
-      <Form
-        labelAlign="left"
-        layout="horizontal"
-        onValuesChange={(cv, v) => {
-          setFormInfo((pre: any) => {
-            return {
-              ...pre,
-              ...cv,
-            };
-          });
-        }}
-        prefixCls="custom-form"
-      >
-        {cdnInfo.map((sub: any) => {
-          const Content = comsKey[sub.type || 'input'];
-          if (!sub.hide && sub.key !== 'security_group_id') {
-            return (
-              <Form.Item
-                name={sub.key}
-                key={sub.key}
-                label={sub.en_US}
-                {...(sub.formprops || {})}
-                prefixCls="custom-form"
-                colon
-              >
-                <Content {...sub.props} />
-              </Form.Item>
-            );
-          }
-        })}
-      </Form>
+      <div className={styles.formContainer}>
+        <div className={styles.img} />
+        <Form
+          labelAlign="left"
+          layout="horizontal"
+          onValuesChange={(cv, v) => {
+            setFormInfo((pre: any) => {
+              return {
+                ...pre,
+                ...cv,
+              };
+            });
+          }}
+          prefixCls="custom-form"
+        >
+          {cdnInfo.map((sub: any) => {
+            const Content = comsKey[sub.type || 'input'];
+            if (
+              !sub.hide &&
+              sub.key !== 'name' &&
+              sub.key !== 'security_group_id'
+            ) {
+              return (
+                <Form.Item
+                  name={sub.key}
+                  key={sub.key}
+                  label={sub.en_US}
+                  {...(sub.formprops || {})}
+                  prefixCls="custom-form"
+                  colon
+                >
+                  <Content {...sub.props} />
+                </Form.Item>
+              );
+            }
+          })}
+        </Form>
+      </div>
     );
   };
 
   const thirdStep = () => {
     return (
-      <Form
-        labelAlign="left"
-        layout="horizontal"
-        onValuesChange={(cv, v) => {
-          setFormInfo((pre: any) => {
-            return {
-              ...pre,
-              ...cv,
-            };
-          });
-        }}
-        prefixCls="custom-form"
-      >
-        {info.map((sub: any) => {
-          const Content = comsKey[sub.type || 'input'];
-          if (
-            !sub.hide &&
-            sub.key !== 'security_group_id' &&
-            sub.key !== 'cdn_cluster_id'
-          ) {
-            return (
-              <Form.Item
-                name={sub.key}
-                key={sub.key}
-                label={sub.en_US}
-                {...(sub.formprops || {})}
-                prefixCls="custom-form"
-                colon
-              >
-                <Content {...sub.props} />
-              </Form.Item>
-            );
-          }
-        })}
-      </Form>
+      <div className={styles.formContainer}>
+        <div className={styles.img2} />
+        <Form
+          labelAlign="left"
+          layout="horizontal"
+          onValuesChange={(cv, v) => {
+            setFormInfo((pre: any) => {
+              return {
+                ...pre,
+                ...cv,
+              };
+            });
+          }}
+          prefixCls="custom-form"
+        >
+          {info.map((sub: any) => {
+            const Content = comsKey[sub.type || 'input'];
+            if (
+              !sub.hide &&
+              sub.key !== 'security_group_id' &&
+              sub.key !== 'cdn_cluster_id' &&
+              sub.key !== 'name'
+            ) {
+              return (
+                <Form.Item
+                  name={sub.key}
+                  key={sub.key}
+                  label={sub.en_US}
+                  {...(sub.formprops || {})}
+                  prefixCls="custom-form"
+                  colon
+                >
+                  <Content {...sub.props} />
+                </Form.Item>
+              );
+            }
+          })}
+        </Form>
+      </div>
     );
   };
 
@@ -232,7 +245,7 @@ export default function Installation({}) {
   const steps: any = [
     {
       title: 'First',
-      description: 'What Is Dragonfly?',
+      description: 'Welcome to Dragonfly!',
       content: firstStep(),
       actionContent: (
         <>
@@ -243,18 +256,42 @@ export default function Installation({}) {
           distribution, cache distribution, log distribution, and image
           distribution.
           <Divider style={{ background: '#fff' }} />
-          <p>Log in with the default account</p>
+          <p>
+            For the first login, please use the default root user account,
+            username is root and password is dragonfly.
+          </p>
         </>
       ),
     },
     {
       title: 'Second',
-      description: 'Create CDN Cluster',
+      description: 'A CDN cluster needs to be created in a P2P network.',
+      actionContent: (
+        <>
+          The created CDN cluster id is 1. When deploying a CDN instance, you
+          need to report the CDN cluster id associated with the CDN instance,
+          and the manager service address.
+          <Divider style={{ background: '#fff' }} />
+          <p>
+            For details, refer to the two fields manager.addr and
+            manager.cdnClusterID in the{' '}
+            <a
+              href="https://d7y.netlify.app/docs/reference/configuration/cdn/"
+              target="_blank"
+            >
+              CDN configuration
+            </a>
+            .
+          </p>
+        </>
+      ),
       content: secondStep(),
     },
     {
       title: 'Third',
       description: 'Create Scheduler Cluster',
+      actionContent:
+        'A scheduler cluster needs to be created in a P2P network. CDN instances in the CDN cluster associated with the scheduler cluster will become the download root node in the P2P network. The CDN cluster field in the scheduler cluster form is the CDN cluster associated with the scheduler clsuter in the P2P network.',
       content: thirdStep(),
     },
     {
@@ -263,19 +300,16 @@ export default function Installation({}) {
       content: forthStep(),
       actionContent: (
         <>
-          <p>Please Enter "Done" into Dragonfly Console.</p>
           <p>
-            Efficiency: with P2P and CDN technology, reduce image distribution
-            time significantly and expedite delivery;
-          </p>
-          <p>
-            Traffic control: with intelligent analysis technology, dynamically
-            balance distribution workload and business running, implement
-            dynamic traffic control, and guarantee business stability;
-          </p>
-          <p>
-            Security: support HTTPs protocol in private image registry, encrypt
-            distribution content, and safeguard data security.
+            The P2P network basic information is created. You can deploy
+            scheduler, cdn and dfdaemon, refer to{' '}
+            <a
+              href="https://d7y.netlify.app/docs/getting-started/quick-start/"
+              target="_blank"
+            >
+              getting-start
+            </a>
+            .
           </p>
         </>
       ),
@@ -284,8 +318,7 @@ export default function Installation({}) {
 
   return (
     <div className={styles.main}>
-      <div className={styles.stepLogo} />
-      {/* <div className={styles.overlop} /> */}
+      {/* <div className={styles.stepLogo} /> */}
       <div className={styles.stepContainer}>
         <Steps current={current}>
           {steps.map((item: any) => (
@@ -308,7 +341,7 @@ export default function Installation({}) {
               <Button
                 type="primary"
                 onClick={() => next()}
-                disabled={!formInfo.name && current !== 0}
+                // disabled={current !== 0}
               >
                 Next
               </Button>

@@ -436,28 +436,37 @@ export default function CDN() {
                     </div>
                     {isHover === sub.id ? (
                       <div className={styles.activeButton}>
-                        <Button
-                          type="text"
-                          className={styles.newBtn}
-                          style={{
-                            marginRight: 4,
-                          }}
-                          onClick={() => {
+                        <Popconfirm
+                          title="Are you sure to Copy this CDN Cluster?"
+                          onConfirm={() => {
                             setUpdateInfo(sub);
                             setCopyVisible(true);
                           }}
+                          okText="Yes"
+                          cancelText="No"
                         >
-                          <CopyOutlined />
-                        </Button>
-                        <Button
-                          type="text"
-                          className={styles.newBtn}
-                          onClick={() => {
+                          <Button
+                            type="text"
+                            className={styles.newBtn}
+                            style={{
+                              marginRight: 4,
+                            }}
+                          >
+                            <CopyOutlined />
+                          </Button>
+                        </Popconfirm>
+                        <Popconfirm
+                          title="Are you sure to delete this CDN Cluster?"
+                          onConfirm={() => {
                             deleteClusterById(sub.id);
                           }}
+                          okText="Yes"
+                          cancelText="No"
                         >
-                          <DeleteOutlined />
-                        </Button>
+                          <Button type="text" className={styles.newBtn}>
+                            <DeleteOutlined />
+                          </Button>
+                        </Popconfirm>
                       </div>
                     ) : (
                       <div />
@@ -708,8 +717,9 @@ export default function CDN() {
             labelAlign="left"
             layout="vertical"
             onValuesChange={(cv, v) => {
-              setFormInfo((pre) => {
+              setFormInfo((pre: any) => {
                 return {
+                  ...v,
                   ...pre,
                   ...cv,
                 };
@@ -812,9 +822,9 @@ export default function CDN() {
             return (
               <Tag closable key={subKey} onClose={(v) => console.log(v)}>
                 {(
-                  (cClusters.filter((e) => e.id.toString() === subKey) ||
+                  (cClusters.filter((e: any) => e?.id?.toString() === subKey) ||
                     [])[0] || {}
-                ).name || ''}
+                )?.name || ''}
               </Tag>
             );
           })}
@@ -891,7 +901,7 @@ export default function CDN() {
             className={styles.newBtn}
             onClick={() => {
               setDrawLoading(true);
-              setDrawContent((pre) => {
+              setDrawContent((pre: any) => {
                 pre.push({
                   key: pre.length + 1,
                 });

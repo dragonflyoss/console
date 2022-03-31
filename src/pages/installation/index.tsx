@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { request, history } from 'umi';
 import { Button, message, Steps, Divider } from 'antd';
-import { UserOutlined, SolutionOutlined, SmileOutlined, FormOutlined } from '@ant-design/icons';
+import {
+  UserOutlined,
+  SolutionOutlined,
+  SmileOutlined,
+  FormOutlined,
+} from '@ant-design/icons';
 import styles from './index.less';
 
 const { Step } = Steps;
@@ -43,7 +48,7 @@ export default function Installation({}) {
         name: 'root',
         password: 'dragonfly',
       });
-    } 
+    }
     setCurrent(current + 1);
   };
 
@@ -51,9 +56,14 @@ export default function Installation({}) {
     setCurrent(current - 1);
   };
 
+  const boldStyle = {
+    color: '#34dd84',
+    fontWeight: 'bold',
+  };
+
   const steps: any = [
     {
-      title: 'Welcome to Dragonfly!',
+      title: 'Introduction',
       description: '',
       actionContent: (
         <>
@@ -70,22 +80,9 @@ export default function Installation({}) {
           <p>For the first login, please use the default root user account.</p>
           <p>
             username is&nbsp;
-            <span
-              style={{
-                color: '#34dd84',
-              }}
-            >
-              root
-            </span>
-            &nbsp; and password is{' '}
-            <span
-              style={{
-                color: '#34dd84',
-              }}
-            >
-              dragonfly
-            </span>
-            .
+            <span style={boldStyle}>root</span>
+            &nbsp; and password is&nbsp;
+            <span style={boldStyle}>dragonfly</span>.
           </p>
         </>
       ),
@@ -103,9 +100,10 @@ export default function Installation({}) {
               height={300}
             />
           </div>
-          The created CDN cluster id is 1. When deploying a CDN instance, you
-          need to report the CDN cluster id associated with the CDN instance,
-          and the manager service address.
+          The created CDN cluster id is&nbsp;
+          <span style={boldStyle}>1</span>
+          . When deploying a CDN instance, you need to report the CDN cluster id
+          associated with the CDN instance, and the manager service address.
           <Divider style={{ background: '#fff' }} />
           <div className={styles.imgBox}>
             <img
@@ -115,11 +113,14 @@ export default function Installation({}) {
             />
           </div>
           <p>
-            For details, refer to the two fields manager.addr and manager.
-            cdnClusterID in the&nbsp;
+            For details, refer to the two fields&nbsp;
+            <span style={boldStyle}>manager.addr</span>&nbsp; and&nbsp;
+            <span style={boldStyle}>manager.cdnClusterID</span>&nbsp; in
+            the&nbsp;
             <a
               href="https://d7y.netlify.app/docs/reference/configuration/cdn/"
               target="_blank"
+              style={boldStyle}
             >
               CDN configuration
             </a>
@@ -133,9 +134,7 @@ export default function Installation({}) {
       description: '',
       actionContent: (
         <>
-          <p>
-            A scheduler cluster needs to be created in a P2P network.
-          </p>
+          <p>A scheduler cluster needs to be created in a P2P network.</p>
           <div className={styles.imgBox}>
             <img
               src={require('@/public/bg_install_05.png')}
@@ -144,10 +143,9 @@ export default function Installation({}) {
             />
           </div>
           <p>
-            CDN
-            instances in the CDN cluster associated with the scheduler cluster
-            will become the download root node in the P2P network. The CDN
-            cluster field in the scheduler cluster form is the CDN cluster
+            CDN instances in the CDN cluster associated with the scheduler
+            cluster will become the download root node in the P2P network. The
+            CDN cluster field in the scheduler cluster form is the CDN cluster
             associated with the scheduler clsuter in the P2P network.
           </p>
           <Divider style={{ background: '#fff' }} />
@@ -159,17 +157,19 @@ export default function Installation({}) {
             />
           </div>
           <p>
-            The created scheduler cluster id is 1. When deploying a scheduler
-            instance, you need to report the scheduler cluster id associated
-            with the scheduler instance, and the manager service address. For
-            details, refer to the two fields manager.addr and
-            manager.schedulerClusterID in the scheduler configuration.
+            The created scheduler cluster id is <span style={boldStyle}>1</span>
+            . When deploying a scheduler instance, you need to report the
+            scheduler cluster id associated with the scheduler instance, and the
+            manager service address. For details, refer to the two fields&nbsp;
+            <span style={boldStyle}>manager.addr</span> and
+            <span style={boldStyle}>manager.schedulerClusterID</span> in the
+            scheduler configuration.
           </p>
         </>
       ),
     },
     {
-      title: 'Validate Dragonfly Console',
+      title: 'Welcome to Dragonfly!',
       description: '',
       actionContent: (
         <>
@@ -179,6 +179,7 @@ export default function Installation({}) {
             <a
               href="https://d7y.netlify.app/docs/getting-started/quick-start/"
               target="_blank"
+              style={boldStyle}
             >
               getting-start
             </a>
@@ -228,7 +229,7 @@ export default function Installation({}) {
                   style={{
                     fontSize: 24,
                     color: idx <= current ? '#44bd7a' : '#fff',
-                    textShadow: '4px 4px rgb(0 0 0 / 5%)'
+                    textShadow: '4px 4px rgb(0 0 0 / 5%)',
                   }}
                 >
                   {item.title}
@@ -241,9 +242,7 @@ export default function Installation({}) {
         </Steps>
         <div className={styles.stepFlex}>
           <div className={styles.stepAction}>
-            <div className={styles.stepActionTitle}>
-              {steps[current].title}
-            </div>
+            <div className={styles.stepActionTitle}>{steps[current].title}</div>
             <div className={styles.stepActionContent}>
               {steps[current].actionContent}
             </div>

@@ -37,7 +37,7 @@ export default function IndexPage({}) {
   useEffect(() => {
     getConfigs();
     getOauth();
-    // deleteConfigById(3)
+    // deleteConfigById(4)
 
     setLoading(false);
 
@@ -115,7 +115,6 @@ export default function IndexPage({}) {
       res &&
       (res?.filter((el: any) => el.name === 'is_boot') || [])[0].value === '1'
     ) {
-      message.success('Success');
       const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
 
       if (userInfo.id) {

@@ -61,6 +61,10 @@
   color: #fff !important;
 }
 
+.ant-steps-item-wait .ant-steps-item-icon > .ant-steps-icon {
+  color: #fff;
+}
+
 .custom-form {
   color: #fff;
   padding: 50px 50px 10px 50px;

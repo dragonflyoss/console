@@ -7,16 +7,15 @@ import {
   Button,
   Table,
   Descriptions,
-  Divider,
   Modal,
   Drawer,
   Form,
-  Tabs,
   Popconfirm,
   Tag,
   Popover,
   message,
   Tooltip,
+  InputNumber,
 } from 'antd';
 import {
   CopyOutlined,
@@ -24,7 +23,7 @@ import {
   MinusCircleOutlined,
   AppstoreAddOutlined,
   EditOutlined,
-  ExclamationCircleOutlined,
+  DesktopOutlined,
 } from '@ant-design/icons';
 import moment from 'moment';
 import { info, updateOptions } from '../../../mock/data';
@@ -36,6 +35,7 @@ const comsKeys = {
   select: Select,
   json: CodeEditor,
   input: Input,
+  InputNumber: InputNumber,
 };
 
 // scheduler
@@ -64,7 +64,7 @@ export default function IndexPage() {
   const [formVisible, setFormVisible] = useState(false);
   const [updateVisible, setUpdateVisible] = useState(false);
   // form dialog content
-  const [formInfo, setFormInfo] = useState({});
+  const [formInfo, setFormInfo] = useState<any>({});
   // form dialog schema
   const [formSchema, setFormSchema] = useState(info);
   // json dialog content
@@ -95,7 +95,6 @@ export default function IndexPage() {
   useEffect(() => {
     getClusters();
     getCDNClusters();
-    getSecGroups();
   }, []);
 
   const getSchedulers = async (v: number) => {
@@ -171,22 +170,22 @@ export default function IndexPage() {
     const res = await request('/api/v1/scheduler-clusters');
     if (res && typeof res === 'object' && res.length > 0) {
       // number to string
-      res.map((sub) => {
+      res.map((sub: any) => {
         Object.keys(sub).forEach((el) => {
           if (typeof sub[el] === 'number') {
             sub[el] = sub[el].toString();
           }
-          let temp_cluster: any[] = [];
-          if (typeof sub['cdn_clusters'] === 'object') {
-            (sub['cdn_clusters'] || []).forEach((cluster: any) => {
-              temp_cluster.push(cluster.id || cluster || '');
-            }) || [];
-          } else {
-            temp_cluster = sub['cdn_clusters'];
-          }
-          // console.log(sub['cdn_clusters'], temp_cluster);
-          sub['cdn_clusters'] = Number(temp_cluster.toString());
-          sub['cdn_cluster_id'] = Number(temp_cluster.toString());
+          // let temp_cluster: any[] = [];
+          // if (typeof sub['cdn_clusters'] === 'object') {
+          //   (sub['cdn_clusters'] || []).forEach((cluster: any) => {
+          //     temp_cluster.push(cluster.id || cluster || '');
+          //   }) || [];
+          // } else {
+          //   temp_cluster = sub['cdn_clusters'];
+          // }
+          // // console.log(sub['cdn_clusters'], temp_cluster);
+          // sub['cdn_clusters'] = Number(temp_cluster.toString());
+          // sub['cdn_cluster_id'] = Number(temp_cluster.toString());
           sub['created_at'] = moment(
             new Date(sub['created_at']).valueOf(),
           ).format('YYYY-MM-DD HH:MM:SS');
@@ -229,15 +228,6 @@ export default function IndexPage() {
         }),
       );
     }
-  };
-
-  const getClusterById = async (id: string) => {
-    const res = await request('/api/v1/scheduler-clusters', {
-      params: {
-        id,
-      },
-    });
-    console.log(res);
   };
 
   const createClusters = (config: any) => {
@@ -323,7 +313,24 @@ export default function IndexPage() {
       render: (v: string) => {
         return (
           <Tooltip title={v}>
-            <div className={styles.tableItem}>{v || '-'}</div>
+            <Button
+              type={location.origin.includes('alibaba') ? 'link' : 'text'}
+              onClick={() => {
+                if (location.origin.includes('alibaba')) {
+                  window.open(
+                    `https://sa.alibaba-inc.com/ops/terminal.html?ip=${v}`,
+                  );
+                }
+              }}
+              style={{
+                overflow: 'auto',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <DesktopOutlined />
+              {v || '-'}
+            </Button>
           </Tooltip>
         );
       },
@@ -410,7 +417,7 @@ export default function IndexPage() {
       align: 'left',
       width: 140,
       key: 'id',
-      render: (t: number, r: any, i: number) => {
+      render: (t: number | string, r: any, i: number) => {
         return (
           <div className={styles.operation}>
             {/* <Button
@@ -462,7 +469,9 @@ export default function IndexPage() {
             }}
             onSearch={(v) => {
               if (v.length > 0) {
-                const f = sClusters.filter((sub) => sub.name.includes(v));
+                const f = sClusters.filter((sub: any) =>
+                  sub?.name?.includes(v),
+                );
                 setClusters(f);
               } else {
                 getClusters();
@@ -549,28 +558,37 @@ export default function IndexPage() {
                       </div>
                       {isHover === sub.id ? (
                         <div className={styles.activeButton}>
-                          <Button
-                            type="text"
-                            className={styles.newBtn}
-                            style={{
-                              marginRight: 4,
-                            }}
-                            onClick={() => {
+                          <Popconfirm
+                            title="Are you sure to Copy this Scheduler Cluster?"
+                            onConfirm={() => {
                               setUpdateInfo(sub);
                               setCopyVisible(true);
                             }}
+                            okText="Yes"
+                            cancelText="No"
                           >
-                            <CopyOutlined />
-                          </Button>
-                          <Button
-                            type="text"
-                            className={styles.newBtn}
-                            onClick={() => {
+                            <Button
+                              type="text"
+                              className={styles.newBtn}
+                              style={{
+                                marginRight: 4,
+                              }}
+                            >
+                              <CopyOutlined />
+                            </Button>
+                          </Popconfirm>
+                          <Popconfirm
+                            title="Are you sure to delete this Scheduler Cluster?"
+                            onConfirm={() => {
                               deleteClusterById(sub.id);
                             }}
+                            okText="Yes"
+                            cancelText="No"
                           >
-                            <DeleteOutlined />
-                          </Button>
+                            <Button type="text" className={styles.newBtn}>
+                              <DeleteOutlined />
+                            </Button>
+                          </Popconfirm>
                         </div>
                       ) : (
                         <div />
@@ -591,11 +609,10 @@ export default function IndexPage() {
                 size="small"
                 onClick={() => {
                   setDTitle('Update Cluster');
-                  console.log(sClusters[isClick]);
-                  const temp = [];
+                  const temp: any = [];
                   const source = sClusters[isClick] || {};
 
-                  info.map((sub) => {
+                  info.map((sub: any) => {
                     if (sub.key === 'id' || sub.key === 'name') {
                       sub = {
                         ...sub,
@@ -606,25 +623,26 @@ export default function IndexPage() {
                         },
                       };
                     }
-                    let res = '';
-                    if (typeof source[sub.key] === 'object') {
-                      try {
-                        if (source[sub.key]) {
-                          res = JSON.stringify(source[sub.key], null, 2);
-                        }
-                      } catch (e) {
-                        console.log(e);
-                      }
+
+                    if (sub.parent) {
+                      sub = {
+                        ...sub,
+                        formprops: {
+                          ...sub.formprops,
+                          initialValue:
+                            (source[sub.parent] || {})[sub.key] || undefined,
+                        },
+                      };
                     } else {
-                      res = source[sub.key];
+                      sub = {
+                        ...sub,
+                        formprops: {
+                          ...sub.formprops,
+                          initialValue: source[sub.key] || undefined,
+                        },
+                      };
                     }
-                    sub = {
-                      ...sub,
-                      formprops: {
-                        ...sub.formprops,
-                        initialValue: res,
-                      },
-                    };
+
                     temp.push(sub);
                   });
 
@@ -641,6 +659,9 @@ export default function IndexPage() {
             }
           >
             {info.map((sub: any, idx: number) => {
+              const source = sClusters[isClick] || {};
+              if (sub.title) return null;
+
               return (
                 <Descriptions.Item
                   label={sub.en_US}
@@ -653,34 +674,13 @@ export default function IndexPage() {
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  {sub.type === 'json' ? (
-                    <Button
-                      type="link"
-                      className={styles.newBtn}
-                      onClick={() => {
-                        // 默认第一个集群选中
-                        let temp = (sClusters[isClick] || {})[sub.key] || '';
-                        if (typeof temp !== 'string') {
-                          try {
-                            temp = JSON.stringify(temp, null, 2);
-                          } catch (e) {
-                            console.log(e);
-                          }
-                        }
-                        setDTitle(sub.key);
-                        setJson(temp);
-                        setVisible(true);
-                      }}
-                    >
-                      View Details
-                    </Button>
+                  {sub.parent ? (
+                    <div>{(source[sub.parent] || {})[sub.key] || '-'}</div>
                   ) : (
                     <div>
                       {sub.key === 'cdn_cluster_id'
-                        ? cClusters.filter(
-                            (e) => e.id === (sClusters[isClick] || {})[sub.key],
-                          )[0]?.name || ''
-                        : (sClusters[isClick] || {})[sub.key] || '--'}
+                        ? (source['cdn_clusters'] || [])[0]?.name || '-'
+                        : (source || {})[sub.key] || '-'}
                     </div>
                   )}
                 </Descriptions.Item>
@@ -780,7 +780,7 @@ export default function IndexPage() {
           options={{
             readOnly: !dTitle.includes('Update'),
           }}
-          onChange={(v) => {
+          onChange={(v: any) => {
             setUpdateInfo(v);
           }}
         />
@@ -792,9 +792,6 @@ export default function IndexPage() {
           setFormVisible(false);
           setFormSchema(info);
           setUpdateVisible(false);
-        }}
-        bodyStyle={{
-          paddingLeft: 0,
         }}
         footer={[
           <Button
@@ -811,40 +808,32 @@ export default function IndexPage() {
             key="submit"
             type="primary"
             onClick={() => {
-              let temp_scope = formInfo.scopes || {};
-              let temp_config = formInfo.config || {};
-              let temp_client = formInfo.client_config || {
-                load_limit: 100,
-              };
-
-              try {
-                if (temp_scope && typeof temp_scope === 'string') {
-                  temp_scope = JSON.parse(formInfo.scopes);
-                } else if (temp_config && typeof temp_config === 'string') {
-                  temp_config = JSON.parse(formInfo.config);
-                } else if (temp_client && typeof temp_client === 'string') {
-                  temp_client = JSON.parse(formInfo.client_config);
-                }
-              } catch (e) {
-                console.log('errors:', e);
-              }
               if (formInfo.security_group_id) {
                 formInfo.security_group_domain = formInfo.security_group_id;
               }
+
+              const params = {
+                ...formInfo,
+                scopes: {
+                  idc: formInfo?.idc || '',
+                  net_topology: formInfo?.net_topology || '',
+                  location: formInfo?.location || '',
+                },
+                config: {
+                  filter_parent_count: formInfo?.filter_parent_count || 3,
+                },
+                client_config: {
+                  load_limit: formInfo?.load_limit || 50,
+                  parallel_count: formInfo?.parallel_count || 4,
+                },
+              };
+
               if (dTitle.includes('Add')) {
-                createClusters({
-                  ...formInfo,
-                  scopes: temp_scope,
-                  config: temp_config,
-                  client_config: temp_client,
-                });
+                createClusters(params);
               } else {
                 updateClusterById({
-                  id: sClusters[isClick].id.toString(),
-                  ...formInfo,
-                  scopes: temp_scope,
-                  config: temp_config,
-                  client_config: temp_client,
+                  id: sClusters[isClick]?.id?.toString(),
+                  ...params,
                 });
               }
             }}
@@ -854,82 +843,37 @@ export default function IndexPage() {
         ]}
       >
         {updateVisible ? (
-          <Tabs tabPosition={'left'}>
-            <Tabs.TabPane tab="basic info" key="1">
-              <Form
-                labelAlign="left"
-                layout="vertical"
-                onValuesChange={(cv, v) => {
-                  setFormInfo((pre) => {
-                    return {
-                      ...pre,
-                      ...cv,
-                    };
-                  });
-                }}
-              >
-                {formSchema.map((sub: any) => {
-                  const Content = comsKeys[sub.type || 'input'];
-                  if (!sub.hide && sub.tab === '1') {
-                    return (
-                      <Form.Item
-                        name={sub.key}
-                        key={sub.key}
-                        label={sub.en_US}
-                        {...(sub.formprops || {})}
-                      >
-                        <Content
-                          {...sub.props}
-                          onClick={() => {
-                            if (sub.key === 'cdn_cluster_id') {
-                              getCDNClusters();
-                            } else if (sub.key === 'security_group_id') {
-                              getSecGroups();
-                            }
-                          }}
-                          onChange={(v: any) => {
-                            console.log(v);
-                          }}
-                          options={formOps[sub.key] || {}}
-                        />
-                      </Form.Item>
-                    );
-                  }
-                })}
-              </Form>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="configs" key="2">
-              <Form
-                labelAlign="left"
-                layout="vertical"
-                onValuesChange={(cv, v) => {
-                  setFormInfo((pre) => {
-                    return {
-                      ...pre,
-                      ...cv,
-                    };
-                  });
-                }}
-              >
-                {formSchema.map((sub: any) => {
-                  const Content = comsKeys[sub.type || 'input'];
-                  if (!sub.hide && sub.tab === '2') {
-                    let temp_props = sub.props || {};
-                    return (
-                      <Form.Item
-                        name={sub.key}
-                        key={sub.key}
-                        label={sub.en_US}
-                        {...(sub.formprops || {})}
-                      >
-                        <Content {...temp_props} />
-                      </Form.Item>
-                    );
-                  }
-                })}
-              </Form>
-            </Tabs.TabPane>
-          </Tabs>
+          <Form
+            labelAlign="left"
+            layout="vertical"
+            onValuesChange={(cv, v) => {
+              setFormInfo((pre: any) => {
+                return {
+                  ...v,
+                  ...pre,
+                  ...cv,
+                };
+              });
+            }}
+          >
+            {formSchema.map((sub: any) => {
+              const Content = comsKeys[sub.type || 'input'];
+              if (sub.title) {
+                return <h3>{sub.en_US}</h3>;
+              } else if (!sub.hide && sub.tab === '1') {
+                return (
+                  <Form.Item
+                    name={sub.key}
+                    key={sub.key}
+                    label={sub.en_US}
+                    {...(sub.formprops || {})}
+                  >
+                    <Content {...sub.props} />
+                  </Form.Item>
+                );
+              }
+            })}
+          </Form>
         ) : null}
       </Modal>
       <Drawer

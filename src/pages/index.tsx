@@ -11,10 +11,11 @@ import styles from './index.less';
 const comsKey = {
   password: Input.Password,
   passwordT: Input.Password,
+  input: Input,
 };
 
 // login
-const particles = [];
+const particles: any = [];
 const particleCount = 600;
 let tick = 0;
 const unit = 30;
@@ -23,7 +24,7 @@ const rows = 24;
 const w = unit * cols;
 const h = unit * rows;
 
-export default function IndexPage({ location }) {
+export default function IndexPage({}) {
   const [hasAccount, setAccount] = useState(true);
   const [loading, setLoading] = useState(true);
   const [oauthInfo, setOauthInfo] = useState({
@@ -32,66 +33,93 @@ export default function IndexPage({ location }) {
     githubOauth: {},
     googleOauth: {},
   });
-  const [isBoot, setIsBoot] = useState(false);
 
   useEffect(() => {
-    getOauth();
     getConfigs();
+    getOauth();
+    // deleteConfigById(4)
 
-    const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
-
-    if (userInfo.id) {
-      history.push('/configuration/scheduler-cluster');
-    }
     setLoading(false);
 
     // 动效
-    const canvas = document.querySelector('#animation-canvas');
-    const ctx = canvas.getContext('2d');
-    const step = () => {
-      if (particles.length < particleCount) {
-        particles.push(new Particle(ctx));
-      }
-      let i = particles.length;
-      while (i--) {
-        particles[i].step();
-      }
-      tick++;
-    };
-    const draw = () => {
-      ctx.clearRect(0, 0, w, h);
+    const canvas: any = document.querySelector('#animation-canvas');
+    const ctx: any = canvas?.getContext('2d');
+    if (canvas && ctx) {
+      init(canvas, ctx);
+    }
+  }, []);
+
+  const init = (canvas: any, ctx: any) => {
+    canvas.width = w;
+    canvas.height = h;
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineWidth = 2;
+    loop(ctx);
+  };
+
+  const requestAnimationFrame =
+    window.requestAnimationFrame ||
+    ((cb) => {
+      setTimeout(cb, 0);
+    });
+
+  const start = Date.now();
+  let myReq = undefined;
+
+  const loop = (ctx: any) => {
+    myReq = requestAnimationFrame(loop);
+    if (myReq > 1000) {
+      window.cancelAnimationFrame(myReq);
+    }
+    if (ctx) {
+      step(ctx);
+      draw(ctx);
+    }
+  };
+
+  const step = (ctx: any) => {
+    if (particles.length < particleCount) {
+      particles.push(new Particle(ctx));
+    }
+    let i = particles.length;
+    while (i--) {
+      particles[i].step();
+    }
+    tick++;
+  };
+
+  const draw = (ctx: any) => {
+    if (typeof ctx === 'object') {
+      ctx?.clearRect(0, 0, w, h);
       let i = particles.length;
       while (i--) {
         particles[i].draw();
       }
-    };
-    const requestAnimationFrame =
-      window.requestAnimationFrame ||
-      ((cb) => {
-        setTimeout(cb, 0);
-      });
-    const loop = () => {
-      requestAnimationFrame(loop);
-      step();
-      draw();
-    };
-    const init = () => {
-      canvas.width = w;
-      canvas.height = h;
-      ctx.globalCompositeOperation = 'lighter';
-      ctx.lineWidth = 2;
-      loop();
-    };
-    init();
-  }, []);
+    }
+  };
+
+  const deleteConfigById = async (id: number) => {
+    request(`/api/v1/configs/${id}`, {
+      method: 'delete',
+    });
+  };
 
   const getConfigs = async () => {
-    const res = await request(`/api/v1/configs?name=is_boot`);
-    console.log(res);
-    if (res && res.length > 0) {
-      history.push('/configuration/scheduler-cluster');
-    } else {
-      setIsBoot(true);
+    const res = await request('/api/v1/configs?name=is_boot');
+    if (
+      res?.length === 0 ||
+      (res?.filter((el: any) => el.name === 'is_boot') || [])[0].value === '0'
+    ) {
+      history.push('/installation');
+    } else if (
+      res &&
+      (res?.filter((el: any) => el.name === 'is_boot') || [])[0].value === '1'
+    ) {
+      const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
+
+      if (userInfo.id) {
+        history.push('/configuration/scheduler-cluster');
+      }
     }
   };
 
@@ -101,8 +129,7 @@ export default function IndexPage({ location }) {
       data: params,
     });
     if (res) {
-      message.success('Success');
-      history.push('/configuration/scheduler-cluster');
+      getConfigs();
     } else {
       message.error('Incorrect authentication credentials');
     }
@@ -177,10 +204,6 @@ export default function IndexPage({ location }) {
       message.error('Incorrect');
     }
   };
-
-  // if (isBoot) {
-  //   return ();
-  // }
 
   return (
     <Spin

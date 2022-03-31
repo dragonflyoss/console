@@ -294,14 +294,13 @@ export const updateOptions = [
 
 export const cdnOptions = [
   {
-    label: 'Security Group ID',
-    value: 'security_group_id',
-    type: 'select',
+    label: 'Load Limit',
+    value: 'load_limit',
+    type: 'InputNumber',
   },
   {
-    label: 'Config',
-    value: 'config',
-    type: 'json',
+    label: 'Net Topology',
+    value: 'net_topology',
   },
 ];
 
@@ -339,32 +338,40 @@ export const cdnInfo = [
     en_US: 'Description',
   },
   {
-    key: 'security_group_id',
-    label: 'security_group_id',
-    type: 'select',
-    tab: '1',
-    props: {
-      placeholder: 'Please enter SecurityGroupID',
-    },
-    en_US: 'Security Group ID',
-  },
-  {
     key: 'config',
     label: '配置信息',
+    title: true,
     type: 'json',
-    tab: '2',
-    formprops: {
-      tooltip: 'CDN cluster config info',
-      required: true,
-      initialValue: JSON.stringify(
-        {
-          load_limit: 300,
-        },
-        null,
-        2,
-      ),
-    },
+    tab: '1',
     en_US: 'Config',
+  },
+  {
+    key: 'load_limit',
+    label: '负载限制',
+    tab: '1',
+    type: 'InputNumber',
+    formprops: {
+      required: true,
+      initialValue: 300,
+    },
+    props: {
+      placeholder: 'Please enter Load Limit, 1 - 5000',
+      min: 1,
+      max: 5000,
+      style: {
+        width: '100%',
+      },
+    },
+    en_US: 'Load Limit',
+  },
+  {
+    key: 'net_topology',
+    label: '',
+    tab: '1',
+    props: {
+      placeholder: 'Please enter Net Topology, separated by "|" characters',
+    },
+    en_US: 'Net Topology',
   },
   {
     key: 'created_at',

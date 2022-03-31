@@ -7,16 +7,14 @@ import {
   Button,
   Table,
   Descriptions,
-  Divider,
   Modal,
   Drawer,
   Form,
-  Tabs,
   Popconfirm,
   Tag,
-  Popover,
   Tooltip,
   message,
+  InputNumber,
 } from 'antd';
 import {
   CopyOutlined,
@@ -35,14 +33,13 @@ const comsKeys = {
   select: Select,
   json: CodeEditor,
   input: Input,
+  InputNumber: InputNumber,
 };
 
 // cdn
 export default function CDN() {
   // cdn scheduler clusters
   const [cClusters, setCdnClusters] = useState([]);
-  // security groups
-  const [secGroups, setGroup] = useState([]);
   // cluster item status
   const [isClick, setClick] = useState(0);
   const [isHover, setHover] = useState(0);
@@ -56,7 +53,7 @@ export default function CDN() {
   // dialog title
   const [dTitle, setDTitle] = useState('');
   // form dialog content
-  const [formInfo, setFormInfo] = useState({});
+  const [formInfo, setFormInfo] = useState<any>({});
   // form dialog schema
   const [formSchema, setFormSchema] = useState(cdnInfo);
   // json dialog content
@@ -64,7 +61,7 @@ export default function CDN() {
   // form dialog visible
   const [formVisible, setFormVisible] = useState(false);
   const [updateVisible, setUpdateVisible] = useState(false);
-  const [updateInfo, setUpdateInfo] = useState({});
+  const [updateInfo, setUpdateInfo] = useState<any>({});
   // json dialog visible
   const [visible, setVisible] = useState(false);
   const [copyVisible, setCopyVisible] = useState(false);
@@ -74,19 +71,15 @@ export default function CDN() {
   // drawer content
   const [drawContent, setDrawContent] = useState([
     {
-      label: 'security_group_id',
-      value: 'security_group_id',
-      type: 'select',
+      label: 'Load Limit',
+      value: 'load_limit',
+      type: 'InputNumber',
       key: 1,
     },
   ]);
   // drawer options
   const [drawOptions, setDrawOptions] = useState(cdnOptions);
   const [drawLoading, setDrawLoading] = useState(false);
-
-  const formOps = {
-    security_group_id: secGroups,
-  };
 
   useEffect(() => {
     getCdnClusters();
@@ -161,20 +154,6 @@ export default function CDN() {
 
       getCdnByClusterId(res[0].id);
       setCdnClusters(res);
-    }
-  };
-
-  const getSecGroups = async () => {
-    const res = await request('/api/v1/security-groups');
-    if (res && res.length > 0) {
-      setGroup(
-        res.map((el: any) => {
-          return {
-            label: el.name,
-            value: el.domain,
-          };
-        }),
-      );
     }
   };
 
@@ -498,8 +477,8 @@ export default function CDN() {
                 size="small"
                 onClick={() => {
                   setDTitle('Update Cluster');
-                  const temp = [];
-                  cdnInfo.map((sub) => {
+                  const temp: any = [];
+                  cdnInfo.map((sub: any) => {
                     if (sub.key === 'id' || sub.key === 'name') {
                       sub = {
                         ...sub,
@@ -510,28 +489,33 @@ export default function CDN() {
                         },
                       };
                     }
-                    const source = cClusters[isClick] || {};
-                    let res = '';
-                    if (typeof source[sub.key] === 'object') {
-                      try {
-                        if (source[sub.key]) {
-                          res = JSON.stringify(source[sub.key], null, 2);
-                        }
-                      } catch (e) {
-                        console.log(e);
-                      }
+
+                    const source: any = cClusters[isClick] || {};
+
+                    if (
+                      sub.key === 'load_limit' ||
+                      sub.key === 'net_topology'
+                    ) {
+                      sub = {
+                        ...sub,
+                        formprops: {
+                          ...sub.formprops,
+                          initialValue: source?.config[sub.key] || undefined,
+                        },
+                      };
                     } else {
-                      res = source[sub.key];
+                      sub = {
+                        ...sub,
+                        formprops: {
+                          ...sub.formprops,
+                          initialValue: source[sub.key] || undefined,
+                        },
+                      };
                     }
-                    sub = {
-                      ...sub,
-                      formprops: {
-                        ...sub.formprops,
-                        initialValue: res,
-                      },
-                    };
+
                     temp.push(sub);
                   });
+
                   setFormSchema(temp);
                   setFormVisible(true);
                   setTimeout(() => {
@@ -544,6 +528,7 @@ export default function CDN() {
             }
           >
             {cdnInfo.map((sub: any, idx: number) => {
+              if (sub.title) return null;
               return (
                 <Descriptions.Item
                   label={sub.en_US}
@@ -556,29 +541,10 @@ export default function CDN() {
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  {sub.type === 'json' ? (
-                    <Button
-                      type="link"
-                      className={styles.newBtn}
-                      onClick={() => {
-                        // 默认第一个集群选中
-                        let temp = (cClusters[isClick] || {})[sub.key] || '';
-                        if (typeof temp !== 'string') {
-                          try {
-                            temp = JSON.stringify(temp, null, 2);
-                          } catch (e) {
-                            console.log(e);
-                          }
-                        }
-                        setDTitle(sub.key);
-                        setJson(temp);
-                        setVisible(true);
-                      }}
-                    >
-                      View Details
-                    </Button>
+                  {sub.key === 'load_limit' || sub.key === 'net_topology' ? (
+                    <div>{cClusters[isClick]?.config[sub.key] || '-'}</div>
                   ) : (
-                    <div>{(cClusters[isClick] || {})[sub.key] || '--'}</div>
+                    <div>{(cClusters[isClick] || {})[sub.key] || '-'}</div>
                   )}
                 </Descriptions.Item>
               );
@@ -691,9 +657,6 @@ export default function CDN() {
           setFormVisible(false);
           setUpdateVisible(false);
         }}
-        bodyStyle={{
-          paddingLeft: 0,
-        }}
         footer={[
           <Button
             key="back"
@@ -710,37 +673,28 @@ export default function CDN() {
             key="submit"
             type="primary"
             onClick={() => {
-              let temp_scope = {};
               let temp_config = {};
-              let temp_client = {};
               try {
-                if (formInfo.scopes) {
-                  temp_scope = JSON.parse(formInfo.scopes);
-                } else if (formInfo.config) {
-                  temp_config = JSON.parse(formInfo.config);
-                } else if (formInfo.client_config) {
-                  temp_client = JSON.parse(formInfo.client_config);
-                }
+                temp_config = JSON.parse(formInfo.config);
               } catch (e) {
                 console.log('errors:', e);
-              }
-              if (formInfo.security_group_id) {
-                formInfo.security_group_domain = formInfo.security_group_id;
               }
               if (dTitle.includes('Add')) {
                 createClusters({
                   ...formInfo,
-                  scopes: temp_scope,
-                  config: temp_config,
-                  client_config: temp_client,
+                  config: {
+                    load_limit: formInfo?.load_limit || 1,
+                    net_topology: formInfo?.net_topology || '',
+                  },
                 });
               } else {
                 updateClusterById({
-                  id: cClusters[isClick].id.toString(),
+                  id: cClusters[isClick]?.id?.toString(),
                   ...formInfo,
-                  scopes: temp_scope,
-                  config: temp_config,
-                  client_config: temp_client,
+                  config: {
+                    load_limit: formInfo?.load_limit || 1,
+                    net_topology: formInfo?.net_topology || '',
+                  },
                 });
               }
             }}
@@ -750,76 +704,36 @@ export default function CDN() {
         ]}
       >
         {updateVisible ? (
-          <Tabs tabPosition={'left'}>
-            <Tabs.TabPane tab="basic info" key="1">
-              <Form
-                labelAlign="left"
-                layout="vertical"
-                onValuesChange={(cv, v) => {
-                  setFormInfo((pre) => {
-                    return {
-                      ...pre,
-                      ...cv,
-                    };
-                  });
-                }}
-              >
-                {formSchema.map((sub: any) => {
-                  const Content = comsKeys[sub.type || 'input'];
-                  if (!sub.hide && sub.tab === '1') {
-                    return (
-                      <Form.Item
-                        name={sub.key}
-                        key={sub.key}
-                        label={sub.en_US}
-                        {...(sub.formprops || {})}
-                      >
-                        <Content
-                          {...sub.props}
-                          onClick={() => {
-                            if (sub.key === 'security_group_id') {
-                              getSecGroups();
-                            }
-                          }}
-                          options={formOps[sub.key] || {}}
-                        />
-                      </Form.Item>
-                    );
-                  }
-                })}
-              </Form>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="configs" key="2">
-              <Form
-                labelAlign="left"
-                layout="vertical"
-                onValuesChange={(cv, v) => {
-                  setFormInfo((pre) => {
-                    return {
-                      ...pre,
-                      ...cv,
-                    };
-                  });
-                }}
-              >
-                {formSchema.map((sub: any) => {
-                  const Content = comsKeys[sub.type || 'input'];
-                  if (!sub.hide && sub.tab === '2') {
-                    return (
-                      <Form.Item
-                        name={sub.key}
-                        key={sub.key}
-                        label={sub.en_US}
-                        {...(sub.formprops || {})}
-                      >
-                        <Content {...(sub.props || {})} />
-                      </Form.Item>
-                    );
-                  }
-                })}
-              </Form>
-            </Tabs.TabPane>
-          </Tabs>
+          <Form
+            labelAlign="left"
+            layout="vertical"
+            onValuesChange={(cv, v) => {
+              setFormInfo((pre) => {
+                return {
+                  ...pre,
+                  ...cv,
+                };
+              });
+            }}
+          >
+            {formSchema.map((sub: any) => {
+              const Content = comsKeys[sub.type || 'input'];
+              if (sub.title) {
+                return <h3>{sub.en_US}</h3>;
+              } else if (!sub.hide && sub.tab === '1') {
+                return (
+                  <Form.Item
+                    name={sub.key}
+                    key={sub.key}
+                    label={sub.en_US}
+                    {...(sub.formprops || {})}
+                  >
+                    <Content {...sub.props} />
+                  </Form.Item>
+                );
+              }
+            })}
+          </Form>
         ) : null}
       </Modal>
       <Drawer
@@ -829,9 +743,9 @@ export default function CDN() {
           setDrawVisible(false);
           setDrawContent([
             {
-              label: 'security_group_id',
-              value: 'security_group_id',
-              type: 'select',
+              label: 'Load Limit',
+              value: 'load_limit',
+              type: 'InputNumber',
               key: 1,
             },
           ]);
@@ -846,9 +760,9 @@ export default function CDN() {
               setDrawVisible(false);
               setDrawContent([
                 {
-                  label: 'security_group_id',
-                  value: 'security_group_id',
-                  type: 'select',
+                  label: 'Load Limit',
+                  value: 'load_limit',
+                  type: 'InputNumber',
                   key: 1,
                 },
               ]);
@@ -865,7 +779,7 @@ export default function CDN() {
             type="primary"
             onClick={() => {
               const config = {};
-              drawContent.forEach((sub) => {
+              drawContent.forEach((sub: any) => {
                 let res = sub.update;
                 if (typeof sub.update === 'string') {
                   try {
@@ -879,7 +793,7 @@ export default function CDN() {
               checkKeys.forEach((id) => {
                 updateClusterById({
                   id,
-                  ...config,
+                  config: config,
                 });
               });
             }}
@@ -920,7 +834,7 @@ export default function CDN() {
                   }}
                   onChange={(v, o) => {
                     setDrawLoading(true);
-                    setDrawContent((pre) => {
+                    setDrawContent((pre: any) => {
                       pre[idx] = {
                         ...pre[idx],
                         ...o,
@@ -939,14 +853,8 @@ export default function CDN() {
                   style={{
                     width: 300,
                   }}
-                  options={formOps[el.value] || {}}
-                  onClick={() => {
-                    if (el.value === 'security_group_id') {
-                      getSecGroups();
-                    }
-                  }}
-                  onChange={(v) => {
-                    setDrawContent((pre) => {
+                  onChange={(v: any) => {
+                    setDrawContent((pre: any) => {
                       pre[idx] = {
                         ...pre[idx],
                         update: v,

@@ -329,7 +329,7 @@ export default function CDN() {
               cancelText="No"
             >
               <Button type="link" className={styles.newBtn}>
-                DELETE
+                Delete
               </Button>
             </Popconfirm>
           </div>
@@ -480,6 +480,7 @@ export default function CDN() {
         <div className={styles.right}>
           <Descriptions
             title="Cluster Info"
+            column={{ xxl: 4, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }}
             extra={
               <Button
                 type="primary"
@@ -537,23 +538,58 @@ export default function CDN() {
             }
           >
             {cdnInfo.map((sub: any, idx: number) => {
+              const source = cClusters[isClick] || {};
+
               if (sub.title) return null;
               return (
                 <Descriptions.Item
-                  label={sub.en_US}
+                  label={
+                    <Tooltip title={sub.en_US}>
+                      <div
+                        style={{
+                          width: '90%',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {sub.en_US}
+                      </div>
+                    </Tooltip>
+                  }
                   key={idx}
                   labelStyle={{
-                    width: '120px',
+                    width: '140px',
                     alignItems: 'center',
-                    textOverflow: 'ellipsis',
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
+                    flex: '0 0 140px',
                   }}
                 >
                   {sub.key === 'load_limit' || sub.key === 'net_topology' ? (
-                    <div>{cClusters[isClick]?.config[sub.key] || '-'}</div>
+                    <Tooltip title={(source?.config || {})[sub.key] || '-'}>
+                      <div
+                        style={{
+                          width: '90%',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {(source?.config || {})[sub.key] || '-'}
+                      </div>
+                    </Tooltip>
                   ) : (
-                    <div>{(cClusters[isClick] || {})[sub.key] || '-'}</div>
+                    <Tooltip title={source[sub.key] || '-'}>
+                      <div
+                        style={{
+                          width: '90%',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {source[sub.key] || '-'}
+                      </div>
+                    </Tooltip>
                   )}
                 </Descriptions.Item>
               );

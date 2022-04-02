@@ -119,7 +119,7 @@ export default function Oauth() {
         >
           <Form.Item
             label="OAuth Type"
-            name="name"
+            name="type"
             rules={[
               { required: true, message: 'Please check your OAuth Typ!' },
             ]}

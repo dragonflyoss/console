@@ -113,8 +113,8 @@ export const info = [
     en_US: 'Location',
   },
   {
-    key: 'filter_parent_count',
-    label: 'Filter Parent Count',
+    key: 'filter_parent_limit',
+    label: 'Filter Parent Limit',
     tab: '1',
     type: 'InputNumber',
     parent: 'config',
@@ -123,7 +123,7 @@ export const info = [
       initialValue: 3,
     },
     props: {
-      placeholder: 'Please enter Filter Parent Count, 1-100',
+      placeholder: 'Please enter Filter Parent Limit, 1 - 100',
       min: 1,
       max: 100,
       style: {

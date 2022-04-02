@@ -87,12 +87,26 @@ export default function BasicLayout({
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="profile">
-        <Button type="text" onClick={() => history.push('/profile')}>
+        <Button
+          type="text"
+          onClick={() => history.push(`/profile/${user.id}`)}
+          style={{
+            padding: 0,
+            height: 'auto',
+          }}
+        >
           Your Profile
         </Button>
       </Menu.Item>
       <Menu.Item key="sign_out">
-        <Button type="text" onClick={() => signout()}>
+        <Button
+          type="text"
+          onClick={() => signout()}
+          style={{
+            padding: 0,
+            height: 'auto',
+          }}
+        >
           Sign Out
         </Button>
       </Menu.Item>
@@ -114,7 +128,7 @@ export default function BasicLayout({
           />
           Dragonfly */}
         </div>
-        <Dropdown overlay={menu} trigger={['click']}>
+        <Dropdown overlay={menu} trigger={['click', 'hover']} placement="bottomRight">
           <Avatar
             style={{
               // backgroundColor: '#23B066',
@@ -164,9 +178,9 @@ export default function BasicLayout({
               <Menu.Item key="cdn-cluster">
                 <Link to="/configuration/cdn-cluster">CDN Cluster</Link>
               </Menu.Item>
-              <Menu.Item key="application">
+              {/* <Menu.Item key="application">
                 <Link to="/configuration/application">Application</Link>
-              </Menu.Item>
+              </Menu.Item> */}
               <Menu.Item key="security">
                 <Link to="/configuration/security">Security</Link>
               </Menu.Item>

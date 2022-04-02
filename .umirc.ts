@@ -5,7 +5,7 @@ export default defineConfig({
   nodeModulesTransform: {
     type: 'none',
   },
-  favicon: '/static/logo-dragonfly.faab8a98.png',
+  favicon: 'logo-dragonfly.png',
   routes: [
     {
       exact: true,
@@ -21,7 +21,7 @@ export default defineConfig({
       routes: [
         {
           exact: true,
-          path: '/profile',
+          path: '/profile/:id',
           component: '@/pages/profile',
         },
       ],

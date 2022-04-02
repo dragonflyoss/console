@@ -408,7 +408,7 @@ export default function IndexPage() {
       key: 'state',
       width: 120,
       render: (v: string) => {
-        return <Tag color={v === 'active' ? 'green' : 'cyan'}>{v || '-'}</Tag>;
+        return <Tag color={v === 'active' ? 'green' : 'cyan'}>{v.toUpperCase() || '-'}</Tag>;
       },
     },
     {
@@ -603,6 +603,7 @@ export default function IndexPage() {
         <div className={styles.right}>
           <Descriptions
             title="Cluster Info"
+            column={{ xxl: 4, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }}
             extra={
               <Button
                 type="primary"
@@ -664,24 +665,61 @@ export default function IndexPage() {
 
               return (
                 <Descriptions.Item
-                  label={sub.en_US}
+                  label={
+                    <Tooltip title={sub.en_US}>
+                      <div
+                        style={{
+                          width: '90%',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {sub.en_US}
+                      </div>
+                    </Tooltip>
+                  }
                   key={idx}
                   labelStyle={{
-                    width: '120px',
+                    width: '140px',
                     alignItems: 'center',
-                    textOverflow: 'ellipsis',
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
+                    flex: '0 0 140px'
                   }}
                 >
                   {sub.parent ? (
-                    <div>{(source[sub.parent] || {})[sub.key] || '-'}</div>
+                    <Tooltip title={(source[sub.parent] || {})[sub.key] || '-'}>
+                      <div
+                        style={{
+                          width: '90%',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {(source[sub.parent] || {})[sub.key] || '-'}
+                      </div>
+                    </Tooltip>
                   ) : (
-                    <div>
-                      {sub.key === 'cdn_cluster_id'
-                        ? (source['cdn_clusters'] || [])[0]?.name || '-'
-                        : (source || {})[sub.key] || '-'}
-                    </div>
+                    <Tooltip
+                      title={
+                        sub.key === 'cdn_cluster_id'
+                          ? (source['cdn_clusters'] || [])[0]?.name || '-'
+                          : (source || {})[sub.key] || '-'
+                      }
+                    >
+                      <div
+                        style={{
+                          width: '90%',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {sub.key === 'cdn_cluster_id'
+                          ? (source['cdn_clusters'] || [])[0]?.name || '-'
+                          : (source || {})[sub.key] || '-'}
+                      </div>
+                    </Tooltip>
                   )}
                 </Descriptions.Item>
               );
@@ -820,7 +858,7 @@ export default function IndexPage() {
                   location: formInfo?.location || '',
                 },
                 config: {
-                  filter_parent_count: formInfo?.filter_parent_count || 3,
+                  filter_parent_limit: formInfo?.filter_parent_limit || 3,
                 },
                 client_config: {
                   load_limit: formInfo?.load_limit || 50,

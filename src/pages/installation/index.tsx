@@ -191,7 +191,6 @@ export default function Installation({}) {
               width={600}
               height={446}
               style={{
-                background: '#fff',
                 padding: 12,
               }}
             />

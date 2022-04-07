@@ -1,18 +1,13 @@
-import { useState } from 'react';
-import { request, history } from 'umi';
-import { Button, message, Steps, Divider } from 'antd';
-import {
-  UserOutlined,
-  SolutionOutlined,
-  SmileOutlined,
-  FormOutlined,
-} from '@ant-design/icons';
-import styles from './index.less';
+import { useState } from 'react'
+import { request, history } from 'umi'
+import { Button, message, Steps, Divider } from 'antd'
+import { UserOutlined, SolutionOutlined, SmileOutlined, FormOutlined } from '@ant-design/icons'
+import styles from './index.less'
 
-const { Step } = Steps;
+const { Step } = Steps
 
 export default function Installation({}) {
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(0)
 
   const createConfig = async () => {
     request('/api/v1/configs', {
@@ -24,42 +19,42 @@ export default function Installation({}) {
       },
     }).then((value: any) => {
       if (value.value === '1') {
-        message.success('Processing complete!');
-        history.push('/configuration/scheduler-cluster');
+        message.success('Processing complete!')
+        history.push('/configuration/scheduler-cluster')
       }
-    });
-  };
+    })
+  }
 
   const signin = async (params: any) => {
     const res = await request('/api/v1/users/signin', {
       method: 'post',
       data: params,
-    });
+    })
     if (res) {
-      setCurrent(current + 1);
+      setCurrent(current + 1)
     } else {
-      message.error('Incorrect authentication credentials');
+      message.error('Incorrect authentication credentials')
     }
-  };
+  }
 
   const next = () => {
     if (current === 0) {
       signin({
         name: 'root',
         password: 'dragonfly',
-      });
+      })
     }
-    setCurrent(current + 1);
-  };
+    setCurrent(current + 1)
+  }
 
   const prev = () => {
-    setCurrent(current - 1);
-  };
+    setCurrent(current - 1)
+  }
 
   const boldStyle = {
     color: '#34dd84',
     fontWeight: 'bold',
-  };
+  }
 
   const steps: any = [
     {
@@ -67,14 +62,11 @@ export default function Installation({}) {
       description: '',
       actionContent: (
         <>
-          Dragonfly is an intelligent P2P-based image and file distribution
-          tool.
+          Dragonfly is an intelligent P2P-based image and file distribution tool.
           <p>
-            It aims to improve the efficiency and success rate of file
-            transferring, and maximize the usage of network bandwidth,
-            especially for the distribution of larget amounts of data, such as
-            application distribution, cache distribution, log distribution, and
-            image distribution.
+            It aims to improve the efficiency and success rate of file transferring, and maximize the usage of network
+            bandwidth, especially for the distribution of larget amounts of data, such as application distribution,
+            cache distribution, log distribution, and image distribution.
           </p>
           <Divider style={{ background: '#fff' }} />
           <p>For the first login, please use the default root user account.</p>
@@ -94,34 +86,21 @@ export default function Installation({}) {
         <>
           <p>A CDN cluster needs to be created in a P2P network.</p>
           <div className={styles.imgBox}>
-            <img
-              src={require('@/public/bg_install_03.png')}
-              width={600}
-              height={300}
-            />
+            <img src={require('@/public/bg_install_03.png')} width={600} height={300} />
           </div>
           The created CDN cluster id is&nbsp;
           <span style={boldStyle}>1</span>
-          . When deploying a CDN instance, you need to report the CDN cluster id
-          associated with the CDN instance, and the manager service address.
+          . When deploying a CDN instance, you need to report the CDN cluster id associated with the CDN instance, and
+          the manager service address.
           <Divider style={{ background: '#fff' }} />
           <div className={styles.imgBox}>
-            <img
-              src={require('@/public/bg_install_07.png')}
-              width={300}
-              height={140}
-            />
+            <img src={require('@/public/bg_install_07.png')} width={300} height={140} />
           </div>
           <p>
             For details, refer to the two fields&nbsp;
             <span style={boldStyle}>manager.addr</span>&nbsp; and&nbsp;
-            <span style={boldStyle}>manager.cdnClusterID</span>&nbsp; in
-            the&nbsp;
-            <a
-              href="https://d7y.netlify.app/docs/reference/configuration/cdn/"
-              target="_blank"
-              style={boldStyle}
-            >
+            <span style={boldStyle}>manager.cdnClusterID</span>&nbsp; in the&nbsp;
+            <a href="https://d7y.io/docs/reference/configuration/cdn/" target="_blank" style={boldStyle}>
               CDN configuration
             </a>
             .
@@ -136,34 +115,27 @@ export default function Installation({}) {
         <>
           <p>A scheduler cluster needs to be created in a P2P network.</p>
           <div className={styles.imgBox}>
-            <img
-              src={require('@/public/bg_install_05.png')}
-              width={800}
-              height={181}
-            />
+            <img src={require('@/public/bg_install_05.png')} width={800} height={181} />
           </div>
           <p>
-            CDN instances in the CDN cluster associated with the scheduler
-            cluster will become the download root node in the P2P network. The
-            CDN cluster field in the scheduler cluster form is the CDN cluster
-            associated with the scheduler clsuter in the P2P network.
+            CDN instances in the CDN cluster associated with the scheduler cluster will become the download root node in
+            the P2P network. The CDN cluster field in the scheduler cluster form is the CDN cluster associated with the
+            scheduler clsuter in the P2P network.
           </p>
           <Divider style={{ background: '#fff' }} />
           <div className={styles.imgBox}>
-            <img
-              src={require('@/public/bg_install_06.png')}
-              width={300}
-              height={140}
-            />
+            <img src={require('@/public/bg_install_06.png')} width={300} height={140} />
           </div>
           <p>
-            The created scheduler cluster id is <span style={boldStyle}>1</span>
-            . When deploying a scheduler instance, you need to report the
-            scheduler cluster id associated with the scheduler instance, and the
-            manager service address. For details, refer to the two fields&nbsp;
+            The created scheduler cluster id is <span style={boldStyle}>1</span>. When deploying a scheduler instance,
+            you need to report the scheduler cluster id associated with the scheduler instance, and the manager service
+            address. For details, refer to the two fields&nbsp;
             <span style={boldStyle}>manager.addr</span> and
             <span style={boldStyle}>manager.schedulerClusterID</span> in the
-            scheduler configuration.
+            <a href="https://d7y.io/docs/reference/configuration/scheduler/" target="_blank" style={boldStyle}>
+              scheduler configuration
+            </a>
+            .
           </p>
         </>
       ),
@@ -174,13 +146,8 @@ export default function Installation({}) {
       actionContent: (
         <>
           <p>
-            The P2P network basic information is created. You can deploy
-            scheduler, cdn and dfdaemon, refer to&nbsp;
-            <a
-              href="https://d7y.netlify.app/docs/getting-started/quick-start/"
-              target="_blank"
-              style={boldStyle}
-            >
+            The P2P network basic information is created. You can deploy scheduler, cdn and dfdaemon, refer to&nbsp;
+            <a href="https://d7y.io/docs/" target="_blank" style={boldStyle}>
               getting-start
             </a>
             .
@@ -198,14 +165,9 @@ export default function Installation({}) {
         </>
       ),
     },
-  ];
+  ]
 
-  const icons: any = [
-    <SmileOutlined />,
-    <SolutionOutlined />,
-    <FormOutlined />,
-    <UserOutlined />,
-  ];
+  const icons: any = [<SmileOutlined />, <SolutionOutlined />, <FormOutlined />, <UserOutlined />]
 
   return (
     <div className={styles.main}>
@@ -216,7 +178,7 @@ export default function Installation({}) {
           direction="vertical"
           current={current}
           onChange={(v: number) => {
-            setCurrent(v);
+            setCurrent(v)
           }}
           className={styles.stepContainer}
         >
@@ -242,9 +204,7 @@ export default function Installation({}) {
         <div className={styles.stepFlex}>
           <div className={styles.stepAction}>
             <div className={styles.stepActionTitle}>{steps[current].title}</div>
-            <div className={styles.stepActionContent}>
-              {steps[current].actionContent}
-            </div>
+            <div className={styles.stepActionContent}>{steps[current].actionContent}</div>
             {current < steps.length - 1 && (
               <Button
                 type="primary"
@@ -260,7 +220,7 @@ export default function Installation({}) {
               <Button
                 type="primary"
                 onClick={() => {
-                  createConfig();
+                  createConfig()
                 }}
                 style={{
                   width: 300,
@@ -279,5 +239,5 @@ export default function Installation({}) {
         </div>
       </div>
     </div>
-  );
+  )
 }

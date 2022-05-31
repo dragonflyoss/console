@@ -24,7 +24,7 @@ import {
   EditOutlined,
 } from '@ant-design/icons';
 import moment from 'moment';
-import { cdnInfo, cdnOptions } from '../../../mock/data';
+import { seedPeerInfo, seedPeerOptions } from '../../../mock/data';
 import CodeEditor from '@/components/codeEditor';
 import styles from './index.less';
 
@@ -36,17 +36,17 @@ const comsKeys = {
   InputNumber: InputNumber,
 };
 
-// cdn
-export default function CDN() {
-  // cdn scheduler clusters
-  const [cClusters, setCdnClusters] = useState([]);
+// seed peer
+export default function SeedPeer() {
+  // seed peer clusters
+  const [seedPeerClusters, setSeedPeerClusters] = useState([]);
   // cluster item status
   const [isClick, setClick] = useState(0);
   const [isHover, setHover] = useState(0);
   // checked clusters
   const [checkKeys, setCheck] = useState([]);
 
-  const [cdns, setCDNs] = useState([]);
+  const [seedPeers, setSeedPeers] = useState([]);
   // TODO table current page
   const [current, setCurrent] = useState(1);
 
@@ -55,7 +55,7 @@ export default function CDN() {
   // form dialog content
   const [formInfo, setFormInfo] = useState<any>({});
   // form dialog schema
-  const [formSchema, setFormSchema] = useState(cdnInfo);
+  const [formSchema, setFormSchema] = useState(seedPeerInfo);
   // json dialog content
   const [json, setJson] = useState('');
   // form dialog visible
@@ -78,23 +78,23 @@ export default function CDN() {
     },
   ]);
   // drawer options
-  const [drawOptions, setDrawOptions] = useState(cdnOptions);
+  const [drawOptions, setDrawOptions] = useState(seedPeerOptions);
   const [drawLoading, setDrawLoading] = useState(false);
 
   useEffect(() => {
-    getCdnClusters();
+    getSeedPeerClusters();
   }, []);
 
-  const getCdnByClusterId = async (id: string | number) => {
-    const res = await request('/api/v1/cdns', {
+  const getSeedPeerByClusterId = async (id: string | number) => {
+    const res = await request('/api/v1/seed-peers', {
       params: {
         page: 1,
         per_page: 50,
-        cdn_cluster_id: id,
+        seed_peer_cluster_id: id,
       },
     });
     if (res && typeof res === 'object') {
-      setCDNs(
+      setSeedPeers(
         res.map((sub) => {
           return {
             ...sub,
@@ -105,38 +105,38 @@ export default function CDN() {
     }
   };
 
-  const updateCDNById = (id: string, config: any) => {
-    const res = request(`/api/v1/cdns/${id}`, {
+  const updateSeedPeerById = (id: string, config: any) => {
+    const res = request(`/api/v1/seed-peers/${id}`, {
       method: 'patch',
       data: config,
     });
     res.then(() => {
-      getCdnByClusterId(cClusters[isClick]?.id);
+      getSeedPeerByClusterId(seedPeerClusters[isClick]?.id);
       setVisible(false);
       message.success('Update Success');
     });
   };
 
-  const deleteCDNById = (id: number) => {
-    const res = request(`/api/v1/cdns/${id}`, {
+  const deleteSeedPeerById = (id: number) => {
+    const res = request(`/api/v1/seed-peers/${id}`, {
       method: 'delete',
     });
     res.then(() => {
       message.success('Delete Success');
-      getCdnByClusterId(cClusters[isClick]?.id);
+      getSeedPeerByClusterId(seedPeerClusters[isClick]?.id);
     });
   };
 
-  const createCDN = async (config: any) => {
-    const res = await request('/api/v1/cdns', {
+  const createSeedPeer = async (config: any) => {
+    const res = await request('/api/v1/seed-peers', {
       method: 'post',
       data: config,
     });
     console.log(res);
   };
 
-  const getCdnClusters = async () => {
-    const res = await request('/api/v1/cdn-clusters');
+  const getSeedPeerClusters = async () => {
+    const res = await request('/api/v1/seed-peer-clusters');
     if (res && typeof res === 'object' && res.length > 0) {
       res.map((sub) => {
         Object.keys(sub).map((el) => {
@@ -152,13 +152,13 @@ export default function CDN() {
         });
       });
 
-      getCdnByClusterId(res[0].id);
-      setCdnClusters(res);
+      getSeedPeerByClusterId(res[0].id);
+      setSeedPeerClusters(res);
     }
   };
 
   const createClusters = (config: any) => {
-    const res = request('/api/v1/cdn-clusters', {
+    const res = request('/api/v1/seed-peer-clusters', {
       method: 'post',
       data: config,
     });
@@ -167,14 +167,14 @@ export default function CDN() {
       message.success('Create Success');
       setFormVisible(false);
       setCopyVisible(false);
-      setFormSchema(cdnInfo);
+      setFormSchema(seedPeerInfo);
       setUpdateInfo({});
-      getCdnClusters();
+      getSeedPeerClusters();
     });
   };
 
   const updateClusterById = (config: any) => {
-    const res = request(`/api/v1/cdn-clusters/${config.id}`, {
+    const res = request(`/api/v1/seed-peer-clusters/${config.id}`, {
       method: 'patch',
       data: config,
     });
@@ -182,13 +182,13 @@ export default function CDN() {
       message.success('Update Success');
       setFormVisible(false);
       setDrawVisible(false);
-      getCdnClusters();
-      setFormSchema(cdnInfo);
+      getSeedPeerClusters();
+      setFormSchema(seedPeerInfo);
     });
   };
 
   const deleteClusterById = (id: number) => {
-    const res = request(`/api/v1/cdn-clusters/${id}`, {
+    const res = request(`/api/v1/seed-peer-clusters/${id}`, {
       method: 'delete',
     });
     res.then(() => {
@@ -200,7 +200,7 @@ export default function CDN() {
         return pre;
       });
       message.success('Delete Success');
-      getCdnClusters();
+      getSeedPeerClusters();
     });
   };
 
@@ -238,6 +238,19 @@ export default function CDN() {
             >
               {v || '-'}
             </Button>
+          </Tooltip>
+        );
+      },
+    },
+    {
+      title: 'Net Topology',
+      dataIndex: 'net_topology',
+      align: 'left',
+      key: 'net_topology',
+      render: (v: string) => {
+        return (
+          <Tooltip title={v}>
+            <div className={styles.tableItem}>{v || '-'}</div>
           </Tooltip>
         );
       },
@@ -312,7 +325,7 @@ export default function CDN() {
                 } catch (e) {
                   console.log(e);
                 }
-                setDTitle('Update CDN');
+                setDTitle('Update Seed Peer');
                 setUpdateInfo(res);
                 setVisible(true);
               }}
@@ -323,7 +336,7 @@ export default function CDN() {
             <Popconfirm
               title="Are you sure to delete this Scheduler?"
               onConfirm={() => {
-                deleteCDNById(t);
+                deleteSeedPeerById(t);
               }}
               okText="Yes"
               cancelText="No"
@@ -340,7 +353,7 @@ export default function CDN() {
 
   return (
     <div className={styles.main}>
-      <h1 className={styles.title}>CDN Cluster</h1>
+      <h1 className={styles.title}>Seed Peer Cluster</h1>
       <div className={styles.content}>
         <div className={styles.left}>
           <Search
@@ -351,10 +364,10 @@ export default function CDN() {
             }}
             onSearch={(v) => {
               if (v.length > 0) {
-                const f = cClusters.filter((sub) => sub.name.includes(v));
-                setCdnClusters(f);
+                const f = seedPeerClusters.filter((sub) => sub.name.includes(v));
+                setSeedPeerClusters(f);
               } else {
-                getCdnClusters();
+                getSeedPeerClusters();
               }
             }}
           />
@@ -368,7 +381,7 @@ export default function CDN() {
               }}
               onClick={() => {
                 setFormVisible(true);
-                setFormSchema(cdnInfo);
+                setFormSchema(seedPeerInfo);
                 setDTitle('Add Cluster');
                 setTimeout(() => {
                   setUpdateVisible(true);
@@ -400,14 +413,14 @@ export default function CDN() {
                 setCheck(v);
               }}
             >
-              {cClusters.map((sub: any, idx: number) => {
+              {seedPeerClusters.map((sub: any, idx: number) => {
                 return (
                   <Checkbox
                     key={sub.name}
                     value={sub.id}
                     onClick={() => {
                       setClick(idx);
-                      getCdnByClusterId(sub.id);
+                      getSeedPeerByClusterId(sub.id);
                     }}
                     onMouseEnter={() => {
                       setHover(sub.id);
@@ -437,7 +450,7 @@ export default function CDN() {
                     {isHover === sub.id ? (
                       <div className={styles.activeButton}>
                         <Popconfirm
-                          title="Are you sure to Copy this CDN Cluster?"
+                          title="Are you sure to copy this seed peer cluster?"
                           onConfirm={() => {
                             setUpdateInfo(sub);
                             setCopyVisible(true);
@@ -456,7 +469,7 @@ export default function CDN() {
                           </Button>
                         </Popconfirm>
                         <Popconfirm
-                          title="Are you sure to delete this CDN Cluster?"
+                          title="Are you sure to delete this seed peer cluster?"
                           onConfirm={() => {
                             deleteClusterById(sub.id);
                           }}
@@ -488,7 +501,7 @@ export default function CDN() {
                 onClick={() => {
                   setDTitle('Update Cluster');
                   const temp: any = [];
-                  cdnInfo.map((sub: any) => {
+                  seedPeerInfo.map((sub: any) => {
                     if (sub.key === 'id' || sub.key === 'name') {
                       sub = {
                         ...sub,
@@ -500,7 +513,7 @@ export default function CDN() {
                       };
                     }
 
-                    const source: any = cClusters[isClick] || {};
+                    const source: any = seedPeerClusters[isClick] || {};
 
                     if (
                       sub.key === 'load_limit' ||
@@ -537,8 +550,8 @@ export default function CDN() {
               </Button>
             }
           >
-            {cdnInfo.map((sub: any, idx: number) => {
-              const source = cClusters[isClick] || {};
+            {seedPeerInfo.map((sub: any, idx: number) => {
+              const source = seedPeerClusters[isClick] || {};
 
               if (sub.title) return null;
               return (
@@ -596,14 +609,14 @@ export default function CDN() {
             })}
           </Descriptions>
           <div className={styles.divideLine} />
-          <div className={styles.infoTitle}>CDN</div>
+          <div className={styles.infoTitle}>Seed Peer</div>
           <Table
-            dataSource={cdns}
+            dataSource={seedPeers}
             columns={columns}
             primaryKey="name"
             pagination={{
               pageSize: 10,
-              total: cdns.length,
+              total: seedPeers.length,
             }}
           />
         </div>
@@ -670,7 +683,7 @@ export default function CDN() {
                     let res = {};
                     try {
                       res = JSON.parse(updateInfo);
-                      updateCDNById(res.id, res);
+                      updateSeedPeerById(res.id, res);
                     } catch (e) {
                       console.log(e);
                     }
@@ -698,7 +711,7 @@ export default function CDN() {
         title={dTitle}
         onCancel={() => {
           setFormInfo({});
-          setFormSchema(cdnInfo);
+          setFormSchema(seedPeerInfo);
           setFormVisible(false);
           setUpdateVisible(false);
         }}
@@ -707,7 +720,7 @@ export default function CDN() {
             key="back"
             onClick={() => {
               setFormInfo({});
-              setFormSchema(cdnInfo);
+              setFormSchema(seedPeerInfo);
               setFormVisible(false);
               setUpdateVisible(false);
             }}
@@ -734,7 +747,7 @@ export default function CDN() {
                 });
               } else {
                 updateClusterById({
-                  id: cClusters[isClick]?.id?.toString(),
+                  id: seedPeerClusters[isClick]?.id?.toString(),
                   ...formInfo,
                   config: {
                     load_limit: formInfo?.load_limit || 1,
@@ -795,7 +808,7 @@ export default function CDN() {
               key: 1,
             },
           ]);
-          setDrawOptions(cdnOptions);
+          setDrawOptions(seedPeerOptions);
         }}
         visible={drawVisible}
         width="600"
@@ -812,7 +825,7 @@ export default function CDN() {
                   key: 1,
                 },
               ]);
-              setDrawOptions(cdnOptions);
+              setDrawOptions(seedPeerOptions);
             }}
             style={{
               marginRight: 8,
@@ -858,7 +871,7 @@ export default function CDN() {
             return (
               <Tag closable key={subKey} onClose={(v) => console.log(v)}>
                 {(
-                  (cClusters.filter((e: any) => e?.id?.toString() === subKey) ||
+                  (seedPeerClusters.filter((e: any) => e?.id?.toString() === subKey) ||
                     [])[0] || {}
                 )?.name || ''}
               </Tag>

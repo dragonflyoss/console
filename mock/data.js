@@ -51,14 +51,14 @@ export const info = [
     en_US: 'Description',
   },
   {
-    key: 'cdn_cluster_id',
-    label: '关联CDN集群',
+    key: 'seed_peer_cluster_id',
+    label: '关联 seed peer 集群',
     type: 'select',
     tab: '1',
     props: {
-      placeholder: 'Please enter CDN cluster ID',
+      placeholder: 'Please enter seed peer cluster ID',
     },
-    en_US: 'CDN Cluster',
+    en_US: 'Seed Peer Cluster',
   },
   {
     key: 'security_group_id',
@@ -206,8 +206,8 @@ export const info = [
 
 export const updateOptions = [
   {
-    label: 'CDN Clusters',
-    value: 'cdn_clusters',
+    label: 'Seed Peer Clusters',
+    value: 'seed_peer_clusters',
     type: 'select',
   },
   {
@@ -232,7 +232,7 @@ export const updateOptions = [
   },
 ];
 
-export const cdnOptions = [
+export const seedPeerOptions = [
   {
     label: 'Load Limit',
     value: 'load_limit',
@@ -244,7 +244,7 @@ export const cdnOptions = [
   },
 ];
 
-export const cdnInfo = [
+export const seedPeerInfo = [
   {
     key: 'id',
     label: '集群ID',
@@ -304,15 +304,15 @@ export const cdnInfo = [
     },
     en_US: 'Load Limit',
   },
-  {
-    key: 'net_topology',
-    label: '',
-    tab: '1',
-    props: {
-      placeholder: 'Please enter Net Topology, separated by "|" characters',
-    },
-    en_US: 'Net Topology',
-  },
+  // {
+  //   key: 'net_topology',
+  //   label: '',
+  //   tab: '1',
+  //   props: {
+  //     placeholder: 'Please enter Net Topology, separated by "|" characters',
+  //   },
+  //   en_US: 'Net Topology',
+  // },
   {
     key: 'created_at',
     label: '创建时间',

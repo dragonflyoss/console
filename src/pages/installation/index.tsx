@@ -80,28 +80,24 @@ export default function Installation({}) {
       ),
     },
     {
-      title: 'Create CDN Cluster',
+      title: 'Create Seed Peer Cluster',
       description: '',
       actionContent: (
         <>
-          <p>A CDN cluster needs to be created in a P2P network.</p>
+          <p>A seed peer cluster needs to be created in a P2P network.</p>
           <div className={styles.imgBox}>
             <img src={require('@/public/bg_install_03.png')} width={600} height={300} />
           </div>
-          The created CDN cluster id is&nbsp;
+          The created seed peer cluster id is&nbsp;
           <span style={boldStyle}>1</span>
-          . When deploying a CDN instance, you need to report the CDN cluster id associated with the CDN instance, and
+          . When deploying a seed peer instance, you need to report the seed peer cluster id associated with the seed peer instance, and
           the manager service address.
-          <Divider style={{ background: '#fff' }} />
-          <div className={styles.imgBox}>
-            <img src={require('@/public/bg_install_07.png')} width={300} height={140} />
-          </div>
           <p>
             For details, refer to the two fields&nbsp;
             <span style={boldStyle}>manager.addr</span>&nbsp; and&nbsp;
-            <span style={boldStyle}>manager.cdnClusterID</span>&nbsp; in the&nbsp;
-            <a href="https://d7y.io/docs/reference/configuration/cdn/" target="_blank" style={boldStyle}>
-              CDN configuration
+            <span style={boldStyle}>manager.seedPeerClusterID</span>&nbsp; in the&nbsp;
+            <a href="https://d7y.io/docs/reference/configuration/seed-peer/" target="_blank" style={boldStyle}>
+              seed peer configuration
             </a>
             .
           </p>
@@ -115,17 +111,13 @@ export default function Installation({}) {
         <>
           <p>A scheduler cluster needs to be created in a P2P network.</p>
           <div className={styles.imgBox}>
-            <img src={require('@/public/bg_install_05.png')} width={800} height={181} />
+            <img src={require('@/public/bg_install_05.png')} width={800} height={322} />
           </div>
           <p>
-            CDN instances in the CDN cluster associated with the scheduler cluster will become the download root node in
-            the P2P network. The CDN cluster field in the scheduler cluster form is the CDN cluster associated with the
+            Seed peer instances in the seed peer cluster associated with the scheduler cluster will become the download root node in
+            the P2P network. The seed peer cluster field in the scheduler cluster form is the seed peer cluster associated with the
             scheduler clsuter in the P2P network.
           </p>
-          <Divider style={{ background: '#fff' }} />
-          <div className={styles.imgBox}>
-            <img src={require('@/public/bg_install_06.png')} width={300} height={140} />
-          </div>
           <p>
             The created scheduler cluster id is <span style={boldStyle}>1</span>. When deploying a scheduler instance,
             you need to report the scheduler cluster id associated with the scheduler instance, and the manager service
@@ -146,7 +138,7 @@ export default function Installation({}) {
       actionContent: (
         <>
           <p>
-            The P2P network basic information is created. You can deploy scheduler, cdn and dfdaemon, refer to&nbsp;
+            The P2P network basic information is created. You can deploy scheduler, seed peer and dfdaemon, refer to&nbsp;
             <a href="https://d7y.io/docs/" target="_blank" style={boldStyle}>
               getting-start
             </a>
@@ -155,8 +147,8 @@ export default function Installation({}) {
           <div className={styles.imgBox}>
             <img
               src={require('@/public/bg_install_04.png')}
-              width={600}
-              height={446}
+              width={700}
+              height={436}
               style={{
                 padding: 12,
               }}

@@ -29,14 +29,14 @@ export default function Application() {
     data: {},
   }); // infos
   const [schedulerClusters, setSchedulerClusters] = useState([]);
-  const [cdnClusters, setCDNClusters] = useState([]);
+  const [seedPeerClusters, setSeedPeerClusters] = useState([]);
 
   useEffect(() => {
     getApps(1);
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
     setUserId(userInfo.id);
     getSchedulerClusters();
-    getCDNClusters();
+    getSeedPeerClusters();
   }, []);
 
   const [form] = Form.useForm();
@@ -131,10 +131,10 @@ export default function Application() {
     }
   };
 
-  const getCDNClusters = async () => {
-    const res = await request('/api/v1/cdn-clusters');
+  const getSeedPeerClusters = async () => {
+    const res = await request('/api/v1/seed-peer-clusters');
     if (res && res.length > 0) {
-      setCDNClusters(
+      setSeedPeerClusters(
         res.map((el) => {
           return {
             label: el.name,
@@ -187,10 +187,10 @@ export default function Application() {
       },
     },
     // {
-    //   title: 'CDN Clusters',
-    //   dataIndex: 'cdn_clusters',
+    //   title: 'Seed Peer Clusters',
+    //   dataIndex: 'seed_peer_clusters',
     //   align: 'left',
-    //   key: 'cdn_clusters',
+    //   key: 'seed_peer_clusters',
     //   width: 130,
     //   ellipsis: true,
     //   render: (v: any, r: any) => {
@@ -397,18 +397,18 @@ export default function Application() {
               />
             </Form.Item>
             {/* <Form.Item
-              name="cdn_clusters"
+              name="seed_peer_clusters"
               style={{ marginBottom: 0 }}
-              label="CDN Cluster"
+              label="Seed Peer Cluster"
             >
               <Select
                 mode="multiple"
                 allowClear
                 showArrow
-                options={cdnClusters}
+                options={seedPeerClusters}
                 // onChange={(v: any) => {
                 //   form.setFieldsValue({
-                //     cdn_clusters: v,
+                //     seed_peer_clusters: v,
                 //   });
                 // }}
               />

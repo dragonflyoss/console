@@ -175,8 +175,8 @@ export default function BasicLayout({
                   Scheduler Cluster
                 </Link>
               </Menu.Item>
-              <Menu.Item key="cdn-cluster">
-                <Link to="/configuration/cdn-cluster">CDN Cluster</Link>
+              <Menu.Item key="seed-peer-cluster">
+                <Link to="/configuration/seed-peer-cluster">Seed Peer Cluster</Link>
               </Menu.Item>
               {/* <Menu.Item key="application">
                 <Link to="/configuration/application">Application</Link>
@@ -219,15 +219,12 @@ export default function BasicLayout({
                 .replace(/^\S/, (s) => s.toUpperCase())}
             </Breadcrumb.Item>
             <Breadcrumb.Item key="bread_1">
-              {key[0]
+              {
+                key[0]
                 .split('-')
-                .map((e) =>
-                  e.includes('cdn')
-                    ? e.toUpperCase()
-                    : e.replace(/^\S/, (s) => s.toUpperCase()),
-                )
-                .toString()
-                .replace(/,/, ' ')}
+                .map((e) => e.replace(/^\S/, (s) => s.toUpperCase()))
+                .join(' ')
+              }
             </Breadcrumb.Item>
           </Breadcrumb>
           <Content

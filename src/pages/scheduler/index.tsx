@@ -42,8 +42,8 @@ const comsKeys = {
 export default function IndexPage() {
   // scheduler clusters
   const [sClusters, setClusters] = useState([]);
-  // cdn scheduler clusters
-  const [cClusters, setCdnClusters] = useState([]);
+  // seed peer clusters
+  const [seedPeerClusters, setSeedPeerClusters] = useState([]);
   // security groups
   const [secGroups, setGroup] = useState([]);
   // cluster item status
@@ -77,8 +77,8 @@ export default function IndexPage() {
   // drawer content
   const [drawContent, setDrawContent] = useState([
     {
-      label: 'cdn_clusters',
-      value: 'cdn_cluster_id',
+      label: 'seed_peer_clusters',
+      value: 'seed_peer_cluster_id',
       type: 'select',
       key: 1,
     },
@@ -88,13 +88,13 @@ export default function IndexPage() {
   const [drawLoading, setDrawLoading] = useState(false);
 
   const formOps = {
-    cdn_cluster_id: cClusters,
+    seed_peer_cluster_id: seedPeerClusters,
     security_group_id: secGroups,
   };
 
   useEffect(() => {
     getClusters();
-    getCDNClusters();
+    getSeedPeerClusters();
   }, []);
 
   const getSchedulers = async (v: number) => {
@@ -176,16 +176,16 @@ export default function IndexPage() {
             sub[el] = sub[el].toString();
           }
           // let temp_cluster: any[] = [];
-          // if (typeof sub['cdn_clusters'] === 'object') {
-          //   (sub['cdn_clusters'] || []).forEach((cluster: any) => {
+          // if (typeof sub['seed_peer_clusters'] === 'object') {
+          //   (sub['seed_peer_clusters'] || []).forEach((cluster: any) => {
           //     temp_cluster.push(cluster.id || cluster || '');
           //   }) || [];
           // } else {
-          //   temp_cluster = sub['cdn_clusters'];
+          //   temp_cluster = sub['seed_peer_clusters'];
           // }
-          // // console.log(sub['cdn_clusters'], temp_cluster);
-          // sub['cdn_clusters'] = Number(temp_cluster.toString());
-          // sub['cdn_cluster_id'] = Number(temp_cluster.toString());
+          // // console.log(sub['seed_peer_clusters'], temp_cluster);
+          // sub['seed_peer_clusters'] = Number(temp_cluster.toString());
+          // sub['seed_peer_cluster_id'] = Number(temp_cluster.toString());
           sub['created_at'] = moment(
             new Date(sub['created_at']).valueOf(),
           ).format('YYYY-MM-DD HH:MM:SS');
@@ -201,10 +201,10 @@ export default function IndexPage() {
     }
   };
 
-  const getCDNClusters = async () => {
-    const res = await request('/api/v1/cdn-clusters');
+  const getSeedPeerClusters = async () => {
+    const res = await request('/api/v1/seed-peer-clusters');
     if (res && res.length > 0) {
-      setCdnClusters(
+      setSeedPeerClusters(
         res.map((el: any) => {
           return {
             ...el,
@@ -257,8 +257,8 @@ export default function IndexPage() {
       setFormSchema(info);
       setDrawContent([
         {
-          label: 'cdn_clusters',
-          value: 'cdn_cluster_id',
+          label: 'seed_peer_clusters',
+          value: 'seed_peer_cluster_id',
           type: 'select',
           key: 1,
         },
@@ -336,10 +336,10 @@ export default function IndexPage() {
       },
     },
     {
-      title: 'Location',
-      dataIndex: 'location',
+      title: 'Net Topology',
+      dataIndex: 'net_topology',
       align: 'left',
-      key: 'location',
+      key: 'net_topology',
       render: (v: string) => {
         return (
           <Tooltip title={v}>
@@ -349,25 +349,15 @@ export default function IndexPage() {
       },
     },
     {
-      title: 'VIPS',
-      dataIndex: 'vips',
+      title: 'Location',
+      dataIndex: 'location',
       align: 'left',
-      key: 'vips',
-      width: 80,
-      ellipsis: true,
+      key: 'location',
       render: (v: string) => {
-        const res = v.split(',');
-        const content = (
-          <div>
-            {res.map((el) => {
-              return <p key={el}>{el}</p>;
-            })}
-          </div>
-        );
         return (
-          <Popover content={content} title="VIPS">
+          <Tooltip title={v}>
             <div className={styles.tableItem}>{v || '-'}</div>
-          </Popover>
+          </Tooltip>
         );
       },
     },
@@ -702,8 +692,8 @@ export default function IndexPage() {
                   ) : (
                     <Tooltip
                       title={
-                        sub.key === 'cdn_cluster_id'
-                          ? (source['cdn_clusters'] || [])[0]?.name || '-'
+                        sub.key === 'seed_peer_cluster_id'
+                          ? (source['seed_peer_clusters'] || [])[0]?.name || '-'
                           : (source || {})[sub.key] || '-'
                       }
                     >
@@ -715,8 +705,8 @@ export default function IndexPage() {
                           whiteSpace: 'nowrap',
                         }}
                       >
-                        {sub.key === 'cdn_cluster_id'
-                          ? (source['cdn_clusters'] || [])[0]?.name || '-'
+                        {sub.key === 'seed_peer_cluster_id'
+                          ? (source['seed_peer_clusters'] || [])[0]?.name || '-'
                           : (source || {})[sub.key] || '-'}
                       </div>
                     </Tooltip>
@@ -921,8 +911,8 @@ export default function IndexPage() {
           setDrawVisible(false);
           setDrawContent([
             {
-              label: 'cdn_clusters',
-              value: 'cdn_cluster_id',
+              label: 'seed_peer_clusters',
+              value: 'seed_peer_cluster_id',
               type: 'select',
               key: 1,
             },
@@ -938,8 +928,8 @@ export default function IndexPage() {
               setDrawVisible(false);
               setDrawContent([
                 {
-                  label: 'cdn_clusters',
-                  value: 'cdn_cluster_id',
+                  label: 'seed_peer_clusters',
+                  value: 'seed_peer_cluster_id',
                   type: 'select',
                   key: 1,
                 },
@@ -968,8 +958,8 @@ export default function IndexPage() {
                   }
                 }
                 config[sub.value] = res;
-                if (sub.value === 'cdn_clusters') {
-                  config['cdn_cluster_id'] = res;
+                if (sub.value === 'seed_peer_clusters') {
+                  config['seed_peer_cluster_id'] = res;
                 }
               });
               checkKeys.forEach((id) => {
@@ -1041,8 +1031,8 @@ export default function IndexPage() {
                   }}
                   options={formOps[el.value] || {}}
                   onClick={() => {
-                    if (el.value === 'cdn_cluster_id') {
-                      getCDNClusters(); // TODO when render get
+                    if (el.value === 'seed_peer_cluster_id') {
+                      getSeedPeerClusters(); // TODO when render get
                     } else if (el.value === 'security_group_id') {
                       getSecGroups();
                     }

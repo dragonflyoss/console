@@ -41,7 +41,7 @@ const defaultArgs = {
 
 export default function PreHeat() {
   const [data, setData] = useState([]);
-  const [cdnClusters, setCdnClusters] = useState([]);
+  const [seedPeerClusters, setSeedPeerClusters] = useState([]);
   const [schedulerClusters, setSchedulerClusters] = useState([]);
 
   const [taskInfo, setTaskInfo] = useState({});
@@ -56,7 +56,7 @@ export default function PreHeat() {
 
   useEffect(() => {
     getTasks(1);
-    // getCDNClusters();
+    // getSeedPeerClusters();
     getSchedulerClusters();
 
     const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
@@ -126,10 +126,10 @@ export default function PreHeat() {
     }
   };
 
-  const getCDNClusters = async () => {
-    const res = await request('/api/v1/cdn-clusters');
+  const getSeedPeerClusters = async () => {
+    const res = await request('/api/v1/seed-peer-clusters');
     if (res && typeof res === 'object' && res.length > 0) {
-      setCdnClusters(
+      setSeedPeerClusters(
         res.map((el) => {
           return {
             ...el,
@@ -491,7 +491,7 @@ export default function PreHeat() {
               bio: source.bio || '--',
               type: source.type || 'preheat',
               scheduler_cluster_ids: source.scheduler_cluster_ids || [],
-              cdn_cluster_ids: source.cdn_cluster_ids || [],
+              seed_peer_cluster_ids: source.seed_peer_cluster_ids || [],
               args: {
                 type: source.preheatType || 'file',
                 url: source.url || '',
@@ -558,8 +558,8 @@ export default function PreHeat() {
                     value: 'scheduler_cluster',
                   },
                   {
-                    label: 'CDN Cluster',
-                    value: 'cdn_cluster',
+                    label: 'Seed Peer Cluster',
+                    value: 'seed_peer_cluster',
                     disabled: true,
                   },
                 ]}
@@ -572,7 +572,7 @@ export default function PreHeat() {
               }
             >
               {({ getFieldValue }) =>
-                getFieldValue('range') !== 'cdn cluster' ? (
+                getFieldValue('range') !== 'seed_peer_cluster' ? (
                   <Form.Item
                     name="scheduler_cluster_ids"
                     style={{ marginBottom: 0 }}
@@ -590,16 +590,16 @@ export default function PreHeat() {
                     />
                   </Form.Item>
                 ) : (
-                  <Form.Item name="cdn_cluster_ids" style={{ marginBottom: 0 }}>
+                  <Form.Item name="seed_peer_cluster_ids" style={{ marginBottom: 0 }}>
                     <Select
                       mode="multiple"
                       allowClear
                       showArrow
-                      options={cdnClusters}
+                      options={seedPeerClusters}
                       onChange={(v: any) => {
                         console.log(v);
                         form.setFieldsValue({
-                          cdn_cluster_ids: v,
+                          seed_peer_cluster_ids: v,
                         });
                       }}
                     />

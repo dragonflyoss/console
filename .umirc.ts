@@ -43,7 +43,7 @@ export default defineConfig({
         },
         {
           exact: true,
-          path: '/configuration/cdn-cluster',
+          path: '/configuration/seed-peer-cluster',
           component: '@/pages/cdn',
         },
         {

@@ -95,6 +95,7 @@ export default function IndexPage() {
   useEffect(() => {
     getClusters();
     getSeedPeerClusters();
+    getSecGroups();
   }, []);
 
   const getSchedulers = async (v: number) => {
@@ -197,6 +198,12 @@ export default function IndexPage() {
 
       // console.log(res);
       getSchedulerByClusterId(res[0].id, 1);
+      res[0].security_group_id = Number(res[0].security_group_id);
+      if (res[0].seed_peer_clusters.length > 0) {
+        res[0].seed_peer_cluster_id = res[0].seed_peer_clusters[0].id;
+      } else {
+        res[0].seed_peer_cluster_id = 0;
+      }
       setClusters(res);
     }
   };
@@ -398,7 +405,11 @@ export default function IndexPage() {
       key: 'state',
       width: 120,
       render: (v: string) => {
-        return <Tag color={v === 'active' ? 'green' : 'cyan'}>{v.toUpperCase() || '-'}</Tag>;
+        return (
+          <Tag color={v === 'active' ? 'green' : 'cyan'}>
+            {v.toUpperCase() || '-'}
+          </Tag>
+        );
       },
     },
     {
@@ -673,7 +684,7 @@ export default function IndexPage() {
                   labelStyle={{
                     width: '140px',
                     alignItems: 'center',
-                    flex: '0 0 140px'
+                    flex: '0 0 140px',
                   }}
                 >
                   {sub.parent ? (
@@ -886,6 +897,9 @@ export default function IndexPage() {
           >
             {formSchema.map((sub: any) => {
               const Content = comsKeys[sub.type || 'input'];
+              if (sub.type === 'select') {
+                sub.props.options = formOps[sub.key] || [];
+              }
               if (sub.title) {
                 return <h3>{sub.en_US}</h3>;
               } else if (!sub.hide && sub.tab === '1') {

@@ -197,7 +197,7 @@ export default function BasicLayout({
             <SubMenu key="setting" icon={<SettingOutlined />} title="Setting">
               {role === 'root' ? (
                 <Menu.Item key="permission">
-                  <Link to="/setting/permission">Premission</Link>
+                  <Link to="/setting/permission">Permission</Link>
                 </Menu.Item>
               ) : null}
               {role === 'root' ? (

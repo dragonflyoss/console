@@ -33,8 +33,8 @@
     "@types/react": "^17.0.0",
     "@umijs/preset-react": "2.x",
     "@types/react-dom": "^18.0.6",
+    "lint-staged": "^13.0.3",
     "@umijs/test": "^4.0.21",
-    "lint-staged": "^10.0.7",
     "prettier": "^2.2.0",
     "typescript": "^4.1.2",
     "yorkie": "^2.0.0"

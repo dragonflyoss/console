@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, release-* ]
+    paths-ignore: [ '**.md', '**.png', '**.jpg', '**.svg', '**/docs/**' ]
+  pull_request:
+    branches: [ main, release-* ]
+    paths-ignore: [ '**.md', '**.png', '**.jpg', '**.svg', '**/docs/**' ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set node version
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14.x'
+
+      - name: Install
+        run: yarn install
+
+      - name: Build
+        run: yarn build

@@ -25,6 +25,11 @@
     }
     .clusters {
       margin-top: 8px;
+      :global {
+        .ant-radio {
+          display: none;
+        }
+      }
       .checkLabel {
         max-width: 100px;
         overflow: hidden;
@@ -39,6 +44,9 @@
         right: 18px;
         z-index: 999;
       }
+    }
+    .pagination {
+      float: right;
     }
   }
   .right {

@@ -31,18 +31,19 @@
         }
       }
       .checkLabel {
-        max-width: 100px;
+        max-width: calc(100% - 40px);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         border-radius: 2px;
         padding: 0 8px;
+        display: inline-block;
       }
       .activeButton {
-        position: absolute;
-        top: 0;
-        right: 18px;
+        display: inline-block;
         z-index: 999;
+        width: 40px;
+        vertical-align: top;
       }
     }
     .pagination {

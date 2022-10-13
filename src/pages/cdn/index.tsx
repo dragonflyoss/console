@@ -138,7 +138,6 @@ export default function SeedPeer() {
     const headerLink = res.response.headers.get('Link') || '';
     const pageMax = getPageMax(headerLink);
     const total = pageMax * 50;
-
     if (data && typeof data === 'object' && data.length > 0) {
       data.map((sub) => {
         Object.keys(sub).map((el) => {

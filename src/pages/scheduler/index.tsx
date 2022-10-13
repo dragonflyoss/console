@@ -3,17 +3,14 @@ import { request } from 'umi';
 import {
   Input,
   Select,
-  Checkbox,
   Radio,
   Button,
   Table,
   Descriptions,
   Modal,
-  Drawer,
   Form,
   Popconfirm,
   Tag,
-  Popover,
   message,
   Tooltip,
   InputNumber,
@@ -22,9 +19,7 @@ import {
 import {
   CopyOutlined,
   DeleteOutlined,
-  MinusCircleOutlined,
   AppstoreAddOutlined,
-  EditOutlined,
   DesktopOutlined,
 } from '@ant-design/icons';
 import moment from 'moment';
@@ -65,8 +60,6 @@ export default function IndexPage() {
   // cluster item status
   const [isClick, setClick] = useState(0);
   const [isHover, setHover] = useState(0);
-  // checked clusters
-  // const [checkKeys, setCheck] = useState([]);
 
   const [scheduler, setSchedulers] = useState([]);
   // cluster选择树分页
@@ -90,20 +83,6 @@ export default function IndexPage() {
   const [updateInfo, setUpdateInfo] = useState({});
 
   const [copyVisible, setCopyVisible] = useState(false);
-  // drawer visible
-  const [drawVisible, setDrawVisible] = useState(false);
-  // drawer content
-  const [drawContent, setDrawContent] = useState([
-    {
-      label: 'seed_peer_clusters',
-      value: 'seed_peer_cluster_id',
-      type: 'select',
-      key: 1,
-    },
-  ]);
-  // drawer options
-  const [drawOptions, setDrawOptions] = useState(updateOptions);
-  const [drawLoading, setDrawLoading] = useState(false);
 
   const formOps = {
     seed_peer_cluster_id: seedPeerClusters,
@@ -118,33 +97,6 @@ export default function IndexPage() {
     getClusters();
     getSeedPeerClusters();
     getSecGroups();
-  };
-
-  const getSchedulers = async (v: number) => {
-    const res = await request('/api/v1/schedulers', {
-      params: {
-        page: v,
-        per_page: 50,
-      },
-    });
-    if (res && typeof res === 'object') {
-      setSchedulers(
-        res.map((sub) => {
-          return {
-            ...sub,
-            key: sub.id,
-          };
-        }),
-      );
-    }
-  };
-
-  const createScheduler = async (config: any) => {
-    const res = await request('/api/v1/schedulers', {
-      method: 'post',
-      data: config,
-    });
-    console.log(res);
   };
 
   const getSchedulerByClusterId = async (id: string | number, v: number) => {
@@ -295,17 +247,7 @@ export default function IndexPage() {
     res.then((r) => {
       message.success('Update Success');
       setFormSchema(info);
-      setDrawContent([
-        {
-          label: 'seed_peer_clusters',
-          value: 'seed_peer_cluster_id',
-          type: 'select',
-          key: 1,
-        },
-      ]);
-      setDrawOptions(updateOptions);
       setFormVisible(false);
-      setDrawVisible(false);
       getClusters();
     });
   };
@@ -316,13 +258,6 @@ export default function IndexPage() {
     });
     res
       .then((r) => {
-        // setCheck((pre) => {
-        //   pre.splice(
-        //     pre.findIndex((item) => item === id.toString()),
-        //     1,
-        //   );
-        //   return pre;
-        // });
         message.success('Delete Success');
         getClusters();
       })
@@ -454,24 +389,6 @@ export default function IndexPage() {
       render: (t: number | string, r: any, i: number) => {
         return (
           <div className={styles.operation}>
-            {/* <Button
-              className={styles.newBtn}
-              type="link"
-              onClick={() => {
-                let res = '';
-                try {
-                  res = JSON.stringify(r, null, 2);
-                } catch (e) {
-                  console.log(e);
-                }
-                setDTitle('Update Scheduler');
-                setUpdateInfo(res);
-                setVisible(true);
-              }}
-            >
-              Update
-            </Button>
-            <Divider type="vertical" /> */}
             <Popconfirm
               title="Are you sure to delete this Scheduler?"
               onConfirm={() => {
@@ -533,101 +450,85 @@ export default function IndexPage() {
               <AppstoreAddOutlined />
               Add Cluster
             </Button>
-            {/* <Button
-              type="text"
-              className={styles.newBtn}
-              style={{
-                fontSize: 12,
-              }}
-              onClick={() => {
-                setDrawVisible(true);
-              }}
-              disabled={!checkKeys.length}
-            >
-              <EditOutlined />
-              Batch Update
-            </Button> */}
           </div>
           <div className={styles.clusters}>
-            <Radio.Group style={{ width: '100%' }}>
-              {sClusters.map((sub: any, idx: number) => {
-                return (
-                  <Tooltip title={sub.name}>
-                    <Radio
-                      key={sub.id}
-                      value={sub.id}
-                      onClick={() => {
-                        setClick(idx);
-                        setFormSchema(info);
-                        getSchedulerByClusterId(sub.id, 1);
-                      }}
-                      onMouseEnter={() => {
-                        setHover(sub.id);
-                      }}
-                      onMouseLeave={() => {
-                        setHover(0);
-                      }}
+            {sClusters.map((sub: any, idx: number) => {
+              return (
+                <Tooltip title={sub.name}>
+                  <div
+                    key={sub.id}
+                    onClick={() => {
+                      setClick(idx);
+                      setFormSchema(info);
+                      getSchedulerByClusterId(sub.id, 1);
+                    }}
+                    onMouseEnter={() => {
+                      setHover(sub.id);
+                    }}
+                    onMouseLeave={() => {
+                      setHover(0);
+                    }}
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      margin: 0,
+                      height: 32,
+                      lineHeight: '32px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <div
+                      className={styles.checkLabel}
                       style={{
-                        position: 'relative',
-                        width: '100%',
-                        margin: 0,
-                        height: 32,
-                        lineHeight: '32px',
+                        background:
+                          isClick === idx ? '#EBF7F1' : 'transparent',
+                        color:
+                          isClick === idx ? '#23B066' : 'rgba(0, 0, 0, 0.85)',
                       }}
                     >
-                      <div
-                        className={styles.checkLabel}
-                        style={{
-                          background:
-                            isClick === idx ? '#EBF7F1' : 'transparent',
-                          color:
-                            isClick === idx ? '#23B066' : 'rgba(0, 0, 0, 0.85)',
-                        }}
-                      >
-                        {sub.name}
+                      {sub.name}
+                    </div>
+                    {isHover === sub.id ? (
+                      <div className={styles.activeButton}>
+                        <Popconfirm
+                          title="Are you sure to Copy this Scheduler Cluster?"
+                          onConfirm={() => {
+                            setUpdateInfo(sub);
+                            setCopyVisible(true);
+                          }}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <Button
+                            type="text"
+                            className={styles.newBtn}
+                            style={{
+                              marginRight: 4,
+                            }}
+                          >
+                            <CopyOutlined />
+                          </Button>
+                        </Popconfirm>
+                        <Popconfirm
+                          title="Are you sure to delete this Scheduler Cluster?"
+                          onConfirm={() => {
+                            deleteClusterById(sub.id);
+                          }}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <Button type="text" className={styles.newBtn}>
+                            <DeleteOutlined />
+                          </Button>
+                        </Popconfirm>
                       </div>
-                      {isHover === sub.id ? (
-                        <div className={styles.activeButton}>
-                          <Popconfirm
-                            title="Are you sure to Copy this Scheduler Cluster?"
-                            onConfirm={() => {
-                              setUpdateInfo(sub);
-                              setCopyVisible(true);
-                            }}
-                            okText="Yes"
-                            cancelText="No"
-                          >
-                            <Button
-                              type="text"
-                              className={styles.newBtn}
-                              style={{
-                                marginRight: 4,
-                              }}
-                            >
-                              <CopyOutlined />
-                            </Button>
-                          </Popconfirm>
-                          <Popconfirm
-                            title="Are you sure to delete this Scheduler Cluster?"
-                            onConfirm={() => {
-                              deleteClusterById(sub.id);
-                            }}
-                            okText="Yes"
-                            cancelText="No"
-                          >
-                            <Button type="text" className={styles.newBtn}>
-                              <DeleteOutlined />
-                            </Button>
-                          </Popconfirm>
-                        </div>
-                      ) : (
-                        <div />
-                      )}
-                    </Radio>
-                  </Tooltip>
-                );
-              })}
-            </Radio.Group>
+                    ) : (
+                      <div />
+                    )}
+                  </div>
+                </Tooltip>
+              );
+            })}
             <div className={styles.pagination}>
               <Pagination
                 size="small"
@@ -960,195 +861,6 @@ export default function IndexPage() {
           </Form>
         ) : null}
       </Modal>
-      {/* 暂时屏蔽Batch Update功能 */}
-      {/*<Drawer
-        title="Update Scheduler Clusters"
-        placement="right"
-        onClose={() => {
-          setDrawVisible(false);
-          setDrawContent([
-            {
-              label: 'seed_peer_clusters',
-              value: 'seed_peer_cluster_id',
-              type: 'select',
-              key: 1,
-            },
-          ]);
-          setDrawOptions(updateOptions);
-        }}
-        visible={drawVisible}
-        width="600"
-        footer={[
-          <Button
-            key="back"
-            onClick={() => {
-              setDrawVisible(false);
-              setDrawContent([
-                {
-                  label: 'seed_peer_clusters',
-                  value: 'seed_peer_cluster_id',
-                  type: 'select',
-                  key: 1,
-                },
-              ]);
-              setDrawOptions(updateOptions);
-            }}
-            style={{
-              marginRight: 8,
-            }}
-          >
-            Cancel
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            onClick={() => {
-              const config = {};
-              drawContent.forEach((sub) => {
-                // console.log(sub);
-                let res = sub.update;
-                if (typeof sub.update === 'string') {
-                  try {
-                    res = JSON.parse(res);
-                  } catch (e) {
-                    console.log(e);
-                  }
-                }
-                config[sub.value] = res;
-                if (sub.value === 'seed_peer_clusters') {
-                  config['seed_peer_cluster_id'] = res;
-                }
-              });
-              checkKeys.forEach((id) => {
-                updateClusterById({
-                  id,
-                  ...config,
-                });
-              });
-            }}
-          >
-            Submit
-          </Button>,
-        ]}
-      >
-        <div className={styles.drawerLabel}>Selected Clusters</div>
-        <div
-          style={{
-            marginBottom: 16,
-          }}
-        >
-          {checkKeys.map((subKey) => {
-            return (
-              <Tag
-                closable={false}
-                key={subKey}
-                onClose={(v) => {
-                  checkKeys.splice(checkKeys.indexOf(subKey), 1);
-                  setCheck(checkKeys);
-                }}
-              >
-                {sClusters.filter((e) => e.id.toString() === subKey)?.[0].name}
-              </Tag>
-            );
-          })}
-        </div>
-        <div className={styles.drawerLabel}>Update Items</div>
-        {!drawLoading &&
-          drawContent.map((el: any, idx: number) => {
-            const Content = comsKeys[el.type] || Input;
-            return (
-              <div className={styles.drawerContainer} key={el.key}>
-                <Select
-                  options={drawOptions}
-                  placeholder={'Please Enter Update Item'}
-                  style={{
-                    width: 200,
-                    marginRight: 8,
-                  }}
-                  onChange={(v, o) => {
-                    setDrawLoading(true);
-                    setDrawContent((pre) => {
-                      pre[idx] = {
-                        ...pre[idx],
-                        ...o,
-                      };
-                      return pre;
-                    });
-                    setTimeout(() => {
-                      setDrawLoading(false);
-                    }, 100);
-                  }}
-                  value={el.value || null}
-                />
-                <Content
-                  {...el.props}
-                  placeholder={'Please Enter Update Value'}
-                  style={{
-                    width: 300,
-                  }}
-                  options={formOps[el.value] || {}}
-                  onClick={() => {
-                    if (el.value === 'seed_peer_cluster_id') {
-                      getSeedPeerClusters(); // TODO when render get
-                    } else if (el.value === 'security_group_id') {
-                      getSecGroups();
-                    }
-                  }}
-                  onChange={(v) => {
-                    setDrawContent((pre) => {
-                      pre[idx] = {
-                        ...pre[idx],
-                        update: v,
-                      };
-                      return pre;
-                    });
-                  }}
-                  value={el.update}
-                  width={300}
-                />
-                {drawContent.length > 1 && idx !== 0 && (
-                  <MinusCircleOutlined
-                    onClick={() => {
-                      setDrawLoading(true);
-                      setDrawContent((pre) => {
-                        pre.splice(idx, 1);
-                        return pre;
-                      });
-                      setTimeout(() => {
-                        setDrawLoading(false);
-                      }, 100);
-                    }}
-                    style={{
-                      marginLeft: 8,
-                    }}
-                  />
-                )}
-              </div>
-            );
-          })}
-        {drawContent.length < 6 && (
-          <Button
-            type="link"
-            className={styles.newBtn}
-            onClick={() => {
-              setDrawLoading(true);
-              setDrawContent((pre) => {
-                pre.push({
-                  key: pre.length + 1,
-                });
-                // console.log(pre);
-                return pre;
-              });
-              setTimeout(() => {
-                setDrawLoading(false);
-              }, 100);
-            }}
-          >
-            <CopyOutlined />
-            Add Item
-          </Button>
-        )}
-      </Drawer> */}
     </div>
   );
 }

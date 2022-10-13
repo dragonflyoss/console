@@ -4,6 +4,7 @@ import {
   Input,
   Select,
   Checkbox,
+  Radio,
   Button,
   Table,
   Descriptions,
@@ -15,6 +16,7 @@ import {
   Tooltip,
   message,
   InputNumber,
+  Pagination,
 } from 'antd';
 import {
   CopyOutlined,
@@ -24,6 +26,7 @@ import {
   EditOutlined,
 } from '@ant-design/icons';
 import moment from 'moment';
+import { parse } from 'qs';
 import { seedPeerInfo, seedPeerOptions } from '../../../mock/data';
 import CodeEditor from '@/components/codeEditor';
 import styles from './index.less';
@@ -35,6 +38,19 @@ const comsKeys = {
   input: Input,
   InputNumber: InputNumber,
 };
+const getPageMax = (link: string) => {
+  const linkMap = link.split(';');
+  let pageMax = 1;
+  if (linkMap.length) {
+    const lastRel = linkMap[linkMap.length - 2];
+    let [, apiLink] = lastRel.split(',');
+    apiLink = apiLink.replace('</', '').replace('>', '');
+    const [, paramString] = apiLink.split('?');
+    const param = parse(paramString.replace(/^\?/, ''));
+    pageMax = param.page;
+  }
+  return pageMax;
+};
 
 // seed peer
 export default function SeedPeer() {
@@ -44,11 +60,13 @@ export default function SeedPeer() {
   const [isClick, setClick] = useState(0);
   const [isHover, setHover] = useState(0);
   // checked clusters
-  const [checkKeys, setCheck] = useState([]);
+  // const [checkKeys, setCheck] = useState([]);
 
   const [seedPeers, setSeedPeers] = useState([]);
-  // TODO table current page
+  // cluster选择树分页
   const [current, setCurrent] = useState(1);
+  const [clusterTotal, setClusterTotal] = useState(0);
+  const [searchCluster, setSearchCluster] = useState('');
 
   // dialog title
   const [dTitle, setDTitle] = useState('');
@@ -83,7 +101,7 @@ export default function SeedPeer() {
 
   useEffect(() => {
     getSeedPeerClusters();
-  }, []);
+  }, [current]);
 
   const getSeedPeerByClusterId = async (id: string | number) => {
     const res = await request('/api/v1/seed-peers', {
@@ -136,9 +154,22 @@ export default function SeedPeer() {
   };
 
   const getSeedPeerClusters = async () => {
-    const res = await request('/api/v1/seed-peer-clusters');
-    if (res && typeof res === 'object' && res.length > 0) {
-      res.map((sub) => {
+    const res = await request('/api/v1/seed-peer-clusters', {
+      method: 'get',
+      getResponse: true, // 获取response信息
+      params: {
+        page: current,
+        per_page: 50,
+        name: searchCluster,
+      },
+    });
+    const data = res.data || [];
+    const headerLink = res.response.headers.get('Link') || '';
+    const pageMax = getPageMax(headerLink);
+    const total = pageMax * 50;
+
+    if (data && typeof data === 'object' && data.length > 0) {
+      data.map((sub) => {
         Object.keys(sub).map((el) => {
           if (typeof sub[el] === 'number') {
             sub[el] = sub[el].toString();
@@ -152,9 +183,10 @@ export default function SeedPeer() {
         });
       });
 
-      getSeedPeerByClusterId(res[0].id);
-      setSeedPeerClusters(res);
+      getSeedPeerByClusterId(data[0].id);
     }
+    setSeedPeerClusters(data);
+    setClusterTotal(total);
   };
 
   const createClusters = (config: any) => {
@@ -192,13 +224,13 @@ export default function SeedPeer() {
       method: 'delete',
     });
     res.then(() => {
-      setCheck((pre) => {
-        pre.splice(
-          pre.findIndex((item) => item === id.toString()),
-          1,
-        );
-        return pre;
-      });
+      // setCheck((pre) => {
+      //   pre.splice(
+      //     pre.findIndex((item) => item === id.toString()),
+      //     1,
+      //   );
+      //   return pre;
+      // });
       message.success('Delete Success');
       getSeedPeerClusters();
     });
@@ -362,12 +394,15 @@ export default function SeedPeer() {
               width: 180,
               marginBottom: 12,
             }}
+            value={searchCluster}
+            onChange={(e: any) => {
+              setSearchCluster(e.target.value);
+            }}
             onSearch={(v) => {
-              if (v.length > 0) {
-                const f = seedPeerClusters.filter((sub) => sub.name.includes(v));
-                setSeedPeerClusters(f);
-              } else {
+              if (current === 1) {
                 getSeedPeerClusters();
+              } else {
+                setCurrent(1);
               }
             }}
           />
@@ -391,7 +426,7 @@ export default function SeedPeer() {
               <AppstoreAddOutlined />
               Add Cluster
             </Button>
-            <Button
+            {/* <Button
               type="text"
               className={styles.newBtn}
               style={{
@@ -404,18 +439,13 @@ export default function SeedPeer() {
             >
               <EditOutlined />
               Batch Update
-            </Button>
+            </Button> */}
           </div>
           <div className={styles.clusters}>
-            <Checkbox.Group
-              style={{ width: '100%' }}
-              onChange={(v: any) => {
-                setCheck(v);
-              }}
-            >
+            <Radio.Group style={{ width: '100%' }}>
               {seedPeerClusters.map((sub: any, idx: number) => {
                 return (
-                  <Checkbox
+                  <Radio
                     key={sub.name}
                     value={sub.id}
                     onClick={() => {
@@ -484,10 +514,23 @@ export default function SeedPeer() {
                     ) : (
                       <div />
                     )}
-                  </Checkbox>
+                  </Radio>
                 );
               })}
-            </Checkbox.Group>
+            </Radio.Group>
+            <div className={styles.pagination}>
+              <Pagination
+                size="small"
+                current={current}
+                defaultPageSize={50}
+                showSizeChanger={false}
+                hideOnSinglePage={true} // 只有一页时隐藏分页器
+                total={clusterTotal}
+                onChange={(v: number) => {
+                  setCurrent(v);
+                }}
+              />
+            </div>
           </div>
         </div>
         <div className={styles.right}>
@@ -795,7 +838,8 @@ export default function SeedPeer() {
           </Form>
         ) : null}
       </Modal>
-      <Drawer
+      {/* 暂时屏蔽Batch Update功能 */}
+      {/* <Drawer
         title="Update Scheduler Clusters"
         placement="right"
         onClose={() => {
@@ -965,7 +1009,7 @@ export default function SeedPeer() {
             Add Item
           </Button>
         )}
-      </Drawer>
+      </Drawer> */}
     </div>
   );
 }

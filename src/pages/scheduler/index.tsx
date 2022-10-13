@@ -4,6 +4,7 @@ import {
   Input,
   Select,
   Checkbox,
+  Radio,
   Button,
   Table,
   Descriptions,
@@ -16,6 +17,7 @@ import {
   message,
   Tooltip,
   InputNumber,
+  Pagination,
 } from 'antd';
 import {
   CopyOutlined,
@@ -26,6 +28,7 @@ import {
   DesktopOutlined,
 } from '@ant-design/icons';
 import moment from 'moment';
+import { parse } from 'qs';
 import { info, updateOptions } from '../../../mock/data';
 import CodeEditor from '@/components/codeEditor';
 import styles from './index.less';
@@ -36,6 +39,19 @@ const comsKeys = {
   json: CodeEditor,
   input: Input,
   InputNumber: InputNumber,
+};
+const getPageMax = (link: string) => {
+  const linkMap = link.split(';');
+  let pageMax = 1;
+  if (linkMap.length) {
+    const lastRel = linkMap[linkMap.length - 2];
+    let [, apiLink] = lastRel.split(',');
+    apiLink = apiLink.replace('</', '').replace('>', '');
+    const [, paramString] = apiLink.split('?');
+    const param = parse(paramString.replace(/^\?/, ''));
+    pageMax = param.page;
+  }
+  return pageMax;
 };
 
 // scheduler
@@ -50,11 +66,13 @@ export default function IndexPage() {
   const [isClick, setClick] = useState(0);
   const [isHover, setHover] = useState(0);
   // checked clusters
-  const [checkKeys, setCheck] = useState([]);
+  // const [checkKeys, setCheck] = useState([]);
 
   const [scheduler, setSchedulers] = useState([]);
-  // TODO table current page
+  // cluster选择树分页
   const [current, setCurrent] = useState(1);
+  const [clusterTotal, setClusterTotal] = useState(0);
+  const [searchCluster, setSearchCluster] = useState('');
 
   // dialog title
   const [dTitle, setDTitle] = useState('');
@@ -93,10 +111,14 @@ export default function IndexPage() {
   };
 
   useEffect(() => {
+    init();
+  }, [current]);
+
+  const init = () => {
     getClusters();
     getSeedPeerClusters();
     getSecGroups();
-  }, []);
+  };
 
   const getSchedulers = async (v: number) => {
     const res = await request('/api/v1/schedulers', {
@@ -168,10 +190,20 @@ export default function IndexPage() {
   };
 
   const getClusters = async () => {
-    const res = await request('/api/v1/scheduler-clusters');
-    if (res && typeof res === 'object' && res.length > 0) {
+    const res = await request('/api/v1/scheduler-clusters', {
+      method: 'get',
+      getResponse: true, // 获取response信息
+      params: { page: current, per_page: 50, name: searchCluster },
+    });
+
+    const data = res.data || [];
+    const headerLink = res.response.headers.get('Link') || '';
+    const pageMax = getPageMax(headerLink);
+    const total = pageMax * 50;
+
+    if (data && typeof data === 'object' && data.length > 0) {
       // number to string
-      res.map((sub: any) => {
+      data.map((sub: any) => {
         Object.keys(sub).forEach((el) => {
           if (typeof sub[el] === 'number') {
             sub[el] = sub[el].toString();
@@ -196,16 +228,17 @@ export default function IndexPage() {
         });
       });
 
-      // console.log(res);
-      getSchedulerByClusterId(res[0].id, 1);
-      res[0].security_group_id = Number(res[0].security_group_id);
-      if (res[0].seed_peer_clusters.length > 0) {
-        res[0].seed_peer_cluster_id = res[0].seed_peer_clusters[0].id;
+      // console.log(data);
+      getSchedulerByClusterId(data[0].id, 1);
+      data[0].security_group_id = Number(data[0].security_group_id);
+      if (data[0].seed_peer_clusters.length > 0) {
+        data[0].seed_peer_cluster_id = data[0].seed_peer_clusters[0].id;
       } else {
-        res[0].seed_peer_cluster_id = 0;
+        data[0].seed_peer_cluster_id = 0;
       }
-      setClusters(res);
     }
+    setClusters(data);
+    setClusterTotal(total);
   };
 
   const getSeedPeerClusters = async () => {
@@ -283,13 +316,13 @@ export default function IndexPage() {
     });
     res
       .then((r) => {
-        setCheck((pre) => {
-          pre.splice(
-            pre.findIndex((item) => item === id.toString()),
-            1,
-          );
-          return pre;
-        });
+        // setCheck((pre) => {
+        //   pre.splice(
+        //     pre.findIndex((item) => item === id.toString()),
+        //     1,
+        //   );
+        //   return pre;
+        // });
         message.success('Delete Success');
         getClusters();
       })
@@ -468,14 +501,15 @@ export default function IndexPage() {
               width: 180,
               marginBottom: 12,
             }}
+            value={searchCluster}
+            onChange={(e: any) => {
+              setSearchCluster(e.target.value);
+            }}
             onSearch={(v) => {
-              if (v.length > 0) {
-                const f = sClusters.filter((sub: any) =>
-                  sub?.name?.includes(v),
-                );
-                setClusters(f);
+              if (current === 1) {
+                init();
               } else {
-                getClusters();
+                setCurrent(1);
               }
             }}
           />
@@ -499,7 +533,7 @@ export default function IndexPage() {
               <AppstoreAddOutlined />
               Add Cluster
             </Button>
-            <Button
+            {/* <Button
               type="text"
               className={styles.newBtn}
               style={{
@@ -512,19 +546,14 @@ export default function IndexPage() {
             >
               <EditOutlined />
               Batch Update
-            </Button>
+            </Button> */}
           </div>
           <div className={styles.clusters}>
-            <Checkbox.Group
-              style={{ width: '100%' }}
-              onChange={(v: any) => {
-                setCheck(v);
-              }}
-            >
+            <Radio.Group style={{ width: '100%' }}>
               {sClusters.map((sub: any, idx: number) => {
                 return (
                   <Tooltip title={sub.name}>
-                    <Checkbox
+                    <Radio
                       key={sub.id}
                       value={sub.id}
                       onClick={() => {
@@ -594,11 +623,24 @@ export default function IndexPage() {
                       ) : (
                         <div />
                       )}
-                    </Checkbox>
+                    </Radio>
                   </Tooltip>
                 );
               })}
-            </Checkbox.Group>
+            </Radio.Group>
+            <div className={styles.pagination}>
+              <Pagination
+                size="small"
+                current={current}
+                defaultPageSize={50}
+                showSizeChanger={false}
+                hideOnSinglePage={true} // 只有一页时隐藏分页器
+                total={clusterTotal}
+                onChange={(v: number) => {
+                  setCurrent(v);
+                }}
+              />
+            </div>
           </div>
         </div>
         <div className={styles.right}>
@@ -918,7 +960,8 @@ export default function IndexPage() {
           </Form>
         ) : null}
       </Modal>
-      <Drawer
+      {/* 暂时屏蔽Batch Update功能 */}
+      {/*<Drawer
         title="Update Scheduler Clusters"
         placement="right"
         onClose={() => {
@@ -1105,7 +1148,7 @@ export default function IndexPage() {
             Add Item
           </Button>
         )}
-      </Drawer>
+      </Drawer> */}
     </div>
   );
 }

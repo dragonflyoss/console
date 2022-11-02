@@ -112,7 +112,7 @@ export default defineConfig({
   },
   proxy: {
     '/api/v1': {
-      target: 'http://11.122.75.66:8080', // dep env
+      target: ' http://dragonfly-manager.com:8080', //dep env
     },
   },
   fastRefresh: {},

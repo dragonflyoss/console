@@ -113,6 +113,7 @@ export default defineConfig({
   proxy: {
     '/api/v1': {
       target: ' http://dragonfly-manager.com:8080', //dep env
+      //verification-commit-name-1
     },
   },
   fastRefresh: {},

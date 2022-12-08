@@ -22,3 +22,7 @@
 # vscode
 .history/
 .vscode/
+
+# Next.js
+.next
+

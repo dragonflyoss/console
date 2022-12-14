@@ -17,5 +17,3 @@ Start the dev server,
 ```bash
 $ yarn dev
 ```
-
-

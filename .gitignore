@@ -22,3 +22,17 @@
 # vscode
 .history/
 .vscode/
+
+# next.js
+/.next/
+/out/
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts

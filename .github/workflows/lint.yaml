@@ -15,16 +15,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Lint
-        run: yarn lint
-
-  Markdown Lint:
-    name: Markdown lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Markdown lint
         uses: docker://avtodev/markdown-lint:v1
         with:

@@ -1,0 +1,35 @@
+name: E2E Test
+
+on:
+  push:
+    branches: [v1]
+  pull_request:
+    branches: [v1]
+
+jobs:
+  e2e_test:
+    strategy:
+      matrix:
+        node-version: [18.12.1]
+
+    name: E2E_Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: yarn
+        run: yarn
+
+      - name: Run e2e
+        run: yarn cypress
+
+      - name: Codecov
+        uses: codecov/codecov-action@v3.1.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

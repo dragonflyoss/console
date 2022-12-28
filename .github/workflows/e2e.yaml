@@ -8,10 +8,6 @@ on:
 
 jobs:
   e2e_test:
-    strategy:
-      matrix:
-        node-version: [18.12.1]
-
     name: E2E_Test
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -19,12 +15,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '18.x'
           cache: yarn
-        run: yarn
+      - run: yarn
 
       - name: Run e2e
         run: yarn cypress

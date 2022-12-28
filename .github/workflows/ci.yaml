@@ -19,7 +19,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
-          cache: yarn
       - run: yarn
 
       - name: Run jest test
@@ -44,7 +43,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
-          cache: yarn
       - run: yarn
 
       - name: Cache nextjs build

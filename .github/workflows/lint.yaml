@@ -2,9 +2,9 @@ name: Lint
 
 on:
   push:
-    branches: [v1]
+    branches: [v1, release-*]
   pull_request:
-    branches: [v1]
+    branches: [v1, release-*]
 
 jobs:
   lint:
@@ -14,14 +14,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
-      - name: Use Node.js 18.x
+
+      - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
-          # cache: 'yarn'
-        run: yarn
+        run: yarn install
+
+      - name: Linter
         run: yarn lint
 
       - name: Markdown lint
         uses: docker://avtodev/markdown-lint:v1
+        with:
+          config: '.markdownlint.yml'
+          args: '**/*.md'
+          ignore: 'deploy/helm-charts manager/console CHANGELOG.md build'

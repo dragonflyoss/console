@@ -2,9 +2,9 @@ name: Lint
 
 on:
   push:
-    branches: [v1, release-*]
+    branches: [v1]
   pull_request:
-    branches: [v1, release-*]
+    branches: [v1]
 
 jobs:
   lint:
@@ -23,10 +23,3 @@ jobs:
 
       - name: Linter
         run: yarn lint
-
-      - name: Markdown lint
-        uses: docker://avtodev/markdown-lint:v1
-        with:
-          config: '.markdownlint.yml'
-          args: '**/*.md'
-          ignore: 'deploy/helm-charts manager/console CHANGELOG.md build'

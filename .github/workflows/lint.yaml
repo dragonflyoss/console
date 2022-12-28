@@ -23,3 +23,9 @@ jobs:
 
       - name: Linter
         run: yarn lint
+
+      - name: Markdown lint
+        uses: docker://avtodev/markdown-lint:v1
+        with:
+          config: '.markdownlint.yml'
+          args: '**/*.md'

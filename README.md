@@ -2,26 +2,26 @@
 
 This repository contains the source code for Dragonfly Console.
 
-This is a project built by [Next.js]（https://nextjs.org/learn).
+This is a project built by [Next.js]<https://nextjs.org/learn>.
 
-# Develop
+## Develop
 
 ## Getting Started
 
 Install dependencies,
 
 ```bash
-$ yarn
+ yarn
 ```
 
 Start the dev server,
 
 ```bash
-$ yarn dev
+ yarn dev
 ```
 
 Build
 
 ```bash
-$ yarn build
+ yarn build
 ```

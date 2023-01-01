@@ -1,0 +1,31 @@
+name: Lint
+
+on:
+  push:
+    branches: [v1]
+  pull_request:
+    branches: [v1]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - run: yarn install
+
+      - name: Linter
+        run: yarn lint
+
+      - name: Markdown Linting Action
+        uses: avto-dev/markdown-lint@v1.5.0
+        with:
+          config: '.markdownlint.yml'
+          args: './*.md'

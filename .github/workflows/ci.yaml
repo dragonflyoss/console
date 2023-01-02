@@ -21,15 +21,13 @@ jobs:
           node-version: '18.x'
       - run: yarn
 
-      # - name: Run jest test
-      #   run: yarn test
+      - name: Run jest test
+        run: yarn test
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.txt
-          flags: unittests
 
   build:
     name: Build

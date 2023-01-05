@@ -10,7 +10,6 @@ jobs:
   e2e_test:
     name: E2E_Test
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -23,8 +22,3 @@ jobs:
 
       - name: Run e2e
         run: yarn cypress
-
-      - name: Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}

@@ -9,7 +9,6 @@ on:
 jobs:
   check_size:
     name: Check Size
-    timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

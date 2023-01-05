@@ -25,7 +25,7 @@
     "**/*.tsx",
     "page.test/home.test.tsx",
     "page.test/home.test.js"
-  ],
+, "cypress.config.js"  ],
   "exclude": [
     "node_modules"
   ]

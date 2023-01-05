@@ -1,4 +1,4 @@
-{
+{ 
   "name": "console",
   "version": "0.1.0",
   "private": true,
@@ -14,6 +14,16 @@
     "e2e": "start-server-and-test dev http://localhost:3000 cypress",
     "e2e:headless": "start-server-and-test dev http://localhost:3000 cypress:headless",
     "test": "jest --watch"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.@(js|ts|tsx)": [
+      "yarn lint"
+        ]
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",

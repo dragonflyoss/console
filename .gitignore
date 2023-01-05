@@ -26,6 +26,7 @@
 # next.js
 /.next/
 /out/
+.next/cache/eslint/.cache_1fck6pt
 
 # local env files
 .env*.local

@@ -1,6 +1,6 @@
 describe('link', () => {
   it('should link to the home page', () => {
-    cy.visit('http://localhost:3000/')
+    cy.visit('/')
 
     cy.get('a[href*="home"]').click()
 

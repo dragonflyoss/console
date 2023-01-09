@@ -11,15 +11,17 @@ Dragonfly Console is the front-end console of dragonfly, through which you can e
 
 ## Functionality Overview
 
-- **Scheduler Cluster:** Visually display the cluster name, description, IDC, load limit and the host name, IP, port and other information of the scheduler, and you will operate the cluster more simply and clearly.
+- **Scheduler Cluster:**  Manage the scheduler cluster and configure the information of the scheduler cluster.
 
-- **Security:** You can create security groups and security rules here, and you can also specify associated security rules, edit or delete them.
+- **Seed Peer Cluster:**  Manage the seed peer cluster and configure the seed peer cluster information.
 
-- **Permissions:** List the objects and actions of all permissions and roles.
+- **Security:**  Manage security groups and security rules, Users can configure the security groups associated with the scheduler cluster.
 
-- **Task:** List all tasks and allows you to create tasks here, including adding URLs, task types, and scopes.
+- **Permissions:**  Manage permissions and roles.
 
-- **User**: List the user name status and other information, you can change the user role here.
+- **Task:**  Manage asynchronous tasks, including warm-up tasks.
+
+- **User:**  Manage user name, status and other information, you can change user roles here.
 
 ## Documentation
 

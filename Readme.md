@@ -15,7 +15,7 @@ Dragonfly Console is the front-end console of dragonfly, through which you can e
 
 - **Seed Peer Cluster:**  Manage the seed peer cluster and configure the seed peer cluster information.
 
-- **Security:**  Manage security groups and security rules, Users can configure the security groups associated with the scheduler cluster.
+- **Security:**  Manage security groups and security rules, users can configure the security groups associated with the scheduler cluster.
 
 - **Permissions:**  Manage permissions and roles.
 

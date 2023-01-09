@@ -7,27 +7,25 @@
 
 ## Introduction
 
-**Dragonfly Console** is the front-end console of Dragonfly, through which you can easily configure clusters and view your cluster information intuitively, set security rules.
+Dragonfly Console is the front-end console of dragonfly, through which you can easily configure clusters and view cluster information.
 
 ## Functionality Overview
 
-- **Scheduler Cluster:** Intuitively display the cluster's name description IDC load limit and the scheduler's hostname IP port and other information, which is more simple and clear for you to operate the cluster.
+- **Scheduler Cluster:** Visually display the cluster name, description, IDC, load limit and the host name, IP, port and other information of the scheduler, and you will operate the cluster more simply and clearly.
 
-- **Security:** You can create security groups and security rules here, associate the specified security rules, edit or delete them.
+- **Security:** You can create security groups and security rules here, and you can also specify associated security rules, edit or delete them.
 
 - **Permissions:** List the objects and actions of all permissions and roles.
 
-- **Task:** List all tasks and allow you to create tasks here, including adding URL and ranges for task types.
+- **Task:** List all tasks and allows you to create tasks here, including adding URLs, task types, and scopes.
 
 - **User**: List the user name status and other information, you can change the user role here.
 
 ## Documentation
 
-You can find the complete **Dragonfly** documentation on the [d7y.io][d7y.io].
+You can find the full documentation on the [d7y.io][d7y.io].
 
 ## Getting Started
-
-**First acquaintance** [Manage Console].
 
 **Quick start**
 

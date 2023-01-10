@@ -1,9 +1,9 @@
 # Dragonfly Console
 
-[![GitHub release](https://img.shields.io/github/release/dragonflyoss/Dragonfly.svg)](https://github.com/dragonflyoss/console/releases)
-[![LICENSE](https://img.shields.io/github/license/dragonflyoss/Dragonfly.svg?style=flat-square)](https://github.com/dragonflyoss/console/blob/main/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/dragonflyoss/console.svg)](https://github.com/dragonflyoss/console/releases)
+[![LICENSE](https://img.shields.io/github/license/dragonflyoss/console.svg?style=flat-square)](https://github.com/dragonflyoss/console/blob/v1/LICENSE)
 [![CI](https://img.shields.io/badge/CI-unknown-orange.svg?logo=github)](https://github.com/dragonflyoss/console/tree/v1)
-[![Coverage](https://codecov.io/gh/dragonflyoss/Dragonfly/branch/main/graph/badge.svg)](https://codecov.io/gh/dragonflyoss/Dragonfly)
+[![Coverage](https://codecov.io/gh/dragonflyoss/console/branch/v1/graph/badge.svg)](https://codecov.io/gh/)
 
 ## Introduction
 

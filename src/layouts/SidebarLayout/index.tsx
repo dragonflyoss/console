@@ -17,9 +17,6 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ children }) => {
         sx={{
           flex: 1,
           height: '100%',
-          '.MuiPageTitle-wrapper': {
-            background: 'pink',
-          },
         }}
       >
         <Sidebar />

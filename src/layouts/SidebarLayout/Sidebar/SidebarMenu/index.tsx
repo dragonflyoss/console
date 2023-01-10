@@ -1,9 +1,8 @@
-import { useEffect } from "react";
-// import { useRouter } from 'next/router';
-import { Box, styled, Button } from "@mui/material";
-import NextLink from "next/link";
-import BrightnessLowTwoToneIcon from "@mui/icons-material/BrightnessLowTwoTone";
-import MmsTwoToneIcon from "@mui/icons-material/MmsTwoTone";
+import { useEffect } from 'react';
+import { Box, styled, Button } from '@mui/material';
+import NextLink from 'next/link';
+import BrightnessLowTwoToneIcon from '@mui/icons-material/BrightnessLowTwoTone';
+import MmsTwoToneIcon from '@mui/icons-material/MmsTwoTone';
 
 const MenuWrapper = styled(Box)(
   `
@@ -36,7 +35,7 @@ const MenuWrapper = styled(Box)(
 
     }
   }
-    `
+    `,
 );
 
 const SidebarMenu = () => {

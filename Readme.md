@@ -2,8 +2,8 @@
 
 [![GitHub release](https://img.shields.io/github/release/dragonflyoss/console.svg)](https://github.com/dragonflyoss/console/releases)
 [![LICENSE](https://img.shields.io/github/license/dragonflyoss/console.svg?style=flat-square)](https://github.com/dragonflyoss/console/blob/main/LICENSE)
-[![CI](https://img.shields.io/badge/CI-unknown-orange.svg?logo=github)](https://github.com/dragonflyoss/console/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/dragonflyoss/console/branch/main/graph/badge.svg)](https://app.codecov.io/gh/dragonflyoss/console)
+[![CI](https://github.com/dragonflyoss/console/actions/workflows/ci.yaml/badge.svg)](https://github.com/dragonflyoss/console/actions/workflows/ci.yaml)
 
 ## Introduction
 

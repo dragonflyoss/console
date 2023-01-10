@@ -19,22 +19,32 @@ Dragonfly Console is the front-end console of dragonfly, through which you can e
 
 - **Permissions:**  Manage permissions and roles.
 
-- **Task:**  Manage asynchronous tasks, including warm-up tasks.
+- **Task:**  Manage asynchronous tasks, including preheat tasks.
 
-- **User:**  Manage user name, status and other information, you can change user roles here.
+- **User:**  Manage user information, you can change user roles here.
 
 ## Documentation
 
 You can find the full documentation on the [d7y.io][d7y.io].
 
-## Getting Started
+## Community
 
-**Quick start**
+Welcome developers to actively participate in community discussions
+and contribute code to dragonfly. We will remain
+concerned about the issues discussed in the community and respond quickly.
 
-1. Navigate to the console directory from the command line.
-1. Install [NodeJS](https://nodejs.org/en/download/) and ensure that it is above 18.x edition.
-1. Install dependencies by running [Yarn](https://yarnpkg.com).
-1. Run `yarn dev` starts dev server.
+- **Slack Channel**: [#dragonfly](https://cloud-native.slack.com/messages/dragonfly/) on [CNCF Slack](https://slack.cncf.io/)
+- **Discussion Group**: <dragonfly-discuss@googlegroups.com>
+- **Developer Group**: <dragonfly-developers@googlegroups.com>
+- **Github Discussions**: [Dragonfly Discussion Forum][discussion]
+- **Twitter**: [@dragonfly_oss](https://twitter.com/dragonfly_oss)
+- **DingTalk**: [23304666](https://qr.dingtalk.com/action/joingroup?code=v1,k1,3wEdP6zHKQbOzBRwOvv8wyIbxDEU0kXMrxphaOcPz6I=&_dt_no_comment=1&origin=11)
+
+<!-- markdownlint-disable -->
+<div align="center">
+  <img src="public/images/community/dingtalk-group.jpeg" width="300" title="dingtalk">
+</div>
+<!-- markdownlint-restore -->
 
 ## Code of Conduct
 
@@ -44,3 +54,4 @@ Please refer to our [Code of Conduct][codeconduct].
 [d7y.io]: https://d7y.io/
 [codeconduct]: CODE_OF_CONDUCT.md
 [Manage Console]:https://d7y.io/docs/reference/manage-console/
+[discussion]: https://github.com/dragonflyoss/Dragonfly2/discussions

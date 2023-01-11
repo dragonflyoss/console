@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "analyze": "cross-env ANALYZE=true next build",
+    "type-check": "tsc",
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
@@ -23,7 +25,7 @@
   "lint-staged": {
     "*.@(js|ts|tsx)": [
       "yarn lint"
-        ]
+    ]
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -35,6 +37,7 @@
     "@types/node": "18.11.13",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.9",
+    "cross-env": "^7.0.3",
     "eslint": "8.29.0",
     "eslint-config-next": "13.0.6",
     "next": "13.0.6",

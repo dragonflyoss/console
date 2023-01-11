@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "allowUnreachableCode": false,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
     "target": "es5",
     "lib": [
       "dom",
@@ -17,15 +22,18 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+    }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "page.test/home.test.tsx",
-    "page.test/home.test.js"
-, "cypress.config.js"  ],
+    "cypress.config.js"
+ ],
   "exclude": [
     "node_modules"
   ]

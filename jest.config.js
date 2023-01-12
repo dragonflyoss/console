@@ -13,7 +13,7 @@ const customJestConfig = {
     '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
   },
   moduleNameMapper: {
-    // Handle module aliases (this will be automatically configured for you soon)
+    // Handle module aliases
     '^@/src/(.*)$': '<rootDir>/src/$1',
     '^@/pages/(.*)$': '<rootDir>/pages/$1',
   },

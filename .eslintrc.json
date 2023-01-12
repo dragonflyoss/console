@@ -1,3 +1,35 @@
 {
-  "extends": ["next/core-web-vitals","plugin:cypress/recommended","prettier"]
+  "extends": ["next/core-web-vitals", "prettier"],
+
+  "overrides": [
+    // Configuration TypeScript
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "extends": ["next/core-web-vitals"],
+      "rules": {
+        // TypeScript ESLint
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/comma-dangle": "off"
+      }
+    },
+    // Configuration jest
+    {
+      "files": ["**/*.test.ts", "**/*.test.tsx"],
+      "plugins": ["jest", "jest-formatting", "jest-dom"],
+      "extends": [
+        "plugin:jest/recommended",
+        "plugin:jest-formatting/recommended",
+        "plugin:jest-dom/recommended"
+      ]
+    },
+    // Configuration  cypress
+    {
+      "files": ["cypress/**/*.ts"],
+      "plugins": ["cypress"],
+      "extends": ["plugin:cypress/recommended"]
+    }
+  ]
 }

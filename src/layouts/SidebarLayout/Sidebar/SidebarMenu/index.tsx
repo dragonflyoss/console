@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Box, styled, Button } from '@mui/material';
 import NextLink from 'next/link';
 import BrightnessLowTwoToneIcon from '@mui/icons-material/BrightnessLowTwoTone';

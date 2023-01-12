@@ -1,8 +1,8 @@
-import { FC, ReactNode } from "react";
-import PropTypes from "prop-types";
-import { Scrollbars } from "react-custom-scrollbars-2";
+import { FC, ReactNode } from 'react';
+import PropTypes from 'prop-types';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 
-import { Box, useTheme } from "@mui/material";
+import { Box } from '@mui/material';
 
 interface ScrollbarProps {
   className?: string;
@@ -10,8 +10,6 @@ interface ScrollbarProps {
 }
 
 const Scrollbar: FC<ScrollbarProps> = ({ className, children, ...rest }) => {
-  const theme = useTheme();
-
   return (
     <Scrollbars
       autoHide

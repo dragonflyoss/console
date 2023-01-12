@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import { Box, Button, Typography } from '@mui/material';
+// import Link from 'next/link';
+import { Button } from '@mui/material';
 import Layout from '../../src/layouts/SidebarLayout';
 
 const HomePage = () => {

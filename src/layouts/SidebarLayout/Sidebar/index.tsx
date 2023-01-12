@@ -1,10 +1,10 @@
 // import { useContext } from 'react';
 import Scrollbar from '../../../components/Scrollbar';
-import { Box, Drawer, styled, Divider, useTheme, Button } from '@mui/material';
+import { Box, styled, Divider } from '@mui/material';
 import SidebarMenu from './SidebarMenu';
 
 const SidebarWrapper = styled(Box)(
-  ({ theme }) => `
+  ({}) => `
         min-width: 250px;
         color: red;
         position: relative;

@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import Link from 'next/link';
 import Layout from '../../src/layouts/SidebarLayout';
 const AboutPage = () => {
@@ -7,7 +7,7 @@ const AboutPage = () => {
       <Box>
         <h3>About Page</h3>
         <Box>
-          <Link href="/home">Go home</Link>
+          <Link href="/home">Go home sssss</Link>
         </Box>
       </Box>
     </Layout>

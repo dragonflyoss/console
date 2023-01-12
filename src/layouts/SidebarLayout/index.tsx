@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { Box, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import Sidebar from './Sidebar';
@@ -9,8 +9,6 @@ interface SidebarLayoutProps {
 }
 
 const SidebarLayout: FC<SidebarLayoutProps> = ({ children }) => {
-  const theme = useTheme();
-
   return (
     <>
       <Box

@@ -7,7 +7,7 @@ const AboutPage = () => {
       <Box>
         <h3>About Page</h3>
         <Box>
-          <Link href="/home">Go home sssss</Link>
+          <Link href="/home">Go home </Link>
         </Box>
       </Box>
     </Layout>

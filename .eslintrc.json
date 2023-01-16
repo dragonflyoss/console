@@ -1,5 +1,5 @@
 {
-  "extends": ["next/core-web-vitals", "prettier"],
+  "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
 
   "overrides": [
     // Configuration TypeScript
@@ -15,7 +15,7 @@
         "@typescript-eslint/comma-dangle": "off"
       }
     },
-    // Configuration jest
+    // Configuration Jest
     {
       "files": ["**/*.test.ts", "**/*.test.tsx"],
       "plugins": ["jest", "jest-formatting", "jest-dom"],
@@ -25,7 +25,7 @@
         "plugin:jest-dom/recommended"
       ]
     },
-    // Configuration  cypress
+    // Configuration Cypress
     {
       "files": ["cypress/**/*.ts"],
       "plugins": ["cypress"],

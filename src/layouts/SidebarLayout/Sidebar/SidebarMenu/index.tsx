@@ -38,33 +38,19 @@ const MenuWrapper = styled(Box)(
 );
 
 const SidebarMenu = () => {
-  // const router = useRouter();
-  // const currentRoute = router.pathname;
-  // useEffect(() => {
-  //   console.log(currentRoute, 'currentRoute');
-  // }, []);
-
   return (
     <>
       <MenuWrapper>
         <Box>
           <NextLink href="/home">
-            <Button
-              variant="outlined"
-              startIcon={<BrightnessLowTwoToneIcon />}
-              // className={currentRoute === "/home" ? "active" : ""}
-            >
+            <Button variant="outlined" startIcon={<BrightnessLowTwoToneIcon />}>
               home
             </Button>
           </NextLink>
         </Box>
         <Box>
           <NextLink href="/about" passHref>
-            <Button
-              variant="outlined"
-              startIcon={<MmsTwoToneIcon />}
-              // className={currentRoute === "/about" ? "active" : ""}
-            >
+            <Button variant="outlined" startIcon={<MmsTwoToneIcon />}>
               about
             </Button>
           </NextLink>

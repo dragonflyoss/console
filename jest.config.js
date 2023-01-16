@@ -6,12 +6,16 @@ const createJestConfig = nextJest({
 
 // Add more setup options before each test is run
 const customJestConfig = {
-  setupFilesAfterEnv: ['./jest.setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jest-environment-jsdom',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'jsx'],
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
-  },
+  collectCoverage: true,
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    'pages/**/*.{ts,tsx}',
+    'pages.test/**/*.{ts,tsx}',
+    '!**/node_modules/**',
+  ],
   moduleNameMapper: {
     // Handle module aliases
     '^@/src/(.*)$': '<rootDir>/src/$1',

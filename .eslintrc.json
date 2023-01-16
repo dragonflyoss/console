@@ -1,6 +1,5 @@
 {
   "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
-
   "overrides": [
     // Configuration TypeScript
     {

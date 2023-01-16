@@ -15,8 +15,6 @@ const SidebarWrapper = styled(Box)(
 );
 
 const Sidebar = () => {
-  // const theme = useTheme();
-
   return (
     <>
       <SidebarWrapper

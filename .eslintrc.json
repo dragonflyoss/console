@@ -1,12 +1,12 @@
 {
   "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
   "overrides": [
-    // Configuration TypeScript
+    // Configuration typeScript.
     {
       "files": ["**/*.ts", "**/*.tsx"],
       "extends": ["next/core-web-vitals"],
       "rules": {
-        // TypeScript ESLint
+        // TypeScript eslint.
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
@@ -14,7 +14,7 @@
         "@typescript-eslint/comma-dangle": "off"
       }
     },
-    // Configuration Jest
+    // Configuration jest.
     {
       "files": ["**/*.test.ts", "**/*.test.tsx"],
       "plugins": ["jest", "jest-formatting", "jest-dom"],
@@ -24,7 +24,7 @@
         "plugin:jest-dom/recommended"
       ]
     },
-    // Configuration Cypress
+    // Configuration cypress.
     {
       "files": ["cypress/**/*.ts"],
       "plugins": ["cypress"],

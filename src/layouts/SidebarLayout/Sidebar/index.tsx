@@ -1,4 +1,3 @@
-// import { useContext } from 'react';
 import Scrollbar from '../../../components/Scrollbar';
 import { Box, styled, Divider } from '@mui/material';
 import SidebarMenu from './SidebarMenu';

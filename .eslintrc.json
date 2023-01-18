@@ -1,0 +1,37 @@
+{
+  "extends": ["next/core-web-vitals", "plugin:prettier/recommended", "prettier"],
+  "overrides": [
+    // Configuration typeScript.
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "extends": ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
+      "parser": "@typescript-eslint/parser",
+      "plugins": ["@typescript-eslint"],
+      "rules": {
+        // TypeScript eslint.
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/comma-dangle": "off"
+      }
+    },
+    // Configuration jest.
+    {
+      "files": ["**/*.test.ts", "**/*.test.tsx"],
+      "plugins": ["jest", "jest-formatting", "jest-dom", "testing-library"],
+      "extends": [
+        "plugin:jest/recommended",
+        "plugin:jest-formatting/recommended",
+        "plugin:jest-dom/recommended",
+        "plugin:testing-library/react"
+      ]
+    },
+    // Configuration cypress.
+    {
+      "files": ["cypress/**/*.ts"],
+      "plugins": ["cypress"],
+      "extends": ["plugin:cypress/recommended"]
+    }
+  ]
+}

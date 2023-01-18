@@ -1,18 +1,12 @@
 {
   "name": "console",
-  "version": "1.0.1",
-  "description": "Dragonfly console",
+  "version": "1.0.0",
+  "description": "Dragonfly console is the front-end console of dragonfly, through which you can easily configure clusters and view cluster information.",
   "license": "Apache-2.0",
   "keywords": [
     "dragonfly",
     "d7y",
-    "p2p",
-    "react",
-    "typescript",
-    "next",
-    "next.js",
-    "recoil",
-    "express"
+    "p2p"
   ],
   "repository": {
     "type": "git",

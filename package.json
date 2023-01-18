@@ -21,11 +21,10 @@
     "lint": "next lint",
     "prepare": "husky install",
     "release": "standard-version",
-    "cypress": "cypress open",
-    "cypress:headless": "cypress run",
-    "e2e": "start-server-and-test dev http://localhost:3000 cypress",
-    "e2e:headless": "start-server-and-test dev http://localhost:3000 cypress:headless",
-    "test": "jest --watch"
+    "cypress:run": "cypress run",
+    "test:cypress": "start-server-and-test dev http-get://localhost:3000 cypress:run",
+    "test:jest": "jest",
+    "test:jest:coverage": "jest --coverage"
   },
   "husky": {
     "hooks": {

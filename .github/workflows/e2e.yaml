@@ -22,7 +22,7 @@ jobs:
       - run: yarn
 
       - name: Run e2e test
-        run: yarn cypress
+        run: yarn run test:cypress
 
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v3

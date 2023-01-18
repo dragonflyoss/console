@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dragonflyoss/console/tree/v1"
+    "url": "git@github.com:dragonflyoss/console.git"
   },
   "scripts": {
     "dev": "next dev",

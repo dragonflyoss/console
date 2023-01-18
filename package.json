@@ -1,0 +1,112 @@
+{
+  "name": "console",
+  "version": "0.1.1",
+  "description": "Dragonfly console",
+  "license": "Apache-2.0",
+  "keywords": [
+    "dragonfly",
+    "d7y",
+    "p2p",
+    "react",
+    "typescript",
+    "next",
+    "next.js",
+    "recoil",
+    "express"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dragonflyoss/console.git"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "analyze": "cross-env ANALYZE=true next build",
+    "type-check": "tsc",
+    "start": "next start",
+    "lint": "next lint",
+    "prepare": "husky install",
+    "release": "standard-version",
+    "cypress": "cypress open",
+    "cypress:headless": "cypress run",
+    "e2e": "start-server-and-test dev http://localhost:3000 cypress",
+    "e2e:headless": "start-server-and-test dev http://localhost:3000 cypress:headless",
+    "test": "jest --watch",
+    "commit": "git-cz"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.@(js|ts|tsx)": [
+      "yarn lint"
+    ]
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.10.16",
+    "@mui/material": "^5.10.17",
+    "@types/jest": "^29.2.5",
+    "cross-env": "^7.0.3",
+    "next": "13.0.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-test-renderer": "^18.2.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.4.2",
+    "@commitlint/cz-commitlint": "^17.4.2",
+    "@commitlint/config-conventional": "^17.4.2",
+    "@next/bundle-analyzer": "^13.0.6",
+    "@next/eslint-plugin-next": "^13.0.6",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@types/node": "18.11.13",
+    "@types/react": "18.0.26",
+    "@types/react-dom": "18.0.9",
+    "@typescript-eslint/eslint-plugin": "^5.48.2",
+    "@typescript-eslint/parser": "^5.48.2",
+    "commitizen": "^4.2.6",
+    "cypress": "^12.1.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.32.0",
+    "eslint-config-next": "13.0.6",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-cypress": "^2.12.1",
+    "eslint-plugin-jest": "^27.2.1",
+    "eslint-plugin-jest-dom": "^4.0.3",
+    "eslint-plugin-jest-formatting": "^3.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-testing-library": "^5.9.1",
+    "husky": "^8.0.0",
+    "jest": "^29.3.1",
+    "jest-environment-jsdom": "^29.3.1",
+    "lint-staged": "^13.1.0",
+    "prettier": "2.8.2",
+    "react-custom-scrollbars-2": "^4.5.0",
+    "recoil": "^0.7.6",
+    "standard-version": "^9.5.0",
+    "start-server-and-test": "^1.15.2",
+    "typescript": "^4.9.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
+  }
+}

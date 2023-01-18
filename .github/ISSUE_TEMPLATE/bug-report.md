@@ -16,9 +16,3 @@ labels: kind/bug
 ### How to reproduce it:
 
 <!-- How can a maintainer reproduce this issue (please be detailed) -->
-
-### Environment:
-- Dragonfly console version:
-- OS:
-- Kernel (e.g. `uname -a`):
-- Others:

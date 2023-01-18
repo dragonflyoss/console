@@ -7,7 +7,8 @@
 
 ## Introduction
 
-Dragonfly Console is the front-end console of dragonfly, through which you can easily configure clusters and view cluster information.
+Dragonfly console is the front-end console of dragonfly,
+through which you can easily configure clusters and view cluster information.
 
 ## Functionality Overview
 
@@ -15,7 +16,8 @@ Dragonfly Console is the front-end console of dragonfly, through which you can e
 
 - **Seed Peer Cluster:**  Manage the seed peer cluster and configure the seed peer cluster information.
 
-- **Security:**  Manage security groups and security rules, users can configure the security groups associated with the scheduler cluster.
+- **Security:**  Manage security groups and security rules,
+  users can configure the security groups associated with the scheduler cluster.
 
 - **Permissions:**  Manage permissions and roles.
 
@@ -36,7 +38,6 @@ concerned about the issues discussed in the community and respond quickly.
 - **Slack Channel**: [#dragonfly](https://cloud-native.slack.com/messages/dragonfly/) on [CNCF Slack](https://slack.cncf.io/)
 - **Discussion Group**: <dragonfly-discuss@googlegroups.com>
 - **Developer Group**: <dragonfly-developers@googlegroups.com>
-- **Github Discussions**: [Dragonfly Discussion Forum][discussion]
 - **Twitter**: [@dragonfly_oss](https://twitter.com/dragonfly_oss)
 - **DingTalk**: [23304666](https://qr.dingtalk.com/action/joingroup?code=v1,k1,3wEdP6zHKQbOzBRwOvv8wyIbxDEU0kXMrxphaOcPz6I=&_dt_no_comment=1&origin=11)
 
@@ -44,8 +45,5 @@ concerned about the issues discussed in the community and respond quickly.
 
 Please refer to our [Code of Conduct][codeconduct].
 
-[logo-linear]: public/images/dragonfly-vertical.png
 [d7y.io]: https://d7y.io/
 [codeconduct]: CODE_OF_CONDUCT.md
-[Manage Console]:https://d7y.io/docs/reference/manage-console/
-[discussion]: https://github.com/dragonflyoss/Dragonfly2/discussions

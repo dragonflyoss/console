@@ -21,11 +21,10 @@
     "lint": "next lint",
     "prepare": "husky install",
     "release": "standard-version",
-    "cypress": "cypress open",
-    "cypress:headless": "cypress run",
-    "e2e": "start-server-and-test dev http://localhost:3000 cypress",
-    "e2e:headless": "start-server-and-test dev http://localhost:3000 cypress:headless",
-    "test": "jest --watch"
+    "cypress:run": "cypress run",
+    "test:cypress": "start-server-and-test dev http-get://localhost:3000 cypress:run",
+    "test:jest": "jest",
+    "test:jest:coverage": "jest --coverage"
   },
   "husky": {
     "hooks": {
@@ -50,6 +49,7 @@
     "react-test-renderer": "^18.2.0"
   },
   "devDependencies": {
+    "@commitlint/config-conventional": "^17.1.0",
     "@next/bundle-analyzer": "^13.0.6",
     "@next/eslint-plugin-next": "^13.0.6",
     "@testing-library/jest-dom": "^5.16.5",
@@ -91,6 +91,25 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "lint-staged": {
+    "**/*.ts?(x)": [
+      "yarn type-check"
+    ],
+    "*.{js,ts,tsx,}": [
+      "prettier --write"
+    ],
+    "*.{json,yaml,yml}": [
+      "prettier --write"
+    ],
+    "*.{css,sass}": [
+      "prettier --write"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
     ]
   }
 }

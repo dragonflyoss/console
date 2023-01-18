@@ -49,6 +49,7 @@
     "react-test-renderer": "^18.2.0"
   },
   "devDependencies": {
+    "@commitlint/config-conventional": "^17.1.0",
     "@next/bundle-analyzer": "^13.0.6",
     "@next/eslint-plugin-next": "^13.0.6",
     "@testing-library/jest-dom": "^5.16.5",
@@ -90,6 +91,11 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
     ]
   }
 }

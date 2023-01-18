@@ -25,12 +25,6 @@
       "@/pages/*": ["./pages/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "cypress.config.js",
-    "page.test/home.test.js"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "cypress.config.js", "page.test/home.test.js"],
   "exclude": ["node_modules"]
 }

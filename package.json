@@ -1,9 +1,12 @@
 {
   "name": "console",
   "version": "0.1.1",
-  "description": "Dragonfly front-end console",
+  "description": "Dragonfly console",
   "license": "Apache-2.0",
   "keywords": [
+    "dragonfly",
+    "d7y",
+    "p2p",
     "react",
     "typescript",
     "next",
@@ -13,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dragonflyoss/console.git"
+    "url": "https://github.com/dragonflyoss/console/tree/v1"
   },
   "scripts": {
     "dev": "next dev",
@@ -55,6 +58,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.2",
+    "@commitlint/cz-commitlint": "^17.4.2",
     "@commitlint/config-conventional": "^17.4.2",
     "@next/bundle-analyzer": "^13.0.6",
     "@next/eslint-plugin-next": "^13.0.6",
@@ -102,7 +106,7 @@
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "@commitlint/cz-commitlint"
     }
   }
 }

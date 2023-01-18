@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import Link from 'next/link';
 import Layout from '../../src/layouts/SidebarLayout';
+
 const AboutPage = () => {
   return (
     <Layout>

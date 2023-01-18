@@ -93,6 +93,20 @@
       "last 1 safari version"
     ]
   },
+  "lint-staged": {
+    "**/*.ts?(x)": [
+      "yarn type-check"
+    ],
+    "*.{js,ts,tsx,}": [
+      "prettier --write"
+    ],
+    "*.{json,yaml,yml}": [
+      "prettier --write"
+    ],
+    "*.{css,sass}": [
+      "prettier --write"
+    ]
+  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"

@@ -11,12 +11,7 @@ const customJestConfig = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'jsx'],
   testPathIgnorePatterns: ['<rootDir>/cypress/'],
   collectCoverage: true,
-  collectCoverageFrom: [
-    'src/**/*.{ts,tsx}',
-    'pages/**/*.{ts,tsx}',
-    'pages.test/**/*.{ts,tsx}',
-    '!**/node_modules/**',
-  ],
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', 'pages/**/*.{ts,tsx}', '!**/node_modules/**'],
   moduleNameMapper: {
     // Handle module aliases.
     '^@/src/(.*)$': '<rootDir>/src/$1',

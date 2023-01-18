@@ -1,6 +1,6 @@
 {
   "name": "console",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Dragonfly console",
   "license": "Apache-2.0",
   "keywords": [
@@ -31,8 +31,7 @@
     "cypress:headless": "cypress run",
     "e2e": "start-server-and-test dev http://localhost:3000 cypress",
     "e2e:headless": "start-server-and-test dev http://localhost:3000 cypress:headless",
-    "test": "jest --watch",
-    "commit": "git-cz"
+    "test": "jest --watch"
   },
   "husky": {
     "hooks": {
@@ -57,9 +56,6 @@
     "react-test-renderer": "^18.2.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.4.2",
-    "@commitlint/cz-commitlint": "^17.4.2",
-    "@commitlint/config-conventional": "^17.4.2",
     "@next/bundle-analyzer": "^13.0.6",
     "@next/eslint-plugin-next": "^13.0.6",
     "@testing-library/jest-dom": "^5.16.5",
@@ -69,7 +65,6 @@
     "@types/react-dom": "18.0.9",
     "@typescript-eslint/eslint-plugin": "^5.48.2",
     "@typescript-eslint/parser": "^5.48.2",
-    "commitizen": "^4.2.6",
     "cypress": "^12.1.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.32.0",
@@ -103,10 +98,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "@commitlint/cz-commitlint"
-    }
   }
 }

@@ -19,7 +19,7 @@
     ]
   },
   "dependencies": {
-    "@ant-design/icons": "^4.6.3",
+    "@ant-design/icons": "^5.0.1",
     "antd": "^4.17.2",
     "js-cookie": "^3.0.1",
     "jsonwebtoken": "^8.5.1",

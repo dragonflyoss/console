@@ -1,7 +1,7 @@
 ---
 name: Bug Report
 about: Report a bug for dragonfly console
-labels: kind/bug
+labels: bug
 
 ---
 

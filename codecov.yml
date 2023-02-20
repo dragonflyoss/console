@@ -6,11 +6,11 @@ coverage:
     project:
       default:
         enabled: yes
-        target: 40%
+        target: 80%
     patch:
       default:
-        enabled: no
-
+        enabled: yes
+        target: 80%
 comment:
   layout: 'reach, diff, flags, files'
   behavior: default

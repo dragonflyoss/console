@@ -1,0 +1,3184 @@
+{
+    "info": {
+      "_postman_id": "6b1d2fc7-19b5-460f-9d5f-5e68f8fed825",
+      "name": "Dragonfly",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "_exporter_id": "2006124"
+    },
+    "item": [
+      {
+        "name": "Manager",
+        "item": [
+          {
+            "name": "Seed Peer Cluster",
+            "item": [
+              {
+                "name": "Create",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"seed-peer-cluster-2\",\n    \"bio\": \"bio\",\n    \"config\": {\n        \"load_limit\": 100\n    },\n    \"scopes\": {\n        \"idc\": \"idc\",\n        \"location\": \"location\",\n        \"net_topology\": \"net topology\"\n    }\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/seed-peer-clusters",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "seed-peer-clusters"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/seed-peer-clusters?page=0&per_page=3&name=seed-peer-cluster-1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "seed-peer-clusters"
+                    ],
+                    "query": [
+                      {
+                        "key": "page",
+                        "value": "0"
+                      },
+                      {
+                        "key": "per_page",
+                        "value": "3"
+                      },
+                      {
+                        "key": "name",
+                        "value": "seed-peer-cluster-1"
+                      }
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/seed-peer-clusters/3",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "seed-peer-clusters",
+                      "3"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/seed-peer-clusters/3",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "seed-peer-clusters",
+                      "3"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Update",
+                "request": {
+                  "method": "PATCH",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"bio\": \"bio2\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/seed-peer-clusters/3",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "seed-peer-clusters",
+                      "3"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Add Seed Peer To SeedPeerCluster",
+                "request": {
+                  "method": "PUT",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/seed-peer-clusters/3/seed-peers/17",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "seed-peer-clusters",
+                      "3",
+                      "seed-peers",
+                      "17"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Add SchedulerCluster To SeedPeerCluster",
+                "request": {
+                  "method": "PUT",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"name8\",\n    \"bio\": \"bio\",\n    \"config\": {\n        \"a\": \"a\"\n    }\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/seed-peer-clusters/3/scheduler-clusters/17",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "seed-peer-clusters",
+                      "3",
+                      "scheduler-clusters",
+                      "17"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ],
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    ""
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    ""
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "Scheduler Cluster",
+            "item": [
+              {
+                "name": "Create",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"seed-peer-cluster-3\",\n    \"bio\": \"bio\",\n    \"config\": {\n        \"filter_parent_limit\": 10\n    },\n    \"client_config\": {\n        \"load_limit\": 100,\n        \"parallel_count\": 4\n    },\n    \"scopes\": {\n        \"idc\": \"idc\",\n        \"location\": \"location\",\n        \"net_topology\": \"net topology\"\n    },\n    \"is_default\": false,\n    \"seed_peer_cluster_id\": 1,\n    \"security_group_id\": 1\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/scheduler-clusters",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "scheduler-clusters"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/scheduler-clusters?page=0&per_page=3&name=scheduler-cluster-1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "scheduler-clusters"
+                    ],
+                    "query": [
+                      {
+                        "key": "page",
+                        "value": "0"
+                      },
+                      {
+                        "key": "per_page",
+                        "value": "3"
+                      },
+                      {
+                        "key": "name",
+                        "value": "scheduler-cluster-1"
+                      }
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/scheduler-clusters/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "scheduler-clusters",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/scheduler-clusters/3",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "scheduler-clusters",
+                      "3"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Update",
+                "request": {
+                  "method": "PATCH",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"bio\": \"bio2\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/scheduler-clusters/3",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "scheduler-clusters",
+                      "3"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Add Seed Peer To SeedPeerCluster",
+                "request": {
+                  "method": "PUT",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/scheduler-clusters/3/schedulers/17",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "scheduler-clusters",
+                      "3",
+                      "schedulers",
+                      "17"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ],
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    ""
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    ""
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "Security Rule",
+            "item": [
+              {
+                "name": "Create",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"security-rule-1\",\n    \"bio\": \"bio\",\n    \"domain\": \"https://example.com\",\n    \"proxy_domain\": \"https://example.com\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/security-rules",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "security-rules"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/security-rules?page=0&per_page=3",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "security-rules"
+                    ],
+                    "query": [
+                      {
+                        "key": "page",
+                        "value": "0"
+                      },
+                      {
+                        "key": "per_page",
+                        "value": "3"
+                      }
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/security-groups/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "security-groups",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/security-rules/2",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "security-rules",
+                      "2"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Update",
+                "request": {
+                  "method": "PATCH",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"bio\": \"bio1\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/security-rules/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "security-rules",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Security Group",
+            "item": [
+              {
+                "name": "Create",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"security-group-1\",\n    \"bio\": \"bio\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/security-groups",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "security-groups"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/security-groups?page=0&per_page=3&name=security-group1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "security-groups"
+                    ],
+                    "query": [
+                      {
+                        "key": "page",
+                        "value": "0"
+                      },
+                      {
+                        "key": "per_page",
+                        "value": "3"
+                      },
+                      {
+                        "key": "name",
+                        "value": "security-group1"
+                      }
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/security-groups/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "security-groups",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/security-groups/2",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "security-groups",
+                      "2"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Update",
+                "request": {
+                  "method": "PATCH",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"bio\": \"bio2\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/security-groups/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "security-groups",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Add Scheduler To SecurityGroup",
+                "request": {
+                  "method": "PUT",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"google\",\n    \"bio\": \"bio\",\n    \"domain\": \"https://google.com\",\n    \"proxy_domain\": \"https://proxy.google.com\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/security-groups/1/scheduler-clusters/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "security-groups",
+                      "1",
+                      "scheduler-clusters",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Add SeedPeer To SecurityGroup",
+                "request": {
+                  "method": "PUT",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"google\",\n    \"bio\": \"bio\",\n    \"domain\": \"https://google.com\",\n    \"proxy_domain\": \"https://proxy.google.com\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/security-groups/1/seed-peer-clusters/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "security-groups",
+                      "1",
+                      "seed-peer-clusters",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Add SecurityRule To SecurityGroup",
+                "request": {
+                  "method": "PUT",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/security-groups/1/security-rules/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "security-groups",
+                      "1",
+                      "security-rules",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy SecurityRule To SecurityGroup",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/security-groups/1/security-rules/2",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "security-groups",
+                      "1",
+                      "security-rules",
+                      "2"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Seed Peer",
+            "item": [
+              {
+                "name": "Create",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"host_name\": \"seed-peer-1\",\n    \"type\": \"super\",\n    \"idc\": \"idc\",\n    \"location\": \"location\",\n    \"ip\": \"0.0.0.0\",\n    \"port\": 8080,\n    \"download_port\": 8001,\n    \"net_topology\": \"net notology\",\n    \"seed_peer_cluster_id\": 1,\n    \"is_cdn\": false\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/seed-peers",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "seed-peers"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/seed-peers?page=0&per_page=3&host_name=seed-peer-1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "seed-peers"
+                    ],
+                    "query": [
+                      {
+                        "key": "page",
+                        "value": "0"
+                      },
+                      {
+                        "key": "per_page",
+                        "value": "3"
+                      },
+                      {
+                        "key": "host_name",
+                        "value": "seed-peer-1"
+                      }
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/seed-peers/18",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "seed-peers",
+                      "18"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/seed-peers/18",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "seed-peers",
+                      "18"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Update",
+                "request": {
+                  "method": "PATCH",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"net_topology\": \"net topology\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/seed-peers/18",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "seed-peers",
+                      "18"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Scheduler",
+            "item": [
+              {
+                "name": "Create",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"host_name\": \"schduler1\",\n    \"idc\": \"idc\",\n    \"vips\": \"1.1.1.1\",\n    \"location\": \"location\",\n    \"ip\": \"0.0.0.0\",\n    \"net_config\": {\n        \"a\": \"a\"\n    },\n    \"port\": 8080,\n    \"scheduler_cluster_id\": 1\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers?page=0&per_page=3&host_name=name",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers"
+                    ],
+                    "query": [
+                      {
+                        "key": "page",
+                        "value": "0"
+                      },
+                      {
+                        "key": "per_page",
+                        "value": "3"
+                      },
+                      {
+                        "key": "host_name",
+                        "value": "name"
+                      }
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers/2",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers",
+                      "2"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Update",
+                "request": {
+                  "method": "PATCH",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"idc\": \"idc2\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Health",
+            "item": [
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/healthy",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "healthy"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Prometheus",
+            "item": [
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/metrics",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "metrics"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "User",
+            "item": [
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/users/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "users",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/users?page=0&per_page=3",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "users"
+                    ],
+                    "query": [
+                      {
+                        "key": "page",
+                        "value": "0"
+                      },
+                      {
+                        "key": "per_page",
+                        "value": "3"
+                      }
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Sign Up",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"gaius\",\n    \"password\": \"123456789\",\n    \"email\": \"gaius.qi@gmail.com\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/users/signup",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "users",
+                      "signup"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Sign In",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"root\",\n    \"password\": \"dragonfly\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/users/signin",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "users",
+                      "signin"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Sign Out",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/users/signout",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "users",
+                      "signout"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Refresh Token",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"gaius\",\n    \"password\": \"123456789\",\n    \"email\": \"gaius.qi@gmail.com\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/users/refresh_token",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "users",
+                      "refresh_token"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Reset Password",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"old_password\": \"123456789\",\n    \"new_password\": \"111111111\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/users/2/reset_password",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "users",
+                      "2",
+                      "reset_password"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Add Role To User",
+                "request": {
+                  "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                      {
+                        "key": "token",
+                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MSwiZXhwIjoxNjI5NDU4NzgwLCJvcmlnX2lhdCI6MTYyOTQ1NTE4MCwidXNlcm5hbWUiOiJhZG1pbiJ9.HLhbJg79K7-pAeC_LSs7gcI_5yXMZ9ABC0IXt9NZ32M",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "method": "PUT",
+                  "header": [],
+                  "url": {
+                    "raw": "http://localhost:8080/api/v1/users/2/roles/root",
+                    "protocol": "http",
+                    "host": [
+                      "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "users",
+                      "2",
+                      "roles",
+                      "root"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Delete Role For User",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/users/2/roles/root",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "users",
+                      "2",
+                      "roles",
+                      "root"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Get Roles For User",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://localhost:8080/api/v1/users/2/roles",
+                    "protocol": "http",
+                    "host": [
+                      "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "users",
+                      "2",
+                      "roles"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Oauth Signin",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/users/signin/github",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "users",
+                      "signin",
+                      "github"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Oauth Signin Callback",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/users/signin/github/callback",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "users",
+                      "signin",
+                      "github",
+                      "callback"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Update",
+                "request": {
+                  "method": "PATCH",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"bio\": \"1111\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/users/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "users",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Preheat",
+            "item": [
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/preheats/6",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "preheats",
+                      "6"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Create",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"type\": \"image\",\n    \"url\": \"https://registry-1.docker.io/v2/library/redis/manifests/latest\",\n    \"scheduler_cluster_id\": 1\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/preheats",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "preheats"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Permission",
+            "item": [
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://localhost:8080/api/v1/permissions",
+                    "protocol": "http",
+                    "host": [
+                      "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "permissions"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Role",
+            "item": [
+              {
+                "name": "Create",
+                "request": {
+                  "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                      {
+                        "key": "token",
+                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MiwiZXhwIjoxNjI5NDYwMDA0LCJvcmlnX2lhdCI6MTYyOTQ1NjQwNCwidXNlcm5hbWUiOiJ5eHhoZXJvIn0.v_5Ydpd81KPAYyFwSIdn4wQttmgEpKQkl5Xa65jrY-8",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\r\n    \"role\": \"admin\",\r\n    \"permissions\": [{\"object\": \"users\", \"action\": \"read\"},{\"object\": \"oauth\", \"action\": \"*\"}, {\"object\": \"permissions\", \"action\": \"*\"} ]\r\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://localhost:8080/api/v1/roles",
+                    "protocol": "http",
+                    "host": [
+                      "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "roles"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                      {
+                        "key": "token",
+                        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MiwiZXhwIjoxNjI5NzY3OTY5LCJvcmlnX2lhdCI6MTYyOTc2NDM2OSwidXNlcm5hbWUiOiJ5eHhoZXJvIn0.lyo50qwLInPDR_SXzJWME_Mm00fV9qOT-3CWCEoVCaE",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://localhost:8080/api/v1/roles",
+                    "protocol": "http",
+                    "host": [
+                      "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "roles"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://localhost:8080/api/v1/roles/guest",
+                    "protocol": "http",
+                    "host": [
+                      "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "roles",
+                      "guest"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://localhost:8080/api/v1/roles/admin",
+                    "protocol": "http",
+                    "host": [
+                      "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "roles",
+                      "admin"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Add Permission To Role",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\r\n    \"object\": \"roles\",\r\n    \"action\": \"*\"\r\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://localhost:8080/api/v1/roles/guest/permissions",
+                    "protocol": "http",
+                    "host": [
+                      "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "roles",
+                      "guest",
+                      "permissions"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Delete Permission To Role",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"object\": \"roles\",\n    \"action\": \"*\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://localhost:8080/api/v1/roles/guest/permissions",
+                    "protocol": "http",
+                    "host": [
+                      "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "roles",
+                      "guest",
+                      "permissions"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Oauth",
+            "item": [
+              {
+                "name": "Create",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"google\",\n    \"bio\": \"bio\",\n    \"client_id\": \"44216f277533f70f33e7\",\n    \"client_secret\": \"dcd12ad1346eeaabe771859916cf54efb58fa1b7\",\n    \"redirect_url\": \"\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/oauth",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "oauth"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/oauth?page=0&per_page=3",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "oauth"
+                    ],
+                    "query": [
+                      {
+                        "key": "page",
+                        "value": "0"
+                      },
+                      {
+                        "key": "per_page",
+                        "value": "3"
+                      }
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/oauth/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "oauth",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/oauth/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "oauth",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Update",
+                "request": {
+                  "method": "PATCH",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"redirect_url\": \"http://localhost:8080/api/v1/users/signin/google/callback\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/oauth/4",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "oauth",
+                      "4"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Config",
+            "item": [
+              {
+                "name": "Create",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"name\",\n    \"value\": \"value\",\n    \"bio\": \"bio\",\n    \"user_id\": 1\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/configs",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "configs"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/configs?page=0&per_page=3&name=name",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "configs"
+                    ],
+                    "query": [
+                      {
+                        "key": "page",
+                        "value": "0"
+                      },
+                      {
+                        "key": "per_page",
+                        "value": "3"
+                      },
+                      {
+                        "key": "name",
+                        "value": "name"
+                      }
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/configs/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "configs",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/configs/3",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "configs",
+                      "3"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Update",
+                "request": {
+                  "method": "PATCH",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"bio\": \"bio2\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/configs/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "configs",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Job",
+            "item": [
+              {
+                "name": "Create",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"bio\": \"bio\",\n    \"type\": \"preheat\",\n    \"args\": {\n        \"type\": \"image\",\n        \"url\": \"https://registry-1.docker.io/v2/library/redis/manifests/latest\"\n    },\n    \"scheduler_cluster_ids\": [1],\n    \"cdn_cluster_ids\": [],\n    \"user_id\": 1\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/jobs",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "jobs"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/jobs?page=0&per_page=3&status=SUCCESS&type=preheat",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "jobs"
+                    ],
+                    "query": [
+                      {
+                        "key": "page",
+                        "value": "0"
+                      },
+                      {
+                        "key": "per_page",
+                        "value": "3"
+                      },
+                      {
+                        "key": "status",
+                        "value": "SUCCESS"
+                      },
+                      {
+                        "key": "type",
+                        "value": "preheat"
+                      }
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/jobs/9",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "jobs",
+                      "9"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/jobs/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "jobs",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Update",
+                "request": {
+                  "method": "PATCH",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"bio\": \"bio\",\n    \"user_id\": 1\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/jobs/2",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "jobs",
+                      "2"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Application",
+            "item": [
+              {
+                "name": "Create",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"application\",\n    \"url\": \"application.com\",\n    \"bio\": \"bio\",\n    \"priority\": {\n        \"value\": 0,\n        \"urls\": [\n            {\n                \"regex\":\"blobs*\",\n                \"value\": 1\n            }\n        ]\n    },\n    \"user_id\": 1\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/applications",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "applications"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/applications?page=0&per_page=3",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "applications"
+                    ],
+                    "query": [
+                      {
+                        "key": "page",
+                        "value": "0"
+                      },
+                      {
+                        "key": "per_page",
+                        "value": "3"
+                      }
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/applications/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "applications",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/applications/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "applications",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Update",
+                "request": {
+                  "method": "PATCH",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"bio\": \"bio1\",\n    \"priority\": {\n        \"value\": 1,\n        \"urls\": [\n            {\n                \"regex\": \"blobs*\",\n                \"value\": 1\n            }\n        ]\n    },\n    \"user_id\": 1\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/applications/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "applications",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Peer",
+            "item": [
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/peers",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "peers"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Bucket",
+            "item": [
+              {
+                "name": "Create",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"bucket\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/buckets",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "buckets"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/buckets",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "buckets"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/buckets/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "buckets",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/buckets/1",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "buckets",
+                      "1"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Model",
+            "item": [
+              {
+                "name": "Create",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"id\": \"evaluator\",\n    \"name\": \"lr\",\n    \"version_id\": \"1\",\n    \"scheduler_id\": 1,\n    \"hostname\": \"localhost\",\n    \"ip\": \"127.0.0.1\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers/1/models",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers",
+                      "1",
+                      "models"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers/1/models",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers",
+                      "1",
+                      "models"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers/1/models/evaluator",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers",
+                      "1",
+                      "models",
+                      "evaluator"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers/1/models/evaluator",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers",
+                      "1",
+                      "models",
+                      "evaluator"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Update",
+                "request": {
+                  "method": "PATCH",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"version_id\": \"2\"\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers/1/models/evaluator",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers",
+                      "1",
+                      "models",
+                      "evaluator"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          },
+          {
+            "name": "Model Version",
+            "item": [
+              {
+                "name": "Create",
+                "request": {
+                  "method": "POST",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"mae\": 1,\n    \"mse\": 1,\n    \"rmse\": 1,\n    \"r2\": -1\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers/1/models/1/versions",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers",
+                      "1",
+                      "models",
+                      "1",
+                      "versions"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Index",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers/1/models/evaluator/versions",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers",
+                      "1",
+                      "models",
+                      "evaluator",
+                      "versions"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers/1/models/evaluator/versions/d1325956-4a31-427e-8636-d4add990b7aa",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers",
+                      "1",
+                      "models",
+                      "evaluator",
+                      "versions",
+                      "d1325956-4a31-427e-8636-d4add990b7aa"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers/1/models/evaluator/versions/d1325956-4a31-427e-8636-d4add990b7aa",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers",
+                      "1",
+                      "models",
+                      "evaluator",
+                      "versions",
+                      "d1325956-4a31-427e-8636-d4add990b7aa"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Update",
+                "request": {
+                  "method": "PATCH",
+                  "header": [],
+                  "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"precision\": 2,\n    \"recall\": 1,\n    \"data\": [1]\n}",
+                    "options": {
+                      "raw": {
+                        "language": "json"
+                      }
+                    }
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:8080/api/v1/schedulers/1/models/evaluator/versions/d1325956-4a31-427e-8636-d4add990b7aa",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "8080",
+                    "path": [
+                      "api",
+                      "v1",
+                      "schedulers",
+                      "1",
+                      "models",
+                      "evaluator",
+                      "versions",
+                      "d1325956-4a31-427e-8636-d4add990b7aa"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Dfdaemon",
+        "item": [
+          {
+            "name": "Object Storage",
+            "item": [
+              {
+                "name": "Put",
+                "request": {
+                  "method": "PUT",
+                  "header": [],
+                  "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                      {
+                        "key": "file",
+                        "type": "file",
+                        "src": "/Users/qiwenbo/Downloads/test"
+                      },
+                      {
+                        "key": "mode",
+                        "value": "1",
+                        "type": "text",
+                        "disabled": true
+                      },
+                      {
+                        "key": "filter",
+                        "value": "Exp",
+                        "type": "text",
+                        "disabled": true
+                      },
+                      {
+                        "key": "maxReplicas",
+                        "value": "2",
+                        "type": "text",
+                        "disabled": true
+                      }
+                    ]
+                  },
+                  "url": {
+                    "raw": "http://127.0.0.1:65004/buckets/dragonfly/objects/test",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "65004",
+                    "path": [
+                      "buckets",
+                      "dragonfly",
+                      "objects",
+                      "test"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Show",
+                "request": {
+                  "method": "GET",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:65004/buckets/dragonfly/objects/test",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "65004",
+                    "path": [
+                      "buckets",
+                      "dragonfly",
+                      "objects",
+                      "test"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Destroy",
+                "request": {
+                  "method": "DELETE",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:65004/buckets/dragonfly/objects/test",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "65004",
+                    "path": [
+                      "buckets",
+                      "dragonfly",
+                      "objects",
+                      "test"
+                    ]
+                  }
+                },
+                "response": []
+              },
+              {
+                "name": "Head",
+                "request": {
+                  "method": "HEAD",
+                  "header": [],
+                  "url": {
+                    "raw": "http://127.0.0.1:65004/buckets/dragonfly/objects/test",
+                    "protocol": "http",
+                    "host": [
+                      "127",
+                      "0",
+                      "0",
+                      "1"
+                    ],
+                    "port": "65004",
+                    "path": [
+                      "buckets",
+                      "dragonfly",
+                      "objects",
+                      "test"
+                    ]
+                  }
+                },
+                "response": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

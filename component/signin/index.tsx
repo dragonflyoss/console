@@ -15,22 +15,18 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import { http } from 'utils/http';
 import { useRouter } from 'next/router';
-
-
 const theme = createTheme();
-
 export default function signIn(props: any) {
   const [showPassword, setShowPassword] = useState(false);
   const [accountError, setAccountError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const router = useRouter()
-  const gotoSignup=()=>{
-    props.onGetcount()
-  }
+  const router = useRouter();
+  const gotoSignup = () => {
+    props.onGetcount();
+  };
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show);
   };
- 
   const formList = [
     {
       formProps: {
@@ -38,8 +34,8 @@ export default function signIn(props: any) {
         label: 'Account',
         name: 'Account',
         autoComplete: 'Account',
-        placeholder:"Enter your account",
-        error:accountError
+        placeholder: 'Enter your account',
+        error: accountError,
       },
       setError: setAccountError,
     },
@@ -50,8 +46,8 @@ export default function signIn(props: any) {
         name: 'password',
         type: showPassword ? 'text' : 'password',
         autoComplete: 'password',
-        placeholder:"Enter your password",
-        error:passwordError,
+        placeholder: 'Enter your password',
+        error: passwordError,
         InputProps: {
           endAdornment: (
             <IconButton
@@ -76,26 +72,22 @@ export default function signIn(props: any) {
     formList.forEach((item) => {
       const value = data.get(item.formProps.name);
       allData[item.formProps.name] = value;
-        
     });
-    // console.log(allData);
-    http.post('/api/v1/users/signin',{
-      account:allData.Account
-    }).then(res=>{
-     if(res){
-     console.log(res);
-  // router.push('/security')
-     }
-      
-    })
-    
+    http
+      .post('/api/v1/users/signin', {
+        account: allData.Account,
+      })
+      .then((res) => {
+        if (res) {
+          console.log(res);
+          // router.push('/security')
+        }
+      });
   };
-
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-
         <Box
           sx={{
             marginTop: 10,
@@ -121,22 +113,15 @@ export default function signIn(props: any) {
         >
           <Box component="form" onSubmit={handleSubmit} noValidate>
             {formList.map((item) => (
-              <TextField margin="normal" color="success"  required fullWidth key={item.formProps.name} {...item.formProps} />
+              <TextField
+                margin="normal"
+                color="success"
+                required
+                fullWidth
+                key={item.formProps.name}
+                {...item.formProps}
+              />
             ))}
-
-            {/* <TextField margin="normal" required fullWidth color="success" />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              color="success"
-              autoComplete="current-password"
-            /> */}
-            
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} style={{ background: '#239B56' }}>
               Sign In
             </Button>
@@ -151,13 +136,12 @@ export default function signIn(props: any) {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                fontSize: 18
+                fontSize: 18,
               }}
-              
             >
-              <Grid >         
+              <Grid>
                 <span>New to Dragnfly? </span>
-                  <Link onClick={gotoSignup}>Create an account.</Link>
+                <Link onClick={gotoSignup}>Create an account.</Link>
               </Grid>
             </Box>
           </Box>
@@ -166,4 +150,3 @@ export default function signIn(props: any) {
     </ThemeProvider>
   );
 }
-

@@ -43,7 +43,6 @@ export default function SignUp(props: any) {
         label: 'Account',
         autoComplete: 'family-name',
         id: 'Account',
-
         placeholder: 'Enter your account',
         error: accountError,
         syncError: false,
@@ -151,12 +150,10 @@ export default function SignUp(props: any) {
           changeValidate(e.target.value, formList[3]);
         },
       },
-
       setError: setconfirmPassworError,
       validate: (value: string) => {
         const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&.])[A-Za-z\d$@$!%*.?&]{8,}/;
         // 至少八个字符，至少一个字母，一个数字和一个特殊字符：
-
         return value === passwordvalue && reg.test(value);
       },
     },
@@ -164,18 +161,14 @@ export default function SignUp(props: any) {
   const allData: any = {};
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const data = new FormData(event.currentTarget);
-
     formList.forEach((item) => {
       const value = data.get(item.formProps.name);
       allData[item.formProps.name] = value;
       item.setError(!item.validate(value as string));
       item.formProps.syncError = !item.validate(value as string);
     });
-
     const canSubmit = Boolean(!formList.filter((item) => item.formProps.syncError).length);
-
     if (canSubmit) {
       http
         .post('/api/v1/users/signup', {
@@ -188,7 +181,6 @@ export default function SignUp(props: any) {
         });
     }
   };
-
   const gotoSignin = () => {
     props.onSetgnup();
   };
@@ -208,7 +200,6 @@ export default function SignUp(props: any) {
             Sign up
           </Typography>
         </Box>
-
         <Box
           sx={{
             marginTop: 2,
@@ -228,13 +219,23 @@ export default function SignUp(props: any) {
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} style={{ background: '#239B56' }}>
               Sign Up
             </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
+
+            <Box
+              sx={{
+                marginTop: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                fontSize: 18,
+              }}
+            >
+              <Grid>
+                <span>Already have an account? </span>
                 <Link variant="body2" onClick={gotoSignin}>
-                  Already have an account? Sign in
+                  Sign in
                 </Link>
               </Grid>
-            </Grid>
+            </Box>
           </Box>
         </Box>
       </Container>

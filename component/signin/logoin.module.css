@@ -1,36 +1,20 @@
 .box {
-
   height: 30px;
-  
   text-align: center;
-  
   line-height: 30px;
-  
-  }
-  
-   
-  
-  .span2 {
-  
+}
+.span2 {
   margin: 0 15px;
-  
   vertical-align: middle;
-  
-  }
-  
-  .span1,
-  
-  .span3 {
-  
+}
+.span1,
+.span3 {
   display: inline-block;
-  
   width: 150px;
-  
   border: 1px solid rgb(123, 123, 123);
-  } 
-  .boximag{
-    width: 50px;
-    height: 50px;
-    margin-bottom: 30px;
-  }
- 
+}
+.boximag {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 30px;
+}

@@ -9,16 +9,16 @@ import styles from './login.module.css';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const images = [
   {
-    label: 'homeimge',
-    imgPath: '/images/dragonfly.png',
+    label: 'dragonflyimge',
+    imgUrl: 'https://img.alicdn.com/imgextra/i2/O1CN01oTDq7f1xhbLcUvqua_!!6000000006475-0-tps-1412-1604.jpg',
   },
   {
     label: 'Featuresimge',
-    imgPath: '/images/features.png',
+    imgUrl: 'https://img.alicdn.com/imgextra/i4/O1CN01bffQeW23c0CSXFlu8_!!6000000007275-0-tps-1370-1558.jpg',
   },
   {
     label: 'Milestonesimge',
-    imgPath: '/images/milestones.png',
+    imgUrl: 'https://img.alicdn.com/imgextra/i1/O1CN016rBV5B1eprnTD9FPQ_!!6000000003921-0-tps-1412-1602.jpg',
   },
 ];
 export default function Login() {
@@ -64,7 +64,7 @@ export default function Login() {
                         width: '100%',
                         height: '100%',
                       }}
-                      src={step.imgPath}
+                      src={step.imgUrl}
                     />
                   ) : null}
                 </div>

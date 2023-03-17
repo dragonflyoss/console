@@ -13,7 +13,7 @@ import styles from './logoin.module.css';
 import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
-import { http } from 'utils/http';
+import { http } from 'services/http';
 import { useRouter } from 'next/router';
 const theme = createTheme();
 export default function signIn(props: any) {
@@ -74,13 +74,16 @@ export default function signIn(props: any) {
       allData[item.formProps.name] = value;
     });
     http
-      .post('/api/v1/users/signin', {
-        account: allData.Account,
+      .get(`/user/signin/:${allData.Account}`, {
+        password: allData.password,
       })
       .then((res) => {
-        if (res) {
-          console.log(res);
-          // router.push('/security')
+        if (res.code === 200) {
+          //console.log(res);
+          router.push('/security');
+        } else {
+          setAccountError(true);
+          setPasswordError(true);
         }
       });
   };

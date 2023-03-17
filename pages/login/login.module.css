@@ -1,5 +1,13 @@
+.container::-webkit-scrollbar {
+  display: none;
+}
 .Pagination {
+  width: 200px;
   position: absolute;
-  bottom: 30px;
-  left: 290px;
+  bottom: 15px;
+  left: 23%;
+  background-color: #f6f7f9;
+}
+.imges {
+  width: 100%;
 }

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { URL } from '../../../utils/constans';
+import { URL } from '../../../services/constans';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { query } = req;

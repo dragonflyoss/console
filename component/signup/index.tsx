@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import { InputAdornment } from '@mui/material';
-import { http } from 'utils/http';
+import { http } from 'services/http';
 const theme = createTheme();
 export default function SignUp(props: any) {
   const [accountError, setAccountError] = useState(false);
@@ -45,13 +45,14 @@ export default function SignUp(props: any) {
         id: 'Account',
         placeholder: 'Enter your account',
         error: accountError,
-        syncError: false,
+
         // helperText: 'At least eight characters, at least one letter and one number:',
         helperText: accountError ? 'At least eight characters, at least one letter and one number' : '',
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[0]);
         },
       },
+      syncError: false,
       setError: setAccountError,
       validate: (value: string) => {
         const reg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{7,}$/;
@@ -68,12 +69,13 @@ export default function SignUp(props: any) {
         placeholder: 'Enter your email',
         // helperText: 'Enter the correct email',
         error: emailError,
-        syncError: false,
+
         helperText: emailError ? 'Enter the correct email' : '',
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[1]);
         },
       },
+      syncError: false,
       setError: setEmailError,
       validate: (value: string) => {
         const reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
@@ -93,7 +95,7 @@ export default function SignUp(props: any) {
           : '',
         type: showPassword ? 'text' : 'password',
         error: passwordError,
-        syncError: false,
+
         InputProps: {
           endAdornment: (
             <IconButton
@@ -113,6 +115,7 @@ export default function SignUp(props: any) {
           });
         },
       },
+      syncError: false,
       setError: setPasswordError,
       validate: (value: string) => {
         const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&.])[A-Za-z\d$@$!%*.?&]{8,}/;
@@ -129,7 +132,7 @@ export default function SignUp(props: any) {
         placeholder: 'Repeat your password',
         // helperText: 'Please enter the same password'
         error: confirmPassworError,
-        syncError: false,
+
         helperText: confirmPassworError ? 'Please enter the same password' : '',
         InputProps: {
           endAdornment: (
@@ -150,6 +153,7 @@ export default function SignUp(props: any) {
           changeValidate(e.target.value, formList[3]);
         },
       },
+      syncError: false,
       setError: setconfirmPassworError,
       validate: (value: string) => {
         const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&.])[A-Za-z\d$@$!%*.?&]{8,}/;
@@ -166,12 +170,12 @@ export default function SignUp(props: any) {
       const value = data.get(item.formProps.name);
       allData[item.formProps.name] = value;
       item.setError(!item.validate(value as string));
-      item.formProps.syncError = !item.validate(value as string);
+      item.syncError = !item.validate(value as string);
     });
-    const canSubmit = Boolean(!formList.filter((item) => item.formProps.syncError).length);
+    const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
     if (canSubmit) {
       http
-        .post('/api/v1/users/signup', {
+        .post('/user/signup', {
           name: allData.account,
           password: allData.password,
           email: allData.email,
@@ -231,9 +235,7 @@ export default function SignUp(props: any) {
             >
               <Grid>
                 <span>Already have an account? </span>
-                <Link variant="body2" onClick={gotoSignin}>
-                  Sign in
-                </Link>
+                <Link onClick={gotoSignin}>Sign in</Link>
               </Grid>
             </Box>
           </Box>

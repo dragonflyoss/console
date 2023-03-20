@@ -54,18 +54,20 @@ export default function Login() {
           >
             {imageList.map((step, index) => {
               return (
-                <div key={step.label}>
-                  {Math.abs(imageIndex - index) <= 2 ? (
-                    <Box
-                      component="img"
-                      sx={{
-                        width: '100%',
-                        height: '100%',
-                      }}
-                      src={step.imgUrl}
-                    />
-                  ) : null}
-                </div>
+                <picture>
+                  <div key={step.label}>
+                    {Math.abs(imageIndex - index) <= 2 ? (
+                      <Box
+                        component="img"
+                        sx={{
+                          width: '100%',
+                          height: '100%',
+                        }}
+                        src={step.imgUrl}
+                      />
+                    ) : null}
+                  </div>
+                </picture>
               );
             })}
           </AutoPlaySwipeableViews>

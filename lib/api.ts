@@ -1,4 +1,3 @@
-
 interface Param {
   [key: string]: any;
 }
@@ -8,32 +7,29 @@ interface HttpParams {
   type?: 'SERVER_RENDER' | 'HTTP';
   requestParam?: Param;
 }
-//封装请求，服务端请求与本地请求都用这个
 const request: (param: HttpParams) => Promise<any> = (param) => {
   return new Promise((resolve, reject) => {
     try {
       (async () => {
-        // token:用户登陆信息
+        // token
         const token = localStorage.getItem('Token');
-        //post请求体
+        //post
         let body = param?.requestParam;
         if (token) {
           body = Object.assign(param?.requestParam || {}, { token });
         }
-        //get请求参数
+        //get
         let bodyStr = '';
         Object.keys(body || {}).forEach((key) => {
           bodyStr += `${bodyStr ? `&` : `?`}${key}=${body?.[key]}`;
         });
-        //请求路径前缀
+        //Request Path Prefix
         let requestUrl = `${param.type === 'SERVER_RENDER' ? process.env.NEXT_PUBLIC_LOCAL_API : process.env.NEXT_PUBLIC_API}${param.url}`;
-        //get方式拼接请求参数
+        //Get Method Splice Request Parameters
         param.methods === 'GET' && (requestUrl += bodyStr);
-
         const res = await fetch(requestUrl, {
           method: param.methods,
           body: param.methods === 'POST' ? JSON.stringify(body) : undefined,
-          // body: param.methods === 'POST' ? JSON.stringify(body) : undefined,
         });
         const data = await res.json();
         if (data.code === 200) {

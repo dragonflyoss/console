@@ -14,8 +14,10 @@ import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import { InputAdornment } from '@mui/material';
-import { http } from 'services/http';
+import { http } from 'lib/api';
+
 const theme = createTheme();
+
 export default function SignUp(props: any) {
   const [accountError, setAccountError] = useState(false);
   const [emailError, setEmailError] = useState(false);
@@ -45,8 +47,6 @@ export default function SignUp(props: any) {
         id: 'Account',
         placeholder: 'Enter your account',
         error: accountError,
-
-        // helperText: 'At least eight characters, at least one letter and one number:',
         helperText: accountError ? 'At least eight characters, at least one letter and one number' : '',
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[0]);
@@ -56,7 +56,6 @@ export default function SignUp(props: any) {
       setError: setAccountError,
       validate: (value: string) => {
         const reg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{7,}$/;
-        // 至少八个字符，至少一个字母和一个数字：
         return reg.test(value);
       },
     },
@@ -67,9 +66,7 @@ export default function SignUp(props: any) {
         autoComplete: 'email',
         id: 'email',
         placeholder: 'Enter your email',
-        // helperText: 'Enter the correct email',
         error: emailError,
-
         helperText: emailError ? 'Enter the correct email' : '',
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[1]);
@@ -89,9 +86,8 @@ export default function SignUp(props: any) {
         id: 'password',
         placeholder: 'Enter your password',
         autoComplete: 'new-password',
-        // helperText: 'At least eight characters, at least one letter, one number and one special character',
         helperText: passwordError
-          ? 'At least eight characters, at least one letter, one number and one special character'
+          ? 'Must contain an uppercase, a lowercase letter, a number, a special character, and be 8 to 16 digits long'
           : '',
         type: showPassword ? 'text' : 'password',
         error: passwordError,
@@ -105,7 +101,7 @@ export default function SignUp(props: any) {
               }}
               edge="end"
             >
-              {showPassword ? <VisibilityOff /> : <Visibility />}
+              {showPassword ? <Visibility /> : <VisibilityOff />}
             </IconButton>
           ),
         },
@@ -118,21 +114,18 @@ export default function SignUp(props: any) {
       syncError: false,
       setError: setPasswordError,
       validate: (value: string) => {
-        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&.])[A-Za-z\d$@$!%*.?&]{8,}/;
-        // 至少八个字符，至少一个字母，一个数字和一个特殊字符：
+        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@&%#_])[a-zA-Z0-9~!@&%#_]{8,16}$/;
         return reg.test(value);
       },
     },
     {
       formProps: {
         name: 'confirmPassword',
-        label: 'confirmPassword',
+        label: 'ConfirmPassword',
         type: showConfirmPassword ? 'text' : 'password',
         autoComplete: 'new-password',
         placeholder: 'Repeat your password',
-        // helperText: 'Please enter the same password'
         error: confirmPassworError,
-
         helperText: confirmPassworError ? 'Please enter the same password' : '',
         InputProps: {
           endAdornment: (
@@ -144,7 +137,7 @@ export default function SignUp(props: any) {
                 }}
                 edge="end"
               >
-                {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             </InputAdornment>
           ),
@@ -156,8 +149,7 @@ export default function SignUp(props: any) {
       syncError: false,
       setError: setconfirmPassworError,
       validate: (value: string) => {
-        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&.])[A-Za-z\d$@$!%*.?&]{8,}/;
-        // 至少八个字符，至少一个字母，一个数字和一个特殊字符：
+        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@&%#_])[a-zA-Z0-9~!@&%#_]{8,16}$/;
         return value === passwordvalue && reg.test(value);
       },
     },
@@ -223,7 +215,6 @@ export default function SignUp(props: any) {
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} style={{ background: '#239B56' }}>
               Sign Up
             </Button>
-
             <Box
               sx={{
                 marginTop: 2,

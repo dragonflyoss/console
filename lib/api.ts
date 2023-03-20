@@ -1,4 +1,4 @@
-import { LOCAL_URL } from './constans';
+
 interface Param {
   [key: string]: any;
 }
@@ -26,7 +26,7 @@ const request: (param: HttpParams) => Promise<any> = (param) => {
           bodyStr += `${bodyStr ? `&` : `?`}${key}=${body?.[key]}`;
         });
         //请求路径前缀
-        let requestUrl = `${param.type === 'SERVER_RENDER' ? LOCAL_URL : process.env.NEXT_PUBLIC_API}${param.url}`;
+        let requestUrl = `${param.type === 'SERVER_RENDER' ? process.env.NEXT_PUBLIC_LOCAL_API : process.env.NEXT_PUBLIC_API}${param.url}`;
         //get方式拼接请求参数
         param.methods === 'GET' && (requestUrl += bodyStr);
 

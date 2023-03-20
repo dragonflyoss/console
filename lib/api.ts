@@ -24,7 +24,9 @@ const request: (param: HttpParams) => Promise<any> = (param) => {
           bodyStr += `${bodyStr ? `&` : `?`}${key}=${body?.[key]}`;
         });
         //Request Path Prefix
-        let requestUrl = `${param.type === 'SERVER_RENDER' ? process.env.NEXT_PUBLIC_LOCAL_API : process.env.NEXT_PUBLIC_API}${param.url}`;
+        let requestUrl = `${
+          param.type === 'SERVER_RENDER' ? process.env.NEXT_PUBLIC_LOCAL_API : process.env.NEXT_PUBLIC_API
+        }${param.url}`;
         //Get Method Splice Request Parameters
         param.methods === 'GET' && (requestUrl += bodyStr);
         const res = await fetch(requestUrl, {

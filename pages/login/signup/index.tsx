@@ -20,13 +20,13 @@ import { http } from 'lib/api';
 const theme = createTheme();
 
 export default function SignUp(props: any) {
-  const [AccountError, setAccountError] = useState(false);
-  const [EmailError, setEmailError] = useState(false);
-  const [PasswordError, setPasswordError] = useState(false);
-  const [ConfirmPassworError, setConfirmPassworError] = useState(false);
-  const [Passwordvalue, setPasswordvalue] = useState('');
-  const [ShowPassword, setShowPassword] = useState(false);
-  const [ShowConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [accountError, setAccountError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [confirmPassworError, setConfirmPassworError] = useState(false);
+  const [passwordvalue, setPasswordvalue] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const handleClickShowPassword = (type: 'password' | 'confirmPassword') => {
     if (type === 'password') {
       setShowPassword((show) => !show);
@@ -47,8 +47,8 @@ export default function SignUp(props: any) {
         autoComplete: 'family-name',
         id: 'Account',
         placeholder: 'Enter your account',
-        error: AccountError,
-        helperText: AccountError ? 'At least eight characters, at least one letter and one number' : '',
+        error: accountError,
+        helperText: accountError ? 'At least eight characters, at least one letter and one number' : '',
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[0]);
         },
@@ -67,8 +67,8 @@ export default function SignUp(props: any) {
         autoComplete: 'email',
         id: 'email',
         placeholder: 'Enter your email',
-        error: EmailError,
-        helperText: EmailError ? 'Enter the correct email' : '',
+        error: emailError,
+        helperText: emailError ? 'Enter the correct email' : '',
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[1]);
         },
@@ -87,11 +87,11 @@ export default function SignUp(props: any) {
         id: 'password',
         placeholder: 'Enter your password',
         autoComplete: 'new-password',
-        helperText: PasswordError
+        helperText: passwordError
           ? 'Must contain an uppercase, a lowercase letter, a number, a special character, and be 8 to 16 digits long'
           : '',
-        type: ShowPassword ? 'text' : 'password',
-        error: PasswordError,
+        type: showPassword ? 'text' : 'password',
+        error: passwordError,
 
         InputProps: {
           endAdornment: (
@@ -102,7 +102,7 @@ export default function SignUp(props: any) {
               }}
               edge="end"
             >
-              {ShowPassword ? <Visibility /> : <VisibilityOff />}
+              {showPassword ? <Visibility /> : <VisibilityOff />}
             </IconButton>
           ),
         },
@@ -123,11 +123,11 @@ export default function SignUp(props: any) {
       formProps: {
         name: 'confirmPassword',
         label: 'ConfirmPassword',
-        type: ShowConfirmPassword ? 'text' : 'password',
+        type: showConfirmPassword ? 'text' : 'password',
         autoComplete: 'new-password',
         placeholder: 'Repeat your password',
-        error: ConfirmPassworError,
-        helperText: ConfirmPassworError ? 'Please enter the same password' : '',
+        error: confirmPassworError,
+        helperText: confirmPassworError ? 'Please enter the same password' : '',
         InputProps: {
           endAdornment: (
             <InputAdornment position="end">
@@ -138,7 +138,7 @@ export default function SignUp(props: any) {
                 }}
                 edge="end"
               >
-                {ShowConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             </InputAdornment>
           ),
@@ -151,7 +151,7 @@ export default function SignUp(props: any) {
       setError: setConfirmPassworError,
       validate: (value: string) => {
         const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@&%#_])[a-zA-Z0-9~!@&%#_]{8,16}$/;
-        return value === Passwordvalue && reg.test(value);
+        return value === passwordvalue && reg.test(value);
       },
     },
   ];

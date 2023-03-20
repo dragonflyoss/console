@@ -1,19 +1,23 @@
-.box {
+.splitlinebox {
   height: 30px;
   text-align: center;
   line-height: 30px;
 }
-.span2 {
+.splitlinetext {
   margin: 0 15px;
   vertical-align: middle;
 }
-.span1,
-.span3 {
+.leftsplitline{
   display: inline-block;
   width: 150px;
   border: 1px solid rgb(123, 123, 123);
 }
-.boximag {
+.rightsplitline{
+  display: inline-block;
+  width: 150px;
+  border: 1px solid rgb(123, 123, 123);
+}
+.dragonflylogoimage {
   width: 40px;
   height: 40px;
   margin-bottom: 20px;

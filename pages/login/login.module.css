@@ -1,5 +1,6 @@
-.container::-webkit-scrollbar {
-  display: none;
+.container{
+  height: 100vh;
+  overflow: hidden;
 }
 .Pagination {
   width: 200px;

@@ -1,20 +1,21 @@
 import { Box, Grid, useTheme, MobileStepper } from '@mui/material';
-import Signin from '../../component/signin';
-import SignUp from 'component/signup';
+import Signin from '@/pages/login/signin';
+import SignUp from '@/pages/login/signup';
 import { useState } from 'react';
 import { autoPlay } from 'react-swipeable-views-utils';
 import SwipeableViews from 'react-swipeable-views';
 import React from 'react';
 import styles from './login.module.css';
+
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-const images = [
+const rotationchart = [
   {
     label: 'dragonflyimge',
     imgUrl: 'https://img.alicdn.com/imgextra/i2/O1CN01oTDq7f1xhbLcUvqua_!!6000000006475-0-tps-1412-1604.jpg',
   },
   {
     label: 'Featuresimge',
-    imgUrl: 'https://img.alicdn.com/imgextra/i4/O1CN01bffQeW23c0CSXFlu8_!!6000000007275-0-tps-1370-1558.jpg',
+    imgUrl: 'https://img.alicdn.com/imgextra/i3/O1CN01slyJkB1ydJFjcDbZi_!!6000000006601-0-tps-1352-1536.jpg',
   },
   {
     label: 'Milestonesimge',
@@ -24,7 +25,7 @@ const images = [
 export default function Login() {
   const [cond, setCond] = useState(true);
   const theme = useTheme();
-  const [imageList] = useState(images);
+  const [imageList] = useState(rotationchart);
   const [imageIndex, setImageIndex] = useState(0);
   const handleStepChange = (step: number) => {
     // setActiveStep(step);
@@ -36,9 +37,6 @@ export default function Login() {
   const signup = () => {
     setCond(true);
   };
-  // const handleChangeIndex = (_event: any, index: number) => {
-  //   setImageIndex(index - 1);
-  // };
   return (
     <div className={styles.container}>
       <Grid
@@ -80,17 +78,6 @@ export default function Login() {
               steps={imageList?.length}
             />
           }
-          {/* <Pagination
-          className={styles.Pagination}
-          page={imageIndex + 1}
-          count={imageList?.length}
-          onChange={handleChangeIndex}
-          size='small'
-          hidePrevButton
-          hideNextButton 
-           variant='outlined'
-          
-        /> */}
         </Grid>
         <Grid item xs={6}>
           {cond ? <Signin onGetcount={getcount}></Signin> : <SignUp onSetgnup={signup}></SignUp>}
@@ -99,21 +86,3 @@ export default function Login() {
     </div>
   );
 }
-// export async function getStaticProps() {
-//   // const res = await fetch('http://localhost:3000/api/user/signin',{
-//   //   method:'POST'
-//   // })
-//   // const data = await res.json();
-
-//   const data = await rendeRHttp.post('/api/user/signin')
-
-//   if (!data) {
-//     return {
-//       notFound: true,
-//     };
-//   }
-
-//   return {
-//     props: { data }, // will be passed to the page component as props
-//   };
-// }

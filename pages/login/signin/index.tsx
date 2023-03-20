@@ -13,13 +13,17 @@ import styles from './logoin.module.css';
 import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
-import { http } from 'services/http';
+import { http } from 'lib/api';
 import { useRouter } from 'next/router';
+
 const theme = createTheme();
+
 export default function signIn(props: any) {
   const [showPassword, setShowPassword] = useState(false);
   const [accountError, setAccountError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [accountHelptext, setAccountHelptext] = useState('');
+  const [passwordHelptext, setPasswordHelptext] = useState('');
   const router = useRouter();
   const gotoSignup = () => {
     props.onGetcount();
@@ -32,9 +36,10 @@ export default function signIn(props: any) {
       formProps: {
         id: 'Account',
         label: 'Account',
-        name: 'Account',
+        name: 'account',
         autoComplete: 'Account',
         placeholder: 'Enter your account',
+        helperText: accountError ? accountHelptext : '',
         error: accountError,
       },
       setError: setAccountError,
@@ -47,6 +52,7 @@ export default function signIn(props: any) {
         type: showPassword ? 'text' : 'password',
         autoComplete: 'password',
         placeholder: 'Enter your password',
+        helperText: passwordError ? passwordHelptext : '',
         error: passwordError,
         InputProps: {
           endAdornment: (
@@ -57,7 +63,7 @@ export default function signIn(props: any) {
               }}
               edge="end"
             >
-              {showPassword ? <VisibilityOff /> : <Visibility />}
+              {showPassword ? <Visibility /> : <VisibilityOff />}
             </IconButton>
           ),
         },
@@ -73,19 +79,25 @@ export default function signIn(props: any) {
       const value = data.get(item.formProps.name);
       allData[item.formProps.name] = value;
     });
-    http
-      .get(`/user/signin/:${allData.Account}`, {
-        password: allData.password,
-      })
-      .then((res) => {
-        if (res.code === 200) {
-          //console.log(res);
-          router.push('/security');
-        } else {
-          setAccountError(true);
-          setPasswordError(true);
-        }
-      });
+    if (allData.account !== '' && allData.password !== '') {
+      http
+        .get(`/user/signin/:${allData.account}`, {
+          password: allData.password,
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            router.push('/security');
+          } else {
+            setAccountError(true);
+            setPasswordError(true);
+          }
+        });
+    } else {
+      setAccountError(true);
+      setPasswordError(true);
+      setPasswordHelptext('Please enter the correct password');
+      setAccountHelptext('Please enter the correct account number ');
+    }
   };
   return (
     <ThemeProvider theme={theme}>
@@ -98,7 +110,7 @@ export default function signIn(props: any) {
             flexDirection: 'column',
           }}
         >
-          <img className={styles.boximag} src={'/images/logo.png'} alt="" />
+          <img className={styles.dragonflylogoimage} src={'/images/logo.png'} alt="" />
           <Typography variant="h4" gutterBottom>
             Welcome back!
           </Typography>
@@ -128,10 +140,10 @@ export default function signIn(props: any) {
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} style={{ background: '#239B56' }}>
               Sign In
             </Button>
-            <div className={styles.box}>
-              <span className={styles.span1}></span>
-              <span className={styles.span2}>or</span>
-              <span className={styles.span3}></span>
+            <div className={styles.splitlinebox}>
+              <span className={styles.leftsplitline}></span>
+              <span className={styles.splitlinetext}>or</span>
+              <span className={styles.rightsplitline}></span>
             </div>
             <Box
               sx={{

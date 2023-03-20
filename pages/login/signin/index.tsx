@@ -14,6 +14,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import { http } from 'lib/api';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function SignIn(props: any) {
   const [showPassword, setShowPassword] = useState(false);
@@ -69,7 +70,7 @@ export default function SignIn(props: any) {
       setError: setPasswordError,
     },
   ];
-  const handleSubmit = (event:any) => {
+  const handleSubmit = (event: any) => {
     event.preventDefault();
     const allData: any = {};
     const data = new FormData(event.currentTarget);
@@ -108,7 +109,7 @@ export default function SignIn(props: any) {
             flexDirection: 'column',
           }}
         >
-          <img className={styles.dragonflylogoimage} src={'/images/logo.png'} alt="" />
+          <Image className={styles.dragonflylogoimage} src={'/images/logo.png'} alt="" />
           <Typography variant="h4" gutterBottom>
             Welcome back!
           </Typography>

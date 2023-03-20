@@ -54,8 +54,8 @@ export default function Login() {
           >
             {imageList.map((step, index) => {
               return (
-                <picture>
-                  <div key={step.imgUrl}>
+                <picture key={step.label}>
+                  <div >
                     {Math.abs(imageIndex - index) <= 2 ? (
                       <Box
                         component="img"

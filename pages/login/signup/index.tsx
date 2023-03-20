@@ -23,7 +23,7 @@ export default function SignUp(props: any) {
   const [accountError, setAccountError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [confirmPassworError, setconfirmPassworError] = useState(false);
+  const [confirmPassworError, setConfirmPassworError] = useState(false);
   const [passwordvalue, setPasswordvalue] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -148,7 +148,7 @@ export default function SignUp(props: any) {
         },
       },
       syncError: false,
-      setError: setconfirmPassworError,
+      setError: setConfirmPassworError,
       validate: (value: string) => {
         const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@&%#_])[a-zA-Z0-9~!@&%#_]{8,16}$/;
         return value === passwordvalue && reg.test(value);

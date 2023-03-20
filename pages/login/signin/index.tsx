@@ -15,14 +15,13 @@ import { http } from 'lib/api';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-const theme = createTheme();
-
 export default function signIn(props: any) {
   const [showPassword, setShowPassword] = useState(false);
   const [accountError, setAccountError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [accountHelptext, setAccountHelptext] = useState('');
   const [passwordHelptext, setPasswordHelptext] = useState('');
+  const theme = createTheme();
   const router = useRouter();
   const gotoSignup = () => {
     props.onGetcount();

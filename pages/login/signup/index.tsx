@@ -4,7 +4,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import Link from '@mui/material/Link';
-import Image from 'next/image';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import styles from './logoup.module.css';
@@ -192,7 +191,13 @@ export default function SignUp(props: any) {
             flexDirection: 'column',
           }}
         >
-          <Image className={styles.boximag} src={'/images/logo.png'} alt="" />
+          <picture>
+            <img
+              className={styles.dragonflylogoimage}
+              src={'https://img.alicdn.com/imgextra/i1/O1CN01PRTkuJ1nAUYdVDQXU_!!6000000005049-2-tps-524-537.png'}
+              alt=""
+            />
+          </picture>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>

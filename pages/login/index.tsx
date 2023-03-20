@@ -28,7 +28,6 @@ export default function Login() {
   const [imageList] = useState(rotationchart);
   const [imageIndex, setImageIndex] = useState(0);
   const handleStepChange = (step: number) => {
-    // setActiveStep(step);
     setImageIndex(step);
   };
   const getcount = () => {
@@ -55,7 +54,7 @@ export default function Login() {
             {imageList.map((step, index) => {
               return (
                 <picture key={step.label}>
-                  <div >
+                  <div>
                     {Math.abs(imageIndex - index) <= 2 ? (
                       <Box
                         component="img"

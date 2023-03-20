@@ -15,7 +15,7 @@ import { http } from 'lib/api';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-export default function signIn(props: any) {
+export default function SignIn(props: any) {
   const [showPassword, setShowPassword] = useState(false);
   const [accountError, setAccountError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);

@@ -41,7 +41,6 @@ export default function Login() {
   const signup = () => {
     setCond(true);
   };
-  
   return (
     <div className={styles.container}>
       <Grid

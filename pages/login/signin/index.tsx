@@ -76,7 +76,6 @@ export default function SignIn(props: any) {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    
     const allData: any = {};
     const data = new FormData(event.currentTarget);
 

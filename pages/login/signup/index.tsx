@@ -190,9 +190,9 @@ export default function SignUp(props: any) {
         });
       } catch (error) {
         setAccountError(true);
-        setConfirmPassworError(true)
-        setEmailError(true)
-        setPasswordError(true)
+        setConfirmPassworError(true);
+        setEmailError(true);
+        setPasswordError(true);
       }
     }
   };

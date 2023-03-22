@@ -2,13 +2,10 @@
   height: 100vh;
   overflow: hidden;
 }
-.Pagination {
-  width: 200px;
+.pagination {
+  width: 50px;
   position: absolute;
   bottom: 15px;
   left: 23%;
   background-color: #f6f7f9;
-}
-.imges {
-  width: 100%;
 }

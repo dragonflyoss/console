@@ -6,7 +6,6 @@ import { useState } from 'react';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import styles from './logoup.module.css';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -14,7 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import { InputAdornment } from '@mui/material';
-import { http } from 'lib/api';
+import { getSignup } from 'lib/api';
 
 const theme = createTheme();
 
@@ -26,6 +25,7 @@ export default function SignUp(props: any) {
   const [passwordvalue, setPasswordvalue] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const handleClickShowPassword = (type: 'password' | 'confirmPassword') => {
     if (type === 'password') {
       setShowPassword((show) => !show);
@@ -33,11 +33,13 @@ export default function SignUp(props: any) {
       setShowConfirmPassword((show) => !show);
     }
   };
+
   const changeValidate = (value: string, data: any, cb?: () => void) => {
     const { setError, validate } = data;
     setError(!validate(value));
     cb && cb();
   };
+
   const formList = [
     {
       formProps: {
@@ -48,12 +50,14 @@ export default function SignUp(props: any) {
         placeholder: 'Enter your account',
         error: accountError,
         helperText: accountError ? 'At least eight characters, at least one letter and one number' : '',
+
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[0]);
         },
       },
       syncError: false,
       setError: setAccountError,
+
       validate: (value: string) => {
         const reg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{7,}$/;
         return reg.test(value);
@@ -68,12 +72,14 @@ export default function SignUp(props: any) {
         placeholder: 'Enter your email',
         error: emailError,
         helperText: emailError ? 'Enter the correct email' : '',
+
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[1]);
         },
       },
       syncError: false,
       setError: setEmailError,
+
       validate: (value: string) => {
         const reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
         return reg.test(value);
@@ -91,7 +97,6 @@ export default function SignUp(props: any) {
           : '',
         type: showPassword ? 'text' : 'password',
         error: passwordError,
-
         InputProps: {
           endAdornment: (
             <IconButton
@@ -105,6 +110,7 @@ export default function SignUp(props: any) {
             </IconButton>
           ),
         },
+
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[2], () => {
             setPasswordvalue(e.target.value);
@@ -113,6 +119,7 @@ export default function SignUp(props: any) {
       },
       syncError: false,
       setError: setPasswordError,
+
       validate: (value: string) => {
         const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@&%#_])[a-zA-Z0-9~!@&%#_]{8,16}$/;
         return reg.test(value);
@@ -127,6 +134,7 @@ export default function SignUp(props: any) {
         placeholder: 'Repeat your password',
         error: confirmPassworError,
         helperText: confirmPassworError ? 'Please enter the same password' : '',
+
         InputProps: {
           endAdornment: (
             <InputAdornment position="end">
@@ -142,44 +150,57 @@ export default function SignUp(props: any) {
             </InputAdornment>
           ),
         },
+
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[3]);
         },
       },
+
       syncError: false,
       setError: setConfirmPassworError,
+
       validate: (value: string) => {
         const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@&%#_])[a-zA-Z0-9~!@&%#_]{8,16}$/;
         return value === passwordvalue && reg.test(value);
       },
     },
   ];
+
   const allData: any = {};
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
     formList.forEach((item) => {
       const value = data.get(item.formProps.name);
       allData[item.formProps.name] = value;
       item.setError(!item.validate(value as string));
       item.syncError = !item.validate(value as string);
     });
+
     const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
     if (canSubmit) {
-      http
-        .post('/user/signup', {
+      try {
+        getSignup({
           name: allData.account,
           password: allData.password,
           email: allData.email,
-        })
-        .then((res) => {
-          localStorage.setItem('Token', res.token);
+        }).then(() => {
+          props.onSetgnup();
         });
+      } catch (error) {
+        setAccountError(true);
+        setConfirmPassworError(true)
+        setEmailError(true)
+        setPasswordError(true)
+      }
     }
   };
+
   const gotoSignin = () => {
     props.onSetgnup();
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -193,8 +214,12 @@ export default function SignUp(props: any) {
         >
           <picture>
             <img
-              className={styles.dragonflylogoimage}
-              src={'https://img.alicdn.com/imgextra/i1/O1CN01PRTkuJ1nAUYdVDQXU_!!6000000005049-2-tps-524-537.png'}
+              style={{
+                width: 40,
+                height: 40,
+                marginBottom: 20,
+              }}
+              src="/logo.png"
               alt=""
             />
           </picture>
@@ -204,7 +229,6 @@ export default function SignUp(props: any) {
         </Box>
         <Box
           sx={{
-            marginTop: 2,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',

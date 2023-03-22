@@ -7,13 +7,12 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import styles from './logoin.module.css';
 import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
-import { http } from 'lib/api';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { getSignin } from 'lib/api';
 
 export default function SignIn(props: any) {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,14 +20,18 @@ export default function SignIn(props: any) {
   const [passwordError, setPasswordError] = useState(false);
   const [accountHelptext, setAccountHelptext] = useState('');
   const [passwordHelptext, setPasswordHelptext] = useState('');
+
   const theme = createTheme();
   const router = useRouter();
+
   const gotoSignup = () => {
     props.onGetcount();
   };
+
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show);
   };
+
   const formList = [
     {
       formProps: {
@@ -52,6 +55,7 @@ export default function SignIn(props: any) {
         placeholder: 'Enter your password',
         helperText: passwordError ? passwordHelptext : '',
         error: passwordError,
+
         InputProps: {
           endAdornment: (
             <IconButton
@@ -69,34 +73,35 @@ export default function SignIn(props: any) {
       setError: setPasswordError,
     },
   ];
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
+    
     const allData: any = {};
     const data = new FormData(event.currentTarget);
+
     formList.forEach((item) => {
       const value = data.get(item.formProps.name);
       allData[item.formProps.name] = value;
     });
+
     if (allData.account !== '' && allData.password !== '') {
-      http
-        .get(`/user/signin/:${allData.account}`, {
+      try {
+        getSignin({
+          name: allData.account,
           password: allData.password,
-        })
-        .then((res) => {
-          if (res.code === 200) {
-            router.push('/security');
-          } else {
-            setAccountError(true);
-            setPasswordError(true);
-          }
+        }).then(() => {
+          router.push('/security');
         });
-    } else {
-      setAccountError(true);
-      setPasswordError(true);
-      setPasswordHelptext('Please enter the correct password');
-      setAccountHelptext('Please enter the correct account number ');
+      } catch (error) {
+        setAccountError(true);
+        setPasswordError(true);
+        setPasswordHelptext('Please enter the correct password');
+        setAccountHelptext('Please enter the correct account number ');
+      }
     }
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -110,8 +115,12 @@ export default function SignIn(props: any) {
         >
           <picture>
             <img
-              className={styles.dragonflylogoimage}
-              src={'https://img.alicdn.com/imgextra/i1/O1CN01PRTkuJ1nAUYdVDQXU_!!6000000005049-2-tps-524-537.png'}
+              style={{
+                width: 40,
+                height: 40,
+                marginBottom: 20,
+              }}
+              src="/logo.png"
               alt=""
             />
           </picture>{' '}
@@ -144,11 +153,37 @@ export default function SignIn(props: any) {
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} style={{ background: '#239B56' }}>
               Sign In
             </Button>
-            <div className={styles.splitlinebox}>
-              <span className={styles.leftsplitline}></span>
-              <span className={styles.splitlinetext}>or</span>
-              <span className={styles.rightsplitline}></span>
-            </div>
+            <Box
+              sx={{
+                height: 30,
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+              }}
+            >
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: 150,
+                  border: '1px solid rgb(123, 123, 123)',
+                }}
+              ></span>
+              <span
+                style={{
+                  margin: '0 ,15',
+                  verticalAlign: 'middle',
+                }}
+              >
+                or
+              </span>
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: 150,
+                  border: '1px solid rgb(123, 123, 123)',
+                }}
+              ></span>
+            </Box>
             <Box
               sx={{
                 marginTop: 2,

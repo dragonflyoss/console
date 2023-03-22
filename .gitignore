@@ -45,6 +45,3 @@ tsconfig.tsbuildinfo
 
 #mock
 /mock
-
-#env development
-.env.development

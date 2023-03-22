@@ -9,7 +9,7 @@ import styles from './login.module.css';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-const rotationchart = [
+const rotationChart = [
   {
     label: 'Dragonfly',
     imgUrl: '/dragonfly.png',
@@ -27,7 +27,7 @@ const rotationchart = [
 export default function Login() {
   const theme = useTheme();
   const [cond, setCond] = useState(true);
-  const [imageList] = useState(rotationchart);
+  const [imageList] = useState(rotationChart);
   const [imageIndex, setImageIndex] = useState(0);
 
   const handleStepChange = (step: number) => {

@@ -15,6 +15,6 @@ module.exports = {
         destination: '/login',
         permanent: true,
       },
-    ]
+    ];
   },
-}
+};

@@ -3,9 +3,9 @@
   overflow: hidden;
 }
 .pagination {
-  width: 50px;
+  width: 1rem;
   position: absolute;
-  bottom: 15px;
-  left: 23%;
+  bottom: 1.5rem;
+  left: 20.5rem;
   background-color: #f6f7f9;
 }

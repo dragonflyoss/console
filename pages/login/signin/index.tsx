@@ -35,10 +35,10 @@ export default function SignIn(props: any) {
   const formList = [
     {
       formProps: {
-        id: 'Account',
+        id: 'account',
         label: 'Account',
         name: 'account',
-        autoComplete: 'Account',
+        autoComplete: 'family-name',
         placeholder: 'Enter your account',
         helperText: accountError ? accountHelptext : '',
         error: accountError,

@@ -46,7 +46,7 @@ export default function SignUp(props: any) {
         name: 'account',
         label: 'Account',
         autoComplete: 'family-name',
-        id: 'Account',
+        id: 'account',
         placeholder: 'Enter your account',
         error: accountError,
         helperText: accountError ? 'At least eight characters, at least one letter and one number' : '',
@@ -129,6 +129,7 @@ export default function SignUp(props: any) {
       formProps: {
         name: 'confirmPassword',
         label: 'ConfirmPassword',
+        id: 'confirmPassword',
         type: showConfirmPassword ? 'text' : 'password',
         autoComplete: 'new-password',
         placeholder: 'Repeat your password',

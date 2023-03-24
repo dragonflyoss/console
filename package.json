@@ -14,7 +14,7 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV='development' next dev -p 3000",
-    "build": "next build",
+    "build": "NEXT_PUBLIC_LOCAL_API=http://127.0.0.1:8080 next build",
     "analyze": "cross-env ANALYZE=true next build",
     "type-check": "tsc",
     "start": "next start",
@@ -69,7 +69,7 @@
     "@next/eslint-plugin-next": "^13.0.6",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
-    "@types/node": "18.15.0",
+    "@types/node": "^18.15.5",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.9",
     "@typescript-eslint/eslint-plugin": "^5.48.2",

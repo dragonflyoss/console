@@ -43,5 +43,5 @@ tsconfig.tsbuildinfo
 /coverage
 /cypress/videos
 
-#mock
+# mock
 /mock

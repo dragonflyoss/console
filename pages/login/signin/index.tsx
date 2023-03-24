@@ -10,11 +10,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
+import Rotation from 'components/login/rotation';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { getSignin } from 'lib/api';
+import { signIn } from 'lib/api';
 
-export default function SignIn(props: any) {
+export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [accountError, setAccountError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
@@ -23,10 +24,6 @@ export default function SignIn(props: any) {
 
   const theme = createTheme();
   const router = useRouter();
-
-  const gotoSignup = () => {
-    props.onGetcount();
-  };
 
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show);
@@ -76,21 +73,22 @@ export default function SignIn(props: any) {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    const allData: any = {};
+    const fromData: any = {};
     const data = new FormData(event.currentTarget);
-
     formList.forEach((item) => {
       const value = data.get(item.formProps.name);
-      allData[item.formProps.name] = value;
+      fromData[item.formProps.name] = value;
     });
 
-    if (allData.account !== '' && allData.password !== '') {
+    if (fromData.account !== '' && fromData.password !== '') {
       try {
-        getSignin({
-          name: allData.account,
-          password: allData.password,
-        }).then(() => {
-          router.push('/security');
+        signIn({
+          name: fromData.account,
+          password: fromData.password,
+        }).then((res) => {
+          if (res.Status === 200) {
+            router.push('/security');
+          }
         });
       } catch (error) {
         setAccountError(true);
@@ -102,104 +100,123 @@ export default function SignIn(props: any) {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 10,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <picture>
-            <img
-              style={{
-                width: 40,
-                height: 40,
-                marginBottom: 20,
-              }}
-              src="/logo.png"
-              alt=""
-            />
-          </picture>{' '}
-          <Typography variant="h4" gutterBottom>
-            Welcome back!
-          </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            through which you can easily configure clusters and view cluster information.
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            marginTop: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Box component="form" onSubmit={handleSubmit} noValidate>
-            {formList.map((item) => (
-              <TextField
-                margin="normal"
-                color="success"
-                required
-                fullWidth
-                key={item.formProps.name}
-                {...item.formProps}
-              />
-            ))}
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} style={{ background: '#239B56' }}>
-              Sign In
-            </Button>
+    <Grid
+      container
+      style={{
+        height: '100vh',
+        overflow: 'hidden',
+      }}
+    >
+      <Grid item xs={6}>
+        <Rotation />
+      </Grid>
+      <Grid item xs={6}>
+        <ThemeProvider theme={theme}>
+          <Container component="main" maxWidth="xs">
+            <CssBaseline />
             <Box
               sx={{
-                height: 30,
+                marginTop: '5rem',
                 display: 'flex',
-                justifyContent: 'space-evenly',
-                alignItems: 'center',
+                flexDirection: 'column',
               }}
             >
-              <span
-                style={{
-                  display: 'inline-block',
-                  width: 150,
-                  border: '1px solid rgb(123, 123, 123)',
-                }}
-              ></span>
-              <span
-                style={{
-                  margin: '0 ,15',
-                  verticalAlign: 'middle',
-                }}
-              >
-                or
-              </span>
-              <span
-                style={{
-                  display: 'inline-block',
-                  width: 150,
-                  border: '1px solid rgb(123, 123, 123)',
-                }}
-              ></span>
+              <picture>
+                <img
+                  style={{
+                    width: '3rem',
+                    height: '3rem',
+                    marginBottom: '1rem',
+                  }}
+                  src="/logoinImage/logo.png"
+                  alt=""
+                />
+              </picture>{' '}
+              <Typography variant="h4" gutterBottom>
+                Welcome back!
+              </Typography>
+              <Typography variant="subtitle1" gutterBottom>
+                through which you can easily configure clusters and view cluster information.
+              </Typography>
             </Box>
             <Box
               sx={{
-                marginTop: 2,
+                marginTop: '0.2rem',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                fontSize: 18,
               }}
             >
-              <Grid>
-                <span>New to Dragnfly? </span>
-                <Link onClick={gotoSignup}>Create an account.</Link>
-              </Grid>
+              <Box component="form" onSubmit={handleSubmit} noValidate>
+                {formList.map((item) => (
+                  <TextField
+                    margin="normal"
+                    color="success"
+                    required
+                    fullWidth
+                    key={item.formProps.name}
+                    {...item.formProps}
+                  />
+                ))}
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: '1.4rem', mb: '1.4rem' }}
+                  style={{ background: '#239B56' }}
+                >
+                  Sign In
+                </Button>
+                <Box
+                  sx={{
+                    height: '2rem',
+                    display: 'flex',
+                    justifyContent: 'space-evenly',
+                    alignItems: 'center',
+                  }}
+                >
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      width: '9rem',
+                      border: '0.08rem solid rgb(123, 123, 123)',
+                    }}
+                  ></span>
+                  <span
+                    style={{
+                      margin: '0 ,15',
+                      verticalAlign: 'middle',
+                    }}
+                  >
+                    or
+                  </span>
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      width: '9em',
+                      border: '0.08rem solid rgb(123, 123, 123)',
+                    }}
+                  ></span>
+                </Box>
+                <Box
+                  sx={{
+                    marginTop: '0.5rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    fontSize: 18,
+                  }}
+                >
+                  <Grid>
+                    <span>New to Dragnfly? </span>
+                    <Link href="/login/signup">Create an account.</Link>
+                  </Grid>
+                </Box>
+              </Box>
             </Box>
-          </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>
+          </Container>
+        </ThemeProvider>
+      </Grid>
+    </Grid>
   );
 }

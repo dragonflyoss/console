@@ -13,11 +13,13 @@ import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import { InputAdornment } from '@mui/material';
-import { getSignup } from 'lib/api';
+import Rotation from 'components/login/rotation';
+import { signUp } from 'lib/api';
+import { useRouter } from 'next/router';
 
 const theme = createTheme();
 
-export default function SignUp(props: any) {
+export default function SignUp() {
   const [accountError, setAccountError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
@@ -26,6 +28,7 @@ export default function SignUp(props: any) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const router = useRouter();
   const handleClickShowPassword = (type: 'password' | 'confirmPassword') => {
     if (type === 'password') {
       setShowPassword((show) => !show);
@@ -167,27 +170,29 @@ export default function SignUp(props: any) {
     },
   ];
 
-  const allData: any = {};
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const fromData: any = {};
     const data = new FormData(event.currentTarget);
 
     formList.forEach((item) => {
       const value = data.get(item.formProps.name);
-      allData[item.formProps.name] = value;
+      fromData[item.formProps.name] = value;
       item.setError(!item.validate(value as string));
       item.syncError = !item.validate(value as string);
     });
 
     const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
+
     if (canSubmit) {
       try {
-        getSignup({
-          name: allData.account,
-          password: allData.password,
-          email: allData.email,
-        }).then(() => {
-          props.onSetgnup();
+        await signUp({
+          name: fromData.account,
+          password: fromData.password,
+          email: fromData.email,
+        }).then((res) => {
+          console.log(res);
+          router.push('/login/signin');
         });
       } catch (error) {
         setAccountError(true);
@@ -198,71 +203,85 @@ export default function SignUp(props: any) {
     }
   };
 
-  const gotoSignin = () => {
-    props.onSetgnup();
-  };
-
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 10,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <picture>
-            <img
-              style={{
-                width: 40,
-                height: 40,
-                marginBottom: 20,
-              }}
-              src="/logo.png"
-              alt=""
-            />
-          </picture>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 4 }}>
-            <Grid container spacing={2}>
-              {formList.map((item) => (
-                <Grid item key={item.formProps.name} xs={12}>
-                  <TextField required fullWidth color="success" {...item.formProps} />
-                </Grid>
-              ))}
-            </Grid>
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} style={{ background: '#239B56' }}>
-              Sign Up
-            </Button>
+    <Grid
+      container
+      style={{
+        height: '100vh',
+        overflow: 'hidden',
+      }}
+    >
+      <Grid item xs={6}>
+        <Rotation />
+      </Grid>
+      <Grid item xs={6}>
+        <ThemeProvider theme={theme}>
+          <Container component="main" maxWidth="xs">
+            <CssBaseline />
             <Box
               sx={{
-                marginTop: 2,
+                mt: '5rem',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <picture>
+                <img
+                  style={{
+                    width: '3rem',
+                    height: '3rem',
+                    marginBottom: '1rem',
+                  }}
+                  src="/logoinImage/logo.png"
+                  alt=""
+                />
+              </picture>
+              <Typography component="h1" variant="h5">
+                Registered Account
+              </Typography>
+            </Box>
+            <Box
+              sx={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                fontSize: 18,
               }}
             >
-              <Grid>
-                <span>Already have an account? </span>
-                <Link onClick={gotoSignin}>Sign in</Link>
-              </Grid>
+              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: '1.5rem' }}>
+                <Grid container spacing={3}>
+                  {formList.map((item) => (
+                    <Grid item key={item.formProps.name} xs={12}>
+                      <TextField required fullWidth color="success" {...item.formProps} />
+                    </Grid>
+                  ))}
+                </Grid>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: '2rem', mb: '2rem' }}
+                  style={{ background: '#239B56' }}
+                >
+                  Sign Up
+                </Button>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    fontSize: 18,
+                  }}
+                >
+                  <Grid>
+                    <span>Already have an account? </span>
+                    <Link href="/login/signin">Sign in</Link>
+                  </Grid>
+                </Box>
+              </Box>
             </Box>
-          </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>
+          </Container>
+        </ThemeProvider>
+      </Grid>
+    </Grid>
   );
 }

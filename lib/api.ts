@@ -1,5 +1,8 @@
 import { URL } from 'next/dist/compiled/@edge-runtime/primitives/url';
 
+interface Param {
+  [key: string]: any;
+}
 const API_URL = process.env.DRAGONFLY_PUBLIC_API;
 
 export async function fetchGetJSON(url: string) {
@@ -14,7 +17,7 @@ export async function fetchGetJSON(url: string) {
   }
 }
 
-export async function fetchPostJSON(url: RequestInfo | URL, data?: {}) {
+export async function fetchPostJSON(url: RequestInfo | URL, data:Param) {
   try {
     const response = await fetch(url, {
       method: 'POST',

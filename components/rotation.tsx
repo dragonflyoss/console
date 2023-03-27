@@ -61,7 +61,7 @@ export default function Rotation() {
         </AutoPlaySwipeableViews>
         {
           <MobileStepper
-            className={styles.mobileStepper}
+            className={styles.scroll}
             backButton={undefined}
             nextButton={undefined}
             activeStep={imageIndex}

@@ -14,20 +14,19 @@ export async function fetchGetJSON(url: string) {
   }
 }
 
-export async function fetchPostJSON(url: any, data?: {}) {
+export async function fetchPostJSON(url: RequestInfo | URL, data?: {}) {
   try {
     const response = await fetch(url, {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: JSON.stringify(data || {}), // body data type must match "Content-Type" header
+      body: JSON.stringify(data || {}),
     });
-    return await response.json(); // parses JSON response into native JavaScript objects
+    return await response.json();
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);

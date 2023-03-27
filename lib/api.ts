@@ -17,7 +17,7 @@ export async function fetchGetJSON(url: string) {
   }
 }
 
-export async function fetchPostJSON(url: RequestInfo | URL, data:Param) {
+export async function fetchPostJSON(url: RequestInfo | URL, data: Param) {
   try {
     const response = await fetch(url, {
       method: 'POST',

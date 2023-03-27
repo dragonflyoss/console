@@ -2,6 +2,7 @@ import { Box, Grid, MobileStepper, useTheme } from '@mui/material';
 import { useState } from 'react';
 import { autoPlay } from 'react-swipeable-views-utils';
 import SwipeableViews from 'react-swipeable-views';
+import styles from './rotation.module.css';
 import React from 'react';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
@@ -9,15 +10,15 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const rotationChart = [
   {
     label: 'Dragonfly',
-    imgUrl: '/logoinImage/dragonfly.png',
+    imageURL: '/images/login/dragonfly.png',
   },
   {
     label: 'Features',
-    imgUrl: '/logoinImage/features.png',
+    imageURL: '/images/login/features.png',
   },
   {
     label: 'Milestones',
-    imgUrl: '/logoinImage/milestones.png',
+    imageURL: '/images/login/milestones.png',
   },
 ];
 
@@ -50,7 +51,7 @@ export default function Rotation() {
                       sx={{
                         width: '100%',
                       }}
-                      src={step.imgUrl}
+                      src={step.imageURL}
                     />
                   ) : null}
                 </div>
@@ -60,13 +61,7 @@ export default function Rotation() {
         </AutoPlaySwipeableViews>
         {
           <MobileStepper
-            style={{
-              width: '1rem',
-              position: 'absolute',
-              bottom: '1.5rem',
-              left: '20.5rem',
-              backgroundColor: '#f6f7f9',
-            }}
+            className={styles.mobileStepper}
             backButton={undefined}
             nextButton={undefined}
             activeStep={imageIndex}

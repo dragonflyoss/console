@@ -13,11 +13,10 @@ import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import { InputAdornment } from '@mui/material';
-import Rotation from 'components/login/rotation';
+import Rotation from 'components/rotation';
 import { signUp } from 'lib/api';
 import { useRouter } from 'next/router';
-
-const theme = createTheme();
+import styles from './signup.module.css';
 
 export default function SignUp() {
   const [accountError, setAccountError] = useState(false);
@@ -29,19 +28,6 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const router = useRouter();
-  const handleClickShowPassword = (type: 'password' | 'confirmPassword') => {
-    if (type === 'password') {
-      setShowPassword((show) => !show);
-    } else {
-      setShowConfirmPassword((show) => !show);
-    }
-  };
-
-  const changeValidate = (value: string, data: any, cb?: () => void) => {
-    const { setError, validate } = data;
-    setError(!validate(value));
-    cb && cb();
-  };
 
   const formList = [
     {
@@ -105,7 +91,7 @@ export default function SignUp() {
             <IconButton
               aria-label="toggle password visibility"
               onClick={() => {
-                handleClickShowPassword('password');
+                handlePassword('password');
               }}
               edge="end"
             >
@@ -145,7 +131,7 @@ export default function SignUp() {
               <IconButton
                 aria-label="toggle password visibility"
                 onClick={() => {
-                  handleClickShowPassword('confirmPassword');
+                  handlePassword('confirmPassword');
                 }}
                 edge="end"
               >
@@ -170,47 +156,66 @@ export default function SignUp() {
     },
   ];
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const fromData: any = {};
-    const data = new FormData(event.currentTarget);
+  const theme = createTheme({
+    palette: {
+      secondary: {
+        contrastText: '#fff',
+        main: '#239b56',
+      },
+    },
+  });
 
+  const handlePassword = (type: 'password' | 'confirmPassword') => {
+    if (type === 'password') {
+      setShowPassword((show) => !show);
+    } else {
+      setShowConfirmPassword((show) => !show);
+    }
+  };
+
+  const changeValidate = (value: string, data: any, cb?: () => void) => {
+    const { setError, validate } = data;
+    setError(!validate(value));
+    cb && cb();
+  };
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+
+    const accountElement = event.currentTarget.elements.account;
+    const emailElement = event.currentTarget.elements.email;
+    const passwordElement = event.currentTarget.elements.password;
+
+    const data = new FormData(event.currentTarget);
     formList.forEach((item) => {
       const value = data.get(item.formProps.name);
-      fromData[item.formProps.name] = value;
       item.setError(!item.validate(value as string));
       item.syncError = !item.validate(value as string);
     });
 
     const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
-
-    if (canSubmit) {
-      try {
+    try {
+      if (canSubmit) {
         await signUp({
-          name: fromData.account,
-          password: fromData.password,
-          email: fromData.email,
+          name: accountElement.value,
+          password: passwordElement.value,
+          email: emailElement.value,
         }).then((res) => {
-          console.log(res);
-          router.push('/login/signin');
+          if (res.cod === 200) {
+            router.push('/login/signin');
+          }
         });
-      } catch (error) {
-        setAccountError(true);
-        setConfirmPassworError(true);
-        setEmailError(true);
-        setPasswordError(true);
       }
+    } catch (error) {
+      setAccountError(true);
+      setEmailError(true);
+      setPasswordError(true);
+      setConfirmPassworError(true);
     }
   };
 
   return (
-    <Grid
-      container
-      style={{
-        height: '100vh',
-        overflow: 'hidden',
-      }}
-    >
+    <Grid container className={styles.containe}>
       <Grid item xs={6}>
         <Rotation />
       </Grid>
@@ -226,15 +231,7 @@ export default function SignUp() {
               }}
             >
               <picture>
-                <img
-                  style={{
-                    width: '3rem',
-                    height: '3rem',
-                    marginBottom: '1rem',
-                  }}
-                  src="/logoinImage/logo.png"
-                  alt=""
-                />
+                <img className={styles.logo} src="/images/login/logo.png" alt="" />
               </picture>
               <Typography component="h1" variant="h5">
                 Registered Account
@@ -255,13 +252,7 @@ export default function SignUp() {
                     </Grid>
                   ))}
                 </Grid>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: '2rem', mb: '2rem' }}
-                  style={{ background: '#239B56' }}
-                >
+                <Button type="submit" fullWidth variant="contained" sx={{ mt: '2rem', mb: '2rem' }} color="secondary">
                   Sign Up
                 </Button>
                 <Box
@@ -274,7 +265,7 @@ export default function SignUp() {
                 >
                   <Grid>
                     <span>Already have an account? </span>
-                    <Link href="/login/signin">Sign in</Link>
+                    <Link href="/signin">Sign in</Link>
                   </Grid>
                 </Box>
               </Box>

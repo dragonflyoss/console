@@ -10,10 +10,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
-import Rotation from 'components/login/rotation';
+import Rotation from 'components/rotation';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { signIn } from 'lib/api';
+import styles from './signin.module.css';
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,13 +22,6 @@ export default function SignIn() {
   const [passwordError, setPasswordError] = useState(false);
   const [accountHelptext, setAccountHelptext] = useState('');
   const [passwordHelptext, setPasswordHelptext] = useState('');
-
-  const theme = createTheme();
-  const router = useRouter();
-
-  const handleClickShowPassword = () => {
-    setShowPassword((show) => !show);
-  };
 
   const formList = [
     {
@@ -58,7 +52,7 @@ export default function SignIn() {
             <IconButton
               aria-label="toggle password visibility"
               onClick={() => {
-                handleClickShowPassword();
+                handlePassword();
               }}
               edge="end"
             >
@@ -71,20 +65,31 @@ export default function SignIn() {
     },
   ];
 
+  const theme = createTheme({
+    palette: {
+      secondary: {
+        contrastText: '#fff',
+        main: '#239b56',
+      },
+    },
+  });
+
+  const router = useRouter();
+
+  const handlePassword = () => {
+    setShowPassword((show) => !show);
+  };
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    const fromData: any = {};
-    const data = new FormData(event.currentTarget);
-    formList.forEach((item) => {
-      const value = data.get(item.formProps.name);
-      fromData[item.formProps.name] = value;
-    });
+    const accountElement = event.currentTarget.elements.account;
+    const passwordElement = event.currentTarget.elements.password;
 
-    if (fromData.account !== '' && fromData.password !== '') {
+    if (accountElement.value !== '' && passwordElement.value !== '') {
       try {
         signIn({
-          name: fromData.account,
-          password: fromData.password,
+          name: accountElement.value,
+          password: passwordElement.value,
         }).then((res) => {
           if (res.Status === 200) {
             router.push('/security');
@@ -122,15 +127,7 @@ export default function SignIn() {
               }}
             >
               <picture>
-                <img
-                  style={{
-                    width: '3rem',
-                    height: '3rem',
-                    marginBottom: '1rem',
-                  }}
-                  src="/logoinImage/logo.png"
-                  alt=""
-                />
+                <img className={styles.logo} src="/images/login/logo.png" alt="" />
               </picture>{' '}
               <Typography variant="h4" gutterBottom>
                 Welcome back!
@@ -163,7 +160,8 @@ export default function SignIn() {
                   fullWidth
                   variant="contained"
                   sx={{ mt: '1.4rem', mb: '1.4rem' }}
-                  style={{ background: '#239B56' }}
+                  color="secondary"
+                  // className={styles.btn}
                 >
                   Sign In
                 </Button>
@@ -175,28 +173,9 @@ export default function SignIn() {
                     alignItems: 'center',
                   }}
                 >
-                  <span
-                    style={{
-                      display: 'inline-block',
-                      width: '9rem',
-                      border: '0.08rem solid rgb(123, 123, 123)',
-                    }}
-                  ></span>
-                  <span
-                    style={{
-                      margin: '0 ,15',
-                      verticalAlign: 'middle',
-                    }}
-                  >
-                    or
-                  </span>
-                  <span
-                    style={{
-                      display: 'inline-block',
-                      width: '9em',
-                      border: '0.08rem solid rgb(123, 123, 123)',
-                    }}
-                  ></span>
+                  <span className={styles.borderLeft}></span>
+                  <span className={styles.text}>or</span>
+                  <span className={styles.bordeRight}></span>
                 </Box>
                 <Box
                   sx={{
@@ -209,7 +188,7 @@ export default function SignIn() {
                 >
                   <Grid>
                     <span>New to Dragnfly? </span>
-                    <Link href="/login/signup">Create an account.</Link>
+                    <Link href="/signup">Create an account.</Link>
                   </Grid>
                 </Box>
               </Box>

@@ -14,7 +14,7 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV='development' next dev -p 3000",
-    "build": "NEXT_PUBLIC_LOCAL_API=http://127.0.0.1:8080 next build",
+    "build": "cross-env NODE_ENV='production' next build",
     "analyze": "cross-env ANALYZE=true next build",
     "type-check": "tsc",
     "start": "next start",

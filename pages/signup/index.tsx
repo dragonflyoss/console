@@ -16,7 +16,7 @@ import { InputAdornment } from '@mui/material';
 import Rotation from 'components/rotation';
 import { signUp } from 'lib/api';
 import { useRouter } from 'next/router';
-import styles from './signup.module.css';
+import styles from './index.module.css';
 
 export default function SignUp() {
   const [accountError, setAccountError] = useState(false);
@@ -194,7 +194,6 @@ export default function SignUp() {
     });
 
     const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
-
     if (canSubmit) {
       await signUp({
         name: accountElement.value,

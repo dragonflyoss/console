@@ -14,7 +14,7 @@ import Rotation from 'components/rotation';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { signIn } from 'lib/api';
-import styles from './signin.module.css';
+import styles from './index.module.css';
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);

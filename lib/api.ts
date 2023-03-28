@@ -34,15 +34,21 @@ export async function post(url: string | URL, data: any) {
     throw err;
   }
 }
-
-export async function signIn(params: any) {
+interface signinData {
+  name: string;
+  password: string;
+}
+export async function signIn(data: signinData) {
   const url = new URL('/api/v1/users/signin', API_URL);
-  const data = await post(url, params);
-  return data;
+  return await post(url, data);
 }
 
-export async function signUp(params: any) {
+interface signupData {
+  name: string;
+  password: string;
+  email: string;
+}
+export async function signUp(data: signupData) {
   const url = new URL('/api/v1/users/signup', API_URL);
-  const data = await post(url, params);
-  return data;
+  return await post(url, data);
 }

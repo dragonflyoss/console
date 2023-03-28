@@ -38,7 +38,7 @@ export default function SignUp() {
         id: 'account',
         placeholder: 'Enter your account',
         error: accountError,
-        helperText: accountError ? 'At least eight characters, at least one letter and one number' : '',
+        helperText: accountError ? 'At least four characters do not contain special characters' : '',
 
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[0]);
@@ -48,7 +48,7 @@ export default function SignUp() {
       setError: setAccountError,
 
       validate: (value: string) => {
-        const reg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{7,}$/;
+        const reg = /^[A-Za-z\d]{4,10}$/;
         return reg.test(value);
       },
     },
@@ -82,7 +82,7 @@ export default function SignUp() {
         placeholder: 'Enter your password',
         autoComplete: 'new-password',
         helperText: passwordError
-          ? 'Must contain an uppercase, a lowercase letter, a number, a special character, and be 8 to 16 digits long'
+          ? 'At least 8-16 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number'
           : '',
         type: showPassword ? 'text' : 'password',
         error: passwordError,
@@ -110,7 +110,7 @@ export default function SignUp() {
       setError: setPasswordError,
 
       validate: (value: string) => {
-        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@&%#_])[a-zA-Z0-9~!@&%#_]{8,16}$/;
+        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
         return reg.test(value);
       },
     },
@@ -150,7 +150,7 @@ export default function SignUp() {
       setError: setConfirmPassworError,
 
       validate: (value: string) => {
-        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@&%#_])[a-zA-Z0-9~!@&%#_]{8,16}$/;
+        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
         return value === password && reg.test(value);
       },
     },
@@ -201,9 +201,9 @@ export default function SignUp() {
         password: passwordElement.value,
         email: emailElement.value,
       }).then((res) => {
-        if (res) {
+        if (res.name) {
           router.push('/signin');
-        } else {
+        } else if (res.message) {
           setAccountError(true);
           setEmailError(true);
           setPasswordError(true);

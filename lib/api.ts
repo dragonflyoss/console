@@ -1,11 +1,8 @@
 import { URL } from 'next/dist/compiled/@edge-runtime/primitives/url';
 
-interface Param {
-  [key: string]: any;
-}
-const API_URL = process.env.DRAGONFLY_PUBLIC_API;
+const API_URL = process.env.NEXT_PUBLIC_DRAGONFLY_PUBLIC_API;
 
-export async function fetchGetJSON(url: string) {
+export async function get(url: string | URL) {
   try {
     const data = await fetch(url).then((res) => res.json());
     return data;
@@ -17,7 +14,7 @@ export async function fetchGetJSON(url: string) {
   }
 }
 
-export async function fetchPostJSON(url: RequestInfo | URL, data: Param) {
+export async function post(url: string | URL, data: any) {
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -39,13 +36,13 @@ export async function fetchPostJSON(url: RequestInfo | URL, data: Param) {
 }
 
 export async function signIn(params: any) {
-  const url = new URL('/users/signin', API_URL);
-  const data = await fetchPostJSON(url, params);
+  const url = new URL('/api/v1/users/signin', API_URL);
+  const data = await post(url, params);
   return data;
 }
 
 export async function signUp(params: any) {
-  const url = new URL('/users/signup', API_URL);
-  const data = await fetchPostJSON(url, params);
+  const url = new URL('/api/v1/users/signup', API_URL);
+  const data = await post(url, params);
   return data;
 }

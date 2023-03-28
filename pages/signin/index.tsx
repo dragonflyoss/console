@@ -86,21 +86,20 @@ export default function SignIn() {
     const passwordElement = event.currentTarget.elements.password;
 
     if (accountElement.value !== '' && passwordElement.value !== '') {
-      try {
-        signIn({
-          name: accountElement.value,
-          password: passwordElement.value,
-        }).then((res) => {
-          if (res.Status === 200) {
-            router.push('/security');
-          }
-        });
-      } catch (error) {
-        setAccountError(true);
-        setPasswordError(true);
-        setPasswordHelptext('Please enter the correct password');
-        setAccountHelptext('Please enter the correct account number ');
-      }
+      signIn({
+        name: accountElement.value,
+        password: passwordElement.value,
+      }).then((res) => {
+        if (res.token) {
+          localStorage.setItem('token', res.token);
+          router.push('/security');
+        } else {
+          setAccountError(true);
+          setPasswordError(true);
+          setPasswordHelptext('Please enter the correct password');
+          setAccountHelptext('Please enter the correct account number ');
+        }
+      });
     }
   };
 
@@ -161,7 +160,6 @@ export default function SignIn() {
                   variant="contained"
                   sx={{ mt: '1.4rem', mb: '1.4rem' }}
                   color="secondary"
-                  // className={styles.btn}
                 >
                   Sign In
                 </Button>

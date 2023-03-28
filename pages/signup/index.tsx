@@ -23,7 +23,7 @@ export default function SignUp() {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [confirmPassworError, setConfirmPassworError] = useState(false);
-  const [passwordvalue, setPasswordvalue] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -102,7 +102,7 @@ export default function SignUp() {
 
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[2], () => {
-            setPasswordvalue(e.target.value);
+            setPassword(e.target.value);
           });
         },
       },
@@ -151,7 +151,7 @@ export default function SignUp() {
 
       validate: (value: string) => {
         const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@&%#_])[a-zA-Z0-9~!@&%#_]{8,16}$/;
-        return value === passwordvalue && reg.test(value);
+        return value === password && reg.test(value);
       },
     },
   ];
@@ -194,23 +194,22 @@ export default function SignUp() {
     });
 
     const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
-    try {
-      if (canSubmit) {
-        await signUp({
-          name: accountElement.value,
-          password: passwordElement.value,
-          email: emailElement.value,
-        }).then((res) => {
-          if (res.cod === 200) {
-            router.push('/login/signin');
-          }
-        });
-      }
-    } catch (error) {
-      setAccountError(true);
-      setEmailError(true);
-      setPasswordError(true);
-      setConfirmPassworError(true);
+
+    if (canSubmit) {
+      await signUp({
+        name: accountElement.value,
+        password: passwordElement.value,
+        email: emailElement.value,
+      }).then((res) => {
+        if (res) {
+          router.push('/signin');
+        } else {
+          setAccountError(true);
+          setEmailError(true);
+          setPasswordError(true);
+          setConfirmPassworError(true);
+        }
+      });
     }
   };
 

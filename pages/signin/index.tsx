@@ -158,13 +158,15 @@ export default function SignIn() {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{ mt: '1.4rem', mb: '1.4rem' }}
+                  sx={{ mt: '1.4rem'}}
                   color="secondary"
                 >
                   Sign In
                 </Button>
                 <Box
                   sx={{
+                    mt: '1.2rem',
+                    mb: '0.8rem',
                     height: '2rem',
                     display: 'flex',
                     justifyContent: 'space-evenly',
@@ -177,11 +179,10 @@ export default function SignIn() {
                 </Box>
                 <Box
                   sx={{
-                    marginTop: '0.5rem',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    fontSize: 18,
+                    fontSize: '0.9rem',
                   }}
                 >
                   <Grid>

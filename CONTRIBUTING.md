@@ -259,10 +259,12 @@ We can use either the standalone app or the browser extension.
 If you need to use mock server, please import the API https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml , as shown in the figure.
 
 Or you can also use the official Postman documentation API:https://learning.postman.com/docs/integrations/available-integrations/working-with-openAPI/
+
 <div align=center>
 <img src=/console/docs/images/postman1.png width=80% />
 </div>
 
+![](/console/docs/images/postman1.png)
 <div align=center>
 <img src=/console/docs/images/postman2.png width=80% />
 </div>

@@ -257,13 +257,13 @@ We can use either the standalone app or the browser extension.
 ## postman mock server step
 
 ### 1. Install postman
-3.1 First of all, your installation of postman https://www.postman.com/downloads
+3.1 First of all, your installation of postman https://www.postman.com/downloads .
 
 ### 2. Import API
 
-If you need to use mock server, please import the API https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml , as shown in the figure.
+If you need to use mock server, please import the API https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml ，as the picture shows.
 
-Or you can also use the official Postman documentation API:https://learning.postman.com/docs/integrations/available-integrations/working-with-openAPI/
+Or you can also use the official Postman documentation API:https://learning.postman.com/docs/integrations/available-integrations/working-with-openAPI/ .
 
 ![](/docs/images/postman1.png)
 
@@ -273,32 +273,32 @@ Or you can also use the official Postman documentation API:https://learning.post
 
 ### 3. Creating a mock from a collection
 
-Select Collections in the sidebar. Select the more actions icon More actions icon next to the collection you want to mock and select Mock collection.
+Create a mock server under the collection: Select the corresponding collection, click the three dots on the right, click mock collection.
 
+Or you can also create a mock server according to the postman official website https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/ .
 
  ![](/docs/images/postman4.png)
 
-Supplement the mock server name information and save it. Then copy out the mock url
- ![](/console/docs/images/postman.png)
+Supplement the mock server name information and save it. Then copy out the mock url.
 
 ![](/docs/images/postman5.png)
 
 ![](/docs/images/postman6.png)
 
-If the request has been sent, use the mock server directly based on the request
+If the request has been sent, use the mock server directly based on the request.
 
  ![](/docs/images/postman7.png)
 
-If no request is sent, you need to create an example
+If no request is sent, you need to create an example.
 
 ![](/docs/images/postman8.png)
 
-Modify the name such as signup, modify the response message, and Save Example
+Modify the name such as signup, modify the response message, and Save Example.
 
 ![](/docs/images/postman9.png)
 
 ### 4. Verification successful
 
-Open the mock server to see if the requested column was successful
+Open the mock server to see if the requested column was successful.
 
 ![](/docs/images/postman10.png)

@@ -154,13 +154,7 @@ export default function SignIn() {
                     {...item.formProps}
                   />
                 ))}
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: '1.4rem'}}
-                  color="secondary"
-                >
+                <Button type="submit" fullWidth variant="contained" sx={{ mt: '1.4rem' }} color="secondary">
                   Sign In
                 </Button>
                 <Box

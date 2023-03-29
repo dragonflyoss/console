@@ -247,58 +247,54 @@ We encourage contributors to follow the
 
 
 ##  Postman mock server Overview
+
 In this article, we will see how to import the Swagger API into Postman and use the mock server
 ### Postman
+
 Postman is an API platform for building and using APIs. Postman simplifies each step of the API lifecycle and streamlines collaboration. We can use Postman to test our API without writing any code.
 
 We can use either the standalone app or the browser extension.
 ## postman mock server step
+
 ### 1. Install postman
-3.1 First of all, your installation of postman https://www.postman.com/downloads，
+3.1 First of all, your installation of postman https://www.postman.com/downloads
+
 ### 2. Import API
+
 If you need to use mock server, please import the API https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml , as shown in the figure.
-
 Or you can also use the official Postman documentation API:https://learning.postman.com/docs/integrations/available-integrations/working-with-openAPI/
+![](/docs/images/postman1.png)
 
-<div align=center>
-<img src=/docs/images/postman1.png width=80% />
-</div>
+![](/docs/images/postman2.png)
 
-![](/console/docs/images/postman1.png)
-<div align=center>
-<img src=/console/docs/images/postman2.png width=80% />
-</div>
-3.2
-<div align=center>
-<img src=/console/docs/images/postman3.png width=80% />
-</div>
+![](/docs/images/postman3.png)
+
 ### 3. Creating a mock from a collection
+
 Select Collections in the sidebar. Select the more actions icon More actions icon next to the collection you want to mock and select Mock collection.
-<div align=center>
-<img src=/console/docs/images/postman4.png width=80% />
-</div>
+
+![](/docs/images/postman4.png)
+
 Supplement the mock server name information and save it. Then copy out the mock url
-<div align=center>
-<img src=/console/docs/images/postman5.png width=80% />
-</div>
-<div align=center>
-<img src=/console/docs/images/postman6.png width=80% />
-</div>
+
+![](/docs/images/postman5.png)
+
+![](/docs/images/postman6.png)
 
 If a request has been sent, you can directly mock the server based on the request and change the path to a simulated path
-<div align=center>
-<img src=/console/docs/images/postman7.png width=80% />
-</div>
+
+![](/docs/images/postman7.png)
+
 If no request is sent, you need to create an example
-<div align=center>
-<img src=/console/docs/images/postman8.png width=80% />
-</div>
+
+![](/docs/images/postman8.png)
+
 Modify the name such as signup, modify the response message, and Save Example
-<div align=center>
-<img src=/console/docs/images/postman9.png width=80% />
-</div>
+
+![](/docs/images/postman9.png)
+
 ### 4. Verification successful
+
 Open the mock server to see if the requested column was successful
-<div align=center>
-<img src=/console/docs/images/postman10.png width=80% />
-</div>
+
+![](/docs/images/postman10.png)

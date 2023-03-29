@@ -261,7 +261,7 @@ If you need to use mock server, please import the API https://raw.githubusercont
 Or you can also use the official Postman documentation API:https://learning.postman.com/docs/integrations/available-integrations/working-with-openAPI/
 
 <div align=center>
-<img src=/console/docs/images/postman1.png width=80% />
+<img src=/docs/images/postman1.png width=80% />
 </div>
 
 ![](/console/docs/images/postman1.png)

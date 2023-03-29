@@ -104,13 +104,7 @@ export default function SignIn() {
   };
 
   return (
-    <Grid
-      container
-      style={{
-        height: '100vh',
-        overflow: 'hidden',
-      }}
-    >
+    <Grid container className={styles.containe}>
       <Grid item xs={6}>
         <Rotation />
       </Grid>

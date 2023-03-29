@@ -34,6 +34,7 @@ export async function post(url: URL, data: any) {
     throw err;
   }
 }
+
 interface signinData {
   name: string;
   password: string;

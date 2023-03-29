@@ -250,15 +250,29 @@ export default function SignUp() {
                     </Grid>
                   ))}
                 </Grid>
-                <Button type="submit" fullWidth variant="contained" sx={{ mt: '2rem', mb: '2rem' }} color="secondary">
+                <Button type="submit" fullWidth variant="contained" sx={{ mt: '2rem' }} color="secondary">
                   Sign Up
                 </Button>
+                <Box
+                  sx={{
+                    mt: '1.2rem',
+                    mb: '0.8rem',
+                    height: '2rem',
+                    display: 'flex',
+                    justifyContent: 'space-evenly',
+                    alignItems: 'center',
+                  }}
+                >
+                  <span className={styles.borderLeft}></span>
+                  <span className={styles.text}>or</span>
+                  <span className={styles.bordeRight}></span>
+                </Box>
                 <Box
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    fontSize: 18,
+                    fontSize: '0.9rem',
                   }}
                 >
                   <Grid>

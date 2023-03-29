@@ -269,6 +269,8 @@ Or you can also use the official Postman documentation API:https://learning.post
 
 ![](/docs/images/postman2.png)
 
+copy to collection.
+
 ![](/docs/images/postman3.png)
 
 ### 3. Creating a mock from a collection

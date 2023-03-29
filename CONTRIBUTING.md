@@ -262,7 +262,9 @@ We can use either the standalone app or the browser extension.
 ### 2. Import API
 
 If you need to use mock server, please import the API https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml , as shown in the figure.
+
 Or you can also use the official Postman documentation API:https://learning.postman.com/docs/integrations/available-integrations/working-with-openAPI/
+
 ![](/docs/images/postman1.png)
 
 ![](/docs/images/postman2.png)
@@ -273,17 +275,19 @@ Or you can also use the official Postman documentation API:https://learning.post
 
 Select Collections in the sidebar. Select the more actions icon More actions icon next to the collection you want to mock and select Mock collection.
 
-![](/docs/images/postman4.png)
+
+ ![](/docs/images/postman4.png)
 
 Supplement the mock server name information and save it. Then copy out the mock url
+ ![](/console/docs/images/postman.png)
 
 ![](/docs/images/postman5.png)
 
 ![](/docs/images/postman6.png)
 
-If a request has been sent, you can directly mock the server based on the request and change the path to a simulated path
+If the request has been sent, use the mock server directly based on the request
 
-![](/docs/images/postman7.png)
+ ![](/docs/images/postman7.png)
 
 If no request is sent, you need to create an example
 

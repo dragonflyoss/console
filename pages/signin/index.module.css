@@ -1,0 +1,22 @@
+.logo {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+}
+
+.borderLeft {
+  display: inline-block;
+  width: 9rem;
+  border: 0.08rem solid rgb(123, 123, 123);
+}
+
+.bordeRight {
+  display: inline-block;
+  width: 9rem;
+  border: 0.08rem solid rgb(123, 123, 123);
+}
+
+.text {
+  margin: 0, 15;
+  vertical-align: middle;
+}

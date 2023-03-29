@@ -13,8 +13,8 @@
     "url": "git@github.com:dragonflyoss/console.git"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "cross-env NODE_ENV='development' next dev -p 3000",
+    "build": "cross-env NODE_ENV='production' next build",
     "analyze": "cross-env ANALYZE=true next build",
     "type-check": "tsc",
     "start": "next start",
@@ -32,8 +32,17 @@
     }
   },
   "lint-staged": {
-    "*.@(js|ts|tsx)": [
-      "yarn lint"
+    "**/*.ts?(x)": [
+      "yarn type-check"
+    ],
+    "*.{js,ts,tsx,}": [
+      "prettier --write"
+    ],
+    "*.{json,yaml,yml}": [
+      "prettier --write"
+    ],
+    "*.{css,sass}": [
+      "prettier --write"
     ]
   },
   "dependencies": {
@@ -42,11 +51,17 @@
     "@mui/icons-material": "^5.10.16",
     "@mui/material": "^5.10.17",
     "@types/jest": "^29.2.5",
+    "@types/react-swipeable-views": "^0.13.1",
+    "@types/react-swipeable-views-utils": "^0.13.4",
     "cross-env": "^7.0.3",
     "next": "13.0.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-test-renderer": "^18.2.0"
+    "react-swipeable-views": "^0.14.0",
+    "react-swipeable-views-native": "^0.13.2",
+    "react-swipeable-views-utils": "^0.14.0",
+    "react-test-renderer": "^18.2.0",
+    "sass-loader": "^13.2.0"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.1.0",
@@ -54,8 +69,8 @@
     "@next/eslint-plugin-next": "^13.0.6",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
-    "@types/node": "18.11.13",
-    "@types/react": "18.0.26",
+    "@types/node": "^18.15.5",
+    "@types/react": "18.0.28",
     "@types/react-dom": "18.0.9",
     "@typescript-eslint/eslint-plugin": "^5.48.2",
     "@typescript-eslint/parser": "^5.48.2",
@@ -91,20 +106,6 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ]
-  },
-  "lint-staged": {
-    "**/*.ts?(x)": [
-      "yarn type-check"
-    ],
-    "*.{js,ts,tsx,}": [
-      "prettier --write"
-    ],
-    "*.{json,yaml,yml}": [
-      "prettier --write"
-    ],
-    "*.{css,sass}": [
-      "prettier --write"
     ]
   },
   "commitlint": {

@@ -1,6 +1,6 @@
- # Contributing to Dragonfly Console
+ # Contributing to Dragonfly Console 
 
-It is warmly welcomed if you have the interest to hack on Dragonfly.
+It is warmly welcomed if you have the interest to hack on Dragonfly Console.
 First, we encourage this kind of willingness very much.
 And here is a list of contributing guide for you.
 
@@ -22,26 +22,32 @@ And here is a list of contributing guide for you.
   - [postman mock server step](#postman-mock-server-step)
     - [1. Install postman](#1-install-postman)
     - [2. Import API](#2-import-api)
+        - [copy to collection.](#copy-to-collection)
     - [3. Creating a mock from a collection](#3-creating-a-mock-from-a-collection)
+        - [3.1 Supplement the mock server name information and save it. Then copy out the mock url.](#31-supplement-the-mock-server-name-information-and-save-it-then-copy-out-the-mock-url)
+        - [3.2 If the request has been sent, use the mock server directly based on the request.](#32-if-the-request-has-been-sent-use-the-mock-server-directly-based-on-the-request)
+        - [3.3 If no request is sent, you need to create an example.](#33-if-no-request-is-sent-you-need-to-create-an-example)
+        - [3.4 Modify the name such as signup, modify the response message, and Save Example.](#34-modify-the-name-such-as-signup-modify-the-response-message-and-save-example)
     - [4. Verification successful](#4-verification-successful)
+        - [Open the mock server to see if the requested column was successful.](#open-the-mock-server-to-see-if-the-requested-column-was-successful)
 
 ## Reporting security issues
 
 Security issues are always treated seriously.
 As our usual principle, we discourage anyone to spread security issues.
-If you find a security issue of Dragonfly, please do not discuss it in
+If you find a security issue of Dragonfly Console, please do not discuss it in
 public and even do not open a public issue.
 Instead, we encourage you to send us a private email to
 [dragonfly-developers@googlegroups.com](mailto:dragonfly-developers@googlegroups.com) to report this.
 
 ## Reporting general issues
 
-To be honest, we regard every user of Dragonfly as a very kind contributor.
-After experiencing Dragonfly, you may have some feedback for the project.
+To be honest, we regard every user of Dragonfly Console as a very kind contributor.
+After experiencing Dragonfly Console, you may have some feedback for the project.
 Then feel free to open an issue via
-[NEW ISSUE](https://github.com/dragonflyoss/Dragonfly2/issues/new).
+[NEW ISSUE](https://github.com/dragonflyoss/console/issues/new).
 
-Since we collaborate project Dragonfly in a distributed way,
+Since we collaborate project Dragonfly Console in a distributed way,
 we appreciate **WELL-WRITTEN**, **DETAILED**, **EXPLICIT** issue reports.
 To make the communication more efficient, we wish everyone could
 search if your issue is an existing one in the searching list.
@@ -74,8 +80,8 @@ network locations, private business data and so on.
 
 ## Code and doc contribution
 
-Every action to make project Dragonfly better is encouraged.
-On GitHub, every improvement for Dragonfly could be
+Every action to make project Dragonfly Console better is encouraged.
+On GitHub, every improvement for Dragonfly Console could be
 via a PR (short for pull request).
 
 - If you find a typo, try to fix it!
@@ -94,7 +100,7 @@ Just remember one principle:
 
 > WE ARE LOOKING FORWARD TO ANY PR FROM YOU.
 
-Since you are ready to improve Dragonfly with a PR,
+Since you are ready to improve Dragonfly Console with a PR,
 we suggest you could take a look at the PR rules here.
 
 - [Workspace Preparation](#workspace-preparation)
@@ -110,37 +116,37 @@ To put forward a PR, we assume you have registered
 a GitHub ID. Then you could finish
 the preparation in the following steps:
 
-1. **FORK** Dragonfly to your repository.
+1. **FORK** Dragonfly Console to your repository.
 
   To make this work, you just need to click the button Fork
-  in right-left of [dragonflyoss/Dragonfly2](https://github.com/dragonflyoss/Dragonfly2)
+  in right-left of [dragonflyoss/console](https://github.com/dragonflyoss/console)
   main page. Then you will end up with your repository in
-  `https://github.com/<your-username>/Dragonfly`,
+  `https://github.com/<your-username>/Dragonfly Console`,
   in which `your-username` is your GitHub username.
 
 1. **CLONE** your own repository to develop locally.
 
-  Use `git clone https://github.com/<your-username>/Dragonfly2.git`
+  Use `git clone https://github.com/dragonflyoss/console.git`
   to clone repository to your local machine.
   Then you can create new branches to finish the change you wish to make.
 
 1. **Set Remote** upstream to be
-    `https://github.com/dragonflyoss/Dragonfly2.git`
+    `https://github.com/dragonflyoss/console.git`
 
   using the following two commands:
 
   ```bash
-  git remote add upstream https://github.com/dragonflyoss/Dragonfly2.git
+  git remote add upstream https://github.com/dragonflyoss/console.git
   git remote set-url --push upstream no-pushing
   ```
 
   With this remote setting, you can check your git remote configuration like this:
-
+https://github.com/dragonflyoss/console.git
   ```bash
   $ git remote -v
-  origin     https://github.com/<your-username>/Dragonfly2.git (fetch)
-  origin     https://github.com/<your-username>/Dragonfly2.git (push)
-  upstream   https://github.com/dragonflyoss/Dragonfly2.git (fetch)
+  origin     https://github.com/<your-username>/console.git (fetch)
+  origin     https://github.com/<your-username>/console.git (push)
+  upstream   https://github.com/dragonflyoss/console.git (fetch)
   upstream   no-pushing (push)
   ```
 
@@ -151,7 +157,7 @@ the preparation in the following steps:
   Update local working directory:
 
   ```bash
-  cd Dragonfly2
+  cd  console
   git fetch upstream
   git checkout main
   git rebase upstream/main
@@ -168,13 +174,13 @@ the preparation in the following steps:
 ### Branch Definition
 
 Right now we assume every contribution via pull
-request is for [branch main](https://github.com/dragonflyoss/Dragonfly2/tree/main)
-in Dragonfly. Before contributing,
+request is for [branch main](https://github.com/dragonflyoss/console)
+in Dragonfly Console. Before contributing,
 be aware of branch definition would help a lot.
 
 As a contributor, keep in mind again that every
 contribution via pull request is for branch main.
-While in project Dragonfly, there are several other branches,
+While in project Dragonfly Console, there are several other branches,
 we generally call them rc branches, release branches and backport branches.
 
 Before officially releasing a version,
@@ -192,7 +198,7 @@ MAJOR.MINOR.PATCH of [SemVer](http://semver.org/).
 
 ### Commit Rules
 
-Actually in Dragonfly, we take two rules seriously when committing:
+Actually in Dragonfly Console, we take two rules seriously when committing:
 
 - [Commit Message](#commit-message)
 - [Commit Content](#commit-content)
@@ -239,7 +245,7 @@ we do take more emphasis on code review.
 
 ### PR Description
 
-PR is the only way to make change to Dragonfly project files.
+PR is the only way to make change to Dragonfly Console project files.
 To help reviewers better get your purpose,
 PR description could not be too detailed.
 We encourage contributors to follow the
@@ -261,7 +267,7 @@ We can use either the standalone app or the browser extension.
 
 ### 2. Import API
 
-If you need to use mock server, please import the API https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml ，as the picture shows.
+If you need to use mock server, please import the API https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml , as the picture shows.
 
 Or you can also use the official Postman documentation API:https://learning.postman.com/docs/integrations/available-integrations/working-with-openAPI/ .
 
@@ -269,7 +275,8 @@ Or you can also use the official Postman documentation API:https://learning.post
   
 ![](/docs/images/contributing/postman-import-api.png)
    
-copy to collection.
+##### copy to collection.
+
 
 ![](/docs/images/contributing/postman-copy-collection.png)
     
@@ -279,29 +286,39 @@ Create a mock server under the collection: Select the corresponding collection, 
 
 Or you can also create a mock server according to the postman official website https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/ .
 
+
  ![](/docs/images/contributing/postman-mock-collection.png)
     
-Supplement the mock server name information and save it. Then copy out the mock url.
+##### 3.1 Supplement the mock server name information and save it. Then copy out the mock url.
+
 
 ![](/docs/images/contributing/postman-creat-mock.png)
      
+
 ![](/docs/images/contributing/postman-copy-mockUrl.png)
     
-If the request has been sent, use the mock server directly based on the request.
+##### 3.2 If the request has been sent, use the mock server directly based on the request.
+
    
  ![](/docs/images/contributing/postman-change-path.png)
 
-If no request is sent, you need to create an example.
+##### 3.3 If no request is sent, you need to create an example.
+
 
 ![](/docs/images/contributing/postman-add-example.png)
     
-Modify the name such as signup, modify the response message, and Save Example.
+
+##### 3.4 Modify the name such as signup, modify the response message, and Save Example.
+
 
 ![](/docs/images/contributing/postman-chang-mock-path.png)
    
+
 ### 4. Verification successful
 
-Open the mock server to see if the requested column was successful.
+
+##### Open the mock server to see if the requested column was successful.
+
 
 ![](/docs/images/contributing/postman-verify.png)
    

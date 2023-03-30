@@ -107,8 +107,6 @@ we suggest you could take a look at the PR rules here.
 - [Branch Definition](#branch-definition)
 - [Commit Rules](#commit-rules)
 - [PR Description](#pr-description)
-- [Developing Environment](#developing-environment)
-- [Golang Dependency Management](#golang-dependency-management)
 
 ### Workspace Preparation
 

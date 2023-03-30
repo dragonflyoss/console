@@ -265,13 +265,13 @@ If you need to use mock server, please import the API https://raw.githubusercont
 
 Or you can also use the official Postman documentation API:https://learning.postman.com/docs/integrations/available-integrations/working-with-openAPI/ .
 
-![](/docs/images/postman-import.png)
+![](/docs/images/contributing/postman-import.png)
   
-![](/docs/images/postman-import-api.png)
+![](/docs/images/contributing/postman-import-api.png)
    
 copy to collection.
 
-![](/docs/images/postman-copy-collection.png)
+![](/docs/images/contributing/postman-copy-collection.png)
     
 ### 3. Creating a mock from a collection
 
@@ -279,29 +279,29 @@ Create a mock server under the collection: Select the corresponding collection, 
 
 Or you can also create a mock server according to the postman official website https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/ .
 
- ![](/docs/images/postman-mock-collection.png)
+ ![](/docs/images/contributing/postman-mock-collection.png)
     
 Supplement the mock server name information and save it. Then copy out the mock url.
 
-![](/docs/images/postman-creat-mock.png)
+![](/docs/images/contributing/postman-creat-mock.png)
      
-![](/docs/images/postman-copy-mockUrl.png)
+![](/docs/images/contributing/postman-copy-mockUrl.png)
     
 If the request has been sent, use the mock server directly based on the request.
    
- ![](/docs/images/postman-change-path.png)
+ ![](/docs/images/contributing/postman-change-path.png)
 
 If no request is sent, you need to create an example.
 
-![](/docs/images/postman-add-example.png)
+![](/docs/images/contributing/postman-add-example.png)
     
 Modify the name such as signup, modify the response message, and Save Example.
 
-![](/docs/images/postman-chang-mock-path.png)
+![](/docs/images/contributing/postman-chang-mock-path.png)
    
 ### 4. Verification successful
 
 Open the mock server to see if the requested column was successful.
 
-![](/docs/images/postman-verify.png)
+![](/docs/images/contributing/postman-verify.png)
    

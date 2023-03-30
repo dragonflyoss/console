@@ -265,42 +265,43 @@ If you need to use mock server, please import the API https://raw.githubusercont
 
 Or you can also use the official Postman documentation API:https://learning.postman.com/docs/integrations/available-integrations/working-with-openAPI/ .
 
-![](/docs/images/postman1.png)
-
-![](/docs/images/postman2.png)
-
+![](/docs/images/postman-import.png)
+  
+![](/docs/images/postman-import-api.png)
+   
 copy to collection.
 
-![](/docs/images/postman3.png)
-
+![](/docs/images/postman-copy-collection.png)
+    
 ### 3. Creating a mock from a collection
 
 Create a mock server under the collection: Select the corresponding collection, click the three dots on the right, click mock collection.
 
 Or you can also create a mock server according to the postman official website https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/ .
 
- ![](/docs/images/postman4.png)
-
+ ![](/docs/images/postman-mock-collection.png)
+    
 Supplement the mock server name information and save it. Then copy out the mock url.
 
-![](/docs/images/postman5.png)
-
-![](/docs/images/postman6.png)
-
+![](/docs/images/postman-creat-mock.png)
+     
+![](/docs/images/postman-copy-mockUrl.png)
+    
 If the request has been sent, use the mock server directly based on the request.
-
- ![](/docs/images/postman7.png)
+   
+ ![](/docs/images/postman-change-path.png)
 
 If no request is sent, you need to create an example.
 
-![](/docs/images/postman8.png)
-
+![](/docs/images/postman-add-example.png)
+    
 Modify the name such as signup, modify the response message, and Save Example.
 
-![](/docs/images/postman9.png)
-
+![](/docs/images/postman-chang-mock-path.png)
+   
 ### 4. Verification successful
 
 Open the mock server to see if the requested column was successful.
 
-![](/docs/images/postman10.png)
+![](/docs/images/postman-verify.png)
+   

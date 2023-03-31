@@ -18,18 +18,12 @@ And here is a list of contributing guide for you.
       - [Commit Content](#commit-content)
     - [PR Description](#pr-description)
   - [Postman mock server Overview](#postman-mock-server-overview)
-    - [Postman](#postman)
+    - [What is Postman?](#what-is-postman)
   - [postman mock server step](#postman-mock-server-step)
-    - [1. Install postman](#1-install-postman)
+    - [1. Download Postman](#1-download-postman)
     - [2. Import API](#2-import-api)
-        - [copy to collection.](#copy-to-collection)
     - [3. Creating a mock from a collection](#3-creating-a-mock-from-a-collection)
-        - [3.1 Supplement the mock server name information and save it. Then copy out the mock url.](#31-supplement-the-mock-server-name-information-and-save-it-then-copy-out-the-mock-url)
-        - [3.2 If the request has been sent, use the mock server directly based on the request.](#32-if-the-request-has-been-sent-use-the-mock-server-directly-based-on-the-request)
-        - [3.3 If no request is sent, you need to create an example.](#33-if-no-request-is-sent-you-need-to-create-an-example)
-        - [3.4 Modify the name such as signup, modify the response message, and Save Example.](#34-modify-the-name-such-as-signup-modify-the-response-message-and-save-example)
     - [4. Verification successful](#4-verification-successful)
-        - [Open the mock server to see if the requested column was successful.](#open-the-mock-server-to-see-if-the-requested-column-was-successful)
 
 ## Reporting security issues
 
@@ -119,7 +113,7 @@ the preparation in the following steps:
   To make this work, you just need to click the button Fork
   in right-left of [dragonflyoss/console](https://github.com/dragonflyoss/console)
   main page. Then you will end up with your repository in
-  `https://github.com/<your-username>/Dragonfly Console`,
+  `https://github.com/<your-username>/Console`,
   in which `your-username` is your GitHub username.
 
 1. **CLONE** your own repository to develop locally.
@@ -253,27 +247,25 @@ We encourage contributors to follow the
 ##  Postman mock server Overview
 
 In this article, we will see how to import the Swagger API into Postman and use the mock server
-### Postman
+### What is Postman?
 
-Postman is an API platform for building and using APIs. Postman simplifies each step of the API lifecycle and streamlines collaboration. We can use Postman to test our API without writing any code.
+Postman is an API platform for building and using APIs. Postman simplifies each step of the API lifecycle and streamlines collaboration so you can create better APIs—faster.
 
-We can use either the standalone app or the browser extension.
 ## postman mock server step
 
-### 1. Install postman
-3.1 First of all, your installation of postman https://www.postman.com/downloads .
+### 1. Download Postman
+Download the app to get started with the Postman API Platform. https://www.postman.com/downloads .
 
 ### 2. Import API
-
-If you need to use mock server, please import the API https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml , as the picture shows.
-
-Or you can also use the official Postman documentation API:https://learning.postman.com/docs/integrations/available-integrations/working-with-openAPI/ .
-
+ 
+If you need to use mock servers, import [swagger.yaml](https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml) postman official website import  [example](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/)
+ 
+Step 1:import api
 ![](/docs/images/contributing/postman-import.png)
   
 ![](/docs/images/contributing/postman-import-api.png)
    
-##### copy to collection.
+Step 2:copy to collection.
 
 
 ![](/docs/images/contributing/postman-copy-collection.png)
@@ -287,7 +279,7 @@ Or you can also create a mock server according to the postman official website h
 
  ![](/docs/images/contributing/postman-mock-collection.png)
     
-##### 3.1 Supplement the mock server name information and save it. Then copy out the mock url.
+Step 1: Supplement the mock server name information and save it. Then copy out the mock url.
 
 
 ![](/docs/images/contributing/postman-creat-mock.png)
@@ -295,18 +287,17 @@ Or you can also create a mock server according to the postman official website h
 
 ![](/docs/images/contributing/postman-copy-mockUrl.png)
     
-##### 3.2 If the request has been sent, use the mock server directly based on the request.
+Step 2:If the request has been sent, use the mock server directly based on the request.
 
    
  ![](/docs/images/contributing/postman-change-path.png)
-
-##### 3.3 If no request is sent, you need to create an example.
+Step 3:If no request is sent, you need to create an example.
 
 
 ![](/docs/images/contributing/postman-add-example.png)
     
 
-##### 3.4 Modify the name such as signup, modify the response message, and Save Example.
+Step 4: Modify the name such as signup, modify the response message, and Save Example.
 
 
 ![](/docs/images/contributing/postman-chang-mock-path.png)
@@ -315,7 +306,7 @@ Or you can also create a mock server according to the postman official website h
 ### 4. Verification successful
 
 
-##### Open the mock server to see if the requested column was successful.
+ Open the mock server to see if the requested column was successful.
 
 
 ![](/docs/images/contributing/postman-verify.png)

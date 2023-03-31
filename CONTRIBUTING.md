@@ -254,17 +254,18 @@ Postman is an API platform for building and using APIs. Postman simplifies each 
 ## postman mock server step
 
 ### 1. Download Postman
-Download the app to get started with the Postman API Platform. https://www.postman.com/downloads .
+Download the [app](https://www.postman.com/downloads) to get started with the Postman API Platform.
 
 ### 2. Import API
  
-If you need to use mock servers, import [swagger.yaml](https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml) postman official website import  [example](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/)
+If you need to use mock servers, import [swagger.yaml](https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml) Or you can import [examples](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/) according to Postman official website
  
 Step 1:import api
+
 ![](/docs/images/contributing/postman-import.png)
-  
+
 ![](/docs/images/contributing/postman-import-api.png)
-   
+ 
 Step 2:copy to collection.
 
 
@@ -272,9 +273,7 @@ Step 2:copy to collection.
     
 ### 3. Creating a mock from a collection
 
-Create a mock server under the collection: Select the corresponding collection, click the three dots on the right, click mock collection.
-
-Or you can also create a mock server according to the postman official website https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/ .
+Create a mock server under the collection: Select the corresponding collection, click the three dots on the right, click mock collection, Or you can also create a mock server based on the postman official website [example](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/ ).
 
 
  ![](/docs/images/contributing/postman-mock-collection.png)

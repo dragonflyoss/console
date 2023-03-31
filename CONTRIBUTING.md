@@ -273,7 +273,7 @@ Step 2:copy to collection.
     
 ### 3. Creating a mock from a collection
 
-Create a mock server under the collection: Select the corresponding collection, click the three dots on the right, click mock collection, Or you can also create a mock server based on the postman official website [example](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/ ).
+Create a mock server under the collection: Select the corresponding collection, click the three dots on the right, click mock collection, Or you can refer to the postman official website  [demo example](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/ )  to create a simulated server..
 
 
  ![](/docs/images/contributing/postman-mock-collection.png)
@@ -290,7 +290,8 @@ Step 2:If the request has been sent, use the mock server directly based on the r
 
    
  ![](/docs/images/contributing/postman-change-path.png)
-Step 3:If no request is sent, you need to create an example.
+
+Step 3:If no request has been sent, an instance needs to be created.
 
 
 ![](/docs/images/contributing/postman-add-example.png)

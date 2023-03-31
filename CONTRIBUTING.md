@@ -259,7 +259,7 @@ Download the [app](https://www.postman.com/downloads) to get started with the Po
 
 ### 2. Import API
  
-If you need to use mock servers, import [swagger.yaml](https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml) Or you can import [examples](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/) according to Postman official website.
+If you need to use mock servers, import [swagger.yaml](https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml), Or you can import [examples](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/) according to Postman official website.
  
 Step 1:import api.
 

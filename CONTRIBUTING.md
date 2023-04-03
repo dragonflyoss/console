@@ -261,13 +261,13 @@ Download the [app](https://www.postman.com/downloads) to get started with the Po
 
 If you need to use a mock server, please import the [swagger.yaml](https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml) file of Dragonfly Manager, refer to [importing-and-exporting-data](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/).
  
-  Step 1.  Import API.
+  **Step 1:** Import API.
 
 ![](/docs/images/contributing/postman-import.png)
 
 ![](/docs/images/contributing/postman-import-api.png)
  
-  Step 2.  Copy to collection.
+  **Step 2:** Copy to collection.
 
 ![](/docs/images/contributing/postman-copy-collection.png)
     
@@ -275,28 +275,28 @@ If you need to use a mock server, please import the [swagger.yaml](https://raw.g
  
 To test using a mock server do the following, refer to [mocking-data-setting-up-mock](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/).
 
-   Step 1. Select the More Actions icon next to the collection you want to mock, then choose Mock collection.
+   **Step 1:** Select the More Actions icon next to the collection you want to mock, then choose Mock collection.
 
 
 ![](/docs/images/contributing/postman-mock-collection.png)
     
-   Step 2.  Supplement the simulated server name information and save it.
+   **Step 2:** Supplement the simulated server name information and save it.
 
 ![](/docs/images/contributing/postman-creat-mock.png)
 
-   Setp 3.  Copy mock URL.
+   **Step 3:** Copy mock URL.
 
 ![](/docs/images/contributing/postman-copy-mockUrl.png)
     
-   Step 4.  If a request has already been sent, mock servers can be used based on the request.
+   **Step 4:** If a request has already been sent, mock servers can be used based on the request.
    
  ![](/docs/images/contributing/postman-change-path.png)
 
-   Step  5:  If no request has been sent, an instance needs to be created.
+   **Step 5:**  If no request has been sent, an instance needs to be created.
 
 ![](/docs/images/contributing/postman-add-example.png)
     
-   Step  6:  Modify the name such as signup, modify the response message, and Save Example.
+   **Step 6:**.  Modify the name such as signup, modify the response message, and Save Example.
 
 ![](/docs/images/contributing/postman-chang-mock-path.png) 
 

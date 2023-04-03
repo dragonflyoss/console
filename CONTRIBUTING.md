@@ -17,9 +17,9 @@ And here is a list of contributing guide for you.
       - [Commit Message](#commit-message)
       - [Commit Content](#commit-content)
     - [PR Description](#pr-description)
-  - [Postman mock server Overview](#postman-mock-server-overview)
-    - [What is Postman?](#what-is-postman)
-  - [postman mock server step](#postman-mock-server-step)
+  - [Postman mock server overview](#postman-mock-server-overview)
+    - [What is a Postman?](#what-is-a-postman)
+    - [Postman mock server step](#postman-mock-server-step)
     - [1. Download Postman](#1-download-postman)
     - [2. Import API](#2-import-api)
     - [3. Creating a mock from a collection](#3-creating-a-mock-from-a-collection)
@@ -244,55 +244,56 @@ We encourage contributors to follow the
 [PR template](./.github/PULL_REQUEST_TEMPLATE.md) to finish the pull request.
 
 
-##  Postman mock server Overview
+##  Postman mock server overview
 
 In this article, we will see how to import the Swagger API into Postman and use the mock server.
 
-### What is Postman?
+###  What is a Postman?
 
 Postman is an API platform for building and using APIs. Postman simplifies each step of the API lifecycle and streamlines collaboration so you can create better APIs—faster.
 
-## postman mock server step
+###  Postman mock server step
 
 ### 1. Download Postman
-Download the [app](https://www.postman.com/downloads) to get started with the Postman API Platform.
+Download the [app](https://www.postman.com/downloads) to get started with the Postman API platform.
 
 ### 2. Import API
+
+If you need to use a mock server, please import the [swagger.yaml](https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml) file of Dragonfly Manager, refer to [importing-and-exporting-data](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/).
  
-If you need to use mock servers, import [swagger.yaml](https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml), Or you can import [examples](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/) according to Postman official website.
- 
-Step 1:import api.
+  Step 1.  Import API.
 
 ![](/docs/images/contributing/postman-import.png)
 
 ![](/docs/images/contributing/postman-import-api.png)
  
-Step 2:copy to collection.
-
+  Step 2.  Copy to collection.
 
 ![](/docs/images/contributing/postman-copy-collection.png)
     
 ### 3. Creating a mock from a collection
 
-Create a mock server under the collection: Select the corresponding collection, click the three dots on the right, click mock collection, Or you can refer to the postman official website  [demo example](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/ )  to create a simulated server.
+  Step 1. Select Favorites in the sidebar. More Actions icon Select the More Actions icon next to the collection you want to mock, then choose Mock collection.
 
 ![](/docs/images/contributing/postman-mock-collection.png)
     
-Step 1: Supplement the mock server name information and save it. Then copy out the mock url.
+  Step 2.  Supplement the simulated server name information and save it.
 
 ![](/docs/images/contributing/postman-creat-mock.png)
-     
+
+  Setp 3.  Copy mock URL.
+
 ![](/docs/images/contributing/postman-copy-mockUrl.png)
     
-Step 2:If the request has been sent, use the mock server directly based on the request.
+  Step 4.  If a request has already been sent, mock servers can be used based on the request.
    
  ![](/docs/images/contributing/postman-change-path.png)
 
-Step 3:If no request has been sent, an instance needs to be created.
+  Step 5:  If no request has been sent, an instance needs to be created.
 
 ![](/docs/images/contributing/postman-add-example.png)
     
-Step 4: Modify the name such as signup, modify the response message, and Save Example.
+  Step 6:  Modify the name such as signup, modify the response message, and Save Example.
 
 ![](/docs/images/contributing/postman-chang-mock-path.png) 
 

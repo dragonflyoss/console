@@ -292,7 +292,7 @@ To test using a mock server do the following, refer to [mocking-data-setting-up-
    
  ![](/docs/images/contributing/postman-change-path.png)
 
-   **Step 5:** If no request has been sent, an instance needs to be created.
+   **Step 5:** If no request is sent, you need to create an example.
 
 ![](/docs/images/contributing/postman-add-example.png)
     

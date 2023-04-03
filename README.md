@@ -42,3 +42,7 @@ concerned about the issues discussed in the community and respond quickly.
 - **DingTalk**: [23304666](https://qr.dingtalk.com/action/joingroup?code=v1,k1,3wEdP6zHKQbOzBRwOvv8wyIbxDEU0kXMrxphaOcPz6I=&_dt_no_comment=1&origin=11)
 
 [d7y.io]: https://d7y.io/
+
+## Contributing
+
+You should check out our [CONTRIBUTING][./ CONTRIBUTING.md] and develop the project together.

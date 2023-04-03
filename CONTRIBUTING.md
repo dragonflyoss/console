@@ -20,10 +20,10 @@ And here is a list of contributing guide for you.
   - [Postman mock server overview](#postman-mock-server-overview)
     - [What is a Postman?](#what-is-a-postman)
     - [Postman mock server step](#postman-mock-server-step)
-    - [1. Download Postman](#1-download-postman)
-    - [2. Import API](#2-import-api)
-    - [3. Setting up mock servers](#3-setting-up-mock-servers)
-    - [4. Verification successful](#4-verification-successful)
+      - [Download Postman](#download-postman)
+      - [Import API](#import-api)
+      - [Set up a mock server](#set-up-a-mock-server)
+      - [Verification successful](#verification-successful)
 
 ## Reporting security issues
 
@@ -254,33 +254,33 @@ Postman is an API platform for building and using APIs. Postman simplifies each 
 
 ###  Postman mock server step
 
-### 1. Download Postman
+####  Download Postman
 Download the [app](https://www.postman.com/downloads) to get started with the Postman API platform.
 
-### 2. Import API
+#### Import API
 
 If you need to use a mock server, please import the [swagger.yaml](https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml) file of Dragonfly Manager, refer to [importing-and-exporting-data](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/).
  
   **Step 1:** Import API.
 
 ![](/docs/images/contributing/postman-import.png)
-
+ 
 ![](/docs/images/contributing/postman-import-api.png)
  
-  **Step 2:** Copy to collection.
+  **Step 2:** Select OpenAPI 2.0 with Postman collection
 
-![](/docs/images/contributing/postman-copy-collection.png)
+![](/docs/images/contributing/postman-select.png)
     
-### 3. Setting up mock servers
+#### Set up a mock server
  
-To test using a mock server do the following, refer to [mocking-data-setting-up-mock](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/).
+To use mock servers for testing, please do the following, refer to [mocking-data-setting-up-mock](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/).
 
-   **Step 1:** Select the more actions icon next to the collection you want to mock, then choose Mock collection.
 
+   **Step 1:** Choose the More Actions icon next to the collection you want to simulate, and choose Simulate Collection.
 
 ![](/docs/images/contributing/postman-mock-collection.png)
     
-   **Step 2:** Supplement the simulated server name information and save it.
+   **Step 2:** Supplement the simulation server name information and save it.
 
 ![](/docs/images/contributing/postman-creat-mock.png)
 
@@ -300,7 +300,7 @@ To test using a mock server do the following, refer to [mocking-data-setting-up-
 
 ![](/docs/images/contributing/postman-chang-mock-path.png) 
 
-### 4. Verification successful
+#### Verification successful
 
  Open the mock server to see if the requested column was successful.
 

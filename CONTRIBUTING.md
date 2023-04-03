@@ -275,7 +275,7 @@ If you need to use a mock server, please import the [swagger.yaml](https://raw.g
  
 To test using a mock server do the following, refer to [mocking-data-setting-up-mock](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/).
 
-   **Step 1:** Select the More Actions icon next to the collection you want to mock, then choose Mock collection.
+   **Step 1:** Select the more actions icon next to the collection you want to mock, then choose Mock collection.
 
 
 ![](/docs/images/contributing/postman-mock-collection.png)
@@ -292,11 +292,11 @@ To test using a mock server do the following, refer to [mocking-data-setting-up-
    
  ![](/docs/images/contributing/postman-change-path.png)
 
-   **Step 5:**  If no request has been sent, an instance needs to be created.
+   **Step 5:** If no request has been sent, an instance needs to be created.
 
 ![](/docs/images/contributing/postman-add-example.png)
     
-   **Step 6:**.  Modify the name such as signup, modify the response message, and Save Example.
+   **Step 6:** Modify the name such as signup, modify the response message, and save example.
 
 ![](/docs/images/contributing/postman-chang-mock-path.png) 
 

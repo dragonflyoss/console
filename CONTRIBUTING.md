@@ -22,7 +22,7 @@ And here is a list of contributing guide for you.
     - [Postman mock server step](#postman-mock-server-step)
     - [1. Download Postman](#1-download-postman)
     - [2. Import API](#2-import-api)
-    - [3. Creating a mock from a collection](#3-creating-a-mock-from-a-collection)
+    - [3. Setting up mock servers](#3-setting-up-mock-servers)
     - [4. Verification successful](#4-verification-successful)
 
 ## Reporting security issues
@@ -271,29 +271,32 @@ If you need to use a mock server, please import the [swagger.yaml](https://raw.g
 
 ![](/docs/images/contributing/postman-copy-collection.png)
     
-### 3. Creating a mock from a collection
+### 3. Setting up mock servers
+ 
+To test using a mock server do the following, refer to [mocking-data-setting-up-mock](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/).
 
-  Step 1. Select Favorites in the sidebar. More Actions icon Select the More Actions icon next to the collection you want to mock, then choose Mock collection.
+   Step 1. Select the More Actions icon next to the collection you want to mock, then choose Mock collection.
+
 
 ![](/docs/images/contributing/postman-mock-collection.png)
     
-  Step 2.  Supplement the simulated server name information and save it.
+   Step 2.  Supplement the simulated server name information and save it.
 
 ![](/docs/images/contributing/postman-creat-mock.png)
 
-  Setp 3.  Copy mock URL.
+   Setp 3.  Copy mock URL.
 
 ![](/docs/images/contributing/postman-copy-mockUrl.png)
     
-  Step 4.  If a request has already been sent, mock servers can be used based on the request.
+   Step 4.  If a request has already been sent, mock servers can be used based on the request.
    
  ![](/docs/images/contributing/postman-change-path.png)
 
-  Step 5:  If no request has been sent, an instance needs to be created.
+   Step  5:  If no request has been sent, an instance needs to be created.
 
 ![](/docs/images/contributing/postman-add-example.png)
     
-  Step 6:  Modify the name such as signup, modify the response message, and Save Example.
+   Step  6:  Modify the name such as signup, modify the response message, and Save Example.
 
 ![](/docs/images/contributing/postman-chang-mock-path.png) 
 

@@ -266,7 +266,7 @@ If you need to use a mock server, please import the [swagger.yaml](https://raw.g
 
 ![](/docs/images/contributing/postman-import.png)
 
-**Step 2:** Copy swagger.yaml URl.
+**Step 2:** Copy the swagger.yaml URL.
   
 ![](/docs/images/contributing/postman-import-api.png)
  
@@ -278,7 +278,7 @@ If you need to use a mock server, please import the [swagger.yaml](https://raw.g
  
 To use mock servers, please do the following, refer to  [mocking-data-setting-up-mock](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/).
 
-**Step 1:** Choose Collections in the sidebar, choose the more actions icon next to the collection you want to mock, and then choose Mock collection.
+**Step 1:** Choose Collections in the sidebar, choose the more actions icon next to the collection you want to mock, then choose Mock collection.
 
 ![](/docs/images/contributing/postman-mock-collection.png)
     
@@ -286,7 +286,7 @@ To use mock servers, please do the following, refer to  [mocking-data-setting-up
 
 ![](/docs/images/contributing/postman-creat-mock.png)
 
-**Step 3:** Copy mock servers URL.
+**Step 3:** Copy the mock servers URL.
 
 ![](/docs/images/contributing/postman-copy-mockUrl.png)
     
@@ -305,6 +305,5 @@ To use mock servers, please do the following, refer to  [mocking-data-setting-up
 #### Verification successful
 
 Open mock servers to view all request responses.
-
 
 ![](/docs/images/contributing/postman-verify.png)

@@ -262,15 +262,15 @@ Download the [app](https://www.postman.com/downloads) to get started with the Po
 
 If you need to use a mock server, please import the [swagger.yaml](https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml) file of Dragonfly Manager, refer to [importing-and-exporting-data](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/).
  
-  **Step 1:** Import API.
+**Step 1:** Import API.
 
 ![](/docs/images/contributing/postman-import.png)
 
-  **Step 2:** Copy swagger.yaml URl.
+**Step 2:** Copy swagger.yaml URl.
   
 ![](/docs/images/contributing/postman-import-api.png)
  
-  **Step 3:** Select OpenAPI 2.0 with Postman collection.
+**Step 3:** Select OpenAPI 2.0 with Postman collection.
 
 ![](/docs/images/contributing/postman-select.png)
     
@@ -278,34 +278,33 @@ If you need to use a mock server, please import the [swagger.yaml](https://raw.g
  
 To use mock servers, please do the following, refer to  [mocking-data-setting-up-mock](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/).
 
-
-   **Step 1:** Choose the More Actions icon next to the collection you want to simulate, then choose Simulate Collection.
+**Step 1:** Choose Collections in the sidebar, choose the more actions icon next to the collection you want to mock, and then choose Mock collection.
 
 ![](/docs/images/contributing/postman-mock-collection.png)
     
-   **Step 2:** Supplement the simulated server name information and save it.
+**Step 2:** Supplement the simulated server name information and save it.
 
 ![](/docs/images/contributing/postman-creat-mock.png)
 
-   **Step 3:** Copy mock URL.
+**Step 3:** Copy mock servers URL.
 
 ![](/docs/images/contributing/postman-copy-mockUrl.png)
     
-   **Step 4:** Replace the mock URL to initiate the request.
+**Step 4:** Replace the mock servers URL to initiate the request.
    
  ![](/docs/images/contributing/postman-change-path.png)
 
-   **Step 5:** If your request fails and says you want an example, then you need to create an example.
+**Step 5:** If your request fails and says you want an example, then you need to create an example.
 
 ![](/docs/images/contributing/postman-add-example.png)
     
-   **Step 6:** Modify the name such as signup, modify the response message, and save the example.
+**Step 6:** Modify the name such as signup, modify the response message, and save the example.
 
 ![](/docs/images/contributing/postman-chang-mock-path.png) 
 
 #### Verification successful
 
- Open mock servers to view all request responses.
+Open mock servers to view all request responses.
 
 
 ![](/docs/images/contributing/postman-verify.png)

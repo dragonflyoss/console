@@ -298,7 +298,7 @@ To use mock servers, please do the following, refer to  [mocking-data-setting-up
 
 ![](/docs/images/contributing/postman-add-example.png)
     
-**Step 6:** Modify the name such as signup, modify the response message, and save the example.
+**Step 6:** Modify the name such as Sign Up, modify the response message, and save the example.
 
 ![](/docs/images/contributing/postman-chang-mock-path.png) 
 

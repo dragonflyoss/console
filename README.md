@@ -45,4 +45,4 @@ concerned about the issues discussed in the community and respond quickly.
 
 ## Contributing
 
-You should check out our [CONTRIBUTING][./ CONTRIBUTING.md] and develop the project together.
+You should check out our [CONTRIBUTING](./CONTRIBUTING.md) and develop the project together.

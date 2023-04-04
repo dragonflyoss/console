@@ -19,10 +19,10 @@ And here is a list of contributing guide for you.
     - [PR Description](#pr-description)
   - [Postman mock server overview](#postman-mock-server-overview)
     - [What is a Postman?](#what-is-a-postman)
-    - [Postman mock server step](#postman-mock-server-step)
+    - [Postman mock servers steps](#postman-mock-servers-steps)
       - [Download Postman](#download-postman)
       - [Import API](#import-api)
-      - [Set up a mock server](#set-up-a-mock-server)
+      - [Set up mock servers](#set-up-mock-servers)
       - [Verification successful](#verification-successful)
 
 ## Reporting security issues
@@ -246,15 +246,16 @@ We encourage contributors to follow the
 
 ##  Postman mock server overview
 
-In this article, we will see how to import the Swagger API into Postman and use the mock server.
+In this article, we will see how to import Swagger API into Postman and use mock server.
 
 ###  What is a Postman?
 
 Postman is an API platform for building and using APIs. Postman simplifies each step of the API lifecycle and streamlines collaboration so you can create better APIs—faster.
 
-###  Postman mock server step
+###  Postman mock servers steps
 
 ####  Download Postman
+
 Download the [app](https://www.postman.com/downloads) to get started with the Postman API platform.
 
 #### Import API
@@ -264,23 +265,25 @@ If you need to use a mock server, please import the [swagger.yaml](https://raw.g
   **Step 1:** Import API.
 
 ![](/docs/images/contributing/postman-import.png)
- 
+
+  **Step 2:** Copy swagger.yaml URl.
+  
 ![](/docs/images/contributing/postman-import-api.png)
  
-  **Step 2:** Select OpenAPI 2.0 with Postman collection
+  **Step 3:** Select OpenAPI 2.0 with Postman collection.
 
 ![](/docs/images/contributing/postman-select.png)
     
-#### Set up a mock server
+#### Set up mock servers
  
-To use mock servers for testing, please do the following, refer to [mocking-data-setting-up-mock](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/).
+To use mock servers, please do the following, refer to  [mocking-data-setting-up-mock](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/).
 
 
-   **Step 1:** Choose the More Actions icon next to the collection you want to simulate, and choose Simulate Collection.
+   **Step 1:** Choose the More Actions icon next to the collection you want to simulate, then choose Simulate Collection.
 
 ![](/docs/images/contributing/postman-mock-collection.png)
     
-   **Step 2:** Supplement the simulation server name information and save it.
+   **Step 2:** Supplement the simulated server name information and save it.
 
 ![](/docs/images/contributing/postman-creat-mock.png)
 
@@ -288,21 +291,21 @@ To use mock servers for testing, please do the following, refer to [mocking-data
 
 ![](/docs/images/contributing/postman-copy-mockUrl.png)
     
-   **Step 4:** If a request has already been sent, mock servers can be used based on the request.
+   **Step 4:** Replace the mock URL to initiate the request.
    
  ![](/docs/images/contributing/postman-change-path.png)
 
-   **Step 5:** If no request is sent, you need to create an example.
+   **Step 5:** If your request fails and says you want an example, then you need to create an example.
 
 ![](/docs/images/contributing/postman-add-example.png)
     
-   **Step 6:** Modify the name such as signup, modify the response message, and save example.
+   **Step 6:** Modify the name such as signup, modify the response message, and save the example.
 
 ![](/docs/images/contributing/postman-chang-mock-path.png) 
 
 #### Verification successful
 
- Open the mock server to see if the requested column was successful.
+ Open mock servers to view all request responses.
+
 
 ![](/docs/images/contributing/postman-verify.png)
-  

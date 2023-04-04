@@ -282,7 +282,7 @@ To use mock servers, please do the following, refer to  [mocking-data-setting-up
 
 ![](/docs/images/contributing/postman-mock-collection.png)
     
-**Step 2:** Supplement the simulated server name information and save it.
+**Step 2:** Supplement mock servers name information and save.
 
 ![](/docs/images/contributing/postman-creat-mock.png)
 

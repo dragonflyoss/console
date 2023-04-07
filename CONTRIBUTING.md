@@ -282,7 +282,7 @@ To use mock server, please do the following, refer to  [mocking-data-setting-up-
 
 ![](/docs/images/contributing/postman-mock-collection.png)
     
-**Step 2:** Supplement mock servers name information, and **Create Mock Server**.
+**Step 2:** Supplement Mock Servers Name information, and **Create Mock Server**.
 
 ![](/docs/images/contributing/postman-creat-mock.png)
 
@@ -298,11 +298,11 @@ To use mock server, please do the following, refer to  [mocking-data-setting-up-
 
 ![](docs/images/contributing/postman-verify.png)
 
-**Step 6:** Environment variable export URL ,refer to [environment-variables](https://nextjs.org/docs/basic-features/environment-variables).
+**Step 6:** Export URL through environment variables ,refer to [environment-variables](https://nextjs.org/docs/basic-features/environment-variables).
 
 ![](/docs/images/contributing/use.png)
 
-**Step 7:** successful demo.
+**Step 7:** Successful demo.
 
 ![](/docs/images/contributing/ok-demo.gif)
 

@@ -19,11 +19,11 @@ And here is a list of contributing guide for you.
     - [PR Description](#pr-description)
   - [Postman mock server overview](#postman-mock-server-overview)
     - [What is a Postman?](#what-is-a-postman)
-    - [Postman mock servers steps](#postman-mock-servers-steps)
+    - [Postman mock server steps](#postman-mock-server-steps)
       - [Download Postman](#download-postman)
       - [Import API](#import-api)
-      - [Set up mock servers](#set-up-mock-servers)
-      - [Verification successful](#verification-successful)
+      - [Set up mock server](#set-up-mock-server)
+      - [Add expample](#add-expample)
 
 ## Reporting security issues
 
@@ -252,7 +252,7 @@ In this article, we will see how to import Swagger API into Postman and use mock
 
 Postman is an API platform for building and using APIs. Postman simplifies each step of the API lifecycle and streamlines collaboration so you can create better APIs—faster.
 
-###  Postman mock servers steps
+###  Postman mock server steps
 
 ####  Download Postman
 
@@ -274,36 +274,49 @@ If you need to use a mock server, please import the [swagger.yaml](https://raw.g
 
 ![](/docs/images/contributing/postman-select.png)
     
-#### Set up mock servers
+#### Set up mock server
  
-To use mock servers, please do the following, refer to  [mocking-data-setting-up-mock](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/).
+To use mock server, please do the following, refer to  [mocking-data-setting-up-mock](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/).
 
-**Step 1:** Choose Collections in the sidebar, choose the more actions icon next to the collection you want to mock, then choose Mock collection.
+**Step 1:** Choose **Collections** in the sidebar, choose the more actions icon next to the collection you want to mock, then choose **Mock collection**.
 
 ![](/docs/images/contributing/postman-mock-collection.png)
     
-**Step 2:** Supplement mock servers name information and save.
+**Step 2:** Supplement mock servers name information, and **Create Mock Server**.
 
 ![](/docs/images/contributing/postman-creat-mock.png)
 
-**Step 3:** Copy the mock servers URL.
+**Step 3:** Copy the mock server URL.
 
 ![](/docs/images/contributing/postman-copy-mockUrl.png)
     
-**Step 4:** Replace the mock servers URL to initiate the request.
+**Step 4:** Replace the mock server URL, click **send** to send the request, if you need to copy the URL, remember to copy the baseUrl.
    
  ![](/docs/images/contributing/postman-change-path.png)
 
-**Step 5:** If your request fails and says you want an example, then you need to create an example.
+ **Step 5:** To verify whether the request is successful, please open **Mock Servers** to view all request responses.
+
+![](docs/images/contributing/postman-verify.png)
+
+**Step 6:** Environment variable export URL ,refer to [environment-variables](https://nextjs.org/docs/basic-features/environment-variables).
+
+![](/docs/images/contributing/use.png)
+
+**Step 7:** successful demo.
+
+![](/docs/images/contributing/ok-demo.gif)
+
+**Step 8:** Not Found demo.
+
+![](/docs/images/contributing/Not-found-demo.gif)
+
+#### Add expample
+
+**Step 1:** If you want more examples or return different data, you can add an example.
 
 ![](/docs/images/contributing/postman-add-example.png)
     
-**Step 6:** Modify the name such as Sign Up, modify the response message, and save the example.
+**Step 2:** Modify the name such as Oauth Signin, modify the response message, and save the example.
 
 ![](/docs/images/contributing/postman-chang-mock-path.png) 
 
-#### Verification successful
-
-Open mock servers to view all request responses.
-
-![](/docs/images/contributing/postman-verify.png)

@@ -22,7 +22,7 @@ And here is a list of contributing guide for you.
     - [Postman mock server steps](#postman-mock-server-steps)
       - [Download Postman](#download-postman)
       - [Import API](#import-api)
-      - [Set up mock server](#set-up-mock-server)
+      - [Setting up mock server](#setting-up-mock-server)
       - [Add expample](#add-expample)
 
 ## Reporting security issues
@@ -274,7 +274,7 @@ If you need to use a mock server, please import the [swagger.yaml](https://raw.g
 
 ![](/docs/images/contributing/postman-select.png)
     
-#### Set up mock server
+#### Setting up mock server
  
 To use mock server, please do the following, refer to  [mocking-data-setting-up-mock](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/).
 
@@ -282,7 +282,7 @@ To use mock server, please do the following, refer to  [mocking-data-setting-up-
 
 ![](/docs/images/contributing/postman-mock-collection.png)
     
-**Step 2:** Supplement Mock Servers Name information, and **Create Mock Server**.
+**Step 2:** Enter the name of the mock server and click **Create Mock Server** button.
 
 ![](/docs/images/contributing/postman-creat-mock.png)
 
@@ -290,23 +290,55 @@ To use mock server, please do the following, refer to  [mocking-data-setting-up-
 
 ![](/docs/images/contributing/postman-copy-mockUrl.png)
     
-**Step 4:** Replace the mock server URL, click **send** to send the request, if you need to copy the URL, remember to copy the baseUrl.
-   
+**Step 4:** Replace the mock server URL and splice /api/v1, then click the **Save** button.
+
  ![](/docs/images/contributing/postman-change-path.png)
 
- **Step 5:** To verify whether the request is successful, please open **Mock Servers** to view all request responses.
+**Step 5:** Click the Send button to initiate a request.
+
+![](docs/images/contributing/postman-request.png)
+
+**Step 6:** You can verify the success of requests by checking the request logs in the **Mock Servers**.
 
 ![](docs/images/contributing/postman-verify.png)
 
-**Step 6:** Export URL through environment variables ,refer to [environment-variables](https://nextjs.org/docs/basic-features/environment-variables).
+**Step 7:** Export mock server URL through environment variables in project.
+
+install dependencies.
+```shell
+npm install
+```
+
+First you need `export NEXT_PUBLIC_DRAGONFLY_PUBLIC_API=your-mock-server-URL`, where your-mock-server-URL is your own mock server URL, start your server after the import is successful.
+
+```shell
+$ export NEXT_PUBLIC_DRAGONFLY_PUBLIC_API=<your-mock-server-URL>
+$ npm run dev
+> console@1.0.0 dev
+> cross-env NODE_ENV='development' next dev -p 3000
+
+ready - started server on 0.0.0.0:3000, url: http://localhost:3000
+event - compiled client and server successfully in 2.8s (173 modules)
+```
 
 ![](/docs/images/contributing/postman-environment-variables.png)
 
-**Step 7:** Successful demo.
+**Step 8:** OK Response
 
-![](/docs/images/contributing/postman-successful-demo.gif)
+Modify Query Params, switch Response.
 
-**Step 8:** Not Found demo.
+![](/docs/images/contributing/postman-ok-response.png)
+
+Response demo.
+
+![](/docs/images/contributing/postman-ok-demo.gif)
+
+**Step 9:** Not Found Response
+
+Modify Query Params, switch Response.
+![](/docs/images/contributing/postman-not-fount-response.png)
+
+Response demo.
 
 ![](/docs/images/contributing/postman-not-found-demo.gif)
 

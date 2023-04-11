@@ -300,15 +300,15 @@ To use mock server, please do the following, refer to  [mocking-data-setting-up-
 
 **Step 6:** Export URL through environment variables ,refer to [environment-variables](https://nextjs.org/docs/basic-features/environment-variables).
 
-![](/docs/images/contributing/use.png)
+![](/docs/images/contributing/postman-environment-variables.png)
 
 **Step 7:** Successful demo.
 
-![](/docs/images/contributing/ok-demo.gif)
+![](/docs/images/contributing/postman-successful-demo.gif)
 
 **Step 8:** Not Found demo.
 
-![](/docs/images/contributing/Not-found-demo.gif)
+![](/docs/images/contributing/postman-not-found-demo.gif)
 
 #### Add expample
 

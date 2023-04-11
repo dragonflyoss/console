@@ -321,8 +321,6 @@ ready - started server on 0.0.0.0:3000, url: http://localhost:3000
 event - compiled client and server successfully in 2.8s (173 modules)
 ```
 
-![](/docs/images/contributing/postman-environment-variables.png)
-
 **Step 8:** OK Response
 
 Modify Query Params, switch Response.

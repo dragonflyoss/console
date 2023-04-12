@@ -113,7 +113,7 @@ export default function SignIn() {
       item.setError(!item.validate(value as string));
       item.syncError = !item.validate(value as string);
     });
-    
+
     const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
     if (canSubmit) {
       signIn({

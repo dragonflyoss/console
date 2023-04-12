@@ -50,6 +50,7 @@ export default function Rotation() {
                       component="img"
                       sx={{
                         width: '100%',
+                        height: '100vh',
                       }}
                       src={step.imageURL}
                     />

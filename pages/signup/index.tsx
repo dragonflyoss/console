@@ -213,11 +213,11 @@ export default function SignUp() {
   };
 
   return (
-    <Grid container className={styles.containe}>
+    <Grid container className={styles.page}>
       <Grid item xs={6}>
         <Rotation />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={6} className={styles.containe}>
         <ThemeProvider theme={theme}>
           <Container component="main" maxWidth="xs">
             <CssBaseline />

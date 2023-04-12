@@ -29,7 +29,7 @@ export default function SignIn() {
         name: 'account',
         autoComplete: 'family-name',
         placeholder: 'Enter your account',
-        helperText: accountError ? 'Please enter the correct password ' : '',
+        helperText: accountError ? 'Please enter the correct account number' : '',
         error: accountError,
 
         onChange: (e: any) => {
@@ -52,7 +52,7 @@ export default function SignIn() {
         type: showPassword ? 'text' : 'password',
         autoComplete: 'password',
         placeholder: 'Enter your password',
-        helperText: passwordError ? 'Please enter the correct account number' : '',
+        helperText: passwordError ? 'Please enter the correct password ' : '',
         error: passwordError,
 
         onChange: (e: any) => {

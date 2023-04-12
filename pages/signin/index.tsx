@@ -104,11 +104,11 @@ export default function SignIn() {
   };
 
   return (
-    <Grid container className={styles.containe}>
+    <Grid container className={styles.page}>
       <Grid item xs={6}>
         <Rotation />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={6} className={styles.containe}>
         <ThemeProvider theme={theme}>
           <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -126,7 +126,7 @@ export default function SignIn() {
                 Welcome back!
               </Typography>
               <Typography variant="subtitle1" gutterBottom>
-                through which you can easily configure clusters and view cluster information.
+                Through which you can easily configure clusters and view cluster information.
               </Typography>
             </Box>
             <Box

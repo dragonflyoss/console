@@ -1,6 +1,13 @@
-.containe {
+.page {
   height: 100vh;
   overflow: hidden;
+}
+
+.containe {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 7rem;
 }
 
 .logo {

@@ -10,15 +10,15 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const rotationChart = [
   {
     label: 'Dragonfly',
-    imageURL: '/images/login/dragonfly.png',
+    imageURL: '/images/login/dragonfly.svg',
   },
   {
     label: 'Features',
-    imageURL: '/images/login/features.png',
+    imageURL: '/images/login/features.svg',
   },
   {
     label: 'Milestones',
-    imageURL: '/images/login/milestones.png',
+    imageURL: '/images/login/milestones.svg',
   },
 ];
 
@@ -33,8 +33,8 @@ export default function Rotation() {
   };
 
   return (
-    <div>
-      <Grid>
+    <div className={styles.containe}>
+      <Grid style={{ flex: '1' }}>
         <AutoPlaySwipeableViews
           axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
           index={imageIndex}

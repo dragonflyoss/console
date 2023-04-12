@@ -20,8 +20,8 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [accountError, setAccountError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [accountHelptext, setAccountHelptext] = useState('');
-  const [passwordHelptext, setPasswordHelptext] = useState('');
+  const [accountHelptext, setAccountHelptext] = useState('Account cannot be empty');
+  const [passwordHelptext, setPasswordHelptext] = useState('Password can not be blank');
 
   const formList = [
     {
@@ -35,6 +35,10 @@ export default function SignIn() {
         error: accountError,
       },
       setError: setAccountError,
+      validate: (value: string) => {
+        const reg = /^[\s\S]*.*[^\s][\s\S]*$/;
+        return reg.test(value);
+      },
     },
     {
       formProps: {
@@ -46,7 +50,6 @@ export default function SignIn() {
         placeholder: 'Enter your password',
         helperText: passwordError ? passwordHelptext : '',
         error: passwordError,
-
         InputProps: {
           endAdornment: (
             <IconButton
@@ -62,6 +65,10 @@ export default function SignIn() {
         },
       },
       setError: setPasswordError,
+      validate: (value: string) => {
+        const reg = /^[\s\S]*.*[^\s][\s\S]*$/;
+        return reg.test(value);
+      },
     },
   ];
 
@@ -84,6 +91,12 @@ export default function SignIn() {
     event.preventDefault();
     const accountElement = event.currentTarget.elements.account;
     const passwordElement = event.currentTarget.elements.password;
+
+    const data = new FormData(event.currentTarget);
+    formList.forEach((item) => {
+      const value = data.get(item.formProps.name);
+      item.setError(!item.validate(value as string));
+    });
 
     if (accountElement.value !== '' && passwordElement.value !== '') {
       signIn({

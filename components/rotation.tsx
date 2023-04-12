@@ -34,7 +34,7 @@ export default function Rotation() {
 
   return (
     <div className={styles.containe}>
-      <Grid style={{ flex: '1' }}>
+      <Grid>
         <AutoPlaySwipeableViews
           axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
           index={imageIndex}

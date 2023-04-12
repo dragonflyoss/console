@@ -290,11 +290,11 @@ To use mock server, please do the following, refer to  [mocking-data-setting-up-
 
 ![](/docs/images/contributing/postman-copy-mockUrl.png)
     
-**Step 4:** Replace the mock server URL and splice /api/v1, then click the **Save** button.
+**Step 4:** Add the mock server URL and click the **Save** button.
 
  ![](/docs/images/contributing/postman-change-path.png)
 
-**Step 5:** Click the Send button to initiate a request.
+**Step 5:** Click the **Send** button to initiate a request
 
 ![](docs/images/contributing/postman-request.png)
 
@@ -305,11 +305,12 @@ To use mock server, please do the following, refer to  [mocking-data-setting-up-
 **Step 7:** Export mock server URL through environment variables in project.
 
 install dependencies.
+
 ```shell
 npm install
 ```
 
-First you need `export NEXT_PUBLIC_DRAGONFLY_PUBLIC_API=your-mock-server-URL`, where your-mock-server-URL is your own mock server URL, start your server after the import is successful.
+FFirst you need `export NEXT_PUBLIC_DRAGONFLY_PUBLIC_API=your-mock-server-URL`, where your-mock-server-URL is your own mock server URL, start your server after the import is successful。
 
 ```shell
 $ export NEXT_PUBLIC_DRAGONFLY_PUBLIC_API=<your-mock-server-URL>
@@ -327,16 +328,13 @@ Modify Query Params, switch Response.
 
 ![](/docs/images/contributing/postman-ok-response.png)
 
-Response demo.
-
 ![](/docs/images/contributing/postman-ok-demo.gif)
 
 **Step 9:** Not Found Response
 
 Modify Query Params, switch Response.
-![](/docs/images/contributing/postman-not-fount-response.png)
 
-Response demo.
+![](/docs/images/contributing/postman-not-fount-response.png)
 
 ![](/docs/images/contributing/postman-not-found-demo.gif)
 
@@ -346,7 +344,6 @@ Response demo.
 
 ![](/docs/images/contributing/postman-add-example.png)
     
-**Step 2:** Modify the name such as Oauth Signin, modify the response message, and save the example.
+**Step 2:** Modify the name such as SignUp user, modify the response message, and save the example.
 
 ![](/docs/images/contributing/postman-chang-mock-path.png) 
-

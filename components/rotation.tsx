@@ -33,7 +33,7 @@ export default function Rotation() {
   };
 
   return (
-    <div className={styles.containe}>
+    <div className={styles.container}>
       <Grid>
         <AutoPlaySwipeableViews
           axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}

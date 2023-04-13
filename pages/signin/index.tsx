@@ -20,8 +20,6 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [accountError, setAccountError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [accountHelptext, setAccountHelptext] = useState('');
-  const [passwordHelptext, setPasswordHelptext] = useState('');
 
   const formList = [
     {
@@ -31,10 +29,20 @@ export default function SignIn() {
         name: 'account',
         autoComplete: 'family-name',
         placeholder: 'Enter your account',
-        helperText: accountError ? accountHelptext : '',
+        helperText: accountError ? 'Please enter the correct account number' : '',
         error: accountError,
+
+        onChange: (e: any) => {
+          changeValidate(e.target.value, formList[0]);
+        },
       },
+      syncError: false,
       setError: setAccountError,
+
+      validate: (value: string) => {
+        const reg = /^[A-Za-z\d]{4,10}$/;
+        return reg.test(value);
+      },
     },
     {
       formProps: {
@@ -44,8 +52,12 @@ export default function SignIn() {
         type: showPassword ? 'text' : 'password',
         autoComplete: 'password',
         placeholder: 'Enter your password',
-        helperText: passwordError ? passwordHelptext : '',
+        helperText: passwordError ? 'Please enter the correct password ' : '',
         error: passwordError,
+
+        onChange: (e: any) => {
+          changeValidate(e.target.value, formList[1]);
+        },
 
         InputProps: {
           endAdornment: (
@@ -61,7 +73,13 @@ export default function SignIn() {
           ),
         },
       },
+      syncError: false,
       setError: setPasswordError,
+
+      validate: (value: string) => {
+        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
+        return reg.test(value);
+      },
     },
   ];
 
@@ -76,6 +94,11 @@ export default function SignIn() {
 
   const router = useRouter();
 
+  const changeValidate = (value: string, data: any) => {
+    const { setError, validate } = data;
+    setError(!validate(value));
+  };
+
   const handlePassword = () => {
     setShowPassword((show) => !show);
   };
@@ -85,7 +108,16 @@ export default function SignIn() {
     const accountElement = event.currentTarget.elements.account;
     const passwordElement = event.currentTarget.elements.password;
 
-    if (accountElement.value !== '' && passwordElement.value !== '') {
+    const data = new FormData(event.currentTarget);
+
+    formList.forEach((item) => {
+      const value = data.get(item.formProps.name);
+      item.setError(!item.validate(value as string));
+      item.syncError = !item.validate(value as string);
+    });
+
+    const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
+    if (canSubmit) {
       signIn({
         name: accountElement.value,
         password: passwordElement.value,
@@ -96,8 +128,6 @@ export default function SignIn() {
         } else {
           setAccountError(true);
           setPasswordError(true);
-          setPasswordHelptext('Please enter the correct password');
-          setAccountHelptext('Please enter the correct account number ');
         }
       });
     }
@@ -108,7 +138,7 @@ export default function SignIn() {
       <Grid item xs={6}>
         <Rotation />
       </Grid>
-      <Grid item xs={6} className={styles.containe}>
+      <Grid item xs={6} className={styles.container}>
         <ThemeProvider theme={theme}>
           <Container component="main" maxWidth="xs">
             <CssBaseline />

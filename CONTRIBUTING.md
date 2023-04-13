@@ -320,7 +320,7 @@ ready - started server on 0.0.0.0:3000, url: http://localhost:3000
 event - compiled client and server successfully in 2.8s (173 modules)
 ```
 
-**Step 8:** If you want to view the response success case, you can do the following operations, modify the name such as OK, add parameters and click Sava.
+**Step 8:** If you want to view the response success case, you need to do the following, modify the name such as OK, add parameters and click Sava.
 
 ![](/docs/images/contributing/postman-ok-response.png)
 
@@ -328,7 +328,7 @@ Send the request, at this point you can see that our status code is 200.
 
 ![](/docs/images/contributing/postman-ok-demo.gif)
 
-**Step 9:** If you want to see the response error case, you can do the following operations, modify the name such as Bad Requset, add parameters and click Sava.
+**Step 9:** If you want to view the response failure case, you need to do the following, modify the name such as Bad Request, add parameters and click Sava.
 
 ![](/docs/images/contributing/postman-not-fount-response.png)
 

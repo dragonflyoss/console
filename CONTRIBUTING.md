@@ -18,12 +18,9 @@ And here is a list of contributing guide for you.
       - [Commit Content](#commit-content)
     - [PR Description](#pr-description)
   - [Postman mock server overview](#postman-mock-server-overview)
-    - [What is a Postman?](#what-is-a-postman)
-    - [Postman mock server steps](#postman-mock-server-steps)
-      - [Download Postman](#download-postman)
-      - [Import API](#import-api)
-      - [Setting up mock server](#setting-up-mock-server)
-      - [Add expample](#add-expample)
+    - [Download Postman](#download-postman)
+    - [Import API](#import-api)
+    - [Setting up mock server](#setting-up-mock-server)
 
 ## Reporting security issues
 
@@ -247,17 +244,11 @@ We encourage contributors to follow the
 
 In this article, we will see how to import Swagger API into Postman and use mock server.
 
-###  What is a Postman?
-
-Postman is an API platform for building and using APIs. Postman simplifies each step of the API lifecycle and streamlines collaboration so you can create better APIs—faster.
-
-###  Postman mock server steps
-
-####  Download Postman
+### Download Postman
 
 Download the [app](https://www.postman.com/downloads) to get started with the Postman API platform.
 
-#### Import API
+### Import API
 
 If you need to use a mock server, please import the [swagger.yaml](https://raw.githubusercontent.com/dragonflyoss/Dragonfly2/main/api/manager/swagger.yaml) file of Dragonfly Manager, refer to [importing-and-exporting-data](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/).
 
@@ -273,7 +264,7 @@ If you need to use a mock server, please import the [swagger.yaml](https://raw.g
 
 ![](/docs/images/contributing/postman-select.png)
 
-#### Setting up mock server
+### Setting up mock server
 
 To use mock server, please do the following, refer to  [mocking-data-setting-up-mock](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/).
 
@@ -328,20 +319,10 @@ After making the request, you can see that our status code is 200.
 
 ![](/docs/images/contributing/postman-ok-demo.gif)
 
-**Step 9:** If you want to view the successful response case, you need to perform the following operations, modify the name under SignUp user such as**Bad Request**, add parameters, and click Sava.
+**Step 9:** If you want to view the response failure case, you need to perform the following operations, modify the name under SignUp user such as **Bad Request**, add parameters, and click Sava.
 
 ![](/docs/images/contributing/postman-not-fount-response.png)
 
 After making the request, you can see that our status code is 400.
 
 ![](/docs/images/contributing/postman-not-found-demo.gif)
-
-#### Add expample
-
-**Step 1:** If you want more examples or return different data, you can add an example.
-
-![](/docs/images/contributing/postman-add-example.png)
-
-**Step 2:** Modify the name such as SignUp user, modify the response message, and save the example.
-
-![](/docs/images/contributing/postman-chang-mock-path.png) 

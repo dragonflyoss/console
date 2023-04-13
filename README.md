@@ -40,3 +40,7 @@ Join the conversation and help the community.
 - **DingTalk**: [22880028764](https://qr.dingtalk.com/action/joingroup?code=v1,k1,pkV9IbsSyDusFQdByPSK3HfCG61ZCLeb8b/lpQ3uUqI=&_dt_no_comment=1&origin=11)
 
 [d7y.io]: https://d7y.io/
+
+## Contributing
+
+You should check out our [CONTRIBUTING](./CONTRIBUTING.md) and develop the project together.

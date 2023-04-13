@@ -311,18 +311,18 @@ ready - started server on 0.0.0.0:3000, url: http://localhost:3000
 event - compiled client and server successfully in 2.8s (173 modules)
 ```
 
-**Step 8:** If you want to view the successful response case, you need to perform the following operations, modify the name under SignUp user such as **OK**, add parameters, and click Sava.
+**Step 8:** If you want **Mock Server** to return **OK response**, you need to add query params with code, so that the request matches the query params, then **OK response** will be returned.
 
 ![](/docs/images/contributing/postman-ok-response.png)
 
-After making the request, you can see that our status code is 200.
+When the query params of the request is `code=200`, **Mock Server** will return `OK Response`.
 
 ![](/docs/images/contributing/postman-ok-demo.gif)
 
-**Step 9:** If you want to view the response failure case, you need to perform the following operations, modify the name under SignUp user such as **Bad Request**, add parameters, and click Sava.
+**Step 9:** If you want **Mock Server** to return **Bad response**, you need to add query params with code, so that the request matches the query params, then **Bad response** will be returned.
 
 ![](/docs/images/contributing/postman-not-fount-response.png)
 
-After making the request, you can see that our status code is 400.
+When the query params of the request is `code=400`, **Mock Server** will return `Bad Response`.
 
 ![](/docs/images/contributing/postman-not-found-demo.gif)

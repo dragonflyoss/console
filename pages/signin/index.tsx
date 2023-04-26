@@ -78,7 +78,7 @@ export default function SignIn() {
 
       validate: (value: string) => {
         const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
-        return reg.test(value);
+        return value == 'dragonfly' || reg.test(value);
       },
     },
   ];
@@ -123,8 +123,7 @@ export default function SignIn() {
         password: passwordElement.value,
       }).then((res) => {
         if (res.token) {
-          localStorage.setItem('token', res.token);
-          router.push('/security');
+          router.push('/cluster');
         } else {
           setAccountError(true);
           setPasswordError(true);
@@ -151,7 +150,7 @@ export default function SignIn() {
             >
               <picture>
                 <img className={styles.logo} src="/images/login/logo.png" alt="" />
-              </picture>{' '}
+              </picture>
               <Typography variant="h4" gutterBottom>
                 Welcome back!
               </Typography>

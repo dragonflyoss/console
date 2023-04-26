@@ -77,7 +77,7 @@ export default function SignIn() {
       setError: setPasswordError,
 
       validate: (value: string) => {
-        const reg = /^(?=.*[a-zA-Z0-9])(.{0,20})$/;
+        const reg = /^(?=.*[a-zA-Z0-9])(.{8,24})$/;
         return reg.test(value);
       },
     },

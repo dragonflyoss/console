@@ -77,8 +77,8 @@ export default function SignIn() {
       setError: setPasswordError,
 
       validate: (value: string) => {
-        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
-        return value == 'dragonfly' || reg.test(value);
+        const reg = /^(?=.*[a-zA-Z0-9])(.{0,20})$/;
+        return reg.test(value);
       },
     },
   ];

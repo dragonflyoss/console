@@ -4,7 +4,11 @@ const API_URL = process.env.NEXT_PUBLIC_DRAGONFLY_PUBLIC_API;
 
 export async function get(url: URL) {
   try {
-    const data = await fetch(url).then((res) => res.json());
+    const data = await fetch(url, {
+      method: 'GET',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+    }).then((res) => res.json());
     return data;
   } catch (err) {
     if (err instanceof Error) {
@@ -18,12 +22,8 @@ export async function post(url: URL, data: any) {
   try {
     const response = await fetch(url, {
       method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data || {}),
     });
     return await response.json();

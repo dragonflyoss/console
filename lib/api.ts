@@ -4,19 +4,12 @@ import { URL } from 'next/dist/compiled/@edge-runtime/primitives/url';
 
 const API_URL = process.env.NEXT_PUBLIC_DRAGONFLY_PUBLIC_API;
 
-export async function get(url: URL) {
+export async function get(url: any) {
   try {
-    var myHeaders = new Headers();
-    myHeaders.append('Cookie', document.cookie);
-    const headers = {
-      Cookie: `jwt: ${Cookies.get('jwt')}`,
-    };
-    const token = document.cookie;
-    const data = await fetch(url, {
-      headers: headers,
+    const response = await fetch(url, {
       credentials: 'include',
-    }).then((res) => res.json());
-    return data;
+    });
+    return await response;
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -29,12 +22,8 @@ export async function post(url: URL, data: any) {
   try {
     const response = await fetch(url, {
       method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data || {}),
     });
     return await response.json();

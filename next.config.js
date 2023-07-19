@@ -2,6 +2,14 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: '/fonts/:path*',
+        destination: '/static/fonts/:path*',
+      },
+    ];
+  },
   async redirects() {
     return [
       {
@@ -20,3 +28,7 @@ module.exports = {
     ];
   },
 };
+
+const nextConfig = {};
+
+module.exports = nextConfig;

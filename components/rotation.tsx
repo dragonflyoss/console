@@ -4,6 +4,7 @@ import { autoPlay } from 'react-swipeable-views-utils';
 import SwipeableViews from 'react-swipeable-views';
 import styles from './rotation.module.scss';
 import React from 'react';
+import { makeStyles } from '@mui/styles';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 

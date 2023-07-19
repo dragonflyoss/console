@@ -38,6 +38,7 @@ export async function post(url: URL, data = {}) {
     throw err;
   }
 }
+
 export async function patch(url: URL, data: any) {
   try {
     const response = await fetch(url, {
@@ -58,6 +59,7 @@ export async function patch(url: URL, data: any) {
     throw err;
   }
 }
+
 export async function Delete(url: URL) {
   try {
     const response = await fetch(url, {
@@ -76,6 +78,7 @@ export async function Delete(url: URL) {
     throw err;
   }
 }
+
 export async function put(url: URL) {
   try {
     const response = await fetch(url, {

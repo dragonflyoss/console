@@ -42,13 +42,14 @@ export default function Layout({ children }: LayoutProps) {
   const open = Boolean(anchorEl);
 
   useEffect(() => {
-    const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
+    const userInfo: any = decode(Cookies.get('jwt') || 'jwt');
+    const userID: string = userInfo?.id;
 
-    if (userInfo?.id) {
-      GetusersInfo(userInfo?.id).then(async (response) => {
+    if (userID) {
+      GetusersInfo(userID).then(async (response) => {
         setUserObject(await response.json());
       });
-      GetuserRoles(userInfo?.id).then(async (response) => {
+      GetuserRoles(userID).then(async (response) => {
         const res = await response.json();
         setRole(res[0] || 'guest');
       });

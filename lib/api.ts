@@ -3,13 +3,9 @@ import { URL } from 'next/dist/compiled/@edge-runtime/primitives/url';
 const API_URL = process.env.NEXT_PUBLIC_DRAGONFLY_PUBLIC_API;
 
 export async function get(url: any) {
-export async function get(url: any) {
   try {
     const response = await fetch(url, {
-    const response = await fetch(url, {
       credentials: 'include',
-    });
-    return await response;
     });
     return await response;
   } catch (err) {
@@ -20,7 +16,6 @@ export async function get(url: any) {
   }
 }
 
-export async function post(url: URL, data = {}) {
 export async function post(url: URL, data = {}) {
   try {
     const response = await fetch(url, {
@@ -48,77 +43,12 @@ export async function patch(url: URL, data: any) {
       method: 'PATCH',
       mode: 'cors',
       cache: 'no-cache',
-      mode: 'cors',
-      cache: 'no-cache',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data || {}),
     });
-    return await response;
-  } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(err.message);
-    }
-    throw err;
-  }
-}
-
-export async function patch(url: URL, data: any) {
-  try {
-    const response = await fetch(url, {
-      method: 'PATCH',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data || {}),
-    });
-    return await response;
-  } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(err.message);
-    }
-    throw err;
-  }
-}
-
-export async function Delete(url: URL) {
-  try {
-    const response = await fetch(url, {
-      method: 'DELETE',
-      mode: 'cors',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    return await response;
-  } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(err.message);
-    }
-    throw err;
-  }
-}
-
-export async function put(url: URL) {
-  try {
-    const response = await fetch(url, {
-      method: 'PUT',
-      mode: 'cors',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    return await response;
     return await response;
   } catch (err) {
     if (err instanceof Error) {
@@ -196,7 +126,7 @@ export async function getClusters() {
 }
 export async function getClustersSearch(params: any) {
   const queryString = Object.entries(params)
-    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
     .join('&');
   const url = new URL(`/api/v1/clusters?${queryString}`, API_URL);
   return await get(url);
@@ -268,17 +198,14 @@ export async function ResetPassword(id: any, data: any) {
   const url = new URL(`/api/v1/users/${id}/reset_password`, API_URL);
   return await post(url, data);
 }
-
 export async function GetSchedulers(id: any) {
   const url = new URL(`/api/v1/schedulers/${id}`, API_URL);
   return await get(url);
 }
-
 export async function GetSeedPeers(id: any) {
   const url = new URL(`/api/v1/seed-peers/${id}`, API_URL);
   return await get(url);
 }
-
 export async function DeleteGuest(id: any) {
   const url = new URL(`api/v1/users/${id}/roles/guest`, API_URL);
   return await Delete(url);

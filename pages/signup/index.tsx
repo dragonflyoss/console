@@ -12,13 +12,15 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
-import { InputAdornment } from '@mui/material';
+import { Alert, Backdrop, InputAdornment, Snackbar } from '@mui/material';
 import Rotation from 'components/rotation';
 import { signUp } from 'lib/api';
 import { useRouter } from 'next/router';
-import styles from './index.module.css';
+import styles from './index.module.scss';
 
 export default function SignUp() {
+  const [errorMessage, setErrorMessage] = useState(false);
+  const [errorMessageText, setErrorMessageText] = useState('');
   const [accountError, setAccountError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
@@ -26,7 +28,7 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const [pageLoding, setPageLoding] = useState(false);
   const router = useRouter();
 
   const formList = [
@@ -121,7 +123,7 @@ export default function SignUp() {
         id: 'confirmPassword',
         type: showConfirmPassword ? 'text' : 'password',
         autoComplete: 'new-password',
-        placeholder: 'Repeat your password',
+        placeholder: 'Repeat your new password',
         error: confirmPassworError,
         helperText: confirmPassworError ? 'Please enter the same password' : '',
 
@@ -160,7 +162,7 @@ export default function SignUp() {
     palette: {
       secondary: {
         contrastText: '#fff',
-        main: '#239b56',
+        main: '#2E8F79',
       },
     },
   });
@@ -199,21 +201,43 @@ export default function SignUp() {
         name: accountElement.value,
         password: passwordElement.value,
         email: emailElement.value,
-      }).then((res) => {
-        if (res.name) {
+      }).then((response) => {
+        if (response.status === 200) {
+          setPageLoding(true);
           router.push('/signin');
-        } else if (res.message) {
-          setAccountError(true);
-          setEmailError(true);
-          setPasswordError(true);
-          setConfirmPassworError(true);
+        } else {
+          setErrorMessage(true);
+          setErrorMessageText(response.statusText);
         }
       });
     }
   };
 
+  const handleClose = (_: any, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErrorMessage(false);
+  };
+
   return (
     <Grid container className={styles.page}>
+      <Snackbar
+        open={errorMessage}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          {errorMessageText}
+        </Alert>
+      </Snackbar>
+      <Backdrop
+        open={pageLoding}
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: 'rgba(0,0,0,0.3)' }}
+      >
+        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/favicon/clusterIcon/pageLoading.svg" />
+      </Backdrop>
       <Grid item xs={6}>
         <Rotation />
       </Grid>
@@ -228,9 +252,7 @@ export default function SignUp() {
                 flexDirection: 'column',
               }}
             >
-              <picture>
-                <img className={styles.logo} src="/images/login/logo.png" alt="" />
-              </picture>
+              <Box component="img" className={styles.logo} src="/images/login/login.svg" />
               <Typography component="h1" variant="h5">
                 Registered Account
               </Typography>
@@ -250,34 +272,37 @@ export default function SignUp() {
                     </Grid>
                   ))}
                 </Grid>
-                <Button type="submit" fullWidth variant="contained" sx={{ mt: '2rem' }} color="secondary">
-                  Sign Up
+                <Button type="submit" fullWidth variant="contained" color="secondary" sx={{ mt: '1.4rem' }}>
+                  <Typography variant="button" component="span" sx={{ textTransform: 'none' }}>
+                    Sign Up
+                  </Typography>
                 </Button>
-                <Box
-                  sx={{
-                    mt: '1.2rem',
-                    mb: '0.8rem',
-                    height: '2rem',
-                    display: 'flex',
-                    justifyContent: 'space-evenly',
-                    alignItems: 'center',
-                  }}
-                >
-                  <span className={styles.borderLeft}></span>
-                  <span className={styles.text}>or</span>
-                  <span className={styles.bordeRight}></span>
+                <Box className={styles.orContainer}>
+                  <Typography component="span" className={styles.borderLeft}></Typography>
+                  <Typography component="span" className={styles.text}>
+                    or
+                  </Typography>
+                  <Typography component="span" className={styles.bordeRight}></Typography>
                 </Box>
                 <Box
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    fontSize: '0.9rem',
                   }}
                 >
                   <Grid>
-                    <span>Already have an account? </span>
-                    <Link href="/signin">Sign in</Link>
+                    <Typography component="span">Already have an account?</Typography>
+                    <Link
+                      underline="hover"
+                      href="/signin"
+                      onClick={() => {
+                        setPageLoding(true);
+                      }}
+                      sx={{ color: '#2E8F79', ml: '0.4rem' }}
+                    >
+                      <Typography component="span">Sign in</Typography>
+                    </Link>
                   </Grid>
                 </Box>
               </Box>

@@ -1,0 +1,43 @@
+.userIcon {
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
+.profileContainer {
+    margin-bottom: 2rem;
+    padding: 2rem;
+
+    .avatarContainer {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+
+        .avatarContent {
+            width: 6rem;
+            height: 6rem;
+            background-color: #1C293A;
+        }
+    }
+
+}
+
+.PersonalInformationContainer {
+    padding: 2rem;
+
+    .InformationHeader {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    .InformationContainer {
+        display: flex;
+        flex-wrap: wrap;
+
+        .InformationContert {
+            width: 34%;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+    }
+}

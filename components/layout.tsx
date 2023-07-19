@@ -1,224 +1,244 @@
-import styles from './layout.module.css';
-import { Avatar, Breadcrumbs, Grid, Typography } from '@mui/material';
+import styles from './layout.module.scss';
+import { Avatar, Backdrop, Divider, Grid, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
 import * as React from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import Container from '@mui/material/Container';
-import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
-import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import Header from './header';
-import { useState } from 'react';
+import { ListItemButton, ListItemIcon } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-const mdTheme = createTheme();
+import { Logout, PersonAdd } from '@mui/icons-material';
+import { decode } from 'jsonwebtoken';
+import Cookies from 'js-cookie';
+import { GetuserRoles, GetusersInfo, signOut } from 'lib/api';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import Link from 'next/link';
+
 type LayoutProps = {
   children: React.ReactNode;
 };
+const APP_BAR_DESKTOP = '2rem';
+
+const Main = styled('div')(({ theme }) => ({
+  flexGrow: 1,
+  overflow: 'auto',
+  minHeight: '100%',
+  height: '100vh',
+  paddingBottom: theme.spacing(10),
+  [theme.breakpoints.up('lg')]: {
+    paddingTop: APP_BAR_DESKTOP,
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(4),
+  },
+}));
 
 export default function Layout({ children }: LayoutProps) {
-  const { asPath } = useRouter();
-  const str = asPath.split('/');
+  const [role, setRole] = useState('guest');
+  const [pageLoding, setPageLoding] = useState(false);
+  const [userObject, setUserObject] = useState({ name: '', email: '' });
+  const router = useRouter();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  useEffect(() => {
+    const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
 
-  const handleListItemClick = (_event: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
-    setSelectedIndex(index);
+    if (userInfo?.id) {
+      GetusersInfo(userInfo?.id).then(async (response) => {
+        setUserObject(await response.json());
+      });
+      GetuserRoles(userInfo?.id).then(async (response) => {
+        const res = await response.json();
+        setRole(res[0] || 'guest');
+      });
+    } else {
+      router.push('/signin');
+    }
+
+    const handleStart = () => {
+      setPageLoding(true);
+    };
+
+    const handleComplete = () => {
+      setPageLoding(false);
+    };
+
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleComplete);
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleComplete);
+    };
+  }, [router]);
+
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
   };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handProfile = () => {
+    setAnchorEl(null);
+    router.push(`/profile`);
+  };
+
+  const handleLogout = () => {
+    signOut();
+    setPageLoding(true);
+    router.push('/signin');
+  };
+  const pathname = router.pathname.split('/');
+
+  const menuItems = [
+    {
+      label: 'clusters',
+      href: '/clusters',
+      text: 'Cluster',
+      icon: (
+        <Box component="img" sx={{ width: '1.6rem', height: '1.6rem' }} src="/favicon/clusterIcon/clusterIcon.svg" />
+      ),
+    },
+    {
+      label: 'users',
+      href: '/users',
+      text: 'User',
+      icon: <Box component="img" sx={{ width: '1.6rem', height: '1.6rem' }} src="/favicon/clusterIcon/userIcon.svg" />,
+    },
+  ];
+  const menuList =
+    role === 'root'
+      ? menuItems
+      : menuItems.filter((item) => {
+          return item.label !== 'users';
+        });
+
   const mainListItems = (
-    <>
-      <List component="nav" aria-label="main mailbox folders" sx={{ width: '100%' }}>
-        <Link href="/cluster" className={styles.link}>
+    <List component="nav" aria-label="main mailbox folders" sx={{ width: '100%' }}>
+      {menuList.map((item) => {
+        return (
           <ListItemButton
-            selected={selectedIndex === 0}
-            onClick={(event) => handleListItemClick(event, 0)}
-            sx={{ flexDirection: 'column' }}
+            key={item.href}
+            selected={pathname[1] === item.label}
+            component={Link}
+            href={item.href}
+            sx={{
+              '&.Mui-selected': { backgroundColor: '#DFFF55' },
+              '&.Mui-selected:hover': { backgroundColor: '#DDFF55', color: '#121726' },
+              height: '2rem',
+              mb: '0.4rem',
+            }}
           >
-            <ListItemIcon></ListItemIcon>
-            <ListItemText primary="Cluster" />
+            {item.icon}
+            <Typography variant="subtitle1" sx={{ fontFamily: 'MabryPro-Bold', ml: '0.4rem' }}>
+              {item.text}
+            </Typography>
           </ListItemButton>
-        </Link>
-        <Divider />
-        <Link href="/security" className={styles.link}>
-          <ListItemButton
-            selected={selectedIndex === 1}
-            onClick={(event) => handleListItemClick(event, 1)}
-            sx={{ flexDirection: 'column' }}
-          >
-            <ListItemIcon></ListItemIcon>
-            <ListItemText primary="Security" />
-          </ListItemButton>
-        </Link>
-        <Divider />
-        <Link href="/job" className={styles.link}>
-          <ListItemButton
-            selected={selectedIndex === 2}
-            onClick={(event) => handleListItemClick(event, 2)}
-            sx={{ flexDirection: 'column' }}
-          >
-            <ListItemIcon></ListItemIcon>
-            <ListItemText primary="Job" />
-          </ListItemButton>
-        </Link>
-        <Divider />
-        <Link href="/user" className={styles.link}>
-          <ListItemButton
-            selected={selectedIndex === 3}
-            onClick={(event) => handleListItemClick(event, 3)}
-            sx={{ flexDirection: 'column' }}
-          >
-            <ListItemIcon></ListItemIcon>
-            <ListItemText primary="User" />
-          </ListItemButton>
-        </Link>
-      </List>
-    </>
+        );
+      })}
+    </List>
   );
 
-  const drawerWidth = '15rem';
-
-  // const menuList = (
-  //   <>
-  //     <MenuList>
-  //       <Link href="/cluster" className={styles.link}>
-  //         <MenuItem>
-  //           <ListItemIcon></ListItemIcon>
-  //           <ListItemText>cluster</ListItemText>
-  //         </MenuItem>
-  //       </Link>
-  //       <Link href="/job" className={styles.link}>
-  //         <MenuItem>
-  //           <ListItemIcon></ListItemIcon>
-  //           <ListItemText>job</ListItemText>
-  //         </MenuItem>
-  //       </Link>
-  //       <Link href="/user" className={styles.link}>
-  //         <MenuItem>
-  //           <ListItemIcon></ListItemIcon>
-  //           <ListItemText>cluster</ListItemText>
-  //         </MenuItem>
-  //       </Link>{' '}
-  //       <Link href="/cluster" className={styles.link}>
-  //         <MenuItem>
-  //           <ListItemIcon></ListItemIcon>
-  //           <ListItemText>cluster</ListItemText>
-  //         </MenuItem>
-  //       </Link>
-  //     </MenuList>
-  //   </>
-  // );
-  const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
-    '& .MuiDrawer-paper': {
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: drawerWidth,
-      transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      boxSizing: 'border-box',
-      ...(!open && {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
-        },
-      }),
-    },
-  }));
-  function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    event.preventDefault();
-    console.info('You clicked a breadcrumb.');
-  }
-
   return (
-    <div className={styles.page}>
-      <ThemeProvider theme={mdTheme}>
-        <Header />
-        <Box sx={{ display: 'flex' }}>
-          <CssBaseline />
-
-          <Drawer
-            variant="permanent"
-            sx={{
-              width: drawerWidth,
-              flexShrink: 0,
-              [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
-            }}
-          >
-            <Divider />
-            <Grid
-              sx={{
-                height: '8rem',
-                display: 'flex',
-                justifyContent: 'space-around',
-                alignItems: 'center',
-                flexDirection: 'column',
-              }}
-            >
-              <Avatar src="" sx={{ mt: 2, width: '3rem', height: '3rem' }} />
-              <Typography variant="subtitle2" gutterBottom>
-                root
-              </Typography>
-            </Grid>
-            <Divider />
-            <List sx={{ width: '100%', display: 'flex' }} component="nav">
-              {mainListItems}
-            </List>
-          </Drawer>
+    <section>
+      <Backdrop
+        open={pageLoding}
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: 'rgba(0,0,0,0.3)' }}
+      >
+        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/favicon/clusterIcon/pageLoading.svg" />
+      </Backdrop>
+      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        <CssBaseline />
+        <Box className={styles.page}>
           <Box
-            component="main"
             sx={{
-              backgroundColor: (theme) =>
-                theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
-              flexGrow: 1,
               height: '100vh',
-              overflow: 'hidden',
-              padding: 0,
+              width: '14rem',
+              backgroundColor: 'rgba(254,252,251,86%)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
             }}
           >
-            <Container maxWidth="lg" >
-              <Breadcrumbs aria-label="breadcrumb" sx={{m:1}}>
-                <Link underline="hover" color="inherit" href={`/${str[1]}`}>
-                  {str[1]}
-                </Link>
-                {str[2] ? (
-                  <Link underline="hover" color="inherit" href={`/${str[1]}/${str[2]}`}>
-                    {str[2]}
-                  </Link>
-                ) : null}
-                {str[3] ? (
-                  <Typography key="3" color="text.primary">
-                    {str[3]}
-                  </Typography>
-                ) : null}
-              </Breadcrumbs>
-              <Grid container>
-                <Grid item xs={12}>
-                  <Paper
-                    sx={{
-                      p: 2,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      height: '90vh',
-                    }}
-                  >
-                  {children}
-                  </Paper>
-                </Grid>
-
+            <Grid sx={{ ml: '1rem', mr: '1rem' }}>
+              <Grid sx={{ display: 'flex', alignItems: 'center', ml: '0.4rem', mt: '2rem' }}>
+                <picture>
+                  <div>
+                    <Box
+                      component="img"
+                      sx={{
+                        width: '1.8rem',
+                        height: '1.8rem',
+                        mr: '0.8rem',
+                      }}
+                      src="/images/login/logoIcon.svg"
+                    />
+                  </div>
+                </picture>
+                <Typography variant="h6" gutterBottom sx={{ fontFamily: 'MabryPro-Bold' }}>
+                  Dragonfly
+                </Typography>
               </Grid>
-            </Container>
+              {mainListItems}
+            </Grid>
+            <Grid sx={{ mb: '4rem' }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Avatar
+                    sx={{ width: '2.6rem', height: '2.6rem', ml: '0.6rem', mr: '0.6rem', background: '#1C293A' }}
+                  ></Avatar>
+                  <Box sx={{ width: '7rem' }}>
+                    <Typography fontFamily="MabryPro-Bold">{userObject?.name || '-'}</Typography>
+                    <Tooltip title={userObject?.email || '-'} placement="top">
+                      <Typography
+                        component="div"
+                        variant="caption"
+                        sx={{ width: '7rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                      >
+                        {userObject?.email || '-'}
+                      </Typography>
+                    </Tooltip>
+                  </Box>
+                </Box>
+                <IconButton
+                  onClick={handleClick}
+                  size="small"
+                  aria-controls={open ? 'account-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  sx={{ mr: '0.6rem', position: 'relative' }}
+                >
+                  <UnfoldMoreIcon />
+                </IconButton>
+              </Box>
+              <Menu
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={open}
+                onClose={handleClose}
+                sx={{ position: 'absolute', top: '-5.5rem', left: '-4.8rem' }}
+              >
+                <MenuItem onClick={handProfile}>
+                  <ListItemIcon>
+                    <PersonAdd fontSize="small" />
+                  </ListItemIcon>
+                  Profile
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <ListItemIcon>
+                    <Logout fontSize="small" />
+                  </ListItemIcon>
+                  Logout
+                </MenuItem>
+              </Menu>
+            </Grid>
           </Box>
         </Box>
-      </ThemeProvider>
-    </div>
+        <Divider orientation="vertical" flexItem />
+        <Main>{children}</Main>
+      </Box>
+    </section>
   );
 }

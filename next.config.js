@@ -1,30 +1,26 @@
 /** @type {import('next').NextConfig} */
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
+/** @type {import('tailwindcss').Config} */
 
-// module.exports = {
-//   async redirects() {
-//     return [
-//       {
-//         source: '/',
-//         destination: '/signin',
-//         permanent: true,
-//       },
-//     ];
-//   },
-// };
-const nextConfig = {
+module.exports = {
   async rewrites() {
-    return {
-      fallback: [
-        {
-          source: '/:path*',
-          destination: `http://dragonfly-manager.alipay.net:8080`,
-        },
-      ],
-    };
+    return [
+      {
+        source: '/fonts/:path*',
+        destination: '/static/fonts/:path*',
+      },
+    ];
+  },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/culster',
+        permanent: true,
+      },
+    ];
   },
 };
+
+const nextConfig = {};
 
 module.exports = nextConfig;

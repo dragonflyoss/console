@@ -11,16 +11,20 @@ import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import Rotation from 'components/rotation';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { signIn } from 'lib/api';
-import styles from './index.module.css';
+import styles from './index.module.scss';
+import { Alert, Backdrop, Snackbar } from '@mui/material';
+import { useRouter } from 'next/dist/client/router';
+import React from 'react';
 
 export default function SignIn() {
+  const [errorMessage, setErrorMessage] = useState(false);
+  const [errorMessageText, setErrorMessageText] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [accountError, setAccountError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-
+  const [pageLoding, setPageLoding] = useState(false);
   const formList = [
     {
       formProps: {
@@ -77,7 +81,7 @@ export default function SignIn() {
       setError: setPasswordError,
 
       validate: (value: string) => {
-        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
+        const reg = /^(?=.*[a-z])[^]{0,16}$/;
         return reg.test(value);
       },
     },
@@ -87,7 +91,7 @@ export default function SignIn() {
     palette: {
       secondary: {
         contrastText: '#fff',
-        main: '#239b56',
+        main: '#2E8F79',
       },
     },
   });
@@ -121,20 +125,41 @@ export default function SignIn() {
       signIn({
         name: accountElement.value,
         password: passwordElement.value,
-      }).then((res) => {
-        if (res.token) {
-          localStorage.setItem('token', res.token);
-          router.push('/security');
+      }).then(async (response) => {
+        if (response.status == 200) {
+          setPageLoding(true);
+          router.push('/clusters');
         } else {
-          setAccountError(true);
-          setPasswordError(true);
+          setErrorMessage(true);
+          setErrorMessageText(response.statusText);
         }
       });
     }
   };
-
+  const handleClose = (_: any, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErrorMessage(false);
+  };
   return (
     <Grid container className={styles.page}>
+      <Snackbar
+        open={errorMessage}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          {errorMessageText}
+        </Alert>
+      </Snackbar>
+      <Backdrop
+        open={pageLoding}
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: 'rgba(0,0,0,0.3)' }}
+      >
+        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/favicon/clusterIcon/pageLoading.svg" />
+      </Backdrop>
       <Grid item xs={6}>
         <Rotation />
       </Grid>
@@ -149,9 +174,7 @@ export default function SignIn() {
                 flexDirection: 'column',
               }}
             >
-              <picture>
-                <img className={styles.logo} src="/images/login/logo.png" alt="" />
-              </picture>{' '}
+              <Box component="img" className={styles.logo} src="/images/login/login.svg" />
               <Typography variant="h4" gutterBottom>
                 Welcome back!
               </Typography>
@@ -178,34 +201,37 @@ export default function SignIn() {
                     {...item.formProps}
                   />
                 ))}
-                <Button type="submit" fullWidth variant="contained" sx={{ mt: '1.4rem' }} color="secondary">
-                  Sign In
+                <Button type="submit" fullWidth variant="contained" color="secondary" sx={{ mt: '1.4rem' }}>
+                  <Typography variant="button" component="span" sx={{ textTransform: 'none' }}>
+                    Sign In
+                  </Typography>
                 </Button>
-                <Box
-                  sx={{
-                    mt: '1.2rem',
-                    mb: '0.8rem',
-                    height: '2rem',
-                    display: 'flex',
-                    justifyContent: 'space-evenly',
-                    alignItems: 'center',
-                  }}
-                >
-                  <span className={styles.borderLeft}></span>
-                  <span className={styles.text}>or</span>
-                  <span className={styles.bordeRight}></span>
+                <Box className={styles.orContainer}>
+                  <Typography component="span" className={styles.borderLeft}></Typography>
+                  <Typography component="span" className={styles.text}>
+                    or
+                  </Typography>
+                  <Typography component="span" className={styles.bordeRight}></Typography>
                 </Box>
                 <Box
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    fontSize: '0.9rem',
                   }}
                 >
                   <Grid>
-                    <span>New to Dragnfly? </span>
-                    <Link href="/signup">Create an account.</Link>
+                    <Typography component="span">New to Dragnfly?</Typography>
+                    <Link
+                      underline="hover"
+                      href="/signup"
+                      onClick={() => {
+                        setPageLoding(true);
+                      }}
+                      sx={{ color: '#2E8F79', ml: '0.4rem' }}
+                    >
+                      <Typography component="span">Create an account.</Typography>
+                    </Link>
                   </Grid>
                 </Box>
               </Box>

@@ -1,0 +1,255 @@
+.informationContainer {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1.4rem;
+    padding-bottom: 1.4rem;
+
+    .informationWrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 20%;
+
+        .informationtitle {
+            display: flex;
+            align-items: center;
+            position: relative;
+
+        }
+
+    }
+}
+
+.helpIcon {
+    width: 0.8rem;
+    height: 0.8rem;
+
+    &:hover {
+        color: #2E8F79;
+    }
+}
+
+//sx={{ display: 'flex', mt: '2rem', p: '1rem' }}
+.container {
+    display: flex;
+    margin-top: 2rem;
+    padding: 0.6rem;
+
+    .scopesLeftContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 65%;
+
+        align-items: stretch;
+
+        .scopesContainer {
+            display: flex;
+            background-color: #EDEFF1;
+            padding: 0.6rem;
+            height: 100%;
+
+            .LocationContainer {
+                padding: 1.6rem;
+                margin-right: 0.6rem;
+                width: 27%;
+                max-width: 27rem;
+                min-width: 11rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+
+                .LocationIcon {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: #EDEFF2;
+                    border-radius: 0.2rem;
+                    width: 2rem;
+                    height: 2rem;
+
+                    .icon {
+                        width: 1.6rem;
+                        height: 1.6rem;
+                    }
+                }
+
+                .LocationTitle {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .LocationTextContainer {
+                    height: 2rem;
+                    display: flex;
+                    align-items: flex-end;
+                }
+
+                .LocationContent {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+
+                }
+            }
+
+            .IDCContainer {
+                padding: 1.6rem;
+                margin-right: 0.6rem;
+                width: 27%;
+                max-width: 27rem;
+                min-width: 11rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+
+                .IDCIcon {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: #EDEFF2;
+                    border-radius: 0.2rem;
+                    width: 2rem;
+                    height: 2rem;
+
+                    .icon {
+                        width: 1.6rem;
+                        height: 1.6rem;
+                    }
+                }
+
+                .IDCTitle {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .IDCTextContainer {
+                    height: 2rem;
+                    display: flex;
+                    align-items: flex-end;
+                }
+
+                .IDCContent {
+                    width: 100%;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+
+                }
+
+            }
+
+            .CIDRsContainer {
+                padding: 1.6rem;
+                width: 46%;
+                display: flex;
+                max-width: 46rem;
+                flex-direction: column;
+                justify-content: space-between;
+
+                .CIDRsIcon {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: #EDEFF2;
+                    border-radius: 0.2rem;
+                    width: 2rem;
+                    height: 2rem;
+
+                    .icon {
+                        width: 1.6rem;
+                        height: 1.6rem;
+                    }
+                }
+
+                .CIDRsTitle {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .CIDRsTags {
+                    display: flex;
+                    align-items: flex-end;
+                    justify-content: space-between;
+                    height: 2rem;
+
+                    .CIDRsContent {
+                        height: 1.6rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin-right: 0.4rem;
+                        padding: 0.4rem;
+                    }
+
+                }
+
+
+
+            }
+
+
+        }
+    }
+
+
+
+    .configRightContainer {
+        margin-left: 0.6rem;
+        width: 35%;
+        max-width: 55rem;
+
+        .configContainer {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .listContainer {
+
+            padding-left: 1rem;
+            padding-right: 1rem;
+
+            .liContainer {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 0.4rem;
+                margin-bottom: 0.4rem;
+            }
+        }
+    }
+
+
+}
+
+.CIDRsDialog {
+    display: flex;
+    flex-wrap: wrap;
+
+
+    .CIDRsDialogContent {
+        width: 30.4%;
+        background-color: #F4F3F6;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0.4rem 0.8rem;
+        margin-bottom: 0.8rem;
+        margin-right: 0.5rem;
+        margin-left: 0.5rem;
+
+        .CIDRsText {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+
+    .icon {
+        width: 1.6rem;
+        height: 1.6rem;
+        margin-right: 0.4rem;
+    }
+
+}

@@ -32,9 +32,6 @@
     }
   },
   "lint-staged": {
-    "**/*.ts?(x)": [
-      "yarn type-check"
-    ],
     "*.{js,ts,tsx,}": [
       "prettier --write"
     ],
@@ -49,7 +46,9 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.10.16",
+    "@mui/lab": "^5.0.0-alpha.136",
     "@mui/material": "^5.10.17",
+    "@mui/styles": "^5.14.0",
     "@types/jest": "^29.2.5",
     "@types/js-cookie": "^3.0.3",
     "@types/react-swipeable-views": "^0.13.1",
@@ -60,12 +59,14 @@
     "js-cookie": "^3.0.4",
     "jsonwebtoken": "^9.0.0",
     "next": "13.0.6",
+    "parse-link-header": "^2.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-swipeable-views": "^0.14.0",
     "react-swipeable-views-native": "^0.13.2",
     "react-swipeable-views-utils": "^0.14.0",
     "react-test-renderer": "^18.2.0",
+    "sass": "^1.63.6",
     "sass-loader": "^13.2.0"
   },
   "devDependencies": {

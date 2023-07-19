@@ -1,0 +1,82 @@
+.spen {
+   margin: 2rem;
+
+}
+
+.TextField {
+   width: 18rem;
+   max-width: 25rem;
+   margin-top: 1rem;
+   margin-bottom: 1rem;
+}
+
+.main {
+   height: 100%;
+   width: 100%;
+   position: relative;
+   overflow: auto;
+
+   .container {
+      width: 60%;
+
+      .informationTitle {
+         display: flex;
+         align-items: center;
+      }
+
+      .isdefaultContainer {
+         display: flex;
+         align-items: center;
+      }
+
+      .scopesTitle {
+         display: flex;
+         align-items: center;
+      }
+
+      .scopesContainer {
+         display: flex;
+         flex-wrap: wrap;
+      }
+
+      .configTitle {
+         display: flex;
+         align-items: center;
+      }
+
+      .configContainer {
+         display: flex;
+         flex-wrap: wrap;
+      }
+
+      .footerButton {
+         margin-top: 2rem;
+      }
+   }
+
+}
+
+.TextField {
+   width: 18rem;
+   max-width: 25rem;
+   margin-top: 1rem;
+   margin-bottom: 1rem;
+   margin-right: 1rem;
+}
+
+.CIDRsIputer {
+   width: 37rem;
+
+   margin-top: 1rem;
+   margin-bottom: 1rem;
+
+}
+
+.helpIcon {
+   width: 1rem;
+   height: 1rem;
+
+   &:hover {
+      color: #2E8F79;
+   }
+}

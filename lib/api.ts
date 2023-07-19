@@ -8,6 +8,7 @@ export async function get(url: any) {
       credentials: 'include',
     });
     return await response;
+
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -20,6 +21,7 @@ export async function post(url: URL, data = {}) {
   try {
     const response = await fetch(url, {
       method: 'POST',
+
       mode: 'cors',
       cache: 'no-cache',
       credentials: 'include',

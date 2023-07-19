@@ -126,7 +126,7 @@ export async function getClusters() {
 }
 export async function getClustersSearch(params: any) {
   const queryString = Object.entries(params)
-    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`)
     .join('&');
   const url = new URL(`/api/v1/clusters?${queryString}`, API_URL);
   return await get(url);

@@ -493,7 +493,7 @@ const User: NextPageWithLayout = () => {
               },
               width: '8rem',
             }}
-            onClick={handleSubmit}
+            onClick={handleSudbmit}
           >
             Save
           </LoadingButton>

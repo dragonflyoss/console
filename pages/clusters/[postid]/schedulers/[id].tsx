@@ -2,17 +2,7 @@ import Layout from 'components/layout';
 import { NextPageWithLayout } from '../../../_app';
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
-import {
-  Alert,
-  Backdrop,
-  Box,
-  Breadcrumbs,
-  Chip,
-  Link as RouterLink,
-  Skeleton,
-  Snackbar,
-  Typography,
-} from '@mui/material';
+import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';

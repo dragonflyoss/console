@@ -51,7 +51,9 @@ const Cluster: NextPageWithLayout = () => {
   const [InformationList, setInformationList] = useState({ Name: '' });
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [schedulerSelectedRow, setSchedulerSelectedRow] = useState(null);
+  const [schedulerID, setSchedulerID] = useState('');
   const [seedPeersSelectedRow, setSeedPeersSelectedRow] = useState(null);
+  const [seedPeerID, setSeedPeerID] = useState('');
   const [schedulerList, setSchedlerList] = useState([
     {
       id: '',
@@ -164,6 +166,7 @@ const Cluster: NextPageWithLayout = () => {
   };
 
   const openHandleScheduler = async (row: any) => {
+    setSchedulerID(row.id);
     setSchedulerSelectedRow(row);
     setOpenDeletScheduler(true);
   };
@@ -171,7 +174,7 @@ const Cluster: NextPageWithLayout = () => {
   const handledeleteScheduler = async () => {
     setDeleteLoadingButton(true);
 
-    await DeleteSchedulerID(schedulerSelectedRow?.id).then((response) => {
+    await DeleteSchedulerID(schedulerID).then((response) => {
       if (response.status === 200) {
         setSuccessMessage(true);
         setOpenDeletScheduler(false);
@@ -188,6 +191,7 @@ const Cluster: NextPageWithLayout = () => {
   };
 
   const openHandleSeedPeers = async (row: any) => {
+    setSeedPeerID(row.id);
     setSeedPeersSelectedRow(row);
     setOpenDeletSeedPeers(true);
   };
@@ -195,7 +199,7 @@ const Cluster: NextPageWithLayout = () => {
   const handledeleteSeedPeers = async () => {
     setDeleteLoadingButton(true);
 
-    await DeleteSeedPeerID(seedPeersSelectedRow?.id).then((response) => {
+    await DeleteSeedPeerID(seedPeerID).then((response) => {
       if (response.status === 200) {
         setSuccessMessage(true);
         setOpenDeletSeedPeers(false);

@@ -60,7 +60,6 @@ export default function Layout({ children }: LayoutProps) {
     const handleStart = () => {
       setPageLoding(true);
     };
-
     const handleComplete = () => {
       setPageLoding(false);
     };

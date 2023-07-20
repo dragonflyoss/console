@@ -256,7 +256,7 @@ const Profile: NextPageWithLayout = () => {
       setError: setEmailError,
 
       validate: (value: string) => {
-        const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-]+)*\.([a-zA-Z]{2,4})$|^$/;
+        const reg = /^$|^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+$/;
         return reg.test(value);
       },
     },

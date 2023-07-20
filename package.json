@@ -51,6 +51,7 @@
     "@mui/styles": "^5.14.0",
     "@types/jest": "^29.2.5",
     "@types/js-cookie": "^3.0.3",
+    "@types/parse-link-header": "^2.0.1",
     "@types/react-swipeable-views": "^0.13.1",
     "@types/react-swipeable-views-utils": "^0.13.4",
     "cross-env": "^7.0.3",

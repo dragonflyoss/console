@@ -42,8 +42,8 @@ export default function Layout({ children }: LayoutProps) {
   const open = Boolean(anchorEl);
 
   useEffect(() => {
-    const userInfo = decode(Cookies.get('jwt') || 'jwt');
-    const userID = userInfo?.id;
+    const userInfo: any = decode(Cookies.get('jwt') || 'jwt');
+    const userID: string = userInfo?.id;
 
     if (userID) {
       GetusersInfo(userID).then(async (response) => {

@@ -17,7 +17,7 @@ const Security: NextPageWithLayout = () => {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [InformationList, setInformationList] = useState({ Name: '', ID: '' });
-  const [seedPeerObject, setSeedPeerObject] = useState({
+  const [seedPeerObject, setSeedPeerObject] = useState<any>({
     id: '',
     host_name: '',
     ip: '',
@@ -199,41 +199,41 @@ const Security: NextPageWithLayout = () => {
                   {item.name == 'created_at' ? (
                     <Chip
                       avatar={<MoreTimeIcon />}
-                      label={dateTimeFormat(seedPeerObject?.[item?.name])}
+                      label={dateTimeFormat(seedPeerObject?.[item.name])}
                       variant="outlined"
                       size="small"
                     />
-                  ) : item?.name == 'updated_at' ? (
+                  ) : item.name == 'updated_at' ? (
                     <Chip
                       avatar={<HistoryIcon />}
-                      label={dateTimeFormat(seedPeerObject?.[item?.name])}
+                      label={dateTimeFormat(seedPeerObject[item.name])}
                       variant="outlined"
                       size="small"
                     />
-                  ) : item?.name == 'state' ? (
+                  ) : item.name == 'state' ? (
                     <Chip
-                      label={`${seedPeerObject?.[item?.name]?.charAt(0).toUpperCase()}${seedPeerObject?.[
-                        item?.name
+                      label={`${seedPeerObject?.[item.name]?.charAt(0).toUpperCase()}${seedPeerObject?.[
+                        item.name
                       ]?.slice(1)}`}
                       size="small"
                       variant="outlined"
                       sx={{
                         borderRadius: '0%',
-                        backgroundColor: seedPeerObject?.[item?.name] === 'active' ? '#2E8F79' : '#1C293A',
-                        color: seedPeerObject?.[item?.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
-                        borderColor: seedPeerObject?.[item?.name] === 'active' ? '#2E8F79' : '#1C293A',
+                        backgroundColor: seedPeerObject?.[item.name] === 'active' ? '#2E8F79' : '#1C293A',
+                        color: seedPeerObject?.[item.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
+                        borderColor: seedPeerObject?.[item.name] === 'active' ? '#2E8F79' : '#1C293A',
                         fontWeight: 'bold',
                       }}
                     />
-                  ) : item?.name == 'type' ? (
+                  ) : item.name == 'type' ? (
                     <Typography component="div" variant="subtitle1" fontFamily="MabryPro-Bold">
-                      {`${seedPeerObject?.[item?.name]?.charAt(0).toUpperCase()}${seedPeerObject?.[item?.name]?.slice(
+                      {`${seedPeerObject?.[item.name]?.charAt(0).toUpperCase()}${seedPeerObject?.[item.name]?.slice(
                         1,
                       )}`}
                     </Typography>
                   ) : (
                     <Typography component="div" variant="subtitle1" fontFamily="MabryPro-Bold">
-                      {seedPeerObject?.[item?.name] || '-'}
+                      {seedPeerObject?.[item.name] || '-'}
                     </Typography>
                   )}
                 </>

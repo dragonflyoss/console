@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 /** @type {import('tailwindcss').Config} */
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
 
 module.exports = {
   async redirects() {
@@ -23,7 +20,3 @@ module.exports = {
     ];
   },
 };
-
-const nextConfig = {};
-
-module.exports = nextConfig;

@@ -114,28 +114,29 @@ const Security: NextPageWithLayout = () => {
     setIsLoading(false);
   }, [page, pageSize]);
 
-  const defaultCluster =
+  const defaultCluster: any =
     Array.isArray(numberOfClusters) &&
-    numberOfClusters?.filter((item) => {
+    numberOfClusters?.filter((item: any) => {
       return item?.IsDefault == true;
     });
 
-  const scheduleActive =
+  const scheduleActive: any =
     Array.isArray(scheduleList) &&
-    scheduleList?.filter((item) => {
+    scheduleList?.filter((item: any) => {
       return item?.state == 'active';
     });
 
-  const seedPeerActive =
+  const seedPeerActive: any =
     Array.isArray(seedPeerList) &&
-    seedPeerList?.filter((item) => {
+    seedPeerList?.filter((item: any) => {
       return item?.state == 'active';
     });
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      document.getElementById('submit-button').click();
+      const submitButton = document.getElementById('submit-button');
+      submitButton?.click();
     }
   };
 

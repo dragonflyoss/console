@@ -53,7 +53,7 @@ const Profile: NextPageWithLayout = () => {
   const [showMyProfile, setShowMyProfile] = useState(true);
   const [showPersonalInformation, setShowPersonalInformation] = useState(true);
   const [userID, setUserID] = useState('');
-  const [userObject, setUserObject] = useState({
+  const [userObject, setUserObject] = useState<any>({
     bio: '',
     avatar: '',
     id: '',
@@ -72,7 +72,7 @@ const Profile: NextPageWithLayout = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    const userInfo = decode(Cookies.get('jwt'), 'jwt') || {};
+    const userInfo: any = decode(Cookies.get('jwt') || 'jwt');
     setUserID(userInfo?.id);
 
     if (userInfo?.id) {

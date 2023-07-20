@@ -2,17 +2,7 @@ import Layout from 'components/layout';
 import { NextPageWithLayout } from '../../../_app';
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
-import {
-  Alert,
-  Backdrop,
-  Box,
-  Breadcrumbs,
-  Chip,
-  Link as RouterLink,
-  Skeleton,
-  Snackbar,
-  Typography,
-} from '@mui/material';
+import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -26,7 +16,7 @@ const Security: NextPageWithLayout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [scheduleObject, setScheduleObject] = useState({
+  const [scheduleObject, setScheduleObject] = useState<any>({
     id: '',
     host_name: '',
     ip: '',
@@ -192,7 +182,7 @@ const Security: NextPageWithLayout = () => {
                   {item.name == 'created_at' ? (
                     <Chip
                       avatar={<MoreTimeIcon />}
-                      label={dateTimeFormat(scheduleObject?.[item?.name])}
+                      label={dateTimeFormat(scheduleObject?.[item?.name] || '')}
                       variant="outlined"
                       size="small"
                     />

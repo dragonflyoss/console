@@ -116,15 +116,18 @@ export async function signUp(data: signupData) {
   const url = new URL('/api/v1/users/signup', API_URL);
   return await post(url, data);
 }
+
 export async function signOut() {
   const url = new URL('/api/v1/users/signout', API_URL);
   return await post(url);
 }
-export async function getClusters() {
+
+export async function listCluster() {
   const url = new URL(`/api/v1/clusters`, API_URL);
   return await get(url);
 }
-export async function getClustersSearch(params: any) {
+
+export async function getClusterSearch(params: any) {
   const queryString = Object.entries(params)
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`)
     .join('&');
@@ -136,93 +139,103 @@ export async function createCluster(data: any) {
   const url = new URL('/api/v1/clusters', API_URL);
   return await post(url, data);
 }
+
 export async function updateCluster(id: any, data: any) {
   const url = new URL(`/api/v1/clusters/${id}`, API_URL);
   return await patch(url, data);
 }
-export async function DeleteCluster(id: any) {
+
+export async function deleteCluster(id: any) {
   const url = new URL(`/api/v1/clusters/${id}`, API_URL);
   return await Delete(url);
 }
 
-export async function getInformation(id: any) {
+export async function getClusterInformation(id: any) {
   const url = new URL(`/api/v1/clusters/${id}`, API_URL);
   return await get(url);
 }
 
-export async function GetScheduler() {
+export async function listScheduler() {
   const url = new URL(`/api/v1/schedulers`, API_URL);
   return await get(url);
 }
-export async function GetSchedulerID(id: any) {
+
+export async function getScheduler(id: any) {
   const url = new URL(`/api/v1/schedulers?scheduler_cluster_id=${id}`, API_URL);
   return await get(url);
 }
-export async function DeleteSchedulerID(id: any) {
+
+export async function deleteSchedulerID(id: any) {
   const url = new URL(`api/v1/schedulers/${id}`, API_URL);
   return await Delete(url);
 }
-export async function GetSeedPeer() {
-  const url = new URL(`/api/v1/seed-peers`, API_URL);
-  return await get(url);
-}
 
-export async function GetSeedPeerID(id: any) {
-  const url = new URL(`/api/v1/seed-peers?seed_peer_cluster_id=${id}`, API_URL);
-  return await get(url);
-}
-export async function DeleteSeedPeerID(id: any) {
-  const url = new URL(`api/v1/seed-peers/${id}`, API_URL);
-  return await Delete(url);
-}
-export async function Getusers() {
-  const url = new URL(`/api/v1/users`, API_URL);
-  return await get(url);
-}
-export async function GetusersInfo(id: any) {
-  const url = new URL(`/api/v1/users/${id}`, API_URL);
-  return await get(url);
-}
-
-export async function GetuserRoles(id: any) {
-  const url = new URL(`/api/v1/users/${id}/roles`, API_URL);
-  return await get(url);
-}
-
-export async function ChangeUser(id: any, data: any) {
-  const url = new URL(`/api/v1/users/${id}`, API_URL);
-  return await patch(url, data);
-}
-
-export async function ResetPassword(id: any, data: any) {
-  const url = new URL(`/api/v1/users/${id}/reset_password`, API_URL);
-  return await post(url, data);
-}
-
-export async function GetSchedulers(id: any) {
+export async function getSchedulerID(id: any) {
   const url = new URL(`/api/v1/schedulers/${id}`, API_URL);
   return await get(url);
 }
 
-export async function GetSeedPeers(id: any) {
+export async function getSeedPeerID(id: any) {
   const url = new URL(`/api/v1/seed-peers/${id}`, API_URL);
   return await get(url);
 }
 
-export async function DeleteGuest(id: any) {
+export async function listSeedPeer() {
+  const url = new URL(`/api/v1/seed-peers`, API_URL);
+  return await get(url);
+}
+
+export async function getSeedPeer(id: any) {
+  const url = new URL(`/api/v1/seed-peers?seed_peer_cluster_id=${id}`, API_URL);
+  return await get(url);
+}
+
+export async function deleteSeedPeerID(id: any) {
+  const url = new URL(`api/v1/seed-peers/${id}`, API_URL);
+  return await Delete(url);
+}
+
+export async function listUsers() {
+  const url = new URL(`/api/v1/users`, API_URL);
+  return await get(url);
+}
+
+export async function getUsersInfo(id: any) {
+  const url = new URL(`/api/v1/users/${id}`, API_URL);
+  return await get(url);
+}
+
+export async function getuserRoles(id: any) {
+  const url = new URL(`/api/v1/users/${id}/roles`, API_URL);
+  return await get(url);
+}
+
+export async function updateUserInfo(id: any, data: any) {
+  const url = new URL(`/api/v1/users/${id}`, API_URL);
+  return await patch(url, data);
+}
+
+export async function updatePassword(id: any, data: any) {
+  const url = new URL(`/api/v1/users/${id}/reset_password`, API_URL);
+  return await post(url, data);
+}
+
+export async function deleteGuest(id: any) {
   const url = new URL(`api/v1/users/${id}/roles/guest`, API_URL);
   return await Delete(url);
 }
-export async function DeleteRoot(id: any) {
+
+export async function deleteRoot(id: any) {
   const url = new URL(`api/v1/users/${id}/roles/root`, API_URL);
   return await Delete(url);
 }
-export async function PutRoot(id: any) {
+
+export async function putRoot(id: any) {
   const url = new URL(`api/v1/users/${id}/roles/root`, API_URL);
   return await put(url);
 }
 
-export async function PutGuest(id: any) {
+export async function putGuest(id: any) {
   const url = new URL(`api/v1/users/${id}/roles/guest`, API_URL);
   return await put(url);
 }

@@ -1,16 +1,30 @@
-.updateClusterIcon {
-    width: 1.4rem;
-    height: 1.4rem;
-    margin-right: 0.4rem;
+.container {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+
+    .updateClusterIcon {
+        width: 1.4rem;
+        height: 1.4rem;
+        margin-right: 0.4rem;
+    }
+
+    .deleteClusterIcon {
+        width: 6rem;
+        height: 6rem;
+    }
 }
 
-.deleteClusterIcon {
-    width: 6rem;
-    height: 6rem;
-}
+.ipContainer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 
-.clusterIPIcon {
-    width: 1.4rem;
-    height: 1.4rem;
-    margin-right: 0.4rem;
+    .ipIcon {
+        width: 1.4rem;
+        height: 1.4rem;
+        margin-right: 0.4rem;
+    }
+
 }

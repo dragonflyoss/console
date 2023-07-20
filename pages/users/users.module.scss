@@ -26,21 +26,22 @@
         margin-bottom: 0.4rem;
         margin-top: 0.4rem;
 
-        .EmailContent {
+        .emailContent {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-    }
 
-    .detailContentLabelContainer {
-        display: flex;
-        align-items: center;
-        width: 50%;
+        .detailContentLabelContainer {
+            display: flex;
+            align-items: center;
+            width: 50%;
 
-        .detailIcon {
-            width: 1.6rem;
-            height: 1.6rem;
+            .detailIcon {
+                width: 1.6rem;
+                height: 1.6rem;
+            }
         }
     }
+
 }

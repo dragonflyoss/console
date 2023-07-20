@@ -28,12 +28,12 @@ import {
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import {
-  DeleteCluster,
-  DeleteSeedPeerID,
-  GetSchedulerID,
-  DeleteSchedulerID,
-  GetSeedPeerID,
-  getInformation,
+  getScheduler,
+  getSeedPeer,
+  getClusterInformation,
+  deleteCluster,
+  deleteSchedulerID,
+  deleteSeedPeerID,
 } from 'lib/api';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -92,7 +92,7 @@ const Cluster: NextPageWithLayout = () => {
   });
 
   const getClustersList = (id: any) => {
-    GetSchedulerID(id).then(async (response) => {
+    getScheduler(id).then(async (response) => {
       if (response.status == 200) {
         setSchedlerList(await response.json());
       } else {
@@ -103,7 +103,7 @@ const Cluster: NextPageWithLayout = () => {
   };
 
   const GetSeedPeerList = (id: any) => {
-    GetSeedPeerID(id).then(async (response) => {
+    getSeedPeer(id).then(async (response) => {
       if (response.status == 200) {
         setSeedPeerList(await response.json());
       } else {
@@ -116,7 +116,7 @@ const Cluster: NextPageWithLayout = () => {
     setIsLoading(true);
 
     if (query.postid) {
-      getInformation(query.postid).then(async (response) => {
+      getClusterInformation(query.postid).then(async (response) => {
         if (response.status == 200) {
           setInformationList(await response.json());
         } else {
@@ -153,7 +153,7 @@ const Cluster: NextPageWithLayout = () => {
   const handledelete = () => {
     setDeleteLoadingButton(true);
 
-    DeleteCluster(query.postid).then((response) => {
+    deleteCluster(query.postid).then((response) => {
       if (response.status === 200) {
         setDeleteLoadingButton(false);
         setSuccessMessage(true);
@@ -175,7 +175,7 @@ const Cluster: NextPageWithLayout = () => {
   const handledeleteScheduler = async () => {
     setDeleteLoadingButton(true);
 
-    await DeleteSchedulerID(schedulerSelectedID).then((response) => {
+    await deleteSchedulerID(schedulerSelectedID).then((response) => {
       if (response.status === 200) {
         setSuccessMessage(true);
         setOpenDeletScheduler(false);
@@ -200,7 +200,7 @@ const Cluster: NextPageWithLayout = () => {
   const handledeleteSeedPeers = async () => {
     setDeleteLoadingButton(true);
 
-    await DeleteSeedPeerID(seedPeersSelectedID).then((response) => {
+    await deleteSeedPeerID(seedPeersSelectedID).then((response) => {
       if (response.status === 200) {
         setSuccessMessage(true);
         setOpenDeletSeedPeers(false);
@@ -246,7 +246,7 @@ const Cluster: NextPageWithLayout = () => {
           {InformationList?.Name}
         </Typography>
       </Breadcrumbs>
-      <Box sx={{ mb: '1rem', mt: '1rem', display: 'flex', justifyContent: 'space-between' }}>
+      <Box className={styles.container}>
         <Typography variant="h5" fontFamily="MabryPro-Bold">
           Cluster
         </Typography>
@@ -260,7 +260,7 @@ const Cluster: NextPageWithLayout = () => {
               variant="contained"
               sx={{ mr: '2rem', '&.MuiButton-root': { backgroundColor: '#1C293A', borderRadius: 0 } }}
             >
-              <Box component="img" className={styles.updateClusterIcon} src="/favicon/userIcon/Edit.svg" />
+              <Box component="img" className={styles.updateClusterIcon} src="/favicon/user/edit.svg" />
               Update Cluster
             </Button>
             <Button
@@ -284,7 +284,7 @@ const Cluster: NextPageWithLayout = () => {
         >
           <DialogContent>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Box component="img" className={styles.deleteClusterIcon} src="/favicon/clusterIcon/clusterDelete.svg" />
+              <Box component="img" className={styles.deleteClusterIcon} src="/favicon/cluster/delete.svg" />
               <Typography fontFamily="MabryPro-Bold" pt="1rem">
                 Are you sure you want to delet this Cluster?
               </Typography>
@@ -436,12 +436,8 @@ const Cluster: NextPageWithLayout = () => {
                           {isLoading ? (
                             <Skeleton />
                           ) : (
-                            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
-                              <Box
-                                component="img"
-                                className={styles.clusterIPIcon}
-                                src="/favicon/clusterIcon/clusterIP.svg"
-                              />
+                            <Box className={styles.ipContainer}>
+                              <Box component="img" className={styles.ipIcon} src="/favicon/cluster/ip.svg" />
                               {item?.ip}
                             </Box>
                           )}
@@ -521,7 +517,7 @@ const Cluster: NextPageWithLayout = () => {
         >
           <DialogContent>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Box component="img" className={styles.deleteClusterIcon} src="/favicon/clusterIcon/clusterDelete.svg" />
+              <Box component="img" className={styles.deleteClusterIcon} src="/favicon/cluster/delete.svg" />
               <Typography fontFamily="MabryPro-Bold" pt="1rem">
                 Are you sure you want to delet this Scheduler Cluster?
               </Typography>
@@ -674,12 +670,8 @@ const Cluster: NextPageWithLayout = () => {
                         {isLoading ? (
                           <Skeleton />
                         ) : (
-                          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
-                            <Box
-                              component="img"
-                              className={styles.clusterIPIcon}
-                              src="/favicon/clusterIcon/clusterIP.svg"
-                            />
+                          <Box className={styles.ipContainer}>
+                            <Box component="img" className={styles.ipIcon} src="/favicon/cluster/ip.svg" />
                             {item?.ip}
                           </Box>
                         )}
@@ -738,7 +730,7 @@ const Cluster: NextPageWithLayout = () => {
         >
           <DialogContent>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Box component="img" className={styles.deleteClusterIcon} src="/favicon/clusterIcon/clusterDelete.svg" />
+              <Box component="img" className={styles.deleteClusterIcon} src="/favicon/cluster/delete.svg" />
               <Typography fontFamily="MabryPro-Bold" pt="1rem">
                 Are you sure you want to delet this Seed Peer Cluster?
               </Typography>

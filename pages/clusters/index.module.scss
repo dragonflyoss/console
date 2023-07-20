@@ -1,26 +1,19 @@
-.main {
-  height: 100%;
-  width: 100%;
-  position: relative;
-  overflow: auto;
-}
-
 .clusterTitle {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.clusterHeaderIconWarp {
+.clusterIconContainer {
   display: flex;
   position: relative;
 
-  .clusterIconMadoka {
+  .clusterSmallCircleIcon {
     width: 0.4rem;
     height: 0.4rem;
   }
 
-  .clusterIconGreatCircle {
+  .clusterBigCircleIcon {
     width: 2rem;
     height: 2rem;
   }
@@ -32,8 +25,6 @@
     left: 0.8rem;
     top: 0.3rem;
   }
-
-
 }
 
 .clusterHeaderContainer {
@@ -50,7 +41,7 @@
     }
   }
 
-  .seedPseerContainer {
+  .seedPeerContainer {
     width: 33%;
 
     .seedPseerIconTitle {
@@ -65,13 +56,7 @@
     align-items: flex-end;
     margin-top: 1.6rem;
 
-    .clusterTopWrap {
-      display: flex;
-      align-items: center;
-
-    }
-
-    .clusterBottomWrap {
+    .clusterBottomContainer {
       display: flex;
       align-items: center;
       padding-top: 0.4rem;
@@ -81,7 +66,6 @@
         width: 1.4rem;
         height: 1.4rem;
       }
-
 
       .clusterBottomContentContainer {
         display: flex;
@@ -102,8 +86,6 @@
   }
 }
 
-
-
 .searchContainer {
   display: flex;
   justify-content: flex-start;
@@ -113,48 +95,27 @@
   width: 23rem;
 }
 
-.clusterLoading {
-  display: flex;
-  justify-content: center;
-  margin: 4rem;
-}
-
-
-
-
-
-
-
-.paperContainer {
+.clusterListContainer {
   display: flex;
   flex-wrap: wrap;
 
-  .paperContent {
+  .clusterListContent {
     padding: 1.6rem;
 
-    .IDText {
+    .idText {
       color: #B1B1B1;
     }
 
-    .IDCText {
-      width: 50%;
-      padding-right: 0.2rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .LoctionContainer {
+    .locationContainer {
       width: 50%;
       padding-right: 0.2rem;
 
-      .LoctionText {
+      .locationText {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
     }
-
 
     .creatTimeContainer {
       display: flex;
@@ -163,7 +124,6 @@
       margin-top: 1rem;
 
       .buttonContent {
-
         padding: 0;
 
         .buttonIcon {
@@ -174,5 +134,4 @@
       }
     }
   }
-
 }

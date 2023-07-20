@@ -36,7 +36,7 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import React from 'react';
-import { DeleteGuest, DeleteRoot, GetuserRoles, Getusers, GetusersInfo, PutGuest, PutRoot } from 'lib/api';
+import { deleteGuest, deleteRoot, getuserRoles, listUsers, getUsersInfo, putGuest, putRoot } from 'lib/api';
 import { makeStyles } from '@mui/styles';
 import { dateTimeFormat } from 'components/dataTime';
 import { LoadingButton } from '@mui/lab';
@@ -76,13 +76,13 @@ const User: NextPageWithLayout = () => {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [DetailLoading, setDetailLoading] = useState(true);
-  const [detailopen, setDetailOpen] = useState(false);
+  const [detailOpen, setDetailOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadingButton, setLoadingButton] = useState(false);
-  const [usersList, setUsersList] = useState([{ avatar: '', id: '', email: '', name: '', state: '', location: '' }]);
-  const [userList, setUserList] = useState({
+  const [userList, setUserList] = useState([{ avatar: '', id: '', email: '', name: '', state: '', location: '' }]);
+  const [userObject, setUserObject] = useState({
     id: '',
     email: '',
     name: '',
@@ -97,9 +97,9 @@ const User: NextPageWithLayout = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    Getusers().then(async (response) => {
+    listUsers().then(async (response) => {
       if (response.status === 200) {
-        setUsersList(await response.json());
+        setUserList(await response.json());
       } else {
         setErrorMessage(true);
         setErrorMessageText(response.statusText);
@@ -113,9 +113,9 @@ const User: NextPageWithLayout = () => {
     setDetailLoading(true);
     setSelectedRow(row);
 
-    await GetusersInfo(row.id).then(async (response) => {
+    await getUsersInfo(row.id).then(async (response) => {
       if (response.status === 200) {
-        setUserList(await response.json());
+        setUserObject(await response.json());
       } else {
         setErrorMessage(true);
         setErrorMessageText(response.statusText);
@@ -137,7 +137,7 @@ const User: NextPageWithLayout = () => {
     setSelectedRow(row);
     setSelected(row.id);
 
-    await GetuserRoles(row.id).then(async (response) => {
+    await getuserRoles(row.id).then(async (response) => {
       if (response.status === 200) {
         setRole(await response.json());
       } else {
@@ -154,15 +154,15 @@ const User: NextPageWithLayout = () => {
     setUserOpen(false);
     setSelectedRow(null);
   };
-
+  1;
   const handleSubmit = async () => {
     setLoadingButton(true);
 
     if (role == 'root') {
-      const deleteGuest = DeleteGuest(selected);
-      const putRoot = PutRoot(selected);
+      const deleteGuestMethod = deleteGuest(selected);
+      const putRootMethod = putRoot(selected);
 
-      Promise.all([deleteGuest, putRoot]).then((res) => {
+      Promise.all([deleteGuestMethod, putRootMethod]).then((res) => {
         const response = res.filter((item) => {
           return item.status == 200;
         });
@@ -179,10 +179,10 @@ const User: NextPageWithLayout = () => {
         }
       });
     } else if (role == 'guest') {
-      const deleteRoot = await DeleteRoot(selected);
-      const putGuest = await PutGuest(selected);
+      const deleteRootMethod = await deleteRoot(selected);
+      const putGuestMethod = await putGuest(selected);
 
-      Promise.all([deleteRoot, putGuest]).then((res) => {
+      Promise.all([deleteRootMethod, putGuestMethod]).then((res) => {
         const response = res.filter((item) => {
           return item.status == 200;
         });
@@ -270,8 +270,8 @@ const User: NextPageWithLayout = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.isArray(usersList) &&
-              usersList.map((item) => (
+            {Array.isArray(userList) &&
+              userList.map((item) => (
                 <TableRow
                   sx={{ '&.MuiTableRow-root': { ':hover': { background: selectedRow === item ? '#1C293A' : '' } } }}
                   key={item?.name}
@@ -403,7 +403,7 @@ const User: NextPageWithLayout = () => {
       >
         <DialogContent>
           <Box className={styles.changeRoleContainer}>
-            <Box component="img" className={styles.roleIcon} src="/favicon/userIcon/role.svg" />
+            <Box component="img" className={styles.roleIcon} src="/favicon/user/role.svg" />
             <FormControl>
               <FormLabel color="success" id="demo-controlled-radio-buttons-group"></FormLabel>
               <RadioGroup
@@ -499,7 +499,7 @@ const User: NextPageWithLayout = () => {
           </LoadingButton>
         </DialogActions>
       </Dialog>
-      <Drawer anchor="right" open={detailopen} onClose={closure} className={styles.detailContainer}>
+      <Drawer anchor="right" open={detailOpen} onClose={closure} className={styles.detailContainer}>
         <Box role="presentation" sx={{ width: 350 }}>
           <List>
             <ListSubheader component="div" color="inherit" className={styles.detailTitle}>
@@ -513,65 +513,65 @@ const User: NextPageWithLayout = () => {
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/favicon/userIcon/ID.svg" />
+                <Box component="img" className={styles.detailIcon} src="/favicon/user/ID.svg" />
                 <Typography variant="body2" ml="0.8rem" fontFamily="MabryPro-Bold">
                   ID
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2">
-                {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userList?.id}
+                {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userObject?.id}
               </Typography>
             </ListItem>
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/favicon/userIcon/name.svg" />
+                <Box component="img" className={styles.detailIcon} src="/favicon/user/name.svg" />
                 <Typography variant="body2" ml="0.8rem" fontFamily="MabryPro-Bold">
                   Name
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2">
-                {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userList?.name}
+                {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userObject?.name}
               </Typography>
             </ListItem>
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/favicon/userIcon/email.svg" />
+                <Box component="img" className={styles.detailIcon} src="/favicon/user/email.svg" />
                 <Typography variant="body2" ml="0.8rem" fontFamily="MabryPro-Bold">
                   Email
                 </Typography>
               </ListItemAvatar>
-              <Tooltip title={userList?.email || '-'} placement="top">
-                <Typography variant="body2" className={styles.EmailContent}>
-                  {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userList?.email || '-'}
+              <Tooltip title={userObject?.email || '-'} placement="top">
+                <Typography variant="body2" className={styles.emailContent}>
+                  {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userObject?.email || '-'}
                 </Typography>
               </Tooltip>
             </ListItem>
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/favicon/userIcon/phone.svg" />
+                <Box component="img" className={styles.detailIcon} src="/favicon/user/phone.svg" />
                 <Typography variant="body2" ml="0.8rem" fontFamily="MabryPro-Bold">
                   Phone
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2">
-                {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userList.phone || '-'}
+                {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userObject.phone || '-'}
               </Typography>
             </ListItem>
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/favicon/userIcon/location.svg" />
+                <Box component="img" className={styles.detailIcon} src="/favicon/user/location.svg" />
                 <Typography variant="body2" ml="0.8rem" fontFamily="MabryPro-Bold">
                   Location
                 </Typography>
               </ListItemAvatar>
-              <Tooltip title={userList.location || '-'} placement="top">
-                <Box className={styles.LocationTextContainer}>
+              <Tooltip title={userObject.location || '-'} placement="top">
+                <Box className={styles.emailContent}>
                   <Typography variant="body2">
-                    {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userList.location || '-'}
+                    {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userObject.location || '-'}
                   </Typography>
                 </Box>
               </Tooltip>
@@ -579,7 +579,7 @@ const User: NextPageWithLayout = () => {
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/favicon/userIcon/created_at.svg" />
+                <Box component="img" className={styles.detailIcon} src="/favicon/user/created_at.svg" />
                 <Typography variant="body2" ml="0.8rem" fontFamily="MabryPro-Bold">
                   Created At
                 </Typography>
@@ -588,8 +588,8 @@ const User: NextPageWithLayout = () => {
                 <Skeleton sx={{ width: '8rem' }} />
               ) : (
                 <Chip
-                  avatar={<Box component="img" src="/favicon/userIcon/created_at.svg" />}
-                  label={dateTimeFormat(userList.created_at || '-')}
+                  avatar={<Box component="img" src="/favicon/user/created_at.svg" />}
+                  label={dateTimeFormat(userObject.created_at || '-')}
                   variant="outlined"
                   size="small"
                 />
@@ -598,7 +598,7 @@ const User: NextPageWithLayout = () => {
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/favicon/userIcon/updated_at.svg" />
+                <Box component="img" className={styles.detailIcon} src="/favicon/user/updated_at.svg" />
                 <Typography variant="body2" ml="0.8rem" fontFamily="MabryPro-Bold">
                   Updated At
                 </Typography>
@@ -607,8 +607,8 @@ const User: NextPageWithLayout = () => {
                 <Skeleton sx={{ width: '8rem' }} />
               ) : (
                 <Chip
-                  avatar={<Box component="img" src="/favicon/userIcon/updated_at.svg" />}
-                  label={dateTimeFormat(userList.updated_at || '-')}
+                  avatar={<Box component="img" src="/favicon/user/updated_at.svg" />}
+                  label={dateTimeFormat(userObject.updated_at || '-')}
                   variant="outlined"
                   size="small"
                 />

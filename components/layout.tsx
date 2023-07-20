@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 import { Logout, PersonAdd } from '@mui/icons-material';
 import { decode } from 'jsonwebtoken';
 import Cookies from 'js-cookie';
-import { GetuserRoles, GetusersInfo, signOut } from 'lib/api';
+import { getuserRoles, getUsersInfo, signOut } from 'lib/api';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import Link from 'next/link';
 
@@ -46,10 +46,10 @@ export default function Layout({ children }: LayoutProps) {
     const userID: string = userInfo?.id;
 
     if (userID) {
-      GetusersInfo(userID).then(async (response) => {
+      getUsersInfo(userID).then(async (response) => {
         setUserObject(await response.json());
       });
-      GetuserRoles(userID).then(async (response) => {
+      getuserRoles(userID).then(async (response) => {
         const res = await response.json();
         setRole(res[0] || 'guest');
       });
@@ -98,15 +98,13 @@ export default function Layout({ children }: LayoutProps) {
       label: 'clusters',
       href: '/clusters',
       text: 'Cluster',
-      icon: (
-        <Box component="img" sx={{ width: '1.6rem', height: '1.6rem' }} src="/favicon/clusterIcon/clusterIcon.svg" />
-      ),
+      icon: <Box component="img" sx={{ width: '1.6rem', height: '1.6rem' }} src="/favicon/cluster/cluster.svg" />,
     },
     {
       label: 'users',
       href: '/users',
       text: 'User',
-      icon: <Box component="img" sx={{ width: '1.6rem', height: '1.6rem' }} src="/favicon/clusterIcon/userIcon.svg" />,
+      icon: <Box component="img" sx={{ width: '1.6rem', height: '1.6rem' }} src="/favicon/cluster/user.svg" />,
     },
   ];
   const menuList =
@@ -148,7 +146,7 @@ export default function Layout({ children }: LayoutProps) {
         open={pageLoding}
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: 'rgba(0,0,0,0.3)' }}
       >
-        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/favicon/clusterIcon/pageLoading.svg" />
+        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/favicon/cluster/pageLoading.svg" />
       </Backdrop>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <CssBaseline />
@@ -174,7 +172,7 @@ export default function Layout({ children }: LayoutProps) {
                         height: '1.8rem',
                         mr: '0.8rem',
                       }}
-                      src="/images/login/logoIcon.svg"
+                      src="/favicon/cluster/logo.svg"
                     />
                   </div>
                 </picture>

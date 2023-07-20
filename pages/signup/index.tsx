@@ -236,7 +236,7 @@ export default function SignUp() {
         open={pageLoding}
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: 'rgba(0,0,0,0.3)' }}
       >
-        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/favicon/clusterIcon/pageLoading.svg" />
+        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/favicon/cluster/pageLoading.svg" />
       </Backdrop>
       <Grid item xs={6}>
         <Rotation />

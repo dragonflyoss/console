@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import { useState, useEffect } from 'react';
-import { ChangeUser, GetusersInfo, ResetPassword, signOut } from 'lib/api';
+import { updateUserInfo, getUsersInfo, updatePassword, signOut } from 'lib/api';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -76,7 +76,7 @@ const Profile: NextPageWithLayout = () => {
     setUserID(userInfo?.id);
 
     if (userInfo?.id) {
-      GetusersInfo(userInfo?.id).then(async (response) => {
+      getUsersInfo(userInfo?.id).then(async (response) => {
         if (response.status === 200) {
           const res = await response.json();
           setUserObject(res);
@@ -98,32 +98,32 @@ const Profile: NextPageWithLayout = () => {
     {
       name: 'id',
       label: 'ID',
-      icon: <Box component="img" className={styles.userIcon} src="/favicon/userIcon/ID.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/favicon/user/id.svg" />,
     },
     {
       name: 'name',
       label: 'Name',
-      icon: <Box component="img" className={styles.userIcon} src="/favicon/userIcon/name.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/favicon/user/name.svg" />,
     },
     {
       name: 'email',
       label: 'Email',
-      icon: <Box component="img" className={styles.userIcon} src="/favicon/userIcon/email.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/favicon/user/email.svg" />,
     },
     {
       name: 'location',
       label: 'Location',
-      icon: <Box component="img" className={styles.userIcon} src="/favicon/userIcon/location.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/favicon/user/location.svg" />,
     },
     {
       name: 'phone',
       label: 'Phone',
-      icon: <Box component="img" className={styles.userIcon} src="/favicon/userIcon/phone.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/favicon/user/phone.svg" />,
     },
     {
       name: 'created_at',
       label: 'created_at',
-      icon: <Box component="img" className={styles.userIcon} src="/favicon/userIcon/created_at.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/favicon/user/created_at.svg" />,
     },
   ];
 
@@ -139,10 +139,12 @@ const Profile: NextPageWithLayout = () => {
         helperText: bioError ? 'The length is 0-1000' : '',
         error: bioError,
         value: bio,
+
         onChange: (e: any) => {
           setUserObject({ ...userObject, bio: e.target.value });
           changeValidate(e.target.value, formList[0]);
         },
+
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
@@ -154,11 +156,11 @@ const Profile: NextPageWithLayout = () => {
 
       syncError: false,
       setError: setBioError,
+
       validate: (value: string) => {
         const reg = /^[\s\S]{0,1000}$/;
         return reg.test(value);
       },
-      title: 'Bio',
     },
 
     {
@@ -169,12 +171,14 @@ const Profile: NextPageWithLayout = () => {
         autoComplete: 'family-name',
         value: phone,
         placeholder: 'Enter your Phone',
-        helperText: phoneError ? 'Must be a number and range from 0-1000' : '',
+        helperText: phoneError ? 'Please enter the correct phone number' : '',
         error: phoneError,
+
         onChange: (e: any) => {
           setUserObject({ ...userObject, phone: e.target.value });
           changeValidate(e.target.value, formList[1]);
         },
+
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
@@ -187,10 +191,9 @@ const Profile: NextPageWithLayout = () => {
       setError: setPhoneError,
 
       validate: (value: string) => {
-        const reg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;
+        const reg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$|^$/;
         return reg.test(value);
       },
-      title: 'Phone',
     },
 
     {
@@ -201,12 +204,14 @@ const Profile: NextPageWithLayout = () => {
         autoComplete: 'family-name',
         value: location,
         placeholder: 'Enter your location',
-        helperText: locationError ? 'Must be a number and range from 0-1000' : '',
+        helperText: locationError ? 'Please enter your address' : '',
         error: locationError,
+
         onChange: (e: any) => {
           setUserObject({ ...userObject, location: e.target.value });
           changeValidate(e.target.value, formList[2]);
         },
+
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
@@ -222,7 +227,6 @@ const Profile: NextPageWithLayout = () => {
         const reg = /^[A-Za-z0-9]{0,1000}$/;
         return reg.test(value);
       },
-      title: 'Location',
     },
     {
       formProps: {
@@ -232,12 +236,14 @@ const Profile: NextPageWithLayout = () => {
         autoComplete: 'family-name',
         value: email,
         placeholder: 'Enter your Email',
-        helperText: emailError ? 'Must be a number and range from 0-1000' : '',
+        helperText: emailError ? 'Please enter the correct email format' : '',
         error: emailError,
+
         onChange: (e: any) => {
           setUserObject({ ...userObject, email: e.target.value });
           changeValidate(e.target.value, formList[3]);
         },
+
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
@@ -250,10 +256,9 @@ const Profile: NextPageWithLayout = () => {
       setError: setEmailError,
 
       validate: (value: string) => {
-        const reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+        const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-]+)*\.([a-zA-Z]{2,4})$|^$/;
         return reg.test(value);
       },
-      title: 'Email',
     },
   ];
 
@@ -415,6 +420,16 @@ const Profile: NextPageWithLayout = () => {
     event.preventDefault();
     setPersonalLoadingButton(true);
 
+    const data = new FormData(event.currentTarget);
+
+    formList.forEach((item) => {
+      const value = data.get(item.formProps.name);
+      item.setError(!item.validate(value as string));
+      item.syncError = !item.validate(value as string);
+    });
+
+    const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
+
     const formData = {
       bio: bio,
       email: email,
@@ -422,23 +437,28 @@ const Profile: NextPageWithLayout = () => {
       phone: phone,
     };
 
-    ChangeUser(userID, { ...formData }).then((response) => {
-      if (response.status === 200) {
-        setPersonalLoadingButton(false);
-        setShowPersonalInformation(true);
-        setSuccessMessage(true);
-        setBio(bio);
-      } else {
-        setPersonalLoadingButton(false);
-        setErrorMessage(true);
-        setErrorMessageText(response.statusText);
-      }
-    });
+    if (canSubmit) {
+      updateUserInfo(userID, { ...formData }).then((response) => {
+        if (response.status === 200) {
+          setPersonalLoadingButton(false);
+          setShowPersonalInformation(true);
+          setSuccessMessage(true);
+          setBio(bio);
+        } else {
+          setPersonalLoadingButton(false);
+          setErrorMessage(true);
+          setErrorMessageText(response.statusText);
+        }
+      });
+    } else {
+      setPersonalLoadingButton(false);
+    }
   };
 
   const changePassword = async (event: any) => {
     setPasswordLoadingButton(true);
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
 
     PasswordList.forEach((item) => {
@@ -448,13 +468,14 @@ const Profile: NextPageWithLayout = () => {
     });
 
     const canSubmit = Boolean(!PasswordList.filter((item) => item.syncError).length);
+
     const formData = {
       old_password: PasswordObjet.old_password,
       new_password: PasswordObjet.new_password,
     };
 
     if (canSubmit) {
-      await ResetPassword(userID, { ...formData }).then((response) => {
+      await updatePassword(userID, { ...formData }).then((response) => {
         if (response.status === 200) {
           setSuccessMessage(true);
           setPasswordLoadingButton(false);
@@ -517,7 +538,7 @@ const Profile: NextPageWithLayout = () => {
                   {isLoading ? <Skeleton /> : userObject?.name}
                 </Typography>
                 <Typography variant="subtitle1" component="div" width="36rem">
-                  {isLoading ? <Skeleton /> : Bio}
+                  {isLoading ? <Skeleton /> : Bio || '-'}
                 </Typography>
               </Box>
             </Box>
@@ -533,7 +554,7 @@ const Profile: NextPageWithLayout = () => {
                 <Box
                   component="img"
                   sx={{ width: '1.4rem', height: '1.4rem', mr: '0.4rem' }}
-                  src="/favicon/userIcon/changePassword.svg"
+                  src="/favicon/user/change-password.svg"
                 />
                 Change Password
               </Button>
@@ -624,7 +645,7 @@ const Profile: NextPageWithLayout = () => {
                 <Box
                   component="img"
                   sx={{ width: '1.4rem', height: '1.4rem', mr: '0.4rem' }}
-                  src="/favicon/userIcon/Edit.svg"
+                  src="/favicon/user/edit.svg"
                 />
                 Edit
               </Button>
@@ -696,7 +717,7 @@ const Profile: NextPageWithLayout = () => {
                   }}
                   onClick={() => {
                     setShowPersonalInformation(true);
-                    GetusersInfo(userID).then(async (response) => {
+                    getusersInfo(userID).then(async (response) => {
                       const res = await response.json();
                       setUserObject(res);
                       setBio(res.bio);

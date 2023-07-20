@@ -10,17 +10,15 @@
         align-items: center;
         width: 20%;
 
-        .informationtitle {
+        .informationTitle {
             display: flex;
             align-items: center;
             position: relative;
-
         }
-
     }
 }
 
-.helpIcon {
+.DescriptionIcon {
     width: 0.8rem;
     height: 0.8rem;
 
@@ -29,7 +27,6 @@
     }
 }
 
-//sx={{ display: 'flex', mt: '2rem', p: '1rem' }}
 .container {
     display: flex;
     margin-top: 2rem;
@@ -49,7 +46,7 @@
             padding: 0.6rem;
             height: 100%;
 
-            .LocationContainer {
+            .locationContainer {
                 padding: 1.6rem;
                 margin-right: 0.6rem;
                 width: 27%;
@@ -59,7 +56,7 @@
                 flex-direction: column;
                 justify-content: space-between;
 
-                .LocationIcon {
+                .iconContainer {
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -74,18 +71,18 @@
                     }
                 }
 
-                .LocationTitle {
+                .locationTitle {
                     display: flex;
                     align-items: center;
                 }
 
-                .LocationTextContainer {
+                .locationTextContainer {
                     height: 2rem;
                     display: flex;
                     align-items: flex-end;
                 }
 
-                .LocationContent {
+                .locationContent {
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
@@ -93,7 +90,7 @@
                 }
             }
 
-            .IDCContainer {
+            .idcContainer {
                 padding: 1.6rem;
                 margin-right: 0.6rem;
                 width: 27%;
@@ -103,7 +100,7 @@
                 flex-direction: column;
                 justify-content: space-between;
 
-                .IDCIcon {
+                .iconContainer {
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -118,18 +115,18 @@
                     }
                 }
 
-                .IDCTitle {
+                .idcTitle {
                     display: flex;
                     align-items: center;
                 }
 
-                .IDCTextContainer {
+                .idcTextContainer {
                     height: 2rem;
                     display: flex;
                     align-items: flex-end;
                 }
 
-                .IDCContent {
+                .idcContent {
                     width: 100%;
                     white-space: nowrap;
                     overflow: hidden;
@@ -139,7 +136,7 @@
 
             }
 
-            .CIDRsContainer {
+            .cidrsContainer {
                 padding: 1.6rem;
                 width: 46%;
                 display: flex;
@@ -147,7 +144,7 @@
                 flex-direction: column;
                 justify-content: space-between;
 
-                .CIDRsIcon {
+                .iconContainer {
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -162,18 +159,18 @@
                     }
                 }
 
-                .CIDRsTitle {
+                .cidrsTitle {
                     display: flex;
                     align-items: center;
                 }
 
-                .CIDRsTags {
+                .cidrsTags {
                     display: flex;
                     align-items: flex-end;
                     justify-content: space-between;
                     height: 2rem;
 
-                    .CIDRsContent {
+                    .cidrsContent {
                         height: 1.6rem;
                         display: flex;
                         align-items: center;
@@ -205,12 +202,12 @@
             margin-bottom: 0.6rem;
         }
 
-        .listContainer {
+        .configListContainer {
 
             padding-left: 1rem;
             padding-right: 1rem;
 
-            .liContainer {
+            .configContent {
                 display: flex;
                 justify-content: space-between;
                 margin-top: 0.4rem;
@@ -222,12 +219,12 @@
 
 }
 
-.CIDRsDialog {
+.cidrsDialogContainer {
     display: flex;
     flex-wrap: wrap;
 
 
-    .CIDRsDialogContent {
+    .cidrsDialogContent {
         width: 30.4%;
         background-color: #F4F3F6;
         display: flex;
@@ -238,13 +235,12 @@
         margin-right: 0.5rem;
         margin-left: 0.5rem;
 
-        .CIDRsText {
+        .cidrsText {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
     }
-
 
     .icon {
         width: 1.6rem;

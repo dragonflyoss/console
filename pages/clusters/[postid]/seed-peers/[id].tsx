@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { GetSeedPeers, getInformation } from 'lib/api';
+import { getSeedPeerID, getClusterInformation } from 'lib/api';
 import { dateTimeFormat } from 'components/dataTime';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import HistoryIcon from '@mui/icons-material/History';
@@ -41,7 +41,7 @@ const Security: NextPageWithLayout = () => {
     setIsLoading(true);
 
     if (query.postid) {
-      getInformation(query.postid).then(async (response) => {
+      getClusterInformation(query.postid).then(async (response) => {
         if (response.status === 200) {
           setInformationList(await response.json());
         } else {
@@ -52,7 +52,7 @@ const Security: NextPageWithLayout = () => {
     }
 
     if (query.id) {
-      GetSeedPeers(query.id).then(async (response) => {
+      getSeedPeerID(query.id).then(async (response) => {
         if (response.status === 200) {
           setSeedPeerObject(await response.json());
         } else {
@@ -139,11 +139,11 @@ const Security: NextPageWithLayout = () => {
       <Typography variant="h5" fontFamily="MabryPro-Bold" sx={{ pb: '1rem' }}>
         Seed-Peer
       </Typography>
-      <Box className={styles.seedPeerHeaderContainer}>
-        <Paper variant="outlined" className={styles.seedPeerHeaderContent}>
-          <Box className={styles.seedPeerHeaderTitleContainer}>
-            <Box component="img" className={styles.headerIcon} src="/favicon/clusterIcon/schedulerID.svg" />
-            <Typography className={styles.seedPeerHeaderTitle} variant="subtitle1" component="div">
+      <Box className={styles.container}>
+        <Paper variant="outlined" className={styles.headerContainer}>
+          <Box className={styles.headerContent}>
+            <Box component="img" className={styles.headerIcon} src="/favicon/cluster/scheduler-id.svg" />
+            <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               ID
             </Typography>
           </Box>
@@ -151,10 +151,10 @@ const Security: NextPageWithLayout = () => {
             {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeerObject?.id}
           </Typography>
         </Paper>
-        <Paper variant="outlined" className={styles.seedPeerHeaderContent}>
-          <Box className={styles.seedPeerHeaderTitleContainer}>
-            <Box component="img" className={styles.headerIcon} src="/favicon/clusterIcon/schedulerHostname.svg" />
-            <Typography className={styles.seedPeerHeaderTitle} variant="subtitle1" component="div">
+        <Paper variant="outlined" className={styles.headerContainer}>
+          <Box className={styles.headerContent}>
+            <Box component="img" className={styles.headerIcon} src="/favicon/cluster/hostname.svg" />
+            <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               Hostname
             </Typography>
           </Box>
@@ -162,10 +162,10 @@ const Security: NextPageWithLayout = () => {
             {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeerObject?.host_name}
           </Typography>
         </Paper>
-        <Paper variant="outlined" className={styles.seedPeerHeaderContent}>
-          <Box className={styles.seedPeerHeaderTitleContainer}>
-            <Box component="img" className={styles.headerIcon} src="/favicon/clusterIcon/schedulerIP.svg" />
-            <Typography className={styles.seedPeerHeaderTitle} variant="subtitle1" component="div">
+        <Paper variant="outlined" className={styles.headerContainer}>
+          <Box className={styles.headerContent}>
+            <Box component="img" className={styles.headerIcon} src="/favicon/cluster/scheduler-ip.svg" />
+            <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               IP
             </Typography>
           </Box>
@@ -173,10 +173,10 @@ const Security: NextPageWithLayout = () => {
             {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeerObject?.ip}
           </Typography>
         </Paper>
-        <Paper variant="outlined" className={styles.portContent}>
-          <Box className={styles.portTitleContainer}>
-            <Box component="img" className={styles.headerIcon} src="/favicon/clusterIcon/clusterID.svg" />
-            <Typography className={styles.portTitle} variant="subtitle1" component="div">
+        <Paper variant="outlined" className={styles.clusterIDContaine}>
+          <Box className={styles.clusterIDContent}>
+            <Box component="img" className={styles.headerIcon} src="/favicon/cluster/clusterID.svg" />
+            <Typography className={styles.clusterIDTitle} variant="subtitle1" component="div">
               Cluster ID
             </Typography>
           </Box>
@@ -185,10 +185,10 @@ const Security: NextPageWithLayout = () => {
           </Typography>
         </Paper>
       </Box>
-      <Paper variant="outlined" className={styles.seedPeerContainer}>
+      <Paper variant="outlined" className={styles.lowerContainer}>
         {seedPeersLIst.map((item: any) => {
           return (
-            <Box key={item.label} className={styles.schedulerContent}>
+            <Box key={item.label} className={styles.lowerContent}>
               <Typography variant="subtitle1" component="div" mb="1rem">
                 {item.label}
               </Typography>

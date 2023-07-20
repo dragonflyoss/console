@@ -1,5 +1,4 @@
 import Layout from 'components/layout';
-
 import {
   Alert,
   Autocomplete,
@@ -14,10 +13,10 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import styles from './edit.module.scss';
+import styles from './index.module.scss';
 import { useEffect, useState } from 'react';
 import HelpIcon from '@mui/icons-material/Help';
-import { getInformation, updateCluster } from 'lib/api';
+import { getClusterInformation, updateCluster } from 'lib/api';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { LoadingButton } from '@mui/lab';
@@ -30,14 +29,14 @@ const CreateCluster = () => {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [bioError, setbioError] = useState(false);
-  const [SeedPeerloadlimitError, setSeedPeerloadlimitError] = useState(false);
-  const [PeerloadlimitError, setPeerloadlimitError] = useState(false);
-  const [NumberofconcurrentdownloadpiecesError, setNumberofconcurrentdownloadpiecesError] = useState(false);
-  const [SchedulingparentlimitError, setSchedulingparentlimitError] = useState(false);
-  const [ParentrangelimitError, setParentrangelimitError] = useState(false);
-  const [LocationError, setLocationError] = useState(false);
-  const [IDCError, setIDCError] = useState(false);
-  const [CIDRsError, setCIDRsError] = useState(false);
+  const [seedPeerLoadLimitError, setSeedPeerLoadLimitError] = useState(false);
+  const [peerLoadLimitError, setPeerLoadLimitError] = useState(false);
+  const [numberOfConcurrentDownloadPiecesError, setNumberOfConcurrentDownloadPiecesError] = useState(false);
+  const [candidateParentLimitError, setCandidateParentLimitError] = useState(false);
+  const [filterParentLimitError, setFilterParentLimitError] = useState(false);
+  const [locationError, setLocationError] = useState(false);
+  const [idcError, setIdcError] = useState(false);
+  const [cidrsError, setCidrsError] = useState(false);
 
   const [editLoadingButton, setEditLoadingButton] = useState(false);
   const [InformationList, setInformationList] = useState({
@@ -60,7 +59,7 @@ const CreateCluster = () => {
 
   useEffect(() => {
     if (router.query.postid) {
-      getInformation(router.query.postid).then(async (response) => {
+      getClusterInformation(router.query.postid).then(async (response) => {
         setInformationList(await response.json());
       });
     }
@@ -109,8 +108,8 @@ const CreateCluster = () => {
         autoComplete: 'family-name',
         placeholder: 'Please enter Location',
         value: location,
-        helperText: LocationError ? 'Maximum length is 100' : '',
-        error: LocationError,
+        helperText: locationError ? 'Maximum length is 100' : '',
+        error: locationError,
 
         onChange: (e: any) => {
           setInformationList({ ...InformationList, Scopes: { ...InformationList.Scopes, location: e.target.value } });
@@ -124,7 +123,7 @@ const CreateCluster = () => {
               }
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.helpIcon} />
+              <HelpIcon color="disabled" className={styles.DescriptionIcon} />
             </Tooltip>
           ),
         },
@@ -145,8 +144,8 @@ const CreateCluster = () => {
         autoComplete: 'family-name',
         placeholder: 'Please enter IDC',
         value: idc,
-        helperText: IDCError ? 'Maximum length is 100' : '',
-        error: IDCError,
+        helperText: idcError ? 'Maximum length is 100' : '',
+        error: idcError,
         onChange: (e: any) => {
           setInformationList({ ...InformationList, Scopes: { ...InformationList.Scopes, idc: e.target.value } });
           changeValidate(e.target.value, scopesFormList[1]);
@@ -159,13 +158,13 @@ const CreateCluster = () => {
               }
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.helpIcon} />
+              <HelpIcon color="disabled" className={styles.DescriptionIcon} />
             </Tooltip>
           ),
         },
       },
       syncError: false,
-      setError: setIDCError,
+      setError: setIdcError,
       validate: (value: string) => {
         const reg = /^(.{0,100})$/;
         return reg.test(value);
@@ -192,8 +191,8 @@ const CreateCluster = () => {
         label: 'CIDRs',
         name: 'CIDRs',
         placeholder: 'Please enter CIDRs',
-        error: CIDRsError,
-        helperText: CIDRsError ? 'Length: (0, 100]' : '',
+        error: cidrsError,
+        helperText: cidrsError ? 'Length: (0, 100]' : '',
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
             e.preventDefault();
@@ -201,13 +200,11 @@ const CreateCluster = () => {
         },
       },
       syncError: false,
-      setError: setCIDRsError,
+      setError: setCidrsError,
       validate: (value: string) => {
         const reg = /^(.{0,1000})$/;
         return reg.test(value);
       },
-      title:
-        'The cluster needs to serve all peers in the CIDRs. The advertise IP will be reported in the peer configuration when the peer is started, and if the advertise IP is empty in the peer configuration, peer will automatically get expose IP as advertise IP. When advertise IP of the peer matches the CIDRs in cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. CIDRs has higher priority than IDC in the scopes.',
     },
   ];
   const configFormList = [
@@ -220,8 +217,8 @@ const CreateCluster = () => {
         autoComplete: 'family-name',
         placeholder: 'Please enter Seed Peer load limit',
         value: SeedPeerClusterConfig?.load_limit,
-        helperText: SeedPeerloadlimitError ? 'Must be a number and range from 0-5000' : '',
-        error: SeedPeerloadlimitError,
+        helperText: seedPeerLoadLimitError ? 'Must be a number and range from 0-5000' : '',
+        error: seedPeerLoadLimitError,
 
         onChange: (e: any) => {
           setInformationList({
@@ -236,13 +233,13 @@ const CreateCluster = () => {
               title={`If other peers download from the seed peer, the load of the seed peer will increase. When the load limit of the seed peer is reached, the scheduler will no longer schedule other peers to download from the seed peer until the it has the free load.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.helpIcon} />
+              <HelpIcon color="disabled" className={styles.DescriptionIcon} />
             </Tooltip>
           ),
         },
       },
       syncError: false,
-      setError: setSeedPeerloadlimitError,
+      setError: setSeedPeerLoadLimitError,
 
       validate: (value: string) => {
         const reg = /^\+?(\d|[1-4]\d{1,3}|[5-9]\d{1,2}|5000)(\.\d*)?$/;
@@ -257,8 +254,8 @@ const CreateCluster = () => {
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Peer load limit',
-        helperText: PeerloadlimitError ? 'Must be a number and range from 0-2000' : '',
-        error: PeerloadlimitError,
+        helperText: peerLoadLimitError ? 'Must be a number and range from 0-2000' : '',
+        error: peerLoadLimitError,
         value: load_limit,
         onChange: (e: any) => {
           setInformationList({
@@ -275,13 +272,13 @@ const CreateCluster = () => {
               }
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.helpIcon} />
+              <HelpIcon color="disabled" className={styles.DescriptionIcon} />
             </Tooltip>
           ),
         },
       },
       syncError: false,
-      setError: setPeerloadlimitError,
+      setError: setPeerLoadLimitError,
       validate: (value: string) => {
         const reg = /^0*1\d{3}$|2000|^0*[1-9]\d{0,2}$|^0*$/;
         return reg.test(value);
@@ -296,8 +293,8 @@ const CreateCluster = () => {
         autoComplete: 'family-name',
         placeholder: 'Please enter Number of concurrent download pieces',
         value: concurrent_piece_count,
-        helperText: NumberofconcurrentdownloadpiecesError ? 'Must be a number and range from 0-50' : '',
-        error: NumberofconcurrentdownloadpiecesError,
+        helperText: numberOfConcurrentDownloadPiecesError ? 'Must be a number and range from 0-50' : '',
+        error: numberOfConcurrentDownloadPiecesError,
 
         onChange: (e: any) => {
           setInformationList({
@@ -312,13 +309,13 @@ const CreateCluster = () => {
               title={`The number of pieces that a peer can concurrent download from other peers.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.helpIcon} />
+              <HelpIcon color="disabled" className={styles.DescriptionIcon} />
             </Tooltip>
           ),
         },
       },
       syncError: false,
-      setError: setNumberofconcurrentdownloadpiecesError,
+      setError: setNumberOfConcurrentDownloadPiecesError,
 
       validate: (value: string) => {
         const reg = /^(?:[0-9]|[1-4][0-9]|50)$/;
@@ -334,8 +331,8 @@ const CreateCluster = () => {
         autoComplete: 'family-name',
         placeholder: 'Please enter Candidate parent limit',
         value: candidate_parent_limit,
-        helperText: SchedulingparentlimitError ? 'Must be a number and range from 0-20' : '',
-        error: SchedulingparentlimitError,
+        helperText: candidateParentLimitError ? 'Must be a number and range from 0-20' : '',
+        error: candidateParentLimitError,
 
         onChange: (e: any) => {
           setInformationList({
@@ -353,13 +350,13 @@ const CreateCluster = () => {
               title={`The maximum number of parents that the scheduler can schedule for download peer.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.helpIcon} />
+              <HelpIcon color="disabled" className={styles.DescriptionIcon} />
             </Tooltip>
           ),
         },
       },
       syncError: false,
-      setError: setSchedulingparentlimitError,
+      setError: setCandidateParentLimitError,
 
       validate: (value: string) => {
         const reg = /^(?:[0-9]|1[0-9]|20)$/;
@@ -375,8 +372,8 @@ const CreateCluster = () => {
         autoComplete: 'family-name',
         placeholder: 'Please enter Filter parent limit',
         value: filter_parent_limit,
-        helperText: ParentrangelimitError ? 'Must be a number and range from 0-1000' : '',
-        error: ParentrangelimitError,
+        helperText: filterParentLimitError ? 'Must be a number and range from 0-1000' : '',
+        error: filterParentLimitError,
 
         onChange: (e: any) => {
           setInformationList({
@@ -394,13 +391,13 @@ const CreateCluster = () => {
               title={`The scheduler will randomly select the  number of parents from all the parents according to the filter parent limit and evaluate the optimal parents in selecting parents for the peer to download task. The number of optimal parent is the scheduling parent limit.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.helpIcon} />
+              <HelpIcon color="disabled" className={styles.DescriptionIcon} />
             </Tooltip>
           ),
         },
       },
       syncError: false,
-      setError: setParentrangelimitError,
+      setError: setFilterParentLimitError,
       validate: (value: string) => {
         const reg = /^(?:[0-9]|[1-9][0-9]{1,2}|1000)$/;
         return reg.test(value);
@@ -488,7 +485,7 @@ const CreateCluster = () => {
   };
 
   return (
-    <Grid className={styles.main}>
+    <Grid>
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -519,7 +516,7 @@ const CreateCluster = () => {
             Information
           </Typography>
           <Tooltip title="The information of cluster." placement="top">
-            <HelpIcon color="disabled" className={styles.helpIcon} />
+            <HelpIcon color="disabled" className={styles.DescriptionIcon} />
           </Tooltip>
         </Box>
         <Box className={styles.isdefaultContainer}>
@@ -540,7 +537,7 @@ const CreateCluster = () => {
             title="When peer does not find a matching cluster based on scopes, the default cluster will be used."
             placement="top"
           >
-            <HelpIcon color="disabled" className={styles.helpIcon} />
+            <HelpIcon color="disabled" className={styles.DescriptionIcon} />
           </Tooltip>
         </Box>
         {informationFormList.map((item) => (
@@ -561,7 +558,7 @@ const CreateCluster = () => {
             the scope."
             placement="top"
           >
-            <HelpIcon color="disabled" className={styles.helpIcon} />
+            <HelpIcon color="disabled" className={styles.DescriptionIcon} />
           </Tooltip>
         </Box>
         <Grid className={styles.scopesContainer}>
@@ -574,7 +571,7 @@ const CreateCluster = () => {
                     multiple
                     {...item.CIDRsFormProps}
                     size="small"
-                    className={styles.CIDRsIputer}
+                    className={styles.cidrsInput}
                     renderInput={(params) => <TextField {...params} color="success" {...item.formProps} />}
                   />
                 ) : (
@@ -589,7 +586,7 @@ const CreateCluster = () => {
             Config
           </Typography>
           <Tooltip title=" The configuration for P2P downloads." placement="top">
-            <HelpIcon color="disabled" className={styles.helpIcon} />
+            <HelpIcon color="disabled" className={styles.DescriptionIcon} />
           </Tooltip>
         </Box>
         <Grid className={styles.configContainer}>

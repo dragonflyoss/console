@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
-import { GetScheduler, GetSeedPeer, getClusters, getClustersSearch } from 'lib/api';
+import { listScheduler, listSeedPeer, listCluster, getClusterSearch } from 'lib/api';
 import styles from './index.module.scss';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -68,7 +68,7 @@ const Security: NextPageWithLayout = () => {
         location: '',
         cidrs: null,
       },
-      CreatedAt: '2023-07-06T08:12:08Z',
+      CreatedAt: '',
       IsDefault: true,
     },
   ]);
@@ -77,7 +77,7 @@ const Security: NextPageWithLayout = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    getClusters().then(async (response) => {
+    listCluster().then(async (response) => {
       if (response.status == 200) {
         setNumberOfClusters(await response.json());
       } else {
@@ -86,7 +86,7 @@ const Security: NextPageWithLayout = () => {
       }
     });
 
-    GetScheduler().then(async (response) => {
+    listScheduler().then(async (response) => {
       if (response.status == 200) {
         setSchedleList(await response.json());
       } else {
@@ -95,7 +95,7 @@ const Security: NextPageWithLayout = () => {
       }
     });
 
-    GetSeedPeer().then(async (response) => {
+    listSeedPeer().then(async (response) => {
       if (response.status == 200) {
         setSeedPeerList(await response.json());
       } else {
@@ -104,7 +104,7 @@ const Security: NextPageWithLayout = () => {
       }
     });
 
-    getClustersSearch({ page: page, per_page: pageSize }).then(async (response) => {
+    getClusterSearch({ page: page, per_page: pageSize }).then(async (response) => {
       const linkHeader = response.headers.get('Link');
       const links = parseLinkHeader(linkHeader);
       setTotalPages(Number(links?.last?.page));
@@ -141,7 +141,7 @@ const Security: NextPageWithLayout = () => {
   };
 
   const handleClick = async () => {
-    await getClustersSearch({ page: 1, per_page: pageSize, name: text }).then(async (response) => {
+    await getClusterSearch({ page: 1, per_page: pageSize, name: text }).then(async (response) => {
       setClusterList(await response.json());
     });
   };
@@ -159,7 +159,7 @@ const Security: NextPageWithLayout = () => {
   };
 
   return (
-    <Grid>
+    <Box>
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
@@ -193,14 +193,10 @@ const Security: NextPageWithLayout = () => {
           <Paper variant="outlined" className={styles.clusterContainer}>
             <Box p="1rem">
               <Box display="flex">
-                <Box className={styles.clusterHeaderIconWarp}>
-                  <Box component="img" className={styles.clusterIconMadoka} src="/favicon/clusterIcon/roundIcon.svg" />
-                  <Box
-                    component="img"
-                    className={styles.clusterIconGreatCircle}
-                    src="/favicon/clusterIcon/roundIcon.svg"
-                  />
-                  <Box component="img" className={styles.clusterIcon} src="/favicon/clusterIcon/clusterIcon.svg" />
+                <Box className={styles.clusterIconContainer}>
+                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/favicon/cluster/round.svg" />
+                  <Box component="img" className={styles.clusterBigCircleIcon} src="/favicon/cluster/round.svg" />
+                  <Box component="img" className={styles.clusterIcon} src="/favicon/cluster/cluster.svg" />
                 </Box>
                 <Typography variant="h6" fontFamily="MabryPro-Bold" className={styles.clusterIconTitle}>
                   Cluster
@@ -208,18 +204,14 @@ const Security: NextPageWithLayout = () => {
               </Box>
               <Box className={styles.clusterContentContainer}>
                 <Box marginLeft="0.6rem">
-                  <Box className={styles.clusterTopWrap}>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" fontFamily="MabryPro-Bold" sx={{ mr: '1rem' }}>
                       {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : numberOfClusters.length}
                     </Typography>
                     <span>number of cluster</span>
                   </Box>
-                  <Grid className={styles.clusterBottomWrap}>
-                    <Box
-                      component="img"
-                      className={styles.clusterBottomIcon}
-                      src="/favicon/clusterIcon/defaultIcon.svg"
-                    />
+                  <Grid className={styles.clusterBottomContainer}>
+                    <Box component="img" className={styles.clusterBottomIcon} src="/favicon/cluster/default.svg" />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span className={styles.clusterBottomContent}>
                         {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : defaultCluster?.length}
@@ -228,21 +220,17 @@ const Security: NextPageWithLayout = () => {
                     </Box>
                   </Grid>
                 </Box>
-                <Box component="img" src="/favicon/clusterIcon/statisticsIcon.svg" />
+                <Box component="img" src="/favicon/cluster/statistics.svg" />
               </Box>
             </Box>
           </Paper>
           <Paper variant="outlined" className={styles.clusterContainer}>
             <Box p="1rem">
               <Box display="flex">
-                <Box className={styles.clusterHeaderIconWarp}>
-                  <Box component="img" className={styles.clusterIconMadoka} src="/favicon/clusterIcon/roundIcon.svg" />
-                  <Box
-                    component="img"
-                    className={styles.clusterIconGreatCircle}
-                    src="/favicon/clusterIcon/roundIcon.svg"
-                  />
-                  <Box component="img" className={styles.clusterIcon} src="/favicon/clusterIcon/schedulerIcon.svg" />
+                <Box className={styles.clusterIconContainer}>
+                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/favicon/cluster/round.svg" />
+                  <Box component="img" className={styles.clusterBigCircleIcon} src="/favicon/cluster/round.svg" />
+                  <Box component="img" className={styles.clusterIcon} src="/favicon/cluster/scheduler.svg" />
                 </Box>
                 <Typography variant="h6" className={styles.clusterIconTitle} fontFamily="MabryPro-Bold">
                   Scheduler
@@ -250,42 +238,35 @@ const Security: NextPageWithLayout = () => {
               </Box>
               <Box className={styles.clusterContentContainer}>
                 <Box sx={{ ml: '0.6rem' }}>
-                  <Box className={styles.clusterTopWrap}>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" fontFamily="MabryPro-Bold" sx={{ mr: '1rem' }}>
                       {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : scheduleList?.length}
                     </Typography>
-                    <span>number of cluster</span>
+                    <span>number of scheduler</span>
                   </Box>
 
-                  <Grid className={styles.clusterBottomWrap}>
-                    <Box
-                      component="img"
-                      className={styles.clusterBottomIcon}
-                      src="/favicon/clusterIcon/activeIcon.svg"
-                    />
+                  <Grid className={styles.clusterBottomContainer}>
+                    <Box component="img" className={styles.clusterBottomIcon} src="/favicon/cluster/active.svg" />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span className={styles.clusterBottomContent}>
                         {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : scheduleActive?.length}
                       </span>
+
                       <span className={styles.clusterBottomContentMsg}>active</span>
                     </Box>
                   </Grid>
                 </Box>
-                <Box component="img" src="/favicon/clusterIcon/statisticsIcon.svg" />
+                <Box component="img" src="/favicon/cluster/statistics.svg" />
               </Box>
             </Box>
           </Paper>
-          <Paper variant="outlined" className={styles.seedPseerContainer}>
+          <Paper variant="outlined" className={styles.seedPeerContainer}>
             <Box p="1rem">
               <Box display="flex">
-                <Box className={styles.clusterHeaderIconWarp}>
-                  <Box component="img" className={styles.clusterIconMadoka} src="/favicon/clusterIcon/roundIcon.svg" />
-                  <Box
-                    component="img"
-                    className={styles.clusterIconGreatCircle}
-                    src="/favicon/clusterIcon/roundIcon.svg"
-                  />
-                  <Box component="img" className={styles.clusterIcon} src="/favicon/clusterIcon/seedPeerIcon.svg" />
+                <Box className={styles.clusterIconContainer}>
+                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/favicon/cluster/round.svg" />
+                  <Box component="img" className={styles.clusterBigCircleIcon} src="/favicon/cluster/round.svg" />
+                  <Box component="img" className={styles.clusterIcon} src="/favicon/cluster/seed-peer.svg" />
                 </Box>
                 <Typography variant="h6" fontFamily="MabryPro-Bold" className={styles.seedPseerIconTitle}>
                   Seed peer
@@ -293,18 +274,14 @@ const Security: NextPageWithLayout = () => {
               </Box>
               <Box className={styles.clusterContentContainer}>
                 <Box sx={{ ml: '0.6rem' }}>
-                  <Box className={styles.clusterTopWrap}>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" fontFamily="MabryPro-Bold" sx={{ mr: '1rem' }}>
                       {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : seedPeerList.length}
                     </Typography>
-                    <span>number of cluster</span>
+                    <span>number of seed peer</span>
                   </Box>
-                  <Grid className={styles.clusterBottomWrap}>
-                    <Box
-                      component="img"
-                      className={styles.clusterBottomIcon}
-                      src="/favicon/clusterIcon/activeIcon.svg"
-                    />
+                  <Grid className={styles.clusterBottomContainer}>
+                    <Box component="img" className={styles.clusterBottomIcon} src="/favicon/cluster/active.svg" />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span className={styles.clusterBottomContent}>
                         {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : seedPeerActive?.length}
@@ -313,7 +290,7 @@ const Security: NextPageWithLayout = () => {
                     </Box>
                   </Grid>
                 </Box>
-                <Box component="img" src="/favicon/clusterIcon/statisticsIcon.svg" />
+                <Box component="img" src="/favicon/cluster/statistics.svg" />
               </Box>
             </Box>
           </Paper>
@@ -340,7 +317,7 @@ const Security: NextPageWithLayout = () => {
             <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
           </IconButton>
         </Paper>
-        <Grid item xs={12} className={styles.paperContainer} component="form" noValidate>
+        <Grid item xs={12} className={styles.clusterListContainer} component="form" noValidate>
           {Array.isArray(clusterList) &&
             clusterList.map((item: any, id: React.Key | null | undefined) => (
               <Paper
@@ -361,10 +338,10 @@ const Security: NextPageWithLayout = () => {
                   },
                 }}
               >
-                <Box className={styles.paperContent}>
+                <Box className={styles.clusterListContent}>
                   <Box display="flex">
-                    <span className={styles.IDText}>ID&nbsp;:&nbsp;</span>
-                    {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : <span className={styles.IDText}>{item.ID}</span>}
+                    <span className={styles.idText}>ID&nbsp;:&nbsp;</span>
+                    {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : <span className={styles.idText}>{item.ID}</span>}
                   </Box>
                   {isLoading ? (
                     <Skeleton sx={{ width: '4rem', height: '1.4rem', mt: '0.8rem', mb: '0.8rem' }} />
@@ -391,22 +368,22 @@ const Security: NextPageWithLayout = () => {
                     {isLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.Name}
                   </Typography>
                   <Box display="flex" mt="0.4rem">
-                    <Box display="flex" className={styles.LoctionContainer}>
+                    <Box display="flex" className={styles.locationContainer}>
                       <Typography variant="body2" component="div" fontFamily="MabryPro-Bold">
                         IDC&nbsp;:&nbsp;
                       </Typography>
                       <Tooltip title={item.Scopes.idc || '-'} placement="top">
-                        <Typography variant="body2" component="div" className={styles.LoctionText}>
+                        <Typography variant="body2" component="div" className={styles.locationText}>
                           {isLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.Scopes.idc || '-'}
                         </Typography>
                       </Tooltip>
                     </Box>
-                    <Box display="flex" className={styles.LoctionContainer}>
+                    <Box display="flex" className={styles.locationContainer}>
                       <Typography variant="body2" component="div" fontFamily="MabryPro-Bold">
                         Location&nbsp;:&nbsp;
                       </Typography>
                       <Tooltip title={item.Scopes.location || '-'} placement="top">
-                        <Typography variant="body2" component="div" className={styles.LoctionText}>
+                        <Typography variant="body2" component="div" className={styles.locationText}>
                           {isLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.Scopes.location || '-'}
                         </Typography>
                       </Tooltip>
@@ -442,7 +419,7 @@ const Security: NextPageWithLayout = () => {
           <Pagination count={totalPages} page={page} onChange={handleChangePage} color="primary" size="small" />
         </Box>
       </ThemeProvider>
-    </Grid>
+    </Box>
   );
 };
 

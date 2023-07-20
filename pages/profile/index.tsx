@@ -717,7 +717,7 @@ const Profile: NextPageWithLayout = () => {
                   }}
                   onClick={() => {
                     setShowPersonalInformation(true);
-                    getusersInfo(userID).then(async (response) => {
+                    getUsersInfo(userID).then(async (response) => {
                       const res = await response.json();
                       setUserObject(res);
                       setBio(res.bio);

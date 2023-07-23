@@ -162,7 +162,7 @@ export default function SignUp() {
     palette: {
       secondary: {
         contrastText: '#fff',
-        main: 'var(--description-color)',
+        main: '#2E8F79',
       },
     },
   });
@@ -299,7 +299,7 @@ export default function SignUp() {
                       onClick={() => {
                         setPageLoding(true);
                       }}
-                      sx={{ color: 'var(--description-color)', ml: '0.4rem' }}
+                      sx={{ color: '#2E8F79', ml: '0.4rem' }}
                     >
                       <Typography component="span">Sign in</Typography>
                     </Link>

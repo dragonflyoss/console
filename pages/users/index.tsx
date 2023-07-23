@@ -35,7 +35,7 @@ import {
   Typography,
 } from '@mui/material';
 import { ReactElement, useEffect, useState } from 'react';
-import { deleteGuest, deleteRoot, getuserRoles, listUsers, getUser, putGuest, putRoot } from 'lib/api';
+import { deleteGuest, deleteRoot, getUserRoles, listUsers, getUser, putGuest, putRoot } from 'lib/api';
 import { makeStyles } from '@mui/styles';
 import { datetime } from 'lib/utils';
 import { LoadingButton } from '@mui/lab';
@@ -137,7 +137,7 @@ const User: NextPageWithLayout = () => {
     setSelectedRow(row);
     setUserID(row.id);
 
-    await getuserRoles(row.id).then(async (response) => {
+    await getUserRoles(row.id).then(async (response) => {
       if (response.status === 200) {
         setRole(await response.json());
       } else {

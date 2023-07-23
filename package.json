@@ -65,9 +65,7 @@
     "react-swipeable-views": "^0.14.0",
     "react-swipeable-views-native": "^0.13.2",
     "react-swipeable-views-utils": "^0.14.0",
-    "react-test-renderer": "^18.2.0",
-    "sass": "^1.63.6",
-    "sass-loader": "^13.2.0"
+    "react-test-renderer": "^18.2.0"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.1.0",

@@ -21,7 +21,7 @@ import { ListItemButton, ListItemIcon } from '@mui/material';
 import { ReactNode, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Logout, PersonAdd } from '@mui/icons-material';
-import { getuserRoles, getUser, signOut } from 'lib/api';
+import { getUserRoles, getUser, signOut } from 'lib/api';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import Link from 'next/link';
 import { getUserID } from 'lib/utils';
@@ -72,7 +72,7 @@ export default function Layout({ children }: LayoutProps) {
         }
       });
 
-      getuserRoles(userID).then(async (response) => {
+      getUserRoles(userID).then(async (response) => {
         const res = await response.json();
         setRole(res[0]);
       });

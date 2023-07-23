@@ -245,7 +245,7 @@ export async function getUser(id: string) {
   return await get(url);
 }
 
-export async function getuserRoles(id: string) {
+export async function getUserRoles(id: string) {
   const url = new URL(`/api/v1/users/${id}/roles`, API_URL);
   return await get(url);
 }

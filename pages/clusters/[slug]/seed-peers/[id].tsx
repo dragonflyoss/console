@@ -4,20 +4,20 @@ import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { getSeedPeerID, getClusterInformation } from 'lib/api';
-import { dateTimeFormat } from 'components/dataTime';
+import { datetime } from 'lib/utils';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import HistoryIcon from '@mui/icons-material/History';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 import Link from 'next/link';
 
-const Security: NextPageWithLayout = () => {
+const SeedPeer: NextPageWithLayout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [InformationList, setInformationList] = useState({ Name: '', ID: '' });
-  const [seedPeerObject, setSeedPeerObject] = useState<any>({
+  const [cluster, setCluster] = useState({ Name: '', ID: '' });
+  const [seedPeer, setSeedPeer] = useState<any>({
     id: '',
     host_name: '',
     ip: '',
@@ -33,39 +33,10 @@ const Security: NextPageWithLayout = () => {
     SeedPeerClusterID: '',
   });
   const router = useRouter();
-  const { pathname } = router;
-  const routerName = pathname.split('/')[1];
+  const routerName = router.pathname.split('/')[1];
   const { query } = useRouter();
 
-  useEffect(() => {
-    setIsLoading(true);
-
-    if (query.postid) {
-      getClusterInformation(query.postid).then(async (response) => {
-        if (response.status === 200) {
-          setInformationList(await response.json());
-        } else {
-          setErrorMessage(true);
-          setErrorMessageText(response.statusText);
-        }
-      });
-    }
-
-    if (query.id) {
-      getSeedPeerID(query.id).then(async (response) => {
-        if (response.status === 200) {
-          setSeedPeerObject(await response.json());
-        } else {
-          setErrorMessage(true);
-          setErrorMessageText(response.statusText);
-        }
-      });
-    }
-
-    setIsLoading(false);
-  }, [query.id, query.postid]);
-
-  const seedPeersLIst = [
+  const seedPeersLabel = [
     {
       label: 'Port',
       name: 'port',
@@ -106,6 +77,34 @@ const Security: NextPageWithLayout = () => {
     },
   ];
 
+  useEffect(() => {
+    setIsLoading(true);
+
+    if (typeof query.slug === 'string') {
+      getClusterInformation(query.slug).then(async (response) => {
+        if (response.status === 200) {
+          setCluster(await response.json());
+        } else {
+          setErrorMessage(true);
+          setErrorMessageText(response.statusText);
+        }
+      });
+    }
+
+    if (typeof query.id === 'string') {
+      getSeedPeerID(query.id).then(async (response) => {
+        if (response.status === 200) {
+          setSeedPeer(await response.json());
+        } else {
+          setErrorMessage(true);
+          setErrorMessageText(response.statusText);
+        }
+      });
+    }
+
+    setIsLoading(false);
+  }, [query.id, query.slug]);
+
   const handleClose = (_: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -129,64 +128,64 @@ const Security: NextPageWithLayout = () => {
         <RouterLink component={Link} underline="hover" color="inherit" href={`/${routerName}`}>
           {routerName}
         </RouterLink>
-        <RouterLink component={Link} underline="hover" color="inherit" href={`/${routerName}/${InformationList?.ID}`}>
-          {InformationList?.Name}
+        <RouterLink component={Link} underline="hover" color="inherit" href={`/${routerName}/${cluster?.ID}`}>
+          {cluster?.Name}
         </RouterLink>
-        <Typography color="text.primary" fontFamily="MabryPro-Bold">
-          {seedPeerObject?.host_name}
+        <Typography color="text.primary" fontFamily="mabry-bold">
+          {seedPeer?.host_name}
         </Typography>
       </Breadcrumbs>
-      <Typography variant="h5" fontFamily="MabryPro-Bold" sx={{ pb: '1rem' }}>
+      <Typography variant="h5" fontFamily="mabry-bold" sx={{ pb: '1rem' }}>
         Seed-Peer
       </Typography>
       <Box className={styles.container}>
         <Paper variant="outlined" className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/favicon/cluster/scheduler-id.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler-id.svg" />
             <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               ID
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="MabryPro-Bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeerObject?.id}
+          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.id}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/favicon/cluster/hostname.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/hostname.svg" />
             <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               Hostname
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="MabryPro-Bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeerObject?.host_name}
+          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.host_name}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/favicon/cluster/scheduler-ip.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler-ip.svg" />
             <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               IP
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="MabryPro-Bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeerObject?.ip}
+          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.ip}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.clusterIDContaine}>
           <Box className={styles.clusterIDContent}>
-            <Box component="img" className={styles.headerIcon} src="/favicon/cluster/clusterID.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/cluster-id.svg" />
             <Typography className={styles.clusterIDTitle} variant="subtitle1" component="div">
               Cluster ID
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="MabryPro-Bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeerObject?.SeedPeerClusterID}
+          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.SeedPeerClusterID}
           </Typography>
         </Paper>
       </Box>
       <Paper variant="outlined" className={styles.lowerContainer}>
-        {seedPeersLIst.map((item: any) => {
+        {seedPeersLabel.map((item: any) => {
           return (
             <Box key={item.label} className={styles.lowerContent}>
               <Typography variant="subtitle1" component="div" mb="1rem">
@@ -199,41 +198,39 @@ const Security: NextPageWithLayout = () => {
                   {item.name == 'created_at' ? (
                     <Chip
                       avatar={<MoreTimeIcon />}
-                      label={dateTimeFormat(seedPeerObject?.[item.name])}
+                      label={datetime(seedPeer?.[item.name])}
                       variant="outlined"
                       size="small"
                     />
                   ) : item.name == 'updated_at' ? (
                     <Chip
                       avatar={<HistoryIcon />}
-                      label={dateTimeFormat(seedPeerObject[item.name])}
+                      label={datetime(seedPeer[item.name])}
                       variant="outlined"
                       size="small"
                     />
                   ) : item.name == 'state' ? (
                     <Chip
-                      label={`${seedPeerObject?.[item.name]?.charAt(0).toUpperCase()}${seedPeerObject?.[
-                        item.name
-                      ]?.slice(1)}`}
+                      label={`${seedPeer?.[item.name]?.charAt(0).toUpperCase()}${seedPeer?.[item.name]?.slice(1)}`}
                       size="small"
                       variant="outlined"
                       sx={{
                         borderRadius: '0%',
-                        backgroundColor: seedPeerObject?.[item.name] === 'active' ? '#2E8F79' : '#1C293A',
-                        color: seedPeerObject?.[item.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
-                        borderColor: seedPeerObject?.[item.name] === 'active' ? '#2E8F79' : '#1C293A',
+                        backgroundColor:
+                          seedPeer?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                        color: seedPeer?.[item.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
+                        borderColor:
+                          seedPeer?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
                         fontWeight: 'bold',
                       }}
                     />
                   ) : item.name == 'type' ? (
-                    <Typography component="div" variant="subtitle1" fontFamily="MabryPro-Bold">
-                      {`${seedPeerObject?.[item.name]?.charAt(0).toUpperCase()}${seedPeerObject?.[item.name]?.slice(
-                        1,
-                      )}`}
+                    <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+                      {`${seedPeer?.[item.name]?.charAt(0).toUpperCase()}${seedPeer?.[item.name]?.slice(1)}`}
                     </Typography>
                   ) : (
-                    <Typography component="div" variant="subtitle1" fontFamily="MabryPro-Bold">
-                      {seedPeerObject?.[item.name] || '-'}
+                    <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+                      {seedPeer?.[item.name] || '-'}
                     </Typography>
                   )}
                 </>
@@ -246,7 +243,8 @@ const Security: NextPageWithLayout = () => {
   );
 };
 
-export default Security;
-Security.getLayout = function getLayout(page: React.ReactElement) {
+export default SeedPeer;
+
+SeedPeer.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };

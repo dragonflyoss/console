@@ -13,7 +13,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import Rotation from 'components/rotation';
 import { useState } from 'react';
 import { signIn } from 'lib/api';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 import { Alert, Backdrop, Snackbar } from '@mui/material';
 import { useRouter } from 'next/dist/client/router';
 import React from 'react';
@@ -91,7 +91,7 @@ export default function SignIn() {
     palette: {
       secondary: {
         contrastText: '#fff',
-        main: '#2E8F79',
+        main: 'var(--description-color)',
       },
     },
   });
@@ -136,12 +136,14 @@ export default function SignIn() {
       });
     }
   };
+
   const handleClose = (_: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
     setErrorMessage(false);
   };
+
   return (
     <Grid container className={styles.page}>
       <Snackbar
@@ -158,7 +160,7 @@ export default function SignIn() {
         open={pageLoding}
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: 'rgba(0,0,0,0.3)' }}
       >
-        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/favicon/cluster/pageLoading.svg" />
+        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
       </Backdrop>
       <Grid item xs={6}>
         <Rotation />
@@ -206,12 +208,12 @@ export default function SignIn() {
                     Sign In
                   </Typography>
                 </Button>
-                <Box className={styles.orContainer}>
-                  <Typography component="span" className={styles.borderLeft}></Typography>
+                <Box className={styles.separationLineContainer}>
+                  <Typography component="span" className={styles.separationLine}></Typography>
                   <Typography component="span" className={styles.text}>
                     or
                   </Typography>
-                  <Typography component="span" className={styles.bordeRight}></Typography>
+                  <Typography component="span" className={styles.separationLine}></Typography>
                 </Box>
                 <Box
                   sx={{
@@ -228,7 +230,7 @@ export default function SignIn() {
                       onClick={() => {
                         setPageLoding(true);
                       }}
-                      sx={{ color: '#2E8F79', ml: '0.4rem' }}
+                      sx={{ color: 'var(--description-color)', ml: '0.4rem' }}
                     >
                       <Typography component="span">Create an account.</Typography>
                     </Link>

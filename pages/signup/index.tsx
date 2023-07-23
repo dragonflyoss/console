@@ -16,7 +16,7 @@ import { Alert, Backdrop, InputAdornment, Snackbar } from '@mui/material';
 import Rotation from 'components/rotation';
 import { signUp } from 'lib/api';
 import { useRouter } from 'next/router';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export default function SignUp() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -162,7 +162,7 @@ export default function SignUp() {
     palette: {
       secondary: {
         contrastText: '#fff',
-        main: '#2E8F79',
+        main: 'var(--description-color)',
       },
     },
   });
@@ -236,7 +236,7 @@ export default function SignUp() {
         open={pageLoding}
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: 'rgba(0,0,0,0.3)' }}
       >
-        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/favicon/cluster/pageLoading.svg" />
+        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
       </Backdrop>
       <Grid item xs={6}>
         <Rotation />
@@ -277,12 +277,12 @@ export default function SignUp() {
                     Sign Up
                   </Typography>
                 </Button>
-                <Box className={styles.orContainer}>
-                  <Typography component="span" className={styles.borderLeft}></Typography>
+                <Box className={styles.separationLineContainer}>
+                  <Typography component="span" className={styles.separationLine}></Typography>
                   <Typography component="span" className={styles.text}>
                     or
                   </Typography>
-                  <Typography component="span" className={styles.bordeRight}></Typography>
+                  <Typography component="span" className={styles.separationLine}></Typography>
                 </Box>
                 <Box
                   sx={{
@@ -299,7 +299,7 @@ export default function SignUp() {
                       onClick={() => {
                         setPageLoding(true);
                       }}
-                      sx={{ color: '#2E8F79', ml: '0.4rem' }}
+                      sx={{ color: 'var(--description-color)', ml: '0.4rem' }}
                     >
                       <Typography component="span">Sign in</Typography>
                     </Link>

@@ -19,10 +19,10 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import { listScheduler, listSeedPeer, listCluster, getClusterSearch } from 'lib/api';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { dateTimeFormat } from 'components/dataTime';
+import { ReactElement, useEffect, useState } from 'react';
+import { datetime } from 'lib/utils';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import parseLinkHeader from 'parse-link-header';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
@@ -48,7 +48,7 @@ const theme = createTheme({
   },
 });
 
-const Security: NextPageWithLayout = () => {
+const Cluster: NextPageWithLayout = () => {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -114,23 +114,14 @@ const Security: NextPageWithLayout = () => {
     setIsLoading(false);
   }, [page, pageSize]);
 
-  const defaultCluster: any =
-    Array.isArray(numberOfClusters) &&
-    numberOfClusters?.filter((item: any) => {
-      return item?.IsDefault == true;
-    });
+  const defaultCluster = (Array.isArray(numberOfClusters) &&
+    numberOfClusters?.filter((item: any) => item?.IsDefault === true)) as any[];
 
-  const scheduleActive: any =
-    Array.isArray(scheduleList) &&
-    scheduleList?.filter((item: any) => {
-      return item?.state == 'active';
-    });
+  const scheduleActive = (Array.isArray(scheduleList) &&
+    scheduleList?.filter((item: any) => item?.state == 'active')) as any[];
 
-  const seedPeerActive: any =
-    Array.isArray(seedPeerList) &&
-    seedPeerList?.filter((item: any) => {
-      return item?.state == 'active';
-    });
+  const seedPeerActive: any = (Array.isArray(seedPeerList) &&
+    seedPeerList?.filter((item: any) => item?.state == 'active')) as any[];
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
@@ -146,11 +137,7 @@ const Security: NextPageWithLayout = () => {
     });
   };
 
-  const handleChangePage = (_event: any, newPage: any) => {
-    setPage(newPage);
-  };
-
-  const handleClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -173,13 +160,13 @@ const Security: NextPageWithLayout = () => {
       <ThemeProvider theme={theme}>
         <Box className={styles.clusterTitle}>
           <Breadcrumbs aria-label="breadcrumb">
-            <Typography variant="h5" color="text.primary" fontFamily="MabryPro-Bold">
+            <Typography variant="h5" color="text.primary" fontFamily="mabry-bold">
               Cluster
             </Typography>
           </Breadcrumbs>
           <Button
             size="small"
-            sx={{ '&.MuiButton-root': { backgroundColor: '#1C293A', borderRadius: 0 } }}
+            className={styles.button}
             variant="contained"
             onClick={() => {
               router.push(`/clusters/new`);
@@ -194,24 +181,24 @@ const Security: NextPageWithLayout = () => {
             <Box p="1rem">
               <Box display="flex">
                 <Box className={styles.clusterIconContainer}>
-                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/favicon/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterBigCircleIcon} src="/favicon/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterIcon} src="/favicon/cluster/cluster.svg" />
+                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/icons/cluster/round.svg" />
+                  <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
+                  <Box component="img" className={styles.clusterIcon} src="/icons/cluster/cluster.svg" />
                 </Box>
-                <Typography variant="h6" fontFamily="MabryPro-Bold" className={styles.clusterIconTitle}>
+                <Typography variant="h6" fontFamily="mabry-bold" className={styles.clusterIconTitle}>
                   Cluster
                 </Typography>
               </Box>
               <Box className={styles.clusterContentContainer}>
                 <Box marginLeft="0.6rem">
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h5" fontFamily="MabryPro-Bold" sx={{ mr: '1rem' }}>
+                    <Typography variant="h5" fontFamily="mabry-bold" sx={{ mr: '1rem' }}>
                       {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : numberOfClusters.length}
                     </Typography>
                     <span>number of cluster</span>
                   </Box>
                   <Grid className={styles.clusterBottomContainer}>
-                    <Box component="img" className={styles.clusterBottomIcon} src="/favicon/cluster/default.svg" />
+                    <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/default.svg" />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span className={styles.clusterBottomContent}>
                         {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : defaultCluster?.length}
@@ -220,7 +207,7 @@ const Security: NextPageWithLayout = () => {
                     </Box>
                   </Grid>
                 </Box>
-                <Box component="img" src="/favicon/cluster/statistics.svg" />
+                <Box component="img" src="/icons/cluster/statistics.svg" />
               </Box>
             </Box>
           </Paper>
@@ -228,35 +215,33 @@ const Security: NextPageWithLayout = () => {
             <Box p="1rem">
               <Box display="flex">
                 <Box className={styles.clusterIconContainer}>
-                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/favicon/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterBigCircleIcon} src="/favicon/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterIcon} src="/favicon/cluster/scheduler.svg" />
+                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/icons/cluster/round.svg" />
+                  <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
+                  <Box component="img" className={styles.clusterIcon} src="/icons/cluster/scheduler.svg" />
                 </Box>
-                <Typography variant="h6" className={styles.clusterIconTitle} fontFamily="MabryPro-Bold">
+                <Typography variant="h6" className={styles.clusterIconTitle} fontFamily="mabry-bold">
                   Scheduler
                 </Typography>
               </Box>
               <Box className={styles.clusterContentContainer}>
                 <Box sx={{ ml: '0.6rem' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h5" fontFamily="MabryPro-Bold" sx={{ mr: '1rem' }}>
+                    <Typography variant="h5" fontFamily="mabry-bold" sx={{ mr: '1rem' }}>
                       {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : scheduleList?.length}
                     </Typography>
                     <span>number of scheduler</span>
                   </Box>
-
                   <Grid className={styles.clusterBottomContainer}>
-                    <Box component="img" className={styles.clusterBottomIcon} src="/favicon/cluster/active.svg" />
+                    <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/active.svg" />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span className={styles.clusterBottomContent}>
                         {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : scheduleActive?.length}
                       </span>
-
                       <span className={styles.clusterBottomContentMsg}>active</span>
                     </Box>
                   </Grid>
                 </Box>
-                <Box component="img" src="/favicon/cluster/statistics.svg" />
+                <Box component="img" src="/icons/cluster/statistics.svg" />
               </Box>
             </Box>
           </Paper>
@@ -264,24 +249,24 @@ const Security: NextPageWithLayout = () => {
             <Box p="1rem">
               <Box display="flex">
                 <Box className={styles.clusterIconContainer}>
-                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/favicon/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterBigCircleIcon} src="/favicon/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterIcon} src="/favicon/cluster/seed-peer.svg" />
+                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/icons/cluster/round.svg" />
+                  <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
+                  <Box component="img" className={styles.clusterIcon} src="/icons/cluster/seed-peer.svg" />
                 </Box>
-                <Typography variant="h6" fontFamily="MabryPro-Bold" className={styles.seedPseerIconTitle}>
+                <Typography variant="h6" fontFamily="mabry-bold" className={styles.seedPseerIconTitle}>
                   Seed peer
                 </Typography>
               </Box>
               <Box className={styles.clusterContentContainer}>
                 <Box sx={{ ml: '0.6rem' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h5" fontFamily="MabryPro-Bold" sx={{ mr: '1rem' }}>
+                    <Typography variant="h5" fontFamily="mabry-bold" sx={{ mr: '1rem' }}>
                       {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : seedPeerList.length}
                     </Typography>
                     <span>number of seed peer</span>
                   </Box>
                   <Grid className={styles.clusterBottomContainer}>
-                    <Box component="img" className={styles.clusterBottomIcon} src="/favicon/cluster/active.svg" />
+                    <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/active.svg" />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span className={styles.clusterBottomContent}>
                         {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : seedPeerActive?.length}
@@ -290,7 +275,7 @@ const Security: NextPageWithLayout = () => {
                     </Box>
                   </Grid>
                 </Box>
-                <Box component="img" src="/favicon/cluster/statistics.svg" />
+                <Box component="img" src="/icons/cluster/statistics.svg" />
               </Box>
             </Box>
           </Paper>
@@ -319,7 +304,7 @@ const Security: NextPageWithLayout = () => {
         </Paper>
         <Grid item xs={12} className={styles.clusterListContainer} component="form" noValidate>
           {Array.isArray(clusterList) &&
-            clusterList.map((item: any, id: React.Key | null | undefined) => (
+            clusterList.map((item: any, id) => (
               <Paper
                 key={id}
                 variant="outlined"
@@ -355,7 +340,7 @@ const Security: NextPageWithLayout = () => {
                         mb: '0.8rem',
                         width: item.IsDefault ? '4rem' : '6rem',
                         height: '1.4rem',
-                        background: item.IsDefault ? '#2E8F79' : '#1C293A',
+                        background: item.IsDefault ? 'var(--description-color)' : 'var(--button-color)',
                         color: item.IsDefault ? '#FFFFFF' : '#FFFFFF',
                       }}
                     >
@@ -364,12 +349,12 @@ const Security: NextPageWithLayout = () => {
                       </Typography>
                     </Box>
                   )}
-                  <Typography variant="h6" component="div" fontFamily="MabryPro-Bold">
+                  <Typography variant="h6" component="div" fontFamily="mabry-bold">
                     {isLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.Name}
                   </Typography>
                   <Box display="flex" mt="0.4rem">
                     <Box display="flex" className={styles.locationContainer}>
-                      <Typography variant="body2" component="div" fontFamily="MabryPro-Bold">
+                      <Typography variant="body2" component="div" fontFamily="mabry-bold">
                         IDC&nbsp;:&nbsp;
                       </Typography>
                       <Tooltip title={item.Scopes.idc || '-'} placement="top">
@@ -379,7 +364,7 @@ const Security: NextPageWithLayout = () => {
                       </Tooltip>
                     </Box>
                     <Box display="flex" className={styles.locationContainer}>
-                      <Typography variant="body2" component="div" fontFamily="MabryPro-Bold">
+                      <Typography variant="body2" component="div" fontFamily="mabry-bold">
                         Location&nbsp;:&nbsp;
                       </Typography>
                       <Tooltip title={item.Scopes.location || '-'} placement="top">
@@ -392,7 +377,7 @@ const Security: NextPageWithLayout = () => {
                   <Box className={styles.creatTimeContainer}>
                     <Chip
                       avatar={<MoreTimeIcon />}
-                      label={isLoading ? <Skeleton sx={{ width: '6rem' }} /> : dateTimeFormat(item.CreatedAt)}
+                      label={isLoading ? <Skeleton sx={{ width: '6rem' }} /> : datetime(item.CreatedAt)}
                       variant="outlined"
                       size="small"
                     />
@@ -408,7 +393,7 @@ const Security: NextPageWithLayout = () => {
                         router.push(`/clusters/${item.ID}`);
                       }}
                     >
-                      <ArrowCircleRightIcon fontSize="large" sx={{ color: '#1C293A' }} />
+                      <ArrowCircleRightIcon fontSize="large" sx={{ color: 'var(--button-color)' }} />
                     </IconButton>
                   </Box>
                 </Box>
@@ -416,14 +401,23 @@ const Security: NextPageWithLayout = () => {
             ))}
         </Grid>
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
-          <Pagination count={totalPages} page={page} onChange={handleChangePage} color="primary" size="small" />
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={(_event: any, newPage: number) => {
+              setPage(newPage);
+            }}
+            color="primary"
+            size="small"
+          />
         </Box>
       </ThemeProvider>
     </Box>
   );
 };
 
-export default Security;
-Security.getLayout = function getLayout(page: React.ReactElement) {
+export default Cluster;
+
+Cluster.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };

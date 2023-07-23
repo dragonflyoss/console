@@ -13,17 +13,16 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import styles from './index.module.scss';
-import { useEffect, useState } from 'react';
+import { LoadingButton } from '@mui/lab';
+import styles from './index.module.css';
 import HelpIcon from '@mui/icons-material/Help';
+import { ReactElement, useEffect, useState } from 'react';
 import { getClusterInformation, updateCluster } from 'lib/api';
 import React from 'react';
 import { useRouter } from 'next/router';
-import { LoadingButton } from '@mui/lab';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-const CIDRsOptions = ['0.0.0.0/0', '10.0.0.0/8'];
 const CreateCluster = () => {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
@@ -35,35 +34,36 @@ const CreateCluster = () => {
   const [candidateParentLimitError, setCandidateParentLimitError] = useState(false);
   const [filterParentLimitError, setFilterParentLimitError] = useState(false);
   const [locationError, setLocationError] = useState(false);
-  const [idcError, setIdcError] = useState(false);
+  const [IDCError, setIDCError] = useState(false);
   const [cidrsError, setCidrsError] = useState(false);
-
   const [editLoadingButton, setEditLoadingButton] = useState(false);
-  const [InformationList, setInformationList] = useState({
+  const [informationList, setInformationList] = useState({
     BIO: '',
     CreatedAt: '',
     ID: '',
     IsDefault: false,
-    PeerClusterConfig: { concurrent_piece_count: 'String', load_limit: 'String' },
-    SchedulerClusterConfig: { candidate_parent_limit: 'String', filter_parent_limit: 'String' },
-    SchedulerClusterID: 'String',
+    PeerClusterConfig: { concurrent_piece_count: '', load_limit: '' },
+    SchedulerClusterConfig: { candidate_parent_limit: '', filter_parent_limit: '' },
+    SchedulerClusterID: '',
     Scopes: {
       cidrs: [],
       idc: '',
       location: '',
     },
-    SeedPeerClusterConfig: { load_limit: 'String' },
-    SeedPeerClusterID: 'String',
+    SeedPeerClusterConfig: { load_limit: '' },
+    SeedPeerClusterID: '',
   });
+  const cidrsOptions: never[] = [];
   const router = useRouter();
 
   useEffect(() => {
-    if (router.query.postid) {
-      getClusterInformation(router.query.postid).then(async (response) => {
+    if (typeof router.query.slug === 'string') {
+      getClusterInformation(router.query.slug).then(async (response) => {
         setInformationList(await response.json());
       });
     }
-  }, [router.query.postid]);
+  }, [router.query.slug]);
+
   const {
     BIO,
     IsDefault,
@@ -72,7 +72,7 @@ const CreateCluster = () => {
     SchedulerClusterConfig: { candidate_parent_limit, filter_parent_limit },
     Scopes: { idc, location, cidrs },
     SeedPeerClusterConfig,
-  } = InformationList;
+  } = informationList;
 
   const informationFormList = [
     {
@@ -85,8 +85,9 @@ const CreateCluster = () => {
         placeholder: 'Please enter Description',
         helperText: bioError ? 'Must be a number and range from 0-1000' : '',
         error: bioError,
+
         onChange: (e: any) => {
-          setInformationList({ ...InformationList, BIO: e.target.value });
+          setInformationList({ ...informationList, BIO: e.target.value });
           changeValidate(e.target.value, informationFormList[0]);
         },
       },
@@ -99,12 +100,13 @@ const CreateCluster = () => {
       },
     },
   ];
+
   const scopesFormList = [
     {
       formProps: {
-        id: 'Location',
+        id: 'location',
         label: 'Location',
-        name: 'Location',
+        name: 'location',
         autoComplete: 'family-name',
         placeholder: 'Please enter Location',
         value: location,
@@ -112,7 +114,7 @@ const CreateCluster = () => {
         error: locationError,
 
         onChange: (e: any) => {
-          setInformationList({ ...InformationList, Scopes: { ...InformationList.Scopes, location: e.target.value } });
+          setInformationList({ ...informationList, Scopes: { ...informationList.Scopes, location: e.target.value } });
           changeValidate(e.target.value, scopesFormList[0]);
         },
         InputProps: {
@@ -123,7 +125,7 @@ const CreateCluster = () => {
               }
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.DescriptionIcon} />
+              <HelpIcon color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -138,16 +140,16 @@ const CreateCluster = () => {
     },
     {
       formProps: {
-        id: 'IDC',
+        id: 'idc',
         label: 'IDC',
-        name: 'IDC',
+        name: 'idc',
         autoComplete: 'family-name',
         placeholder: 'Please enter IDC',
         value: idc,
-        helperText: idcError ? 'Maximum length is 100' : '',
-        error: idcError,
+        helperText: IDCError ? 'Maximum length is 100' : '',
+        error: IDCError,
         onChange: (e: any) => {
-          setInformationList({ ...InformationList, Scopes: { ...InformationList.Scopes, idc: e.target.value } });
+          setInformationList({ ...informationList, Scopes: { ...informationList.Scopes, idc: e.target.value } });
           changeValidate(e.target.value, scopesFormList[1]);
         },
         InputProps: {
@@ -158,27 +160,28 @@ const CreateCluster = () => {
               }
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.DescriptionIcon} />
+              <HelpIcon color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
       },
       syncError: false,
-      setError: setIdcError,
+      setError: setIDCError,
       validate: (value: string) => {
         const reg = /^(.{0,100})$/;
         return reg.test(value);
       },
     },
     {
+      name: 'cidrs',
       label: 'CIDRs',
       CIDRsFormProps: {
         value: cidrs || [],
-        options: CIDRsOptions,
+        options: cidrsOptions,
 
         onChange: (_e: any, newValue: any) => {
           if (!scopesFormList[2].formProps.error) {
-            setInformationList({ ...InformationList, Scopes: { ...InformationList.Scopes, cidrs: newValue } });
+            setInformationList({ ...informationList, Scopes: { ...informationList.Scopes, cidrs: newValue } });
           }
         },
         onInputChange: (e: any) => {
@@ -188,11 +191,13 @@ const CreateCluster = () => {
           value.map((option: any, index: any) => <Chip key={index} label={option} {...getTagProps({ index })} />),
       },
       formProps: {
+        id: 'cidrs',
         label: 'CIDRs',
-        name: 'CIDRs',
+        name: 'cidrs',
         placeholder: 'Please enter CIDRs',
         error: cidrsError,
         helperText: cidrsError ? 'Length: (0, 100]' : '',
+
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
             e.preventDefault();
@@ -201,18 +206,20 @@ const CreateCluster = () => {
       },
       syncError: false,
       setError: setCidrsError,
+
       validate: (value: string) => {
         const reg = /^(.{0,1000})$/;
         return reg.test(value);
       },
     },
   ];
+
   const configFormList = [
     {
       formProps: {
-        id: 'Seed Peer load limit',
+        id: 'seed peer load limit',
         label: 'Seed Peer load limit',
-        name: 'SeedPeerloadlimit',
+        name: 'seedPeerLoadLimit',
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Seed Peer load limit',
@@ -222,8 +229,8 @@ const CreateCluster = () => {
 
         onChange: (e: any) => {
           setInformationList({
-            ...InformationList,
-            SeedPeerClusterConfig: { ...InformationList.SeedPeerClusterConfig, load_limit: e.target.value },
+            ...informationList,
+            SeedPeerClusterConfig: { ...informationList.SeedPeerClusterConfig, load_limit: e.target.value },
           });
           changeValidate(e.target.value, configFormList[0]);
         },
@@ -233,7 +240,7 @@ const CreateCluster = () => {
               title={`If other peers download from the seed peer, the load of the seed peer will increase. When the load limit of the seed peer is reached, the scheduler will no longer schedule other peers to download from the seed peer until the it has the free load.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.DescriptionIcon} />
+              <HelpIcon color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -248,22 +255,24 @@ const CreateCluster = () => {
     },
     {
       formProps: {
-        id: 'Peer load limit',
+        id: 'peer load limit',
         label: 'Peer load limit',
-        name: 'Peerloadlimit',
+        name: 'peerLoadLimit',
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Peer load limit',
         helperText: peerLoadLimitError ? 'Must be a number and range from 0-2000' : '',
         error: peerLoadLimitError,
         value: load_limit,
+
         onChange: (e: any) => {
           setInformationList({
-            ...InformationList,
-            PeerClusterConfig: { ...InformationList.PeerClusterConfig, load_limit: e.target.value },
+            ...informationList,
+            PeerClusterConfig: { ...informationList.PeerClusterConfig, load_limit: e.target.value },
           });
           changeValidate(e.target.value, configFormList[1]);
         },
+
         InputProps: {
           endAdornment: (
             <Tooltip
@@ -272,7 +281,7 @@ const CreateCluster = () => {
               }
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.DescriptionIcon} />
+              <HelpIcon color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -286,9 +295,9 @@ const CreateCluster = () => {
     },
     {
       formProps: {
-        id: 'Number of concurrent download pieces',
+        id: 'number of concurrent download pieces',
         label: 'Number of concurrent download pieces',
-        name: 'concurrent_piece_count',
+        name: 'numberOfConcurrentDownloadPieces',
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Number of concurrent download pieces',
@@ -298,18 +307,19 @@ const CreateCluster = () => {
 
         onChange: (e: any) => {
           setInformationList({
-            ...InformationList,
-            PeerClusterConfig: { ...InformationList.PeerClusterConfig, concurrent_piece_count: e.target.value },
+            ...informationList,
+            PeerClusterConfig: { ...informationList.PeerClusterConfig, concurrent_piece_count: e.target.value },
           });
           changeValidate(e.target.value, configFormList[2]);
         },
+
         InputProps: {
           endAdornment: (
             <Tooltip
               title={`The number of pieces that a peer can concurrent download from other peers.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.DescriptionIcon} />
+              <HelpIcon color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -324,9 +334,9 @@ const CreateCluster = () => {
     },
     {
       formProps: {
-        id: 'Candidate parent limit',
+        id: 'candidate parent limit',
         label: 'Candidate parent limit',
-        name: 'Candidate parent limit',
+        name: 'candidateParentLimit',
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Candidate parent limit',
@@ -336,21 +346,22 @@ const CreateCluster = () => {
 
         onChange: (e: any) => {
           setInformationList({
-            ...InformationList,
+            ...informationList,
             SchedulerClusterConfig: {
-              ...InformationList.SchedulerClusterConfig,
+              ...informationList.SchedulerClusterConfig,
               candidate_parent_limit: e.target.value,
             },
           });
           changeValidate(e.target.value, configFormList[3]);
         },
+
         InputProps: {
           endAdornment: (
             <Tooltip
               title={`The maximum number of parents that the scheduler can schedule for download peer.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.DescriptionIcon} />
+              <HelpIcon color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -365,9 +376,9 @@ const CreateCluster = () => {
     },
     {
       formProps: {
-        id: 'Filter parent limit',
+        id: 'filter parent limit',
         label: 'Filter parent limit',
-        name: 'Filter parent limit',
+        name: 'filter parent limit',
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Filter parent limit',
@@ -377,21 +388,22 @@ const CreateCluster = () => {
 
         onChange: (e: any) => {
           setInformationList({
-            ...InformationList,
+            ...informationList,
             SchedulerClusterConfig: {
-              ...InformationList.SchedulerClusterConfig,
+              ...informationList.SchedulerClusterConfig,
               filter_parent_limit: e.target.value,
             },
           });
           changeValidate(e.target.value, configFormList[4]);
         },
+
         InputProps: {
           endAdornment: (
             <Tooltip
               title={`The scheduler will randomly select the  number of parents from all the parents according to the filter parent limit and evaluate the optimal parents in selecting parents for the peer to download task. The number of optimal parent is the scheduling parent limit.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.DescriptionIcon} />
+              <HelpIcon color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -407,17 +419,14 @@ const CreateCluster = () => {
 
   const changeValidate = (value: string, data: any) => {
     const { setError, validate } = data;
-
     setError(!validate(value));
   };
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInformationList({ ...InformationList, IsDefault: event.target.checked });
-  };
 
-  const handleClose = (_event: React.SyntheticEvent | Event, reason?: string) => {
+  const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
+
     setSuccessMessage(false);
     setErrorMessage(false);
   };
@@ -466,15 +475,15 @@ const CreateCluster = () => {
       },
     };
 
-    if (canSubmit) {
-      updateCluster(router.query.postid, {
+    if (canSubmit && typeof router.query.slug === 'string') {
+      updateCluster(router.query.slug, {
         ...formdata,
       }).then((response) => {
         if (response.status === 200) {
           setEditLoadingButton(false);
           setSuccessMessage(true);
 
-          router.push(`/clusters/${router.query.postid}`);
+          router.push(`/clusters/${router.query.slug}`);
         } else {
           setEditLoadingButton(false);
           setErrorMessage(true);
@@ -506,17 +515,17 @@ const CreateCluster = () => {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography variant="h5" fontFamily="MabryPro-Bold">
+      <Typography variant="h5" fontFamily="mabry-bold">
         Update Cluster
       </Typography>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Grid className={styles.container} component="form" noValidate onSubmit={handleSubmit}>
         <Box className={styles.informationTitle}>
-          <Typography variant="h6" fontFamily="MabryPro-Bold" mr="0.4rem">
+          <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
             Information
           </Typography>
           <Tooltip title="The information of cluster." placement="top">
-            <HelpIcon color="disabled" className={styles.DescriptionIcon} />
+            <HelpIcon color="disabled" className={styles.descriptionIcon} />
           </Tooltip>
         </Box>
         <Box className={styles.isdefaultContainer}>
@@ -524,20 +533,21 @@ const CreateCluster = () => {
             control={
               <Checkbox
                 checked={IsDefault}
-                onChange={handleChange}
-                sx={{ '&.MuiCheckbox-root': { color: '#1C293A' } }}
+                onChange={(event: { target: { checked: any } }) => {
+                  setInformationList({ ...informationList, IsDefault: event.target.checked });
+                }}
+                sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }}
               />
             }
             label="Set cluster as your default cluster"
             name="IsDefault"
             sx={{ '&.MuiFormControlLabel-root': { mr: '0.6rem' } }}
           />
-
           <Tooltip
             title="When peer does not find a matching cluster based on scopes, the default cluster will be used."
             placement="top"
           >
-            <HelpIcon color="disabled" className={styles.DescriptionIcon} />
+            <HelpIcon color="disabled" className={styles.descriptionIcon} />
           </Tooltip>
         </Box>
         {informationFormList.map((item) => (
@@ -550,7 +560,7 @@ const CreateCluster = () => {
           />
         ))}
         <Box className={styles.scopesTitle}>
-          <Typography variant="h6" fontFamily="MabryPro-Bold" mr="0.4rem">
+          <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
             Scopes
           </Typography>
           <Tooltip
@@ -558,7 +568,7 @@ const CreateCluster = () => {
             the scope."
             placement="top"
           >
-            <HelpIcon color="disabled" className={styles.DescriptionIcon} />
+            <HelpIcon color="disabled" className={styles.descriptionIcon} />
           </Tooltip>
         </Box>
         <Grid className={styles.scopesContainer}>
@@ -582,11 +592,11 @@ const CreateCluster = () => {
           })}
         </Grid>
         <Box className={styles.configTitle}>
-          <Typography variant="h6" fontFamily="MabryPro-Bold" mr="0.4rem">
+          <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
             Config
           </Typography>
           <Tooltip title=" The configuration for P2P downloads." placement="top">
-            <HelpIcon color="disabled" className={styles.DescriptionIcon} />
+            <HelpIcon color="disabled" className={styles.descriptionIcon} />
           </Tooltip>
         </Box>
         <Grid className={styles.configContainer}>
@@ -603,21 +613,24 @@ const CreateCluster = () => {
         <Box className={styles.footerButton}>
           <LoadingButton
             loading={editLoadingButton}
-            endIcon={<CancelIcon sx={{ color: '#1C293A' }} />}
+            endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
             size="small"
             variant="outlined"
             loadingPosition="end"
             sx={{
               '&.MuiLoadingButton-root': {
-                color: '#000000',
+                color: 'var(--calcel-size-color)',
                 borderRadius: 0,
-                borderColor: '#979797',
+                borderColor: 'var(--calcel-color)',
               },
-              ':hover': { backgroundColor: '#F4F3F6', borderColor: '#F4F3F6' },
+              ':hover': {
+                backgroundColor: 'var( --calcel-hover-corlor)',
+                borderColor: 'var( --calcel-hover-corlor)',
+              },
               '&.MuiLoadingButton-loading': {
-                backgroundColor: '#DEDEDE',
-                color: '#000000',
-                borderColor: '#DEDEDE',
+                backgroundColor: 'var(--button-loading-color)',
+                color: 'var(--button-loading-size-color)',
+                borderColor: 'var(--button-loading-color)',
               },
               mr: '1rem',
               width: '8rem',
@@ -639,16 +652,16 @@ const CreateCluster = () => {
             loadingPosition="end"
             sx={{
               '&.MuiLoadingButton-root': {
-                backgroundColor: '#1C293A',
+                backgroundColor: 'var(--save-color)',
                 borderRadius: 0,
-                color: '#FFFFFF',
-                borderColor: '#1C293A',
+                color: 'var(--save-size-color)',
+                borderColor: 'var(--save-color)',
               },
-              ':hover': { backgroundColor: '#555555', borderColor: '#555555' },
+              ':hover': { backgroundColor: 'var(--save-hover-corlor)', borderColor: 'var(--save-hover-corlor)' },
               '&.MuiLoadingButton-loading': {
-                backgroundColor: '#DEDEDE',
-                color: '#000000',
-                borderColor: '#DEDEDE',
+                backgroundColor: 'var(--button-loading-color)',
+                color: 'var(--button-loading-size-color)',
+                borderColor: 'var(--button-loading-color)',
               },
               width: '8rem',
             }}
@@ -662,6 +675,7 @@ const CreateCluster = () => {
 };
 
 export default CreateCluster;
-CreateCluster.getLayout = function getLayout(page: React.ReactElement) {
+
+CreateCluster.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };

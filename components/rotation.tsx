@@ -2,7 +2,7 @@ import { Box, Grid, MobileStepper, ThemeProvider, createTheme } from '@mui/mater
 import { useState } from 'react';
 import { autoPlay } from 'react-swipeable-views-utils';
 import SwipeableViews from 'react-swipeable-views';
-import styles from './rotation.module.scss';
+import styles from './rotation.module.css';
 import React from 'react';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
@@ -27,12 +27,13 @@ const theme = createTheme({
     MuiMobileStepper: {
       styleOverrides: {
         dotActive: {
-          backgroundColor: '#2E8F79',
+          backgroundColor: 'var(--description-color)',
         },
       },
     },
   },
 });
+
 export default function Rotation() {
   const [imageList] = useState(rotationChart);
   const [imageIndex, setImageIndex] = useState(0);

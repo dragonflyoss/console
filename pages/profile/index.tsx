@@ -17,8 +17,8 @@ import {
 import { useRouter } from 'next/router';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
-import { useState, useEffect } from 'react';
-import { updateUserInfo, getUsersInfo, updatePassword, signOut } from 'lib/api';
+import { useState, useEffect, ReactElement } from 'react';
+import { updateUser, getUser, updatePassword, signOut } from 'lib/api';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -29,10 +29,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import styles from './index.module.scss';
-import { decode } from 'jsonwebtoken';
-import Cookies from 'js-cookie';
-import { dateTimeFormat } from 'components/dataTime';
+import styles from './index.module.css';
+import { datetime, getUserID } from 'lib/utils';
 
 const Profile: NextPageWithLayout = () => {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -53,7 +51,7 @@ const Profile: NextPageWithLayout = () => {
   const [showMyProfile, setShowMyProfile] = useState(true);
   const [showPersonalInformation, setShowPersonalInformation] = useState(true);
   const [userID, setUserID] = useState('');
-  const [userObject, setUserObject] = useState<any>({
+  const [user, setUser] = useState<any>({
     bio: '',
     avatar: '',
     id: '',
@@ -64,7 +62,7 @@ const Profile: NextPageWithLayout = () => {
     created_at: '',
     formBio: '',
   });
-  const [PasswordObjet, setPasswordObjet] = useState({
+  const [passwordObjet, setPasswordObjet] = useState({
     old_password: '',
     new_password: '',
   });
@@ -72,14 +70,14 @@ const Profile: NextPageWithLayout = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    const userInfo: any = decode(Cookies.get('jwt') || 'jwt');
-    setUserID(userInfo?.id);
+    const userID = getUserID();
+    setUserID(userID);
 
-    if (userInfo?.id) {
-      getUsersInfo(userInfo?.id).then(async (response) => {
+    if (userID) {
+      getUser(userID).then(async (response) => {
         if (response.status === 200) {
           const res = await response.json();
-          setUserObject(res);
+          setUser(res);
           setBio(res.bio);
         } else {
           setErrorMessage(true);
@@ -91,39 +89,39 @@ const Profile: NextPageWithLayout = () => {
     setIsLoading(false);
   }, []);
 
-  const { bio, email, phone, location } = userObject;
-  const { old_password, new_password } = PasswordObjet;
+  const { bio, email, phone, location } = user;
+  const { old_password, new_password } = passwordObjet;
 
   const userList = [
     {
       name: 'id',
       label: 'ID',
-      icon: <Box component="img" className={styles.userIcon} src="/favicon/user/id.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/icons/user/id.svg" />,
     },
     {
       name: 'name',
       label: 'Name',
-      icon: <Box component="img" className={styles.userIcon} src="/favicon/user/name.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/icons/user/name.svg" />,
     },
     {
       name: 'email',
       label: 'Email',
-      icon: <Box component="img" className={styles.userIcon} src="/favicon/user/email.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/icons/user/email.svg" />,
     },
     {
       name: 'location',
       label: 'Location',
-      icon: <Box component="img" className={styles.userIcon} src="/favicon/user/location.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/icons/user/location.svg" />,
     },
     {
       name: 'phone',
       label: 'Phone',
-      icon: <Box component="img" className={styles.userIcon} src="/favicon/user/phone.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/icons/user/phone.svg" />,
     },
     {
       name: 'created_at',
       label: 'created_at',
-      icon: <Box component="img" className={styles.userIcon} src="/favicon/user/created_at.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/icons/user/created-at.svg" />,
     },
   ];
 
@@ -141,7 +139,7 @@ const Profile: NextPageWithLayout = () => {
         value: bio,
 
         onChange: (e: any) => {
-          setUserObject({ ...userObject, bio: e.target.value });
+          setUser({ ...user, bio: e.target.value });
           changeValidate(e.target.value, formList[0]);
         },
 
@@ -175,7 +173,7 @@ const Profile: NextPageWithLayout = () => {
         error: phoneError,
 
         onChange: (e: any) => {
-          setUserObject({ ...userObject, phone: e.target.value });
+          setUser({ ...user, phone: e.target.value });
           changeValidate(e.target.value, formList[1]);
         },
 
@@ -208,7 +206,7 @@ const Profile: NextPageWithLayout = () => {
         error: locationError,
 
         onChange: (e: any) => {
-          setUserObject({ ...userObject, location: e.target.value });
+          setUser({ ...user, location: e.target.value });
           changeValidate(e.target.value, formList[2]);
         },
 
@@ -240,7 +238,7 @@ const Profile: NextPageWithLayout = () => {
         error: emailError,
 
         onChange: (e: any) => {
-          setUserObject({ ...userObject, email: e.target.value });
+          setUser({ ...user, email: e.target.value });
           changeValidate(e.target.value, formList[3]);
         },
 
@@ -256,7 +254,7 @@ const Profile: NextPageWithLayout = () => {
       setError: setEmailError,
 
       validate: (value: string) => {
-        const reg = /^$|^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+$/;
+        const reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
         return reg.test(value);
       },
     },
@@ -277,7 +275,7 @@ const Profile: NextPageWithLayout = () => {
 
         onChange: (e: any) => {
           changeValidate(e.target.value, PasswordList[0]);
-          setPasswordObjet({ ...PasswordObjet, old_password: e.target.value });
+          setPasswordObjet({ ...passwordObjet, old_password: e.target.value });
         },
 
         InputProps: {
@@ -326,7 +324,7 @@ const Profile: NextPageWithLayout = () => {
           changeValidate(e.target.value, PasswordList[1], () => {
             setNewPassword(e.target.value);
           });
-          setPasswordObjet({ ...PasswordObjet, new_password: e.target.value });
+          setPasswordObjet({ ...passwordObjet, new_password: e.target.value });
         },
 
         InputProps: {
@@ -438,7 +436,7 @@ const Profile: NextPageWithLayout = () => {
     };
 
     if (canSubmit) {
-      updateUserInfo(userID, { ...formData }).then((response) => {
+      updateUser(userID, { ...formData }).then((response) => {
         if (response.status === 200) {
           setPersonalLoadingButton(false);
           setShowPersonalInformation(true);
@@ -470,8 +468,8 @@ const Profile: NextPageWithLayout = () => {
     const canSubmit = Boolean(!PasswordList.filter((item) => item.syncError).length);
 
     const formData = {
-      old_password: PasswordObjet.old_password,
-      new_password: PasswordObjet.new_password,
+      old_password: passwordObjet.old_password,
+      new_password: passwordObjet.new_password,
     };
 
     if (canSubmit) {
@@ -492,7 +490,7 @@ const Profile: NextPageWithLayout = () => {
     }
   };
 
-  const handleClose = (_event: React.SyntheticEvent | Event, reason?: string) => {
+  const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -523,7 +521,7 @@ const Profile: NextPageWithLayout = () => {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography sx={{ mb: '2rem' }} variant="h5" component="div" fontFamily="MabryPro-Bold">
+      <Typography sx={{ mb: '2rem' }} variant="h5" component="div" fontFamily="mabry-bold">
         My Profile
       </Typography>
       <Paper variant="outlined" className={styles.profileContainer}>
@@ -531,11 +529,11 @@ const Profile: NextPageWithLayout = () => {
           <Box className={styles.avatarContainer}>
             <Box display="flex" alignItems="center">
               <Stack direction="row" spacing={2}>
-                <Avatar alt="Remy Sharp" src={userObject?.avatar} className={styles.avatarContent} />
+                <Avatar alt="Remy Sharp" src={user?.avatar} className={styles.avatarContent} />
               </Stack>
               <Box sx={{ pl: '1rem' }}>
-                <Typography variant="h5" component="div" fontFamily="MabryPro-Bold">
-                  {isLoading ? <Skeleton /> : userObject?.name}
+                <Typography variant="h5" component="div" fontFamily="mabry-bold">
+                  {isLoading ? <Skeleton /> : user?.name}
                 </Typography>
                 <Typography variant="subtitle1" component="div" width="36rem">
                   {isLoading ? <Skeleton /> : Bio || '-'}
@@ -546,7 +544,7 @@ const Profile: NextPageWithLayout = () => {
               <Button
                 size="small"
                 variant="contained"
-                sx={{ '&.MuiButton-root': { backgroundColor: '#1C293A', borderRadius: 0 } }}
+                className={styles.button}
                 onClick={() => {
                   setShowMyProfile(false);
                 }}
@@ -554,7 +552,7 @@ const Profile: NextPageWithLayout = () => {
                 <Box
                   component="img"
                   sx={{ width: '1.4rem', height: '1.4rem', mr: '0.4rem' }}
-                  src="/favicon/user/change-password.svg"
+                  src="/icons/user/change-password.svg"
                 />
                 Change Password
               </Button>
@@ -562,7 +560,7 @@ const Profile: NextPageWithLayout = () => {
           </Box>
         ) : (
           <Grid sx={{ width: '40rem' }} onSubmit={changePassword} component="form" noValidate>
-            <Typography variant="h6" component="div" fontFamily="MabryPro-Bold">
+            <Typography variant="h6" component="div" fontFamily="mabry-bold">
               Change Password
             </Typography>
             {PasswordList.map((item) => (
@@ -573,21 +571,24 @@ const Profile: NextPageWithLayout = () => {
             <Box mt="2rem">
               <LoadingButton
                 loading={passwordLoadingButton}
-                endIcon={<CancelIcon sx={{ color: '#1C293A' }} />}
+                endIcon={<CancelIcon sx={{ color: 'var(--save-color)' }} />}
                 size="small"
                 variant="outlined"
                 loadingPosition="end"
                 sx={{
                   '&.MuiLoadingButton-root': {
-                    color: '#000000',
+                    color: 'var(--calcel-size-color)',
                     borderRadius: 0,
-                    borderColor: '#979797',
+                    borderColor: 'var(--calcel-color)',
                   },
-                  ':hover': { backgroundColor: '#F4F3F6', borderColor: '#F4F3F6' },
+                  ':hover': {
+                    backgroundColor: 'var( --calcel-hover-corlor)',
+                    borderColor: 'var( --calcel-hover-corlor)',
+                  },
                   '&.MuiLoadingButton-loading': {
-                    backgroundColor: '#DEDEDE',
-                    color: '#000000',
-                    borderColor: '#DEDEDE',
+                    backgroundColor: 'var(--button-loading-color)',
+                    color: 'var(--button-loading-size-color)',
+                    borderColor: 'var(--button-loading-color)',
                   },
                   mr: '1rem',
                   width: '7rem',
@@ -596,7 +597,7 @@ const Profile: NextPageWithLayout = () => {
                   setShowMyProfile(true);
                 }}
               >
-                Cancel
+                cancel
               </LoadingButton>
               <LoadingButton
                 loading={passwordLoadingButton}
@@ -607,16 +608,16 @@ const Profile: NextPageWithLayout = () => {
                 loadingPosition="end"
                 sx={{
                   '&.MuiLoadingButton-root': {
-                    backgroundColor: '#1C293A',
+                    backgroundColor: 'var(--save-color)',
                     borderRadius: 0,
-                    color: '#FFFFFF',
-                    borderColor: '#1C293A',
+                    color: 'var(--save-size-color)',
+                    borderColor: 'var(--save-color)',
                   },
-                  ':hover': { backgroundColor: '#555555', borderColor: '#555555' },
+                  ':hover': { backgroundColor: 'var(--save-hover-corlor)', borderColor: 'var(--save-hover-corlor)' },
                   '&.MuiLoadingButton-loading': {
-                    backgroundColor: '#DEDEDE',
-                    color: '#000000',
-                    borderColor: '#DEDEDE',
+                    backgroundColor: 'var(--button-loading-color)',
+                    color: 'var(--button-loading-size-color)',
+                    borderColor: 'var(--button-loading-color)',
                   },
                   width: '7rem',
                 }}
@@ -627,17 +628,17 @@ const Profile: NextPageWithLayout = () => {
           </Grid>
         )}
       </Paper>
-      <Paper variant="outlined" className={styles.PersonalInformationContainer}>
+      <Paper variant="outlined" sx={{ p: '2rem' }}>
         {showPersonalInformation ? (
           <Box>
-            <Grid className={styles.InformationHeader}>
-              <Typography variant="h6" component="div" fontFamily="MabryPro-Bold">
+            <Grid className={styles.informationHeader}>
+              <Typography variant="h6" component="div" fontFamily="mabry-bold">
                 Personal Information
               </Typography>
               <Button
                 size="small"
                 variant="contained"
-                sx={{ '&.MuiButton-root': { backgroundColor: '#1C293A', borderRadius: 0 } }}
+                className={styles.button}
                 onClick={() => {
                   setShowPersonalInformation(false);
                 }}
@@ -645,28 +646,24 @@ const Profile: NextPageWithLayout = () => {
                 <Box
                   component="img"
                   sx={{ width: '1.4rem', height: '1.4rem', mr: '0.4rem' }}
-                  src="/favicon/user/edit.svg"
+                  src="/icons/user/edit.svg"
                 />
                 Edit
               </Button>
             </Grid>
-            <Box className={styles.InformationContainer}>
+            <Box className={styles.informationContainer}>
               {userList.map((item) => {
                 return (
-                  <Box className={styles.InformationContert} key={item.name}>
+                  <Box className={styles.informationContent} key={item.name}>
                     <Box display="flex" alignItems="center" mb="0.6rem">
                       {item.icon}
                       {item.name == 'created_at' ? (
-                        <Typography component="div" variant="body1" fontFamily="MabryPro-Bold" ml="0.6rem">
-                          {isLoading ? (
-                            <Skeleton sx={{ width: '10rem' }} />
-                          ) : (
-                            dateTimeFormat(userObject?.[item.name]) || '-'
-                          )}
+                        <Typography component="div" variant="body1" fontFamily="mabry-bold" ml="0.6rem">
+                          {isLoading ? <Skeleton sx={{ width: '10rem' }} /> : datetime(user?.[item.name]) || '-'}
                         </Typography>
                       ) : (
-                        <Typography component="div" variant="body1" fontFamily="MabryPro-Bold" ml="0.6rem">
-                          {isLoading ? <Skeleton sx={{ width: '10rem' }} /> : userObject?.[item?.name] || '-'}
+                        <Typography component="div" variant="body1" fontFamily="mabry-bold" ml="0.6rem">
+                          {isLoading ? <Skeleton sx={{ width: '10rem' }} /> : user?.[item?.name] || '-'}
                         </Typography>
                       )}
                     </Box>
@@ -677,7 +674,7 @@ const Profile: NextPageWithLayout = () => {
           </Box>
         ) : (
           <Box>
-            <Typography variant="h6" component="div" fontFamily="MabryPro-Bold">
+            <Typography variant="h6" component="div" fontFamily="mabry-bold">
               Personal Information
             </Typography>
             <Box component="form" onSubmit={changePersonal} noValidate>
@@ -696,30 +693,33 @@ const Profile: NextPageWithLayout = () => {
               <Box mt="2rem">
                 <LoadingButton
                   loading={personalLoadingButton}
-                  endIcon={<CancelIcon sx={{ color: '#1C293A' }} />}
+                  endIcon={<CancelIcon sx={{ color: 'var(--save-color)' }} />}
                   size="small"
                   variant="outlined"
                   loadingPosition="end"
                   sx={{
                     '&.MuiLoadingButton-root': {
-                      color: '#000000',
+                      color: 'var(--calcel-size-color)',
                       borderRadius: 0,
-                      borderColor: '#979797',
+                      borderColor: 'var(--calcel-color)',
                     },
-                    ':hover': { backgroundColor: '#F4F3F6', borderColor: '#F4F3F6' },
+                    ':hover': {
+                      backgroundColor: 'var( --calcel-hover-corlor)',
+                      borderColor: 'var( --calcel-hover-corlor)',
+                    },
                     '&.MuiLoadingButton-loading': {
-                      backgroundColor: '#DEDEDE',
-                      color: '#000000',
-                      borderColor: '#DEDEDE',
+                      backgroundColor: 'var(--button-loading-color)',
+                      color: 'var(--button-loading-size-color)',
+                      borderColor: 'var(--button-loading-color)',
                     },
                     mr: '1rem',
                     width: '7rem',
                   }}
                   onClick={() => {
                     setShowPersonalInformation(true);
-                    getUsersInfo(userID).then(async (response) => {
+                    getUser(userID).then(async (response) => {
                       const res = await response.json();
-                      setUserObject(res);
+                      setUser(res);
                       setBio(res.bio);
                     });
                   }}
@@ -735,16 +735,16 @@ const Profile: NextPageWithLayout = () => {
                   loadingPosition="end"
                   sx={{
                     '&.MuiLoadingButton-root': {
-                      backgroundColor: '#1C293A',
+                      backgroundColor: 'var(--save-color)',
                       borderRadius: 0,
-                      color: '#FFFFFF',
-                      borderColor: '#1C293A',
+                      color: 'var(--save-size-color)',
+                      borderColor: 'var(--save-color)',
                     },
-                    ':hover': { backgroundColor: '#555555', borderColor: '#555555' },
+                    ':hover': { backgroundColor: 'var(--save-hover-corlor)', borderColor: 'var(--save-hover-corlor)' },
                     '&.MuiLoadingButton-loading': {
-                      backgroundColor: '#DEDEDE',
-                      color: '#000000',
-                      borderColor: '#DEDEDE',
+                      backgroundColor: 'var(--button-loading-color)',
+                      color: 'var(--button-loading-size-color)',
+                      borderColor: 'var(--button-loading-color)',
                     },
                     width: '7rem',
                   }}
@@ -760,6 +760,7 @@ const Profile: NextPageWithLayout = () => {
   );
 };
 export default Profile;
-Profile.getLayout = function getLayout(page: React.ReactElement) {
+
+Profile.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };

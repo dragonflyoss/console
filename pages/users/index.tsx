@@ -34,20 +34,19 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
-import React from 'react';
-import { deleteGuest, deleteRoot, getuserRoles, listUsers, getUsersInfo, putGuest, putRoot } from 'lib/api';
+import { ReactElement, useEffect, useState } from 'react';
+import { deleteGuest, deleteRoot, getuserRoles, listUsers, getUser, putGuest, putRoot } from 'lib/api';
 import { makeStyles } from '@mui/styles';
-import { dateTimeFormat } from 'components/dataTime';
+import { datetime } from 'lib/utils';
 import { LoadingButton } from '@mui/lab';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import styles from './users.module.scss';
+import styles from './users.module.css';
 
 const useStyles = makeStyles((theme: any) => ({
   tableRow: {
     '&$selected': {
-      backgroundColor: '#1C293A',
+      backgroundColor: 'var(--button-color)',
     },
   },
   hover: {
@@ -57,15 +56,16 @@ const useStyles = makeStyles((theme: any) => ({
   tableCell: {
     color: theme.palette.text.primary,
   },
+
   selectedTableCell: {
     color: '#fff',
   },
   selectedTableAvatar: {
-    color: '#1C293A!important',
+    color: 'var(--button-color)!important',
     backgroundColor: '#fff!important',
   },
   selectedButton: {
-    color: '#1C293A!important',
+    color: 'var(--button-color)!important',
     backgroundColor: '#fff!important',
   },
 }));
@@ -78,7 +78,7 @@ const User: NextPageWithLayout = () => {
   const [DetailLoading, setDetailLoading] = useState(true);
   const [detailOpen, setDetailOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
-  const [selected, setSelected] = useState(null);
+  const [userID, setUserID] = useState('');
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadingButton, setLoadingButton] = useState(false);
   const [userList, setUserList] = useState([{ avatar: '', id: '', email: '', name: '', state: '', location: '' }]);
@@ -113,7 +113,7 @@ const User: NextPageWithLayout = () => {
     setDetailLoading(true);
     setSelectedRow(row);
 
-    await getUsersInfo(row.id).then(async (response) => {
+    await getUser(row.id).then(async (response) => {
       if (response.status === 200) {
         setUserObject(await response.json());
       } else {
@@ -135,7 +135,7 @@ const User: NextPageWithLayout = () => {
 
   const openSwitchUser = async (row: any) => {
     setSelectedRow(row);
-    setSelected(row.id);
+    setUserID(row.id);
 
     await getuserRoles(row.id).then(async (response) => {
       if (response.status === 200) {
@@ -154,13 +154,13 @@ const User: NextPageWithLayout = () => {
     setUserOpen(false);
     setSelectedRow(null);
   };
-  1;
+
   const handleSubmit = async () => {
     setLoadingButton(true);
 
     if (role == 'root') {
-      const deleteGuestMethod = deleteGuest(selected);
-      const putRootMethod = putRoot(selected);
+      const deleteGuestMethod = deleteGuest(userID);
+      const putRootMethod = putRoot(userID);
 
       Promise.all([deleteGuestMethod, putRootMethod]).then((res) => {
         const response = res.filter((item) => {
@@ -179,8 +179,8 @@ const User: NextPageWithLayout = () => {
         }
       });
     } else if (role == 'guest') {
-      const deleteRootMethod = await deleteRoot(selected);
-      const putGuestMethod = await putGuest(selected);
+      const deleteRootMethod = await deleteRoot(userID);
+      const putGuestMethod = await putGuest(userID);
 
       Promise.all([deleteRootMethod, putGuestMethod]).then((res) => {
         const response = res.filter((item) => {
@@ -233,7 +233,7 @@ const User: NextPageWithLayout = () => {
         </Alert>
       </Snackbar>
       <Breadcrumbs sx={{ mb: '2rem' }}>
-        <Typography variant="h5" color="text.primary" fontFamily="MabryPro-Bold">
+        <Typography variant="h5" color="text.primary" fontFamily="mabry-bold">
           User
         </Typography>
       </Breadcrumbs>
@@ -243,27 +243,27 @@ const User: NextPageWithLayout = () => {
             <TableRow>
               <TableCell align="center"></TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Name
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Email
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Location
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   State
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Operation
                 </Typography>
               </TableCell>
@@ -273,10 +273,14 @@ const User: NextPageWithLayout = () => {
             {Array.isArray(userList) &&
               userList.map((item) => (
                 <TableRow
-                  sx={{ '&.MuiTableRow-root': { ':hover': { background: selectedRow === item ? '#1C293A' : '' } } }}
+                  sx={{
+                    '&.MuiTableRow-root': {
+                      ':hover': { background: selectedRow === item ? 'var(--button-color)' : '' },
+                    },
+                  }}
                   key={item?.name}
                   selected={selectedRow === item}
-                  className={`${classes.tableRow} ${selected === item ? classes.selected : ''}`}
+                  className={`${classes.tableRow} ${selectedRow === item ? classes.selected : ''}`}
                   classes={{ selected: classes.selected }}
                 >
                   <TableCell align="center">
@@ -286,7 +290,7 @@ const User: NextPageWithLayout = () => {
                       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                         <Avatar
                           alt="Remy Sharp"
-                          sx={{ '&.MuiAvatar-root': { background: '#1C293A', color: '#fff' } }}
+                          sx={{ '&.MuiAvatar-root': { background: 'var(--button-color)', color: '#fff' } }}
                           className={`${classes.tableCell} ${selectedRow === item ? classes.selectedTableAvatar : ''}`}
                           src={item?.avatar}
                         />
@@ -324,9 +328,10 @@ const User: NextPageWithLayout = () => {
                         variant="outlined"
                         sx={{
                           borderRadius: '0%',
-                          backgroundColor: item?.state === 'enable' ? '#2E8F79' : '#1C293A',
+                          backgroundColor:
+                            item?.state === 'enable' ? 'var( --description-color)' : 'var(--button-color)',
                           color: item?.state === 'enable' ? '#FFFFFF' : '#FFFFFF',
-                          borderColor: item?.state === 'enable' ? '#2E8F79' : '#1C293A',
+                          borderColor: item?.state === 'enable' ? 'var( --description-color)' : 'var(--button-color)',
                           fontWeight: 'bold',
                         }}
                       />
@@ -343,7 +348,7 @@ const User: NextPageWithLayout = () => {
                         className={`${classes.tableCell} ${selectedRow === item ? classes.selectedButton : ''}`}
                         sx={{
                           '&.MuiButton-root': {
-                            backgroundColor: '#1C293A',
+                            backgroundColor: 'var(--button-color)',
                             borderRadius: 0,
                             color: '#fff',
                           },
@@ -363,7 +368,7 @@ const User: NextPageWithLayout = () => {
                           className={`${classes.tableCell} ${selectedRow === item ? classes.selectedButton : ''}`}
                           sx={{
                             '&.MuiButton-root': {
-                              backgroundColor: '#1C293A',
+                              backgroundColor: 'var(--button-color)',
                               borderRadius: 0,
                               color: '#fff',
                             },
@@ -380,7 +385,11 @@ const User: NextPageWithLayout = () => {
                           variant="contained"
                           className={`${classes.tableCell} ${selectedRow === item ? classes.selectedButton : ''}`}
                           sx={{
-                            '&.MuiButton-root': { backgroundColor: '#1C293A', borderRadius: 0, color: '#fff' },
+                            '&.MuiButton-root': {
+                              backgroundColor: 'var(--button-color)',
+                              borderRadius: 0,
+                              color: '#fff',
+                            },
                           }}
                         >
                           Update
@@ -403,7 +412,7 @@ const User: NextPageWithLayout = () => {
       >
         <DialogContent>
           <Box className={styles.changeRoleContainer}>
-            <Box component="img" className={styles.roleIcon} src="/favicon/user/role.svg" />
+            <Box component="img" className={styles.roleIcon} src="/icons/user/role.svg" />
             <FormControl>
               <FormLabel color="success" id="demo-controlled-radio-buttons-group"></FormLabel>
               <RadioGroup
@@ -421,7 +430,7 @@ const User: NextPageWithLayout = () => {
                     <Radio
                       sx={{
                         '&.MuiRadio-root': {
-                          color: '#1C293A',
+                          color: 'var(--button-color)',
                         },
                       }}
                     />
@@ -434,7 +443,7 @@ const User: NextPageWithLayout = () => {
                     <Radio
                       sx={{
                         '&.MuiRadio-root': {
-                          color: '#1C293A',
+                          color: 'var(--button-color)',
                         },
                       }}
                     />
@@ -448,21 +457,24 @@ const User: NextPageWithLayout = () => {
         <DialogActions className={styles.roleButtonContainer}>
           <LoadingButton
             loading={loadingButton}
-            endIcon={<CancelIcon sx={{ color: '#1C293A' }} />}
+            endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
             size="small"
             variant="outlined"
             loadingPosition="end"
             sx={{
               '&.MuiLoadingButton-root': {
-                color: '#000000',
+                color: 'var(--calcel-size-color)',
                 borderRadius: 0,
-                borderColor: '#979797',
+                borderColor: 'var(--calcel-color)',
               },
-              ':hover': { backgroundColor: '#F4F3F6', borderColor: '#F4F3F6' },
+              ':hover': {
+                backgroundColor: 'var( --calcel-hover-corlor)',
+                borderColor: 'var( --calcel-hover-corlor)',
+              },
               '&.MuiLoadingButton-loading': {
-                backgroundColor: '#DEDEDE',
-                color: '#000000',
-                borderColor: '#DEDEDE',
+                backgroundColor: 'var(--button-loading-color)',
+                color: 'var(--button-loading-size-color)',
+                borderColor: 'var(--button-loading-color)',
               },
               mr: '1rem',
               width: '8rem',
@@ -480,16 +492,16 @@ const User: NextPageWithLayout = () => {
             loadingPosition="end"
             sx={{
               '&.MuiLoadingButton-root': {
-                backgroundColor: '#1C293A',
+                backgroundColor: 'var(--save-color)',
                 borderRadius: 0,
-                color: '#FFFFFF',
-                borderColor: '#1C293A',
+                color: 'var(--save-size-color)',
+                borderColor: 'var(--save-color)',
               },
-              ':hover': { backgroundColor: '#555555', borderColor: '#555555' },
+              ':hover': { backgroundColor: 'var(--save-hover-corlor)', borderColor: 'var(--save-hover-corlor)' },
               '&.MuiLoadingButton-loading': {
-                backgroundColor: '#DEDEDE',
-                color: '#000000',
-                borderColor: '#DEDEDE',
+                backgroundColor: 'var(--button-loading-color)',
+                color: 'var(--button-loading-size-color)',
+                borderColor: 'var(--button-loading-color)',
               },
               width: '8rem',
             }}
@@ -499,22 +511,22 @@ const User: NextPageWithLayout = () => {
           </LoadingButton>
         </DialogActions>
       </Dialog>
-      <Drawer anchor="right" open={detailOpen} onClose={closure} className={styles.detailContainer}>
+      <Drawer anchor="right" open={detailOpen} onClose={closure}>
         <Box role="presentation" sx={{ width: 350 }}>
           <List>
             <ListSubheader component="div" color="inherit" className={styles.detailTitle}>
-              <Typography variant="h6" fontFamily="MabryPro-Bold">
+              <Typography variant="h6" fontFamily="mabry-bold">
                 User Detail
               </Typography>
               <IconButton onClick={closureDeatail}>
-                <ClearOutlinedIcon sx={{ color: '#1C293A' }} />
+                <ClearOutlinedIcon sx={{ color: 'var(--button-color)' }} />
               </IconButton>
             </ListSubheader>
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/favicon/user/ID.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="MabryPro-Bold">
+                <Box component="img" className={styles.detailIcon} src="/icons/user/ID.svg" />
+                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
                   ID
                 </Typography>
               </ListItemAvatar>
@@ -525,8 +537,8 @@ const User: NextPageWithLayout = () => {
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/favicon/user/name.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="MabryPro-Bold">
+                <Box component="img" className={styles.detailIcon} src="/icons/user/name.svg" />
+                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
                   Name
                 </Typography>
               </ListItemAvatar>
@@ -537,8 +549,8 @@ const User: NextPageWithLayout = () => {
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/favicon/user/email.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="MabryPro-Bold">
+                <Box component="img" className={styles.detailIcon} src="/icons/user/email.svg" />
+                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
                   Email
                 </Typography>
               </ListItemAvatar>
@@ -551,8 +563,8 @@ const User: NextPageWithLayout = () => {
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/favicon/user/phone.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="MabryPro-Bold">
+                <Box component="img" className={styles.detailIcon} src="/icons/user/phone.svg" />
+                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
                   Phone
                 </Typography>
               </ListItemAvatar>
@@ -563,8 +575,8 @@ const User: NextPageWithLayout = () => {
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/favicon/user/location.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="MabryPro-Bold">
+                <Box component="img" className={styles.detailIcon} src="/icons/user/location.svg" />
+                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
                   Location
                 </Typography>
               </ListItemAvatar>
@@ -579,8 +591,8 @@ const User: NextPageWithLayout = () => {
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/favicon/user/created_at.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="MabryPro-Bold">
+                <Box component="img" className={styles.detailIcon} src="/icons/user/created-at.svg" />
+                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
                   Created At
                 </Typography>
               </ListItemAvatar>
@@ -588,8 +600,8 @@ const User: NextPageWithLayout = () => {
                 <Skeleton sx={{ width: '8rem' }} />
               ) : (
                 <Chip
-                  avatar={<Box component="img" src="/favicon/user/created_at.svg" />}
-                  label={dateTimeFormat(userObject.created_at || '-')}
+                  avatar={<Box component="img" src="/icons/user/created-at.svg" />}
+                  label={datetime(userObject.created_at || '-')}
                   variant="outlined"
                   size="small"
                 />
@@ -598,8 +610,8 @@ const User: NextPageWithLayout = () => {
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/favicon/user/updated_at.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="MabryPro-Bold">
+                <Box component="img" className={styles.detailIcon} src="/icons/user/updated-at.svg" />
+                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
                   Updated At
                 </Typography>
               </ListItemAvatar>
@@ -607,8 +619,8 @@ const User: NextPageWithLayout = () => {
                 <Skeleton sx={{ width: '8rem' }} />
               ) : (
                 <Chip
-                  avatar={<Box component="img" src="/favicon/user/updated_at.svg" />}
-                  label={dateTimeFormat(userObject.updated_at || '-')}
+                  avatar={<Box component="img" src="/icons/user/updated-at.svg" />}
+                  label={datetime(userObject.updated_at || '-')}
                   variant="outlined"
                   size="small"
                 />
@@ -622,6 +634,7 @@ const User: NextPageWithLayout = () => {
 };
 
 export default User;
-User.getLayout = function getLayout(page: React.ReactElement) {
+
+User.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };

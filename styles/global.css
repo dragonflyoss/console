@@ -1,0 +1,12 @@
+:root {
+  --button-color: #1c293a;
+  --description-color: #2e8f79;
+  --save-color: #1c293a;
+  --save-size-color: #ffffff;
+  --save-hover-corlor: #555555;
+  --calcel-color: #979797;
+  --calcel-size-color: #000000;
+  --calcel-hover-corlor: #f4f3f6;
+  --button-loading-color: #dedede;
+  --button-loading-size-color: #000000;
+}

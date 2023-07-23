@@ -1,23 +1,25 @@
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import '../styles/main.css';
-import React from 'react';
+import '../styles/global.css';
+import React, { ReactElement, ReactNode } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   typography: {
-    fontFamily: 'MabryPro-Light,sans-serif',
+    fontFamily: 'mabry-light,sans-serif',
   },
 });
+
 export type NextPageWithLayout = NextPage & {
-  getLayout?: (page: React.ReactElement) => React.ReactNode;
+  getLayout?: (page: ReactElement) => ReactNode;
 };
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return getLayout(

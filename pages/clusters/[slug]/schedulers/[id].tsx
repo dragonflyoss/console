@@ -5,18 +5,19 @@ import Paper from '@mui/material/Paper';
 import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import HistoryIcon from '@mui/icons-material/History';
 import { getSchedulerID, getClusterInformation } from 'lib/api';
-import { dateTimeFormat } from 'components/dataTime';
-import styles from './index.module.scss';
+import { datetime } from 'lib/utils';
+import styles from './index.module.css';
 
-const Security: NextPageWithLayout = () => {
+const Scheduler: NextPageWithLayout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [scheduleObject, setScheduleObject] = useState<any>({
+  const [cluster, setCluster] = useState({ Name: '', ID: '' });
+  const [schedule, setSchedule] = useState<any>({
     id: '',
     host_name: '',
     ip: '',
@@ -29,46 +30,15 @@ const Security: NextPageWithLayout = () => {
     created_at: '',
     updated_at: '',
   });
-  const [informationObject, setInformationObject] = useState({ Name: '', ID: '' });
   const router = useRouter();
-  const { pathname } = router;
-  const routerName = pathname.split('/')[1];
+  const routerName = router.pathname.split('/')[1];
   const { query } = useRouter();
 
-  useEffect(() => {
-    setIsLoading(true);
-
-    if (query.postid) {
-      getClusterInformation(query.postid).then(async (response) => {
-        if (response.status === 200) {
-          setInformationObject(await response.json());
-        } else {
-          setErrorMessage(true);
-          setErrorMessageText(response.statusText);
-        }
-      });
-    }
-
-    if (query.id) {
-      getSchedulerID(query.id).then(async (response) => {
-        if (response.status === 200) {
-          setScheduleObject(await response.json());
-        } else {
-          setErrorMessage(true);
-          setErrorMessageText(response.statusText);
-        }
-      });
-    }
-
-    setIsLoading(false);
-  }, [query.id, query.postid]);
-
-  const schedulerList = [
+  const schedulerLabel = [
     {
       label: 'Port',
       name: 'port',
     },
-
     {
       label: 'IDC',
       name: 'idc',
@@ -95,6 +65,34 @@ const Security: NextPageWithLayout = () => {
     },
   ];
 
+  useEffect(() => {
+    setIsLoading(true);
+
+    if (typeof query.slug === 'string') {
+      getClusterInformation(query.slug).then(async (response) => {
+        if (response.status === 200) {
+          setCluster(await response.json());
+        } else {
+          setErrorMessage(true);
+          setErrorMessageText(response.statusText);
+        }
+      });
+    }
+
+    if (typeof query.id === 'string') {
+      getSchedulerID(query.id).then(async (response) => {
+        if (response.status === 200) {
+          setSchedule(await response.json());
+        } else {
+          setErrorMessage(true);
+          setErrorMessageText(response.statusText);
+        }
+      });
+    }
+
+    setIsLoading(false);
+  }, [query.id, query.slug]);
+
   const handleClose = (_: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -118,64 +116,64 @@ const Security: NextPageWithLayout = () => {
         <RouterLink component={Link} underline="hover" color="inherit" href={`/${routerName}`}>
           {routerName}
         </RouterLink>
-        <RouterLink component={Link} underline="hover" color="inherit" href={`/${routerName}/${informationObject?.ID}`}>
-          {informationObject?.Name}
+        <RouterLink component={Link} underline="hover" color="inherit" href={`/${routerName}/${cluster?.ID}`}>
+          {cluster?.Name}
         </RouterLink>
-        <Typography color="text.primary" fontFamily="MabryPro-Bold">
-          {scheduleObject?.host_name}
+        <Typography color="text.primary" fontFamily="mabry-bold">
+          {schedule?.host_name}
         </Typography>
       </Breadcrumbs>
-      <Typography variant="h5" fontFamily="MabryPro-Bold" sx={{ pb: '1rem' }}>
+      <Typography variant="h5" fontFamily="mabry-bold" sx={{ pb: '1rem' }}>
         Scheduler
       </Typography>
       <Box className={styles.container}>
         <Paper variant="outlined" className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/favicon/cluster/scheduler-id.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler-id.svg" />
             <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               ID
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="MabryPro-Bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : scheduleObject?.id || '-'}
+          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : schedule?.id || '-'}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/favicon/cluster/hostname.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/hostname.svg" />
             <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               Hostname
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="MabryPro-Bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : scheduleObject?.host_name || '-'}
+          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : schedule?.host_name || '-'}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/favicon/cluster/scheduler-ip.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler-ip.svg" />
             <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               IP
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="MabryPro-Bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : scheduleObject?.ip}
+          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : schedule?.ip}
           </Typography>
         </Paper>
-        <Paper variant="outlined" className={styles.clusterIDContaine}>
-          <Box className={styles.clusterIDContent}>
-            <Box component="img" className={styles.headerIcon} src="/favicon/cluster/clusterID.svg" />
-            <Typography className={styles.clusterIDTitle} variant="subtitle1" component="div">
+        <Paper variant="outlined" className={styles.clusterIdContaine}>
+          <Box className={styles.clusterIdContent}>
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/cluster-id.svg" />
+            <Typography className={styles.clusterIdTitle} variant="subtitle1" component="div">
               Cluster ID
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="MabryPro-Bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : scheduleObject?.SchedulerClusterID}
+          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : schedule?.SchedulerClusterID}
           </Typography>
         </Paper>
       </Box>
       <Paper variant="outlined" className={styles.lowerContainer}>
-        {schedulerList.map((item) => {
+        {schedulerLabel.map((item) => {
           return (
             <Box key={item.label} className={styles.lowerContent}>
               <Typography variant="subtitle1" component="div" mb="1rem">
@@ -188,35 +186,35 @@ const Security: NextPageWithLayout = () => {
                   {item.name == 'created_at' ? (
                     <Chip
                       avatar={<MoreTimeIcon />}
-                      label={dateTimeFormat(scheduleObject?.[item?.name] || '')}
+                      label={datetime(schedule?.[item?.name] || '')}
                       variant="outlined"
                       size="small"
                     />
                   ) : item.name == 'updated_at' ? (
                     <Chip
                       avatar={<HistoryIcon />}
-                      label={dateTimeFormat(scheduleObject?.[item?.name])}
+                      label={datetime(schedule?.[item?.name])}
                       variant="outlined"
                       size="small"
                     />
                   ) : item.name == 'state' ? (
                     <Chip
-                      label={`${scheduleObject?.[item.name]?.charAt(0).toUpperCase()}${scheduleObject?.[
-                        item.name
-                      ]?.slice(1)}`}
+                      label={`${schedule?.[item.name]?.charAt(0).toUpperCase()}${schedule?.[item.name]?.slice(1)}`}
                       size="small"
                       variant="outlined"
                       sx={{
                         borderRadius: '0%',
-                        backgroundColor: scheduleObject?.[item.name] === 'active' ? '#2E8F79' : '#1C293A',
-                        color: scheduleObject?.[item.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
-                        borderColor: scheduleObject?.[item.name] === 'active' ? '#2E8F79' : '#1C293A',
+                        backgroundColor:
+                          schedule?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                        color: schedule?.[item.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
+                        borderColor:
+                          schedule?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
                         fontWeight: 'bold',
                       }}
                     />
                   ) : item.name == 'features' ? (
                     <>
-                      {scheduleObject?.[item?.name]?.map((items: string, id: any) => (
+                      {schedule?.[item?.name]?.map((items: string, id: any) => (
                         <Chip
                           key={id}
                           label={`${items.charAt(0).toUpperCase()}${items.slice(1)}`}
@@ -224,18 +222,18 @@ const Security: NextPageWithLayout = () => {
                           variant="outlined"
                           sx={{
                             borderRadius: '0%',
-                            background: '#1C293A',
+                            background: 'var(--button-color)',
                             color: '#FFFFFF',
                             mr: '0.4rem',
-                            borderColor: '#1C293A',
+                            borderColor: 'var(--button-color)',
                             fontWeight: 'bold',
                           }}
                         />
                       ))}
                     </>
                   ) : (
-                    <Typography component="div" variant="subtitle1" fontFamily="MabryPro-Bold">
-                      {scheduleObject?.[item?.name] || '-'}
+                    <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+                      {schedule?.[item?.name] || '-'}
                     </Typography>
                   )}
                 </>
@@ -248,7 +246,8 @@ const Security: NextPageWithLayout = () => {
   );
 };
 
-export default Security;
-Security.getLayout = function getLayout(page: React.ReactElement) {
+export default Scheduler;
+
+Scheduler.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };

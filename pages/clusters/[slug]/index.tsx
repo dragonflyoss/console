@@ -2,9 +2,6 @@ import type { NextPageWithLayout } from '../../_app';
 import Layout from 'components/layout';
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import Information from 'components/clusterInformation';
@@ -14,6 +11,9 @@ import {
   Breadcrumbs,
   Button,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
   Grid,
   Link as RouterLink,
   Skeleton,
@@ -26,7 +26,7 @@ import {
   Typography,
 } from '@mui/material';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import {
   getScheduler,
   getSeedPeer,
@@ -38,7 +38,34 @@ import {
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';
-import styles from './index.module.scss';
+import styles from './index.module.css';
+
+interface clusterData {
+  ID: number;
+  Name: string;
+  BIO: string;
+  Scopes: {
+    idc: string;
+    location: string;
+    cidrs: Array<string>;
+  };
+  SchedulerClusterID: number;
+  SeedPeerClusterID: number;
+  SchedulerClusterConfig: {
+    candidate_parent_limit: number;
+    filter_parent_limit: number;
+  };
+  SeedPeerClusterConfig: {
+    load_limit: number;
+  };
+  PeerClusterConfig: {
+    load_limit: number;
+    concurrent_piece_count: number;
+  };
+  CreatedAt: string;
+  UpdatedAt: string;
+  IsDefault: boolean;
+}
 
 const Cluster: NextPageWithLayout = () => {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -48,12 +75,37 @@ const Cluster: NextPageWithLayout = () => {
   const [openDelet, setOpenDelet] = useState(false);
   const [openDeletScheduler, setOpenDeletScheduler] = useState(false);
   const [openDeletSeedPeers, setOpenDeletSeedPeers] = useState(false);
-  const [InformationList, setInformationList] = useState({ Name: '' });
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [schedulerSelectedRow, setSchedulerSelectedRow] = useState(null);
   const [schedulerSelectedID, setSchedulerSelectedID] = useState('');
   const [seedPeersSelectedRow, setSeedPeersSelectedRow] = useState(null);
   const [seedPeersSelectedID, setSeedPeersSelectedID] = useState(null);
+  const [informationList, setInformationList] = useState<clusterData>({
+    ID: 0,
+    Name: '',
+    BIO: '',
+    Scopes: {
+      idc: '',
+      location: '',
+      cidrs: [''],
+    },
+    SchedulerClusterID: 0,
+    SeedPeerClusterID: 0,
+    SchedulerClusterConfig: {
+      candidate_parent_limit: 0,
+      filter_parent_limit: 0,
+    },
+    SeedPeerClusterConfig: {
+      load_limit: 0,
+    },
+    PeerClusterConfig: {
+      load_limit: 0,
+      concurrent_piece_count: 0,
+    },
+    CreatedAt: '',
+    UpdatedAt: '',
+    IsDefault: true,
+  });
   const [schedulerList, setSchedlerList] = useState([
     {
       id: '',
@@ -80,6 +132,7 @@ const Cluster: NextPageWithLayout = () => {
   ]);
   const router = useRouter();
   const { pathname, asPath, query } = router;
+
   const routerName = pathname.split('/')[1];
 
   const theme = createTheme({
@@ -115,8 +168,8 @@ const Cluster: NextPageWithLayout = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    if (query.postid) {
-      getClusterInformation(query.postid).then(async (response) => {
+    if (typeof query.slug === 'string') {
+      getClusterInformation(query.slug).then(async (response) => {
         if (response.status == 200) {
           setInformationList(await response.json());
         } else {
@@ -125,14 +178,14 @@ const Cluster: NextPageWithLayout = () => {
         }
       });
 
-      getClustersList(query.postid);
-      GetSeedPeerList(query.postid);
+      getClustersList(query.slug);
+      GetSeedPeerList(query.slug);
     }
 
     setIsLoading(false);
-  }, [query.postid]);
+  }, [query.slug]);
 
-  const handleClose = (_event: React.SyntheticEvent | Event, reason?: string) => {
+  const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -152,21 +205,22 @@ const Cluster: NextPageWithLayout = () => {
 
   const handledelete = () => {
     setDeleteLoadingButton(true);
-
-    deleteCluster(query.postid).then((response) => {
-      if (response.status === 200) {
-        setDeleteLoadingButton(false);
-        setSuccessMessage(true);
-        setOpenDelet(false);
-        router.push('/clusters');
-      } else {
-        setDeleteLoadingButton(false);
-        setErrorMessage(true);
-      }
-    });
+    if (typeof query.slug === 'string') {
+      deleteCluster(query.slug).then((response) => {
+        if (response.status === 200) {
+          setDeleteLoadingButton(false);
+          setSuccessMessage(true);
+          setOpenDelet(false);
+          router.push('/clusters');
+        } else {
+          setDeleteLoadingButton(false);
+          setErrorMessage(true);
+        }
+      });
+    }
   };
 
-  const openHandleScheduler = async (row: any) => {
+  const openHandleScheduler = (row: any) => {
     setSchedulerSelectedRow(row);
     setSchedulerSelectedID(row.id);
     setOpenDeletScheduler(true);
@@ -180,8 +234,8 @@ const Cluster: NextPageWithLayout = () => {
         setSuccessMessage(true);
         setOpenDeletScheduler(false);
         setDeleteLoadingButton(false);
-        if (query.postid) {
-          getClustersList(query.postid);
+        if (query.slug) {
+          getClustersList(query.slug);
         }
       } else {
         setErrorMessage(true);
@@ -191,7 +245,7 @@ const Cluster: NextPageWithLayout = () => {
     });
   };
 
-  const openHandleSeedPeers = async (row: any) => {
+  const openHandleSeedPeers = (row: any) => {
     setSeedPeersSelectedRow(row);
     setSeedPeersSelectedID(row.id);
     setOpenDeletSeedPeers(true);
@@ -199,21 +253,22 @@ const Cluster: NextPageWithLayout = () => {
 
   const handledeleteSeedPeers = async () => {
     setDeleteLoadingButton(true);
-
-    await deleteSeedPeerID(seedPeersSelectedID).then((response) => {
-      if (response.status === 200) {
-        setSuccessMessage(true);
-        setOpenDeletSeedPeers(false);
-        setDeleteLoadingButton(false);
-        if (query.postid) {
-          GetSeedPeerList(query.postid);
+    if (typeof seedPeersSelectedID === 'string') {
+      await deleteSeedPeerID(seedPeersSelectedID).then((response) => {
+        if (response.status === 200) {
+          setSuccessMessage(true);
+          setOpenDeletSeedPeers(false);
+          setDeleteLoadingButton(false);
+          if (query.slug) {
+            GetSeedPeerList(query.slug);
+          }
+        } else {
+          setErrorMessage(true);
+          setErrorMessageText(response.statusText);
+          setDeleteLoadingButton(false);
         }
-      } else {
-        setErrorMessage(true);
-        setErrorMessageText(response.statusText);
-        setDeleteLoadingButton(false);
-      }
-    });
+      });
+    }
   };
 
   return (
@@ -242,25 +297,25 @@ const Cluster: NextPageWithLayout = () => {
         <RouterLink underline="hover" component={Link} color="inherit" href={`/${routerName}`}>
           {routerName}
         </RouterLink>
-        <Typography color="text.primary" fontFamily="MabryPro-Bold">
-          {InformationList?.Name}
+        <Typography color="text.primary" fontFamily="mabry-bold">
+          {informationList?.Name}
         </Typography>
       </Breadcrumbs>
       <Box className={styles.container}>
-        <Typography variant="h5" fontFamily="MabryPro-Bold">
+        <Typography variant="h5" fontFamily="mabry-bold">
           Cluster
         </Typography>
         <ThemeProvider theme={theme}>
           <Box>
             <Button
               onClick={() => {
-                router.push(`/clusters/${query.postid}/edit`);
+                router.push(`/clusters/${query.slug}/edit`);
               }}
               size="small"
               variant="contained"
-              sx={{ mr: '2rem', '&.MuiButton-root': { backgroundColor: '#1C293A', borderRadius: 0 } }}
+              className={styles.updateButton}
             >
-              <Box component="img" className={styles.updateClusterIcon} src="/favicon/user/edit.svg" />
+              <Box component="img" className={styles.updateClusterIcon} src="/icons/user/edit.svg" />
               Update Cluster
             </Button>
             <Button
@@ -269,7 +324,7 @@ const Cluster: NextPageWithLayout = () => {
               onClick={() => {
                 setOpenDelet(true);
               }}
-              sx={{ '&.MuiButton-root': { backgroundColor: '#1C293A', borderRadius: 0 } }}
+              className={styles.DeleteButton}
             >
               <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
               Delete Cluster
@@ -284,8 +339,8 @@ const Cluster: NextPageWithLayout = () => {
         >
           <DialogContent>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Box component="img" className={styles.deleteClusterIcon} src="/favicon/cluster/delete.svg" />
-              <Typography fontFamily="MabryPro-Bold" pt="1rem">
+              <Box component="img" className={styles.deleteClusterIcon} src="/icons/cluster/delete.svg" />
+              <Typography fontFamily="mabry-bold" pt="1rem">
                 Are you sure you want to delet this Cluster?
               </Typography>
             </Box>
@@ -293,21 +348,24 @@ const Cluster: NextPageWithLayout = () => {
           <DialogActions sx={{ display: 'flex', justifyContent: 'space-evenly', pb: '1.2rem' }}>
             <LoadingButton
               loading={deleteLoadingButton}
-              endIcon={<CancelIcon sx={{ color: '#1C293A' }} />}
+              endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
               size="small"
               variant="outlined"
               loadingPosition="end"
               sx={{
                 '&.MuiLoadingButton-root': {
-                  color: '#000000',
+                  color: 'var(--calcel-size-color)',
                   borderRadius: 0,
-                  borderColor: '#979797',
+                  borderColor: 'var(--calcel-color)',
                 },
-                ':hover': { backgroundColor: '#F4F3F6', borderColor: '#F4F3F6' },
+                ':hover': {
+                  backgroundColor: 'var( --calcel-hover-corlor)',
+                  borderColor: 'var( --calcel-hover-corlor)',
+                },
                 '&.MuiLoadingButton-loading': {
-                  backgroundColor: '#DEDEDE',
-                  color: '#000000',
-                  borderColor: '#DEDEDE',
+                  backgroundColor: 'var(--button-loading-color)',
+                  color: 'var(--button-loading-size-color)',
+                  borderColor: 'var(--button-loading-color)',
                 },
                 mr: '1rem',
                 width: '8rem',
@@ -325,16 +383,16 @@ const Cluster: NextPageWithLayout = () => {
               loadingPosition="end"
               sx={{
                 '&.MuiLoadingButton-root': {
-                  backgroundColor: '#1C293A',
+                  backgroundColor: 'var(--save-color)',
                   borderRadius: 0,
-                  color: '#FFFFFF',
-                  borderColor: '#1C293A',
+                  color: 'var(--save-size-color)',
+                  borderColor: 'var(--save-color)',
                 },
-                ':hover': { backgroundColor: '#555555', borderColor: '#555555' },
+                ':hover': { backgroundColor: 'var(--save-hover-corlor)', borderColor: 'var(--save-hover-corlor)' },
                 '&.MuiLoadingButton-loading': {
-                  backgroundColor: '#DEDEDE',
-                  color: '#000000',
-                  borderColor: '#DEDEDE',
+                  backgroundColor: 'var(--button-loading-color)',
+                  color: 'var(--button-loading-size-color)',
+                  borderColor: 'var(--button-loading-color)',
                 },
                 width: '8rem',
               }}
@@ -345,8 +403,8 @@ const Cluster: NextPageWithLayout = () => {
           </DialogActions>
         </Dialog>
       </Box>
-      <Information InformationList={InformationList} isLoading={isLoading} />
-      <Typography variant="subtitle1" gutterBottom fontFamily="MabryPro-Bold" mt="2rem" mb="1rem">
+      <Information informationList={informationList} isLoading={isLoading} />
+      <Typography variant="subtitle1" gutterBottom fontFamily="mabry-bold" mt="2rem" mb="1rem">
         Scheduler Cluster
       </Typography>
       <Paper variant="outlined">
@@ -354,47 +412,47 @@ const Cluster: NextPageWithLayout = () => {
           <TableHead>
             <TableRow>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   ID
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Hostname
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   IP
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Port
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   IDC
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Location
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   State
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Features
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Operation
                 </Typography>
               </TableCell>
@@ -426,7 +484,7 @@ const Cluster: NextPageWithLayout = () => {
                               component={Link}
                               href={`${asPath}/schedulers/${item?.id}`}
                               underline="hover"
-                              sx={{ color: '#2E8F79' }}
+                              sx={{ color: 'var(--description-color)' }}
                             >
                               {item?.host_name}
                             </RouterLink>
@@ -437,7 +495,7 @@ const Cluster: NextPageWithLayout = () => {
                             <Skeleton />
                           ) : (
                             <Box className={styles.ipContainer}>
-                              <Box component="img" className={styles.ipIcon} src="/favicon/cluster/ip.svg" />
+                              <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
                               {item?.ip}
                             </Box>
                           )}
@@ -455,9 +513,11 @@ const Cluster: NextPageWithLayout = () => {
                               variant="outlined"
                               sx={{
                                 borderRadius: '0%',
-                                backgroundColor: item?.state === 'active' ? '#2E8F79' : '#1C293A',
+                                backgroundColor:
+                                  item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
                                 color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
-                                borderColor: item?.state === 'active' ? '#2E8F79' : '#1C293A',
+                                borderColor:
+                                  item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
                                 fontWeight: 'bold',
                               }}
                             />
@@ -477,10 +537,10 @@ const Cluster: NextPageWithLayout = () => {
                                     variant="outlined"
                                     sx={{
                                       borderRadius: '0%',
-                                      background: '#1C293A',
+                                      background: 'var(--button-color)',
                                       color: '#FFFFFF',
                                       mr: '0.4rem',
-                                      borderColor: '#1C293A',
+                                      borderColor: 'var(--button-color)',
                                       fontWeight: 'bold',
                                     }}
                                   />
@@ -496,7 +556,11 @@ const Cluster: NextPageWithLayout = () => {
                             size="small"
                             variant="contained"
                             sx={{
-                              '&.MuiButton-root': { backgroundColor: '#1C293A', borderRadius: 0, color: '#fff' },
+                              '&.MuiButton-root': {
+                                backgroundColor: 'var(--button-color)',
+                                borderRadius: 0,
+                                color: '#fff',
+                              },
                             }}
                           >
                             Delete
@@ -517,8 +581,8 @@ const Cluster: NextPageWithLayout = () => {
         >
           <DialogContent>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Box component="img" className={styles.deleteClusterIcon} src="/favicon/cluster/delete.svg" />
-              <Typography fontFamily="MabryPro-Bold" pt="1rem">
+              <Box component="img" className={styles.deleteClusterIcon} src="/icons/cluster/delete.svg" />
+              <Typography fontFamily="mabry-bold" pt="1rem">
                 Are you sure you want to delet this Scheduler Cluster?
               </Typography>
             </Box>
@@ -526,21 +590,24 @@ const Cluster: NextPageWithLayout = () => {
           <DialogActions sx={{ display: 'flex', justifyContent: 'space-evenly', pb: '1.2rem' }}>
             <LoadingButton
               loading={deleteLoadingButton}
-              endIcon={<CancelIcon sx={{ color: '#1C293A' }} />}
+              endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
               size="small"
               variant="outlined"
               loadingPosition="end"
               sx={{
                 '&.MuiLoadingButton-root': {
-                  color: '#000000',
+                  color: 'var(--calcel-size-color)',
                   borderRadius: 0,
-                  borderColor: '#979797',
+                  borderColor: 'var(--calcel-color)',
                 },
-                ':hover': { backgroundColor: '#F4F3F6', borderColor: '#F4F3F6' },
+                ':hover': {
+                  backgroundColor: 'var( --calcel-hover-corlor)',
+                  borderColor: 'var( --calcel-hover-corlor)',
+                },
                 '&.MuiLoadingButton-loading': {
-                  backgroundColor: '#DEDEDE',
-                  color: '#000000',
-                  borderColor: '#DEDEDE',
+                  backgroundColor: 'var(--button-loading-color)',
+                  color: 'var(--button-loading-size-color)',
+                  borderColor: 'var(--button-loading-color)',
                 },
                 mr: '1rem',
                 width: '8rem',
@@ -561,16 +628,16 @@ const Cluster: NextPageWithLayout = () => {
               loadingPosition="end"
               sx={{
                 '&.MuiLoadingButton-root': {
-                  backgroundColor: '#1C293A',
+                  backgroundColor: 'var(--save-color)',
                   borderRadius: 0,
-                  color: '#FFFFFF',
-                  borderColor: '#1C293A',
+                  color: 'var(--save-size-color)',
+                  borderColor: 'var(--save-color)',
                 },
-                ':hover': { backgroundColor: '#555555', borderColor: '#555555' },
+                ':hover': { backgroundColor: 'var(--save-hover-corlor)', borderColor: 'var(--save-hover-corlor)' },
                 '&.MuiLoadingButton-loading': {
-                  backgroundColor: '#DEDEDE',
-                  color: '#000000',
-                  borderColor: '#DEDEDE',
+                  backgroundColor: 'var(--button-loading-color)',
+                  color: 'var(--button-loading-size-color)',
+                  borderColor: 'var(--button-loading-color)',
                 },
                 width: '8rem',
               }}
@@ -581,7 +648,7 @@ const Cluster: NextPageWithLayout = () => {
           </DialogActions>
         </Dialog>
       </Paper>
-      <Typography variant="subtitle1" gutterBottom fontFamily="MabryPro-Bold" mt="2rem" mb="1rem">
+      <Typography variant="subtitle1" gutterBottom fontFamily="mabry-bold" mt="2rem" mb="1rem">
         Seed Peer Cluster
       </Typography>
       <Paper variant="outlined">
@@ -589,47 +656,47 @@ const Cluster: NextPageWithLayout = () => {
           <TableHead>
             <TableRow>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   ID
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Hostname
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   IP
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Port
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Download Port
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Object Storage Port
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Type
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   State
                 </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="MabryPro-Bold">
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   Operation
                 </Typography>
               </TableCell>
@@ -660,7 +727,7 @@ const Cluster: NextPageWithLayout = () => {
                             component={Link}
                             href={`${asPath}/seed-peers/${item?.id}`}
                             underline="hover"
-                            sx={{ color: '#2E8F79' }}
+                            sx={{ color: 'var(--description-color)' }}
                           >
                             {item?.host_name}
                           </RouterLink>
@@ -671,7 +738,7 @@ const Cluster: NextPageWithLayout = () => {
                           <Skeleton />
                         ) : (
                           <Box className={styles.ipContainer}>
-                            <Box component="img" className={styles.ipIcon} src="/favicon/cluster/ip.svg" />
+                            <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
                             {item?.ip}
                           </Box>
                         )}
@@ -694,9 +761,11 @@ const Cluster: NextPageWithLayout = () => {
                             variant="outlined"
                             sx={{
                               borderRadius: '0%',
-                              backgroundColor: item?.state === 'active' ? '#2E8F79' : '#1C293A',
+                              backgroundColor:
+                                item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
                               color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
-                              borderColor: item?.state === 'active' ? '#2E8F79' : '#1C293A',
+                              borderColor:
+                                item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
                               fontWeight: 'bold',
                             }}
                           />
@@ -710,7 +779,11 @@ const Cluster: NextPageWithLayout = () => {
                           size="small"
                           variant="contained"
                           sx={{
-                            '&.MuiButton-root': { backgroundColor: '#1C293A', borderRadius: 0, color: '#fff' },
+                            '&.MuiButton-root': {
+                              backgroundColor: 'var(--button-color)',
+                              borderRadius: 0,
+                              color: '#fff',
+                            },
                           }}
                         >
                           Delete
@@ -730,8 +803,8 @@ const Cluster: NextPageWithLayout = () => {
         >
           <DialogContent>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Box component="img" className={styles.deleteClusterIcon} src="/favicon/cluster/delete.svg" />
-              <Typography fontFamily="MabryPro-Bold" pt="1rem">
+              <Box component="img" className={styles.deleteClusterIcon} src="/icons/cluster/delete.svg" />
+              <Typography fontFamily="mabry-bold" pt="1rem">
                 Are you sure you want to delet this Seed Peer Cluster?
               </Typography>
             </Box>
@@ -739,21 +812,24 @@ const Cluster: NextPageWithLayout = () => {
           <DialogActions sx={{ display: 'flex', justifyContent: 'space-evenly', pb: '1.2rem' }}>
             <LoadingButton
               loading={deleteLoadingButton}
-              endIcon={<CancelIcon sx={{ color: '#1C293A' }} />}
+              endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
               size="small"
               variant="outlined"
               loadingPosition="end"
               sx={{
                 '&.MuiLoadingButton-root': {
-                  color: '#000000',
+                  color: 'var(--calcel-size-color)',
                   borderRadius: 0,
-                  borderColor: '#979797',
+                  borderColor: 'var(--calcel-color)',
                 },
-                ':hover': { backgroundColor: '#F4F3F6', borderColor: '#F4F3F6' },
+                ':hover': {
+                  backgroundColor: 'var( --calcel-hover-corlor)',
+                  borderColor: 'var( --calcel-hover-corlor)',
+                },
                 '&.MuiLoadingButton-loading': {
-                  backgroundColor: '#DEDEDE',
-                  color: '#000000',
-                  borderColor: '#DEDEDE',
+                  backgroundColor: 'var(--button-loading-color)',
+                  color: 'var(--button-loading-size-color)',
+                  borderColor: 'var(--button-loading-color)',
                 },
                 mr: '1rem',
                 width: '8rem',
@@ -774,16 +850,16 @@ const Cluster: NextPageWithLayout = () => {
               loadingPosition="end"
               sx={{
                 '&.MuiLoadingButton-root': {
-                  backgroundColor: '#1C293A',
+                  backgroundColor: 'var(--save-color)',
                   borderRadius: 0,
-                  color: '#FFFFFF',
-                  borderColor: '#1C293A',
+                  color: 'var(--save-size-color)',
+                  borderColor: 'var(--save-color)',
                 },
-                ':hover': { backgroundColor: '#555555', borderColor: '#555555' },
+                ':hover': { backgroundColor: 'var(--save-hover-corlor)', borderColor: 'var(--save-hover-corlor)' },
                 '&.MuiLoadingButton-loading': {
-                  backgroundColor: '#DEDEDE',
-                  color: '#000000',
-                  borderColor: '#DEDEDE',
+                  backgroundColor: 'var(--button-loading-color)',
+                  color: 'var(--button-loading-size-color)',
+                  borderColor: 'var(--button-loading-color)',
                 },
                 width: '8rem',
               }}
@@ -800,6 +876,7 @@ const Cluster: NextPageWithLayout = () => {
 };
 
 export default Cluster;
-Cluster.getLayout = function getLayout(page: React.ReactElement) {
+
+Cluster.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };

@@ -505,7 +505,9 @@ const User: NextPageWithLayout = () => {
         <Box role="presentation" sx={{ width: 350 }}>
           <List>
             <ListSubheader component="div" color="inherit" className={styles.detailTitle}>
-              <Typography variant="h6">User Detail</Typography>
+              <Typography variant="h6" fontFamily="mabry-bold">
+                User Detail
+              </Typography>
               <IconButton onClick={closureDeatail}>
                 <ClearOutlinedIcon sx={{ color: 'var(--button-color)' }} />
               </IconButton>

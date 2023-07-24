@@ -30,7 +30,7 @@ import { ReactElement, useEffect, useState } from 'react';
 import {
   getScheduler,
   getSeedPeer,
-  getClusterInformation,
+  getCluster,
   deleteCluster,
   deleteSchedulerID,
   deleteSeedPeerID,
@@ -169,7 +169,7 @@ const Cluster: NextPageWithLayout = () => {
     setIsLoading(true);
 
     if (typeof query.slug === 'string') {
-      getClusterInformation(query.slug).then(async (response) => {
+      getCluster(query.slug).then(async (response) => {
         if (response.status == 200) {
           setInformationList(await response.json());
         } else {

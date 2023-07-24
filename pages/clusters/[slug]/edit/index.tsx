@@ -17,7 +17,7 @@ import { LoadingButton } from '@mui/lab';
 import styles from './index.module.css';
 import HelpIcon from '@mui/icons-material/Help';
 import { ReactElement, useEffect, useState } from 'react';
-import { getClusterInformation, updateCluster } from 'lib/api';
+import { getCluster, updateCluster } from 'lib/api';
 import React from 'react';
 import { useRouter } from 'next/router';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -58,7 +58,7 @@ const CreateCluster = () => {
 
   useEffect(() => {
     if (typeof router.query.slug === 'string') {
-      getClusterInformation(router.query.slug).then(async (response) => {
+      getCluster(router.query.slug).then(async (response) => {
         setInformationList(await response.json());
       });
     }

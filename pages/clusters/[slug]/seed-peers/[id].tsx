@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useState } from 'react';
-import { getSeedPeerID, getClusterInformation } from 'lib/api';
+import { getSeedPeerID, getCluster } from 'lib/api';
 import { datetime } from 'lib/utils';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import HistoryIcon from '@mui/icons-material/History';
@@ -81,7 +81,7 @@ const SeedPeer: NextPageWithLayout = () => {
     setIsLoading(true);
 
     if (typeof query.slug === 'string') {
-      getClusterInformation(query.slug).then(async (response) => {
+      getCluster(query.slug).then(async (response) => {
         if (response.status === 200) {
           setCluster(await response.json());
         } else {

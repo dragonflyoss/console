@@ -129,6 +129,11 @@ export async function listCluster(data?: clusterPagingData) {
   return await get(url);
 }
 
+export async function getCluster(id: string) {
+  const url = new URL(`/api/v1/clusters/${id}`, API_URL);
+  return await get(url);
+}
+
 interface clusterData {
   name: string;
   peer_cluster_config: {
@@ -185,11 +190,6 @@ export async function updateCluster(id: string, data: updateClusterData) {
 export async function deleteCluster(id: string) {
   const url = new URL(`/api/v1/clusters/${id}`, API_URL);
   return await Delete(url);
-}
-
-export async function getClusterInformation(id: string) {
-  const url = new URL(`/api/v1/clusters/${id}`, API_URL);
-  return await get(url);
 }
 
 export async function listScheduler() {

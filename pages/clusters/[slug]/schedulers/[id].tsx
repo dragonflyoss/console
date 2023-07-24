@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useState } from 'react';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import HistoryIcon from '@mui/icons-material/History';
-import { getSchedulerID, getClusterInformation } from 'lib/api';
+import { getSchedulerID, getCluster } from 'lib/api';
 import { datetime } from 'lib/utils';
 import styles from './index.module.css';
 
@@ -70,7 +70,7 @@ const Scheduler: NextPageWithLayout = () => {
     setIsLoading(true);
 
     if (typeof query.slug === 'string') {
-      getClusterInformation(query.slug).then(async (response) => {
+      getCluster(query.slug).then(async (response) => {
         if (response.status === 200) {
           setCluster(await response.json());
         } else {

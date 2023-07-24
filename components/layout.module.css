@@ -1,13 +1,3 @@
-@font-face {
-  font-family: 'mabry-light';
-  src: url('../public/fonts/MabryPro-Light.ttf') format('woff');
-}
-
-@font-face {
-  font-family: 'mabry-bold';
-  src: url('../public/fonts/MabryPro-Bold.ttf') format('woff');
-}
-
 .container {
   display: flex;
   flex-direction: row;

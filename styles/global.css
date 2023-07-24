@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'mabry-light';
+  src: url('../public/fonts/MabryPro-Light.ttf') format('woff');
+}
+@font-face {
+  font-family: 'mabry-bold';
+  src: url('../public/fonts/MabryPro-Bold.ttf') format('woff');
+}
+
 :root {
   --button-color: #1c293a;
   --description-color: #2e8f79;
@@ -9,4 +18,42 @@
   --calcel-hover-corlor: #f4f3f6;
   --button-loading-color: #dedede;
   --button-loading-size-color: #000000;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  line-height: 1.5;
+  font-family: 'mabry-light', sans-serif;
+}
+
+body {
+  font-family: 'mabry-light', sans-serif;
+}
+
+.main {
+  margin: 0;
+  padding: 0;
+  font-family: 'mabry-light', sans-serif;
+}
+
+h2 {
+  font-family: 'mabry-bold' !important;
+}
+
+h3 {
+  font-family: 'mabry-bold' !important;
+}
+
+h4 {
+  font-family: 'mabry-bold' !important;
+}
+
+h5 {
+  font-family: 'mabry-bold' !important;
+}
+
+span {
+  font-family: 'mabry-light', sans-serif !important;
 }

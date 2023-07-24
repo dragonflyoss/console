@@ -6,7 +6,7 @@
   align-items: center;
 }
 
-.isdefaultContainer {
+.defaultContainer {
   display: flex;
   align-items: center;
 }

@@ -33,14 +33,14 @@
   margin-left: 0.6rem;
 }
 
-.lowerContainer {
+.seedPeerContainer {
   display: flex;
   flex-wrap: wrap;
   padding: 1rem;
   margin-top: 2rem;
 }
 
-.lowerContent {
+.seedPeerContent {
   width: 20%;
   padding: 1rem;
 }

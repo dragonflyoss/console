@@ -528,7 +528,7 @@ const CreateCluster = () => {
             <HelpIcon color="disabled" className={styles.descriptionIcon} />
           </Tooltip>
         </Box>
-        <Box className={styles.isdefaultContainer}>
+        <Box className={styles.defaultContainer}>
           <FormControlLabel
             control={
               <Checkbox

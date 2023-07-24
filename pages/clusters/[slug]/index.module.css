@@ -15,12 +15,12 @@
   background-color: var(--button-color);
 }
 
-.DeleteButton {
+.deleteButton {
   background-color: var(--button-color);
   border-radius: 0;
 }
 
-.DeleteButton:hover {
+.deleteButton:hover {
   background-color: var(--button-color);
 }
 

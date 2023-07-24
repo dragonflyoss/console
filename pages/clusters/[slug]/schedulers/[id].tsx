@@ -33,6 +33,7 @@ const Scheduler: NextPageWithLayout = () => {
   const router = useRouter();
   const routerName = router.pathname.split('/')[1];
   const { query } = useRouter();
+  console.log(router);
 
   const schedulerLabel = [
     {
@@ -172,10 +173,10 @@ const Scheduler: NextPageWithLayout = () => {
           </Typography>
         </Paper>
       </Box>
-      <Paper variant="outlined" className={styles.lowerContainer}>
+      <Paper variant="outlined" className={styles.schedulerContainer}>
         {schedulerLabel.map((item) => {
           return (
-            <Box key={item.label} className={styles.lowerContent}>
+            <Box key={item.label} className={styles.lschedulerContent}>
               <Typography variant="subtitle1" component="div" mb="1rem">
                 {item.label}
               </Typography>

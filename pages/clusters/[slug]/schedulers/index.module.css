@@ -33,14 +33,14 @@
   margin-left: 0.6rem;
 }
 
-.lowerContainer {
+.schedulerContainer {
   display: flex;
   flex-wrap: wrap;
   padding: 1rem;
   margin-top: 2rem;
 }
 
-.lowerContent {
+.lschedulerContent {
   width: 20%;
   padding: 1rem;
 }

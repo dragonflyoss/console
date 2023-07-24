@@ -113,22 +113,19 @@ export async function signOut() {
   return await post(url);
 }
 
-export async function listCluster() {
-  const url = new URL(`/api/v1/clusters`, API_URL);
-  return await get(url);
-}
-
 interface clusterPagingData {
-  page: number;
-  per_page: number;
+  page?: number;
+  per_page?: number;
   name?: string;
 }
 
-export async function getClusterSearch(data: clusterPagingData) {
-  const queryString = Object.entries(data)
-    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`)
-    .join('&');
-  const url = new URL(`/api/v1/clusters?${queryString}`, API_URL);
+export async function listCluster(data?: clusterPagingData) {
+  const queryString = data
+    ? Object.entries(data)
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`)
+        .join('&')
+    : '';
+  const url = new URL(`/api/v1/clusters${queryString ? '?' : ''}${queryString}`, API_URL);
   return await get(url);
 }
 

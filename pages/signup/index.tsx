@@ -253,7 +253,7 @@ export default function SignUp() {
               }}
             >
               <Box component="img" className={styles.logo} src="/images/login/login.svg" />
-              <Typography component="h1" variant="h5">
+              <Typography variant="h5" gutterBottom>
                 Registered Account
               </Typography>
             </Box>
@@ -264,7 +264,7 @@ export default function SignUp() {
                 alignItems: 'center',
               }}
             >
-              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: '1.5rem' }}>
+              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: '1rem' }}>
                 <Grid container spacing={3}>
                   {formList.map((item) => (
                     <Grid item key={item.formProps.name} xs={12}>
@@ -273,9 +273,7 @@ export default function SignUp() {
                   ))}
                 </Grid>
                 <Button type="submit" fullWidth variant="contained" color="secondary" sx={{ mt: '1.4rem' }}>
-                  <Typography variant="button" component="span" sx={{ textTransform: 'none' }}>
-                    Sign Up
-                  </Typography>
+                  <Typography variant="button">Sign Up</Typography>
                 </Button>
                 <Box className={styles.separationLineContainer}>
                   <Typography component="span" className={styles.separationLine}></Typography>

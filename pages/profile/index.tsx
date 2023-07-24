@@ -521,7 +521,7 @@ const Profile: NextPageWithLayout = () => {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography sx={{ mb: '2rem' }} variant="h5" component="div" fontFamily="mabry-bold">
+      <Typography sx={{ mb: '2rem' }} variant="h5">
         My Profile
       </Typography>
       <Paper variant="outlined" className={styles.profileContainer}>
@@ -532,9 +532,7 @@ const Profile: NextPageWithLayout = () => {
                 <Avatar alt="Remy Sharp" src={user?.avatar} className={styles.avatarContent} />
               </Stack>
               <Box sx={{ pl: '1rem' }}>
-                <Typography variant="h5" component="div" fontFamily="mabry-bold">
-                  {isLoading ? <Skeleton /> : user?.name}
-                </Typography>
+                <Typography variant="h5">{isLoading ? <Skeleton /> : user?.name}</Typography>
                 <Typography variant="subtitle1" component="div" width="36rem">
                   {isLoading ? <Skeleton /> : Bio || '-'}
                 </Typography>
@@ -560,9 +558,7 @@ const Profile: NextPageWithLayout = () => {
           </Box>
         ) : (
           <Grid sx={{ width: '40rem' }} onSubmit={changePassword} component="form" noValidate>
-            <Typography variant="h6" component="div" fontFamily="mabry-bold">
-              Change Password
-            </Typography>
+            <Typography variant="h6">Change Password</Typography>
             {PasswordList.map((item) => (
               <Box key={item.formProps.name}>
                 <TextField size="small" margin="normal" color="success" fullWidth required {...item.formProps} />
@@ -632,9 +628,7 @@ const Profile: NextPageWithLayout = () => {
         {showPersonalInformation ? (
           <Box>
             <Grid className={styles.informationHeader}>
-              <Typography variant="h6" component="div" fontFamily="mabry-bold">
-                Personal Information
-              </Typography>
+              <Typography variant="h6">Personal Information</Typography>
               <Button
                 size="small"
                 variant="contained"
@@ -674,9 +668,7 @@ const Profile: NextPageWithLayout = () => {
           </Box>
         ) : (
           <Box>
-            <Typography variant="h6" component="div" fontFamily="mabry-bold">
-              Personal Information
-            </Typography>
+            <Typography variant="h6">Personal Information</Typography>
             <Box component="form" onSubmit={changePersonal} noValidate>
               {formList.map((item) => (
                 <Box key={item.formProps.name}>

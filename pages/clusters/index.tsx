@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
-import { listScheduler, listSeedPeer, listCluster, getClusterSearch } from 'lib/api';
+import { listScheduler, listSeedPeer, listCluster } from 'lib/api';
 import styles from './index.module.css';
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useState } from 'react';
@@ -58,7 +58,7 @@ const Cluster: NextPageWithLayout = () => {
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
-  const [text, setText] = useState('');
+  const [searchText, setSearchText] = useState('');
   const [clusterList, setClusterList] = useState([
     {
       ID: '',
@@ -104,7 +104,7 @@ const Cluster: NextPageWithLayout = () => {
       }
     });
 
-    getClusterSearch({ page: page, per_page: pageSize }).then(async (response) => {
+    listCluster({ page: page, per_page: pageSize }).then(async (response) => {
       const linkHeader = response.headers.get('Link');
       const links = parseLinkHeader(linkHeader);
       setTotalPages(Number(links?.last?.page));
@@ -131,12 +131,6 @@ const Cluster: NextPageWithLayout = () => {
     }
   };
 
-  const handleClick = async () => {
-    await getClusterSearch({ page: 1, per_page: pageSize, name: text }).then(async (response) => {
-      setClusterList(await response.json());
-    });
-  };
-
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -160,7 +154,7 @@ const Cluster: NextPageWithLayout = () => {
       <ThemeProvider theme={theme}>
         <Box className={styles.clusterTitle}>
           <Breadcrumbs aria-label="breadcrumb">
-            <Typography variant="h5" color="text.primary" fontFamily="mabry-bold">
+            <Typography variant="h5" color="text.primary">
               Cluster
             </Typography>
           </Breadcrumbs>
@@ -185,14 +179,14 @@ const Cluster: NextPageWithLayout = () => {
                   <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
                   <Box component="img" className={styles.clusterIcon} src="/icons/cluster/cluster.svg" />
                 </Box>
-                <Typography variant="h6" fontFamily="mabry-bold" className={styles.clusterIconTitle}>
+                <Typography variant="h6" className={styles.clusterIconTitle}>
                   Cluster
                 </Typography>
               </Box>
               <Box className={styles.clusterContentContainer}>
                 <Box marginLeft="0.6rem">
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h5" fontFamily="mabry-bold" sx={{ mr: '1rem' }}>
+                    <Typography variant="h5" sx={{ mr: '1rem' }}>
                       {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : numberOfClusters.length}
                     </Typography>
                     <span>number of cluster</span>
@@ -219,14 +213,14 @@ const Cluster: NextPageWithLayout = () => {
                   <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
                   <Box component="img" className={styles.clusterIcon} src="/icons/cluster/scheduler.svg" />
                 </Box>
-                <Typography variant="h6" className={styles.clusterIconTitle} fontFamily="mabry-bold">
+                <Typography variant="h6" className={styles.clusterIconTitle}>
                   Scheduler
                 </Typography>
               </Box>
               <Box className={styles.clusterContentContainer}>
                 <Box sx={{ ml: '0.6rem' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h5" fontFamily="mabry-bold" sx={{ mr: '1rem' }}>
+                    <Typography variant="h5" sx={{ mr: '1rem' }}>
                       {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : scheduleList?.length}
                     </Typography>
                     <span>number of scheduler</span>
@@ -253,14 +247,14 @@ const Cluster: NextPageWithLayout = () => {
                   <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
                   <Box component="img" className={styles.clusterIcon} src="/icons/cluster/seed-peer.svg" />
                 </Box>
-                <Typography variant="h6" fontFamily="mabry-bold" className={styles.seedPseerIconTitle}>
+                <Typography variant="h6" className={styles.seedPseerIconTitle}>
                   Seed peer
                 </Typography>
               </Box>
               <Box className={styles.clusterContentContainer}>
                 <Box sx={{ ml: '0.6rem' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h5" fontFamily="mabry-bold" sx={{ mr: '1rem' }}>
+                    <Typography variant="h5" sx={{ mr: '1rem' }}>
                       {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : seedPeerList.length}
                     </Typography>
                     <span>number of seed peer</span>
@@ -285,9 +279,9 @@ const Cluster: NextPageWithLayout = () => {
             name="Name"
             placeholder="Search"
             color="secondary"
-            value={text}
+            value={searchText}
             onKeyDown={handleKeyDown}
-            onChange={(event) => setText(event.target.value)}
+            onChange={(event) => setSearchText(event.target.value)}
             sx={{ ml: 1, flex: 1 }}
             inputProps={{ 'aria-label': 'search google maps' }}
           />
@@ -296,7 +290,11 @@ const Cluster: NextPageWithLayout = () => {
             aria-label="search"
             id="submit-button"
             size="small"
-            onClick={handleClick}
+            onClick={() => {
+              listCluster({ page: 1, per_page: pageSize, name: searchText }).then(async (response) => {
+                setClusterList(await response.json());
+              });
+            }}
             sx={{ width: '3rem' }}
           >
             <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
@@ -349,26 +347,24 @@ const Cluster: NextPageWithLayout = () => {
                       </Typography>
                     </Box>
                   )}
-                  <Typography variant="h6" component="div" fontFamily="mabry-bold">
-                    {isLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.Name}
-                  </Typography>
+                  <Typography variant="h6">{isLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.Name}</Typography>
                   <Box display="flex" mt="0.4rem">
                     <Box display="flex" className={styles.locationContainer}>
-                      <Typography variant="body2" component="div" fontFamily="mabry-bold">
+                      <Typography variant="body2" fontFamily="mabry-bold">
                         IDC&nbsp;:&nbsp;
                       </Typography>
                       <Tooltip title={item.Scopes.idc || '-'} placement="top">
-                        <Typography variant="body2" component="div" className={styles.locationText}>
+                        <Typography variant="body2" className={styles.locationText}>
                           {isLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.Scopes.idc || '-'}
                         </Typography>
                       </Tooltip>
                     </Box>
                     <Box display="flex" className={styles.locationContainer}>
-                      <Typography variant="body2" component="div" fontFamily="mabry-bold">
+                      <Typography variant="body2" fontFamily="mabry-bold">
                         Location&nbsp;:&nbsp;
                       </Typography>
                       <Tooltip title={item.Scopes.location || '-'} placement="top">
-                        <Typography variant="body2" component="div" className={styles.locationText}>
+                        <Typography variant="body2" className={styles.locationText}>
                           {isLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.Scopes.location || '-'}
                         </Typography>
                       </Tooltip>

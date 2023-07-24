@@ -184,10 +184,10 @@ const SeedPeer: NextPageWithLayout = () => {
           </Typography>
         </Paper>
       </Box>
-      <Paper variant="outlined" className={styles.lowerContainer}>
+      <Paper variant="outlined" className={styles.seedPeerContainer}>
         {seedPeersLabel.map((item: any) => {
           return (
-            <Box key={item.label} className={styles.lowerContent}>
+            <Box key={item.label} className={styles.seedPeerContent}>
               <Typography variant="subtitle1" component="div" mb="1rem">
                 {item.label}
               </Typography>

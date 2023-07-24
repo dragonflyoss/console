@@ -41,7 +41,7 @@ import { datetime } from 'lib/utils';
 import { LoadingButton } from '@mui/lab';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import styles from './users.module.css';
+import styles from './index.module.css';
 
 const useStyles = makeStyles((theme: any) => ({
   tableRow: {
@@ -233,7 +233,7 @@ const User: NextPageWithLayout = () => {
         </Alert>
       </Snackbar>
       <Breadcrumbs sx={{ mb: '2rem' }}>
-        <Typography variant="h5" color="text.primary" fontFamily="mabry-bold">
+        <Typography variant="h5" color="text.primary">
           User
         </Typography>
       </Breadcrumbs>
@@ -243,29 +243,19 @@ const User: NextPageWithLayout = () => {
             <TableRow>
               <TableCell align="center"></TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="mabry-bold">
-                  Name
-                </Typography>
+                <Typography variant="subtitle1">Name</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="mabry-bold">
-                  Email
-                </Typography>
+                <Typography variant="subtitle1">Email</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="mabry-bold">
-                  Location
-                </Typography>
+                <Typography variant="subtitle1">Location</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="mabry-bold">
-                  State
-                </Typography>
+                <Typography variant="subtitle1">State</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="mabry-bold">
-                  Operation
-                </Typography>
+                <Typography variant="subtitle1">Operation</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -515,9 +505,7 @@ const User: NextPageWithLayout = () => {
         <Box role="presentation" sx={{ width: 350 }}>
           <List>
             <ListSubheader component="div" color="inherit" className={styles.detailTitle}>
-              <Typography variant="h6" fontFamily="mabry-bold">
-                User Detail
-              </Typography>
+              <Typography variant="h6">User Detail</Typography>
               <IconButton onClick={closureDeatail}>
                 <ClearOutlinedIcon sx={{ color: 'var(--button-color)' }} />
               </IconButton>

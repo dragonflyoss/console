@@ -79,7 +79,7 @@ const Cluster: NextPageWithLayout = () => {
   const [schedulerSelectedRow, setSchedulerSelectedRow] = useState(null);
   const [schedulerSelectedID, setSchedulerSelectedID] = useState('');
   const [seedPeersSelectedRow, setSeedPeersSelectedRow] = useState(null);
-  const [seedPeersSelectedID, setSeedPeersSelectedID] = useState(null);
+  const [seedPeersSelectedID, setSeedPeersSelectedID] = useState('');
   const [informationList, setInformationList] = useState<clusterData>({
     ID: 0,
     Name: '',
@@ -155,7 +155,7 @@ const Cluster: NextPageWithLayout = () => {
     });
   };
 
-  const GetSeedPeerList = (id: any) => {
+  const getSeedPeerList = (id: any) => {
     getSeedPeer(id).then(async (response) => {
       if (response.status == 200) {
         setSeedPeerList(await response.json());
@@ -179,7 +179,7 @@ const Cluster: NextPageWithLayout = () => {
       });
 
       getClustersList(query.slug);
-      GetSeedPeerList(query.slug);
+      getSeedPeerList(query.slug);
     }
 
     setIsLoading(false);
@@ -189,7 +189,6 @@ const Cluster: NextPageWithLayout = () => {
     if (reason === 'clickaway') {
       return;
     }
-
     setErrorMessage(false);
     setSuccessMessage(false);
   };
@@ -198,7 +197,6 @@ const Cluster: NextPageWithLayout = () => {
     setOpenDelet(false);
     setOpenDeletScheduler(false);
     setSchedulerSelectedRow(null);
-
     setOpenDeletSeedPeers(false);
     setSeedPeersSelectedRow(null);
   };
@@ -217,6 +215,8 @@ const Cluster: NextPageWithLayout = () => {
           setErrorMessage(true);
         }
       });
+    } else {
+      setDeleteLoadingButton(false);
     }
   };
 
@@ -253,22 +253,21 @@ const Cluster: NextPageWithLayout = () => {
 
   const handledeleteSeedPeers = async () => {
     setDeleteLoadingButton(true);
-    if (typeof seedPeersSelectedID === 'string') {
-      await deleteSeedPeerID(seedPeersSelectedID).then((response) => {
-        if (response.status === 200) {
-          setSuccessMessage(true);
-          setOpenDeletSeedPeers(false);
-          setDeleteLoadingButton(false);
-          if (query.slug) {
-            GetSeedPeerList(query.slug);
-          }
-        } else {
-          setErrorMessage(true);
-          setErrorMessageText(response.statusText);
-          setDeleteLoadingButton(false);
+
+    await deleteSeedPeerID(seedPeersSelectedID).then((response) => {
+      if (response.status === 200) {
+        setSuccessMessage(true);
+        setOpenDeletSeedPeers(false);
+        setDeleteLoadingButton(false);
+        if (query.slug) {
+          getSeedPeerList(query.slug);
         }
-      });
-    }
+      } else {
+        setErrorMessage(true);
+        setErrorMessageText(response.statusText);
+        setDeleteLoadingButton(false);
+      }
+    });
   };
 
   return (
@@ -302,9 +301,7 @@ const Cluster: NextPageWithLayout = () => {
         </Typography>
       </Breadcrumbs>
       <Box className={styles.container}>
-        <Typography variant="h5" fontFamily="mabry-bold">
-          Cluster
-        </Typography>
+        <Typography variant="h5">Cluster</Typography>
         <ThemeProvider theme={theme}>
           <Box>
             <Button
@@ -324,7 +321,7 @@ const Cluster: NextPageWithLayout = () => {
               onClick={() => {
                 setOpenDelet(true);
               }}
-              className={styles.DeleteButton}
+              className={styles.deleteButton}
             >
               <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
               Delete Cluster

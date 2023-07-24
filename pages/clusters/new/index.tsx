@@ -525,7 +525,7 @@ const CreateCluster = () => {
             <HelpIcon color="disabled" className={styles.descriptionIcon} />
           </Tooltip>
         </Box>
-        <Box className={styles.isdefaultContainer}>
+        <Box className={styles.defaultContainer}>
           <FormControlLabel
             control={<Checkbox defaultChecked sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }} />}
             label="Set cluster as your default cluster"
@@ -672,6 +672,7 @@ const CreateCluster = () => {
 };
 
 export default CreateCluster;
+
 CreateCluster.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };

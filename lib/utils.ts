@@ -1,8 +1,8 @@
 import Cookies from 'js-cookie';
 import { decode } from 'jsonwebtoken';
 
-export const datetime = (_: string) => {
-  const date = new Date(_);
+export const datetime = (time: string) => {
+  const date = new Date(time);
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();

@@ -180,13 +180,13 @@ export default function SignIn() {
               <Typography variant="h4" gutterBottom>
                 Welcome back!
               </Typography>
-              <Typography variant="subtitle1" gutterBottom>
+              <Typography variant="subtitle1" gutterBottom fontFamily="mabry-light,sans-serif">
                 Through which you can easily configure clusters and view cluster information.
               </Typography>
             </Box>
             <Box
               sx={{
-                marginTop: '0.2rem',
+                mt: '0.2rem',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -204,9 +204,7 @@ export default function SignIn() {
                   />
                 ))}
                 <Button type="submit" fullWidth variant="contained" color="secondary" sx={{ mt: '1.4rem' }}>
-                  <Typography variant="button" component="span" sx={{ textTransform: 'none' }}>
-                    Sign In
-                  </Typography>
+                  <Typography variant="button">Sign In</Typography>
                 </Button>
                 <Box className={styles.separationLineContainer}>
                   <Typography component="span" className={styles.separationLine}></Typography>

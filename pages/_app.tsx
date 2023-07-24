@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
-import '../styles/main.css';
 import '../styles/global.css';
 import React, { ReactElement, ReactNode } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';

@@ -27,14 +27,7 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import { ReactElement, useEffect, useState } from 'react';
-import {
-  getScheduler,
-  getSeedPeer,
-  getCluster,
-  deleteCluster,
-  deleteSchedulerID,
-  deleteSeedPeerID,
-} from 'lib/api';
+import { getScheduler, getSeedPeer, getCluster, deleteCluster, deleteSchedulerID, deleteSeedPeerID } from 'lib/api';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';

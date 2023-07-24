@@ -542,7 +542,7 @@ const CreateCluster = () => {
         <Grid sx={{ display: 'flex' }}>
           {informationFormList.map((item) => (
             <TextField
-              className={styles.TextField}
+              className={styles.textField}
               color="success"
               size="small"
               key={item.formProps.name}
@@ -579,7 +579,7 @@ const CreateCluster = () => {
                 ) : (
                   <TextField
                     size="small"
-                    className={styles.TextField}
+                    className={styles.textField}
                     color="success"
                     key={item.formProps.name}
                     {...item.formProps}
@@ -600,7 +600,7 @@ const CreateCluster = () => {
         <Grid sx={{ display: 'flex', flexWrap: 'wrap' }}>
           {configFormList.map((item) => (
             <TextField
-              className={styles.TextField}
+              className={styles.textField}
               color="success"
               size="small"
               key={item.formProps.name}

@@ -556,7 +556,7 @@ const CreateCluster = () => {
             color="success"
             key={item.formProps.name}
             {...item.formProps}
-            className={styles.TextField}
+            className={styles.textField}
           />
         ))}
         <Box className={styles.scopesTitle}>
@@ -585,7 +585,7 @@ const CreateCluster = () => {
                     renderInput={(params) => <TextField {...params} color="success" {...item.formProps} />}
                   />
                 ) : (
-                  <TextField size="small" className={styles.TextField} color="success" {...item.formProps} />
+                  <TextField size="small" className={styles.textField} color="success" {...item.formProps} />
                 )}
               </Box>
             );
@@ -603,7 +603,7 @@ const CreateCluster = () => {
           {configFormList.map((item) => (
             <TextField
               size="small"
-              className={styles.TextField}
+              className={styles.textField}
               color="success"
               key={item.formProps.name}
               {...item.formProps}

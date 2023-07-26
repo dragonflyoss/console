@@ -69,7 +69,7 @@ export async function patch(url: URL, data = {}) {
   }
 }
 
-export async function Delete(url: URL) {
+export async function destroy(url: URL) {
   try {
     const response = await fetch(url, {
       method: 'DELETE',
@@ -213,7 +213,7 @@ export async function updateCluster(id: string, data: updateClusterData) {
 
 export async function deleteCluster(id: string) {
   const url = new URL(`/api/v1/clusters/${id}`, API_URL);
-  return await Delete(url);
+  return await destroy(url);
 }
 
 export async function listScheduler() {
@@ -228,7 +228,7 @@ export async function getScheduler(id: string) {
 
 export async function deleteSchedulerID(id: string) {
   const url = new URL(`api/v1/schedulers/${id}`, API_URL);
-  return await Delete(url);
+  return await destroy(url);
 }
 
 export async function getSchedulerID(id: string) {
@@ -253,7 +253,7 @@ export async function getSeedPeer(id: string) {
 
 export async function deleteSeedPeerID(id: string) {
   const url = new URL(`api/v1/seed-peers/${id}`, API_URL);
-  return await Delete(url);
+  return await destroy(url);
 }
 
 export async function listUsers() {
@@ -295,12 +295,12 @@ export async function updatePassword(id: string, data: updatePassworData) {
 
 export async function deleteGuest(id: string) {
   const url = new URL(`api/v1/users/${id}/roles/guest`, API_URL);
-  return await Delete(url);
+  return await destroy(url);
 }
 
 export async function deleteRoot(id: string) {
   const url = new URL(`api/v1/users/${id}/roles/root`, API_URL);
-  return await Delete(url);
+  return await destroy(url);
 }
 
 export async function putRoot(id: string) {

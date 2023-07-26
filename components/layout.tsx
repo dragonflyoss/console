@@ -68,6 +68,7 @@ export default function Layout({ children }: LayoutProps) {
       try {
         if (userID) {
           const [user, userRoles] = await Promise.all([getUser(userID), getUserRoles(userID)]);
+          
           setUser(await user.json());
           const res = await userRoles.json();
           setRole(res[0]);

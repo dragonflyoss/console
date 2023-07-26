@@ -42,6 +42,7 @@ import { LoadingButton } from '@mui/lab';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import styles from './index.module.css';
+import _ from 'lodash';
 
 const useStyles = makeStyles((theme: any) => ({
   tableRow: {
@@ -92,13 +93,14 @@ const User: NextPageWithLayout = () => {
     updated_at: '',
   });
   const [role, setRole] = useState('');
+
   const classes = useStyles();
 
   useEffect(() => {
     (async function () {
-      setIsLoading(true);
-
       try {
+        setIsLoading(true);
+
         const response = await listUsers();
         setUserList(await response.json());
         setIsLoading(false);
@@ -136,7 +138,7 @@ const User: NextPageWithLayout = () => {
       setSelectedRow(row);
       setUserID(row.id);
 
-      const response = await await getUserRoles(row.id);
+      const response = await getUserRoles(row.id);
       setRole(await response.json());
       setOpenUser(true);
     } catch (error) {
@@ -157,7 +159,7 @@ const User: NextPageWithLayout = () => {
   const handleSubmit = async () => {
     setLoadingButton(true);
 
-    if (role == 'root') {
+    if (role === 'root') {
       try {
         await deleteGuest(userID);
         await putRoot(userID);
@@ -174,7 +176,7 @@ const User: NextPageWithLayout = () => {
           setLoadingButton(false);
         }
       }
-    } else if (role == 'guest') {
+    } else if (role === 'guest') {
       try {
         await deleteRoot(userID);
         await putGuest(userID);
@@ -305,7 +307,7 @@ const User: NextPageWithLayout = () => {
                       <Skeleton />
                     ) : (
                       <Chip
-                        label={`${item?.state?.charAt(0).toUpperCase()}${item?.state?.slice(1)}`}
+                        label={_.upperFirst(item?.state) || ''}
                         size="small"
                         variant="outlined"
                         sx={{

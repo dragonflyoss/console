@@ -3,37 +3,12 @@ import Divider from '@mui/material/Divider';
 import { Box, Grid, Tooltip, Typography, Paper, DialogTitle, DialogContent, IconButton, Skeleton } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import styles from './clusterInformation.module.css';
+import styles from './cluster.module.css';
 import HelpIcon from '@mui/icons-material/Help';
 import { useState } from 'react';
+import { clusterData } from 'lib/api';
 
-interface cluster {
-  name: string;
-  bio: string;
-  scopes: {
-    idc: string;
-    location: string;
-    cidrs: Array<string>;
-  };
-  scheduler_cluster_id: number;
-  seed_peer_cluster_id: number;
-  scheduler_cluster_config: {
-    candidate_parent_limit: number;
-    filter_parent_limit: number;
-  };
-  seed_peer_cluster_config: {
-    load_limit: number;
-  };
-  peer_cluster_config: {
-    load_limit: number;
-    concurrent_piece_count: number;
-  };
-  created_at: string;
-  updated_at: string;
-  is_default: boolean;
-}
-
-const Clusters = (props: { cluster: cluster; isLoading: boolean }) => {
+const Clusters = (props: { cluster: clusterData; isLoading: boolean }) => {
   const { cluster, isLoading } = props;
   const [openCIDRs, setOpenCIDRs] = useState(false);
 

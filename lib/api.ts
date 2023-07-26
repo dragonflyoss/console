@@ -55,6 +55,7 @@ export async function patch(url: URL, data = {}) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data || {}),
     });
+
     if (response.status === 200) {
       return await response;
     } else {
@@ -76,6 +77,7 @@ export async function Delete(url: URL) {
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
     });
+
     if (response.status === 200) {
       return await response;
     } else {
@@ -97,6 +99,7 @@ export async function put(url: URL) {
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
     });
+
     if (response.status === 200) {
       return await response;
     } else {
@@ -136,13 +139,13 @@ export async function signOut() {
   return await post(url);
 }
 
-interface clusterPagingData {
+interface listClusterData {
   page?: number;
   per_page?: number;
   name?: string;
 }
 
-export async function listCluster(data?: clusterPagingData) {
+export async function listCluster(data?: listClusterData) {
   const query = data ? queryString.stringify({ ...data }) : '';
   const url = new URL(`/api/v1/clusters${query ? '?' : ''}${query}`, API_URL);
   return await get(url);
@@ -153,7 +156,7 @@ export async function getCluster(id: string) {
   return await get(url);
 }
 
-interface clusterData {
+export interface clusterData {
   name: string;
   peer_cluster_config: {
     concurrent_piece_count: number;
@@ -163,6 +166,8 @@ interface clusterData {
     candidate_parent_limit: number;
     filter_parent_limit: number;
   };
+  scheduler_cluster_id?: number;
+  seed_peer_cluster_id?: number;
   seed_peer_cluster_config: {
     load_limit: number;
   };

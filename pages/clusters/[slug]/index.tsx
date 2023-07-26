@@ -4,7 +4,7 @@ import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/router';
-import Information from 'components/clusterInformation';
+import Clusters from 'components/cluster';
 import {
   Alert,
   Box,
@@ -32,6 +32,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';
 import styles from './index.module.css';
+import _ from 'lodash';
 
 const Cluster: NextPageWithLayout = () => {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -119,9 +120,9 @@ const Cluster: NextPageWithLayout = () => {
 
   useEffect(() => {
     (async function () {
-      setIsLoading(true);
-
       try {
+        setIsLoading(true);
+
         if (typeof query.slug === 'string') {
           const [ClusterRes, SchedulerRes, SeedPeerRes] = await Promise.all([
             getCluster(query.slug),
@@ -367,7 +368,7 @@ const Cluster: NextPageWithLayout = () => {
           </DialogActions>
         </Dialog>
       </Box>
-      <Information cluster={cluster} isLoading={isLoading} />
+      <Clusters cluster={cluster} isLoading={isLoading} />
       <Typography variant="subtitle1" gutterBottom fontFamily="mabry-bold" mt="2rem" mb="1rem">
         Scheduler Cluster
       </Typography>
@@ -472,7 +473,7 @@ const Cluster: NextPageWithLayout = () => {
                             <Skeleton />
                           ) : (
                             <Chip
-                              label={`${item?.state.charAt(0).toUpperCase()}${item?.state.slice(1)}`}
+                              label={_.upperFirst(item?.state) || ''}
                               size="small"
                               variant="outlined"
                               sx={{
@@ -496,7 +497,7 @@ const Cluster: NextPageWithLayout = () => {
                                 item.features.map((item: string, id: any) => (
                                   <Chip
                                     key={id}
-                                    label={`${item.charAt(0).toUpperCase()}${item.slice(1)}`}
+                                    label={_.upperFirst(item) || ''}
                                     size="small"
                                     variant="outlined"
                                     sx={{
@@ -712,15 +713,13 @@ const Cluster: NextPageWithLayout = () => {
                       <TableCell align="center">
                         {isLoading ? <Skeleton /> : item?.object_storage_port === 0 ? '-' : item?.object_storage_port}
                       </TableCell>
-                      <TableCell align="center">
-                        {isLoading ? <Skeleton /> : `${item?.type?.charAt(0).toUpperCase()}${item?.type?.slice(1)}`}
-                      </TableCell>
+                      <TableCell align="center">{isLoading ? <Skeleton /> : _.upperFirst(item?.type) || ''}</TableCell>
                       <TableCell align="center">
                         {isLoading ? (
                           <Skeleton />
                         ) : (
                           <Chip
-                            label={`${item?.state.charAt(0).toUpperCase()}${item?.state.slice(1)}`}
+                            label={_.upperFirst(item?.state) || ''}
                             size="small"
                             variant="outlined"
                             sx={{

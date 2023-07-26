@@ -63,7 +63,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #edeff2;
+  background-color: var(--scopes-icon-color);
   border-radius: 0.2rem;
   width: 2rem;
   height: 2rem;

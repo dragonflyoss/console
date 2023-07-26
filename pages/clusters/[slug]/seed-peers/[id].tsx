@@ -11,6 +11,7 @@ import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import HistoryIcon from '@mui/icons-material/History';
 import styles from './index.module.css';
 import Link from 'next/link';
+import _ from 'lodash';
 
 const SeedPeer: NextPageWithLayout = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +31,7 @@ const SeedPeer: NextPageWithLayout = () => {
     lcoation: '',
     created_at: '',
     updated_at: '',
-    SeedPeerClusterID: '',
+    seed_peer_cluster_id: '',
   });
 
   const { query } = useRouter();
@@ -78,8 +79,9 @@ const SeedPeer: NextPageWithLayout = () => {
 
   useEffect(() => {
     (async function () {
-      setIsLoading(true);
       try {
+        setIsLoading(true);
+
         if (typeof query.slug === 'string' && typeof query.id === 'string') {
           const [getClusters, getSeedPeer] = await Promise.all([getCluster(query.slug), getSeedPeerID(query.id)]);
 
@@ -173,7 +175,7 @@ const SeedPeer: NextPageWithLayout = () => {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.SeedPeerClusterID}
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.seed_peer_cluster_id}
           </Typography>
         </Paper>
       </Box>
@@ -204,9 +206,7 @@ const SeedPeer: NextPageWithLayout = () => {
                     />
                   ) : item.name == 'state' ? (
                     <Chip
-                      label={`${seedPeer?.[item.name as keyof typeof seedPeer]?.charAt(0).toUpperCase()}${seedPeer?.[
-                        item.name as keyof typeof seedPeer
-                      ]?.slice(1)}`}
+                      label={_.upperFirst(seedPeer?.[item.name as keyof typeof seedPeer]) || ''}
                       size="small"
                       variant="outlined"
                       sx={{
@@ -225,9 +225,7 @@ const SeedPeer: NextPageWithLayout = () => {
                     />
                   ) : item.name == 'type' ? (
                     <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-                      {`${seedPeer?.[item.name as keyof typeof seedPeer]?.charAt(0).toUpperCase()}${seedPeer?.[
-                        item.name as keyof typeof seedPeer
-                      ]?.slice(1)}`}
+                      {_.upperFirst(seedPeer?.[item.name as keyof typeof seedPeer]) || ''}
                     </Typography>
                   ) : (
                     <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">

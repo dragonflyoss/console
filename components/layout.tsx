@@ -24,7 +24,7 @@ import { Logout, PersonAdd } from '@mui/icons-material';
 import { getUserRoles, getUser, signOut } from 'lib/api';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import Link from 'next/link';
-import { getUserID } from 'lib/utils';
+import { getJwtPayload } from 'lib/utils';
 
 type LayoutProps = {
   children: ReactNode;
@@ -50,7 +50,7 @@ const Main = styled('div')(({ theme }) => ({
 }));
 
 export default function Layout({ children }: LayoutProps) {
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState([]);
   const [root] = useState('root');
   const [guest] = useState('guest');
   const [errorMessage, setErrorMessage] = useState(false);
@@ -62,16 +62,16 @@ export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const userID = getUserID();
+    const account = getJwtPayload();
 
     (async function () {
       try {
-        if (userID) {
-          const [user, userRoles] = await Promise.all([getUser(userID), getUserRoles(userID)]);
+        if (account?.id) {
+          const [user, userRoles] = await Promise.all([getUser(account?.id), getUserRoles(account?.id)]);
 
           setUser(await user.json());
           const res = await userRoles.json();
-          setRole(res[0] || '');
+          setRole(res);
         } else {
           router.push('/signin');
         }
@@ -176,7 +176,55 @@ export default function Layout({ children }: LayoutProps) {
               </Typography>
             </Box>
             <List component="nav" aria-label="main mailbox folders" sx={{ width: '100%' }}>
-              {role === root ? (
+              {role.map((item) => {
+                return item === root ? (
+                  rootMenu.map((items) => (
+                    <ListItemButton
+                      key={items.href}
+                      selected={router.asPath.split('/')[1] === items.label}
+                      component={Link}
+                      href={items.href}
+                      sx={{
+                        '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                        '&.Mui-selected:hover': { backgroundColor: '#DDFF55', color: '#121726' },
+                        height: '2rem',
+                        mb: '0.4rem',
+                      }}
+                    >
+                      {items.icon}
+                      <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                        {items.text}
+                      </Typography>
+                    </ListItemButton>
+                  ))
+                ) : item === guest ? (
+                  guestMenu.map((item) => {
+                    return (
+                      <ListItemButton
+                        key={item.href}
+                        selected={router.asPath.split('/')[1] === item.label}
+                        component={Link}
+                        href={item.href}
+                        sx={{
+                          '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                          '&.Mui-selected:hover': { backgroundColor: '#DDFF55', color: '#121726' },
+                          height: '2rem',
+                          mb: '0.4rem',
+                        }}
+                      >
+                        {item.icon}
+                        <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                          {item.text}
+                        </Typography>
+                      </ListItemButton>
+                    );
+                  })
+                ) : (
+                  <></>
+                );
+              })}
+
+              {/* {role === root ? (
                 rootMenu.map((item) => {
                   return (
                     <ListItemButton
@@ -222,7 +270,7 @@ export default function Layout({ children }: LayoutProps) {
                 })
               ) : (
                 <></>
-              )}
+              )} */}
             </List>
           </Grid>
           <Grid sx={{ mb: '4rem' }}>

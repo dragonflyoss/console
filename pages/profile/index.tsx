@@ -30,7 +30,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import styles from './index.module.css';
-import { datetime, getUserID } from 'lib/utils';
+import { datetime, getJwtPayload } from 'lib/utils';
 
 const Profile: NextPageWithLayout = () => {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -50,7 +50,7 @@ const Profile: NextPageWithLayout = () => {
   const [showMyProfile, setShowMyProfile] = useState(true);
   const [showPersonalInformation, setShowPersonalInformation] = useState(true);
   const [userID, setUserID] = useState('');
-  const [BIO, setBIO] = useState('');
+  const [bio, setBio] = useState('');
   const [user, setUser] = useState({
     bio: '',
     avatar: '',
@@ -60,7 +60,6 @@ const Profile: NextPageWithLayout = () => {
     location: '',
     phone: '',
     created_at: '',
-    formBio: '',
   });
   const [password, setPassword] = useState({
     old_password: '',
@@ -69,18 +68,19 @@ const Profile: NextPageWithLayout = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const userID = getUserID();
-    setUserID(userID);
+    const account = getJwtPayload();
+    setUserID(account?.id);
 
     (async function () {
-      setIsLoading(true);
       try {
-        if (userID) {
-          const response = await getUser(userID);
+        setIsLoading(true);
+
+        if (account?.id) {
+          const response = await getUser(account?.id);
           const res = await response.json();
 
           setUser(res);
-          setBIO(res.bio);
+          setBio(res.bio);
           setIsLoading(false);
         }
       } catch (error) {
@@ -93,7 +93,6 @@ const Profile: NextPageWithLayout = () => {
     })();
   }, []);
 
-  const { bio, email, phone, location } = user;
   const { old_password, new_password } = password;
 
   const userLable = [
@@ -140,7 +139,7 @@ const Profile: NextPageWithLayout = () => {
         placeholder: 'Enter your Bio',
         helperText: bioError ? 'The length is 0-1000' : '',
         error: bioError,
-        value: bio,
+        value: user.bio,
 
         onChange: (e: any) => {
           setUser({ ...user, bio: e.target.value });
@@ -171,7 +170,7 @@ const Profile: NextPageWithLayout = () => {
         label: 'Phone',
         name: 'Phone',
         autoComplete: 'family-name',
-        value: phone,
+        value: user.phone,
         placeholder: 'Enter your Phone',
         helperText: phoneError ? 'Please enter the correct phone number' : '',
         error: phoneError,
@@ -204,7 +203,7 @@ const Profile: NextPageWithLayout = () => {
         label: 'Location',
         name: 'location',
         autoComplete: 'family-name',
-        value: location,
+        value: user.location,
         placeholder: 'Enter your location',
         helperText: locationError ? 'Please enter your address' : '',
         error: locationError,
@@ -236,7 +235,7 @@ const Profile: NextPageWithLayout = () => {
         label: 'Email',
         name: 'Email',
         autoComplete: 'family-name',
-        value: email,
+        value: user.email,
         placeholder: 'Enter your Email',
         helperText: emailError ? 'Please enter the correct email format' : '',
         error: emailError,
@@ -433,10 +432,10 @@ const Profile: NextPageWithLayout = () => {
     const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
 
     const formData = {
-      bio: bio,
-      email: email,
-      location: location,
-      phone: phone,
+      bio: user.bio,
+      email: user.email,
+      location: user.location,
+      phone: user.phone,
     };
 
     if (canSubmit) {
@@ -447,7 +446,7 @@ const Profile: NextPageWithLayout = () => {
           setPersonalLoadingButton(false);
           setShowPersonalInformation(true);
           setSuccessMessage(true);
-          setBIO(bio);
+          setBio(user.bio);
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -469,7 +468,7 @@ const Profile: NextPageWithLayout = () => {
         const response = await getUser(userID);
         const res = await response.json();
         setUser(res);
-        setBIO(res.bio);
+        setBio(res.bio);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -565,7 +564,7 @@ const Profile: NextPageWithLayout = () => {
               <Box sx={{ pl: '1rem' }}>
                 <Typography variant="h5">{isLoading ? <Skeleton /> : user?.name}</Typography>
                 <Typography variant="subtitle1" component="div" width="36rem">
-                  {isLoading ? <Skeleton /> : BIO || '-'}
+                  {isLoading ? <Skeleton /> : bio || '-'}
                 </Typography>
               </Box>
             </Box>

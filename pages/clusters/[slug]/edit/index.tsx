@@ -35,7 +35,7 @@ const CreateCluster = () => {
   const [filterParentLimitError, setFilterParentLimitError] = useState(false);
   const [locationError, setLocationError] = useState(false);
   const [idcError, setIDCError] = useState(false);
-  const [cidrsError, setCidrsError] = useState(false);
+  const [cidrsError, setCIDRsError] = useState(false);
   const [editLoadingButton, setEditLoadingButton] = useState(false);
   const [clusters, setClusters] = useState({
     id: '',
@@ -91,7 +91,7 @@ const CreateCluster = () => {
     })();
   }, [router.query.slug]);
 
-  const informationFormList = [
+  const informationForm = [
     {
       formProps: {
         id: 'bio',
@@ -105,7 +105,7 @@ const CreateCluster = () => {
 
         onChange: (e: any) => {
           setClusters({ ...clusters, bio: e.target.value });
-          changeValidate(e.target.value, informationFormList[0]);
+          changeValidate(e.target.value, informationForm[0]);
         },
       },
       syncError: false,
@@ -118,7 +118,7 @@ const CreateCluster = () => {
     },
   ];
 
-  const scopesFormList = [
+  const scopesForm = [
     {
       formProps: {
         id: 'location',
@@ -132,7 +132,7 @@ const CreateCluster = () => {
 
         onChange: (e: any) => {
           setClusters({ ...clusters, scopes: { ...clusters.scopes, location: e.target.value } });
-          changeValidate(e.target.value, scopesFormList[0]);
+          changeValidate(e.target.value, scopesForm[0]);
         },
         InputProps: {
           endAdornment: (
@@ -167,7 +167,7 @@ const CreateCluster = () => {
         error: idcError,
         onChange: (e: any) => {
           setClusters({ ...clusters, scopes: { ...clusters.scopes, idc: e.target.value } });
-          changeValidate(e.target.value, scopesFormList[1]);
+          changeValidate(e.target.value, scopesForm[1]);
         },
         InputProps: {
           endAdornment: (
@@ -197,12 +197,12 @@ const CreateCluster = () => {
         options: cidrsOptions,
 
         onChange: (_e: any, newValue: any) => {
-          if (!scopesFormList[2].formProps.error) {
+          if (!scopesForm[2].formProps.error) {
             setClusters({ ...clusters, scopes: { ...clusters.scopes, cidrs: newValue } });
           }
         },
         onInputChange: (e: any) => {
-          changeValidate(e.target.value, scopesFormList[2]);
+          changeValidate(e.target.value, scopesForm[2]);
         },
         renderTags: (value: any, getTagProps: any) =>
           value.map((option: any, index: any) => <Chip key={index} label={option} {...getTagProps({ index })} />),
@@ -222,7 +222,7 @@ const CreateCluster = () => {
         },
       },
       syncError: false,
-      setError: setCidrsError,
+      setError: setCIDRsError,
 
       validate: (value: string) => {
         const reg = /^(.{0,1000})$/;
@@ -231,7 +231,7 @@ const CreateCluster = () => {
     },
   ];
 
-  const configFormList = [
+  const configForm = [
     {
       formProps: {
         id: 'seed peer load limit',
@@ -249,7 +249,7 @@ const CreateCluster = () => {
             ...clusters,
             seed_peer_cluster_config: { ...clusters.seed_peer_cluster_config, load_limit: e.target.value },
           });
-          changeValidate(e.target.value, configFormList[0]);
+          changeValidate(e.target.value, configForm[0]);
         },
         InputProps: {
           endAdornment: (
@@ -287,7 +287,7 @@ const CreateCluster = () => {
             ...clusters,
             peer_cluster_config: { ...clusters.peer_cluster_config, load_limit: e.target.value },
           });
-          changeValidate(e.target.value, configFormList[1]);
+          changeValidate(e.target.value, configForm[1]);
         },
 
         InputProps: {
@@ -327,7 +327,7 @@ const CreateCluster = () => {
             ...clusters,
             peer_cluster_config: { ...clusters.peer_cluster_config, concurrent_piece_count: e.target.value },
           });
-          changeValidate(e.target.value, configFormList[2]);
+          changeValidate(e.target.value, configForm[2]);
         },
 
         InputProps: {
@@ -369,7 +369,7 @@ const CreateCluster = () => {
               candidate_parent_limit: e.target.value,
             },
           });
-          changeValidate(e.target.value, configFormList[3]);
+          changeValidate(e.target.value, configForm[3]);
         },
 
         InputProps: {
@@ -411,7 +411,7 @@ const CreateCluster = () => {
               filter_parent_limit: e.target.value,
             },
           });
-          changeValidate(e.target.value, configFormList[4]);
+          changeValidate(e.target.value, configForm[4]);
         },
 
         InputProps: {
@@ -453,22 +453,22 @@ const CreateCluster = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    informationFormList.forEach((item) => {
+    informationForm.forEach((item) => {
       const value = data.get(item.formProps.name);
       item.setError(!item.validate(value as string));
       item.syncError = !item.validate(value as string);
     });
 
-    configFormList.forEach((item) => {
+    configForm.forEach((item) => {
       const value = data.get(item.formProps.name);
       item.setError(!item.validate(value as string));
       item.syncError = !item.validate(value as string);
     });
 
     const canSubmit = Boolean(
-      !informationFormList.filter((item) => item.syncError).length &&
-        !scopesFormList.filter((item) => item.syncError).length &&
-        !configFormList.filter((item) => item.syncError).length,
+      !informationForm.filter((item) => item.syncError).length &&
+        !scopesForm.filter((item) => item.syncError).length &&
+        !configForm.filter((item) => item.syncError).length,
     );
 
     const formdata = {
@@ -565,7 +565,7 @@ const CreateCluster = () => {
             <HelpIcon color="disabled" className={styles.descriptionIcon} />
           </Tooltip>
         </Box>
-        {informationFormList.map((item) => (
+        {informationForm.map((item) => (
           <TextField
             size="small"
             color="success"
@@ -587,7 +587,7 @@ const CreateCluster = () => {
           </Tooltip>
         </Box>
         <Grid className={styles.scopesContainer}>
-          {scopesFormList.map((item) => {
+          {scopesForm.map((item) => {
             return (
               <Box key={item.formProps.name}>
                 {item.label === 'CIDRs' ? (
@@ -615,7 +615,7 @@ const CreateCluster = () => {
           </Tooltip>
         </Box>
         <Grid className={styles.configContainer}>
-          {configFormList.map((item) => (
+          {configForm.map((item) => (
             <TextField
               size="small"
               className={styles.textField}

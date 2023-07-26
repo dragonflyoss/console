@@ -11,6 +11,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import { getSchedulerID, getCluster } from 'lib/api';
 import { datetime } from 'lib/utils';
 import styles from './index.module.css';
+import _ from 'lodash';
 
 const Scheduler: NextPageWithLayout = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +22,7 @@ const Scheduler: NextPageWithLayout = () => {
     id: '',
     host_name: '',
     ip: '',
-    SchedulerClusterID: '',
+    scheduler_cluster_id: '',
     port: '',
     state: '',
     idc: '',
@@ -65,8 +66,9 @@ const Scheduler: NextPageWithLayout = () => {
 
   useEffect(() => {
     (async function () {
-      setIsLoading(true);
       try {
+        setIsLoading(true);
+
         if (typeof query.slug === 'string' && typeof query.id === 'string') {
           const [getClusters, getSchedulers] = await Promise.all([getCluster(query.slug), getSchedulerID(query.id)]);
 
@@ -152,15 +154,15 @@ const Scheduler: NextPageWithLayout = () => {
             {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : schedule?.ip}
           </Typography>
         </Paper>
-        <Paper variant="outlined" className={styles.clusterIdContaine}>
-          <Box className={styles.clusterIdContent}>
+        <Paper variant="outlined" className={styles.clusterIDContaine}>
+          <Box className={styles.clusterIDContent}>
             <Box component="img" className={styles.headerIcon} src="/icons/cluster/cluster-id.svg" />
-            <Typography className={styles.clusterIdTitle} variant="subtitle1" component="div">
+            <Typography className={styles.clusterIDTitle} variant="subtitle1" component="div">
               Cluster ID
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : schedule?.SchedulerClusterID}
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : schedule?.scheduler_cluster_id}
           </Typography>
         </Paper>
       </Box>
@@ -191,7 +193,7 @@ const Scheduler: NextPageWithLayout = () => {
                     />
                   ) : item.name == 'state' ? (
                     <Chip
-                      label={`${schedule?.[item.name]?.charAt(0).toUpperCase()}${schedule?.[item.name]?.slice(1)}`}
+                      label={_.upperFirst(schedule?.[item.name]) || ''}
                       size="small"
                       variant="outlined"
                       sx={{
@@ -209,7 +211,7 @@ const Scheduler: NextPageWithLayout = () => {
                       {schedule?.[item?.name]?.map((items: string, id: any) => (
                         <Chip
                           key={id}
-                          label={`${items.charAt(0).toUpperCase()}${items.slice(1)}`}
+                          label={_.upperFirst(items) || ''}
                           size="small"
                           variant="outlined"
                           sx={{

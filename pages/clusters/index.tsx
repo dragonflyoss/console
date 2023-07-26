@@ -52,15 +52,15 @@ const Cluster: NextPageWithLayout = () => {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [clusterLoading, setClusterLoading] = useState(true);
-  const [numberOfClusters, setNumberOfClusters] = useState([]);
-  const [scheduleList, setSchedleList] = useState([]);
-  const [seedPeerList, setSeedPeerList] = useState([]);
+  const [clusterIsLoading, setClusterIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [searchText, setSearchText] = useState('');
-  const [clusterList, setClusterList] = useState([
+  const [cluster, setCluster] = useState([]);
+  const [scheduler, setScheduler] = useState([]);
+  const [seedPeer, setSeedPeer] = useState([]);
+  const [clusters, setClusters] = useState([
     {
       id: '',
       name: '',
@@ -70,7 +70,7 @@ const Cluster: NextPageWithLayout = () => {
         cidrs: null,
       },
       created_at: '',
-      is_default: true,
+      is_default: false,
     },
   ]);
   const router = useRouter();
@@ -79,26 +79,26 @@ const Cluster: NextPageWithLayout = () => {
     (async function () {
       try {
         setIsLoading(true);
-        setClusterLoading(true);
+        setClusterIsLoading(true);
 
         const [cluster, Schedle, seedPeer, clusters] = await Promise.all([
-          listCluster(),
+          listCluster({ page: 1, per_page: 1000 }),
           listScheduler(),
           listSeedPeer(),
           listCluster({ page: page, per_page: pageSize }),
         ]);
 
-        setNumberOfClusters(await cluster.json());
-        setSchedleList(await Schedle.json());
-        setSeedPeerList(await seedPeer.json());
+        setCluster(await cluster.json());
+        setScheduler(await Schedle.json());
+        setSeedPeer(await seedPeer.json());
 
         const linkHeader = clusters.headers.get('Link');
         const links = parseLinkHeader(linkHeader);
 
         setTotalPages(Number(links?.last?.page));
-        setClusterList(await clusters.json());
+        setClusters(await clusters.json());
         setIsLoading(false);
-        setClusterLoading(false);
+        setClusterIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
@@ -109,21 +109,21 @@ const Cluster: NextPageWithLayout = () => {
     })();
   }, [page, pageSize]);
 
-  const defaultCluster = (Array.isArray(numberOfClusters) &&
-    numberOfClusters?.filter((item: any) => item?.is_default === true)) as any[];
+  const numberOfDefaultClusters =
+    Array.isArray(cluster) && cluster?.filter((item: any) => item?.is_default === true).length;
 
-  const scheduleActive = (Array.isArray(scheduleList) &&
-    scheduleList?.filter((item: any) => item?.state == 'active')) as any[];
+  const numberOfActiveSchedulers =
+    Array.isArray(scheduler) && scheduler?.filter((item: any) => item?.state == 'active').length;
 
-  const seedPeerActive: any = (Array.isArray(seedPeerList) &&
-    seedPeerList?.filter((item: any) => item?.state == 'active')) as any[];
+  const numberOfActiveSeedPeers: any =
+    Array.isArray(seedPeer) && seedPeer?.filter((item: any) => item?.state == 'active').length;
 
-  const inquireCluster = async () => {
+  const searchCluster = async () => {
     try {
-      setClusterLoading(true);
+      setClusterIsLoading(true);
       const response = await listCluster({ page: 1, per_page: pageSize, name: searchText });
-      setClusterList(await response.json());
-      setClusterLoading(false);
+      setClusters(await response.json());
+      setClusterIsLoading(false);
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(true);
@@ -196,7 +196,7 @@ const Cluster: NextPageWithLayout = () => {
                 <Box marginLeft="0.6rem">
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : numberOfClusters.length}
+                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : cluster.length || ''}
                     </Typography>
                     <span>number of cluster</span>
                   </Box>
@@ -204,7 +204,7 @@ const Cluster: NextPageWithLayout = () => {
                     <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/default.svg" />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span className={styles.clusterBottomContent}>
-                        {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : defaultCluster?.length}
+                        {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : numberOfDefaultClusters || 0}
                       </span>
                       <span className={styles.clusterBottomContentMsg}>default</span>
                     </Box>
@@ -230,7 +230,7 @@ const Cluster: NextPageWithLayout = () => {
                 <Box sx={{ ml: '0.6rem' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : scheduleList?.length}
+                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : scheduler?.length}
                     </Typography>
                     <span>number of scheduler</span>
                   </Box>
@@ -238,7 +238,7 @@ const Cluster: NextPageWithLayout = () => {
                     <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/active.svg" />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span className={styles.clusterBottomContent}>
-                        {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : scheduleActive?.length}
+                        {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : numberOfActiveSchedulers || 0}
                       </span>
                       <span className={styles.clusterBottomContentMsg}>active</span>
                     </Box>
@@ -264,7 +264,7 @@ const Cluster: NextPageWithLayout = () => {
                 <Box sx={{ ml: '0.6rem' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : seedPeerList.length}
+                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : seedPeer.length}
                     </Typography>
                     <span>number of seed peer</span>
                   </Box>
@@ -272,7 +272,7 @@ const Cluster: NextPageWithLayout = () => {
                     <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/active.svg" />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span className={styles.clusterBottomContent}>
-                        {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : seedPeerActive?.length}
+                        {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : numberOfActiveSeedPeers || 0}
                       </span>
                       <span className={styles.clusterBottomContentMsg}>active</span>
                     </Box>
@@ -299,15 +299,15 @@ const Cluster: NextPageWithLayout = () => {
             aria-label="search"
             id="submit-button"
             size="small"
-            onClick={inquireCluster}
+            onClick={searchCluster}
             sx={{ width: '3rem' }}
           >
             <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
           </IconButton>
         </Paper>
         <Grid item xs={12} className={styles.clusterListContainer} component="form" noValidate>
-          {Array.isArray(clusterList) &&
-            clusterList.map((item: any, id) => (
+          {Array.isArray(clusters) &&
+            clusters.map((item: any, id) => (
               <Paper
                 key={id}
                 variant="outlined"
@@ -329,13 +329,13 @@ const Cluster: NextPageWithLayout = () => {
                 <Box className={styles.clusterListContent}>
                   <Box display="flex">
                     <span className={styles.idText}>ID&nbsp;:&nbsp;</span>
-                    {clusterLoading ? (
+                    {clusterIsLoading ? (
                       <Skeleton sx={{ width: '1rem' }} />
                     ) : (
                       <span className={styles.idText}>{item.id}</span>
                     )}
                   </Box>
-                  {clusterLoading ? (
+                  {clusterIsLoading ? (
                     <Skeleton sx={{ width: '4rem', height: '1.4rem', mt: '0.8rem', mb: '0.8rem' }} />
                   ) : (
                     <Box
@@ -357,7 +357,7 @@ const Cluster: NextPageWithLayout = () => {
                     </Box>
                   )}
                   <Typography variant="h6">
-                    {clusterLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.name}
+                    {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.name}
                   </Typography>
                   <Box display="flex" mt="0.4rem">
                     <Box display="flex" className={styles.locationContainer}>
@@ -366,7 +366,7 @@ const Cluster: NextPageWithLayout = () => {
                       </Typography>
                       <Tooltip title={item.scopes.idc || '-'} placement="top">
                         <Typography variant="body2" className={styles.locationText}>
-                          {clusterLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.scopes.idc || '-'}
+                          {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.scopes.idc || '-'}
                         </Typography>
                       </Tooltip>
                     </Box>
@@ -376,7 +376,7 @@ const Cluster: NextPageWithLayout = () => {
                       </Typography>
                       <Tooltip title={item.scopes.location || '-'} placement="top">
                         <Typography variant="body2" className={styles.locationText}>
-                          {clusterLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.scopes.location || '-'}
+                          {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.scopes.location || '-'}
                         </Typography>
                       </Tooltip>
                     </Box>
@@ -384,7 +384,7 @@ const Cluster: NextPageWithLayout = () => {
                   <Box className={styles.creatTimeContainer}>
                     <Chip
                       avatar={<MoreTimeIcon />}
-                      label={clusterLoading ? <Skeleton sx={{ width: '6rem' }} /> : datetime(item.created_at)}
+                      label={clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : datetime(item.created_at)}
                       variant="outlined"
                       size="small"
                     />

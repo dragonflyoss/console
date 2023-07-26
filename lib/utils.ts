@@ -12,10 +12,8 @@ export const datetime = (time: string) => {
   return `${year}-${month}-${day}-${hr}:${min}`;
 };
 
-export const getUserID = () => {
+export const getJwtPayload = () => {
   const account = (decode(Cookies.get('jwt') || 'jwt') as JwtPayload) || null;
 
-  if (account) {
-    return account?.id;
-  }
+  return account;
 };

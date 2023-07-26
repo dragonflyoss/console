@@ -7,35 +7,34 @@ import styles from './clusterInformation.module.css';
 import HelpIcon from '@mui/icons-material/Help';
 import { useState } from 'react';
 
-interface clusterData {
-  ID: number;
-  Name: string;
-  BIO: string;
-  Scopes: {
+interface cluster {
+  name: string;
+  bio: string;
+  scopes: {
     idc: string;
     location: string;
     cidrs: Array<string>;
   };
-  SchedulerClusterID: number;
-  SeedPeerClusterID: number;
-  SchedulerClusterConfig: {
+  scheduler_cluster_id: number;
+  seed_peer_cluster_id: number;
+  scheduler_cluster_config: {
     candidate_parent_limit: number;
     filter_parent_limit: number;
   };
-  SeedPeerClusterConfig: {
+  seed_peer_cluster_config: {
     load_limit: number;
   };
-  PeerClusterConfig: {
+  peer_cluster_config: {
     load_limit: number;
     concurrent_piece_count: number;
   };
-  CreatedAt: string;
-  UpdatedAt: string;
-  IsDefault: boolean;
+  created_at: string;
+  updated_at: string;
+  is_default: boolean;
 }
 
-const Information = (props: { informationList: clusterData; isLoading: boolean }) => {
-  const { informationList, isLoading } = props;
+const Clusters = (props: { cluster: cluster; isLoading: boolean }) => {
+  const { cluster, isLoading } = props;
   const [openCIDRs, setOpenCIDRs] = useState(false);
 
   return (
@@ -49,9 +48,9 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
         </Tooltip>
       </Box>
       <Grid>
-        <Paper variant="outlined" className={styles.informationContainer}>
-          <Box className={styles.informationWrap}>
-            <Box className={styles.informationTitle}>
+        <Paper variant="outlined" className={styles.clusterContainer}>
+          <Box className={styles.clusterWrap}>
+            <Box className={styles.clusterTitle}>
               <Typography variant="body2" component="div" color="#80828B" mr="0.2rem">
                 Name
               </Typography>
@@ -60,12 +59,12 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
               </Tooltip>
             </Box>
             <Typography variant="subtitle1" component="div" fontFamily="mabry-bold">
-              {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : informationList.Name}
+              {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster.name}
             </Typography>
           </Box>
           <Divider orientation="vertical" flexItem />
-          <Box className={styles.informationWrap}>
-            <Box className={styles.informationTitle}>
+          <Box className={styles.clusterWrap}>
+            <Box className={styles.clusterTitle}>
               <Typography variant="body2" component="div" color="#80828B" mr="0.2rem">
                 Description
               </Typography>
@@ -73,26 +72,26 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
                 <HelpIcon color="disabled" className={styles.descriptionIcon} />
               </Tooltip>
             </Box>
-            <Tooltip title={informationList?.BIO || '-'} placement="bottom">
+            <Tooltip title={cluster?.bio || '-'} placement="bottom">
               <Typography
                 variant="subtitle1"
                 component="div"
                 fontFamily="mabry-bold"
                 sx={{
-                  width: '9rem',
+                  width: '80%',
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   textAlign: 'center',
                 }}
               >
-                {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : informationList?.BIO || '-'}
+                {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.bio || '-'}
               </Typography>
             </Tooltip>
           </Box>
           <Divider orientation="vertical" flexItem />
-          <Box className={styles.informationWrap}>
-            <Box className={styles.informationTitle}>
+          <Box className={styles.clusterWrap}>
+            <Box className={styles.clusterTitle}>
               <Typography variant="body2" component="div" color="#80828B" mr="0.2rem">
                 Set as default cluster
               </Typography>
@@ -104,12 +103,12 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
               </Tooltip>
             </Box>
             <Typography variant="subtitle1" component="div" fontFamily="mabry-bold">
-              {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : informationList.IsDefault ? 'Yes' : 'No'}
+              {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster.is_default ? 'Yes' : 'No'}
             </Typography>
           </Box>
           <Divider orientation="vertical" flexItem />
-          <Box className={styles.informationWrap}>
-            <Box className={styles.informationTitle}>
+          <Box className={styles.clusterWrap}>
+            <Box className={styles.clusterTitle}>
               <Typography variant="body2" component="div" color="#80828B" mr="0.2rem">
                 Scheduler cluster ID
               </Typography>
@@ -121,12 +120,12 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
               </Tooltip>
             </Box>
             <Typography variant="subtitle1" component="div" fontFamily="mabry-bold">
-              {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : informationList?.SchedulerClusterID}
+              {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.scheduler_cluster_id}
             </Typography>
           </Box>
           <Divider orientation="vertical" flexItem />
-          <Box className={styles.informationWrap}>
-            <Box className={styles.informationTitle}>
+          <Box className={styles.clusterWrap}>
+            <Box className={styles.clusterTitle}>
               <Typography variant="body2" component="div" color="#80828B" mr="0.2rem">
                 Seed Peer cluster ID
               </Typography>
@@ -138,7 +137,7 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
               </Tooltip>
             </Box>
             <Typography variant="subtitle1" component="div" fontFamily="mabry-bold">
-              {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : informationList?.SeedPeerClusterID}
+              {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.seed_peer_cluster_id}
             </Typography>
           </Box>
         </Paper>
@@ -175,10 +174,10 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
                       <HelpIcon color="disabled" className={styles.descriptionIcon} />
                     </Tooltip>
                   </Box>
-                  <Tooltip title={informationList?.Scopes?.location || '-'} placement="top">
+                  <Tooltip title={cluster?.scopes?.location || '-'} placement="top">
                     <Box className={styles.locationTextContainer}>
                       <Typography variant="body2" component="span" className={styles.locationContent}>
-                        {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : informationList?.Scopes?.location || '-'}
+                        {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.scopes?.location || '-'}
                       </Typography>
                     </Box>
                   </Tooltip>
@@ -200,10 +199,10 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
                       <HelpIcon color="disabled" className={styles.descriptionIcon} />
                     </Tooltip>
                   </Box>
-                  <Tooltip title={informationList?.Scopes?.idc || '-'} placement="top">
+                  <Tooltip title={cluster?.scopes?.idc || '-'} placement="top">
                     <Box className={styles.idcTextContainer}>
                       <Typography variant="body2" component="div" className={styles.idcContent}>
-                        {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : informationList?.Scopes?.idc || '-'}
+                        {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.scopes?.idc || '-'}
                       </Typography>
                     </Box>
                   </Tooltip>
@@ -229,16 +228,16 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
                     <Skeleton sx={{ width: '10rem' }} />
                   ) : (
                     <Box className={styles.cidrsTags}>
-                      {informationList?.Scopes?.cidrs?.length > 0 ? (
+                      {cluster?.scopes?.cidrs?.length > 0 ? (
                         <Paper variant="outlined" className={styles.cidrsContent}>
                           <Typography variant="body2" sx={{ fontFamily: 'system-ui' }}>
-                            {informationList?.Scopes?.cidrs[0]}
+                            {cluster?.scopes?.cidrs[0]}
                           </Typography>
                         </Paper>
                       ) : (
                         <>-</>
                       )}
-                      {informationList?.Scopes?.cidrs?.length > 1 ? (
+                      {cluster?.scopes?.cidrs?.length > 1 ? (
                         <IconButton
                           size="small"
                           onClick={() => {
@@ -260,7 +259,7 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
                       >
                         <DialogTitle fontFamily="mabry-bold">CIDRs</DialogTitle>
                         <DialogContent dividers className={styles.cidrsDialogContainer}>
-                          {informationList?.Scopes?.cidrs?.map((item: any, id: any) => (
+                          {cluster?.scopes?.cidrs?.map((item: any, id: any) => (
                             <Paper key={id} elevation={0} className={styles.cidrsDialogContent}>
                               <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/cidrs.svg" />
                               <Tooltip title={item} placement="top">
@@ -312,7 +311,7 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
                     <Skeleton />
                   </Box>
                 ) : (
-                  <Typography component="div">{informationList?.SeedPeerClusterConfig?.load_limit || '-'}</Typography>
+                  <Typography component="div">{cluster?.seed_peer_cluster_config?.load_limit || '-'}</Typography>
                 )}
               </Box>
               <Divider />
@@ -333,7 +332,7 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
                     <Skeleton />
                   </Box>
                 ) : (
-                  <Typography component="div"> {informationList?.PeerClusterConfig?.load_limit || '-'}</Typography>
+                  <Typography component="div"> {cluster?.peer_cluster_config?.load_limit || '-'}</Typography>
                 )}
               </Box>
               <Divider />
@@ -354,9 +353,7 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
                     <Skeleton />
                   </Box>
                 ) : (
-                  <Typography component="div">
-                    {informationList?.PeerClusterConfig?.concurrent_piece_count || '-'}
-                  </Typography>
+                  <Typography component="div">{cluster?.peer_cluster_config?.concurrent_piece_count || '-'}</Typography>
                 )}
               </Box>
               <Divider />
@@ -378,7 +375,7 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
                   </Box>
                 ) : (
                   <Typography component="div">
-                    {informationList?.SchedulerClusterConfig?.candidate_parent_limit || '-'}
+                    {cluster?.scheduler_cluster_config?.candidate_parent_limit || '-'}
                   </Typography>
                 )}
               </Box>
@@ -401,7 +398,7 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
                   </Box>
                 ) : (
                   <Typography component="div">
-                    {informationList?.SchedulerClusterConfig?.filter_parent_limit || '-'}
+                    {cluster?.scheduler_cluster_config?.filter_parent_limit || '-'}
                   </Typography>
                 )}
               </Box>
@@ -413,4 +410,4 @@ const Information = (props: { informationList: clusterData; isLoading: boolean }
   );
 };
 
-export default Information;
+export default Clusters;

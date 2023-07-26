@@ -174,7 +174,7 @@ const CreateCluster = () => {
         },
 
         renderTags: (value: any, getTagProps: any) =>
-          value.map((option: any, index: any) => <Chip key={value} label={option} {...getTagProps({ index })} />),
+          value.map((option: any, index: any) => <Chip key={index} label={option} {...getTagProps({ index })} />),
       },
 
       formProps: {
@@ -319,7 +319,7 @@ const CreateCluster = () => {
         autoComplete: 'family-name',
         placeholder: 'Please enter Candidate parent limit',
         defaultValue: 4,
-        helperText: candidateParentLimitError ? 'Must be a number and range from 0-20' : '',
+        helperText: candidateParentLimitError ? 'Must be a number and range from 1-20' : '',
         error: candidateParentLimitError,
 
         onChange: (e: any) => {
@@ -341,7 +341,7 @@ const CreateCluster = () => {
       setError: setCandidateParentLimitError,
 
       validate: (value: string) => {
-        const reg = /^(0|[1-9]|1[0-9]|20)$/;
+        const reg = /^([1-9]|1[0-9]|20)$/;
         return reg.test(value);
       },
     },
@@ -355,7 +355,7 @@ const CreateCluster = () => {
         placeholder: 'Please enter Filter parent limit',
         defaultValue: 40,
         fullWidth: false,
-        helperText: filterParentLimitError ? 'Must be a number and range from 0-1000' : '',
+        helperText: filterParentLimitError ? 'Must be a number and range from 10-1000' : '',
         error: filterParentLimitError,
 
         onChange: (e: any) => {
@@ -377,7 +377,7 @@ const CreateCluster = () => {
       setError: setFilterParentLimitError,
 
       validate: (value: string) => {
-        const reg = /^(?:[0-9]|[1-9][0-9]{1,2}|1000)$/;
+        const reg = /^([1-9][0-9]{1,2}|1000)$/;
         return reg.test(value);
       },
     },
@@ -387,7 +387,7 @@ const CreateCluster = () => {
     setEditLoadingButton(true);
 
     event.preventDefault();
-
+    const data = new FormData(event.currentTarget);
     const name = event.currentTarget.elements.name.value;
     const isDefault = event.currentTarget.elements.isDefault.checked;
     const description = event.currentTarget.elements.description.value;
@@ -398,7 +398,6 @@ const CreateCluster = () => {
     const numberOfConcurrentDownloadPieces = event.currentTarget.elements.numberOfConcurrentDownloadPieces.value;
     const candidateParentLimit = event.currentTarget.elements.candidateParentLimit.value;
     const filterParentLimit = event.currentTarget.elements.filterParentLimit.value;
-    const data = new FormData(event.currentTarget);
 
     informationFormList.forEach((item) => {
       const value = data.get(item.formProps.name);
@@ -423,54 +422,41 @@ const CreateCluster = () => {
         !scopesFormList.filter((item) => item.syncError).length &&
         !configFormList.filter((item) => item.syncError).length,
     );
+    const formData = {
+      name: String(name),
+      peer_cluster_config: {
+        concurrent_piece_count: Number(peerLoadLimit),
+        load_limit: Number(numberOfConcurrentDownloadPieces),
+      },
+      scheduler_cluster_config: {
+        candidate_parent_limit: Number(candidateParentLimit),
+        filter_parent_limit: Number(filterParentLimit),
+      },
+      seed_peer_cluster_config: {
+        load_limit: Number(seedPeerLoadLimit),
+      },
+      bio: description,
+      is_default: isDefault,
+      scopes: {
+        cidrs: cidrs,
+        idc: idc,
+        location: location,
+      },
+    };
 
     if (canSubmit) {
-      console.log(
-        name,
-        isDefault,
-        description,
-        location,
-        idc,
-        cidrs,
-        seedPeerLoadLimit,
-        peerLoadLimit,
-        numberOfConcurrentDownloadPieces,
-        candidateParentLimit,
-        filterParentLimit,
-      );
-
-      createCluster({
-        name: String(name),
-        peer_cluster_config: {
-          concurrent_piece_count: Number(peerLoadLimit),
-          load_limit: Number(numberOfConcurrentDownloadPieces),
-        },
-        scheduler_cluster_config: {
-          candidate_parent_limit: Number(candidateParentLimit),
-          filter_parent_limit: Number(filterParentLimit),
-        },
-        seed_peer_cluster_config: {
-          load_limit: Number(seedPeerLoadLimit),
-        },
-        bio: description,
-        is_default: isDefault,
-        scopes: {
-          cidrs: cidrs,
-          idc: idc,
-          location: location,
-        },
-      }).then(async (response) => {
-        if (response.status === 200) {
-          setEditLoadingButton(false);
-          setSuccessMessage(true);
-          router.push('/clusters');
-        } else {
-          const responseMsg = await response.json();
-          setErrorMessageText(responseMsg.message);
-          setEditLoadingButton(false);
+      try {
+        await createCluster({ ...formData });
+        setEditLoadingButton(false);
+        setSuccessMessage(true);
+        router.push('/clusters');
+      } catch (error) {
+        if (error instanceof Error) {
           setErrorMessage(true);
+          setErrorMessageText(error.message);
+          setEditLoadingButton(false);
         }
-      });
+      }
     } else {
       setEditLoadingButton(false);
     }

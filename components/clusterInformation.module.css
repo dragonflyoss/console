@@ -1,18 +1,18 @@
-.informationContainer {
+.clusterContainer {
   display: flex;
   justify-content: space-between;
   padding-top: 1.4rem;
   padding-bottom: 1.4rem;
 }
 
-.informationWrap {
+.clusterWrap {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 20%;
 }
 
-.informationTitle {
+.clusterTitle {
   display: flex;
   align-items: center;
   position: relative;

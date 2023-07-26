@@ -41,7 +41,6 @@ const Profile: NextPageWithLayout = () => {
   const [phoneError, setPhoneError] = useState(false);
   const [locationError, setLocationError] = useState(false);
   const [emailError, setEmailError] = useState(false);
-  const [Bio, setBio] = useState('');
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [showOldPassword, setShowOldPassword] = useState(false);
@@ -51,7 +50,8 @@ const Profile: NextPageWithLayout = () => {
   const [showMyProfile, setShowMyProfile] = useState(true);
   const [showPersonalInformation, setShowPersonalInformation] = useState(true);
   const [userID, setUserID] = useState('');
-  const [user, setUser] = useState<any>({
+  const [BIO, setBIO] = useState('');
+  const [user, setUser] = useState({
     bio: '',
     avatar: '',
     id: '',
@@ -62,37 +62,41 @@ const Profile: NextPageWithLayout = () => {
     created_at: '',
     formBio: '',
   });
-  const [passwordObjet, setPasswordObjet] = useState({
+  const [password, setPassword] = useState({
     old_password: '',
     new_password: '',
   });
   const router = useRouter();
 
   useEffect(() => {
-    setIsLoading(true);
     const userID = getUserID();
     setUserID(userID);
 
-    if (userID) {
-      getUser(userID).then(async (response) => {
-        if (response.status === 200) {
+    (async function () {
+      setIsLoading(true);
+      try {
+        if (userID) {
+          const response = await getUser(userID);
           const res = await response.json();
-          setUser(res);
-          setBio(res.bio);
-        } else {
-          setErrorMessage(true);
-          setErrorMessageText(response.statusText);
-        }
-      });
-    }
 
-    setIsLoading(false);
+          setUser(res);
+          setBIO(res.bio);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(true);
+          setErrorMessageText(error.message);
+          setIsLoading(false);
+        }
+      }
+    })();
   }, []);
 
   const { bio, email, phone, location } = user;
-  const { old_password, new_password } = passwordObjet;
+  const { old_password, new_password } = password;
 
-  const userList = [
+  const userLable = [
     {
       name: 'id',
       label: 'ID',
@@ -260,7 +264,7 @@ const Profile: NextPageWithLayout = () => {
     },
   ];
 
-  const PasswordList = [
+  const passwordFormList = [
     {
       formProps: {
         id: 'oldPassword',
@@ -274,8 +278,8 @@ const Profile: NextPageWithLayout = () => {
         error: phoneError,
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, PasswordList[0]);
-          setPasswordObjet({ ...passwordObjet, old_password: e.target.value });
+          changeValidate(e.target.value, passwordFormList[0]);
+          setPassword({ ...password, old_password: e.target.value });
         },
 
         InputProps: {
@@ -321,10 +325,10 @@ const Profile: NextPageWithLayout = () => {
         value: new_password,
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, PasswordList[1], () => {
+          changeValidate(e.target.value, passwordFormList[1], () => {
             setNewPassword(e.target.value);
           });
-          setPasswordObjet({ ...passwordObjet, new_password: e.target.value });
+          setPassword({ ...password, new_password: e.target.value });
         },
 
         InputProps: {
@@ -365,7 +369,7 @@ const Profile: NextPageWithLayout = () => {
         error: emailError,
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, PasswordList[2]);
+          changeValidate(e.target.value, passwordFormList[2]);
         },
 
         InputProps: {
@@ -414,7 +418,7 @@ const Profile: NextPageWithLayout = () => {
     cb && cb();
   };
 
-  const changePersonal = (event: any) => {
+  const changePersonal = async (event: any) => {
     event.preventDefault();
     setPersonalLoadingButton(true);
 
@@ -436,20 +440,43 @@ const Profile: NextPageWithLayout = () => {
     };
 
     if (canSubmit) {
-      updateUser(userID, { ...formData }).then((response) => {
-        if (response.status === 200) {
+      try {
+        if (userID) {
+          await updateUser(userID, { ...formData });
+
           setPersonalLoadingButton(false);
           setShowPersonalInformation(true);
           setSuccessMessage(true);
-          setBio(bio);
-        } else {
-          setPersonalLoadingButton(false);
-          setErrorMessage(true);
-          setErrorMessageText(response.statusText);
+          setBIO(bio);
         }
-      });
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(true);
+          setErrorMessageText(error.message);
+          setPersonalLoadingButton(false);
+        }
+      }
     } else {
       setPersonalLoadingButton(false);
+    }
+  };
+
+  const cancelChangePersonal = async () => {
+    setShowPersonalInformation(true);
+
+    try {
+      if (userID) {
+        const response = await getUser(userID);
+        const res = await response.json();
+        setUser(res);
+        setBIO(res.bio);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(true);
+        setErrorMessageText(error.message);
+        setPersonalLoadingButton(false);
+      }
     }
   };
 
@@ -459,32 +486,36 @@ const Profile: NextPageWithLayout = () => {
 
     const data = new FormData(event.currentTarget);
 
-    PasswordList.forEach((item) => {
+    passwordFormList.forEach((item) => {
       const value = data.get(item.formProps.name);
       item.setError(!item.validate(value as string));
       item.syncError = !item.validate(value as string);
     });
 
-    const canSubmit = Boolean(!PasswordList.filter((item) => item.syncError).length);
+    const canSubmit = Boolean(!passwordFormList.filter((item) => item.syncError).length);
 
     const formData = {
-      old_password: passwordObjet.old_password,
-      new_password: passwordObjet.new_password,
+      old_password: password.old_password,
+      new_password: password.new_password,
     };
 
     if (canSubmit) {
-      await updatePassword(userID, { ...formData }).then((response) => {
-        if (response.status === 200) {
+      try {
+        if (userID) {
+          await updatePassword(userID, { ...formData });
+
           setSuccessMessage(true);
           setPasswordLoadingButton(false);
-          signOut();
+          await signOut();
           router.push('/signin');
-        } else {
+        }
+      } catch (error) {
+        if (error instanceof Error) {
           setErrorMessage(true);
-          setErrorMessageText(response.statusText);
+          setErrorMessageText(error.message);
           setPasswordLoadingButton(false);
         }
-      });
+      }
     } else {
       setPasswordLoadingButton(false);
     }
@@ -534,7 +565,7 @@ const Profile: NextPageWithLayout = () => {
               <Box sx={{ pl: '1rem' }}>
                 <Typography variant="h5">{isLoading ? <Skeleton /> : user?.name}</Typography>
                 <Typography variant="subtitle1" component="div" width="36rem">
-                  {isLoading ? <Skeleton /> : Bio || '-'}
+                  {isLoading ? <Skeleton /> : BIO || '-'}
                 </Typography>
               </Box>
             </Box>
@@ -559,7 +590,7 @@ const Profile: NextPageWithLayout = () => {
         ) : (
           <Grid sx={{ width: '40rem' }} onSubmit={changePassword} component="form" noValidate>
             <Typography variant="h6">Change Password</Typography>
-            {PasswordList.map((item) => (
+            {passwordFormList.map((item) => (
               <Box key={item.formProps.name}>
                 <TextField size="small" margin="normal" color="success" fullWidth required {...item.formProps} />
               </Box>
@@ -646,7 +677,7 @@ const Profile: NextPageWithLayout = () => {
               </Button>
             </Grid>
             <Box className={styles.informationContainer}>
-              {userList.map((item) => {
+              {userLable.map((item) => {
                 return (
                   <Box className={styles.informationContent} key={item.name}>
                     <Box display="flex" alignItems="center" mb="0.6rem">
@@ -657,7 +688,11 @@ const Profile: NextPageWithLayout = () => {
                         </Typography>
                       ) : (
                         <Typography component="div" variant="body1" fontFamily="mabry-bold" ml="0.6rem">
-                          {isLoading ? <Skeleton sx={{ width: '10rem' }} /> : user?.[item?.name] || '-'}
+                          {isLoading ? (
+                            <Skeleton sx={{ width: '10rem' }} />
+                          ) : (
+                            user?.[item?.name as keyof typeof user] || '-'
+                          )}
                         </Typography>
                       )}
                     </Box>
@@ -707,14 +742,7 @@ const Profile: NextPageWithLayout = () => {
                     mr: '1rem',
                     width: '7rem',
                   }}
-                  onClick={() => {
-                    setShowPersonalInformation(true);
-                    getUser(userID).then(async (response) => {
-                      const res = await response.json();
-                      setUser(res);
-                      setBio(res.bio);
-                    });
-                  }}
+                  onClick={cancelChangePersonal}
                 >
                   cancel
                 </LoadingButton>
@@ -751,6 +779,7 @@ const Profile: NextPageWithLayout = () => {
     </Box>
   );
 };
+
 export default Profile;
 
 Profile.getLayout = function getLayout(page: ReactElement) {

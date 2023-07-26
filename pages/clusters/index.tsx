@@ -52,6 +52,7 @@ const Cluster: NextPageWithLayout = () => {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [clusterLoading, setClusterLoading] = useState(true);
   const [numberOfClusters, setNumberOfClusters] = useState([]);
   const [scheduleList, setSchedleList] = useState([]);
   const [seedPeerList, setSeedPeerList] = useState([]);
@@ -61,67 +62,75 @@ const Cluster: NextPageWithLayout = () => {
   const [searchText, setSearchText] = useState('');
   const [clusterList, setClusterList] = useState([
     {
-      ID: '',
-      Name: '',
-      Scopes: {
+      id: '',
+      name: '',
+      scopes: {
         idc: '',
         location: '',
         cidrs: null,
       },
-      CreatedAt: '',
-      IsDefault: true,
+      created_at: '',
+      is_default: true,
     },
   ]);
   const router = useRouter();
 
   useEffect(() => {
-    setIsLoading(true);
+    (async function () {
+      try {
+        setIsLoading(true);
+        setClusterLoading(true);
 
-    listCluster().then(async (response) => {
-      if (response.status == 200) {
-        setNumberOfClusters(await response.json());
-      } else {
-        setErrorMessage(true);
-        setErrorMessageText(response.statusText);
+        const [cluster, Schedle, seedPeer, clusters] = await Promise.all([
+          listCluster(),
+          listScheduler(),
+          listSeedPeer(),
+          listCluster({ page: page, per_page: pageSize }),
+        ]);
+
+        setNumberOfClusters(await cluster.json());
+        setSchedleList(await Schedle.json());
+        setSeedPeerList(await seedPeer.json());
+
+        const linkHeader = clusters.headers.get('Link');
+        const links = parseLinkHeader(linkHeader);
+
+        setTotalPages(Number(links?.last?.page));
+        setClusterList(await clusters.json());
+        setIsLoading(false);
+        setClusterLoading(false);
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(true);
+          setErrorMessageText(error.message);
+          setIsLoading(false);
+        }
       }
-    });
-
-    listScheduler().then(async (response) => {
-      if (response.status == 200) {
-        setSchedleList(await response.json());
-      } else {
-        setErrorMessage(true);
-        setErrorMessageText(response.statusText);
-      }
-    });
-
-    listSeedPeer().then(async (response) => {
-      if (response.status == 200) {
-        setSeedPeerList(await response.json());
-      } else {
-        setErrorMessage(true);
-        setErrorMessageText(response.statusText);
-      }
-    });
-
-    listCluster({ page: page, per_page: pageSize }).then(async (response) => {
-      const linkHeader = response.headers.get('Link');
-      const links = parseLinkHeader(linkHeader);
-      setTotalPages(Number(links?.last?.page));
-      setClusterList(await response.json());
-    });
-
-    setIsLoading(false);
+    })();
   }, [page, pageSize]);
 
   const defaultCluster = (Array.isArray(numberOfClusters) &&
-    numberOfClusters?.filter((item: any) => item?.IsDefault === true)) as any[];
+    numberOfClusters?.filter((item: any) => item?.is_default === true)) as any[];
 
   const scheduleActive = (Array.isArray(scheduleList) &&
     scheduleList?.filter((item: any) => item?.state == 'active')) as any[];
 
   const seedPeerActive: any = (Array.isArray(seedPeerList) &&
     seedPeerList?.filter((item: any) => item?.state == 'active')) as any[];
+
+  const inquireCluster = async () => {
+    try {
+      setClusterLoading(true);
+      const response = await listCluster({ page: 1, per_page: pageSize, name: searchText });
+      setClusterList(await response.json());
+      setClusterLoading(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(true);
+        setErrorMessageText(error.message);
+      }
+    }
+  };
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
@@ -290,11 +299,7 @@ const Cluster: NextPageWithLayout = () => {
             aria-label="search"
             id="submit-button"
             size="small"
-            onClick={() => {
-              listCluster({ page: 1, per_page: pageSize, name: searchText }).then(async (response) => {
-                setClusterList(await response.json());
-              });
-            }}
+            onClick={inquireCluster}
             sx={{ width: '3rem' }}
           >
             <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
@@ -324,9 +329,13 @@ const Cluster: NextPageWithLayout = () => {
                 <Box className={styles.clusterListContent}>
                   <Box display="flex">
                     <span className={styles.idText}>ID&nbsp;:&nbsp;</span>
-                    {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : <span className={styles.idText}>{item.ID}</span>}
+                    {clusterLoading ? (
+                      <Skeleton sx={{ width: '1rem' }} />
+                    ) : (
+                      <span className={styles.idText}>{item.id}</span>
+                    )}
                   </Box>
-                  {isLoading ? (
+                  {clusterLoading ? (
                     <Skeleton sx={{ width: '4rem', height: '1.4rem', mt: '0.8rem', mb: '0.8rem' }} />
                   ) : (
                     <Box
@@ -336,26 +345,28 @@ const Cluster: NextPageWithLayout = () => {
                       sx={{
                         mt: '0.8rem',
                         mb: '0.8rem',
-                        width: item.IsDefault ? '4rem' : '6rem',
+                        width: item.is_default ? '4rem' : '6rem',
                         height: '1.4rem',
-                        background: item.IsDefault ? 'var(--description-color)' : 'var(--button-color)',
-                        color: item.IsDefault ? '#FFFFFF' : '#FFFFFF',
+                        background: item.is_default ? 'var(--description-color)' : 'var(--button-color)',
+                        color: item.is_default ? '#FFFFFF' : '#FFFFFF',
                       }}
                     >
                       <Typography variant="body2" fontFamily="system-ui">
-                        {`${item.IsDefault ? 'Default' : 'Non-Default'}`}
+                        {`${item.is_default ? 'Default' : 'Non-Default'}`}
                       </Typography>
                     </Box>
                   )}
-                  <Typography variant="h6">{isLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.Name}</Typography>
+                  <Typography variant="h6">
+                    {clusterLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.name}
+                  </Typography>
                   <Box display="flex" mt="0.4rem">
                     <Box display="flex" className={styles.locationContainer}>
                       <Typography variant="body2" fontFamily="mabry-bold">
                         IDC&nbsp;:&nbsp;
                       </Typography>
-                      <Tooltip title={item.Scopes.idc || '-'} placement="top">
+                      <Tooltip title={item.scopes.idc || '-'} placement="top">
                         <Typography variant="body2" className={styles.locationText}>
-                          {isLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.Scopes.idc || '-'}
+                          {clusterLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.scopes.idc || '-'}
                         </Typography>
                       </Tooltip>
                     </Box>
@@ -363,9 +374,9 @@ const Cluster: NextPageWithLayout = () => {
                       <Typography variant="body2" fontFamily="mabry-bold">
                         Location&nbsp;:&nbsp;
                       </Typography>
-                      <Tooltip title={item.Scopes.location || '-'} placement="top">
+                      <Tooltip title={item.scopes.location || '-'} placement="top">
                         <Typography variant="body2" className={styles.locationText}>
-                          {isLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.Scopes.location || '-'}
+                          {clusterLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.scopes.location || '-'}
                         </Typography>
                       </Tooltip>
                     </Box>
@@ -373,7 +384,7 @@ const Cluster: NextPageWithLayout = () => {
                   <Box className={styles.creatTimeContainer}>
                     <Chip
                       avatar={<MoreTimeIcon />}
-                      label={isLoading ? <Skeleton sx={{ width: '6rem' }} /> : datetime(item.CreatedAt)}
+                      label={clusterLoading ? <Skeleton sx={{ width: '6rem' }} /> : datetime(item.created_at)}
                       variant="outlined"
                       size="small"
                     />
@@ -386,7 +397,7 @@ const Cluster: NextPageWithLayout = () => {
                         },
                       }}
                       onClick={() => {
-                        router.push(`/clusters/${item.ID}`);
+                        router.push(`/clusters/${item.id}`);
                       }}
                     >
                       <ArrowCircleRightIcon fontSize="large" sx={{ color: 'var(--button-color)' }} />

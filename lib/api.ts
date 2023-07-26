@@ -1,4 +1,5 @@
 import { URL } from 'next/dist/compiled/@edge-runtime/primitives/url';
+import queryString from 'query-string';
 
 const API_URL = process.env.NEXT_PUBLIC_DRAGONFLY_PUBLIC_API;
 
@@ -8,7 +9,12 @@ export async function get(url: URL) {
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
     });
-    return await response;
+
+    if (response.status === 200) {
+      return await response;
+    } else {
+      throw new Error(response.statusText);
+    }
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -26,7 +32,12 @@ export async function post(url: URL, data = {}) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data || {}),
     });
-    return await response;
+
+    if (response.status === 200) {
+      return await response;
+    } else {
+      throw new Error(response.statusText);
+    }
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -44,7 +55,11 @@ export async function patch(url: URL, data = {}) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data || {}),
     });
-    return await response;
+    if (response.status === 200) {
+      return await response;
+    } else {
+      throw new Error(response.statusText);
+    }
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -61,7 +76,11 @@ export async function Delete(url: URL) {
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
     });
-    return await response;
+    if (response.status === 200) {
+      return await response;
+    } else {
+      throw new Error(response.statusText);
+    }
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -78,7 +97,11 @@ export async function put(url: URL) {
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
     });
-    return await response;
+    if (response.status === 200) {
+      return await response;
+    } else {
+      throw new Error(response.statusText);
+    }
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -120,12 +143,8 @@ interface clusterPagingData {
 }
 
 export async function listCluster(data?: clusterPagingData) {
-  const queryString = data
-    ? Object.entries(data)
-        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`)
-        .join('&')
-    : '';
-  const url = new URL(`/api/v1/clusters${queryString ? '?' : ''}${queryString}`, API_URL);
+  const query = data ? queryString.stringify({ ...data }) : '';
+  const url = new URL(`/api/v1/clusters${query ? '?' : ''}${query}`, API_URL);
   return await get(url);
 }
 

@@ -34,45 +34,62 @@ const CreateCluster = () => {
   const [candidateParentLimitError, setCandidateParentLimitError] = useState(false);
   const [filterParentLimitError, setFilterParentLimitError] = useState(false);
   const [locationError, setLocationError] = useState(false);
-  const [IDCError, setIDCError] = useState(false);
+  const [idcError, setIDCError] = useState(false);
   const [cidrsError, setCidrsError] = useState(false);
   const [editLoadingButton, setEditLoadingButton] = useState(false);
-  const [informationList, setInformationList] = useState({
-    BIO: '',
-    CreatedAt: '',
-    ID: '',
-    IsDefault: false,
-    PeerClusterConfig: { concurrent_piece_count: '', load_limit: '' },
-    SchedulerClusterConfig: { candidate_parent_limit: '', filter_parent_limit: '' },
-    SchedulerClusterID: '',
-    Scopes: {
-      cidrs: [],
+  const [clusters, setClusters] = useState({
+    id: '',
+    bio: '',
+    scopes: {
       idc: '',
       location: '',
+      cidrs: [''],
     },
-    SeedPeerClusterConfig: { load_limit: '' },
-    SeedPeerClusterID: '',
+    scheduler_cluster_id: 0,
+    seed_peer_cluster_id: 0,
+    scheduler_cluster_config: {
+      candidate_parent_limit: 0,
+      filter_parent_limit: 0,
+    },
+    seed_peer_cluster_config: {
+      load_limit: 0,
+    },
+    peer_cluster_config: {
+      load_limit: 0,
+      concurrent_piece_count: 0,
+    },
+    created_at: '',
+    updated_at: '',
+    is_default: true,
   });
   const cidrsOptions: never[] = [];
   const router = useRouter();
 
-  useEffect(() => {
-    if (typeof router.query.slug === 'string') {
-      getCluster(router.query.slug).then(async (response) => {
-        setInformationList(await response.json());
-      });
-    }
-  }, [router.query.slug]);
-
   const {
-    BIO,
-    IsDefault,
-    ID,
-    PeerClusterConfig: { load_limit, concurrent_piece_count },
-    SchedulerClusterConfig: { candidate_parent_limit, filter_parent_limit },
-    Scopes: { idc, location, cidrs },
-    SeedPeerClusterConfig,
-  } = informationList;
+    bio,
+    is_default,
+    id,
+    peer_cluster_config: { load_limit, concurrent_piece_count },
+    scheduler_cluster_config: { candidate_parent_limit, filter_parent_limit },
+    scopes: { idc, location, cidrs },
+    seed_peer_cluster_config,
+  } = clusters;
+
+  useEffect(() => {
+    (async function () {
+      try {
+        if (typeof router.query.slug === 'string') {
+          const response = await getCluster(router.query.slug);
+          setClusters(await response.json());
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(true);
+          setErrorMessageText(error.message);
+        }
+      }
+    })();
+  }, [router.query.slug]);
 
   const informationFormList = [
     {
@@ -81,13 +98,13 @@ const CreateCluster = () => {
         label: 'Description',
         name: 'bio',
         autoComplete: 'family-name',
-        value: BIO,
+        value: bio,
         placeholder: 'Please enter Description',
         helperText: bioError ? 'Must be a number and range from 0-1000' : '',
         error: bioError,
 
         onChange: (e: any) => {
-          setInformationList({ ...informationList, BIO: e.target.value });
+          setClusters({ ...clusters, bio: e.target.value });
           changeValidate(e.target.value, informationFormList[0]);
         },
       },
@@ -114,7 +131,7 @@ const CreateCluster = () => {
         error: locationError,
 
         onChange: (e: any) => {
-          setInformationList({ ...informationList, Scopes: { ...informationList.Scopes, location: e.target.value } });
+          setClusters({ ...clusters, scopes: { ...clusters.scopes, location: e.target.value } });
           changeValidate(e.target.value, scopesFormList[0]);
         },
         InputProps: {
@@ -146,10 +163,10 @@ const CreateCluster = () => {
         autoComplete: 'family-name',
         placeholder: 'Please enter IDC',
         value: idc,
-        helperText: IDCError ? 'Maximum length is 100' : '',
-        error: IDCError,
+        helperText: idcError ? 'Maximum length is 100' : '',
+        error: idcError,
         onChange: (e: any) => {
-          setInformationList({ ...informationList, Scopes: { ...informationList.Scopes, idc: e.target.value } });
+          setClusters({ ...clusters, scopes: { ...clusters.scopes, idc: e.target.value } });
           changeValidate(e.target.value, scopesFormList[1]);
         },
         InputProps: {
@@ -181,7 +198,7 @@ const CreateCluster = () => {
 
         onChange: (_e: any, newValue: any) => {
           if (!scopesFormList[2].formProps.error) {
-            setInformationList({ ...informationList, Scopes: { ...informationList.Scopes, cidrs: newValue } });
+            setClusters({ ...clusters, scopes: { ...clusters.scopes, cidrs: newValue } });
           }
         },
         onInputChange: (e: any) => {
@@ -223,14 +240,14 @@ const CreateCluster = () => {
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Seed Peer load limit',
-        value: SeedPeerClusterConfig?.load_limit,
+        value: seed_peer_cluster_config?.load_limit,
         helperText: seedPeerLoadLimitError ? 'Must be a number and range from 0-5000' : '',
         error: seedPeerLoadLimitError,
 
         onChange: (e: any) => {
-          setInformationList({
-            ...informationList,
-            SeedPeerClusterConfig: { ...informationList.SeedPeerClusterConfig, load_limit: e.target.value },
+          setClusters({
+            ...clusters,
+            seed_peer_cluster_config: { ...clusters.seed_peer_cluster_config, load_limit: e.target.value },
           });
           changeValidate(e.target.value, configFormList[0]);
         },
@@ -266,9 +283,9 @@ const CreateCluster = () => {
         value: load_limit,
 
         onChange: (e: any) => {
-          setInformationList({
-            ...informationList,
-            PeerClusterConfig: { ...informationList.PeerClusterConfig, load_limit: e.target.value },
+          setClusters({
+            ...clusters,
+            peer_cluster_config: { ...clusters.peer_cluster_config, load_limit: e.target.value },
           });
           changeValidate(e.target.value, configFormList[1]);
         },
@@ -306,9 +323,9 @@ const CreateCluster = () => {
         error: numberOfConcurrentDownloadPiecesError,
 
         onChange: (e: any) => {
-          setInformationList({
-            ...informationList,
-            PeerClusterConfig: { ...informationList.PeerClusterConfig, concurrent_piece_count: e.target.value },
+          setClusters({
+            ...clusters,
+            peer_cluster_config: { ...clusters.peer_cluster_config, concurrent_piece_count: e.target.value },
           });
           changeValidate(e.target.value, configFormList[2]);
         },
@@ -341,14 +358,14 @@ const CreateCluster = () => {
         autoComplete: 'family-name',
         placeholder: 'Please enter Candidate parent limit',
         value: candidate_parent_limit,
-        helperText: candidateParentLimitError ? 'Must be a number and range from 0-20' : '',
+        helperText: candidateParentLimitError ? 'Must be a number and range from 1-20' : '',
         error: candidateParentLimitError,
 
         onChange: (e: any) => {
-          setInformationList({
-            ...informationList,
-            SchedulerClusterConfig: {
-              ...informationList.SchedulerClusterConfig,
+          setClusters({
+            ...clusters,
+            scheduler_cluster_config: {
+              ...clusters.scheduler_cluster_config,
               candidate_parent_limit: e.target.value,
             },
           });
@@ -370,7 +387,7 @@ const CreateCluster = () => {
       setError: setCandidateParentLimitError,
 
       validate: (value: string) => {
-        const reg = /^(?:[0-9]|1[0-9]|20)$/;
+        const reg = /^([1-9]|1[0-9]|20)$/;
         return reg.test(value);
       },
     },
@@ -383,14 +400,14 @@ const CreateCluster = () => {
         autoComplete: 'family-name',
         placeholder: 'Please enter Filter parent limit',
         value: filter_parent_limit,
-        helperText: filterParentLimitError ? 'Must be a number and range from 0-1000' : '',
+        helperText: filterParentLimitError ? 'Must be a number and range from 10-1000' : '',
         error: filterParentLimitError,
 
         onChange: (e: any) => {
-          setInformationList({
-            ...informationList,
-            SchedulerClusterConfig: {
-              ...informationList.SchedulerClusterConfig,
+          setClusters({
+            ...clusters,
+            scheduler_cluster_config: {
+              ...clusters.scheduler_cluster_config,
               filter_parent_limit: e.target.value,
             },
           });
@@ -411,7 +428,7 @@ const CreateCluster = () => {
       syncError: false,
       setError: setFilterParentLimitError,
       validate: (value: string) => {
-        const reg = /^(?:[0-9]|[1-9][0-9]{1,2}|1000)$/;
+        const reg = /^([1-9][0-9]{1,2}|1000)$/;
         return reg.test(value);
       },
     },
@@ -455,8 +472,8 @@ const CreateCluster = () => {
     );
 
     const formdata = {
-      is_default: IsDefault,
-      bio: String(BIO),
+      is_default: is_default,
+      bio: String(bio),
       peer_cluster_config: {
         concurrent_piece_count: Number(concurrent_piece_count),
         load_limit: Number(load_limit),
@@ -471,25 +488,23 @@ const CreateCluster = () => {
         location: String(location),
       },
       seed_peer_cluster_config: {
-        load_limit: Number(SeedPeerClusterConfig.load_limit),
+        load_limit: Number(seed_peer_cluster_config.load_limit),
       },
     };
 
     if (canSubmit && typeof router.query.slug === 'string') {
-      updateCluster(router.query.slug, {
-        ...formdata,
-      }).then((response) => {
-        if (response.status === 200) {
-          setEditLoadingButton(false);
-          setSuccessMessage(true);
-
-          router.push(`/clusters/${router.query.slug}`);
-        } else {
-          setEditLoadingButton(false);
+      try {
+        await updateCluster(router.query.slug, { ...formdata });
+        setEditLoadingButton(false);
+        setSuccessMessage(true);
+        router.push(`/clusters/${router.query.slug}`);
+      } catch (error) {
+        if (error instanceof Error) {
           setErrorMessage(true);
-          setErrorMessageText(response.statusText);
+          setErrorMessageText(error.message);
+          setEditLoadingButton(false);
         }
-      });
+      }
     }
   };
 
@@ -532,9 +547,9 @@ const CreateCluster = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={IsDefault}
+                checked={is_default}
                 onChange={(event: { target: { checked: any } }) => {
-                  setInformationList({ ...informationList, IsDefault: event.target.checked });
+                  setClusters({ ...clusters, is_default: event.target.checked });
                 }}
                 sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }}
               />
@@ -561,7 +576,7 @@ const CreateCluster = () => {
         ))}
         <Box className={styles.scopesTitle}>
           <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
-            Scopes
+            scopes
           </Typography>
           <Tooltip
             title="The cluster needs to serve the scope. It wil provide scheduler services and seed peer services to peers in
@@ -638,7 +653,7 @@ const CreateCluster = () => {
             onClick={() => {
               setEditLoadingButton(true);
 
-              router.push(`/clusters/${ID}`);
+              router.push(`/clusters/${id}`);
             }}
           >
             Cancel

@@ -16,8 +16,8 @@ const SeedPeer: NextPageWithLayout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [cluster, setCluster] = useState({ Name: '', ID: '' });
-  const [seedPeer, setSeedPeer] = useState<any>({
+  const [cluster, setCluster] = useState({ name: '', id: '' });
+  const [seedPeer, setSeedPeer] = useState({
     id: '',
     host_name: '',
     ip: '',
@@ -32,8 +32,7 @@ const SeedPeer: NextPageWithLayout = () => {
     updated_at: '',
     SeedPeerClusterID: '',
   });
-  const router = useRouter();
-  const routerName = router.pathname.split('/')[1];
+
   const { query } = useRouter();
 
   const seedPeersLabel = [
@@ -78,37 +77,31 @@ const SeedPeer: NextPageWithLayout = () => {
   ];
 
   useEffect(() => {
-    setIsLoading(true);
+    (async function () {
+      setIsLoading(true);
+      try {
+        if (typeof query.slug === 'string' && typeof query.id === 'string') {
+          const [getClusters, getSeedPeer] = await Promise.all([getCluster(query.slug), getSeedPeerID(query.id)]);
 
-    if (typeof query.slug === 'string') {
-      getCluster(query.slug).then(async (response) => {
-        if (response.status === 200) {
-          setCluster(await response.json());
-        } else {
-          setErrorMessage(true);
-          setErrorMessageText(response.statusText);
+          setCluster(await getClusters.json());
+          setSeedPeer(await getSeedPeer.json());
+          setIsLoading(false);
         }
-      });
-    }
-
-    if (typeof query.id === 'string') {
-      getSeedPeerID(query.id).then(async (response) => {
-        if (response.status === 200) {
-          setSeedPeer(await response.json());
-        } else {
+      } catch (error) {
+        if (error instanceof Error) {
           setErrorMessage(true);
-          setErrorMessageText(response.statusText);
+          setErrorMessageText(error.message);
+          setIsLoading(false);
         }
-      });
-    }
-
-    setIsLoading(false);
+      }
+    })();
   }, [query.id, query.slug]);
 
   const handleClose = (_: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
+
     setErrorMessage(false);
   };
 
@@ -125,11 +118,11 @@ const SeedPeer: NextPageWithLayout = () => {
         </Alert>
       </Snackbar>
       <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
-        <RouterLink component={Link} underline="hover" color="inherit" href={`/${routerName}`}>
-          {routerName}
+        <RouterLink component={Link} underline="hover" color="inherit" href={`/clusters`}>
+          clusters
         </RouterLink>
-        <RouterLink component={Link} underline="hover" color="inherit" href={`/${routerName}/${cluster?.ID}`}>
-          {cluster?.Name}
+        <RouterLink component={Link} underline="hover" color="inherit" href={`/clusters/${cluster?.id}`}>
+          {cluster?.name}
         </RouterLink>
         <Typography color="text.primary" fontFamily="mabry-bold">
           {seedPeer?.host_name}
@@ -198,39 +191,47 @@ const SeedPeer: NextPageWithLayout = () => {
                   {item.name == 'created_at' ? (
                     <Chip
                       avatar={<MoreTimeIcon />}
-                      label={datetime(seedPeer?.[item.name])}
+                      label={datetime(seedPeer?.[item.name as keyof typeof seedPeer])}
                       variant="outlined"
                       size="small"
                     />
                   ) : item.name == 'updated_at' ? (
                     <Chip
                       avatar={<HistoryIcon />}
-                      label={datetime(seedPeer[item.name])}
+                      label={datetime(seedPeer[item.name as keyof typeof seedPeer])}
                       variant="outlined"
                       size="small"
                     />
                   ) : item.name == 'state' ? (
                     <Chip
-                      label={`${seedPeer?.[item.name]?.charAt(0).toUpperCase()}${seedPeer?.[item.name]?.slice(1)}`}
+                      label={`${seedPeer?.[item.name as keyof typeof seedPeer]?.charAt(0).toUpperCase()}${seedPeer?.[
+                        item.name as keyof typeof seedPeer
+                      ]?.slice(1)}`}
                       size="small"
                       variant="outlined"
                       sx={{
                         borderRadius: '0%',
                         backgroundColor:
-                          seedPeer?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                        color: seedPeer?.[item.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
+                          seedPeer?.[item.name as keyof typeof seedPeer] === 'active'
+                            ? 'var(--description-color)'
+                            : 'var(--button-color)',
+                        color: seedPeer?.[item.name as keyof typeof seedPeer] === 'active' ? '#FFFFFF' : '#FFFFFF',
                         borderColor:
-                          seedPeer?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                          seedPeer?.[item.name as keyof typeof seedPeer] === 'active'
+                            ? 'var(--description-color)'
+                            : 'var(--button-color)',
                         fontWeight: 'bold',
                       }}
                     />
                   ) : item.name == 'type' ? (
                     <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-                      {`${seedPeer?.[item.name]?.charAt(0).toUpperCase()}${seedPeer?.[item.name]?.slice(1)}`}
+                      {`${seedPeer?.[item.name as keyof typeof seedPeer]?.charAt(0).toUpperCase()}${seedPeer?.[
+                        item.name as keyof typeof seedPeer
+                      ]?.slice(1)}`}
                     </Typography>
                   ) : (
                     <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-                      {seedPeer?.[item.name] || '-'}
+                      {seedPeer?.[item.name as keyof typeof seedPeer] || '-'}
                     </Typography>
                   )}
                 </>

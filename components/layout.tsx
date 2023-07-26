@@ -50,35 +50,37 @@ const Main = styled('div')(({ theme }) => ({
 }));
 
 export default function Layout({ children }: LayoutProps) {
-  const [role, setRole] = useState('guest');
+  const [role, setRole] = useState('');
+  const [root] = useState('root');
+  const [guest] = useState('guest');
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [pageLoding, setPageLoding] = useState(false);
   const [user, setUser] = useState({ name: '', email: '', avatar: '' });
-  const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const router = useRouter();
 
   useEffect(() => {
     const userID = getUserID();
 
-    if (userID) {
-      getUser(userID).then(async (response) => {
-        if (response.status == 200) {
-          setUser(await response.json());
+    (async function () {
+      try {
+        if (userID) {
+          const [user, userRoles] = await Promise.all([getUser(userID), getUserRoles(userID)]);
+          setUser(await user.json());
+          const res = await userRoles.json();
+          setRole(res[0]);
         } else {
-          setErrorMessage(true);
-          setErrorMessageText(response.statusText);
+          router.push('/signin');
         }
-      });
-
-      getUserRoles(userID).then(async (response) => {
-        const res = await response.json();
-        setRole(res[0]);
-      });
-    } else {
-      router.push('/signin');
-    }
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(true);
+          setErrorMessageText(error.message);
+        }
+      }
+    })();
 
     const handleStart = () => {
       setPageLoding(true);
@@ -97,9 +99,7 @@ export default function Layout({ children }: LayoutProps) {
     };
   }, [router]);
 
-  const pathName = router.pathname.split('/');
-
-  const menuItem = [
+  const rootMenu = [
     {
       label: 'clusters',
       href: '/clusters',
@@ -114,26 +114,33 @@ export default function Layout({ children }: LayoutProps) {
     },
   ];
 
-  const menu =
-    role === 'root'
-      ? menuItem
-      : menuItem.filter((item) => {
-          return item.label !== 'users';
-        });
+  const guestMenu = [
+    {
+      label: 'clusters',
+      href: '/clusters',
+      text: 'Cluster',
+      icon: <Box component="img" className={styles.menuIcon} src="/icons/cluster/cluster.svg" />,
+    },
+  ];
 
-  const handleLogout = () => {
-    signOut().then((response) => {
-      if (response.status == 200) {
-        setPageLoding(true);
-        router.push('/signin');
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      setPageLoding(true);
+      router.push('/signin');
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(true);
+        setErrorMessageText(error.message);
       }
-    });
+    }
   };
 
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
+
     setErrorMessage(false);
   };
 
@@ -157,7 +164,7 @@ export default function Layout({ children }: LayoutProps) {
       </Snackbar>
       <Box className={styles.container}>
         <CssBaseline />
-        <Box className={styles.NavigationBarContainer}>
+        <Box className={styles.navigationBarContainer}>
           <Grid sx={{ pl: '1rem', pr: '1rem' }}>
             <Box className={styles.title}>
               <picture>
@@ -168,27 +175,53 @@ export default function Layout({ children }: LayoutProps) {
               </Typography>
             </Box>
             <List component="nav" aria-label="main mailbox folders" sx={{ width: '100%' }}>
-              {menu.map((item) => {
-                return (
-                  <ListItemButton
-                    key={item.href}
-                    selected={pathName[1] === item.label}
-                    component={Link}
-                    href={item.href}
-                    sx={{
-                      '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                      '&.Mui-selected:hover': { backgroundColor: '#DDFF55', color: '#121726' },
-                      height: '2rem',
-                      mb: '0.4rem',
-                    }}
-                  >
-                    {item.icon}
-                    <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
-                      {item.text}
-                    </Typography>
-                  </ListItemButton>
-                );
-              })}
+              {role === root ? (
+                rootMenu.map((item) => {
+                  return (
+                    <ListItemButton
+                      key={item.href}
+                      selected={router.asPath.split('/')[1] === item.label}
+                      component={Link}
+                      href={item.href}
+                      sx={{
+                        '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                        '&.Mui-selected:hover': { backgroundColor: '#DDFF55', color: '#121726' },
+                        height: '2rem',
+                        mb: '0.4rem',
+                      }}
+                    >
+                      {item.icon}
+                      <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                        {item.text}
+                      </Typography>
+                    </ListItemButton>
+                  );
+                })
+              ) : role === guest ? (
+                guestMenu.map((item) => {
+                  return (
+                    <ListItemButton
+                      key={item.href}
+                      selected={router.asPath.split('/')[1] === item.label}
+                      component={Link}
+                      href={item.href}
+                      sx={{
+                        '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                        '&.Mui-selected:hover': { backgroundColor: '#DDFF55', color: '#121726' },
+                        height: '2rem',
+                        mb: '0.4rem',
+                      }}
+                    >
+                      {item.icon}
+                      <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                        {item.text}
+                      </Typography>
+                    </ListItemButton>
+                  );
+                })
+              ) : (
+                <></>
+              )}
             </List>
           </Grid>
           <Grid sx={{ mb: '4rem' }}>

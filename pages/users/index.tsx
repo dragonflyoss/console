@@ -76,8 +76,8 @@ const User: NextPageWithLayout = () => {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [DetailLoading, setDetailLoading] = useState(true);
-  const [detailOpen, setDetailOpen] = useState(false);
-  const [userOpen, setUserOpen] = useState(false);
+  const [openDetail, setOpenDeatil] = useState(false);
+  const [openUser, setOpenUser] = useState(false);
   const [userID, setUserID] = useState('');
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadingButton, setLoadingButton] = useState(false);
@@ -95,63 +95,62 @@ const User: NextPageWithLayout = () => {
   const classes = useStyles();
 
   useEffect(() => {
-    setIsLoading(true);
+    (async function () {
+      setIsLoading(true);
 
-    listUsers().then(async (response) => {
-      if (response.status === 200) {
+      try {
+        const response = await listUsers();
         setUserList(await response.json());
-      } else {
-        setErrorMessage(true);
-        setErrorMessageText(response.statusText);
+        setIsLoading(false);
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(true);
+          setErrorMessageText(error.message);
+          setIsLoading(false);
+        }
       }
-    });
-
-    setIsLoading(false);
+    })();
   }, []);
 
   const handleChange = async (row: any) => {
-    setDetailLoading(true);
-    setSelectedRow(row);
+    try {
+      setOpenDeatil(true);
+      setDetailLoading(true);
+      setSelectedRow(row);
 
-    await getUser(row.id).then(async (response) => {
-      if (response.status === 200) {
-        setUserObject(await response.json());
-      } else {
+      const response = await getUser(row.id);
+      setUserObject(await response.json());
+      setDetailLoading(false);
+    } catch (error) {
+      if (error instanceof Error) {
         setErrorMessage(true);
-        setErrorMessageText(response.statusText);
+        setErrorMessageText(error.message);
+        setOpenDeatil(true);
+        setDetailLoading(false);
       }
-    });
-
-    setDetailOpen(true);
-    setDetailLoading(false);
-  };
-
-  const closureDeatail = () => {
-    setDetailOpen(false);
-    setUserOpen(false);
-    setSelectedRow(null);
-    setDetailLoading(true);
+    }
   };
 
   const openSwitchUser = async (row: any) => {
-    setSelectedRow(row);
-    setUserID(row.id);
+    try {
+      setSelectedRow(row);
+      setUserID(row.id);
 
-    await getUserRoles(row.id).then(async (response) => {
-      if (response.status === 200) {
-        setRole(await response.json());
-      } else {
+      const response = await await getUserRoles(row.id);
+      setRole(await response.json());
+      setOpenUser(true);
+    } catch (error) {
+      if (error instanceof Error) {
         setErrorMessage(true);
-        setErrorMessageText(response.statusText);
+        setErrorMessageText(error.message);
+        setOpenUser(true);
       }
-    });
-
-    setUserOpen(true);
+    }
   };
 
   const closure = () => {
-    setDetailOpen(false);
-    setUserOpen(false);
+    setOpenDeatil(false);
+    setOpenUser(false);
     setSelectedRow(null);
   };
 
@@ -159,45 +158,38 @@ const User: NextPageWithLayout = () => {
     setLoadingButton(true);
 
     if (role == 'root') {
-      const deleteGuestMethod = deleteGuest(userID);
-      const putRootMethod = putRoot(userID);
+      try {
+        await deleteGuest(userID);
+        await putRoot(userID);
 
-      Promise.all([deleteGuestMethod, putRootMethod]).then((res) => {
-        const response = res.filter((item) => {
-          return item.status == 200;
-        });
-
-        if (response.length == 2) {
-          setSuccessMessage(true);
-          setLoadingButton(false);
-          setUserOpen(false);
-          setSelectedRow(null);
-        } else {
+        setSuccessMessage(true);
+        setLoadingButton(false);
+        setOpenUser(false);
+        setSelectedRow(null);
+      } catch (error) {
+        if (error instanceof Error) {
           setErrorMessage(true);
+          setErrorMessageText(error.message);
+
           setLoadingButton(false);
-          setErrorMessageText(response[0].statusText || 'Submission Failed!');
         }
-      });
+      }
     } else if (role == 'guest') {
-      const deleteRootMethod = await deleteRoot(userID);
-      const putGuestMethod = await putGuest(userID);
+      try {
+        await deleteRoot(userID);
+        await putGuest(userID);
 
-      Promise.all([deleteRootMethod, putGuestMethod]).then((res) => {
-        const response = res.filter((item) => {
-          return item.status == 200;
-        });
-
-        if (response.length == 2) {
-          setSuccessMessage(true);
-          setLoadingButton(false);
-          setUserOpen(false);
-          setSelectedRow(null);
-        } else {
+        setSuccessMessage(true);
+        setLoadingButton(false);
+        setOpenUser(false);
+        setSelectedRow(null);
+      } catch (error) {
+        if (error instanceof Error) {
           setErrorMessage(true);
+          setErrorMessageText(error.message);
           setLoadingButton(false);
-          setErrorMessageText(response[0].statusText || 'Submission Failed!');
         }
-      });
+      }
     }
   };
 
@@ -393,7 +385,7 @@ const User: NextPageWithLayout = () => {
         </Table>
       </Paper>
       <Dialog
-        open={userOpen}
+        open={openUser}
         onClose={closure}
         maxWidth="xs"
         fullWidth
@@ -501,14 +493,21 @@ const User: NextPageWithLayout = () => {
           </LoadingButton>
         </DialogActions>
       </Dialog>
-      <Drawer anchor="right" open={detailOpen} onClose={closure}>
+      <Drawer anchor="right" open={openDetail} onClose={closure}>
         <Box role="presentation" sx={{ width: 350 }}>
           <List>
             <ListSubheader component="div" color="inherit" className={styles.detailTitle}>
               <Typography variant="h6" fontFamily="mabry-bold">
                 User Detail
               </Typography>
-              <IconButton onClick={closureDeatail}>
+              <IconButton
+                onClick={() => {
+                  setOpenDeatil(false);
+                  setOpenUser(false);
+                  setSelectedRow(null);
+                  setDetailLoading(true);
+                }}
+              >
                 <ClearOutlinedIcon sx={{ color: 'var(--button-color)' }} />
               </IconButton>
             </ListSubheader>

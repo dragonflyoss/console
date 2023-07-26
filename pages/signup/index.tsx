@@ -197,19 +197,20 @@ export default function SignUp() {
 
     const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
     if (canSubmit) {
-      await signUp({
-        name: accountElement.value,
-        password: passwordElement.value,
-        email: emailElement.value,
-      }).then((response) => {
-        if (response.status === 200) {
-          setPageLoding(true);
-          router.push('/signin');
-        } else {
+      try {
+        await signUp({
+          name: accountElement.value,
+          password: passwordElement.value,
+          email: emailElement.value,
+        });
+        setPageLoding(true);
+        router.push('/signin');
+      } catch (error) {
+        if (error instanceof Error) {
           setErrorMessage(true);
-          setErrorMessageText(response.statusText);
+          setErrorMessageText(error.message);
         }
-      });
+      }
     }
   };
 

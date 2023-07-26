@@ -1,23 +1,21 @@
 import Cookies from 'js-cookie';
-import { decode } from 'jsonwebtoken';
+import { decode, JwtPayload } from 'jsonwebtoken';
 
 export const datetime = (time: string) => {
   const date = new Date(time);
   const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-  return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')} ${hours
-    .toString()
-    .padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+  const hr = `${date.getHours()}`.padStart(2, '0');
+  const min = `${date.getMinutes()}`.padStart(2, '0');
+
+  return `${year}-${month}-${day}-${hr}:${min}`;
 };
 
 export const getUserID = () => {
-  const accountInformation: any = decode(Cookies.get('jwt') || 'jwt');
+  const account = (decode(Cookies.get('jwt') || 'jwt') as JwtPayload) || null;
 
-  if (accountInformation) {
-    return accountInformation?.id;
+  if (account) {
+    return account?.id;
   }
 };

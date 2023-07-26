@@ -107,7 +107,7 @@ export default function SignIn() {
     setShowPassword((show) => !show);
   };
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     const accountElement = event.currentTarget.elements.account;
     const passwordElement = event.currentTarget.elements.password;
@@ -122,18 +122,19 @@ export default function SignIn() {
 
     const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
     if (canSubmit) {
-      signIn({
-        name: accountElement.value,
-        password: passwordElement.value,
-      }).then(async (response) => {
-        if (response.status == 200) {
-          setPageLoding(true);
-          router.push('/clusters');
-        } else {
+      try {
+        await signIn({
+          name: accountElement.value,
+          password: passwordElement.value,
+        });
+        setPageLoding(true);
+        router.push('/clusters');
+      } catch (error) {
+        if (error instanceof Error) {
           setErrorMessage(true);
-          setErrorMessageText(response.statusText);
+          setErrorMessageText(error.message);
         }
-      });
+      }
     }
   };
 

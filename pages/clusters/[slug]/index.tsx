@@ -33,39 +33,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';
 import styles from './index.module.css';
 
-interface clusterData {
-  ID: number;
-  Name: string;
-  BIO: string;
-  Scopes: {
-    idc: string;
-    location: string;
-    cidrs: Array<string>;
-  };
-  SchedulerClusterID: number;
-  SeedPeerClusterID: number;
-  SchedulerClusterConfig: {
-    candidate_parent_limit: number;
-    filter_parent_limit: number;
-  };
-  SeedPeerClusterConfig: {
-    load_limit: number;
-  };
-  PeerClusterConfig: {
-    load_limit: number;
-    concurrent_piece_count: number;
-  };
-  CreatedAt: string;
-  UpdatedAt: string;
-  IsDefault: boolean;
-}
-
 const Cluster: NextPageWithLayout = () => {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [openDelet, setOpenDelet] = useState(false);
+  const [openDeletCluster, setOpenDeletCluster] = useState(false);
   const [openDeletScheduler, setOpenDeletScheduler] = useState(false);
   const [openDeletSeedPeers, setOpenDeletSeedPeers] = useState(false);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
@@ -73,31 +46,31 @@ const Cluster: NextPageWithLayout = () => {
   const [schedulerSelectedID, setSchedulerSelectedID] = useState('');
   const [seedPeersSelectedRow, setSeedPeersSelectedRow] = useState(null);
   const [seedPeersSelectedID, setSeedPeersSelectedID] = useState('');
-  const [informationList, setInformationList] = useState<clusterData>({
-    ID: 0,
-    Name: '',
-    BIO: '',
-    Scopes: {
+  const [cluster, setCluster] = useState({
+    id: 0,
+    name: '',
+    bio: '',
+    scopes: {
       idc: '',
       location: '',
       cidrs: [''],
     },
-    SchedulerClusterID: 0,
-    SeedPeerClusterID: 0,
-    SchedulerClusterConfig: {
+    scheduler_cluster_id: 0,
+    seed_peer_cluster_id: 0,
+    scheduler_cluster_config: {
       candidate_parent_limit: 0,
       filter_parent_limit: 0,
     },
-    SeedPeerClusterConfig: {
+    seed_peer_cluster_config: {
       load_limit: 0,
     },
-    PeerClusterConfig: {
+    peer_cluster_config: {
       load_limit: 0,
       concurrent_piece_count: 0,
     },
-    CreatedAt: '',
-    UpdatedAt: '',
-    IsDefault: true,
+    created_at: '',
+    updated_at: '',
+    is_default: true,
   });
   const [schedulerList, setSchedlerList] = useState([
     {
@@ -123,10 +96,9 @@ const Cluster: NextPageWithLayout = () => {
       type: '',
     },
   ]);
-  const router = useRouter();
-  const { pathname, asPath, query } = router;
 
-  const routerName = pathname.split('/')[1];
+  const router = useRouter();
+  const { asPath, query } = router;
 
   const theme = createTheme({
     palette: {
@@ -137,79 +109,75 @@ const Cluster: NextPageWithLayout = () => {
     },
   });
 
-  const getClustersList = (id: any) => {
-    getScheduler(id).then(async (response) => {
-      if (response.status == 200) {
-        setSchedlerList(await response.json());
-      } else {
-        setErrorMessage(true);
-        setErrorMessageText(response.statusText);
-      }
-    });
+  const getSchedulers = async (id: string) => {
+    return await getScheduler(id);
   };
 
-  const getSeedPeerList = (id: any) => {
-    getSeedPeer(id).then(async (response) => {
-      if (response.status == 200) {
-        setSeedPeerList(await response.json());
-      } else {
-        setErrorMessage(true);
-        setErrorMessageText(response.statusText);
-      }
-    });
+  const getSeedPeers = async (id: string) => {
+    return await getSeedPeer(id);
   };
+
   useEffect(() => {
-    setIsLoading(true);
+    (async function () {
+      setIsLoading(true);
 
-    if (typeof query.slug === 'string') {
-      getCluster(query.slug).then(async (response) => {
-        if (response.status == 200) {
-          setInformationList(await response.json());
-        } else {
-          setErrorMessage(true);
-          setErrorMessageText(response.statusText);
+      try {
+        if (typeof query.slug === 'string') {
+          const [ClusterRes, SchedulerRes, SeedPeerRes] = await Promise.all([
+            getCluster(query.slug),
+            getSchedulers(query.slug),
+            getSeedPeers(query.slug),
+          ]);
+
+          setCluster(await ClusterRes.json());
+          setSchedlerList(await SchedulerRes.json());
+          setSeedPeerList(await SeedPeerRes.json());
+          setIsLoading(false);
         }
-      });
-
-      getClustersList(query.slug);
-      getSeedPeerList(query.slug);
-    }
-
-    setIsLoading(false);
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(true);
+          setErrorMessageText(error.message);
+          setIsLoading(false);
+        }
+      }
+    })();
   }, [query.slug]);
 
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
+
     setErrorMessage(false);
     setSuccessMessage(false);
   };
 
   const handleDelete = () => {
-    setOpenDelet(false);
+    setOpenDeletCluster(false);
     setOpenDeletScheduler(false);
     setSchedulerSelectedRow(null);
     setOpenDeletSeedPeers(false);
     setSeedPeersSelectedRow(null);
   };
 
-  const handledelete = () => {
+  const handledeleteCluster = async () => {
     setDeleteLoadingButton(true);
-    if (typeof query.slug === 'string') {
-      deleteCluster(query.slug).then((response) => {
-        if (response.status === 200) {
-          setDeleteLoadingButton(false);
-          setSuccessMessage(true);
-          setOpenDelet(false);
-          router.push('/clusters');
-        } else {
-          setDeleteLoadingButton(false);
-          setErrorMessage(true);
-        }
-      });
-    } else {
-      setDeleteLoadingButton(false);
+
+    try {
+      if (typeof query.slug === 'string') {
+        await deleteCluster(query.slug);
+        setDeleteLoadingButton(false);
+        setSuccessMessage(true);
+        setOpenDeletCluster(false);
+        router.push('/clusters');
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(true);
+        setErrorMessageText(error.message);
+        setDeleteLoadingButton(false);
+      }
     }
   };
 
@@ -222,20 +190,23 @@ const Cluster: NextPageWithLayout = () => {
   const handledeleteScheduler = async () => {
     setDeleteLoadingButton(true);
 
-    await deleteSchedulerID(schedulerSelectedID).then((response) => {
-      if (response.status === 200) {
-        setSuccessMessage(true);
-        setOpenDeletScheduler(false);
-        setDeleteLoadingButton(false);
-        if (query.slug) {
-          getClustersList(query.slug);
-        }
-      } else {
+    try {
+      await deleteSchedulerID(schedulerSelectedID);
+      setSuccessMessage(true);
+      setOpenDeletScheduler(false);
+      setDeleteLoadingButton(false);
+
+      if (typeof query.slug === 'string') {
+        const response = await getSchedulers(query.slug);
+        setSchedlerList(await response.json());
+      }
+    } catch (error) {
+      if (error instanceof Error) {
         setErrorMessage(true);
-        setErrorMessageText(response.statusText);
+        setErrorMessageText(error.message);
         setDeleteLoadingButton(false);
       }
-    });
+    }
   };
 
   const openHandleSeedPeers = (row: any) => {
@@ -247,20 +218,23 @@ const Cluster: NextPageWithLayout = () => {
   const handledeleteSeedPeers = async () => {
     setDeleteLoadingButton(true);
 
-    await deleteSeedPeerID(seedPeersSelectedID).then((response) => {
-      if (response.status === 200) {
-        setSuccessMessage(true);
-        setOpenDeletSeedPeers(false);
-        setDeleteLoadingButton(false);
-        if (query.slug) {
-          getSeedPeerList(query.slug);
-        }
-      } else {
+    try {
+      await deleteSeedPeerID(seedPeersSelectedID);
+      setSuccessMessage(true);
+      setOpenDeletSeedPeers(false);
+      setDeleteLoadingButton(false);
+
+      if (typeof query.slug === 'string') {
+        const response = await getSeedPeers(query.slug);
+        setSeedPeerList(await response.json());
+      }
+    } catch (error) {
+      if (error instanceof Error) {
         setErrorMessage(true);
-        setErrorMessageText(response.statusText);
+        setErrorMessageText(error.message);
         setDeleteLoadingButton(false);
       }
-    });
+    }
   };
 
   return (
@@ -286,11 +260,11 @@ const Cluster: NextPageWithLayout = () => {
         </Alert>
       </Snackbar>
       <Breadcrumbs aria-label="breadcrumb">
-        <RouterLink underline="hover" component={Link} color="inherit" href={`/${routerName}`}>
-          {routerName}
+        <RouterLink underline="hover" component={Link} color="inherit" href={`/clusters`}>
+          clusters
         </RouterLink>
         <Typography color="text.primary" fontFamily="mabry-bold">
-          {informationList?.Name}
+          {cluster?.name}
         </Typography>
       </Breadcrumbs>
       <Box className={styles.container}>
@@ -312,7 +286,7 @@ const Cluster: NextPageWithLayout = () => {
               variant="contained"
               size="small"
               onClick={() => {
-                setOpenDelet(true);
+                setOpenDeletCluster(true);
               }}
               className={styles.deleteButton}
             >
@@ -322,7 +296,7 @@ const Cluster: NextPageWithLayout = () => {
           </Box>
         </ThemeProvider>
         <Dialog
-          open={openDelet}
+          open={openDeletCluster}
           onClose={handleDelete}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
@@ -386,14 +360,14 @@ const Cluster: NextPageWithLayout = () => {
                 },
                 width: '8rem',
               }}
-              onClick={handledelete}
+              onClick={handledeleteCluster}
             >
               Delete
             </LoadingButton>
           </DialogActions>
         </Dialog>
       </Box>
-      <Information informationList={informationList} isLoading={isLoading} />
+      <Information cluster={cluster} isLoading={isLoading} />
       <Typography variant="subtitle1" gutterBottom fontFamily="mabry-bold" mt="2rem" mb="1rem">
         Scheduler Cluster
       </Typography>

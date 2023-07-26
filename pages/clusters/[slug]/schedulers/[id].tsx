@@ -16,8 +16,8 @@ const Scheduler: NextPageWithLayout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [cluster, setCluster] = useState({ Name: '', ID: '' });
-  const [schedule, setSchedule] = useState<any>({
+  const [cluster, setCluster] = useState({ name: '', id: '' });
+  const [schedule, setSchedule] = useState({
     id: '',
     host_name: '',
     ip: '',
@@ -30,10 +30,7 @@ const Scheduler: NextPageWithLayout = () => {
     created_at: '',
     updated_at: '',
   });
-  const router = useRouter();
-  const routerName = router.pathname.split('/')[1];
   const { query } = useRouter();
-  console.log(router);
 
   const schedulerLabel = [
     {
@@ -67,37 +64,31 @@ const Scheduler: NextPageWithLayout = () => {
   ];
 
   useEffect(() => {
-    setIsLoading(true);
+    (async function () {
+      setIsLoading(true);
+      try {
+        if (typeof query.slug === 'string' && typeof query.id === 'string') {
+          const [getClusters, getSchedulers] = await Promise.all([getCluster(query.slug), getSchedulerID(query.id)]);
 
-    if (typeof query.slug === 'string') {
-      getCluster(query.slug).then(async (response) => {
-        if (response.status === 200) {
-          setCluster(await response.json());
-        } else {
-          setErrorMessage(true);
-          setErrorMessageText(response.statusText);
+          setCluster(await getClusters.json());
+          setSchedule(await getSchedulers.json());
+          setIsLoading(false);
         }
-      });
-    }
-
-    if (typeof query.id === 'string') {
-      getSchedulerID(query.id).then(async (response) => {
-        if (response.status === 200) {
-          setSchedule(await response.json());
-        } else {
+      } catch (error) {
+        if (error instanceof Error) {
           setErrorMessage(true);
-          setErrorMessageText(response.statusText);
+          setErrorMessageText(error.message);
+          setIsLoading(false);
         }
-      });
-    }
-
-    setIsLoading(false);
+      }
+    })();
   }, [query.id, query.slug]);
 
   const handleClose = (_: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
+
     setErrorMessage(false);
   };
 
@@ -114,11 +105,11 @@ const Scheduler: NextPageWithLayout = () => {
         </Alert>
       </Snackbar>
       <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
-        <RouterLink component={Link} underline="hover" color="inherit" href={`/${routerName}`}>
-          {routerName}
+        <RouterLink component={Link} underline="hover" color="inherit" href={`/clusters`}>
+          clusters
         </RouterLink>
-        <RouterLink component={Link} underline="hover" color="inherit" href={`/${routerName}/${cluster?.ID}`}>
-          {cluster?.Name}
+        <RouterLink component={Link} underline="hover" color="inherit" href={`/clusters/${cluster?.id}`}>
+          {cluster?.name}
         </RouterLink>
         <Typography color="text.primary" fontFamily="mabry-bold">
           {schedule?.host_name}
@@ -206,10 +197,10 @@ const Scheduler: NextPageWithLayout = () => {
                       sx={{
                         borderRadius: '0%',
                         backgroundColor:
-                          schedule?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                        color: schedule?.[item.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
+                          schedule?.[item?.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                        color: schedule?.[item?.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
                         borderColor:
-                          schedule?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                          schedule?.[item?.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
                         fontWeight: 'bold',
                       }}
                     />
@@ -234,7 +225,7 @@ const Scheduler: NextPageWithLayout = () => {
                     </>
                   ) : (
                     <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-                      {schedule?.[item?.name] || '-'}
+                      {schedule?.[item?.name as keyof typeof schedule] || '-'}
                     </Typography>
                   )}
                 </>

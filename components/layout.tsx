@@ -50,7 +50,7 @@ const Main = styled('div')(({ theme }) => ({
 }));
 
 export default function Layout({ children }: LayoutProps) {
-  const [role, setRole] = useState([]);
+  const [role, setRole] = useState(['']);
   const [root] = useState('root');
   const [guest] = useState('guest');
   const [errorMessage, setErrorMessage] = useState(false);
@@ -69,9 +69,8 @@ export default function Layout({ children }: LayoutProps) {
         if (account?.id) {
           const [user, userRoles] = await Promise.all([getUser(account?.id), getUserRoles(account?.id)]);
 
-          setUser(await user.json());
-          const res = await userRoles.json();
-          setRole(res);
+          setUser(user);
+          setRole(userRoles);
         } else {
           router.push('/signin');
         }

@@ -18,13 +18,13 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
-import { listScheduler, listSeedPeer, listCluster } from 'lib/api';
+import { getSchedulers, getSeedPeers, getClusters } from 'lib/api';
 import styles from './index.module.css';
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useState } from 'react';
 import { datetime } from 'lib/utils';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import parseLinkHeader from 'parse-link-header';
+
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
@@ -55,19 +55,19 @@ const Cluster: NextPageWithLayout = () => {
   const [clusterIsLoading, setClusterIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
   const [searchText, setSearchText] = useState('');
-  const [cluster, setCluster] = useState([]);
-  const [scheduler, setScheduler] = useState([]);
-  const [seedPeer, setSeedPeer] = useState([]);
-  const [clusters, setClusters] = useState([
+  const [cluster, setCluster] = useState([{}]);
+  const [scheduler, setScheduler] = useState([{}]);
+  const [seedPeer, setSeedPeer] = useState([{}]);
+  const [allClusters, setClusters] = useState([
     {
-      id: '',
+      id: 0,
       name: '',
       scopes: {
         idc: '',
         location: '',
-        cidrs: null,
+        cidrs: [''],
       },
       created_at: '',
       is_default: false,
@@ -81,22 +81,19 @@ const Cluster: NextPageWithLayout = () => {
         setIsLoading(true);
         setClusterIsLoading(true);
 
-        const [cluster, Schedle, seedPeer, clusters] = await Promise.all([
-          listCluster({ page: 1, per_page: 1000 }),
-          listScheduler(),
-          listSeedPeer(),
-          listCluster({ page: page, per_page: pageSize }),
+        const [cluster, schedle, seedPeer, allClusters] = await Promise.all([
+          getClusters({ page: 1, per_page: 1000 }),
+          getSchedulers(),
+          getSeedPeers(),
+          getClusters({ page: page, per_page: pageSize }),
         ]);
 
-        setCluster(await cluster.json());
-        setScheduler(await Schedle.json());
-        setSeedPeer(await seedPeer.json());
+        setCluster(cluster.data);
+        setScheduler(schedle);
+        setSeedPeer(seedPeer);
 
-        const linkHeader = clusters.headers.get('Link');
-        const links = parseLinkHeader(linkHeader);
-
-        setTotalPages(Number(links?.last?.page));
-        setClusters(await clusters.json());
+        setTotalPages(allClusters.total_page || 1);
+        setClusters(allClusters.data);
         setIsLoading(false);
         setClusterIsLoading(false);
       } catch (error) {
@@ -121,8 +118,8 @@ const Cluster: NextPageWithLayout = () => {
   const searchCluster = async () => {
     try {
       setClusterIsLoading(true);
-      const response = await listCluster({ page: 1, per_page: pageSize, name: searchText });
-      setClusters(await response.json());
+      const response = await getClusters({ page: 1, per_page: pageSize, name: searchText });
+      setClusters(response.data);
       setClusterIsLoading(false);
     } catch (error) {
       if (error instanceof Error) {
@@ -306,8 +303,8 @@ const Cluster: NextPageWithLayout = () => {
           </IconButton>
         </Paper>
         <Grid item xs={12} className={styles.clusterListContainer} component="form" noValidate>
-          {Array.isArray(clusters) &&
-            clusters.map((item: any, id) => (
+          {Array.isArray(allClusters) &&
+            allClusters.map((item: any, id) => (
               <Paper
                 key={id}
                 variant="outlined"

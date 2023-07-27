@@ -27,7 +27,7 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import { ReactElement, useEffect, useState } from 'react';
-import { getScheduler, getSeedPeer, getCluster, deleteCluster, deleteSchedulerID, deleteSeedPeerID } from 'lib/api';
+import { getSchedulers, getSeedPeers, getCluster, deleteCluster, deleteScheduler, deleteSeedPeer } from 'lib/api';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';
@@ -75,7 +75,7 @@ const Cluster: NextPageWithLayout = () => {
   });
   const [schedulerList, setSchedlerList] = useState([
     {
-      id: '',
+      id: 0,
       host_name: '',
       idc: '',
       location: '',
@@ -87,7 +87,7 @@ const Cluster: NextPageWithLayout = () => {
   ]);
   const [seedPeerList, setSeedPeerList] = useState([
     {
-      id: '',
+      id: 0,
       host_name: '',
       download_port: '',
       object_storage_port: '',
@@ -110,29 +110,21 @@ const Cluster: NextPageWithLayout = () => {
     },
   });
 
-  const getSchedulers = async (id: string) => {
-    return await getScheduler(id);
-  };
-
-  const getSeedPeers = async (id: string) => {
-    return await getSeedPeer(id);
-  };
-
   useEffect(() => {
     (async function () {
       try {
         setIsLoading(true);
 
         if (typeof query.slug === 'string') {
-          const [ClusterRes, SchedulerRes, SeedPeerRes] = await Promise.all([
+          const [cluster, scheduler, seedPeer] = await Promise.all([
             getCluster(query.slug),
-            getSchedulers(query.slug),
-            getSeedPeers(query.slug),
+            getSchedulers({ scheduler_cluster_id: query.slug }),
+            getSeedPeers({ seed_peer_cluster_id: query.slug }),
           ]);
 
-          setCluster(await ClusterRes.json());
-          setSchedlerList(await SchedulerRes.json());
-          setSeedPeerList(await SeedPeerRes.json());
+          setCluster(cluster);
+          setSchedlerList(scheduler);
+          setSeedPeerList(seedPeer);
           setIsLoading(false);
         }
       } catch (error) {
@@ -167,7 +159,7 @@ const Cluster: NextPageWithLayout = () => {
 
     try {
       if (typeof query.slug === 'string') {
-        await deleteCluster(query.slug);
+        deleteCluster(query.slug);
         setDeleteLoadingButton(false);
         setSuccessMessage(true);
         setOpenDeletCluster(false);
@@ -192,14 +184,14 @@ const Cluster: NextPageWithLayout = () => {
     setDeleteLoadingButton(true);
 
     try {
-      await deleteSchedulerID(schedulerSelectedID);
+      await deleteScheduler(schedulerSelectedID);
       setSuccessMessage(true);
       setOpenDeletScheduler(false);
       setDeleteLoadingButton(false);
 
       if (typeof query.slug === 'string') {
-        const response = await getSchedulers(query.slug);
-        setSchedlerList(await response.json());
+        const response = await getSchedulers({ scheduler_cluster_id: query.slug });
+        setSchedlerList(response);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -220,14 +212,14 @@ const Cluster: NextPageWithLayout = () => {
     setDeleteLoadingButton(true);
 
     try {
-      await deleteSeedPeerID(seedPeersSelectedID);
+      await deleteSeedPeer(seedPeersSelectedID);
       setSuccessMessage(true);
       setOpenDeletSeedPeers(false);
       setDeleteLoadingButton(false);
 
       if (typeof query.slug === 'string') {
-        const response = await getSeedPeers(query.slug);
-        setSeedPeerList(await response.json());
+        const response = await getSeedPeers({ seed_peer_cluster_id: query.slug });
+        setSeedPeerList(response);
       }
     } catch (error) {
       if (error instanceof Error) {

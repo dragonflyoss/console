@@ -38,7 +38,7 @@ const CreateCluster = () => {
   const [cidrsError, setCIDRsError] = useState(false);
   const [editLoadingButton, setEditLoadingButton] = useState(false);
   const [clusters, setClusters] = useState({
-    id: '',
+    id: 0,
     bio: '',
     scopes: {
       idc: '',
@@ -60,7 +60,7 @@ const CreateCluster = () => {
     },
     created_at: '',
     updated_at: '',
-    is_default: true,
+    is_default: false,
   });
   const cidrsOptions: never[] = [];
   const router = useRouter();
@@ -80,7 +80,7 @@ const CreateCluster = () => {
       try {
         if (typeof router.query.slug === 'string') {
           const response = await getCluster(router.query.slug);
-          setClusters(await response.json());
+          setClusters(response);
         }
       } catch (error) {
         if (error instanceof Error) {

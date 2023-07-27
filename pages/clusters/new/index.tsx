@@ -426,8 +426,8 @@ const CreateCluster = () => {
     const formData = {
       name: String(name),
       peer_cluster_config: {
-        concurrent_piece_count: Number(peerLoadLimit),
-        load_limit: Number(numberOfConcurrentDownloadPieces),
+        concurrent_piece_count: Number(numberOfConcurrentDownloadPieces),
+        load_limit: Number(peerLoadLimit),
       },
       scheduler_cluster_config: {
         candidate_parent_limit: Number(candidateParentLimit),

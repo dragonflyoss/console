@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useState } from 'react';
-import { getSeedPeerID, getCluster } from 'lib/api';
+import { getSeedPeer } from 'lib/api';
 import { datetime } from 'lib/utils';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import HistoryIcon from '@mui/icons-material/History';
@@ -17,9 +17,8 @@ const SeedPeer: NextPageWithLayout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [cluster, setCluster] = useState({ name: '', id: '' });
   const [seedPeer, setSeedPeer] = useState({
-    id: '',
+    id: 0,
     host_name: '',
     ip: '',
     port: '',
@@ -28,10 +27,10 @@ const SeedPeer: NextPageWithLayout = () => {
     type: '',
     state: '',
     idc: '',
-    lcoation: '',
+    location: '',
     created_at: '',
     updated_at: '',
-    seed_peer_cluster_id: '',
+    seed_peer_cluster_id: 0,
   });
 
   const { query } = useRouter();
@@ -82,11 +81,9 @@ const SeedPeer: NextPageWithLayout = () => {
       try {
         setIsLoading(true);
 
-        if (typeof query.slug === 'string' && typeof query.id === 'string') {
-          const [getClusters, getSeedPeer] = await Promise.all([getCluster(query.slug), getSeedPeerID(query.id)]);
-
-          setCluster(await getClusters.json());
-          setSeedPeer(await getSeedPeer.json());
+        if (typeof query.id === 'string') {
+          const response = await getSeedPeer(query.id);
+          setSeedPeer(response);
           setIsLoading(false);
         }
       } catch (error) {
@@ -97,7 +94,7 @@ const SeedPeer: NextPageWithLayout = () => {
         }
       }
     })();
-  }, [query.id, query.slug]);
+  }, [query.id]);
 
   const handleClose = (_: any, reason?: string) => {
     if (reason === 'clickaway') {
@@ -123,8 +120,13 @@ const SeedPeer: NextPageWithLayout = () => {
         <RouterLink component={Link} underline="hover" color="inherit" href={`/clusters`}>
           clusters
         </RouterLink>
-        <RouterLink component={Link} underline="hover" color="inherit" href={`/clusters/${cluster?.id}`}>
-          {cluster?.name}
+        <RouterLink
+          component={Link}
+          underline="hover"
+          color="inherit"
+          href={`/clusters/${seedPeer.seed_peer_cluster_id}`}
+        >
+          {`seed-peer-cluster-${seedPeer.seed_peer_cluster_id}`}
         </RouterLink>
         <Typography color="text.primary" fontFamily="mabry-bold">
           {seedPeer?.host_name}
@@ -180,7 +182,7 @@ const SeedPeer: NextPageWithLayout = () => {
         </Paper>
       </Box>
       <Paper variant="outlined" className={styles.seedPeerContainer}>
-        {seedPeersLabel.map((item: any) => {
+        {seedPeersLabel.map((item) => {
           return (
             <Box key={item.label} className={styles.seedPeerContent}>
               <Typography variant="subtitle1" component="div" mb="1rem">
@@ -190,42 +192,38 @@ const SeedPeer: NextPageWithLayout = () => {
                 <Skeleton sx={{ width: '80%' }} />
               ) : (
                 <>
-                  {item.name == 'created_at' ? (
+                  {item.name === 'created_at' ? (
                     <Chip
                       avatar={<MoreTimeIcon />}
-                      label={datetime(seedPeer?.[item.name as keyof typeof seedPeer])}
+                      label={datetime(seedPeer?.[item?.name] || '')}
                       variant="outlined"
                       size="small"
                     />
-                  ) : item.name == 'updated_at' ? (
+                  ) : item.name === 'updated_at' ? (
                     <Chip
                       avatar={<HistoryIcon />}
-                      label={datetime(seedPeer[item.name as keyof typeof seedPeer])}
+                      label={datetime(seedPeer?.[item?.name] || '')}
                       variant="outlined"
                       size="small"
                     />
-                  ) : item.name == 'state' ? (
+                  ) : item.name === 'state' ? (
                     <Chip
-                      label={_.upperFirst(seedPeer?.[item.name as keyof typeof seedPeer]) || ''}
+                      label={_.upperFirst(seedPeer?.[item?.name]) || ''}
                       size="small"
                       variant="outlined"
                       sx={{
                         borderRadius: '0%',
                         backgroundColor:
-                          seedPeer?.[item.name as keyof typeof seedPeer] === 'active'
-                            ? 'var(--description-color)'
-                            : 'var(--button-color)',
-                        color: seedPeer?.[item.name as keyof typeof seedPeer] === 'active' ? '#FFFFFF' : '#FFFFFF',
+                          seedPeer?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                        color: seedPeer?.[item.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
                         borderColor:
-                          seedPeer?.[item.name as keyof typeof seedPeer] === 'active'
-                            ? 'var(--description-color)'
-                            : 'var(--button-color)',
+                          seedPeer?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
                         fontWeight: 'bold',
                       }}
                     />
-                  ) : item.name == 'type' ? (
+                  ) : item.name === 'type' ? (
                     <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-                      {_.upperFirst(seedPeer?.[item.name as keyof typeof seedPeer]) || ''}
+                      {_.upperFirst(seedPeer?.[item.name]) || ''}
                     </Typography>
                   ) : (
                     <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">

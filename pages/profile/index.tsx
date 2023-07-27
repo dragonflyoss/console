@@ -54,7 +54,7 @@ const Profile: NextPageWithLayout = () => {
   const [user, setUser] = useState({
     bio: '',
     avatar: '',
-    id: '',
+    id: 0,
     name: '',
     email: '',
     location: '',
@@ -77,10 +77,8 @@ const Profile: NextPageWithLayout = () => {
 
         if (account?.id) {
           const response = await getUser(account?.id);
-          const res = await response.json();
-
-          setUser(res);
-          setBio(res.bio);
+          setUser(response);
+          setBio(response.bio);
           setIsLoading(false);
         }
       } catch (error) {
@@ -128,7 +126,7 @@ const Profile: NextPageWithLayout = () => {
     },
   ];
 
-  const formList = [
+  const profileForm = [
     {
       formProps: {
         id: 'bio',
@@ -143,7 +141,7 @@ const Profile: NextPageWithLayout = () => {
 
         onChange: (e: any) => {
           setUser({ ...user, bio: e.target.value });
-          changeValidate(e.target.value, formList[0]);
+          changeValidate(e.target.value, profileForm[0]);
         },
 
         InputProps: {
@@ -177,7 +175,7 @@ const Profile: NextPageWithLayout = () => {
 
         onChange: (e: any) => {
           setUser({ ...user, phone: e.target.value });
-          changeValidate(e.target.value, formList[1]);
+          changeValidate(e.target.value, profileForm[1]);
         },
 
         InputProps: {
@@ -210,7 +208,7 @@ const Profile: NextPageWithLayout = () => {
 
         onChange: (e: any) => {
           setUser({ ...user, location: e.target.value });
-          changeValidate(e.target.value, formList[2]);
+          changeValidate(e.target.value, profileForm[2]);
         },
 
         InputProps: {
@@ -242,7 +240,7 @@ const Profile: NextPageWithLayout = () => {
 
         onChange: (e: any) => {
           setUser({ ...user, email: e.target.value });
-          changeValidate(e.target.value, formList[3]);
+          changeValidate(e.target.value, profileForm[3]);
         },
 
         InputProps: {
@@ -263,7 +261,7 @@ const Profile: NextPageWithLayout = () => {
     },
   ];
 
-  const passwordFormList = [
+  const passwordForm = [
     {
       formProps: {
         id: 'oldPassword',
@@ -277,7 +275,7 @@ const Profile: NextPageWithLayout = () => {
         error: phoneError,
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, passwordFormList[0]);
+          changeValidate(e.target.value, passwordForm[0]);
           setPassword({ ...password, old_password: e.target.value });
         },
 
@@ -324,7 +322,7 @@ const Profile: NextPageWithLayout = () => {
         value: new_password,
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, passwordFormList[1], () => {
+          changeValidate(e.target.value, passwordForm[1], () => {
             setNewPassword(e.target.value);
           });
           setPassword({ ...password, new_password: e.target.value });
@@ -368,7 +366,7 @@ const Profile: NextPageWithLayout = () => {
         error: emailError,
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, passwordFormList[2]);
+          changeValidate(e.target.value, passwordForm[2]);
         },
 
         InputProps: {
@@ -423,13 +421,13 @@ const Profile: NextPageWithLayout = () => {
 
     const data = new FormData(event.currentTarget);
 
-    formList.forEach((item) => {
+    profileForm.forEach((item) => {
       const value = data.get(item.formProps.name);
       item.setError(!item.validate(value as string));
       item.syncError = !item.validate(value as string);
     });
 
-    const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
+    const canSubmit = Boolean(!profileForm.filter((item) => item.syncError).length);
 
     const formData = {
       bio: user.bio,
@@ -466,9 +464,9 @@ const Profile: NextPageWithLayout = () => {
     try {
       if (userID) {
         const response = await getUser(userID);
-        const res = await response.json();
-        setUser(res);
-        setBio(res.bio);
+
+        setUser(response);
+        setBio(response.bio);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -485,13 +483,13 @@ const Profile: NextPageWithLayout = () => {
 
     const data = new FormData(event.currentTarget);
 
-    passwordFormList.forEach((item) => {
+    passwordForm.forEach((item) => {
       const value = data.get(item.formProps.name);
       item.setError(!item.validate(value as string));
       item.syncError = !item.validate(value as string);
     });
 
-    const canSubmit = Boolean(!passwordFormList.filter((item) => item.syncError).length);
+    const canSubmit = Boolean(!passwordForm.filter((item) => item.syncError).length);
 
     const formData = {
       old_password: password.old_password,
@@ -589,7 +587,7 @@ const Profile: NextPageWithLayout = () => {
         ) : (
           <Grid sx={{ width: '40rem' }} onSubmit={changePassword} component="form" noValidate>
             <Typography variant="h6">Change Password</Typography>
-            {passwordFormList.map((item) => (
+            {passwordForm.map((item) => (
               <Box key={item.formProps.name}>
                 <TextField size="small" margin="normal" color="success" fullWidth required {...item.formProps} />
               </Box>
@@ -704,7 +702,7 @@ const Profile: NextPageWithLayout = () => {
           <Box>
             <Typography variant="h6">Personal Information</Typography>
             <Box component="form" onSubmit={changePersonal} noValidate>
-              {formList.map((item) => (
+              {profileForm.map((item) => (
                 <Box key={item.formProps.name}>
                   <TextField
                     size="small"

@@ -6,9 +6,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import styles from './cluster.module.css';
 import HelpIcon from '@mui/icons-material/Help';
 import { useState } from 'react';
-import { clusterData } from 'lib/api';
 
-const Clusters = (props: { cluster: clusterData; isLoading: boolean }) => {
+const Clusters = (props: { cluster: any; isLoading: boolean }) => {
   const { cluster, isLoading } = props;
   const [openCIDRs, setOpenCIDRs] = useState(false);
 

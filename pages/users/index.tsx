@@ -35,7 +35,7 @@ import {
   Typography,
 } from '@mui/material';
 import { ReactElement, useEffect, useState } from 'react';
-import { deleteGuest, deleteRoot, getUserRoles, listUsers, getUser, putGuest, putRoot } from 'lib/api';
+import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole } from 'lib/api';
 import { makeStyles } from '@mui/styles';
 import { datetime } from 'lib/utils';
 import { LoadingButton } from '@mui/lab';
@@ -80,11 +80,13 @@ const User: NextPageWithLayout = () => {
   const [openDetail, setOpenDeatil] = useState(false);
   const [openUser, setOpenUser] = useState(false);
   const [userID, setUserID] = useState('');
+  const [root] = useState('root');
+  const [guest] = useState('guest');
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadingButton, setLoadingButton] = useState(false);
-  const [userList, setUserList] = useState([{ avatar: '', id: '', email: '', name: '', state: '', location: '' }]);
-  const [userObject, setUserObject] = useState({
-    id: '',
+  const [users, setUsers] = useState([{ avatar: '', id: 0, email: '', name: '', state: '', location: '' }]);
+  const [user, setUser] = useState({
+    id: 0,
     email: '',
     name: '',
     phone: '',
@@ -93,7 +95,6 @@ const User: NextPageWithLayout = () => {
     updated_at: '',
   });
   const [role, setRole] = useState('');
-
   const classes = useStyles();
 
   useEffect(() => {
@@ -101,8 +102,8 @@ const User: NextPageWithLayout = () => {
       try {
         setIsLoading(true);
 
-        const response = await listUsers();
-        setUserList(await response.json());
+        const response = await getUsers();
+        setUsers(response);
         setIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
@@ -121,7 +122,7 @@ const User: NextPageWithLayout = () => {
       setSelectedRow(row);
 
       const response = await getUser(row.id);
-      setUserObject(await response.json());
+      setUser(response);
       setDetailLoading(false);
     } catch (error) {
       if (error instanceof Error) {
@@ -139,7 +140,7 @@ const User: NextPageWithLayout = () => {
       setUserID(row.id);
 
       const response = await getUserRoles(row.id);
-      setRole(await response.json());
+      setRole(response[0] || '');
       setOpenUser(true);
     } catch (error) {
       if (error instanceof Error) {
@@ -161,8 +162,8 @@ const User: NextPageWithLayout = () => {
 
     if (role === 'root') {
       try {
-        await deleteGuest(userID);
-        await putRoot(userID);
+        await deleteUserRole(userID, guest);
+        await putUserRole(userID, root);
 
         setSuccessMessage(true);
         setLoadingButton(false);
@@ -178,8 +179,8 @@ const User: NextPageWithLayout = () => {
       }
     } else if (role === 'guest') {
       try {
-        await deleteRoot(userID);
-        await putGuest(userID);
+        await deleteUserRole(userID, root);
+        await putUserRole(userID, guest);
 
         setSuccessMessage(true);
         setLoadingButton(false);
@@ -254,8 +255,8 @@ const User: NextPageWithLayout = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.isArray(userList) &&
-              userList.map((item) => (
+            {Array.isArray(users) &&
+              users.map((item) => (
                 <TableRow
                   sx={{
                     '&.MuiTableRow-root': {
@@ -521,9 +522,7 @@ const User: NextPageWithLayout = () => {
                   ID
                 </Typography>
               </ListItemAvatar>
-              <Typography variant="body2">
-                {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userObject?.id}
-              </Typography>
+              <Typography variant="body2">{DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.id}</Typography>
             </ListItem>
             <Divider />
             <ListItem className={styles.detailContentWrap}>
@@ -534,7 +533,7 @@ const User: NextPageWithLayout = () => {
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2">
-                {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userObject?.name}
+                {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.name}
               </Typography>
             </ListItem>
             <Divider />
@@ -545,9 +544,9 @@ const User: NextPageWithLayout = () => {
                   Email
                 </Typography>
               </ListItemAvatar>
-              <Tooltip title={userObject?.email || '-'} placement="top">
+              <Tooltip title={user?.email || '-'} placement="top">
                 <Typography variant="body2" className={styles.emailContent}>
-                  {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userObject?.email || '-'}
+                  {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.email || '-'}
                 </Typography>
               </Tooltip>
             </ListItem>
@@ -560,7 +559,7 @@ const User: NextPageWithLayout = () => {
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2">
-                {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userObject.phone || '-'}
+                {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : user.phone || '-'}
               </Typography>
             </ListItem>
             <Divider />
@@ -571,10 +570,10 @@ const User: NextPageWithLayout = () => {
                   Location
                 </Typography>
               </ListItemAvatar>
-              <Tooltip title={userObject.location || '-'} placement="top">
+              <Tooltip title={user.location || '-'} placement="top">
                 <Box className={styles.emailContent}>
                   <Typography variant="body2">
-                    {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : userObject.location || '-'}
+                    {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : user.location || '-'}
                   </Typography>
                 </Box>
               </Tooltip>
@@ -592,7 +591,7 @@ const User: NextPageWithLayout = () => {
               ) : (
                 <Chip
                   avatar={<Box component="img" src="/icons/user/created-at.svg" />}
-                  label={datetime(userObject.created_at || '-')}
+                  label={datetime(user.created_at || '-')}
                   variant="outlined"
                   size="small"
                 />
@@ -611,7 +610,7 @@ const User: NextPageWithLayout = () => {
               ) : (
                 <Chip
                   avatar={<Box component="img" src="/icons/user/updated-at.svg" />}
-                  label={datetime(userObject.updated_at || '-')}
+                  label={datetime(user.updated_at || '-')}
                   variant="outlined"
                   size="small"
                 />

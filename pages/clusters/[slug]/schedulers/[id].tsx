@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useState } from 'react';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import HistoryIcon from '@mui/icons-material/History';
-import { getSchedulerID, getCluster } from 'lib/api';
+import { getScheduler } from 'lib/api';
 import { datetime } from 'lib/utils';
 import styles from './index.module.css';
 import _ from 'lodash';
@@ -17,17 +17,17 @@ const Scheduler: NextPageWithLayout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [cluster, setCluster] = useState({ name: '', id: '' });
+
   const [schedule, setSchedule] = useState({
-    id: '',
+    id: 0,
     host_name: '',
     ip: '',
-    scheduler_cluster_id: '',
+    scheduler_cluster_id: 0,
     port: '',
     state: '',
     idc: '',
-    features: [],
-    lcoation: '',
+    features: [''],
+    location: '',
     created_at: '',
     updated_at: '',
   });
@@ -69,11 +69,9 @@ const Scheduler: NextPageWithLayout = () => {
       try {
         setIsLoading(true);
 
-        if (typeof query.slug === 'string' && typeof query.id === 'string') {
-          const [getClusters, getSchedulers] = await Promise.all([getCluster(query.slug), getSchedulerID(query.id)]);
-
-          setCluster(await getClusters.json());
-          setSchedule(await getSchedulers.json());
+        if (typeof query.id === 'string') {
+          const response = await getScheduler(query.id);
+          setSchedule(response);
           setIsLoading(false);
         }
       } catch (error) {
@@ -84,7 +82,7 @@ const Scheduler: NextPageWithLayout = () => {
         }
       }
     })();
-  }, [query.id, query.slug]);
+  }, [query.id]);
 
   const handleClose = (_: any, reason?: string) => {
     if (reason === 'clickaway') {
@@ -110,8 +108,13 @@ const Scheduler: NextPageWithLayout = () => {
         <RouterLink component={Link} underline="hover" color="inherit" href={`/clusters`}>
           clusters
         </RouterLink>
-        <RouterLink component={Link} underline="hover" color="inherit" href={`/clusters/${cluster?.id}`}>
-          {cluster?.name}
+        <RouterLink
+          component={Link}
+          underline="hover"
+          color="inherit"
+          href={`/clusters/${schedule.scheduler_cluster_id}`}
+        >
+          {`scheduler-cluster-${schedule.scheduler_cluster_id}`}
         </RouterLink>
         <Typography color="text.primary" fontFamily="mabry-bold">
           {schedule?.host_name}
@@ -177,21 +180,21 @@ const Scheduler: NextPageWithLayout = () => {
                 <Skeleton sx={{ width: '80%' }} />
               ) : (
                 <>
-                  {item.name == 'created_at' ? (
+                  {item.name === 'created_at' ? (
                     <Chip
                       avatar={<MoreTimeIcon />}
                       label={datetime(schedule?.[item?.name] || '')}
                       variant="outlined"
                       size="small"
                     />
-                  ) : item.name == 'updated_at' ? (
+                  ) : item.name === 'updated_at' ? (
                     <Chip
                       avatar={<HistoryIcon />}
                       label={datetime(schedule?.[item?.name])}
                       variant="outlined"
                       size="small"
                     />
-                  ) : item.name == 'state' ? (
+                  ) : item.name === 'state' ? (
                     <Chip
                       label={_.upperFirst(schedule?.[item.name]) || ''}
                       size="small"
@@ -206,7 +209,7 @@ const Scheduler: NextPageWithLayout = () => {
                         fontWeight: 'bold',
                       }}
                     />
-                  ) : item.name == 'features' ? (
+                  ) : item.name === 'features' ? (
                     <>
                       {schedule?.[item?.name]?.map((items: string, id: any) => (
                         <Chip

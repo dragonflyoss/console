@@ -62,12 +62,12 @@ export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const account = getJwtPayload();
+    const payload = getJwtPayload();
 
     (async function () {
       try {
-        if (account?.id) {
-          const [user, userRoles] = await Promise.all([getUser(account?.id), getUserRoles(account?.id)]);
+        if (payload?.id) {
+          const [user, userRoles] = await Promise.all([getUser(payload?.id), getUserRoles(payload?.id)]);
 
           setUser(user);
           setRole(userRoles);

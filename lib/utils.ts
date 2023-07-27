@@ -13,7 +13,7 @@ export const datetime = (time: string) => {
 };
 
 export const getJwtPayload = () => {
-  const account = (decode(Cookies.get('jwt') || 'jwt') as JwtPayload) || null;
+  const payload = (decode(Cookies.get('jwt') || 'jwt') as JwtPayload) || null;
 
-  return account;
+  return payload;
 };

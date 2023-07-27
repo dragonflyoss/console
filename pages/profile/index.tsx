@@ -68,15 +68,15 @@ const Profile: NextPageWithLayout = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const account = getJwtPayload();
-    setUserID(account?.id);
+    const payload = getJwtPayload();
+    setUserID(payload?.id);
 
     (async function () {
       try {
         setIsLoading(true);
 
-        if (account?.id) {
-          const response = await getUser(account?.id);
+        if (payload?.id) {
+          const response = await getUser(payload?.id);
           setUser(response);
           setBio(response.bio);
           setIsLoading(false);
@@ -361,7 +361,7 @@ const Profile: NextPageWithLayout = () => {
         name: 'confirmPassword',
         type: showConfirmPassword ? 'text' : 'password',
         autoComplete: 'family-name',
-        placeholder: 'Enter your account',
+        placeholder: 'Enter your payload',
         helperText: emailError ? 'Please enter the same password' : '',
         error: emailError,
 

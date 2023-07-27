@@ -112,7 +112,7 @@ const Cluster: NextPageWithLayout = () => {
   const numberOfActiveSchedulers =
     Array.isArray(scheduler) && scheduler?.filter((item: any) => item?.state == 'active').length;
 
-  const numberOfActiveSeedPeers: any =
+  const numberOfActiveSeedPeers =
     Array.isArray(seedPeer) && seedPeer?.filter((item: any) => item?.state == 'active').length;
 
   const searchCluster = async () => {
@@ -304,9 +304,9 @@ const Cluster: NextPageWithLayout = () => {
         </Paper>
         <Grid item xs={12} className={styles.clusterListContainer} component="form" noValidate>
           {Array.isArray(allClusters) &&
-            allClusters.map((item: any, id) => (
+            allClusters.map((item) => (
               <Paper
-                key={id}
+                key={item.id}
                 variant="outlined"
                 sx={{
                   mr: '1rem',

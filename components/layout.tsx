@@ -175,7 +175,7 @@ export default function Layout({ children }: LayoutProps) {
               </Typography>
             </Box>
             <List component="nav" aria-label="main mailbox folders" sx={{ width: '100%' }}>
-              {role.map((item) => {
+              {role.map((item, id) => {
                 return item === root ? (
                   rootMenu.map((items) => (
                     <ListItemButton
@@ -197,13 +197,13 @@ export default function Layout({ children }: LayoutProps) {
                     </ListItemButton>
                   ))
                 ) : item === guest ? (
-                  guestMenu.map((item) => {
+                  guestMenu.map((items) => {
                     return (
                       <ListItemButton
-                        key={item.href}
-                        selected={router.asPath.split('/')[1] === item.label}
+                        key={items.href}
+                        selected={router.asPath.split('/')[1] === items.label}
                         component={Link}
-                        href={item.href}
+                        href={items.href}
                         sx={{
                           '&.Mui-selected': { backgroundColor: '#DFFF55' },
                           '&.Mui-selected:hover': { backgroundColor: '#DDFF55', color: '#121726' },
@@ -211,65 +211,17 @@ export default function Layout({ children }: LayoutProps) {
                           mb: '0.4rem',
                         }}
                       >
-                        {item.icon}
+                        {items.icon}
                         <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
-                          {item.text}
+                          {items.text}
                         </Typography>
                       </ListItemButton>
                     );
                   })
                 ) : (
-                  <></>
+                  <Box key={id}></Box>
                 );
               })}
-
-              {/* {role === root ? (
-                rootMenu.map((item) => {
-                  return (
-                    <ListItemButton
-                      key={item.href}
-                      selected={router.asPath.split('/')[1] === item.label}
-                      component={Link}
-                      href={item.href}
-                      sx={{
-                        '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                        '&.Mui-selected:hover': { backgroundColor: '#DDFF55', color: '#121726' },
-                        height: '2rem',
-                        mb: '0.4rem',
-                      }}
-                    >
-                      {item.icon}
-                      <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
-                        {item.text}
-                      </Typography>
-                    </ListItemButton>
-                  );
-                })
-              ) : role === guest ? (
-                guestMenu.map((item) => {
-                  return (
-                    <ListItemButton
-                      key={item.href}
-                      selected={router.asPath.split('/')[1] === item.label}
-                      component={Link}
-                      href={item.href}
-                      sx={{
-                        '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                        '&.Mui-selected:hover': { backgroundColor: '#DDFF55', color: '#121726' },
-                        height: '2rem',
-                        mb: '0.4rem',
-                      }}
-                    >
-                      {item.icon}
-                      <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
-                        {item.text}
-                      </Typography>
-                    </ListItemButton>
-                  );
-                })
-              ) : (
-                <></>
-              )} */}
             </List>
           </Grid>
           <Grid sx={{ mb: '4rem' }}>

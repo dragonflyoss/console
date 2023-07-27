@@ -116,15 +116,15 @@ const Cluster: NextPageWithLayout = () => {
         setIsLoading(true);
 
         if (typeof query.slug === 'string') {
-          const [cluster, scheduler, seedPeer] = await Promise.all([
+          const [cluster, schedulers, seedPeers] = await Promise.all([
             getCluster(query.slug),
             getSchedulers({ scheduler_cluster_id: query.slug }),
             getSeedPeers({ seed_peer_cluster_id: query.slug }),
           ]);
 
           setCluster(cluster);
-          setSchedlerList(scheduler);
-          setSeedPeerList(seedPeer);
+          setSchedlerList(schedulers);
+          setSeedPeerList(seedPeers);
           setIsLoading(false);
         }
       } catch (error) {

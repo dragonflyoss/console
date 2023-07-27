@@ -60,7 +60,7 @@ const Cluster: NextPageWithLayout = () => {
   const [cluster, setCluster] = useState([{}]);
   const [scheduler, setScheduler] = useState([{}]);
   const [seedPeer, setSeedPeer] = useState([{}]);
-  const [allClusters, setClusters] = useState([
+  const [allClusters, setAllClusters] = useState([
     {
       id: 0,
       name: '',
@@ -93,7 +93,7 @@ const Cluster: NextPageWithLayout = () => {
         setSeedPeer(seedPeer);
 
         setTotalPages(allClusters.total_page || 1);
-        setClusters(allClusters.data);
+        setAllClusters(allClusters.data);
         setIsLoading(false);
         setClusterIsLoading(false);
       } catch (error) {
@@ -119,7 +119,7 @@ const Cluster: NextPageWithLayout = () => {
     try {
       setClusterIsLoading(true);
       const response = await getClusters({ page: 1, per_page: pageSize, name: searchText });
-      setClusters(response.data);
+      setAllClusters(response.data);
       setClusterIsLoading(false);
     } catch (error) {
       if (error instanceof Error) {

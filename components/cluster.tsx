@@ -7,7 +7,34 @@ import styles from './cluster.module.css';
 import HelpIcon from '@mui/icons-material/Help';
 import { useState } from 'react';
 
-const Clusters = (props: { cluster: any; isLoading: boolean }) => {
+interface cluster {
+  id: number;
+  name: string;
+  bio: string;
+  scopes: {
+    idc: string;
+    location: string;
+    cidrs: Array<string>;
+  };
+  scheduler_cluster_id: number;
+  seed_peer_cluster_id: number;
+  scheduler_cluster_config: {
+    candidate_parent_limit: number;
+    filter_parent_limit: number;
+  };
+  seed_peer_cluster_config: {
+    load_limit: number;
+  };
+  peer_cluster_config: {
+    load_limit: number;
+    concurrent_piece_count: number;
+  };
+  created_at: string;
+  updated_at: string;
+  is_default: boolean;
+}
+
+const Clusters = (props: { cluster: cluster; isLoading: boolean }) => {
   const { cluster, isLoading } = props;
   const [openCIDRs, setOpenCIDRs] = useState(false);
 

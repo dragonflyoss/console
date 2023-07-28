@@ -115,11 +115,11 @@ const Cluster: NextPageWithLayout = () => {
       try {
         setIsLoading(true);
 
-        if (typeof query.slug === 'string') {
+        if (typeof query.clusterID === 'string') {
           const [cluster, schedulers, seedPeers] = await Promise.all([
-            getCluster(query.slug),
-            getSchedulers({ scheduler_cluster_id: query.slug }),
-            getSeedPeers({ seed_peer_cluster_id: query.slug }),
+            getCluster(query.clusterID),
+            getSchedulers({ scheduler_cluster_id: query.clusterID }),
+            getSeedPeers({ seed_peer_cluster_id: query.clusterID }),
           ]);
 
           setCluster(cluster);
@@ -135,7 +135,7 @@ const Cluster: NextPageWithLayout = () => {
         }
       }
     })();
-  }, [query.slug]);
+  }, [query.clusterID]);
 
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
@@ -158,8 +158,8 @@ const Cluster: NextPageWithLayout = () => {
     setDeleteLoadingButton(true);
 
     try {
-      if (typeof query.slug === 'string') {
-        deleteCluster(query.slug);
+      if (typeof query.clusterID === 'string') {
+        deleteCluster(query.clusterID);
         setDeleteLoadingButton(false);
         setSuccessMessage(true);
         setOpenDeletCluster(false);
@@ -189,8 +189,8 @@ const Cluster: NextPageWithLayout = () => {
       setOpenDeletScheduler(false);
       setDeleteLoadingButton(false);
 
-      if (typeof query.slug === 'string') {
-        const response = await getSchedulers({ scheduler_cluster_id: query.slug });
+      if (typeof query.clusterID === 'string') {
+        const response = await getSchedulers({ scheduler_cluster_id: query.clusterID });
         setSchedlerList(response);
       }
     } catch (error) {
@@ -217,8 +217,8 @@ const Cluster: NextPageWithLayout = () => {
       setOpenDeletSeedPeers(false);
       setDeleteLoadingButton(false);
 
-      if (typeof query.slug === 'string') {
-        const response = await getSeedPeers({ seed_peer_cluster_id: query.slug });
+      if (typeof query.clusterID === 'string') {
+        const response = await getSeedPeers({ seed_peer_cluster_id: query.clusterID });
         setSeedPeerList(response);
       }
     } catch (error) {
@@ -266,7 +266,7 @@ const Cluster: NextPageWithLayout = () => {
           <Box>
             <Button
               onClick={() => {
-                router.push(`/clusters/${query.slug}/edit`);
+                router.push(`/clusters/${query.clusterID}/edit`);
               }}
               size="small"
               variant="contained"

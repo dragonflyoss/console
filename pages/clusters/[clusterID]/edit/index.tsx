@@ -78,8 +78,8 @@ const CreateCluster = () => {
   useEffect(() => {
     (async function () {
       try {
-        if (typeof router.query.slug === 'string') {
-          const response = await getCluster(router.query.slug);
+        if (typeof router.query.clusterID === 'string') {
+          const response = await getCluster(router.query.clusterID);
           setClusters(response);
         }
       } catch (error) {
@@ -89,7 +89,7 @@ const CreateCluster = () => {
         }
       }
     })();
-  }, [router.query.slug]);
+  }, [router.query.clusterID]);
 
   const informationForm = [
     {
@@ -492,12 +492,12 @@ const CreateCluster = () => {
       },
     };
 
-    if (canSubmit && typeof router.query.slug === 'string') {
+    if (canSubmit && typeof router.query.clusterID === 'string') {
       try {
-        await updateCluster(router.query.slug, { ...formdata });
+        await updateCluster(router.query.clusterID, { ...formdata });
         setEditLoadingButton(false);
         setSuccessMessage(true);
-        router.push(`/clusters/${router.query.slug}`);
+        router.push(`/clusters/${router.query.clusterID}`);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);

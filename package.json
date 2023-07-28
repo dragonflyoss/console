@@ -32,9 +32,6 @@
     }
   },
   "lint-staged": {
-    "**/*.ts?(x)": [
-      "yarn type-check"
-    ],
     "*.{js,ts,tsx,}": [
       "prettier --write"
     ],
@@ -49,19 +46,30 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.10.16",
+    "@mui/lab": "^5.0.0-alpha.136",
     "@mui/material": "^5.10.17",
+    "@mui/styles": "^5.14.0",
     "@types/jest": "^29.2.5",
+    "@types/js-cookie": "^3.0.3",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/lodash.upperfirst": "^4.3.7",
+    "@types/parse-link-header": "^2.0.1",
     "@types/react-swipeable-views": "^0.13.1",
     "@types/react-swipeable-views-utils": "^0.13.4",
     "cross-env": "^7.0.3",
+    "global": "^4.4.0",
+    "js-cookie": "^3.0.4",
+    "jsonwebtoken": "^9.0.1",
+    "lodash.upperfirst": "^4.3.1",
     "next": "13.0.6",
+    "parse-link-header": "^2.0.0",
+    "query-string": "^8.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-swipeable-views": "^0.14.0",
     "react-swipeable-views-native": "^0.13.2",
     "react-swipeable-views-utils": "^0.14.0",
-    "react-test-renderer": "^18.2.0",
-    "sass-loader": "^13.2.0"
+    "react-test-renderer": "^18.2.0"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.1.0",

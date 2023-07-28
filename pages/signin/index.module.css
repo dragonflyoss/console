@@ -16,13 +16,16 @@
   margin-bottom: 1rem;
 }
 
-.borderLeft {
-  display: inline-block;
-  width: 9rem;
-  border: 0.07rem solid rgb(123, 123, 123);
+.separationLineContainer {
+  margin-top: 1.2rem;
+  margin-bottom: 0.8rem;
+  height: 2rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
-.bordeRight {
+.separationLine {
   display: inline-block;
   width: 9rem;
   border: 0.07rem solid rgb(123, 123, 123);

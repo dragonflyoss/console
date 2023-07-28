@@ -1,4 +1,4 @@
-import { Box, Grid, MobileStepper, useTheme } from '@mui/material';
+import { Box, Grid, MobileStepper, ThemeProvider, createTheme } from '@mui/material';
 import { useState } from 'react';
 import { autoPlay } from 'react-swipeable-views-utils';
 import SwipeableViews from 'react-swipeable-views';
@@ -22,9 +22,19 @@ const rotationChart = [
   },
 ];
 
-export default function Rotation() {
-  const theme = useTheme();
+const theme = createTheme({
+  components: {
+    MuiMobileStepper: {
+      styleOverrides: {
+        dotActive: {
+          backgroundColor: 'var(--description-color)',
+        },
+      },
+    },
+  },
+});
 
+export default function Rotation() {
   const [imageList] = useState(rotationChart);
   const [imageIndex, setImageIndex] = useState(0);
 
@@ -33,7 +43,7 @@ export default function Rotation() {
   };
 
   return (
-    <div>
+    <ThemeProvider theme={theme}>
       <Grid className={styles.container}>
         <AutoPlaySwipeableViews
           axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -70,6 +80,6 @@ export default function Rotation() {
           />
         }
       </Grid>
-    </div>
+    </ThemeProvider>
   );
 }

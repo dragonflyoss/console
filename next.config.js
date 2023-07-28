@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
+/** @type {import('tailwindcss').Config} */
 
 module.exports = {
   async redirects() {
@@ -10,6 +8,14 @@ module.exports = {
         source: '/',
         destination: '/signin',
         permanent: true,
+      },
+    ];
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/fonts/:path*',
+        destination: '/static/fonts/:path*',
       },
     ];
   },

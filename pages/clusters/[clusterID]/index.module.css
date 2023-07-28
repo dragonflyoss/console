@@ -1,0 +1,48 @@
+.container {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.updateButton {
+  background-color: var(--button-color);
+  border-radius: 0;
+  margin-right: 2rem;
+}
+
+.updateButton:hover {
+  background-color: var(--button-color);
+}
+
+.deleteButton {
+  background-color: var(--button-color);
+  border-radius: 0;
+}
+
+.deleteButton:hover {
+  background-color: var(--button-color);
+}
+
+.updateClusterIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-right: 0.4rem;
+}
+
+.deleteClusterIcon {
+  width: 6rem;
+  height: 6rem;
+}
+
+.ipContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.ipIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-right: 0.4rem;
+}

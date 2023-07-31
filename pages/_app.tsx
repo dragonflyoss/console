@@ -1,7 +1,6 @@
-import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import '../styles/global.css';
-import React, { ReactElement, ReactNode } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
@@ -10,20 +9,13 @@ const theme = createTheme({
   },
 });
 
-export type NextPageWithLayout = NextPage & {
-  getLayout?: (page: ReactElement) => ReactNode;
-};
+export default function App({ Component, pageProps }: AppProps) {
+  const [render, setRender] = useState(false);
+  useEffect(() => setRender(true), []);
 
-type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
-};
-
-export default function App({ Component, pageProps }: AppPropsWithLayout) {
-  const getLayout = Component.getLayout ?? ((page) => page);
-
-  return getLayout(
+  return render ? (
     <ThemeProvider theme={theme}>
       <Component {...pageProps} />
-    </ThemeProvider>,
-  );
+    </ThemeProvider>
+  ) : null;
 }

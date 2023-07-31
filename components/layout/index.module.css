@@ -1,0 +1,40 @@
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.navigationBarContainer {
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  background-color: rgba(254, 252, 251, 86%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  margin-left: 0.4rem;
+  margin-top: 2rem;
+}
+
+.logo {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: 0.8rem;
+}
+
+.menuIcon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.avatar {
+  width: 2.6rem !important;
+  height: 2.6rem !important;
+  margin-left: 0.6rem;
+  margin-right: 0.6rem;
+  background: var(--button-color) !important;
+}

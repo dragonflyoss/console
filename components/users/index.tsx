@@ -322,6 +322,7 @@ export default function Users() {
                   <TableCell align="center">
                     {item?.name == 'root' ? (
                       <IconButton
+                        className={`${classes.tableCell} ${selectedRow === item ? classes.selectedButton : ''}`}
                         sx={{
                           '&.MuiButton-root': {
                             backgroundColor: 'var(--button-color)',

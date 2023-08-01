@@ -12,6 +12,7 @@ import {
   DialogActions,
   DialogContent,
   Grid,
+  IconButton,
   Link as RouterLink,
   Skeleton,
   Snackbar,
@@ -518,12 +519,7 @@ export default function ShowCluster() {
                           )}
                         </TableCell>
                         <TableCell align="center">
-                          <Button
-                            onClick={() => {
-                              openHandleScheduler(item);
-                            }}
-                            size="small"
-                            variant="contained"
+                          <IconButton
                             sx={{
                               '&.MuiButton-root': {
                                 backgroundColor: 'var(--button-color)',
@@ -531,9 +527,12 @@ export default function ShowCluster() {
                                 color: '#fff',
                               },
                             }}
+                            onClick={() => {
+                              openHandleScheduler(item);
+                            }}
                           >
-                            Delete
-                          </Button>
+                            <DeleteIcon fontSize="large" sx={{ color: 'var(--button-color)' }} />
+                          </IconButton>
                         </TableCell>
                       </TableRow>
                     );
@@ -742,12 +741,7 @@ export default function ShowCluster() {
                           )}
                         </TableCell>
                         <TableCell align="center">
-                          <Button
-                            onClick={() => {
-                              openHandleSeedPeers(item);
-                            }}
-                            size="small"
-                            variant="contained"
+                          <IconButton
                             sx={{
                               '&.MuiButton-root': {
                                 backgroundColor: 'var(--button-color)',
@@ -755,9 +749,12 @@ export default function ShowCluster() {
                                 color: '#fff',
                               },
                             }}
+                            onClick={() => {
+                              openHandleSeedPeers(item);
+                            }}
                           >
-                            Delete
-                          </Button>
+                            <DeleteIcon fontSize="large" sx={{ color: 'var(--button-color)' }} />
+                          </IconButton>
                         </TableCell>
                       </TableRow>
                     );

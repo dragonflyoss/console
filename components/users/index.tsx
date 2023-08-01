@@ -22,7 +22,6 @@ import {
   Snackbar,
   Tooltip,
   Typography,
-  Button,
   Paper,
   Table,
   TableHead,
@@ -322,32 +321,23 @@ export default function Users() {
                   </TableCell>
                   <TableCell align="center">
                     {item?.name == 'root' ? (
-                      <Button
-                        onClick={() => {
-                          handleChange(item);
-                        }}
-                        size="small"
-                        variant="contained"
-                        className={`${classes.tableCell} ${selectedRow === item ? classes.selectedButton : ''}`}
+                      <IconButton
                         sx={{
                           '&.MuiButton-root': {
                             backgroundColor: 'var(--button-color)',
                             borderRadius: 0,
                             color: '#fff',
                           },
-                          mr: '0.6rem',
+                        }}
+                        onClick={() => {
+                          handleChange(item);
                         }}
                       >
-                        Detail
-                      </Button>
+                        <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/detail.svg" />
+                      </IconButton>
                     ) : (
                       <>
-                        <Button
-                          onClick={() => {
-                            handleChange(item);
-                          }}
-                          size="small"
-                          variant="contained"
+                        <IconButton
                           className={`${classes.tableCell} ${selectedRow === item ? classes.selectedButton : ''}`}
                           sx={{
                             '&.MuiButton-root': {
@@ -355,17 +345,14 @@ export default function Users() {
                               borderRadius: 0,
                               color: '#fff',
                             },
-                            mr: '0.6rem',
                           }}
-                        >
-                          Detail
-                        </Button>
-                        <Button
                           onClick={() => {
                             openSwitchUser(item);
                           }}
-                          size="small"
-                          variant="contained"
+                        >
+                          <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/user-edit.svg" />
+                        </IconButton>
+                        <IconButton
                           className={`${classes.tableCell} ${selectedRow === item ? classes.selectedButton : ''}`}
                           sx={{
                             '&.MuiButton-root': {
@@ -374,9 +361,12 @@ export default function Users() {
                               color: '#fff',
                             },
                           }}
+                          onClick={() => {
+                            handleChange(item);
+                          }}
                         >
-                          Update
-                        </Button>
+                          <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/detail.svg" />
+                        </IconButton>
                       </>
                     )}
                   </TableCell>

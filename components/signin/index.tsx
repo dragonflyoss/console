@@ -181,7 +181,7 @@ export default function SignIn() {
               <Typography variant="h4" gutterBottom>
                 Welcome back!
               </Typography>
-              <Typography variant="subtitle1" gutterBottom fontFamily="mabry-light,sans-serif">
+              <Typography variant="body1" gutterBottom fontFamily="mabry-light,sans-serif">
                 Through which you can easily configure clusters and view cluster information.
               </Typography>
             </Box>

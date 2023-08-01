@@ -1,0 +1,135 @@
+.clusterTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clusterIconContainer {
+  display: flex;
+  position: relative;
+}
+
+.clusterSmallCircleIcon {
+  width: 0.4rem;
+  height: 0.4rem;
+}
+
+.button {
+  background-color: var(--button-color);
+  border-radius: 0;
+}
+
+.clusterBigCircleIcon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.clusterIcon {
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  left: 0.8rem;
+  top: 0.3rem;
+}
+
+.clusterHeaderContainer {
+  display: flex;
+  margin-top: 2rem;
+}
+
+.clusterContainer {
+  width: 33%;
+  margin-right: 1rem;
+}
+
+.clusterIconTitle {
+  margin-left: 1.4rem !important;
+  margin-top: 0.2rem !important;
+}
+
+.seedPeerContainer {
+  width: 33%;
+}
+
+.seedPseerIconTitle {
+  margin-left: 1.4rem !important;
+  margin-top: 0.2rem !important;
+}
+
+.clusterContentContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 1.6rem;
+}
+
+.clusterBottomContainer {
+  display: flex;
+  align-items: center;
+  padding-top: 0.4rem;
+  margin-left: -0.3rem;
+}
+
+.clusterBottomIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.clusterBottomContentContainer {
+  display: flex;
+  align-items: center;
+}
+
+.clusterBottomContent {
+  margin-left: 0.8rem;
+}
+
+.clusterBottomContentMsg {
+  font-size: 1rem;
+  margin-left: 0.4rem;
+  color: #b1b1b1;
+}
+
+.searchContainer {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 0.2rem 0.4rem;
+  width: 23rem;
+}
+
+.clusterListContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.clusterListContent {
+  padding: 1.6rem;
+}
+
+.idText {
+  color: #b1b1b1;
+}
+
+.locationContainer {
+  width: 50%;
+  padding-right: 0.2rem;
+}
+
+.locationText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.creatTimeContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.buttonContent {
+  padding: 0;
+}

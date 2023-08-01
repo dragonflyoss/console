@@ -142,7 +142,7 @@ export default function Layout(props: any) {
       ) : (
         <Box className={styles.container}>
           <CssBaseline />
-          <Box className={styles.navigationBarContainer} width="14rem">
+          <Box className={styles.navigationBarContainer}>
             <Grid sx={{ pl: '1rem', pr: '1rem' }}>
               <Box className={styles.title}>
                 <picture>
@@ -152,7 +152,7 @@ export default function Layout(props: any) {
                   Dragonfly
                 </Typography>
               </Box>
-              <List component="nav" aria-label="main mailbox folders" sx={{ width: '100%' }}>
+              <List component="nav" aria-label="main mailbox folders">
                 {role.map((item, id) => {
                   return item === root ? (
                     rootMenu.map((items) => (

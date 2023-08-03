@@ -250,7 +250,7 @@ export default function Clusters() {
                   <Box component="img" className={styles.clusterIcon} src="/icons/cluster/seed-peer.svg" />
                 </Box>
                 <Typography variant="h6" className={styles.seedPseerIconTitle}>
-                  Seed peer
+                  Seed Peer
                 </Typography>
               </Box>
               <Box className={styles.clusterContentContainer}>

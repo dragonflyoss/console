@@ -311,7 +311,7 @@ export default function ShowCluster() {
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Box component="img" className={styles.deleteClusterIcon} src="/icons/cluster/delete.svg" />
               <Typography fontFamily="mabry-bold" pt="1rem">
-                Are you sure you want to delet this Cluster?
+                Are you sure you want to delet this cluster?
               </Typography>
             </Box>
           </DialogContent>
@@ -554,7 +554,7 @@ export default function ShowCluster() {
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Box component="img" className={styles.deleteClusterIcon} src="/icons/cluster/delete.svg" />
               <Typography fontFamily="mabry-bold" pt="1rem">
-                Are you sure you want to delet this Scheduler Cluster?
+                Are you sure you want to delet this scheduler?
               </Typography>
             </Box>
           </DialogContent>
@@ -779,7 +779,7 @@ export default function ShowCluster() {
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Box component="img" className={styles.deleteClusterIcon} src="/icons/cluster/delete.svg" />
               <Typography fontFamily="mabry-bold" pt="1rem">
-                Are you sure you want to delet this Seed Peer Cluster?
+                Are you sure you want to delet this seed peer?
               </Typography>
             </Box>
           </DialogContent>

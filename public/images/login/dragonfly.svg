@@ -60,18 +60,13 @@
         <text id="Incubating" font-family="MabryPro-Light, Mabry Pro" font-size="12" font-weight="300" line-spacing="19" letter-spacing="-0.2" fill="#5A5A5A">
             <tspan x="358" y="329">Incubating</tspan>
         </text>
-        <text id="From-7-companies" font-family="MabryPro-Light, Mabry Pro" font-size="12" font-weight="300" letter-spacing="-0.2" fill="#5A5A5A">
-            <tspan x="231" y="211">From 7 companies</tspan>
+        <text id="From-6-companies" font-family="MabryPro-Light, Mabry Pro" font-size="12" font-weight="300" letter-spacing="-0.2" fill="#5A5A5A">
+            <tspan x="240" y="206">From 6 companies</tspan>
         </text>
-        <text id="Efficient" font-family="MabryPro-Light, Mabry Pro" font-size="12" font-weight="300" line-spacing="16" fill="#5A5A5A">
-            <tspan x="253" y="381">Efficient</tspan>
-            <tspan x="295.84375" y="381" font-family="ClarityCity-SemiBold, Clarity City" font-weight="500"></tspan>
-        </text>
-        <text id="Stable-Secure" font-family="MabryPro-Light, Mabry Pro" font-size="12" font-weight="300" line-spacing="16" fill="#5A5A5A">
-            <tspan x="253" y="397">Stable</tspan>
-            <tspan x="295.085453" y="397.597656" font-family="PingFangSC-Semibold, PingFang SC" font-weight="500">   </tspan>
-            <tspan x="298.767297" y="397">Secure</tspan>
-            <tspan x="343.394641" y="397.597656" font-family="ClarityCity-SemiBold, Clarity City" font-weight="500" letter-spacing="0.3"> </tspan>
+        <text id="Efficient,stable,sec" font-family="MabryPro-Light, Mabry Pro" font-size="12" font-weight="300" line-spacing="16" fill="#5A5A5A">
+            <tspan x="253" y="373">Efficient,stable,</tspan>
+            <tspan x="253" y="389">secure file </tspan>
+            <tspan x="253" y="405">distribution</tspan>
         </text>
         <use id="矩形" stroke="#938B8B" mask="url(#mask-4)" stroke-width="2" stroke-dasharray="9" xlink:href="#path-3"></use>
         <line x1="243.5" y1="184.329215" x2="329.5" y2="184.5" id="路径-6" stroke="#979797"></line>

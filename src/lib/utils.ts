@@ -19,5 +19,6 @@ export const getJwtPayload = () => {
 };
 
 export const setPageTitle = (title: string) => {
-  document.title = `Console ${title}`;
+  const pageTitle = title.replace(/\//g, ' ');
+  document.title = `Console ${pageTitle}`;
 };

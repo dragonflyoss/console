@@ -157,7 +157,7 @@ export default function ShowCluster() {
 
     try {
       if (typeof params.id === 'string') {
-        deleteCluster(params.id);
+        await deleteCluster(params.id);
         setDeleteLoadingButton(false);
         setSuccessMessage(true);
         setOpenDeletCluster(false);
@@ -531,7 +531,10 @@ export default function ShowCluster() {
                               openHandleScheduler(item);
                             }}
                           >
-                            <DeleteIcon fontSize="large" sx={{ color: 'var(--button-color)' }} />
+                            <DeleteIcon
+                              fontSize="large"
+                              sx={{ color: 'var(--button-color)', width: '2rem', height: '2rem' }}
+                            />
                           </IconButton>
                         </TableCell>
                       </TableRow>
@@ -753,7 +756,10 @@ export default function ShowCluster() {
                               openHandleSeedPeers(item);
                             }}
                           >
-                            <DeleteIcon fontSize="large" sx={{ color: 'var(--button-color)' }} />
+                            <DeleteIcon
+                              fontSize="large"
+                              sx={{ color: 'var(--button-color)', width: '2rem', height: '2rem' }}
+                            />
                           </IconButton>
                         </TableCell>
                       </TableRow>

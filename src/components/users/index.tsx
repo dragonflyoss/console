@@ -92,6 +92,7 @@ export default function Users() {
     updated_at: '',
   });
   const [role, setRole] = useState('');
+  const [detailRole, setDetailRole] = useState('');
   const classes = useStyles();
 
   useEffect(() => {
@@ -119,6 +120,9 @@ export default function Users() {
       setSelectedRow(row);
 
       const response = await getUser(row.id);
+      const roleResponse = await getUserRoles(row.id);
+
+      setDetailRole(roleResponse[0] || '');
       setUser(response);
       setDetailLoading(false);
     } catch (error) {
@@ -516,7 +520,7 @@ export default function Users() {
             <Divider />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/icons/user/ID.svg" />
+                <Box component="img" className={styles.detailIcon} src="/icons/user/id.svg" />
                 <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
                   ID
                 </Typography>
@@ -533,6 +537,34 @@ export default function Users() {
               </ListItemAvatar>
               <Typography variant="body2">
                 {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.name}
+              </Typography>
+            </ListItem>
+            <Divider />
+            <ListItem className={styles.detailContentWrap}>
+              <ListItemAvatar className={styles.detailContentLabelContainer}>
+                <Box component="img" className={styles.detailIcon} src="/icons/user/detail-role.svg" />
+                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
+                  Role
+                </Typography>
+              </ListItemAvatar>
+              <Typography variant="body2" component="div">
+                {DetailLoading ? (
+                  <Skeleton sx={{ width: '8rem' }} />
+                ) : (
+                  <Chip
+                    label={detailRole}
+                    size="small"
+                    variant="outlined"
+                    sx={{
+                      borderRadius: '0%',
+                      background: 'var(--button-color)',
+                      color: '#FFFFFF',
+                      mr: '0.4rem',
+                      borderColor: 'var(--button-color)',
+                      fontWeight: 'bold',
+                    }}
+                  />
+                )}
               </Typography>
             </ListItem>
             <Divider />

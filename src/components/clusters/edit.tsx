@@ -61,7 +61,7 @@ export default function EditCluster() {
     updated_at: '',
     is_default: false,
   });
-  const cidrsOptions: never[] = [];
+  const cidrsOptions = ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'];
   const navigate = useNavigate();
   const params = useParams();
 

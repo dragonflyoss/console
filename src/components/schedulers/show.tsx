@@ -36,14 +36,6 @@ export default function Schedulers() {
       name: 'port',
     },
     {
-      label: 'IDC',
-      name: 'idc',
-    },
-    {
-      label: 'Location',
-      name: 'location',
-    },
-    {
       label: 'State',
       name: 'state',
     },
@@ -113,6 +105,7 @@ export default function Schedulers() {
         >
           {`scheduler-cluster-${schedule.scheduler_cluster_id}`}
         </RouterLink>
+        <Typography color="text.primary">schedulers</Typography>
         <Typography color="text.primary" fontFamily="mabry-bold">
           {schedule?.host_name}
         </Typography>

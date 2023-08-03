@@ -37,7 +37,7 @@ export default function NewCluster() {
   const [cidrsError, setCIDRsError] = useState(false);
   const [cidrs, setCIDRs] = useState([]);
   const [editLoadingButton, setEditLoadingButton] = useState(false);
-  const cidrsOptions: never[] = [];
+  const cidrsOptions = ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'];
   const navigate = useNavigate();
 
   const informationForm = [

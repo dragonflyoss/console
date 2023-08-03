@@ -230,7 +230,9 @@ export default function SignIn() {
                   }}
                 >
                   <Grid>
-                    <Typography component="span">New to Dragnfly?</Typography>
+                    <Typography component="span" fontFamily="-moz-initial">
+                      New to Dragnfly?
+                    </Typography>
                     <RouterLink
                       underline="hover"
                       component={Link}

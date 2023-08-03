@@ -300,13 +300,13 @@ Install dependencies.
 npm install
 ```
 
-First you need `export NEXT_PUBLIC_DRAGONFLY_PUBLIC_API=your-mock-server-URL`, where your-mock-server-URL is your own mock server URL, start your server after the import is successful.
+First you need `export REACT_APP_API_URL=<your-mock-server-URL>`, where your-mock-server-URL is your own mock server URL, start your server after the import is successful.
 
 ```shell
-$ export NEXT_PUBLIC_DRAGONFLY_PUBLIC_API=<your-mock-server-URL>
-$ npm run dev
+$ export REACT_APP_API_URL=<your-mock-server-URL>
+$ npm start
 > console@1.0.0 dev
-> cross-env NODE_ENV='development' next dev -p 3000
+> cross-env NODE_ENV='development' 
 ready - started server on 0.0.0.0:3000, url: http://localhost:3000
 event - compiled client and server successfully in 2.8s (173 modules)
 ```

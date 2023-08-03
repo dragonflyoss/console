@@ -254,7 +254,7 @@ export default function Profile() {
       setError: setEmailError,
 
       validate: (value: string) => {
-        const reg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+        const reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
         return reg.test(value);
       },
     },

@@ -1,0 +1,37 @@
+.page {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 7rem;
+}
+
+.logo {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+}
+
+.separationLineContainer {
+  margin-top: 1.2rem;
+  margin-bottom: 0.8rem;
+  height: 2rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.separationLine {
+  display: inline-block;
+  width: 9rem;
+  border: 0.07rem solid rgb(123, 123, 123);
+}
+
+.text {
+  margin: 0, 15;
+  vertical-align: middle;
+}

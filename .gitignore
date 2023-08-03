@@ -6,12 +6,19 @@
 /yarn-error.log
 /yarn.lock
 /package-lock.json
+/.pnp
+.pnp.js
 
 # production
 /dist
+/build
 
 # misc
 .DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # umi
 /src/.umi
@@ -22,3 +29,20 @@
 # vscode
 .history/
 .vscode/
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# testing
+/coverage
+/cypress/videos
+
+# mock
+/mock

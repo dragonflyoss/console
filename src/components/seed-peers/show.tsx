@@ -53,16 +53,6 @@ export default function SeedPeer() {
       label: 'State',
       name: 'state',
     },
-
-    {
-      label: 'IDC',
-      name: 'idc',
-    },
-
-    {
-      label: 'Location',
-      name: 'location',
-    },
     {
       label: 'Created At',
       name: 'created_at',
@@ -125,6 +115,7 @@ export default function SeedPeer() {
         >
           {`seed-peer-cluster-${seedPeer.seed_peer_cluster_id}`}
         </RouterLink>
+        <Typography color="text.primary">seed-peers</Typography>
         <Typography color="text.primary" fontFamily="mabry-bold">
           {seedPeer?.host_name}
         </Typography>

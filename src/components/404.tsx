@@ -12,7 +12,7 @@ export default function NotFound() {
       }}
     >
       <Box sx={{ width: '40rem' }}>
-        <Box component="img" src="/404.svg" sx={{ width: '20rem' }} />
+        <Box component="img" src="/images/404.svg" sx={{ width: '20rem' }} />
         <Typography variant="h6" gutterBottom fontFamily="mabry-light" mt="3rem">
           We could not find what you were looking for.
         </Typography>

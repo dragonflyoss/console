@@ -11,7 +11,7 @@ export async function get(url: URL) {
     });
 
     if (response.status === 200) {
-      return await response;
+      return response;
     } else {
       throw new Error(response.statusText);
     }
@@ -34,7 +34,7 @@ export async function post(url: URL, request = {}) {
     });
 
     if (response.status === 200) {
-      return await response;
+      return response;
     } else {
       throw new Error(response.statusText);
     }
@@ -57,7 +57,7 @@ export async function patch(url: URL, request = {}) {
     });
 
     if (response.status === 200) {
-      return await response;
+      return response;
     } else {
       throw new Error(response.statusText);
     }
@@ -79,7 +79,7 @@ export async function destroy(url: URL) {
     });
 
     if (response.status === 200) {
-      return await response;
+      return response;
     } else {
       throw new Error(response.statusText);
     }
@@ -101,7 +101,7 @@ export async function put(url: URL) {
     });
 
     if (response.status === 200) {
-      return await response;
+      return response;
     } else {
       throw new Error(response.statusText);
     }
@@ -195,7 +195,7 @@ export async function getClusters(params?: getClustersParams): Promise<getCluste
   const totalPage = Number(links?.last?.page || 1);
   const responses = { data: data, total_page: totalPage };
 
-  return await responses;
+  return responses;
 }
 
 interface getClusterResponse {

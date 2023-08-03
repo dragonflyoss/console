@@ -1,7 +1,7 @@
 import parseLinkHeader from 'parse-link-header';
 import queryString from 'query-string';
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL || window.location.href;
 
 export async function get(url: URL) {
   try {

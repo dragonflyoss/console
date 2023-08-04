@@ -403,16 +403,6 @@ export default function ShowCluster() {
               </TableCell>
               <TableCell align="center">
                 <Typography variant="subtitle1" fontFamily="mabry-bold">
-                  IDC
-                </Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="mabry-bold">
-                  Location
-                </Typography>
-              </TableCell>
-              <TableCell align="center">
-                <Typography variant="subtitle1" fontFamily="mabry-bold">
                   State
                 </Typography>
               </TableCell>
@@ -471,8 +461,6 @@ export default function ShowCluster() {
                           )}
                         </TableCell>
                         <TableCell align="center">{isLoading ? <Skeleton /> : item?.port}</TableCell>
-                        <TableCell align="center">{isLoading ? <Skeleton /> : item?.idc || '-'}</TableCell>
-                        <TableCell align="center">{isLoading ? <Skeleton /> : item?.location || '-'}</TableCell>
                         <TableCell align="center">
                           {isLoading ? (
                             <Skeleton />

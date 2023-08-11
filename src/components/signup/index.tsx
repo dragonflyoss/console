@@ -33,7 +33,7 @@ export default function SignUp() {
   const formList = [
     {
       formProps: {
-        name: 'account',
+        name: 'username',
         label: 'Account',
         autoComplete: 'family-name',
         id: 'account',
@@ -187,7 +187,7 @@ export default function SignUp() {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
 
-    const accountElement = event.currentTarget.elements.account;
+    const accountElement = event.currentTarget.elements.username;
     const emailElement = event.currentTarget.elements.email;
     const passwordElement = event.currentTarget.elements.password;
 

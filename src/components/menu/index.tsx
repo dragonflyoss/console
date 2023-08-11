@@ -213,7 +213,7 @@ export default function Layout(props: any) {
                 })}
               </List>
             </Grid>
-            <Grid sx={{ mb: '4rem' }}>
+            <Grid sx={{ mb: '4rem', ml: '1rem', mr: '1rem' }}>
               <Box
                 sx={{
                   display: 'flex',
@@ -221,16 +221,27 @@ export default function Layout(props: any) {
                   justifyContent: 'space-between',
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Avatar className={styles.avatar} src={user?.avatar} />
-                  <Box sx={{ width: '7rem' }}>
-                    <Typography fontFamily="mabry-bold">{user?.name || '-'}</Typography>
+                <Box sx={{ display: 'flex', height: '100%' }}>
+                  <Avatar
+                    sx={{
+                      width: '2.8rem',
+                      height: '2.8rem',
+                      mr: '0.6rem',
+                      backgroundColor: 'var(--button-color)',
+                    }}
+                    src={user?.avatar}
+                  />
+                  <Box
+                    sx={{ width: '8rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+                  >
+                    <Typography component="div" fontFamily="mabry-bold">
+                      {user?.name || '-'}
+                    </Typography>
                     <Tooltip title={user?.email || '-'} placement="top">
                       <Typography
                         component="div"
                         variant="caption"
                         sx={{
-                          width: '7rem',
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -249,9 +260,9 @@ export default function Layout(props: any) {
                   aria-controls={open ? 'account-menu' : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
-                  sx={{ mr: '0.6rem', position: 'relative' }}
+                  sx={{ position: 'relative', padding: '0' }}
                 >
-                  <UnfoldMoreIcon />
+                  <Box component="img" sx={{ width: '1.2rem', height: '1.2rem' }} src="/icons/cluster/unfoldMore.svg" />
                 </IconButton>
               </Box>
               <Menu
@@ -261,12 +272,11 @@ export default function Layout(props: any) {
                 onClose={() => {
                   setAnchorEl(null);
                 }}
-                sx={{ position: 'absolute', top: '-5.5rem', left: '-4.8rem' }}
+                sx={{ position: 'absolute', top: '-6rem', left: '-5.5rem' }}
               >
                 <MenuItem
                   onClick={() => {
                     setAnchorEl(null);
-
                     navigate('/profile');
                   }}
                 >

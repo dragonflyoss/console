@@ -505,6 +505,8 @@ export default function EditCluster() {
           setEditLoadingButton(false);
         }
       }
+    } else {
+      setEditLoadingButton(false);
     }
   };
 

@@ -131,8 +131,14 @@ export default function SignIn() {
           name: accountElement.value,
           password: passwordElement.value,
         });
+
+        if (accountElement.value === 'root' && passwordElement.value === 'dragonfly') {
+          router('/clusters', { state: { isFirstLogin: true } });
+        } else {
+          router('/clusters');
+        }
+
         setPageLoding(true);
-        router('/clusters');
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);

@@ -20,7 +20,6 @@ import { ListItemButton, ListItemIcon } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Logout, PersonAdd } from '@mui/icons-material';
 import { getUserRoles, getUser, signOut } from '../../lib/api';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { getJwtPayload, setPageTitle } from '../../lib/utils';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 
@@ -46,6 +45,7 @@ export default function Layout(props: any) {
   const [pageLoding, setPageLoding] = useState(false);
   const [user, setUser] = useState({ name: '', email: '', avatar: '' });
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isFirstLogin, setIsFirstLogin] = useState(false);
   const open = Boolean(anchorEl);
   const location = useLocation();
   const navigate = useNavigate();
@@ -73,7 +73,11 @@ export default function Layout(props: any) {
       }
       setPageLoding(false);
     })();
-  }, [location.pathname, navigate]);
+
+    if (location.state?.isFirstLogin) {
+      setIsFirstLogin(true);
+    }
+  }, [location, navigate]);
 
   const rootMenu = [
     {
@@ -117,7 +121,7 @@ export default function Layout(props: any) {
     if (reason === 'clickaway') {
       return;
     }
-
+    setIsFirstLogin(false);
     setErrorMessage(false);
   };
 
@@ -132,6 +136,16 @@ export default function Layout(props: any) {
       >
         <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
       </Backdrop>
+      <Snackbar
+        open={isFirstLogin}
+        autoHideDuration={60000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+          Please change the password in time for the first login!
+        </Alert>
+      </Snackbar>
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
@@ -213,7 +227,7 @@ export default function Layout(props: any) {
                 })}
               </List>
             </Grid>
-            <Grid sx={{ mb: '4rem' }}>
+            <Grid sx={{ mb: '4rem', ml: '1rem', mr: '1rem' }}>
               <Box
                 sx={{
                   display: 'flex',
@@ -221,16 +235,27 @@ export default function Layout(props: any) {
                   justifyContent: 'space-between',
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Avatar className={styles.avatar} src={user?.avatar} />
-                  <Box sx={{ width: '7rem' }}>
-                    <Typography fontFamily="mabry-bold">{user?.name || '-'}</Typography>
+                <Box sx={{ display: 'flex', height: '100%' }}>
+                  <Avatar
+                    sx={{
+                      width: '2.8rem',
+                      height: '2.8rem',
+                      mr: '0.6rem',
+                      backgroundColor: 'var(--button-color)',
+                    }}
+                    src={user?.avatar}
+                  />
+                  <Box
+                    sx={{ width: '8rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+                  >
+                    <Typography component="div" fontFamily="mabry-bold">
+                      {user?.name || '-'}
+                    </Typography>
                     <Tooltip title={user?.email || '-'} placement="top">
                       <Typography
                         component="div"
                         variant="caption"
                         sx={{
-                          width: '7rem',
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -249,9 +274,9 @@ export default function Layout(props: any) {
                   aria-controls={open ? 'account-menu' : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
-                  sx={{ mr: '0.6rem', position: 'relative' }}
+                  sx={{ position: 'relative', padding: '0' }}
                 >
-                  <UnfoldMoreIcon />
+                  <Box component="img" sx={{ width: '1.2rem', height: '1.2rem' }} src="/icons/cluster/unfoldMore.svg" />
                 </IconButton>
               </Box>
               <Menu
@@ -261,12 +286,11 @@ export default function Layout(props: any) {
                 onClose={() => {
                   setAnchorEl(null);
                 }}
-                sx={{ position: 'absolute', top: '-5.5rem', left: '-4.8rem' }}
+                sx={{ position: 'absolute', top: '-6rem', left: '-5.5rem' }}
               >
                 <MenuItem
                   onClick={() => {
                     setAnchorEl(null);
-
                     navigate('/profile');
                   }}
                 >

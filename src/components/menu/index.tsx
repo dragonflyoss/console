@@ -11,7 +11,6 @@ import {
   Snackbar,
   Tooltip,
   Typography,
-  Link as RouterLink,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -78,7 +77,7 @@ export default function Layout(props: any) {
     if (location.state?.isFirstLogin) {
       setIsFirstLogin(true);
     }
-  }, [location.pathname, navigate]);
+  }, [location, navigate]);
 
   const rootMenu = [
     {
@@ -122,7 +121,7 @@ export default function Layout(props: any) {
     if (reason === 'clickaway') {
       return;
     }
-
+    setIsFirstLogin(false);
     setErrorMessage(false);
   };
 
@@ -145,18 +144,6 @@ export default function Layout(props: any) {
       >
         <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
           Please change the password in time for the first login!
-          <RouterLink
-            underline="hover"
-            component={Link}
-            color="error"
-            to={'/profile'}
-            onClick={() => {
-              setIsFirstLogin(false);
-            }}
-            sx={{ ml: '2rem' }}
-          >
-            Change Password
-          </RouterLink>
         </Alert>
       </Snackbar>
       <Snackbar

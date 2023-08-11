@@ -11,6 +11,7 @@ import {
   Snackbar,
   Tooltip,
   Typography,
+  Link as RouterLink,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -20,7 +21,6 @@ import { ListItemButton, ListItemIcon } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Logout, PersonAdd } from '@mui/icons-material';
 import { getUserRoles, getUser, signOut } from '../../lib/api';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { getJwtPayload, setPageTitle } from '../../lib/utils';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 
@@ -46,6 +46,7 @@ export default function Layout(props: any) {
   const [pageLoding, setPageLoding] = useState(false);
   const [user, setUser] = useState({ name: '', email: '', avatar: '' });
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isFirstLogin, setIsFirstLogin] = useState(false);
   const open = Boolean(anchorEl);
   const location = useLocation();
   const navigate = useNavigate();
@@ -73,6 +74,10 @@ export default function Layout(props: any) {
       }
       setPageLoding(false);
     })();
+
+    if (location.state?.isFirstLogin) {
+      setIsFirstLogin(true);
+    }
   }, [location.pathname, navigate]);
 
   const rootMenu = [
@@ -132,6 +137,28 @@ export default function Layout(props: any) {
       >
         <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
       </Backdrop>
+      <Snackbar
+        open={isFirstLogin}
+        autoHideDuration={60000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+          Please change the password in time for the first login!
+          <RouterLink
+            underline="hover"
+            component={Link}
+            color="error"
+            to={'/profile'}
+            onClick={() => {
+              setIsFirstLogin(false);
+            }}
+            sx={{ ml: '2rem' }}
+          >
+            Change Password
+          </RouterLink>
+        </Alert>
+      </Snackbar>
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}

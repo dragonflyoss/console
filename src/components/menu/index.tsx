@@ -3,9 +3,11 @@ import {
   Alert,
   Avatar,
   Backdrop,
+  Collapse,
   Divider,
   Grid,
   IconButton,
+  ListItemText,
   Menu,
   MenuItem,
   Snackbar,
@@ -17,8 +19,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import { ListItemButton, ListItemIcon } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { Logout, PersonAdd } from '@mui/icons-material';
+import { createContext, useEffect, useState } from 'react';
+import { ExpandLess, ExpandMore, Logout, PersonAdd, StarBorder } from '@mui/icons-material';
 import { getUserRoles, getUser, signOut } from '../../lib/api';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { getJwtPayload, setPageTitle } from '../../lib/utils';
@@ -37,6 +39,16 @@ const Main = styled('div')(({ theme }) => ({
   },
 }));
 
+interface MyContextType {
+  name: string;
+  id: number;
+}
+
+export const MyContext = createContext<MyContextType>({
+  name: '',
+  id: 0,
+});
+
 export default function Layout(props: any) {
   const [role, setRole] = useState(['']);
   const [root] = useState('root');
@@ -44,11 +56,13 @@ export default function Layout(props: any) {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [pageLoding, setPageLoding] = useState(false);
-  const [user, setUser] = useState({ name: '', email: '', avatar: '' });
+  const [user, setUser] = useState({ name: '', email: '', avatar: '', id: 0 });
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isFirstLogin, setIsFirstLogin] = useState(false);
   const open = Boolean(anchorEl);
   const location = useLocation();
   const navigate = useNavigate();
+  const [openAccessTokens, setOpenccessTokens] = useState(true);
 
   useEffect(() => {
     setPageLoding(true);
@@ -59,7 +73,6 @@ export default function Layout(props: any) {
       try {
         if (payload?.id) {
           const [user, userRoles] = await Promise.all([getUser(payload?.id), getUserRoles(payload?.id)]);
-
           setUser(user);
           setRole(userRoles);
         } else {
@@ -73,7 +86,11 @@ export default function Layout(props: any) {
       }
       setPageLoding(false);
     })();
-  }, [location.pathname, navigate]);
+
+    if (location.state?.isFirstLogin) {
+      setIsFirstLogin(true);
+    }
+  }, [location, navigate]);
 
   const rootMenu = [
     {
@@ -81,6 +98,17 @@ export default function Layout(props: any) {
       href: '/clusters',
       text: 'Cluster',
       icon: <Box component="img" className={styles.menuIcon} src="/icons/cluster/cluster.svg" />,
+    },
+    {
+      label: 'Developer',
+      href: '/tokens',
+      text: 'Developer',
+      icon: <Box component="img" className={styles.menuIcon} src="/icons/tokens/developer.svg" />,
+      menuProps: {
+        label: 'personal-access-tokens',
+        href: '/developer/personal-access-tokens',
+        text: 'Tokens',
+      },
     },
     {
       label: 'users',
@@ -97,10 +125,22 @@ export default function Layout(props: any) {
       text: 'Cluster',
       icon: <Box component="img" className={styles.menuIcon} src="/icons/cluster/cluster.svg" />,
     },
+    {
+      label: 'Developer',
+      href: '/tokens',
+      text: 'Developer',
+      icon: <Box component="img" className={styles.menuIcon} src="/icons/tokens/developer.svg" />,
+      menuProps: {
+        label: 'personal-access-tokens',
+        href: '/developer/personal-access-tokens',
+        text: 'Tokens',
+      },
+    },
   ];
 
   const handleLogout = async () => {
     setAnchorEl(null);
+
     try {
       await signOut();
       setPageLoding(true);
@@ -117,179 +157,311 @@ export default function Layout(props: any) {
     if (reason === 'clickaway') {
       return;
     }
-
+    setIsFirstLogin(false);
     setErrorMessage(false);
   };
 
   return (
-    <Box>
-      <Backdrop
-        open={pageLoding}
-        sx={{
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          backgroundColor: 'rgba(0,0,0,0.3)',
-        }}
-      >
-        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
-      </Backdrop>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
-      {location.pathname === '/signin' || location.pathname === '/signup' ? (
-        <main>{props.children}</main>
-      ) : (
-        <Box className={styles.container}>
-          <CssBaseline />
-          <Box className={styles.navigationBarContainer}>
-            <Grid sx={{ pl: '1rem', pr: '1rem' }}>
-              <Box className={styles.title}>
-                <picture>
-                  <Box component="img" className={styles.logo} src="/icons/cluster/logo.svg" />
-                </picture>
-                <Typography variant="h6" gutterBottom sx={{ fontFamily: 'mabry-bold' }}>
-                  Dragonfly
-                </Typography>
-              </Box>
-              <List component="nav" aria-label="main mailbox folders">
-                {role.map((item, id) => {
-                  return item === root ? (
-                    rootMenu.map((items) => (
-                      <ListItemButton
-                        key={items.href}
-                        selected={location.pathname.split('/')[1] === items.label}
-                        component={Link}
-                        to={items.href}
-                        sx={{
-                          '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                          '&.Mui-selected:hover': {
-                            backgroundColor: '#DDFF55',
-                            color: '#121726',
-                          },
-                          height: '2rem',
-                          mb: '0.4rem',
-                        }}
-                      >
-                        {items.icon}
-                        <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
-                          {items.text}
-                        </Typography>
-                      </ListItemButton>
-                    ))
-                  ) : item === guest ? (
-                    guestMenu.map((items) => {
-                      return (
-                        <ListItemButton
-                          key={items.href}
-                          selected={location.pathname.split('/')[1] === items.label}
-                          component={Link}
-                          to={items.href}
+    <MyContext.Provider value={user}>
+      <Box>
+        <Backdrop
+          open={pageLoding}
+          sx={{
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+            backgroundColor: 'rgba(0,0,0,0.3)',
+          }}
+        >
+          <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
+        </Backdrop>
+        <Snackbar
+          open={isFirstLogin}
+          autoHideDuration={60000}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          onClose={handleClose}
+          sx={{ alignItems: 'center' }}
+        >
+          <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+            Please change the password in time for the first login!
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={errorMessage}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+            {errorMessageText}
+          </Alert>
+        </Snackbar>
+        {location.pathname === '/signin' || location.pathname === '/signup' ? (
+          <main>{props.children}</main>
+        ) : (
+          <Box className={styles.container}>
+            <CssBaseline />
+            <Box className={styles.navigationBarContainer}>
+              <Grid sx={{ pl: '1rem', pr: '1rem' }}>
+                <Box className={styles.title}>
+                  <picture>
+                    <Box component="img" className={styles.logo} src="/icons/cluster/logo.svg" />
+                  </picture>
+                  <Typography variant="h6" gutterBottom sx={{ fontFamily: 'mabry-bold' }}>
+                    Dragonfly
+                  </Typography>
+                </Box>
+                <List component="nav" aria-label="main mailbox folders">
+                  {role.map((item, id) => {
+                    return item === root ? (
+                      rootMenu.map((items) =>
+                        items.text === 'Developer' ? (
+                          <Box key={items.href}>
+                            <ListItemButton
+                              key={items.href}
+                              onClick={() => {
+                                setOpenccessTokens(!openAccessTokens);
+                              }}
+                              sx={{
+                                '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                '&.Mui-selected:hover': {
+                                  backgroundColor: '#DDFF55',
+                                  color: '#121726',
+                                },
+                                height: '2rem',
+                                mb: '0.4rem',
+                              }}
+                            >
+                              {items.icon}
+                              <Typography
+                                variant="subtitle1"
+                                sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                              >
+                                {items.text}
+                              </Typography>
+                              {openAccessTokens ? <ExpandLess /> : <ExpandMore />}
+                            </ListItemButton>
+                            <Collapse in={openAccessTokens} timeout="auto" unmountOnExit>
+                              <List component="div" disablePadding>
+                                <ListItemButton
+                                  selected={location.pathname.split('/')[2] === items?.menuProps?.label}
+                                  component={Link}
+                                  to={items?.menuProps?.href || ''}
+                                  sx={{
+                                    '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                    '&.Mui-selected:hover': {
+                                      backgroundColor: '#DDFF55',
+                                      color: '#121726',
+                                    },
+                                    height: '2rem',
+                                    mb: '0.4rem',
+                                    pl: '1rem',
+                                  }}
+                                >
+                                  <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
+                                    {items?.menuProps?.text}
+                                  </Typography>
+                                </ListItemButton>
+                              </List>
+                            </Collapse>
+                          </Box>
+                        ) : (
+                          <ListItemButton
+                            key={items.href}
+                            selected={location.pathname.split('/')[1] === items.label}
+                            component={Link}
+                            to={items.href}
+                            sx={{
+                              '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                              '&.Mui-selected:hover': {
+                                backgroundColor: '#DDFF55',
+                                color: '#121726',
+                              },
+                              height: '2rem',
+                              mb: '0.4rem',
+                            }}
+                          >
+                            {items.icon}
+                            <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                              {items.text}
+                            </Typography>
+                          </ListItemButton>
+                        ),
+                      )
+                    ) : item === guest ? (
+                      guestMenu.map((items) =>
+                        items.text === 'Developer' ? (
+                          <Box key={items.href}>
+                            <ListItemButton
+                              onClick={() => {
+                                setOpenccessTokens(!openAccessTokens);
+                              }}
+                              sx={{
+                                '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                '&.Mui-selected:hover': {
+                                  backgroundColor: '#DDFF55',
+                                  color: '#121726',
+                                },
+                                height: '2rem',
+                                mb: '0.4rem',
+                              }}
+                            >
+                              {items.icon}
+                              <Typography
+                                variant="subtitle1"
+                                sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                              >
+                                {items.text}
+                              </Typography>
+                              {openAccessTokens ? <ExpandLess /> : <ExpandMore />}
+                            </ListItemButton>
+                            <Collapse in={openAccessTokens} timeout="auto" unmountOnExit>
+                              <List component="div" disablePadding>
+                                <ListItemButton
+                                  selected={location.pathname.split('/')[2] === items?.menuProps?.label}
+                                  component={Link}
+                                  to={items?.menuProps?.href || ''}
+                                  sx={{
+                                    '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                    '&.Mui-selected:hover': {
+                                      backgroundColor: '#DDFF55',
+                                      color: '#121726',
+                                    },
+                                    height: '2rem',
+                                    mb: '0.4rem',
+                                    pl: '1rem',
+                                  }}
+                                >
+                                  <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
+                                    {items?.menuProps?.text}
+                                  </Typography>
+                                </ListItemButton>
+                              </List>
+                            </Collapse>
+                          </Box>
+                        ) : (
+                          <ListItemButton
+                            key={items.href}
+                            selected={location.pathname.split('/')[1] === items.label}
+                            component={Link}
+                            to={items.href}
+                            sx={{
+                              '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                              '&.Mui-selected:hover': {
+                                backgroundColor: '#DDFF55',
+                                color: '#121726',
+                              },
+                              height: '2rem',
+                              mb: '0.4rem',
+                            }}
+                          >
+                            {items.icon}
+                            <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                              {items.text}
+                            </Typography>
+                          </ListItemButton>
+                        ),
+                      )
+                    ) : (
+                      <Box key={id}></Box>
+                    );
+                  })}
+                </List>
+              </Grid>
+              <Grid sx={{ mb: '4rem' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Box sx={{ display: 'flex', height: '100%' }}>
+                    <Avatar
+                      sx={{
+                        width: '2.8rem',
+                        height: '2.8rem',
+                        ml: '1rem',
+                        mr: '1rem',
+                        backgroundColor: 'var(--button-color)',
+                      }}
+                      src={user?.avatar}
+                    />
+                    <Box
+                      sx={{
+                        width: '7rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <Typography component="div" fontFamily="mabry-bold">
+                        {user?.name || '-'}
+                      </Typography>
+                      <Tooltip title={user?.email || '-'} placement="top">
+                        <Typography
+                          component="div"
+                          variant="caption"
                           sx={{
-                            '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                            '&.Mui-selected:hover': {
-                              backgroundColor: '#DDFF55',
-                              color: '#121726',
-                            },
-                            height: '2rem',
-                            mb: '0.4rem',
+                            width: '7rem',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
                           }}
                         >
-                          {items.icon}
-                          <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
-                            {items.text}
-                          </Typography>
-                        </ListItemButton>
-                      );
-                    })
-                  ) : (
-                    <Box key={id}></Box>
-                  );
-                })}
-              </List>
-            </Grid>
-            <Grid sx={{ mb: '4rem' }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Avatar className={styles.avatar} src={user?.avatar} />
-                  <Box sx={{ width: '7rem' }}>
-                    <Typography fontFamily="mabry-bold">{user?.name || '-'}</Typography>
-                    <Tooltip title={user?.email || '-'} placement="top">
-                      <Typography
-                        component="div"
-                        variant="caption"
-                        sx={{
-                          width: '7rem',
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}
-                      >
-                        {user?.email || '-'}
-                      </Typography>
-                    </Tooltip>
+                          {user?.email || '-'}
+                        </Typography>
+                      </Tooltip>
+                    </Box>
                   </Box>
+                  <IconButton
+                    onClick={(event: any) => {
+                      setAnchorEl(event.currentTarget);
+                    }}
+                    size="small"
+                    aria-controls={open ? 'account-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    sx={{ mr: '1rem', position: 'relative', padding: '0' }}
+                  >
+                    <UnfoldMoreIcon sx={{ position: 'relative', padding: '0' }} />
+                  </IconButton>
                 </Box>
-                <IconButton
-                  onClick={(event: any) => {
-                    setAnchorEl(event.currentTarget);
-                  }}
-                  size="small"
-                  aria-controls={open ? 'account-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                  sx={{ mr: '0.6rem', position: 'relative' }}
-                >
-                  <UnfoldMoreIcon />
-                </IconButton>
-              </Box>
-              <Menu
-                anchorEl={anchorEl}
-                id="account-menu"
-                open={open}
-                onClose={() => {
-                  setAnchorEl(null);
-                }}
-                sx={{ position: 'absolute', top: '-5.5rem', left: '-4.8rem' }}
-              >
-                <MenuItem
-                  onClick={() => {
+                <Menu
+                  anchorEl={anchorEl}
+                  id="account-menu"
+                  open={open}
+                  onClose={() => {
                     setAnchorEl(null);
-
-                    navigate('/profile');
                   }}
+                  sx={{ position: 'absolute', top: '-5.5rem', left: '-4.8rem' }}
                 >
-                  <ListItemIcon>
-                    <PersonAdd fontSize="small" />
-                  </ListItemIcon>
-                  Profile
-                </MenuItem>
-                <MenuItem onClick={handleLogout}>
-                  <ListItemIcon>
-                    <Logout fontSize="small" />
-                  </ListItemIcon>
-                  Logout
-                </MenuItem>
-              </Menu>
-            </Grid>
+                  <MenuItem
+                    onClick={() => {
+                      setAnchorEl(null);
+
+                      navigate('/profile');
+                    }}
+                  >
+                    <ListItemIcon>
+                      <PersonAdd fontSize="small" />
+                    </ListItemIcon>
+                    Profile
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout}>
+                    <ListItemIcon>
+                      <Logout fontSize="small" />
+                    </ListItemIcon>
+                    Logout
+                  </MenuItem>
+                </Menu>
+              </Grid>
+            </Box>
+            <Divider orientation="vertical" flexItem />
+            <Main>
+              <Outlet />
+            </Main>
           </Box>
-          <Divider orientation="vertical" flexItem />
-          <Main>
-            <Outlet />
-          </Main>
-        </Box>
-      )}
-    </Box>
+        )}
+      </Box>
+    </MyContext.Provider>
   );
 }

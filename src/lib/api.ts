@@ -539,3 +539,137 @@ export async function putUserRole(id: string, role: string) {
   const url = new URL(`api/v1/users/${id}/roles/${role}`, API_URL);
   return await put(url);
 }
+
+interface getTokensParams {
+  user_id?: string;
+}
+
+interface tokensResponse {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  name: string;
+  bio: string;
+  token: string;
+  scopes: Array<string>;
+  state: string;
+  expired_at: string;
+  user_id: number;
+  user: {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    is_del: number;
+    email: string;
+    name: string;
+    avatar: string;
+    phone: string;
+    state: string;
+    location: string;
+    bio: string;
+    configs: null;
+  };
+}
+
+type getTokensResponse = tokensResponse[];
+
+export async function getTokens(params?: getTokensParams): Promise<getTokensResponse> {
+  const query = params ? queryString.stringify({ ...params }) : '';
+  const url = new URL(`/api/v1/personal-access-tokens${query ? '?' : ''}${query}`, API_URL);
+  const response = await get(url);
+  return await response.json();
+}
+
+export async function getToken(id: string): Promise<tokensResponse> {
+  const url = new URL(`/api/v1/personal-access-tokens/${id}`, API_URL);
+  const response = await get(url);
+  return await response.json();
+}
+
+interface createTokensRequest {
+  name: string;
+  bio: string;
+  scopes: Array<string>;
+  expired_at: string;
+  user_id: number;
+}
+
+interface createTokensResponse {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  name: string;
+  bio: string;
+  token: string;
+  scopes: Array<string>;
+  state: string;
+  expired_at: string;
+  user_id: number;
+  user: {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    is_del: number;
+    email: string;
+    name: string;
+    avatar: string;
+    phone: string;
+    state: string;
+    location: string;
+    bio: string;
+    configs: null;
+  };
+}
+
+export async function createTokens(request: createTokensRequest): Promise<createTokensResponse> {
+  const url = new URL(`/api/v1/personal-access-tokens`, API_URL);
+  const response = await post(url, request);
+  return await response.json();
+}
+
+export async function deleteTokens(id: string) {
+  const url = new URL(`/api/v1/personal-access-tokens/${id}`, API_URL);
+  return await destroy(url);
+}
+
+interface updateTokensRequset {
+  bio: string;
+  expired_at: string;
+  scopes: Array<string>;
+}
+
+interface updateTokensResponse {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  name: string;
+  bio: string;
+  token: string;
+  scopes: Array<string>;
+  state: string;
+  expired_at: string;
+  user_id: number;
+  user: {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    is_del: number;
+    email: string;
+    name: string;
+    avatar: string;
+    phone: string;
+    state: string;
+    location: string;
+    bio: string;
+    configs: null;
+  };
+}
+
+export async function updateTokens(id: string, request: updateTokensRequset): Promise<updateTokensResponse> {
+  const url = new URL(`/api/v1/personal-access-tokens/${id}`, API_URL);
+  const response = await patch(url, request);
+  return response.json();
+}

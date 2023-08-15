@@ -19,7 +19,7 @@ import {
   FormHelperText,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { formatDate, getTime } from '../../../lib/utils';
+import { formatDate, getExpiredTime } from '../../../lib/utils';
 import { LoadingButton } from '@mui/lab';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getToken, updateTokens } from '../../../lib/api';
@@ -44,6 +44,8 @@ export default function CreateTokens(props: any) {
   const [expiration, setExpiration] = useState('');
   const [expirationError, setExpirationError] = useState(false);
   const [updateChecked, setUpdateChecked] = useState([true, false]);
+  const [preheat, setPreheat] = useState(false);
+  const [job, setJob] = useState(false);
   const [editLoadingButton, setEditLoadingButton] = useState(false);
   const [token, setToken] = useState({ name: '', bio: '', scopes: [''], expired_at: '', state: '', id: 0 });
   const updateFormList = [
@@ -94,6 +96,8 @@ export default function CreateTokens(props: any) {
           const response = await getToken(params?.id);
           setToken(response);
           setExpiration(response.expired_at);
+          setPreheat(response.scopes.includes('preheat'));
+          setJob(response.scopes.includes('job'));
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -112,7 +116,7 @@ export default function CreateTokens(props: any) {
   const handleChangeSelect = (event: SelectChangeEvent) => {
     setExpirationError(false);
     setTiem(event.target.value);
-    const time = getTime(Number(event.target.value));
+    const time = getExpiredTime(Number(event.target.value));
     setExpiration(time);
   };
 
@@ -120,8 +124,9 @@ export default function CreateTokens(props: any) {
     setEditLoadingButton(true);
     event.preventDefault();
 
-    const Scopes = [updateChecked[0] ? 'preheat' : '', updateChecked[1] ? 'job' : ''];
-    const filteredScopes = Scopes.filter((scope) => scope !== '');
+    const scopes = [preheat ? 'preheat' : '', job ? 'job' : ''];
+    const filteredScopes = scopes.filter((item) => item !== '');
+
     const data = new FormData(event.currentTarget);
 
     updateFormList.forEach((item) => {
@@ -144,8 +149,8 @@ export default function CreateTokens(props: any) {
             const response = await updateTokens(params.id, { ...formData });
             setEditLoadingButton(false);
             setSuccessMessage(true);
-            const newToken = response.token;
-            localStorage.setItem('newToken', JSON.stringify(newToken));
+            const token = response.token;
+            localStorage.setItem('token', JSON.stringify(token));
             navigate('/developer/personal-access-tokens');
           }
         } catch (error) {
@@ -277,9 +282,9 @@ export default function CreateTokens(props: any) {
                   label="preheat"
                   control={
                     <Checkbox
-                      checked={updateChecked[0]}
+                      checked={preheat}
                       onChange={(event: any) => {
-                        setUpdateChecked([event.target.checked, updateChecked[1]]);
+                        setPreheat(event.target.checked);
                       }}
                       sx={{ color: 'var(--button-color)!important' }}
                     />
@@ -289,9 +294,9 @@ export default function CreateTokens(props: any) {
                   label="job"
                   control={
                     <Checkbox
-                      checked={updateChecked[1]}
+                      checked={job}
                       onChange={(event: any) => {
-                        setUpdateChecked([updateChecked[0], event.target.checked]);
+                        setJob(event.target.checked);
                       }}
                       sx={{ color: 'var(--button-color)!important' }}
                     />

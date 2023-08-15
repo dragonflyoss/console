@@ -18,7 +18,7 @@ import {
   InputLabel,
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
-import { formatDate, getTime } from '../../../lib/utils';
+import { formatDate, getExpiredTime } from '../../../lib/utils';
 import { LoadingButton } from '@mui/lab';
 import { useNavigate } from 'react-router-dom';
 import { createTokens } from '../../../lib/api';
@@ -44,7 +44,8 @@ export default function CreateTokens() {
   const [bioError, setBioError] = useState(false);
   const [time, setTiem] = useState('3650');
   const [expiration, setExpiration] = useState('');
-  const [createChecked, setCreateChecked] = useState([true, false]);
+  const [preheat, setPreheat] = useState(false);
+  const [job, setJob] = useState(false);
   const [newLoadingButton, setNewLoadingButton] = useState(false);
   const createFormList = [
     {
@@ -83,7 +84,7 @@ export default function CreateTokens() {
       formProps: {
         id: 'Bio',
         label: 'Description',
-        name: 'Bio',
+        name: 'bio',
         autoComplete: 'family-name',
         placeholder: 'Enter your Description',
         helperText: bioError ? 'Please enter Description' : '',
@@ -116,7 +117,7 @@ export default function CreateTokens() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const time = getTime(Number(3650));
+    const time = getExpiredTime(Number(3650));
     setExpiration(time);
   }, []);
 
@@ -127,7 +128,7 @@ export default function CreateTokens() {
 
   const handleChangeSelect = (event: SelectChangeEvent) => {
     setTiem(event.target.value);
-    const time = getTime(Number(event.target.value));
+    const time = getExpiredTime(Number(event.target.value));
     setExpiration(time);
   };
 
@@ -136,9 +137,10 @@ export default function CreateTokens() {
     event.preventDefault();
 
     const name = event.currentTarget.elements.name;
-    const Bio = event.currentTarget.elements.Bio;
-    const Scopes = [createChecked[0] ? 'preheat' : '', createChecked[1] ? 'job' : ''];
-    const filteredScopes = Scopes.filter((scope) => scope !== '');
+    const bio = event.currentTarget.elements.bio;
+    const scopes = [preheat ? 'preheat' : '', job ? 'job' : ''];
+    const filteredScopes = scopes.filter((item) => item !== '');
+
     const data = new FormData(event.currentTarget);
 
     createFormList.forEach((item) => {
@@ -149,7 +151,7 @@ export default function CreateTokens() {
 
     const formData = {
       name: name.value,
-      bio: Bio.value,
+      bio: bio.value,
       scopes: filteredScopes,
       expired_at: expiration,
       user_id: user.id,
@@ -162,8 +164,8 @@ export default function CreateTokens() {
         const response = await createTokens({ ...formData });
         setNewLoadingButton(false);
         setSuccessMessage(true);
-        const newToken = response.token;
-        localStorage.setItem('newToken', JSON.stringify(newToken));
+        const token = response.token;
+        localStorage.setItem('token', JSON.stringify(token));
         navigate('/developer/personal-access-tokens');
       } catch (error) {
         if (error instanceof Error) {
@@ -290,10 +292,9 @@ export default function CreateTokens() {
                   label="preheat"
                   control={
                     <Checkbox
-                      checked={createChecked[0]}
+                      checked={preheat}
                       onChange={(event: any) => {
-                        event.stopPropagation();
-                        setCreateChecked([event.target.checked, createChecked[1]]);
+                        setPreheat(event.target.checked);
                       }}
                       sx={{ color: 'var(--button-color)!important' }}
                     />
@@ -303,10 +304,9 @@ export default function CreateTokens() {
                   label="job"
                   control={
                     <Checkbox
-                      checked={createChecked[1]}
+                      checked={job}
                       onChange={(event: any) => {
-                        event.stopPropagation();
-                        setCreateChecked([createChecked[0], event.target.checked]);
+                        setJob(event.target.checked);
                       }}
                       sx={{ color: 'var(--button-color)!important' }}
                     />

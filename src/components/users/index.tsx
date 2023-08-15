@@ -34,7 +34,7 @@ import {
 import { useEffect, useState } from 'react';
 import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole } from '../../lib/api';
 import { makeStyles } from '@mui/styles';
-import { datetime } from '../../lib/utils';
+import { getDatetime } from '../../lib/utils';
 import { LoadingButton } from '@mui/lab';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -622,7 +622,7 @@ export default function Users() {
               ) : (
                 <Chip
                   avatar={<Box component="img" src="/icons/user/created-at.svg" />}
-                  label={datetime(user.created_at || '-')}
+                  label={getDatetime(user.created_at || '-')}
                   variant="outlined"
                   size="small"
                 />
@@ -641,7 +641,7 @@ export default function Users() {
               ) : (
                 <Chip
                   avatar={<Box component="img" src="/icons/user/updated-at.svg" />}
-                  label={datetime(user.updated_at || '-')}
+                  label={getDatetime(user.updated_at || '-')}
                   variant="outlined"
                   size="small"
                 />

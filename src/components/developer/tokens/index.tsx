@@ -46,13 +46,13 @@ export default function PersonalAccessTokens() {
   const user = useContext(MyContext);
 
   useEffect(() => {
-    const tokenData = localStorage.getItem('newToken');
+    const token = localStorage.getItem('token');
 
-    if (tokenData) {
-      const newToken = JSON.parse(tokenData);
+    if (token) {
+      const newToken = JSON.parse(token);
       setNewToken(newToken);
       setShowSnackbar(true);
-      localStorage.removeItem('newToken');
+      localStorage.removeItem('token');
     }
 
     (async function () {
@@ -78,7 +78,6 @@ export default function PersonalAccessTokens() {
 
   const handleChange = async (row: any) => {
     setOpenDeletToken(true);
-
     setTokensID(row.id);
   };
 

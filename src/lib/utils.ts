@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import { decode, JwtPayload } from 'jsonwebtoken';
 
-export const datetime = (time: string) => {
+export const getDatetime = (time: string) => {
   const date = new Date(time);
   const year = date.getFullYear();
   const month = `${date.getMonth() + 1}`.padStart(2, '0');
@@ -23,7 +23,7 @@ export const setPageTitle = (title: string) => {
   document.title = `Console ${pageTitle}`;
 };
 
-export const getTime = (time: number) => {
+export const getExpiredTime = (time: number) => {
   const weekAgo = new Date();
   weekAgo.setDate(weekAgo.getDate() + time);
   return weekAgo.toISOString();

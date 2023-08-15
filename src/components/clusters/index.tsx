@@ -19,7 +19,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { getSchedulers, getSeedPeers, getClusters } from '../../lib/api';
 import styles from './index.module.css';
 import { useEffect, useState } from 'react';
-import { datetime } from '../../lib/utils';
+import { getDatetime } from '../../lib/utils';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
@@ -377,7 +377,7 @@ export default function Clusters() {
                   <Box className={styles.creatTimeContainer}>
                     <Chip
                       avatar={<MoreTimeIcon />}
-                      label={clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : datetime(item.created_at)}
+                      label={clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : getDatetime(item.created_at)}
                       variant="outlined"
                       size="small"
                     />

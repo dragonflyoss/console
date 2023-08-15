@@ -345,7 +345,7 @@ interface getSchedulerParmas {
   scheduler_cluster_id?: string;
 }
 
-interface schedulersResponse {
+interface getSchedulersResponse {
   id: number;
   host_name: string;
   ip: string;
@@ -359,9 +359,7 @@ interface schedulersResponse {
   updated_at: string;
 }
 
-type getSchedulersResponse = schedulersResponse[];
-
-export async function getSchedulers(params?: getSchedulerParmas): Promise<getSchedulersResponse> {
+export async function getSchedulers(params?: getSchedulerParmas): Promise<getSchedulersResponse[]> {
   const query = params ? queryString.stringify({ ...params }) : '';
   const url = new URL(`/api/v1/schedulers${query ? '?' : ''}${query}`, API_URL);
   const response = await get(url);
@@ -397,7 +395,7 @@ interface getSeedPeersParmas {
   seed_peer_cluster_id?: string;
 }
 
-interface seedPeersResponse {
+interface getSeedPeersResponse {
   id: number;
   host_name: string;
   ip: string;
@@ -413,9 +411,7 @@ interface seedPeersResponse {
   seed_peer_cluster_id: number;
 }
 
-type getSeedPeersResponse = seedPeersResponse[];
-
-export async function getSeedPeers(params?: getSeedPeersParmas): Promise<getSeedPeersResponse> {
+export async function getSeedPeers(params?: getSeedPeersParmas): Promise<getSeedPeersResponse[]> {
   const query = params ? queryString.stringify({ ...params }) : '';
   const url = new URL(`/api/v1/seed-peers${query ? '?' : ''}${query}`, API_URL);
   const response = await get(url);
@@ -449,7 +445,7 @@ export async function deleteSeedPeer(id: string) {
   return await destroy(url);
 }
 
-interface userResponse {
+interface getUsersResponse {
   avatar: string;
   id: number;
   email: string;
@@ -458,9 +454,7 @@ interface userResponse {
   location: string;
 }
 
-type getUsersResponse = userResponse[];
-
-export async function getUsers(): Promise<getUsersResponse> {
+export async function getUsers(): Promise<getUsersResponse[]> {
   const url = new URL(`/api/v1/users`, API_URL);
   const response = await get(url);
   return await response.json();
@@ -544,7 +538,7 @@ interface getTokensParams {
   user_id?: string;
 }
 
-interface tokensResponse {
+interface getTokensResponse {
   id: number;
   created_at: string;
   updated_at: string;
@@ -572,16 +566,14 @@ interface tokensResponse {
   };
 }
 
-type getTokensResponse = tokensResponse[];
-
-export async function getTokens(params?: getTokensParams): Promise<getTokensResponse> {
+export async function getTokens(params?: getTokensParams): Promise<getTokensResponse[]> {
   const query = params ? queryString.stringify({ ...params }) : '';
   const url = new URL(`/api/v1/personal-access-tokens${query ? '?' : ''}${query}`, API_URL);
   const response = await get(url);
   return await response.json();
 }
 
-export async function getToken(id: string): Promise<tokensResponse> {
+export async function getToken(id: string): Promise<getTokensResponse> {
   const url = new URL(`/api/v1/personal-access-tokens/${id}`, API_URL);
   const response = await get(url);
   return await response.json();
@@ -607,20 +599,6 @@ interface createTokensResponse {
   state: string;
   expired_at: string;
   user_id: number;
-  user: {
-    id: number;
-    created_at: string;
-    updated_at: string;
-    is_del: number;
-    email: string;
-    name: string;
-    avatar: string;
-    phone: string;
-    state: string;
-    location: string;
-    bio: string;
-    configs: null;
-  };
 }
 
 export async function createTokens(request: createTokensRequest): Promise<createTokensResponse> {
@@ -652,20 +630,6 @@ interface updateTokensResponse {
   state: string;
   expired_at: string;
   user_id: number;
-  user: {
-    id: number;
-    created_at: string;
-    updated_at: string;
-    is_del: number;
-    email: string;
-    name: string;
-    avatar: string;
-    phone: string;
-    state: string;
-    location: string;
-    bio: string;
-    configs: null;
-  };
 }
 
 export async function updateTokens(id: string, request: updateTokensRequset): Promise<updateTokensResponse> {

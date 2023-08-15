@@ -179,7 +179,7 @@ export default function ShowCluster() {
     setOpenDeletScheduler(true);
   };
 
-  const handledeleteScheduler = async () => {
+  const handleDeleteScheduler = async () => {
     setDeleteLoadingButton(true);
 
     try {
@@ -189,7 +189,11 @@ export default function ShowCluster() {
       setDeleteLoadingButton(false);
 
       if (typeof params.id === 'string') {
-        const response = await getSchedulers({ scheduler_cluster_id: params.id });
+        const response = await getSchedulers({
+          scheduler_cluster_id: String(cluster.scheduler_cluster_id),
+          page: 1,
+          per_page: 1000,
+        });
         setSchedlerList(response);
       }
     } catch (error) {
@@ -207,7 +211,7 @@ export default function ShowCluster() {
     setOpenDeletSeedPeers(true);
   };
 
-  const handledeleteSeedPeers = async () => {
+  const handleDeleteSeedPeers = async () => {
     setDeleteLoadingButton(true);
 
     try {
@@ -217,7 +221,11 @@ export default function ShowCluster() {
       setDeleteLoadingButton(false);
 
       if (typeof params.id === 'string') {
-        const response = await getSeedPeers({ seed_peer_cluster_id: params.id });
+        const response = await getSeedPeers({
+          seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
+          page: 1,
+          per_page: 1000,
+        });
         setSeedPeerList(response);
       }
     } catch (error) {
@@ -601,7 +609,7 @@ export default function ShowCluster() {
                 },
                 width: '8rem',
               }}
-              onClick={handledeleteScheduler}
+              onClick={handleDeleteScheduler}
             >
               Delete
             </LoadingButton>
@@ -826,7 +834,7 @@ export default function ShowCluster() {
                 },
                 width: '8rem',
               }}
-              onClick={handledeleteSeedPeers}
+              onClick={handleDeleteSeedPeers}
             >
               Delete
             </LoadingButton>

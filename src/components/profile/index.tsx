@@ -156,7 +156,7 @@ export default function Profile() {
       setError: setBioError,
 
       validate: (value: string) => {
-        const reg = /^[\s\S]{0,1000}$/;
+        const reg = /^.{0,1000}$/;
         return reg.test(value);
       },
     },

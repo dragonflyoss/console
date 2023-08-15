@@ -59,7 +59,7 @@ export default function NewCluster() {
       setError: setNameError,
 
       validate: (value: string) => {
-        const reg = /^[A-Za-z0-9-]{1,40}$/;
+        const reg = /^(?=.*[A-Za-z0-9@$!%*?&._-])[A-Za-z0-9@$!%*?&._-]{1,}$/;
         return reg.test(value);
       },
     },
@@ -81,7 +81,7 @@ export default function NewCluster() {
       setError: setBioError,
 
       validate: (value: string) => {
-        const reg = /^[A-Za-z0-9]{0,1000}$/;
+        const reg = /^.{0,1000}$/;
         return reg.test(value);
       },
     },

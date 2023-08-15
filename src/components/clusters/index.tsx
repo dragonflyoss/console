@@ -31,8 +31,8 @@ const theme = createTheme({
       xs: 0,
       sm: 600,
       md: 900,
-      lg: 1200,
-      xl: 1536,
+      lg: 1135,
+      xl: 1441,
     },
   },
   palette: {
@@ -301,103 +301,104 @@ export default function Clusters() {
         <Grid item xs={12} className={styles.clusterListContainer} component="form" noValidate>
           {Array.isArray(allClusters) &&
             allClusters.map((item) => (
-              <Paper
+              <Box
                 key={item.id}
-                variant="outlined"
                 sx={{
-                  mr: '1rem',
-                  mb: '1rem',
-                  maxWidth: '27rem',
-                  width: '32.4%',
+                  maxWidth: '28rem',
+                  width: '33.333%',
+                  pr: '1rem',
+                  pb: '1rem',
                   ':nth-of-type(3n)': {
-                    mr: '0rem',
+                    pr: '0rem ',
                   },
                   [theme.breakpoints.up('xl')]: {
                     ':nth-of-type(3n)': {
-                      mr: '1rem !important',
+                      pr: '1rem !important',
                     },
                   },
                 }}
               >
-                <Box className={styles.clusterListContent}>
-                  <Box display="flex">
-                    <span className={styles.idText}>ID&nbsp;:&nbsp;</span>
+                <Paper variant="outlined">
+                  <Box className={styles.clusterListContent}>
+                    <Box display="flex">
+                      <span className={styles.idText}>ID&nbsp;:&nbsp;</span>
+                      {clusterIsLoading ? (
+                        <Skeleton sx={{ width: '1rem' }} />
+                      ) : (
+                        <span className={styles.idText}>{item.id}</span>
+                      )}
+                    </Box>
                     {clusterIsLoading ? (
-                      <Skeleton sx={{ width: '1rem' }} />
+                      <Skeleton sx={{ width: '4rem', height: '1.4rem', mt: '0.8rem', mb: '0.8rem' }} />
                     ) : (
-                      <span className={styles.idText}>{item.id}</span>
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        sx={{
+                          mt: '0.8rem',
+                          mb: '0.8rem',
+                          width: item.is_default ? '4rem' : '6rem',
+                          height: '1.4rem',
+                          background: item.is_default ? 'var(--description-color)' : 'var(--button-color)',
+                          color: item.is_default ? '#FFFFFF' : '#FFFFFF',
+                        }}
+                      >
+                        <Typography variant="body2" fontFamily="system-ui">
+                          {`${item.is_default ? 'Default' : 'Non-Default'}`}
+                        </Typography>
+                      </Box>
                     )}
-                  </Box>
-                  {clusterIsLoading ? (
-                    <Skeleton sx={{ width: '4rem', height: '1.4rem', mt: '0.8rem', mb: '0.8rem' }} />
-                  ) : (
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      sx={{
-                        mt: '0.8rem',
-                        mb: '0.8rem',
-                        width: item.is_default ? '4rem' : '6rem',
-                        height: '1.4rem',
-                        background: item.is_default ? 'var(--description-color)' : 'var(--button-color)',
-                        color: item.is_default ? '#FFFFFF' : '#FFFFFF',
-                      }}
-                    >
-                      <Typography variant="body2" fontFamily="system-ui">
-                        {`${item.is_default ? 'Default' : 'Non-Default'}`}
-                      </Typography>
-                    </Box>
-                  )}
-                  <Typography variant="h6">
-                    {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.name}
-                  </Typography>
-                  <Box display="flex" mt="0.4rem">
-                    <Box display="flex" className={styles.locationContainer}>
-                      <Typography variant="body2" fontFamily="mabry-bold">
-                        IDC&nbsp;:&nbsp;
-                      </Typography>
-                      <Tooltip title={item.scopes.idc || '-'} placement="top">
-                        <Typography variant="body2" className={styles.locationText}>
-                          {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.scopes.idc || '-'}
+                    <Typography variant="h6">
+                      {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.name}
+                    </Typography>
+                    <Box display="flex" mt="0.4rem">
+                      <Box display="flex" className={styles.locationContainer}>
+                        <Typography variant="body2" fontFamily="mabry-bold">
+                          IDC&nbsp;:&nbsp;
                         </Typography>
-                      </Tooltip>
-                    </Box>
-                    <Box display="flex" className={styles.locationContainer}>
-                      <Typography variant="body2" fontFamily="mabry-bold">
-                        Location&nbsp;:&nbsp;
-                      </Typography>
-                      <Tooltip title={item.scopes.location || '-'} placement="top">
-                        <Typography variant="body2" className={styles.locationText}>
-                          {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.scopes.location || '-'}
+                        <Tooltip title={item.scopes.idc || '-'} placement="top">
+                          <Typography variant="body2" className={styles.locationText}>
+                            {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.scopes.idc || '-'}
+                          </Typography>
+                        </Tooltip>
+                      </Box>
+                      <Box display="flex" className={styles.locationContainer}>
+                        <Typography variant="body2" fontFamily="mabry-bold">
+                          Location&nbsp;:&nbsp;
                         </Typography>
-                      </Tooltip>
+                        <Tooltip title={item.scopes.location || '-'} placement="top">
+                          <Typography variant="body2" className={styles.locationText}>
+                            {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.scopes.location || '-'}
+                          </Typography>
+                        </Tooltip>
+                      </Box>
+                    </Box>
+                    <Box className={styles.creatTimeContainer}>
+                      <Chip
+                        avatar={<MoreTimeIcon />}
+                        label={clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : getDatetime(item.created_at)}
+                        variant="outlined"
+                        size="small"
+                      />
+                      <IconButton
+                        className={styles.buttonContent}
+                        sx={{
+                          '&.MuiButton-root': {
+                            backgroundColor: '#fff',
+                            padding: 0,
+                          },
+                        }}
+                        onClick={() => {
+                          navigate(`/clusters/${item.id}`);
+                        }}
+                      >
+                        <ArrowCircleRightIcon fontSize="large" sx={{ color: 'var(--button-color)' }} />
+                      </IconButton>
                     </Box>
                   </Box>
-                  <Box className={styles.creatTimeContainer}>
-                    <Chip
-                      avatar={<MoreTimeIcon />}
-                      label={clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : getDatetime(item.created_at)}
-                      variant="outlined"
-                      size="small"
-                    />
-                    <IconButton
-                      className={styles.buttonContent}
-                      sx={{
-                        '&.MuiButton-root': {
-                          backgroundColor: '#fff',
-                          padding: 0,
-                        },
-                      }}
-                      onClick={() => {
-                        navigate(`/clusters/${item.id}`);
-                      }}
-                    >
-                      <ArrowCircleRightIcon fontSize="large" sx={{ color: 'var(--button-color)' }} />
-                    </IconButton>
-                  </Box>
-                </Box>
-              </Paper>
+                </Paper>
+              </Box>
             ))}
         </Grid>
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>

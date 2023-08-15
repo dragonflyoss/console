@@ -128,7 +128,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
           <Box className={styles.clusterWrap}>
             <Box className={styles.clusterTitle}>
               <Typography variant="body2" component="div" color="#80828B" mr="0.2rem">
-                Seed Peer cluster ID
+                Seed peer cluster ID
               </Typography>
               <Tooltip
                 title="When the seed peer is deployed, the clusterID must be filled with this seed peer cluster ID in scheduler configuration. In this way, the seed peer will become the seed peer service of this cluster."
@@ -298,7 +298,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
               <Box className={styles.configContent}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography variant="body2" component="div" color="#80828B" sx={{ mr: '0.2rem' }}>
-                    Seed Peer load limit
+                    Seed peer load limit
                   </Typography>
                   <Tooltip
                     title="If other peers download from the seed peer, the load of the seed peer will increase. When the load limit of the seed peer is reached, the scheduler will no longer schedule other peers to download from the seed peer until the it has the free load.	seed_peer_cluster_config.load_limit"

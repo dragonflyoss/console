@@ -366,7 +366,7 @@ export default function Layout(props: any) {
                   })}
                 </List>
               </Grid>
-              <Grid sx={{ mb: '4rem' }}>
+              <Grid sx={{ mb: '4rem', pl: '1rem', pr: '1rem' }}>
                 <Box
                   sx={{
                     display: 'flex',
@@ -374,17 +374,8 @@ export default function Layout(props: any) {
                     justifyContent: 'space-between',
                   }}
                 >
-                  <Box sx={{ display: 'flex', height: '100%' }}>
-                    <Avatar
-                      sx={{
-                        width: '2.8rem',
-                        height: '2.8rem',
-                        ml: '1rem',
-                        mr: '1rem',
-                        backgroundColor: 'var(--button-color)',
-                      }}
-                      src={user?.avatar}
-                    />
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Avatar className={styles.avatar} src={user?.avatar} />
                     <Box
                       sx={{
                         width: '7rem',
@@ -420,9 +411,9 @@ export default function Layout(props: any) {
                     aria-controls={open ? 'account-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
-                    sx={{ mr: '1rem', position: 'relative', padding: '0' }}
+                    sx={{ position: 'relative', padding: '0' }}
                   >
-                    <UnfoldMoreIcon sx={{ position: 'relative', padding: '0' }} />
+                    <UnfoldMoreIcon />
                   </IconButton>
                 </Box>
                 <Menu

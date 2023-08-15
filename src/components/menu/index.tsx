@@ -62,7 +62,7 @@ export default function Layout(props: any) {
   const open = Boolean(anchorEl);
   const location = useLocation();
   const navigate = useNavigate();
-  const [openAccessTokens, setOpenccessTokens] = useState(true);
+  const [openAccessTokens, setOpenAccessTokens] = useState(true);
 
   useEffect(() => {
     setPageLoding(true);
@@ -218,7 +218,7 @@ export default function Layout(props: any) {
                             <ListItemButton
                               key={items.href}
                               onClick={() => {
-                                setOpenccessTokens(!openAccessTokens);
+                                setOpenAccessTokens(!openAccessTokens);
                               }}
                               sx={{
                                 '&.Mui-selected': { backgroundColor: '#DFFF55' },
@@ -292,7 +292,7 @@ export default function Layout(props: any) {
                           <Box key={items.href}>
                             <ListItemButton
                               onClick={() => {
-                                setOpenccessTokens(!openAccessTokens);
+                                setOpenAccessTokens(!openAccessTokens);
                               }}
                               sx={{
                                 '&.Mui-selected': { backgroundColor: '#DFFF55' },

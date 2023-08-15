@@ -92,11 +92,11 @@ export default function CreateTokens(props: any) {
     (async function () {
       try {
         if (params?.id) {
-          const response = await getToken(params?.id);
-          setToken(response);
-          setExpiration(response.expired_at);
-          setPreheat(response.scopes.includes('preheat'));
-          setJob(response.scopes.includes('job'));
+          const token = await getToken(params?.id);
+          setToken(token);
+          setExpiration(token.expired_at);
+          setPreheat(token.scopes.includes('preheat'));
+          setJob(token.scopes.includes('job'));
         }
       } catch (error) {
         if (error instanceof Error) {

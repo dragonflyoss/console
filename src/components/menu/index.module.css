@@ -34,9 +34,9 @@
 }
 
 .avatar {
-  width: 2.6rem !important;
-  height: 2.6rem !important;
-  margin-left: 0.6rem;
-  margin-right: 0.6rem;
+  width: 2rem;
+  height: 2rem;
+  margin-left: 0.8rem;
+  margin-right: 0.8rem;
   background: var(--button-color) !important;
 }

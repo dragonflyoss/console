@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import { decode, JwtPayload } from 'jsonwebtoken';
 
-export const datetime = (time: string) => {
+export const getDatetime = (time: string) => {
   const date = new Date(time);
   const year = date.getFullYear();
   const month = `${date.getMonth() + 1}`.padStart(2, '0');
@@ -21,4 +21,22 @@ export const getJwtPayload = () => {
 export const setPageTitle = (title: string) => {
   const pageTitle = title.replace(/\//g, ' ');
   document.title = `Console ${pageTitle}`;
+};
+
+export const getExpiredTime = (time: number) => {
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() + time);
+  return weekAgo.toISOString();
+};
+
+const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+export const formatDate = (time: string) => {
+  const date = new Date(time);
+  const day = dayNames[date.getDay()];
+  const month = monthNames[date.getMonth()];
+  const year = date.getFullYear();
+  const hour = date.getHours();
+  return `${day}, ${month} ${date.getDate()} ${year}`;
 };

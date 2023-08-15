@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import HistoryIcon from '@mui/icons-material/History';
 import { getScheduler } from '../../lib/api';
-import { datetime } from '../../lib/utils';
+import { getDatetime } from '../../lib/utils';
 import styles from './show.module.css';
 import _ from 'lodash';
 import { useParams, Link } from 'react-router-dom';
@@ -173,14 +173,14 @@ export default function Schedulers() {
                   {item.name === 'created_at' ? (
                     <Chip
                       avatar={<MoreTimeIcon />}
-                      label={datetime(schedule?.[item?.name] || '')}
+                      label={getDatetime(schedule?.[item?.name] || '')}
                       variant="outlined"
                       size="small"
                     />
                   ) : item.name === 'updated_at' ? (
                     <Chip
                       avatar={<HistoryIcon />}
-                      label={datetime(schedule?.[item?.name])}
+                      label={getDatetime(schedule?.[item?.name])}
                       variant="outlined"
                       size="small"
                     />

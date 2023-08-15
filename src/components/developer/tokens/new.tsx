@@ -107,7 +107,7 @@ export default function CreateTokens() {
       setError: setBioError,
 
       validate: (value: string) => {
-        const reg = /^[A-Za-z0-9]{0,1000}$/;
+        const reg = /^.{0,1000}$/;
         return reg.test(value);
       },
     },

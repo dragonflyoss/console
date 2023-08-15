@@ -114,13 +114,14 @@ export default function ShowCluster() {
         setIsLoading(true);
 
         if (typeof params.id === 'string') {
-          const [cluster, schedulers, seedPeers] = await Promise.all([
-            getCluster(params.id),
-            getSchedulers({ scheduler_cluster_id: params.id }),
-            getSeedPeers({ seed_peer_cluster_id: params.id }),
+          const cluster = await getCluster(params.id);
+          setCluster(cluster);
+
+          const [schedulers, seedPeers] = await Promise.all([
+            getSchedulers({ scheduler_cluster_id: String(cluster.scheduler_cluster_id) }),
+            getSeedPeers({ seed_peer_cluster_id: String(cluster.seed_peer_cluster_id) }),
           ]);
 
-          setCluster(cluster);
           setSchedlerList(schedulers);
           setSeedPeerList(seedPeers);
           setIsLoading(false);

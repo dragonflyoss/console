@@ -1,4 +1,4 @@
-import parseLinkHeader from 'parse-link-header';
+import { parseLinkHeader } from '@web3-storage/parse-link-header';
 import queryString from 'query-string';
 
 const API_URL = process.env.REACT_APP_API_URL || window.location.href;
@@ -12,9 +12,8 @@ export async function get(url: URL) {
 
     if (response.status === 200) {
       return response;
-    } else {
-      throw new Error(response.statusText);
     }
+    throw new Error(String(response.statusText));
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -35,9 +34,8 @@ export async function post(url: URL, request = {}) {
 
     if (response.status === 200) {
       return response;
-    } else {
-      throw new Error(response.statusText);
     }
+    throw new Error(String(response.statusText));
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -58,9 +56,8 @@ export async function patch(url: URL, request = {}) {
 
     if (response.status === 200) {
       return response;
-    } else {
-      throw new Error(response.statusText);
     }
+    throw new Error(String(response.statusText));
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -77,12 +74,10 @@ export async function destroy(url: URL) {
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
     });
-
     if (response.status === 200) {
       return response;
-    } else {
-      throw new Error(response.statusText);
     }
+    throw new Error(String(response.statusText));
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -102,9 +97,8 @@ export async function put(url: URL) {
 
     if (response.status === 200) {
       return response;
-    } else {
-      throw new Error(response.statusText);
     }
+    throw new Error(String(response.statusText));
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -191,8 +185,8 @@ export async function getClusters(params?: getClustersParams): Promise<getCluste
   const response = await get(url);
   const data = await response.json();
   const linkHeader = response.headers.get('link');
-  const links = parseLinkHeader(linkHeader);
-  const totalPage = Number(links?.last?.page || 1);
+  const links = parseLinkHeader(linkHeader || null);
+  const totalPage = Number(links?.last?.page);
   const responses = { data: data, total_page: totalPage };
 
   return responses;

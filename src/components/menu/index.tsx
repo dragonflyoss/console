@@ -62,7 +62,7 @@ export default function Layout(props: any) {
   const open = Boolean(anchorEl);
   const location = useLocation();
   const navigate = useNavigate();
-  const [openAccessTokens, setOpenAccessTokens] = useState(true);
+  const [openAccessTokens, setOpenAccessTokens] = useState(false);
 
   useEffect(() => {
     setPageLoding(true);

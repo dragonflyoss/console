@@ -27,7 +27,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import styles from './index.module.css';
-import { datetime, getJwtPayload } from '../../lib/utils';
+import { getDatetime, getJwtPayload } from '../../lib/utils';
 import { useNavigate } from 'react-router-dom';
 
 export default function Profile() {
@@ -691,7 +691,7 @@ export default function Profile() {
                       {item.icon}
                       {item.name === 'created_at' ? (
                         <Typography component="div" variant="body1" fontFamily="mabry-bold" ml="0.6rem">
-                          {isLoading ? <Skeleton sx={{ width: '10rem' }} /> : datetime(user?.[item.name]) || '-'}
+                          {isLoading ? <Skeleton sx={{ width: '10rem' }} /> : getDatetime(user?.[item.name]) || '-'}
                         </Typography>
                       ) : (
                         <Typography component="div" variant="body1" fontFamily="mabry-bold" ml="0.6rem">

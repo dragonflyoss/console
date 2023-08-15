@@ -3,7 +3,7 @@ import Paper from '@mui/material/Paper';
 import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getSeedPeer } from '../../lib/api';
-import { datetime } from '../../lib/utils';
+import { getDatetime } from '../../lib/utils';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import HistoryIcon from '@mui/icons-material/History';
 import styles from './show.module.css';
@@ -183,14 +183,14 @@ export default function SeedPeer() {
                   {item.name === 'created_at' ? (
                     <Chip
                       avatar={<MoreTimeIcon />}
-                      label={datetime(seedPeer?.[item?.name] || '')}
+                      label={getDatetime(seedPeer?.[item?.name] || '')}
                       variant="outlined"
                       size="small"
                     />
                   ) : item.name === 'updated_at' ? (
                     <Chip
                       avatar={<HistoryIcon />}
-                      label={datetime(seedPeer?.[item?.name] || '')}
+                      label={getDatetime(seedPeer?.[item?.name] || '')}
                       variant="outlined"
                       size="small"
                     />

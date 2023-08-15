@@ -11,6 +11,10 @@ import ShowScheduler from '../components/schedulers/show';
 import ShowSeedPeer from '../components/seed-peers/show';
 import Profile from '../components/profile';
 import Users from '../components/users';
+import Tokens from '../components/developer/tokens';
+import NewTokens from '../components/developer/tokens/new';
+import EditTokens from '../components/developer/tokens/edit';
+
 function Main() {
   return (
     <Routes>
@@ -26,6 +30,9 @@ function Main() {
         <Route path="/clusters/:id/schedulers/:id" element={<ShowScheduler />} />
         <Route path="/clusters/:id/seed-peers/:id" element={<ShowSeedPeer />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/developer/personal-access-tokens" element={<Tokens />} />
+        <Route path="/developer/personal-access-tokens/new" element={<NewTokens />} />
+        <Route path="/developer/personal-access-tokens/:id" element={<EditTokens />} />
         <Route path="/users" element={<Users />} />
       </Route>
     </Routes>

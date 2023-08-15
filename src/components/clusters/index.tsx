@@ -80,8 +80,8 @@ export default function Clusters() {
 
         const [cluster, schedle, seedPeer, allClusters] = await Promise.all([
           getClusters({ page: 1, per_page: 1000 }),
-          getSchedulers(),
-          getSeedPeers(),
+          getSchedulers({ page: 1, per_page: 1000 }),
+          getSeedPeers({ page: 1, per_page: 1000 }),
           getClusters({ page: page, per_page: pageSize }),
         ]);
 

@@ -337,6 +337,8 @@ export async function deleteCluster(id: string) {
 
 interface getSchedulerParmas {
   scheduler_cluster_id?: string;
+  page?: number;
+  per_page?: number;
 }
 
 interface getSchedulersResponse {
@@ -387,6 +389,8 @@ export async function deleteScheduler(id: string) {
 
 interface getSeedPeersParmas {
   seed_peer_cluster_id?: string;
+  page?: number;
+  per_page?: number;
 }
 
 interface getSeedPeersResponse {

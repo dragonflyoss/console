@@ -11,13 +11,13 @@ import {
   TextField,
   Tooltip,
   Typography,
+  Paper,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import styles from './edit.module.css';
 import HelpIcon from '@mui/icons-material/Help';
 import { useEffect, useState } from 'react';
 import { getCluster, updateCluster } from '../../lib/api';
-import React from 'react';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -39,6 +39,7 @@ export default function EditCluster() {
   const [clusters, setClusters] = useState({
     id: 0,
     bio: '',
+    name: '',
     scopes: {
       idc: '',
       location: '',
@@ -537,6 +538,21 @@ export default function EditCluster() {
       </Typography>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Grid className={styles.container} component="form" noValidate onSubmit={handleSubmit}>
+        <Paper variant="outlined" sx={{ display: 'flex', alignItems: 'center', mb: '1rem', width: '18rem', p: '1rem' }}>
+          <Box
+            component="img"
+            src="/icons/cluster/cluster.svg"
+            sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }}
+          />
+          <Box>
+            <Typography component="div" variant="body1" fontFamily="mabry-bold">
+              ID:&nbsp;&nbsp;{clusters.id}
+            </Typography>
+            <Typography component="div" variant="body1" fontFamily="mabry-bold">
+              Name:&nbsp;&nbsp;{clusters.name}
+            </Typography>
+          </Box>
+        </Paper>
         <Box className={styles.informationTitle}>
           <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
             Information

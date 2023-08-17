@@ -27,3 +27,12 @@
   height: 1.4rem;
   margin-right: 0.4rem;
 }
+
+.searchContainer {
+  display: flex;
+  justify-content: flex-start;
+  margin-right: 1rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.6rem;
+  width: 23rem;
+}

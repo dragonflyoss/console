@@ -354,10 +354,12 @@ interface schedulersResponse {
   created_at: string;
   updated_at: string;
 }
+
 interface getSchedulersResponse {
   data: schedulersResponse[];
   total_page?: number;
 }
+
 export async function getSchedulers(params?: getSchedulerParmas): Promise<getSchedulersResponse> {
   const query = params ? queryString.stringify({ ...params }) : '';
   const url = new URL(`/api/v1/schedulers${query ? '?' : ''}${query}`, API_URL);
@@ -417,10 +419,12 @@ interface seedPeersResponse {
   updated_at: string;
   seed_peer_cluster_id: number;
 }
+
 interface getSeedPeersResponse {
   data: seedPeersResponse[];
   total_page?: number;
 }
+
 export async function getSeedPeers(params?: getSeedPeersParmas): Promise<getSeedPeersResponse> {
   const query = params ? queryString.stringify({ ...params }) : '';
   const url = new URL(`/api/v1/seed-peers${query ? '?' : ''}${query}`, API_URL);

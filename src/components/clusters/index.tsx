@@ -6,7 +6,6 @@ import {
   Chip,
   Grid,
   IconButton,
-  InputBase,
   Pagination,
   Paper,
   Skeleton,

@@ -13,6 +13,9 @@ import {
   Snackbar,
   Tooltip,
   Typography,
+  Stack,
+  Autocomplete,
+  TextField,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
@@ -53,8 +56,8 @@ export default function Clusters() {
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [searchText, setSearchText] = useState('');
-  const [cluster, setCluster] = useState([{}]);
+  const [clusterSearchValue, setClusterSearchValue] = useState('');
+  const [cluster, setCluster] = useState([{ name: '' }]);
   const [scheduler, setScheduler] = useState([{}]);
   const [seedPeer, setSeedPeer] = useState([{}]);
   const [allClusters, setAllClusters] = useState([
@@ -86,8 +89,8 @@ export default function Clusters() {
         ]);
 
         setCluster(cluster.data);
-        setScheduler(schedle);
-        setSeedPeer(seedPeer);
+        setScheduler(schedle.data);
+        setSeedPeer(seedPeer.data);
         setTotalPages(allClusters.total_page || 1);
         setAllClusters(allClusters.data);
         setIsLoading(false);
@@ -111,11 +114,12 @@ export default function Clusters() {
   const numberOfActiveSeedPeers =
     Array.isArray(seedPeer) && seedPeer?.filter((item: any) => item?.state === 'active').length;
 
-  const searchCluster = async () => {
+  const searchCluster = async (event: any) => {
     try {
       setClusterIsLoading(true);
-      const response = await getClusters({ page: 1, per_page: pageSize, name: searchText });
+      const response = await getClusters({ page: 1, per_page: pageSize, name: clusterSearchValue });
       setAllClusters(response.data);
+      setTotalPages(response.total_page || 1);
       setClusterIsLoading(false);
     } catch (error) {
       if (error instanceof Error) {
@@ -276,17 +280,22 @@ export default function Clusters() {
             </Box>
           </Paper>
         </Grid>
-        <Paper variant="outlined" className={styles.searchContainer}>
-          <InputBase
-            name="Name"
-            placeholder="Search"
-            color="secondary"
-            value={searchText}
-            onKeyDown={handleKeyDown}
-            onChange={(event) => setSearchText(event.target.value)}
-            sx={{ ml: 1, flex: 1 }}
-            inputProps={{ 'aria-label': 'search google maps' }}
-          />
+        <Box className={styles.searchContainer}>
+          <Stack spacing={2} sx={{ width: '20rem' }}>
+            <Autocomplete
+              size="small"
+              color="secondary"
+              id="free-solo-demo"
+              freeSolo
+              onKeyDown={handleKeyDown}
+              inputValue={clusterSearchValue}
+              onInputChange={(_event, newInputValue) => {
+                setClusterSearchValue(newInputValue);
+              }}
+              options={(Array.isArray(cluster) && cluster.map((option) => option?.name)) || ['']}
+              renderInput={(params) => <TextField {...params} label="Search" />}
+            />
+          </Stack>
           <IconButton
             type="button"
             aria-label="search"
@@ -297,7 +306,7 @@ export default function Clusters() {
           >
             <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
           </IconButton>
-        </Paper>
+        </Box>
         <Grid item xs={12} className={styles.clusterListContainer} component="form" noValidate>
           {Array.isArray(allClusters) &&
             allClusters.map((item) => (

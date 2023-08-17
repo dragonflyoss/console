@@ -181,14 +181,12 @@ interface getClustersResponse {
 export async function getClusters(params?: getClustersParams): Promise<getClustersResponse> {
   const query = params ? queryString.stringify({ ...params }) : '';
   const url = new URL(`/api/v1/clusters${query ? '?' : ''}${query}`, API_URL);
-
   const response = await get(url);
   const data = await response.json();
   const linkHeader = response.headers.get('link');
   const links = parseLinkHeader(linkHeader || null);
   const totalPage = Number(links?.last?.page);
   const responses = { data: data, total_page: totalPage };
-
   return responses;
 }
 
@@ -339,9 +337,10 @@ interface getSchedulerParmas {
   scheduler_cluster_id?: string;
   page?: number;
   per_page?: number;
+  host_name?: string;
 }
 
-interface getSchedulersResponse {
+interface schedulersResponse {
   id: number;
   host_name: string;
   ip: string;
@@ -354,12 +353,20 @@ interface getSchedulersResponse {
   created_at: string;
   updated_at: string;
 }
-
-export async function getSchedulers(params?: getSchedulerParmas): Promise<getSchedulersResponse[]> {
+interface getSchedulersResponse {
+  data: schedulersResponse[];
+  total_page?: number;
+}
+export async function getSchedulers(params?: getSchedulerParmas): Promise<getSchedulersResponse> {
   const query = params ? queryString.stringify({ ...params }) : '';
   const url = new URL(`/api/v1/schedulers${query ? '?' : ''}${query}`, API_URL);
   const response = await get(url);
-  return await response.json();
+  const data = await response.json();
+  const linkHeader = response.headers.get('link');
+  const links = parseLinkHeader(linkHeader || null);
+  const totalPage = Number(links?.last?.page);
+  const responses = { data: data, total_page: totalPage };
+  return responses;
 }
 
 interface getSchedulerResponse {
@@ -391,9 +398,10 @@ interface getSeedPeersParmas {
   seed_peer_cluster_id?: string;
   page?: number;
   per_page?: number;
+  host_name?: string;
 }
 
-interface getSeedPeersResponse {
+interface seedPeersResponse {
   id: number;
   host_name: string;
   ip: string;
@@ -408,12 +416,20 @@ interface getSeedPeersResponse {
   updated_at: string;
   seed_peer_cluster_id: number;
 }
-
-export async function getSeedPeers(params?: getSeedPeersParmas): Promise<getSeedPeersResponse[]> {
+interface getSeedPeersResponse {
+  data: seedPeersResponse[];
+  total_page?: number;
+}
+export async function getSeedPeers(params?: getSeedPeersParmas): Promise<getSeedPeersResponse> {
   const query = params ? queryString.stringify({ ...params }) : '';
   const url = new URL(`/api/v1/seed-peers${query ? '?' : ''}${query}`, API_URL);
   const response = await get(url);
-  return await response.json();
+  const data = await response.json();
+  const linkHeader = response.headers.get('link');
+  const links = parseLinkHeader(linkHeader || null);
+  const totalPage = Number(links?.last?.page);
+  const responses = { data: data, total_page: totalPage };
+  return responses;
 }
 
 interface getSeedPeerResponse {

@@ -603,7 +603,7 @@ export default function ShowCluster() {
             />
           </Paper>
         </Box>
-        <Typography variant="h6" gutterBottom fontFamily="mabry-bold" mt="2rem" mb="1rem">
+        <Typography variant="subtitle1" gutterBottom fontFamily="mabry-bold" mt="2rem" mb="1rem">
           Scheduler Cluster
         </Typography>
         <Paper variant="outlined" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
@@ -877,7 +877,7 @@ export default function ShowCluster() {
             size="small"
           />
         </Box>
-        <Typography variant="h6" gutterBottom fontFamily="mabry-bold" mt="2rem" mb="1rem">
+        <Typography variant="subtitle1" gutterBottom fontFamily="mabry-bold" mt="2rem" mb="1rem">
           Seed Peer Cluster
         </Typography>
         <Paper variant="outlined" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>

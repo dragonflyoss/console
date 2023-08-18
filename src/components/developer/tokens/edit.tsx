@@ -17,6 +17,7 @@ import {
   InputLabel,
   FormGroup,
   FormHelperText,
+  Paper,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { formatDate, getExpiredTime } from '../../../lib/utils';
@@ -204,6 +205,20 @@ export default function UpdateTokens() {
           Update personal access token
         </Typography>
         <Divider sx={{ mt: 2, mb: 2 }} />
+        <Paper
+          variant="outlined"
+          sx={{ flexGrow: '1', display: 'inline-flex', alignItems: 'center', mb: '1rem', p: '1rem' }}
+        >
+          <Box component="img" src="/icons/tokens/key.svg" sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }} />
+          <Box>
+            <Typography component="div" variant="body1" fontFamily="mabry-bold">
+              ID:&nbsp;&nbsp;{tokens.id}
+            </Typography>
+            <Typography component="div" variant="body1" fontFamily="mabry-bold">
+              Name:&nbsp;&nbsp;{tokens.name}
+            </Typography>
+          </Box>
+        </Paper>
         <Box component="form" onSubmit={handleSubmit} noValidate>
           <FormControl fullWidth>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>

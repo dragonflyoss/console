@@ -160,8 +160,8 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
             </Grid>
             <Paper elevation={0} className={styles.scopesContentContainer}>
               <Paper variant="outlined" className={styles.locationContainer}>
-                <Box className={styles.iconContainer}>
-                  <Box component="img" className={styles.icon} src="/icons/cluster/location.svg" />
+                <Box className={styles.scopesIconContainer}>
+                  <Box component="img" className={styles.scopesIcon} src="/icons/cluster/location.svg" />
                 </Box>
                 <Box>
                   <Box className={styles.locationTitle}>
@@ -185,8 +185,8 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                 </Box>
               </Paper>
               <Paper variant="outlined" className={styles.idcContainer}>
-                <Box className={styles.iconContainer}>
-                  <Box component="img" className={styles.icon} src="/icons/cluster/idc.svg" />
+                <Box className={styles.scopesIconContainer}>
+                  <Box component="img" className={styles.scopesIcon} src="/icons/cluster/idc.svg" />
                 </Box>
                 <Box>
                   <Box className={styles.idcTitle}>
@@ -210,8 +210,8 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                 </Box>
               </Paper>
               <Paper variant="outlined" className={styles.cidrsContainer}>
-                <Box className={styles.iconContainer}>
-                  <Box component="img" className={styles.icon} src="/icons/cluster/cidrs.svg" />
+                <Box className={styles.scopesIconContainer}>
+                  <Box component="img" className={styles.scopesIcon} src="/icons/cluster/cidrs.svg" />
                 </Box>
                 <Box>
                   <Box className={styles.cidrsTitle}>

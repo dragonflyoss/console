@@ -43,8 +43,6 @@
 
 .scopesContentContainer {
   display: flex;
-  background-color: #edeff1 !important;
-  padding: 0.6rem;
   height: 100%;
 }
 
@@ -59,19 +57,19 @@
   justify-content: space-between;
 }
 
-.iconContainer {
+.scopesIconContainer {
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--scopes-icon-color);
   border-radius: 0.2rem;
-  width: 2rem;
-  height: 2rem;
+  width: 2.4rem;
+  height: 2.4rem;
 }
 
-.icon {
-  width: 1.6rem;
-  height: 1.6rem;
+.scopesIcon {
+  width: 2rem;
+  height: 2rem;
 }
 
 .locationTitle {

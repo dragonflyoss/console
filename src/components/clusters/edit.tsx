@@ -11,6 +11,7 @@ import {
   TextField,
   Tooltip,
   Typography,
+  Paper,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import styles from './edit.module.css';
@@ -37,6 +38,7 @@ export default function EditCluster() {
   const [loadingButton, setLoadingButton] = useState(false);
   const [cluster, setCluster] = useState({
     id: 0,
+    name: '',
     bio: '',
     scopes: {
       idc: '',
@@ -535,6 +537,17 @@ export default function EditCluster() {
         Update Cluster
       </Typography>
       <Divider sx={{ mt: 2, mb: 2 }} />
+      <Paper variant="outlined" sx={{ display: 'inline-flex', alignItems: 'center', mb: '1rem', p: '1rem' }}>
+        <Box component="img" src="/icons/cluster/cluster.svg" sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }} />
+        <Box>
+          <Typography component="div" variant="body1" fontFamily="mabry-bold">
+            ID:&nbsp;&nbsp;{cluster.id}
+          </Typography>
+          <Typography component="div" variant="body1" fontFamily="mabry-bold">
+            Name:&nbsp;&nbsp;{cluster.name}
+          </Typography>
+        </Box>
+      </Paper>
       <Grid className={styles.container} component="form" noValidate onSubmit={handleSubmit}>
         <Box className={styles.informationTitle}>
           <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">

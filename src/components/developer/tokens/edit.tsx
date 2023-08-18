@@ -46,17 +46,18 @@ export default function UpdateTokens() {
   const [preheat, setPreheat] = useState(false);
   const [job, setJob] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
-  const [token, setToken] = useState({ name: '', bio: '', scopes: [''], expired_at: '', state: '', id: 0 });
+  const [tokens, setTokens] = useState({ name: '', bio: '', scopes: [''], expired_at: '', state: '', id: 0 });
+
   const formList = [
     {
       formProps: {
-        id: 'Bio',
+        id: 'bio',
         label: 'Description',
-        name: 'Bio',
+        name: 'bio',
         autoComplete: 'family-name',
-        placeholder: 'Enter your Note',
-        value: token.bio,
-        helperText: bioError ? 'Please enter Description' : '',
+        placeholder: 'Enter your description',
+        value: tokens.bio,
+        helperText: bioError ? 'The length is 1-1000' : '',
         error: bioError,
 
         InputProps: {
@@ -71,7 +72,7 @@ export default function UpdateTokens() {
         },
 
         onChange: (e: any) => {
-          setToken({ ...token, bio: e.target.value });
+          setTokens({ ...tokens, bio: e.target.value });
           changeValidate(e.target.value, formList[0]);
         },
       },
@@ -92,11 +93,11 @@ export default function UpdateTokens() {
     (async function () {
       try {
         if (params?.id) {
-          const token = await getToken(params?.id);
-          setToken(token);
-          setExpiredTime(token.expired_at);
-          setPreheat(token.scopes.includes('preheat'));
-          setJob(token.scopes.includes('job'));
+          const tokens = await getToken(params?.id);
+          setTokens(tokens);
+          setExpiredTime(tokens.expired_at);
+          setPreheat(tokens.scopes.includes('preheat'));
+          setJob(tokens.scopes.includes('job'));
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -137,7 +138,7 @@ export default function UpdateTokens() {
 
     const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
 
-    const formData = { bio: token.bio, expired_at: expiredTime, scopes: filteredScopes };
+    const formData = { bio: tokens.bio, expired_at: expiredTime, scopes: filteredScopes };
 
     if (!selectedTime) {
       setExpiredTimeError(true);
@@ -146,11 +147,11 @@ export default function UpdateTokens() {
       if (canSubmit) {
         try {
           if (params.id) {
-            const response = await updateTokens(params.id, { ...formData });
+            const tokens = await updateTokens(params.id, { ...formData });
             setLoadingButton(false);
             setSuccessMessage(true);
 
-            const token = response.token;
+            const token = tokens.token;
             localStorage.setItem('token', JSON.stringify(token));
             navigate('/developer/personal-access-tokens');
           }

@@ -34,7 +34,7 @@ export default function PersonalAccessTokens() {
   const [openDeletToken, setOpenDeletToken] = useState(false);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [tokenSelectedID, setTokenSelectedID] = useState('');
-  const [token, setToken] = useState([
+  const [tokens, setTokens] = useState([
     { name: '', id: 0, scopes: [''], token: '', created_at: '', expired_at: '', user: { name: '' } },
   ]);
   const [showCopyColumn, setShowCopyColumn] = useState(false);
@@ -58,11 +58,11 @@ export default function PersonalAccessTokens() {
       try {
         if (user.name === 'root') {
           const token = await getTokens();
-          setToken(token);
+          setTokens(token);
           setIsLoading(false);
         } else if (user.name !== '') {
           const token = await getTokens({ user_id: String(user.id) });
-          setToken(token);
+          setTokens(token);
           setIsLoading(false);
         }
       } catch (error) {
@@ -90,11 +90,11 @@ export default function PersonalAccessTokens() {
       setOpenDeletToken(false);
 
       if (user.name === 'root') {
-        const token = await getTokens();
-        setToken(token);
+        const tokens = await getTokens();
+        setTokens(tokens);
       } else if (user.name !== '') {
         const token = await getTokens({ user_id: String(user.id) });
-        setToken(token);
+        setTokens(token);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -215,8 +215,8 @@ export default function PersonalAccessTokens() {
         ) : (
           <></>
         )}
-        {Array.isArray(token) &&
-          token.map((item) => {
+        {Array.isArray(tokens) &&
+          tokens.map((item) => {
             return (
               <Box key={item.id}>
                 <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>

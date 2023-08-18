@@ -47,6 +47,7 @@ export default function CreateTokens() {
   const [preheat, setPreheat] = useState(false);
   const [job, setJob] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
+
   const formList = [
     {
       formProps: {
@@ -54,7 +55,7 @@ export default function CreateTokens() {
         label: 'Name',
         name: 'name',
         autoComplete: 'family-name',
-        placeholder: 'Enter your token',
+        placeholder: 'Enter your token name',
         helperText: nameError ? 'Please enter the correct token name' : '',
         error: nameError,
         InputProps: {
@@ -82,12 +83,12 @@ export default function CreateTokens() {
     },
     {
       formProps: {
-        id: 'Bio',
+        id: 'bio',
         label: 'Description',
         name: 'bio',
         autoComplete: 'family-name',
-        placeholder: 'Enter your Description',
-        helperText: bioError ? 'Please enter Description' : '',
+        placeholder: 'Enter your description',
+        helperText: bioError ? 'The length is 1-1000' : '',
         error: bioError,
         InputProps: {
           endAdornment: (
@@ -162,11 +163,11 @@ export default function CreateTokens() {
 
     if (canSubmit) {
       try {
-        const response = await createTokens({ ...formData });
+        const tokens = await createTokens({ ...formData });
         setLoadingButton(false);
         setSuccessMessage(true);
 
-        const token = response.token;
+        const token = tokens.token;
         localStorage.setItem('token', JSON.stringify(token));
         navigate('/developer/personal-access-tokens');
       } catch (error) {

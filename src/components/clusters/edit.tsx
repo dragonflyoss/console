@@ -98,8 +98,8 @@ export default function EditCluster() {
         name: 'bio',
         autoComplete: 'family-name',
         value: bio,
-        placeholder: 'Please enter Description',
-        helperText: bioError ? 'Must be a number and range from 0-1000' : '',
+        placeholder: 'Please enter description',
+        helperText: bioError ? 'The length is 1-1000' : '',
         error: bioError,
 
         onChange: (e: any) => {

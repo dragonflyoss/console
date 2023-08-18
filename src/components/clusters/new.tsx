@@ -70,7 +70,7 @@ export default function NewCluster() {
         name: 'description',
         autoComplete: 'family-name',
         placeholder: 'Enter a cluster description',
-        helperText: bioError ? 'The length is 0-40' : '',
+        helperText: bioError ? 'The length is 1-1000' : '',
         error: bioError,
 
         onChange: (e: any) => {
@@ -386,7 +386,7 @@ export default function NewCluster() {
 
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    
+
     const name = event.currentTarget.elements.name.value;
     const isDefault = event.currentTarget.elements.isDefault.checked;
     const description = event.currentTarget.elements.description.value;

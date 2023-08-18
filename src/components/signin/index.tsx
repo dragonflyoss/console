@@ -23,6 +23,8 @@ export default function SignIn() {
   const [accountError, setAccountError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [pageLoding, setPageLoding] = useState(false);
+
+  const navigate = useNavigate();
   const location = useLocation();
 
   const formList = [
@@ -100,8 +102,6 @@ export default function SignIn() {
     },
   });
 
-  const router = useNavigate();
-
   const changeValidate = (value: string, data: any) => {
     const { setError, validate } = data;
     setError(!validate(value));
@@ -133,9 +133,9 @@ export default function SignIn() {
         });
 
         if (accountElement.value === 'root' && passwordElement.value === 'dragonfly') {
-          router('/clusters', { state: { isFirstLogin: true } });
+          navigate('/clusters', { state: { isFirstLogin: true } });
         } else {
-          router('/clusters');
+          navigate('/clusters');
         }
 
         setPageLoding(true);

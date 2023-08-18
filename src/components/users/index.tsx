@@ -73,9 +73,9 @@ export default function Users() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [DetailLoading, setDetailLoading] = useState(true);
-  const [openDetail, setOpenDeatil] = useState(false);
-  const [openUser, setOpenUser] = useState(false);
+  const [detailIsLoading, setDetailIsLoading] = useState(true);
+  const [userDetail, setUserDetail] = useState(false);
+  const [switchUser, setSwitchUser] = useState(false);
   const [userID, setUserID] = useState('');
   const [root] = useState('root');
   const [guest] = useState('guest');
@@ -100,8 +100,8 @@ export default function Users() {
       try {
         setIsLoading(true);
 
-        const response = await getUsers();
-        setUsers(response);
+        const user = await getUsers();
+        setUsers(user);
         setIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
@@ -115,22 +115,22 @@ export default function Users() {
 
   const handleChange = async (row: any) => {
     try {
-      setOpenDeatil(true);
-      setDetailLoading(true);
+      setUserDetail(true);
+      setDetailIsLoading(true);
       setSelectedRow(row);
 
-      const response = await getUser(row.id);
-      const roleResponse = await getUserRoles(row.id);
+      const user = await getUser(row.id);
+      const role = await getUserRoles(row.id);
 
-      setDetailRole(roleResponse[0] || '');
-      setUser(response);
-      setDetailLoading(false);
+      setDetailRole(role[0] || '');
+      setUser(user);
+      setDetailIsLoading(false);
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(true);
         setErrorMessageText(error.message);
-        setOpenDeatil(true);
-        setDetailLoading(false);
+        setUserDetail(true);
+        setDetailIsLoading(false);
       }
     }
   };
@@ -140,21 +140,21 @@ export default function Users() {
       setSelectedRow(row);
       setUserID(row.id);
 
-      const response = await getUserRoles(row.id);
-      setRole(response[0] || '');
-      setOpenUser(true);
+      const role = await getUserRoles(row.id);
+      setRole(role[0] || '');
+      setSwitchUser(true);
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(true);
         setErrorMessageText(error.message);
-        setOpenUser(true);
+        setSwitchUser(true);
       }
     }
   };
 
-  const closure = () => {
-    setOpenDeatil(false);
-    setOpenUser(false);
+  const closeAllPopups = () => {
+    setUserDetail(false);
+    setSwitchUser(false);
     setSelectedRow(null);
   };
 
@@ -168,7 +168,7 @@ export default function Users() {
 
         setSuccessMessage(true);
         setLoadingButton(false);
-        setOpenUser(false);
+        setSwitchUser(false);
         setSelectedRow(null);
       } catch (error) {
         if (error instanceof Error) {
@@ -185,7 +185,7 @@ export default function Users() {
 
         setSuccessMessage(true);
         setLoadingButton(false);
-        setOpenUser(false);
+        setSwitchUser(false);
         setSelectedRow(null);
       } catch (error) {
         if (error instanceof Error) {
@@ -388,8 +388,8 @@ export default function Users() {
         </Table>
       </Paper>
       <Dialog
-        open={openUser}
-        onClose={closure}
+        open={switchUser}
+        onClose={closeAllPopups}
         maxWidth="xs"
         fullWidth
         aria-labelledby="alert-dialog-title"
@@ -464,7 +464,7 @@ export default function Users() {
               mr: '1rem',
               width: '8rem',
             }}
-            onClick={closure}
+            onClick={closeAllPopups}
           >
             Cancel
           </LoadingButton>
@@ -499,7 +499,7 @@ export default function Users() {
           </LoadingButton>
         </DialogActions>
       </Dialog>
-      <Drawer anchor="right" open={openDetail} onClose={closure}>
+      <Drawer anchor="right" open={userDetail} onClose={closeAllPopups}>
         <Box role="presentation" sx={{ width: 350 }}>
           <List>
             <ListSubheader component="div" color="inherit" className={styles.detailTitle}>
@@ -508,10 +508,10 @@ export default function Users() {
               </Typography>
               <IconButton
                 onClick={() => {
-                  setOpenDeatil(false);
-                  setOpenUser(false);
+                  setUserDetail(false);
+                  setSwitchUser(false);
                   setSelectedRow(null);
-                  setDetailLoading(true);
+                  setDetailIsLoading(true);
                 }}
               >
                 <ClearOutlinedIcon sx={{ color: 'var(--button-color)' }} />
@@ -525,7 +525,9 @@ export default function Users() {
                   ID
                 </Typography>
               </ListItemAvatar>
-              <Typography variant="body2">{DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.id}</Typography>
+              <Typography variant="body2">
+                {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.id}
+              </Typography>
             </ListItem>
             <Divider />
             <ListItem className={styles.detailContentWrap}>
@@ -536,7 +538,7 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2">
-                {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.name}
+                {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.name}
               </Typography>
             </ListItem>
             <Divider />
@@ -548,7 +550,7 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2" component="div">
-                {DetailLoading ? (
+                {detailIsLoading ? (
                   <Skeleton sx={{ width: '8rem' }} />
                 ) : (
                   <Chip
@@ -577,7 +579,7 @@ export default function Users() {
               </ListItemAvatar>
               <Tooltip title={user?.email || '-'} placement="top">
                 <Typography variant="body2" className={styles.emailContent}>
-                  {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.email || '-'}
+                  {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.email || '-'}
                 </Typography>
               </Tooltip>
             </ListItem>
@@ -590,7 +592,7 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2">
-                {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : user.phone || '-'}
+                {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user.phone || '-'}
               </Typography>
             </ListItem>
             <Divider />
@@ -604,7 +606,7 @@ export default function Users() {
               <Tooltip title={user.location || '-'} placement="top">
                 <Box className={styles.emailContent}>
                   <Typography variant="body2">
-                    {DetailLoading ? <Skeleton sx={{ width: '8rem' }} /> : user.location || '-'}
+                    {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user.location || '-'}
                   </Typography>
                 </Box>
               </Tooltip>
@@ -617,7 +619,7 @@ export default function Users() {
                   Created At
                 </Typography>
               </ListItemAvatar>
-              {DetailLoading ? (
+              {detailIsLoading ? (
                 <Skeleton sx={{ width: '8rem' }} />
               ) : (
                 <Chip
@@ -636,7 +638,7 @@ export default function Users() {
                   Updated At
                 </Typography>
               </ListItemAvatar>
-              {DetailLoading ? (
+              {detailIsLoading ? (
                 <Skeleton sx={{ width: '8rem' }} />
               ) : (
                 <Chip

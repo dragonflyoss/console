@@ -17,7 +17,6 @@ import styles from './edit.module.css';
 import HelpIcon from '@mui/icons-material/Help';
 import { useEffect, useState } from 'react';
 import { getCluster, updateCluster } from '../../lib/api';
-import React from 'react';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -26,7 +25,7 @@ export default function EditCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [bioError, setbioError] = useState(false);
+  const [bioError, setBioError] = useState(false);
   const [seedPeerLoadLimitError, setSeedPeerLoadLimitError] = useState(false);
   const [peerLoadLimitError, setPeerLoadLimitError] = useState(false);
   const [numberOfConcurrentDownloadPiecesError, setNumberOfConcurrentDownloadPiecesError] = useState(false);
@@ -35,8 +34,8 @@ export default function EditCluster() {
   const [locationError, setLocationError] = useState(false);
   const [idcError, setIDCError] = useState(false);
   const [cidrsError, setCIDRsError] = useState(false);
-  const [editLoadingButton, setEditLoadingButton] = useState(false);
-  const [clusters, setClusters] = useState({
+  const [loadingButton, setLoadingButton] = useState(false);
+  const [cluster, setCluster] = useState({
     id: 0,
     bio: '',
     scopes: {
@@ -73,14 +72,14 @@ export default function EditCluster() {
     scheduler_cluster_config: { candidate_parent_limit, filter_parent_limit },
     scopes: { idc, location, cidrs },
     seed_peer_cluster_config,
-  } = clusters;
+  } = cluster;
 
   useEffect(() => {
     (async function () {
       try {
         if (typeof params.id === 'string') {
-          const response = await getCluster(params.id);
-          setClusters(response);
+          const cluster = await getCluster(params.id);
+          setCluster(cluster);
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -104,12 +103,12 @@ export default function EditCluster() {
         error: bioError,
 
         onChange: (e: any) => {
-          setClusters({ ...clusters, bio: e.target.value });
+          setCluster({ ...cluster, bio: e.target.value });
           changeValidate(e.target.value, informationForm[0]);
         },
       },
       syncError: false,
-      setError: setbioError,
+      setError: setBioError,
 
       validate: (value: string) => {
         const reg = /^.{0,1000}$/;
@@ -131,7 +130,7 @@ export default function EditCluster() {
         error: locationError,
 
         onChange: (e: any) => {
-          setClusters({ ...clusters, scopes: { ...clusters.scopes, location: e.target.value } });
+          setCluster({ ...cluster, scopes: { ...cluster.scopes, location: e.target.value } });
           changeValidate(e.target.value, scopesForm[0]);
         },
         InputProps: {
@@ -166,7 +165,7 @@ export default function EditCluster() {
         helperText: idcError ? 'Maximum length is 100' : '',
         error: idcError,
         onChange: (e: any) => {
-          setClusters({ ...clusters, scopes: { ...clusters.scopes, idc: e.target.value } });
+          setCluster({ ...cluster, scopes: { ...cluster.scopes, idc: e.target.value } });
           changeValidate(e.target.value, scopesForm[1]);
         },
         InputProps: {
@@ -198,7 +197,7 @@ export default function EditCluster() {
 
         onChange: (_e: any, newValue: any) => {
           if (!scopesForm[2].formProps.error) {
-            setClusters({ ...clusters, scopes: { ...clusters.scopes, cidrs: newValue } });
+            setCluster({ ...cluster, scopes: { ...cluster.scopes, cidrs: newValue } });
           }
         },
         onInputChange: (e: any) => {
@@ -245,9 +244,9 @@ export default function EditCluster() {
         error: seedPeerLoadLimitError,
 
         onChange: (e: any) => {
-          setClusters({
-            ...clusters,
-            seed_peer_cluster_config: { ...clusters.seed_peer_cluster_config, load_limit: e.target.value },
+          setCluster({
+            ...cluster,
+            seed_peer_cluster_config: { ...cluster.seed_peer_cluster_config, load_limit: e.target.value },
           });
           changeValidate(e.target.value, configForm[0]);
         },
@@ -283,9 +282,9 @@ export default function EditCluster() {
         value: load_limit,
 
         onChange: (e: any) => {
-          setClusters({
-            ...clusters,
-            peer_cluster_config: { ...clusters.peer_cluster_config, load_limit: e.target.value },
+          setCluster({
+            ...cluster,
+            peer_cluster_config: { ...cluster.peer_cluster_config, load_limit: e.target.value },
           });
           changeValidate(e.target.value, configForm[1]);
         },
@@ -323,9 +322,9 @@ export default function EditCluster() {
         error: numberOfConcurrentDownloadPiecesError,
 
         onChange: (e: any) => {
-          setClusters({
-            ...clusters,
-            peer_cluster_config: { ...clusters.peer_cluster_config, concurrent_piece_count: e.target.value },
+          setCluster({
+            ...cluster,
+            peer_cluster_config: { ...cluster.peer_cluster_config, concurrent_piece_count: e.target.value },
           });
           changeValidate(e.target.value, configForm[2]);
         },
@@ -362,10 +361,10 @@ export default function EditCluster() {
         error: candidateParentLimitError,
 
         onChange: (e: any) => {
-          setClusters({
-            ...clusters,
+          setCluster({
+            ...cluster,
             scheduler_cluster_config: {
-              ...clusters.scheduler_cluster_config,
+              ...cluster.scheduler_cluster_config,
               candidate_parent_limit: e.target.value,
             },
           });
@@ -404,10 +403,10 @@ export default function EditCluster() {
         error: filterParentLimitError,
 
         onChange: (e: any) => {
-          setClusters({
-            ...clusters,
+          setCluster({
+            ...cluster,
             scheduler_cluster_config: {
-              ...clusters.scheduler_cluster_config,
+              ...cluster.scheduler_cluster_config,
               filter_parent_limit: e.target.value,
             },
           });
@@ -449,7 +448,7 @@ export default function EditCluster() {
   };
 
   const handleSubmit = async (event: any) => {
-    setEditLoadingButton(true);
+    setLoadingButton(true);
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
@@ -495,18 +494,18 @@ export default function EditCluster() {
     if (canSubmit && typeof params.id === 'string') {
       try {
         await updateCluster(params.id, { ...formdata });
-        setEditLoadingButton(false);
+        setLoadingButton(false);
         setSuccessMessage(true);
         navigate(`/clusters/${params.id}`);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
-          setEditLoadingButton(false);
+          setLoadingButton(false);
         }
       }
     } else {
-      setEditLoadingButton(false);
+      setLoadingButton(false);
     }
   };
 
@@ -551,7 +550,7 @@ export default function EditCluster() {
               <Checkbox
                 checked={is_default}
                 onChange={(event: { target: { checked: any } }) => {
-                  setClusters({ ...clusters, is_default: event.target.checked });
+                  setCluster({ ...cluster, is_default: event.target.checked });
                 }}
                 sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }}
               />
@@ -629,7 +628,7 @@ export default function EditCluster() {
         </Grid>
         <Box className={styles.footerButton}>
           <LoadingButton
-            loading={editLoadingButton}
+            loading={loadingButton}
             endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
             size="small"
             variant="outlined"
@@ -653,14 +652,14 @@ export default function EditCluster() {
               width: '8rem',
             }}
             onClick={() => {
-              setEditLoadingButton(true);
+              setLoadingButton(true);
               navigate(`/clusters/${id}`);
             }}
           >
             Cancel
           </LoadingButton>
           <LoadingButton
-            loading={editLoadingButton}
+            loading={loadingButton}
             endIcon={<CheckCircleIcon />}
             size="small"
             variant="outlined"

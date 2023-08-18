@@ -57,12 +57,13 @@ export default function Layout(props: any) {
   const [errorMessageText, setErrorMessageText] = useState('');
   const [pageLoding, setPageLoding] = useState(false);
   const [user, setUser] = useState({ name: '', email: '', avatar: '', id: 0 });
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [isFirstLogin, setIsFirstLogin] = useState(false);
-  const open = Boolean(anchorEl);
+  const [anchorElement, setAnchorElement] = useState(null);
+  const [firstLogin, setFirstLogin] = useState(false);
+  const [expandDeveloper, setExpandDeveloper] = useState(false);
+
+  const openProfile = Boolean(anchorElement);
   const location = useLocation();
   const navigate = useNavigate();
-  const [openAccessTokens, setOpenAccessTokens] = useState(false);
 
   useEffect(() => {
     setPageLoding(true);
@@ -87,8 +88,8 @@ export default function Layout(props: any) {
       setPageLoding(false);
     })();
 
-    if (location.state?.isFirstLogin) {
-      setIsFirstLogin(true);
+    if (location.state?.firstLogin) {
+      setFirstLogin(true);
     }
   }, [location, navigate]);
 
@@ -139,7 +140,7 @@ export default function Layout(props: any) {
   ];
 
   const handleLogout = async () => {
-    setAnchorEl(null);
+    setAnchorElement(null);
 
     try {
       await signOut();
@@ -157,7 +158,7 @@ export default function Layout(props: any) {
     if (reason === 'clickaway') {
       return;
     }
-    setIsFirstLogin(false);
+    setFirstLogin(false);
     setErrorMessage(false);
   };
 
@@ -174,7 +175,7 @@ export default function Layout(props: any) {
           <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
         </Backdrop>
         <Snackbar
-          open={isFirstLogin}
+          open={firstLogin}
           autoHideDuration={60000}
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           onClose={handleClose}
@@ -218,7 +219,7 @@ export default function Layout(props: any) {
                             <ListItemButton
                               key={items.href}
                               onClick={() => {
-                                setOpenAccessTokens(!openAccessTokens);
+                                setExpandDeveloper(!expandDeveloper);
                               }}
                               sx={{
                                 '&.Mui-selected': { backgroundColor: '#DFFF55' },
@@ -237,9 +238,9 @@ export default function Layout(props: any) {
                               >
                                 {items.text}
                               </Typography>
-                              {openAccessTokens ? <ExpandLess /> : <ExpandMore />}
+                              {expandDeveloper ? <ExpandLess /> : <ExpandMore />}
                             </ListItemButton>
-                            <Collapse in={openAccessTokens} timeout="auto" unmountOnExit>
+                            <Collapse in={expandDeveloper} timeout="auto" unmountOnExit>
                               <List component="div" disablePadding>
                                 <ListItemButton
                                   selected={location.pathname.split('/')[2] === items?.menuProps?.label}
@@ -292,7 +293,7 @@ export default function Layout(props: any) {
                           <Box key={items.href}>
                             <ListItemButton
                               onClick={() => {
-                                setOpenAccessTokens(!openAccessTokens);
+                                setExpandDeveloper(!expandDeveloper);
                               }}
                               sx={{
                                 '&.Mui-selected': { backgroundColor: '#DFFF55' },
@@ -311,9 +312,9 @@ export default function Layout(props: any) {
                               >
                                 {items.text}
                               </Typography>
-                              {openAccessTokens ? <ExpandLess /> : <ExpandMore />}
+                              {expandDeveloper ? <ExpandLess /> : <ExpandMore />}
                             </ListItemButton>
-                            <Collapse in={openAccessTokens} timeout="auto" unmountOnExit>
+                            <Collapse in={expandDeveloper} timeout="auto" unmountOnExit>
                               <List component="div" disablePadding>
                                 <ListItemButton
                                   selected={location.pathname.split('/')[2] === items?.menuProps?.label}
@@ -405,29 +406,29 @@ export default function Layout(props: any) {
                   </Box>
                   <IconButton
                     onClick={(event: any) => {
-                      setAnchorEl(event.currentTarget);
+                      setAnchorElement(event.currentTarget);
                     }}
                     size="small"
-                    aria-controls={open ? 'account-menu' : undefined}
+                    aria-controls={openProfile ? 'account-menu' : undefined}
                     aria-haspopup="true"
-                    aria-expanded={open ? 'true' : undefined}
+                    aria-expanded={openProfile ? 'true' : undefined}
                     sx={{ position: 'relative', padding: '0' }}
                   >
                     <UnfoldMoreIcon />
                   </IconButton>
                 </Box>
                 <Menu
-                  anchorEl={anchorEl}
+                  anchorEl={anchorElement}
                   id="account-menu"
-                  open={open}
+                  open={openProfile}
                   onClose={() => {
-                    setAnchorEl(null);
+                    setAnchorElement(null);
                   }}
-                  sx={{ position: 'absolute', top: '-5.5rem', left: '-4.8rem' }}
+                  sx={{ position: 'absolute', top: '-5.8rem', left: '-5rem' }}
                 >
                   <MenuItem
                     onClick={() => {
-                      setAnchorEl(null);
+                      setAnchorElement(null);
 
                       navigate('/profile');
                     }}

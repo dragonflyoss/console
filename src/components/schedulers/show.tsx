@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -14,7 +13,7 @@ export default function Schedulers() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [schedule, setSchedule] = useState({
+  const [scheduler, setScheduler] = useState({
     id: 0,
     host_name: '',
     ip: '',
@@ -59,8 +58,8 @@ export default function Schedulers() {
         setIsLoading(true);
 
         if (typeof params.id === 'string') {
-          const response = await getScheduler(params.id);
-          setSchedule(response);
+          const scheduler = await getScheduler(params.id);
+          setScheduler(scheduler);
           setIsLoading(false);
         }
       } catch (error) {
@@ -101,13 +100,13 @@ export default function Schedulers() {
           component={Link}
           underline="hover"
           color="inherit"
-          to={`/clusters/${schedule.scheduler_cluster_id}`}
+          to={`/clusters/${scheduler.scheduler_cluster_id}`}
         >
-          {`scheduler-cluster-${schedule.scheduler_cluster_id}`}
+          {`scheduler-cluster-${scheduler.scheduler_cluster_id}`}
         </RouterLink>
         <Typography color="text.primary">schedulers</Typography>
         <Typography color="text.primary" fontFamily="mabry-bold">
-          {schedule?.host_name}
+          {scheduler?.host_name}
         </Typography>
       </Breadcrumbs>
       <Typography variant="h5" fontFamily="mabry-bold" sx={{ pb: '1rem' }}>
@@ -122,7 +121,7 @@ export default function Schedulers() {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : schedule?.id || '-'}
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : scheduler?.id || '-'}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.headerContainer}>
@@ -133,7 +132,7 @@ export default function Schedulers() {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : schedule?.host_name || '-'}
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : scheduler?.host_name || '-'}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.headerContainer}>
@@ -144,7 +143,7 @@ export default function Schedulers() {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : schedule?.ip}
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : scheduler?.ip}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.clusterIDContaine}>
@@ -155,7 +154,7 @@ export default function Schedulers() {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : schedule?.scheduler_cluster_id}
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : scheduler?.scheduler_cluster_id}
           </Typography>
         </Paper>
       </Box>
@@ -173,35 +172,35 @@ export default function Schedulers() {
                   {item.name === 'created_at' ? (
                     <Chip
                       avatar={<MoreTimeIcon />}
-                      label={getDatetime(schedule?.[item?.name] || '')}
+                      label={getDatetime(scheduler?.[item?.name] || '')}
                       variant="outlined"
                       size="small"
                     />
                   ) : item.name === 'updated_at' ? (
                     <Chip
                       avatar={<HistoryIcon />}
-                      label={getDatetime(schedule?.[item?.name])}
+                      label={getDatetime(scheduler?.[item?.name])}
                       variant="outlined"
                       size="small"
                     />
                   ) : item.name === 'state' ? (
                     <Chip
-                      label={_.upperFirst(schedule?.[item.name]) || ''}
+                      label={_.upperFirst(scheduler?.[item.name]) || ''}
                       size="small"
                       variant="outlined"
                       sx={{
                         borderRadius: '0%',
                         backgroundColor:
-                          schedule?.[item?.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                        color: schedule?.[item?.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
+                          scheduler?.[item?.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                        color: scheduler?.[item?.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
                         borderColor:
-                          schedule?.[item?.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                          scheduler?.[item?.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
                         fontWeight: 'bold',
                       }}
                     />
                   ) : item.name === 'features' ? (
                     <>
-                      {schedule?.[item?.name]?.map((items: string, id: any) => (
+                      {scheduler?.[item?.name]?.map((items: string, id: any) => (
                         <Chip
                           key={id}
                           label={_.upperFirst(items) || ''}
@@ -220,7 +219,7 @@ export default function Schedulers() {
                     </>
                   ) : (
                     <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-                      {schedule?.[item?.name as keyof typeof schedule] || '-'}
+                      {scheduler?.[item?.name as keyof typeof scheduler] || '-'}
                     </Typography>
                   )}
                 </>

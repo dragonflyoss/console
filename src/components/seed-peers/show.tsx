@@ -32,7 +32,7 @@ export default function SeedPeer() {
 
   const params = useParams();
 
-  const seedPeersLabel = [
+  const seedPeerLabel = [
     {
       label: 'Port',
       name: 'port',
@@ -69,8 +69,8 @@ export default function SeedPeer() {
         setIsLoading(true);
 
         if (typeof params.id === 'string') {
-          const response = await getSeedPeer(params.id);
-          setSeedPeer(response);
+          const seedPeer = await getSeedPeer(params.id);
+          setSeedPeer(seedPeer);
           setIsLoading(false);
         }
       } catch (error) {
@@ -170,7 +170,7 @@ export default function SeedPeer() {
         </Paper>
       </Box>
       <Paper variant="outlined" className={styles.seedPeerContainer}>
-        {seedPeersLabel.map((item) => {
+        {seedPeerLabel.map((item) => {
           return (
             <Box key={item.label} className={styles.seedPeerContent}>
               <Typography variant="subtitle1" component="div" mb="1rem">

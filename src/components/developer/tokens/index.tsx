@@ -31,17 +31,16 @@ export default function PersonalAccessTokens() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [_state, copyToClipboard] = useCopyToClipboard();
   const [openDeletToken, setOpenDeletToken] = useState(false);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
-  const [tokensID, setTokensID] = useState('');
-  const [tokensList, setTokensList] = useState([
+  const [tokenSelectedID, setTokenSelectedID] = useState('');
+  const [token, setToken] = useState([
     { name: '', id: 0, scopes: [''], token: '', created_at: '', expired_at: '', user: { name: '' } },
   ]);
-  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [showCopyColumn, setShowCopyColumn] = useState(false);
+  const [showCopyIcon, setShowCopyIcon] = useState(false);
   const [newToken, setNewToken] = useState('');
-  const [copyIcon, setCopyIcon] = useState(false);
-
+  const [, setCopiedText] = useCopyToClipboard();
   const navigate = useNavigate();
   const user = useContext(MyContext);
 
@@ -51,19 +50,19 @@ export default function PersonalAccessTokens() {
     if (token) {
       const newToken = JSON.parse(token);
       setNewToken(newToken);
-      setShowSnackbar(true);
+      setShowCopyColumn(true);
       localStorage.removeItem('token');
     }
 
     (async function () {
       try {
         if (user.name === 'root') {
-          const response = await getTokens();
-          setTokensList(response);
+          const token = await getTokens();
+          setToken(token);
           setIsLoading(false);
         } else if (user.name !== '') {
-          const response = await getTokens({ user_id: String(user.id) });
-          setTokensList(response);
+          const token = await getTokens({ user_id: String(user.id) });
+          setToken(token);
           setIsLoading(false);
         }
       } catch (error) {
@@ -76,26 +75,26 @@ export default function PersonalAccessTokens() {
     })();
   }, [user]);
 
-  const handleChange = async (row: any) => {
+  const handleDeleteClose = async (row: any) => {
     setOpenDeletToken(true);
-    setTokensID(row.id);
+    setTokenSelectedID(row.id);
   };
 
-  const deletSubmit = async () => {
+  const handleDeleteToken = async () => {
     setDeleteLoadingButton(true);
 
     try {
-      await deleteTokens(tokensID);
+      await deleteTokens(tokenSelectedID);
       setDeleteLoadingButton(false);
       setSuccessMessage(true);
       setOpenDeletToken(false);
 
       if (user.name === 'root') {
-        const response = await getTokens();
-        setTokensList(response);
+        const token = await getTokens();
+        setToken(token);
       } else if (user.name !== '') {
-        const response = await getTokens({ user_id: String(user.id) });
-        setTokensList(response);
+        const token = await getTokens({ user_id: String(user.id) });
+        setToken(token);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -116,11 +115,11 @@ export default function PersonalAccessTokens() {
   };
 
   const copyToken = () => {
-    copyToClipboard(newToken);
-    setCopyIcon(true);
+    setCopiedText(newToken);
+    setShowCopyIcon(true);
 
     setTimeout(() => {
-      setCopyIcon(false);
+      setShowCopyIcon(false);
     }, 1000);
   };
 
@@ -174,7 +173,7 @@ export default function PersonalAccessTokens() {
         Tokens you have generated that can be used to access the Dragonfly API.
       </Typography>
       <Paper variant="outlined" sx={{ width: '100%' }}>
-        {showSnackbar ? (
+        {showCopyColumn ? (
           <>
             <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center', backgroundColor: 'rgba(108,198,68,.1)' }}>
               <Typography variant="body2" mr="0.2rem">
@@ -189,16 +188,16 @@ export default function PersonalAccessTokens() {
                 }}
                 onClick={copyToken}
               >
-                {copyIcon ? (
+                {showCopyIcon ? (
                   <Tooltip
                     placement="top"
                     PopperProps={{
                       disablePortal: true,
                     }}
                     onClose={() => {
-                      setCopyIcon(false);
+                      setShowCopyIcon(false);
                     }}
-                    open={copyIcon}
+                    open={showCopyIcon}
                     disableFocusListener
                     disableHoverListener
                     disableTouchListener
@@ -216,8 +215,8 @@ export default function PersonalAccessTokens() {
         ) : (
           <></>
         )}
-        {Array.isArray(tokensList) &&
-          tokensList.map((item) => {
+        {Array.isArray(token) &&
+          token.map((item) => {
             return (
               <Box key={item.id}>
                 <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -269,7 +268,7 @@ export default function PersonalAccessTokens() {
                       }}
                       variant="contained"
                       onClick={() => {
-                        handleChange(item);
+                        handleDeleteClose(item);
                       }}
                     >
                       Delete
@@ -350,7 +349,7 @@ export default function PersonalAccessTokens() {
               },
               width: '8rem',
             }}
-            onClick={deletSubmit}
+            onClick={handleDeleteToken}
           >
             Delete
           </LoadingButton>

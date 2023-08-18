@@ -75,9 +75,9 @@ export default function Profile() {
         setIsLoading(true);
 
         if (payload?.id) {
-          const response = await getUser(payload?.id);
-          setUser(response);
-          setBio(response.bio);
+          const user = await getUser(payload?.id);
+          setUser(user);
+          setBio(user.bio);
           setIsLoading(false);
         }
       } catch (error) {
@@ -163,9 +163,9 @@ export default function Profile() {
 
     {
       formProps: {
-        id: 'Phone',
+        id: 'phone',
         label: 'Phone',
-        name: 'Phone',
+        name: 'phone',
         autoComplete: 'family-name',
         value: user.phone,
         placeholder: 'Enter your Phone',
@@ -228,9 +228,9 @@ export default function Profile() {
     },
     {
       formProps: {
-        id: 'Email',
+        id: 'email',
         label: 'Email',
-        name: 'Email',
+        name: 'email',
         autoComplete: 'family-name',
         value: user.email,
         placeholder: 'Enter your Email',
@@ -414,7 +414,7 @@ export default function Profile() {
     cb && cb();
   };
 
-  const changePersonal = async (event: any) => {
+  const handlePersonalInformation = async (event: any) => {
     event.preventDefault();
     setPersonalLoadingButton(true);
 
@@ -457,15 +457,15 @@ export default function Profile() {
     }
   };
 
-  const cancelChangePersonal = async () => {
+  const cancelHandlePersonalInformation = async () => {
     setShowPersonalInformation(true);
 
     try {
       if (userID) {
-        const response = await getUser(userID);
+        const user = await getUser(userID);
 
-        setUser(response);
-        setBio(response.bio);
+        setUser(user);
+        setBio(user.bio);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -476,7 +476,7 @@ export default function Profile() {
     }
   };
 
-  const changePassword = async (event: any) => {
+  const handleChangePassword = async (event: any) => {
     setPasswordLoadingButton(true);
     event.preventDefault();
 
@@ -588,7 +588,7 @@ export default function Profile() {
             </Box>
           </Box>
         ) : (
-          <Grid sx={{ width: '40rem' }} onSubmit={changePassword} component="form" noValidate>
+          <Grid sx={{ width: '40rem' }} onSubmit={handleChangePassword} component="form" noValidate>
             <Typography variant="h6">Change Password</Typography>
             {passwordForm.map((item) => (
               <Box key={item.formProps.name}>
@@ -711,7 +711,7 @@ export default function Profile() {
         ) : (
           <Box>
             <Typography variant="h6">Personal Information</Typography>
-            <Box component="form" onSubmit={changePersonal} noValidate>
+            <Box component="form" onSubmit={handlePersonalInformation} noValidate>
               {profileForm.map((item) => (
                 <Box key={item.formProps.name}>
                   <TextField
@@ -749,7 +749,7 @@ export default function Profile() {
                     mr: '1rem',
                     width: '7rem',
                   }}
-                  onClick={cancelChangePersonal}
+                  onClick={cancelHandlePersonalInformation}
                 >
                   cancel
                 </LoadingButton>

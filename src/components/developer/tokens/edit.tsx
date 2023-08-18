@@ -35,28 +35,29 @@ const theme = createTheme({
   },
 });
 
-export default function CreateTokens(props: any) {
+export default function UpdateTokens() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [bioError, setBioError] = useState(false);
-  const [time, setTiem] = useState('');
-  const [expiration, setExpiration] = useState('');
-  const [expirationError, setExpirationError] = useState(false);
+  const [selectedTime, setSelectedTime] = useState('');
+  const [expiredTime, setExpiredTime] = useState('');
+  const [expiredTimeError, setExpiredTimeError] = useState(false);
   const [preheat, setPreheat] = useState(false);
   const [job, setJob] = useState(false);
-  const [editLoadingButton, setEditLoadingButton] = useState(false);
-  const [token, setToken] = useState({ name: '', bio: '', scopes: [''], expired_at: '', state: '', id: 0 });
-  const updateFormList = [
+  const [loadingButton, setLoadingButton] = useState(false);
+  const [tokens, setTokens] = useState({ name: '', bio: '', scopes: [''], expired_at: '', state: '', id: 0 });
+
+  const formList = [
     {
       formProps: {
-        id: 'Bio',
+        id: 'bio',
         label: 'Description',
-        name: 'Bio',
+        name: 'bio',
         autoComplete: 'family-name',
-        placeholder: 'Enter your Note',
-        value: token.bio,
-        helperText: bioError ? 'Please enter Description' : '',
+        placeholder: 'Enter your description',
+        value: tokens.bio,
+        helperText: bioError ? 'The length is 1-1000' : '',
         error: bioError,
 
         InputProps: {
@@ -71,8 +72,8 @@ export default function CreateTokens(props: any) {
         },
 
         onChange: (e: any) => {
-          setToken({ ...token, bio: e.target.value });
-          changeValidate(e.target.value, updateFormList[0]);
+          setTokens({ ...tokens, bio: e.target.value });
+          changeValidate(e.target.value, formList[0]);
         },
       },
       syncError: false,
@@ -92,11 +93,11 @@ export default function CreateTokens(props: any) {
     (async function () {
       try {
         if (params?.id) {
-          const token = await getToken(params?.id);
-          setToken(token);
-          setExpiration(token.expired_at);
-          setPreheat(token.scopes.includes('preheat'));
-          setJob(token.scopes.includes('job'));
+          const tokens = await getToken(params?.id);
+          setTokens(tokens);
+          setExpiredTime(tokens.expired_at);
+          setPreheat(tokens.scopes.includes('preheat'));
+          setJob(tokens.scopes.includes('job'));
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -112,15 +113,16 @@ export default function CreateTokens(props: any) {
     setError(!validate(value));
   };
 
-  const handleChangeSelect = (event: SelectChangeEvent) => {
-    setExpirationError(false);
-    setTiem(event.target.value);
+  const handleSelectExpiredTime = (event: SelectChangeEvent) => {
+    setExpiredTimeError(false);
+    setSelectedTime(event.target.value);
+
     const time = getExpiredTime(Number(event.target.value));
-    setExpiration(time);
+    setExpiredTime(time);
   };
 
   const handleSubmit = async (event: any) => {
-    setEditLoadingButton(true);
+    setLoadingButton(true);
     event.preventDefault();
 
     const scopes = [preheat ? 'preheat' : '', job ? 'job' : ''];
@@ -128,39 +130,40 @@ export default function CreateTokens(props: any) {
 
     const data = new FormData(event.currentTarget);
 
-    updateFormList.forEach((item) => {
+    formList.forEach((item) => {
       const value = data.get(item.formProps.name);
       item.setError(!item.validate(value as string));
       item.syncError = !item.validate(value as string);
     });
 
-    const canSubmit = Boolean(!updateFormList.filter((item) => item.syncError).length);
+    const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
 
-    const formData = { bio: token.bio, expired_at: expiration, scopes: filteredScopes };
+    const formData = { bio: tokens.bio, expired_at: expiredTime, scopes: filteredScopes };
 
-    if (!time) {
-      setExpirationError(true);
-      setEditLoadingButton(false);
+    if (!selectedTime) {
+      setExpiredTimeError(true);
+      setLoadingButton(false);
     } else {
       if (canSubmit) {
         try {
           if (params.id) {
-            const response = await updateTokens(params.id, { ...formData });
-            setEditLoadingButton(false);
+            const tokens = await updateTokens(params.id, { ...formData });
+            setLoadingButton(false);
             setSuccessMessage(true);
-            const token = response.token;
+
+            const token = tokens.token;
             localStorage.setItem('token', JSON.stringify(token));
             navigate('/developer/personal-access-tokens');
           }
         } catch (error) {
           if (error instanceof Error) {
-            setEditLoadingButton(false);
+            setLoadingButton(false);
             setErrorMessage(true);
             setErrorMessageText(error.message);
           }
         }
       } else {
-        setEditLoadingButton(false);
+        setLoadingButton(false);
       }
     }
   };
@@ -214,7 +217,7 @@ export default function CreateTokens(props: any) {
                 />
               </Tooltip>
             </Box>
-            {updateFormList.map((item) => (
+            {formList.map((item) => (
               <TextField
                 margin="normal"
                 color="success"
@@ -236,7 +239,7 @@ export default function CreateTokens(props: any) {
                 />
               </Tooltip>
             </Box>
-            <FormControl size="small" error={expirationError}>
+            <FormControl size="small" error={expiredTimeError}>
               <InputLabel color="secondary" id="demo-simple-select-label">
                 Expiration
               </InputLabel>
@@ -245,9 +248,9 @@ export default function CreateTokens(props: any) {
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={time}
+                    value={selectedTime}
                     label="Expiration"
-                    onChange={handleChangeSelect}
+                    onChange={handleSelectExpiredTime}
                     color="secondary"
                     sx={{ width: '10rem' }}
                   >
@@ -257,10 +260,10 @@ export default function CreateTokens(props: any) {
                     <MenuItem value={90}>90 days</MenuItem>
                     <MenuItem value={'3650'}>10 years</MenuItem>
                   </Select>
-                  {expirationError && <FormHelperText>Please select an option.</FormHelperText>}
+                  {expiredTimeError && <FormHelperText>Please select an option.</FormHelperText>}
                 </Box>
                 <Typography variant="body2" color="text.primary" ml="1rem">
-                  The token expires on {formatDate(expiration) || ''}.
+                  The token expires on {formatDate(expiredTime) || ''}.
                 </Typography>
               </Box>
             </FormControl>
@@ -305,7 +308,7 @@ export default function CreateTokens(props: any) {
             </Box>
             <Box sx={{ mt: '2rem' }}>
               <LoadingButton
-                loading={editLoadingButton}
+                loading={loadingButton}
                 endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
                 size="small"
                 variant="outlined"
@@ -335,7 +338,7 @@ export default function CreateTokens(props: any) {
                 Cancel
               </LoadingButton>
               <LoadingButton
-                loading={editLoadingButton}
+                loading={loadingButton}
                 endIcon={<CheckCircleIcon />}
                 size="small"
                 variant="outlined"

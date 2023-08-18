@@ -36,7 +36,7 @@ export default function NewCluster() {
   const [idcError, setIDCError] = useState(false);
   const [cidrsError, setCIDRsError] = useState(false);
   const [cidrs, setCIDRs] = useState([]);
-  const [editLoadingButton, setEditLoadingButton] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(false);
   const cidrsOptions = ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'];
   const navigate = useNavigate();
 
@@ -70,7 +70,7 @@ export default function NewCluster() {
         name: 'description',
         autoComplete: 'family-name',
         placeholder: 'Enter a cluster description',
-        helperText: bioError ? 'The length is 0-40' : '',
+        helperText: bioError ? 'The length is 1-1000' : '',
         error: bioError,
 
         onChange: (e: any) => {
@@ -382,10 +382,11 @@ export default function NewCluster() {
   ];
 
   const handleSubmit = async (event: any) => {
-    setEditLoadingButton(true);
+    setLoadingButton(true);
 
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
     const name = event.currentTarget.elements.name.value;
     const isDefault = event.currentTarget.elements.isDefault.checked;
     const description = event.currentTarget.elements.description.value;
@@ -446,18 +447,18 @@ export default function NewCluster() {
     if (canSubmit) {
       try {
         await createCluster({ ...formData });
-        setEditLoadingButton(false);
+        setLoadingButton(false);
         setSuccessMessage(true);
         navigate('/clusters');
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
-          setEditLoadingButton(false);
+          setLoadingButton(false);
         }
       }
     } else {
-      setEditLoadingButton(false);
+      setLoadingButton(false);
     }
   };
 
@@ -588,7 +589,7 @@ export default function NewCluster() {
         </Grid>
         <Box className={styles.footerButton}>
           <LoadingButton
-            loading={editLoadingButton}
+            loading={loadingButton}
             endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
             size="small"
             variant="outlined"
@@ -612,14 +613,14 @@ export default function NewCluster() {
               width: '8rem',
             }}
             onClick={() => {
-              setEditLoadingButton(true);
+              setLoadingButton(true);
               navigate(`/clusters`);
             }}
           >
             Cancel
           </LoadingButton>
           <LoadingButton
-            loading={editLoadingButton}
+            loading={loadingButton}
             endIcon={<CheckCircleIcon />}
             size="small"
             variant="outlined"

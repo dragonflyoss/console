@@ -116,9 +116,9 @@ export default function Clusters() {
   const searchCluster = async (event: any) => {
     try {
       setClusterIsLoading(true);
-      const response = await getClusters({ page: 1, per_page: pageSize, name: searchClusters });
-      setAllClusters(response.data);
-      setTotalPages(response.total_page || 1);
+      const cluster = await getClusters({ page: 1, per_page: pageSize, name: searchClusters });
+      setAllClusters(cluster.data);
+      setTotalPages(cluster.total_page || 1);
       setClusterIsLoading(false);
     } catch (error) {
       if (error instanceof Error) {

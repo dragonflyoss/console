@@ -27,6 +27,7 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [pageLoding, setPageLoding] = useState(false);
+  
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -206,6 +207,7 @@ export default function SignUp() {
           password: passwordElement.value,
           email: emailElement.value,
         });
+
         setPageLoding(true);
         navigate('/signin');
       } catch (error) {

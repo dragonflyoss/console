@@ -42,19 +42,20 @@ export default function CreateTokens() {
   const [errorMessageText, setErrorMessageText] = useState('');
   const [nameError, setNameError] = useState(false);
   const [bioError, setBioError] = useState(false);
-  const [time, setTiem] = useState('3650');
-  const [expiration, setExpiration] = useState('');
+  const [selectedTime, setSelectedTime] = useState('3650');
+  const [expiredTime, setExpiredTime] = useState('');
   const [preheat, setPreheat] = useState(false);
   const [job, setJob] = useState(false);
-  const [newLoadingButton, setNewLoadingButton] = useState(false);
-  const createFormList = [
+  const [loadingButton, setLoadingButton] = useState(false);
+
+  const formList = [
     {
       formProps: {
         id: 'name',
         label: 'Name',
         name: 'name',
         autoComplete: 'family-name',
-        placeholder: 'Enter your token',
+        placeholder: 'Enter your token name',
         helperText: nameError ? 'Please enter the correct token name' : '',
         error: nameError,
         InputProps: {
@@ -69,7 +70,7 @@ export default function CreateTokens() {
         },
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, createFormList[0]);
+          changeValidate(e.target.value, formList[0]);
         },
       },
       syncError: false,
@@ -82,12 +83,12 @@ export default function CreateTokens() {
     },
     {
       formProps: {
-        id: 'Bio',
+        id: 'bio',
         label: 'Description',
         name: 'bio',
         autoComplete: 'family-name',
-        placeholder: 'Enter your Description',
-        helperText: bioError ? 'Please enter Description' : '',
+        placeholder: 'Enter your description',
+        helperText: bioError ? 'The length is 1-1000' : '',
         error: bioError,
         InputProps: {
           endAdornment: (
@@ -100,7 +101,7 @@ export default function CreateTokens() {
           ),
         },
         onChange: (e: any) => {
-          changeValidate(e.target.value, createFormList[1]);
+          changeValidate(e.target.value, formList[1]);
         },
       },
       syncError: false,
@@ -117,8 +118,8 @@ export default function CreateTokens() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const time = getExpiredTime(Number(3650));
-    setExpiration(time);
+    const expiredTime = getExpiredTime(Number(3650));
+    setExpiredTime(expiredTime);
   }, []);
 
   const changeValidate = (value: string, data: any) => {
@@ -126,14 +127,15 @@ export default function CreateTokens() {
     setError(!validate(value));
   };
 
-  const handleChangeSelect = (event: SelectChangeEvent) => {
-    setTiem(event.target.value);
+  const handleSelectExpiredTime = (event: SelectChangeEvent) => {
+    setSelectedTime(event.target.value);
+
     const time = getExpiredTime(Number(event.target.value));
-    setExpiration(time);
+    setExpiredTime(time);
   };
 
   const handleSubmit = async (event: any) => {
-    setNewLoadingButton(true);
+    setLoadingButton(true);
     event.preventDefault();
 
     const name = event.currentTarget.elements.name;
@@ -143,7 +145,7 @@ export default function CreateTokens() {
 
     const data = new FormData(event.currentTarget);
 
-    createFormList.forEach((item) => {
+    formList.forEach((item) => {
       const value = data.get(item.formProps.name);
       item.setError(!item.validate(value as string));
       item.syncError = !item.validate(value as string);
@@ -153,29 +155,30 @@ export default function CreateTokens() {
       name: name.value,
       bio: bio.value,
       scopes: filteredScopes,
-      expired_at: expiration,
+      expired_at: expiredTime,
       user_id: user.id,
     };
 
-    const canSubmit = Boolean(!createFormList.filter((item) => item.syncError).length);
+    const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
 
     if (canSubmit) {
       try {
-        const response = await createTokens({ ...formData });
-        setNewLoadingButton(false);
+        const tokens = await createTokens({ ...formData });
+        setLoadingButton(false);
         setSuccessMessage(true);
-        const token = response.token;
+
+        const token = tokens.token;
         localStorage.setItem('token', JSON.stringify(token));
         navigate('/developer/personal-access-tokens');
       } catch (error) {
         if (error instanceof Error) {
-          setNewLoadingButton(false);
+          setLoadingButton(false);
           setErrorMessage(true);
           setErrorMessageText(error.message);
         }
       }
     } else {
-      setNewLoadingButton(false);
+      setLoadingButton(false);
     }
   };
 
@@ -228,7 +231,7 @@ export default function CreateTokens() {
                 />
               </Tooltip>
             </Box>
-            {createFormList.map((item) => (
+            {formList.map((item) => (
               <TextField
                 margin="normal"
                 color="success"
@@ -258,9 +261,9 @@ export default function CreateTokens() {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={time}
+                  value={selectedTime}
                   label="Expiration"
-                  onChange={handleChangeSelect}
+                  onChange={handleSelectExpiredTime}
                   color="secondary"
                   sx={{ width: '10rem' }}
                 >
@@ -271,7 +274,7 @@ export default function CreateTokens() {
                   <MenuItem value={'3650'}>10 years</MenuItem>
                 </Select>
                 <Typography variant="body2" color="text.primary" ml="1rem">
-                  The token expires on {formatDate(expiration) || ''}.
+                  The token expires on {formatDate(expiredTime) || ''}.
                 </Typography>
               </Box>
             </FormControl>
@@ -316,7 +319,7 @@ export default function CreateTokens() {
             </Box>
             <Box sx={{ mt: '2rem' }}>
               <LoadingButton
-                loading={newLoadingButton}
+                loading={loadingButton}
                 endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
                 size="small"
                 variant="outlined"
@@ -346,7 +349,7 @@ export default function CreateTokens() {
                 Cancel
               </LoadingButton>
               <LoadingButton
-                loading={newLoadingButton}
+                loading={loadingButton}
                 endIcon={<CheckCircleIcon />}
                 size="small"
                 variant="outlined"

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Information from './information';
@@ -42,25 +41,25 @@ export default function ShowCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [schedulerIsLoading, setSchedulerIsLoading] = useState(true);
-  const [seedPeerIsLoading, setSeedPeerIsLoading] = useState(true);
-  const [openDeletCluster, setOpenDeletCluster] = useState(false);
-  const [openDeletScheduler, setOpenDeletScheduler] = useState(false);
-  const [openDeletSeedPeers, setOpenDeletSeedPeers] = useState(false);
+  const [clusterIsLoading, setClusterIsLoading] = useState(true);
+  const [schedulerTableIsLoading, setSchedulerTableIsLoading] = useState(true);
+  const [seedPeerTableIsLoading, setSeedPeerTableIsLoading] = useState(true);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
+  const [openDeleteCluster, setOpenDeleteCluster] = useState(false);
+  const [openDeleteScheduler, setOpenDeleteScheduler] = useState(false);
+  const [openDeleteSeedPeer, setOpenDeleteSeedPeer] = useState(false);
   const [schedulerSelectedRow, setSchedulerSelectedRow] = useState(null);
   const [schedulerSelectedID, setSchedulerSelectedID] = useState('');
-  const [seedPeersSelectedRow, setSeedPeersSelectedRow] = useState(null);
-  const [seedPeersSelectedID, setSeedPeersSelectedID] = useState('');
+  const [seedPeerSelectedRow, setSeedPeerSelectedRow] = useState(null);
+  const [seedPeerSelectedID, setSeedPeerSelectedID] = useState('');
   const [schedulerPage, setSchedulerPage] = useState(1);
   const [schedulerTotalPages, setSchedulerTotalPages] = useState<number>(1);
   const [seedPeerPage, setSeedPeerPage] = useState(1);
   const [seedPeerTotalPages, setSeedPeerTotalPages] = useState<number>(1);
   const [schedulerPageSize] = useState(5);
   const [seedPeerPageSize] = useState(5);
-  const [schedulerSearchValue, setSchedulerSearchValue] = useState('');
-  const [seedPeerSearchValue, setSeedPeerSearchValue] = useState('');
+  const [searchSchedulers, setSearchSchedulers] = useState('');
+  const [searchSeedPeers, setSearchSeedPeer] = useState('');
   const [scheduler, setScheduler] = useState([{ host_name: '' }]);
   const [seedPeer, setSeedPeer] = useState([{ host_name: '' }]);
   const [cluster, setCluster] = useState({
@@ -89,7 +88,7 @@ export default function ShowCluster() {
     updated_at: '',
     is_default: true,
   });
-  const [allScheduler, setAllSchedler] = useState([
+  const [allSchedulers, setAllSchedlers] = useState([
     {
       id: 0,
       host_name: '',
@@ -101,7 +100,7 @@ export default function ShowCluster() {
       features: [''],
     },
   ]);
-  const [allseedPeer, setAllSeedPeer] = useState([
+  const [allseedPeers, setAllSeedPeers] = useState([
     {
       id: 0,
       host_name: '',
@@ -131,18 +130,18 @@ export default function ShowCluster() {
   useEffect(() => {
     (async function () {
       try {
-        setIsLoading(true);
+        setClusterIsLoading(true);
 
         if (typeof params.id === 'string') {
           const cluster = await getCluster(params.id);
           setCluster(cluster);
-          setIsLoading(false);
+          setClusterIsLoading(false);
         }
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
-          setIsLoading(false);
+          setClusterIsLoading(false);
         }
       }
     })();
@@ -151,7 +150,7 @@ export default function ShowCluster() {
   useEffect(() => {
     (async function () {
       try {
-        setSchedulerIsLoading(true);
+        setSchedulerTableIsLoading(true);
 
         if (cluster.scheduler_cluster_id !== 0) {
           const [scheduler, schedulers] = await Promise.all([
@@ -168,15 +167,15 @@ export default function ShowCluster() {
           ]);
 
           setScheduler(scheduler.data);
-          setAllSchedler(schedulers.data);
+          setAllSchedlers(schedulers.data);
           setSchedulerTotalPages(schedulers.total_page || 1);
-          setSchedulerIsLoading(false);
+          setSchedulerTableIsLoading(false);
         }
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
-          setSchedulerIsLoading(false);
+          setSchedulerTableIsLoading(false);
         }
       }
     })();
@@ -185,7 +184,7 @@ export default function ShowCluster() {
   useEffect(() => {
     (async function () {
       try {
-        setSeedPeerIsLoading(true);
+        setSeedPeerTableIsLoading(true);
 
         if (cluster.seed_peer_cluster_id !== 0) {
           const [seedPeer, seedPeers] = await Promise.all([
@@ -202,17 +201,15 @@ export default function ShowCluster() {
           ]);
 
           setSeedPeer(seedPeer.data);
-          setAllSeedPeer(seedPeers.data);
+          setAllSeedPeers(seedPeers.data);
           setSeedPeerTotalPages(seedPeers.total_page || 1);
-          setSeedPeerIsLoading(false);
-        } else {
-          setSeedPeerIsLoading(false);
+          setSeedPeerTableIsLoading(false);
         }
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
-          setSeedPeerIsLoading(false);
+          setSeedPeerTableIsLoading(false);
         }
       }
     })();
@@ -233,15 +230,15 @@ export default function ShowCluster() {
     setSuccessMessage(false);
   };
 
-  const handleDelete = () => {
-    setOpenDeletCluster(false);
-    setOpenDeletScheduler(false);
+  const handleDeleteClose = () => {
+    setOpenDeleteCluster(false);
+    setOpenDeleteScheduler(false);
     setSchedulerSelectedRow(null);
-    setOpenDeletSeedPeers(false);
-    setSeedPeersSelectedRow(null);
+    setOpenDeleteSeedPeer(false);
+    setSeedPeerSelectedRow(null);
   };
 
-  const handledeleteCluster = async () => {
+  const handleDeleteCluster = async () => {
     setDeleteLoadingButton(true);
 
     try {
@@ -249,7 +246,7 @@ export default function ShowCluster() {
         await deleteCluster(params.id);
         setDeleteLoadingButton(false);
         setSuccessMessage(true);
-        setOpenDeletCluster(false);
+        setOpenDeleteCluster(false);
         navigate('/clusters');
       }
     } catch (error) {
@@ -264,7 +261,7 @@ export default function ShowCluster() {
   const openHandleScheduler = (row: any) => {
     setSchedulerSelectedRow(row);
     setSchedulerSelectedID(row.id);
-    setOpenDeletScheduler(true);
+    setOpenDeleteScheduler(true);
   };
 
   const handleDeleteScheduler = async () => {
@@ -273,7 +270,7 @@ export default function ShowCluster() {
     try {
       await deleteScheduler(schedulerSelectedID);
       setSuccessMessage(true);
-      setOpenDeletScheduler(false);
+      setOpenDeleteScheduler(false);
       setDeleteLoadingButton(false);
 
       if (cluster.scheduler_cluster_id !== 0) {
@@ -294,7 +291,7 @@ export default function ShowCluster() {
 
         schedulers.data.length === 0 && schedulerPage > 1
           ? setSchedulerPage(schedulerPage - 1)
-          : setAllSchedler(schedulers.data);
+          : setAllSchedlers(schedulers.data);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -305,13 +302,19 @@ export default function ShowCluster() {
     }
   };
 
-  const handleDeleteSeedPeers = async () => {
+  const openHandleSeedPeer = (row: any) => {
+    setSeedPeerSelectedRow(row);
+    setSeedPeerSelectedID(row.id);
+    setOpenDeleteSeedPeer(true);
+  };
+
+  const handleDeleteSeedPeer = async () => {
     setDeleteLoadingButton(true);
 
     try {
-      await deleteSeedPeer(seedPeersSelectedID);
+      await deleteSeedPeer(seedPeerSelectedID);
       setSuccessMessage(true);
-      setOpenDeletSeedPeers(false);
+      setOpenDeleteSeedPeer(false);
       setDeleteLoadingButton(false);
       if (cluster.seed_peer_cluster_id !== 0) {
         const [seedPeer, seedPeers] = await Promise.all([
@@ -330,7 +333,7 @@ export default function ShowCluster() {
         setSeedPeer(seedPeer.data);
         seedPeers?.data.length === 0 && seedPeerPage > 1
           ? setSeedPeerPage(seedPeerPage - 1)
-          : setAllSeedPeer(seedPeers.data);
+          : setAllSeedPeers(seedPeers.data);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -341,12 +344,7 @@ export default function ShowCluster() {
     }
   };
 
-  const openHandleSeedPeers = (row: any) => {
-    setSeedPeersSelectedRow(row);
-    setSeedPeersSelectedID(row.id);
-    setOpenDeletSeedPeers(true);
-  };
-  const schedulerKeyDown = (event: any) => {
+  const searchSchedulerKeyDown = (event: any) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       const submitButton = document.getElementById('scheduler-button');
@@ -354,7 +352,7 @@ export default function ShowCluster() {
     }
   };
 
-  const seedPeerKeyDown = (event: any) => {
+  const searchSeedPeerKeyDown = (event: any) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       const submitButton = document.getElementById('seedPeer-button');
@@ -368,10 +366,10 @@ export default function ShowCluster() {
         scheduler_cluster_id: String(cluster.scheduler_cluster_id),
         page: 1,
         per_page: schedulerPageSize,
-        host_name: schedulerSearchValue,
+        host_name: searchSchedulers,
       });
 
-      setAllSchedler(scheduler.data);
+      setAllSchedlers(scheduler.data);
       setSchedulerTotalPages(scheduler.total_page || 1);
     } catch (error) {
       if (error instanceof Error) {
@@ -388,10 +386,10 @@ export default function ShowCluster() {
         seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
         page: 1,
         per_page: seedPeerPageSize,
-        host_name: seedPeerSearchValue,
+        host_name: searchSeedPeers,
       });
 
-      setAllSeedPeer(seedPeer.data);
+      setAllSeedPeers(seedPeer.data);
       setSeedPeerTotalPages(seedPeer.total_page || 1);
     } catch (error) {
       if (error instanceof Error) {
@@ -459,7 +457,7 @@ export default function ShowCluster() {
               variant="contained"
               size="small"
               onClick={() => {
-                setOpenDeletCluster(true);
+                setOpenDeleteCluster(true);
               }}
               className={styles.deleteButton}
               sx={{
@@ -475,8 +473,8 @@ export default function ShowCluster() {
             </Button>
           </Box>
           <Dialog
-            open={openDeletCluster}
-            onClose={handleDelete}
+            open={openDeleteCluster}
+            onClose={handleDeleteClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
@@ -513,7 +511,7 @@ export default function ShowCluster() {
                   mr: '1rem',
                   width: '8rem',
                 }}
-                onClick={handleDelete}
+                onClick={handleDeleteClose}
               >
                 Cancel
               </LoadingButton>
@@ -539,14 +537,14 @@ export default function ShowCluster() {
                   },
                   width: '8rem',
                 }}
-                onClick={handledeleteCluster}
+                onClick={handleDeleteCluster}
               >
                 Delete
               </LoadingButton>
             </DialogActions>
           </Dialog>
         </Box>
-        <Information cluster={cluster} isLoading={isLoading} />
+        <Information cluster={cluster} isLoading={clusterIsLoading} />
         <Box sx={{ display: 'flex' }}>
           <Paper
             variant="outlined"
@@ -564,16 +562,16 @@ export default function ShowCluster() {
                 </Typography>
                 <Box>
                   <Typography variant="h5" fontFamily="mabry-bold">
-                    {scheduler.length}
+                    {numberOfActiveSchedulers}
                   </Typography>
-                  <div>number of scheduler</div>
+                  <div>number of active schdulers</div>
                 </Box>
               </Box>
             </Box>
             <Chip
               size="small"
-              icon={<Box component="img" src="/icons/cluster/active.svg" sx={{ width: '1.2rem', height: '1.2rem' }} />}
-              label={`Active:${numberOfActiveSchedulers}`}
+              icon={<Box component="img" src="/icons/cluster/total.svg" sx={{ width: '1.2rem', height: '1.2rem' }} />}
+              label={`Total: ${scheduler.length}`}
             />
           </Paper>
           <Paper
@@ -592,16 +590,16 @@ export default function ShowCluster() {
                 </Typography>
                 <Box>
                   <Typography variant="h5" fontFamily="mabry-bold">
-                    {seedPeer.length}
+                    {numberOfActiveSeedPeers}
                   </Typography>
-                  <div>number of seed peer</div>
+                  <div>number of active seed peers</div>
                 </Box>
               </Box>
             </Box>
             <Chip
               size="small"
-              icon={<Box component="img" src="/icons/cluster/active.svg" sx={{ width: '1.2rem', height: '1.2rem' }} />}
-              label={`Active:${numberOfActiveSeedPeers}`}
+              icon={<Box component="img" src="/icons/cluster/total.svg" sx={{ width: '1.2rem', height: '1.2rem' }} />}
+              label={`Total: ${seedPeer.length}`}
             />
           </Paper>
         </Box>
@@ -616,10 +614,10 @@ export default function ShowCluster() {
                 color="secondary"
                 id="free-solo-demo"
                 freeSolo
-                onKeyDown={schedulerKeyDown}
-                inputValue={schedulerSearchValue}
+                onKeyDown={searchSchedulerKeyDown}
+                inputValue={searchSchedulers}
                 onInputChange={(_event, newInputValue) => {
-                  setSchedulerSearchValue(newInputValue);
+                  setSearchSchedulers(newInputValue);
                 }}
                 options={scheduler.map((option) => option?.host_name)}
                 renderInput={(params) => <TextField {...params} label="Search" />}
@@ -679,7 +677,7 @@ export default function ShowCluster() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {allScheduler.length === 0 ? (
+                {allSchedulers.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={9} align="center" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       -
@@ -687,17 +685,17 @@ export default function ShowCluster() {
                   </TableRow>
                 ) : (
                   <>
-                    {Array.isArray(allScheduler) &&
-                      allScheduler.map((item: any) => {
+                    {Array.isArray(allSchedulers) &&
+                      allSchedulers.map((item: any) => {
                         return (
                           <TableRow
                             key={item?.id}
                             selected={schedulerSelectedRow === item}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                           >
-                            <TableCell align="center">{schedulerIsLoading ? <Skeleton /> : item?.id}</TableCell>
+                            <TableCell align="center">{schedulerTableIsLoading ? <Skeleton /> : item?.id}</TableCell>
                             <TableCell align="center">
-                              {schedulerIsLoading ? (
+                              {schedulerTableIsLoading ? (
                                 <Skeleton />
                               ) : (
                                 <RouterLink
@@ -711,7 +709,7 @@ export default function ShowCluster() {
                               )}
                             </TableCell>
                             <TableCell align="center">
-                              {schedulerIsLoading ? (
+                              {schedulerTableIsLoading ? (
                                 <Skeleton />
                               ) : (
                                 <Box className={styles.ipContainer}>
@@ -720,9 +718,9 @@ export default function ShowCluster() {
                                 </Box>
                               )}
                             </TableCell>
-                            <TableCell align="center">{schedulerIsLoading ? <Skeleton /> : item?.port}</TableCell>
+                            <TableCell align="center">{schedulerTableIsLoading ? <Skeleton /> : item?.port}</TableCell>
                             <TableCell align="center">
-                              {schedulerIsLoading ? (
+                              {schedulerTableIsLoading ? (
                                 <Skeleton />
                               ) : (
                                 <Chip
@@ -742,7 +740,7 @@ export default function ShowCluster() {
                               )}
                             </TableCell>
                             <TableCell align="center">
-                              {schedulerIsLoading ? (
+                              {schedulerTableIsLoading ? (
                                 <Skeleton />
                               ) : (
                                 <>
@@ -795,8 +793,8 @@ export default function ShowCluster() {
           </Box>
         </Paper>
         <Dialog
-          open={openDeletScheduler}
-          onClose={handleDelete}
+          open={openDeleteScheduler}
+          onClose={handleDeleteClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
@@ -834,7 +832,7 @@ export default function ShowCluster() {
                 width: '8rem',
               }}
               onClick={() => {
-                setOpenDeletScheduler(false);
+                setOpenDeleteScheduler(false);
                 setSchedulerSelectedRow(null);
               }}
             >
@@ -890,10 +888,10 @@ export default function ShowCluster() {
                 color="secondary"
                 id="seedPeerSearch"
                 freeSolo
-                onKeyDown={seedPeerKeyDown}
-                inputValue={seedPeerSearchValue}
+                onKeyDown={searchSeedPeerKeyDown}
+                inputValue={searchSeedPeers}
                 onInputChange={(_event, newInputValue) => {
-                  setSeedPeerSearchValue(newInputValue);
+                  setSearchSeedPeer(newInputValue);
                 }}
                 options={seedPeer.map((option) => option.host_name)}
                 renderInput={(params) => <TextField {...params} label="Search" />}
@@ -963,7 +961,7 @@ export default function ShowCluster() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {allseedPeer.length === 0 ? (
+                {allseedPeers.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={9} align="center" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       -
@@ -971,17 +969,17 @@ export default function ShowCluster() {
                   </TableRow>
                 ) : (
                   <>
-                    {Array.isArray(allseedPeer) &&
-                      allseedPeer.map((item: any) => {
+                    {Array.isArray(allseedPeers) &&
+                      allseedPeers.map((item: any) => {
                         return (
                           <TableRow
                             key={item?.id}
-                            selected={seedPeersSelectedRow === item}
+                            selected={seedPeerSelectedRow === item}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                           >
-                            <TableCell align="center">{seedPeerIsLoading ? <Skeleton /> : item?.id}</TableCell>
+                            <TableCell align="center">{seedPeerTableIsLoading ? <Skeleton /> : item?.id}</TableCell>
                             <TableCell align="center">
-                              {seedPeerIsLoading ? (
+                              {seedPeerTableIsLoading ? (
                                 <Skeleton />
                               ) : (
                                 <RouterLink
@@ -995,7 +993,7 @@ export default function ShowCluster() {
                               )}
                             </TableCell>
                             <TableCell align="center">
-                              {seedPeerIsLoading ? (
+                              {seedPeerTableIsLoading ? (
                                 <Skeleton />
                               ) : (
                                 <Box className={styles.ipContainer}>
@@ -1004,12 +1002,12 @@ export default function ShowCluster() {
                                 </Box>
                               )}
                             </TableCell>
-                            <TableCell align="center">{seedPeerIsLoading ? <Skeleton /> : item?.port}</TableCell>
+                            <TableCell align="center">{seedPeerTableIsLoading ? <Skeleton /> : item?.port}</TableCell>
                             <TableCell align="center">
-                              {seedPeerIsLoading ? <Skeleton /> : item?.download_port}
+                              {seedPeerTableIsLoading ? <Skeleton /> : item?.download_port}
                             </TableCell>
                             <TableCell align="center">
-                              {seedPeerIsLoading ? (
+                              {seedPeerTableIsLoading ? (
                                 <Skeleton />
                               ) : item?.object_storage_port === 0 ? (
                                 '-'
@@ -1018,10 +1016,10 @@ export default function ShowCluster() {
                               )}
                             </TableCell>
                             <TableCell align="center">
-                              {seedPeerIsLoading ? <Skeleton /> : _.upperFirst(item?.type) || ''}
+                              {seedPeerTableIsLoading ? <Skeleton /> : _.upperFirst(item?.type) || ''}
                             </TableCell>
                             <TableCell align="center">
-                              {seedPeerIsLoading ? (
+                              {seedPeerTableIsLoading ? (
                                 <Skeleton />
                               ) : (
                                 <Chip
@@ -1050,7 +1048,7 @@ export default function ShowCluster() {
                                   },
                                 }}
                                 onClick={() => {
-                                  openHandleSeedPeers(item);
+                                  openHandleSeedPeer(item);
                                 }}
                               >
                                 <DeleteIcon
@@ -1069,8 +1067,8 @@ export default function ShowCluster() {
           </Box>
         </Paper>
         <Dialog
-          open={openDeletSeedPeers}
-          onClose={handleDelete}
+          open={openDeleteSeedPeer}
+          onClose={handleDeleteClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
@@ -1108,8 +1106,8 @@ export default function ShowCluster() {
                 width: '8rem',
               }}
               onClick={() => {
-                setOpenDeletSeedPeers(false);
-                setSeedPeersSelectedRow(null);
+                setOpenDeleteSeedPeer(false);
+                setSeedPeerSelectedRow(null);
               }}
             >
               Cancel
@@ -1136,7 +1134,7 @@ export default function ShowCluster() {
                 },
                 width: '8rem',
               }}
-              onClick={handleDeleteSeedPeers}
+              onClick={handleDeleteSeedPeer}
             >
               Delete
             </LoadingButton>

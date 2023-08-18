@@ -80,7 +80,7 @@ export default function Clusters() {
         setIsLoading(true);
         setClusterIsLoading(true);
 
-        const [cluster, schedle, seedPeer, allClusters] = await Promise.all([
+        const [cluster, scheduler, seedPeer, allClusters] = await Promise.all([
           getClusters({ page: 1, per_page: 1000 }),
           getSchedulers({ page: 1, per_page: 1000 }),
           getSeedPeers({ page: 1, per_page: 1000 }),
@@ -88,7 +88,7 @@ export default function Clusters() {
         ]);
 
         setCluster(cluster.data);
-        setScheduler(schedle.data);
+        setScheduler(scheduler.data);
         setSeedPeer(seedPeer.data);
         setTotalPages(allClusters.total_page || 1);
         setAllClusters(allClusters.data);
@@ -128,7 +128,7 @@ export default function Clusters() {
     }
   };
 
-  const handleKeyDown = (event: any) => {
+  const searchClusterKeyDown = (event: any) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       const submitButton = document.getElementById('submit-button');
@@ -194,7 +194,7 @@ export default function Clusters() {
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
                       {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : cluster.length || ''}
                     </Typography>
-                    <span>number of cluster</span>
+                    <span>number of clusters</span>
                   </Box>
                   <Grid className={styles.clusterBottomContainer}>
                     <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/default.svg" />
@@ -228,7 +228,7 @@ export default function Clusters() {
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
                       {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : scheduler?.length}
                     </Typography>
-                    <span>number of scheduler</span>
+                    <span>number of schedulers</span>
                   </Box>
                   <Grid className={styles.clusterBottomContainer}>
                     <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/active.svg" />
@@ -262,7 +262,7 @@ export default function Clusters() {
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
                       {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : seedPeer.length}
                     </Typography>
-                    <span>number of seed peer</span>
+                    <span>number of seed peers</span>
                   </Box>
                   <Grid className={styles.clusterBottomContainer}>
                     <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/active.svg" />
@@ -286,7 +286,7 @@ export default function Clusters() {
               color="secondary"
               id="free-solo-demo"
               freeSolo
-              onKeyDown={handleKeyDown}
+              onKeyDown={searchClusterKeyDown}
               inputValue={clusterSearchValue}
               onInputChange={(_event, newInputValue) => {
                 setClusterSearchValue(newInputValue);

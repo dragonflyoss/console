@@ -84,7 +84,7 @@ export default function PersonalAccessTokens() {
         }
       }
     })();
-  }, [user, tokensPage, DEFAULT_PAGE_SIZE]);
+  }, [user, tokensPage]);
 
   const theme = createTheme({
     palette: {

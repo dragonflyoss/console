@@ -36,6 +36,7 @@ import styles from './show.module.css';
 import SearchIcon from '@mui/icons-material/Search';
 import _ from 'lodash';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { MAX_PAGE_SIZE, MIN_PAGE_SIZE } from '../../lib/constants';
 
 export default function ShowCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -56,8 +57,6 @@ export default function ShowCluster() {
   const [schedulerTotalPages, setSchedulerTotalPages] = useState<number>(1);
   const [seedPeerPage, setSeedPeerPage] = useState(1);
   const [seedPeerTotalPages, setSeedPeerTotalPages] = useState<number>(1);
-  const [schedulerPageSize] = useState(5);
-  const [seedPeerPageSize] = useState(5);
   const [searchSchedulers, setSearchSchedulers] = useState('');
   const [searchSeedPeers, setSearchSeedPeer] = useState('');
   const [scheduler, setScheduler] = useState([{ host_name: '' }]);
@@ -157,12 +156,12 @@ export default function ShowCluster() {
             getSchedulers({
               scheduler_cluster_id: String(cluster.scheduler_cluster_id),
               page: 1,
-              per_page: 1000,
+              per_page: MAX_PAGE_SIZE,
             }),
             getSchedulers({
               scheduler_cluster_id: String(cluster.scheduler_cluster_id),
               page: schedulerPage,
-              per_page: schedulerPageSize,
+              per_page: MIN_PAGE_SIZE,
             }),
           ]);
 
@@ -179,7 +178,7 @@ export default function ShowCluster() {
         }
       }
     })();
-  }, [cluster.scheduler_cluster_id, schedulerPage, schedulerPageSize]);
+  }, [cluster.scheduler_cluster_id, schedulerPage]);
 
   useEffect(() => {
     (async function () {
@@ -191,12 +190,12 @@ export default function ShowCluster() {
             getSeedPeers({
               seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
               page: 1,
-              per_page: 1000,
+              per_page: MAX_PAGE_SIZE,
             }),
             getSeedPeers({
               seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
               page: seedPeerPage,
-              per_page: seedPeerPageSize,
+              per_page: MIN_PAGE_SIZE,
             }),
           ]);
 
@@ -213,7 +212,7 @@ export default function ShowCluster() {
         }
       }
     })();
-  }, [cluster.seed_peer_cluster_id, seedPeerPage, seedPeerPageSize]);
+  }, [cluster.seed_peer_cluster_id, seedPeerPage]);
 
   const numberOfActiveSchedulers =
     Array.isArray(scheduler) && scheduler?.filter((item: any) => item?.state === 'active').length;
@@ -278,12 +277,12 @@ export default function ShowCluster() {
           getSchedulers({
             scheduler_cluster_id: String(cluster.scheduler_cluster_id),
             page: 1,
-            per_page: 1000,
+            per_page: MAX_PAGE_SIZE,
           }),
           getSchedulers({
             scheduler_cluster_id: String(cluster.scheduler_cluster_id),
             page: schedulerPage,
-            per_page: schedulerPageSize,
+            per_page: MIN_PAGE_SIZE,
           }),
         ]);
 
@@ -323,12 +322,12 @@ export default function ShowCluster() {
           getSeedPeers({
             seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
             page: 1,
-            per_page: 1000,
+            per_page: MAX_PAGE_SIZE,
           }),
           getSeedPeers({
             seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
             page: seedPeerPage,
-            per_page: seedPeerPageSize,
+            per_page: MIN_PAGE_SIZE,
           }),
         ]);
 
@@ -369,7 +368,7 @@ export default function ShowCluster() {
       const scheduler = await getSchedulers({
         scheduler_cluster_id: String(cluster.scheduler_cluster_id),
         page: 1,
-        per_page: schedulerPageSize,
+        per_page: MIN_PAGE_SIZE,
         host_name: searchSchedulers,
       });
 
@@ -389,7 +388,7 @@ export default function ShowCluster() {
       const seedPeer = await getSeedPeers({
         seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
         page: 1,
-        per_page: seedPeerPageSize,
+        per_page: MIN_PAGE_SIZE,
         host_name: searchSeedPeers,
       });
 

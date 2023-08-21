@@ -30,6 +30,9 @@ import {
   TableBody,
   ListItem,
   List,
+  Pagination,
+  ThemeProvider,
+  createTheme,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole } from '../../lib/api';
@@ -81,6 +84,9 @@ export default function Users() {
   const [guest] = useState('guest');
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadingButton, setLoadingButton] = useState(false);
+  const [userPage, setUserPage] = useState(1);
+  const [userTotalPages, setUserTotalPages] = useState<number>(1);
+  const [userPageSize] = useState(10);
   const [users, setUsers] = useState([{ avatar: '', id: 0, email: '', name: '', state: '', location: '' }]);
   const [user, setUser] = useState({
     id: 0,
@@ -100,8 +106,9 @@ export default function Users() {
       try {
         setIsLoading(true);
 
-        const user = await getUsers();
-        setUsers(user);
+        const user = await getUsers({ page: userPage, per_page: userPageSize });
+        setUsers(user.data);
+        setUserTotalPages(user.total_page || 1);
         setIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
@@ -111,7 +118,15 @@ export default function Users() {
         }
       }
     })();
-  }, []);
+  }, [userPage, userPageSize]);
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#1C293A',
+      },
+    },
+  });
 
   const handleChange = async (row: any) => {
     try {
@@ -207,7 +222,7 @@ export default function Users() {
   };
 
   return (
-    <Box>
+    <ThemeProvider theme={theme}>
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -387,6 +402,17 @@ export default function Users() {
           </TableBody>
         </Table>
       </Paper>
+      <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+        <Pagination
+          count={userTotalPages}
+          page={userPage}
+          onChange={(_event: any, newPage: number) => {
+            setUserPage(newPage);
+          }}
+          color="primary"
+          size="small"
+        />
+      </Box>
       <Dialog
         open={switchUser}
         onClose={closeAllPopups}
@@ -652,6 +678,6 @@ export default function Users() {
           </List>
         </Box>
       </Drawer>
-    </Box>
+    </ThemeProvider>
   );
 }

@@ -464,7 +464,12 @@ export async function deleteSeedPeer(id: string) {
   return await destroy(url);
 }
 
-interface getUsersResponse {
+interface getUserParams {
+  page?: number;
+  per_page?: number;
+}
+
+interface usersResponse {
   avatar: string;
   id: number;
   email: string;
@@ -473,10 +478,23 @@ interface getUsersResponse {
   location: string;
 }
 
-export async function getUsers(): Promise<getUsersResponse[]> {
-  const url = new URL(`/api/v1/users`, API_URL);
+interface getUsersResponse {
+  data: usersResponse[];
+  total_page?: number;
+}
+
+export async function getUsers(params: getUserParams): Promise<getUsersResponse> {
+  const url = params
+    ? new URL(`/api/v1/users?${queryString.stringify(params)}`, API_URL)
+    : new URL('/api/v1/users', API_URL);
+
   const response = await get(url);
-  return await response.json();
+  const data = await response.json();
+  const linkHeader = response.headers.get('link');
+  const links = parseLinkHeader(linkHeader || null);
+  const totalPage = Number(links?.last?.page);
+  const responses = { data: data, total_page: totalPage };
+  return responses;
 }
 
 interface getUserResponse {

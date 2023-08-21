@@ -26,6 +26,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import { useNavigate } from 'react-router-dom';
+import { DEFAULT_PAGE_SIZE } from '../../lib/constants';
 
 const theme = createTheme({
   breakpoints: {
@@ -53,7 +54,6 @@ export default function Clusters() {
   const [isLoading, setIsLoading] = useState(true);
   const [clusterIsLoading, setClusterIsLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [pageSize] = useState(10);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [searchClusters, setSearchClusters] = useState('');
   const [cluster, setCluster] = useState([{ name: '' }]);
@@ -84,7 +84,7 @@ export default function Clusters() {
           getClusters({ page: 1, per_page: 1000 }),
           getSchedulers({ page: 1, per_page: 1000 }),
           getSeedPeers({ page: 1, per_page: 1000 }),
-          getClusters({ page: page, per_page: pageSize }),
+          getClusters({ page: page, per_page: DEFAULT_PAGE_SIZE }),
         ]);
 
         setCluster(cluster.data);
@@ -102,7 +102,7 @@ export default function Clusters() {
         }
       }
     })();
-  }, [page, pageSize]);
+  }, [page, DEFAULT_PAGE_SIZE]);
 
   const numberOfDefaultClusters =
     Array.isArray(cluster) && cluster?.filter((item: any) => item?.is_default === true).length;
@@ -116,7 +116,7 @@ export default function Clusters() {
   const searchCluster = async (event: any) => {
     try {
       setClusterIsLoading(true);
-      const cluster = await getClusters({ page: 1, per_page: pageSize, name: searchClusters });
+      const cluster = await getClusters({ page: 1, per_page: DEFAULT_PAGE_SIZE, name: searchClusters });
       setAllClusters(cluster.data);
       setTotalPages(cluster.total_page || 1);
       setClusterIsLoading(false);

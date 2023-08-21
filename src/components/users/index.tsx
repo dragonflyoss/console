@@ -30,6 +30,9 @@ import {
   TableBody,
   ListItem,
   List,
+  Pagination,
+  ThemeProvider,
+  createTheme,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole } from '../../lib/api';
@@ -40,6 +43,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import styles from './index.module.css';
 import _ from 'lodash';
+import { ROLE_ROOT, ROLE_GUEST, DEFAULT_PAGE_SIZE } from '../../lib/constants';
 
 const useStyles = makeStyles((theme: any) => ({
   tableRow: {
@@ -77,10 +81,10 @@ export default function Users() {
   const [userDetail, setUserDetail] = useState(false);
   const [switchUser, setSwitchUser] = useState(false);
   const [userID, setUserID] = useState('');
-  const [root] = useState('root');
-  const [guest] = useState('guest');
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadingButton, setLoadingButton] = useState(false);
+  const [userPage, setUserPage] = useState(1);
+  const [userTotalPages, setUserTotalPages] = useState<number>(1);
   const [users, setUsers] = useState([{ avatar: '', id: 0, email: '', name: '', state: '', location: '' }]);
   const [user, setUser] = useState({
     id: 0,
@@ -93,6 +97,7 @@ export default function Users() {
   });
   const [role, setRole] = useState('');
   const [detailRole, setDetailRole] = useState('');
+
   const classes = useStyles();
 
   useEffect(() => {
@@ -100,8 +105,9 @@ export default function Users() {
       try {
         setIsLoading(true);
 
-        const user = await getUsers();
-        setUsers(user);
+        const user = await getUsers({ page: userPage, per_page: DEFAULT_PAGE_SIZE });
+        setUsers(user.data);
+        setUserTotalPages(user.total_page || 1);
         setIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
@@ -111,7 +117,15 @@ export default function Users() {
         }
       }
     })();
-  }, []);
+  }, [userPage, DEFAULT_PAGE_SIZE]);
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#1C293A',
+      },
+    },
+  });
 
   const handleChange = async (row: any) => {
     try {
@@ -163,8 +177,8 @@ export default function Users() {
 
     if (role === 'root') {
       try {
-        await deleteUserRole(userID, guest);
-        await putUserRole(userID, root);
+        await deleteUserRole(userID, ROLE_GUEST);
+        await putUserRole(userID, ROLE_ROOT);
 
         setSuccessMessage(true);
         setLoadingButton(false);
@@ -180,8 +194,8 @@ export default function Users() {
       }
     } else if (role === 'guest') {
       try {
-        await deleteUserRole(userID, root);
-        await putUserRole(userID, guest);
+        await deleteUserRole(userID, ROLE_ROOT);
+        await putUserRole(userID, ROLE_GUEST);
 
         setSuccessMessage(true);
         setLoadingButton(false);
@@ -207,7 +221,7 @@ export default function Users() {
   };
 
   return (
-    <Box>
+    <ThemeProvider theme={theme}>
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -387,6 +401,17 @@ export default function Users() {
           </TableBody>
         </Table>
       </Paper>
+      <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+        <Pagination
+          count={userTotalPages}
+          page={userPage}
+          onChange={(_event: any, newPage: number) => {
+            setUserPage(newPage);
+          }}
+          color="primary"
+          size="small"
+        />
+      </Box>
       <Dialog
         open={switchUser}
         onClose={closeAllPopups}
@@ -652,6 +677,6 @@ export default function Users() {
           </List>
         </Box>
       </Drawer>
-    </Box>
+    </ThemeProvider>
   );
 }

@@ -288,6 +288,7 @@ export default function ShowCluster() {
         ]);
 
         setScheduler(scheduler.data);
+        setSchedulerTotalPages(schedulers.total_page || 1);
 
         schedulers.data.length === 0 && schedulerPage > 1
           ? setSchedulerPage(schedulerPage - 1)
@@ -316,6 +317,7 @@ export default function ShowCluster() {
       setSuccessMessage(true);
       setOpenDeleteSeedPeer(false);
       setDeleteLoadingButton(false);
+
       if (cluster.seed_peer_cluster_id !== 0) {
         const [seedPeer, seedPeers] = await Promise.all([
           getSeedPeers({
@@ -331,6 +333,8 @@ export default function ShowCluster() {
         ]);
 
         setSeedPeer(seedPeer.data);
+        setSeedPeerTotalPages(seedPeers.total_page || 1);
+
         seedPeers?.data.length === 0 && seedPeerPage > 1
           ? setSeedPeerPage(seedPeerPage - 1)
           : setAllSeedPeers(seedPeers.data);

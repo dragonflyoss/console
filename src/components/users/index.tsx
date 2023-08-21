@@ -117,7 +117,7 @@ export default function Users() {
         }
       }
     })();
-  }, [userPage, DEFAULT_PAGE_SIZE]);
+  }, [userPage]);
 
   const theme = createTheme({
     palette: {

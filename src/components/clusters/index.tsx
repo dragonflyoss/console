@@ -26,7 +26,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import { useNavigate } from 'react-router-dom';
-import { DEFAULT_PAGE_SIZE } from '../../lib/constants';
+import { DEFAULT_PAGE_SIZE ,MAX_PAGE_SIZE} from '../../lib/constants';
 
 const theme = createTheme({
   breakpoints: {
@@ -81,9 +81,9 @@ export default function Clusters() {
         setClusterIsLoading(true);
 
         const [cluster, scheduler, seedPeer, allClusters] = await Promise.all([
-          getClusters({ page: 1, per_page: 1000 }),
-          getSchedulers({ page: 1, per_page: 1000 }),
-          getSeedPeers({ page: 1, per_page: 1000 }),
+          getClusters({ page: 1, per_page: MAX_PAGE_SIZE }),
+          getSchedulers({ page: 1, per_page: MAX_PAGE_SIZE }),
+          getSeedPeers({ page: 1, per_page: MAX_PAGE_SIZE }),
           getClusters({ page: page, per_page: DEFAULT_PAGE_SIZE }),
         ]);
 
@@ -102,7 +102,7 @@ export default function Clusters() {
         }
       }
     })();
-  }, [page, DEFAULT_PAGE_SIZE]);
+  }, [page]);
 
   const numberOfDefaultClusters =
     Array.isArray(cluster) && cluster?.filter((item: any) => item?.is_default === true).length;

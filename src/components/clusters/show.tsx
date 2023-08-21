@@ -36,7 +36,11 @@ import styles from './show.module.css';
 import SearchIcon from '@mui/icons-material/Search';
 import _ from 'lodash';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { MAX_PAGE_SIZE, DEFAULT_SCHEDULER_TABLE_PAGE_SIZE, DEFAULT_SEEDPEER_TABLE_PAGE_SIZE } from '../../lib/constants';
+import {
+  MAX_PAGE_SIZE,
+  DEFAULT_SCHEDULER_TABLE_PAGE_SIZE,
+  DEFAULT_SEED_PEER_TABLE_PAGE_SIZE,
+} from '../../lib/constants';
 
 export default function ShowCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -195,7 +199,7 @@ export default function ShowCluster() {
             getSeedPeers({
               seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
               page: seedPeerPage,
-              per_page: DEFAULT_SEEDPEER_TABLE_PAGE_SIZE,
+              per_page: DEFAULT_SEED_PEER_TABLE_PAGE_SIZE,
             }),
           ]);
 
@@ -327,7 +331,7 @@ export default function ShowCluster() {
           getSeedPeers({
             seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
             page: seedPeerPage,
-            per_page: DEFAULT_SEEDPEER_TABLE_PAGE_SIZE,
+            per_page: DEFAULT_SEED_PEER_TABLE_PAGE_SIZE,
           }),
         ]);
 
@@ -388,7 +392,7 @@ export default function ShowCluster() {
       const seedPeer = await getSeedPeers({
         seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
         page: 1,
-        per_page: DEFAULT_SEEDPEER_TABLE_PAGE_SIZE,
+        per_page: DEFAULT_SEED_PEER_TABLE_PAGE_SIZE,
         host_name: searchSeedPeers,
       });
 

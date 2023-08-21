@@ -179,8 +179,9 @@ interface getClustersResponse {
 }
 
 export async function getClusters(params?: getClustersParams): Promise<getClustersResponse> {
-  const query = params ? queryString.stringify({ ...params }) : '';
-  const url = new URL(`/api/v1/clusters${query ? '?' : ''}${query}`, API_URL);
+  const url = params
+    ? new URL(`/api/v1/clusters?${queryString.stringify(params)}`, API_URL)
+    : new URL('/api/v1/clusters', API_URL);
 
   const response = await get(url);
   const data = await response.json();
@@ -361,8 +362,10 @@ interface getSchedulersResponse {
 }
 
 export async function getSchedulers(params?: getSchedulerParmas): Promise<getSchedulersResponse> {
-  const query = params ? queryString.stringify({ ...params }) : '';
-  const url = new URL(`/api/v1/schedulers${query ? '?' : ''}${query}`, API_URL);
+  const url = params
+    ? new URL(`/api/v1/schedulers?${queryString.stringify(params)}`, API_URL)
+    : new URL('/api/v1/schedulers', API_URL);
+
   const response = await get(url);
   const data = await response.json();
   const linkHeader = response.headers.get('link');
@@ -426,8 +429,10 @@ interface getSeedPeersResponse {
 }
 
 export async function getSeedPeers(params?: getSeedPeersParmas): Promise<getSeedPeersResponse> {
-  const query = params ? queryString.stringify({ ...params }) : '';
-  const url = new URL(`/api/v1/seed-peers${query ? '?' : ''}${query}`, API_URL);
+  const url = params
+    ? new URL(`/api/v1/seed-peers?${queryString.stringify(params)}`, API_URL)
+    : new URL('/api/v1/seed-peers', API_URL);
+
   const response = await get(url);
   const data = await response.json();
   const linkHeader = response.headers.get('link');
@@ -573,9 +578,11 @@ export async function putUserRole(id: string, role: string) {
 
 interface getTokensParams {
   user_id?: string;
+  page?: number;
+  per_page?: number;
 }
 
-interface getTokensResponse {
+interface tokensResponse {
   id: number;
   created_at: string;
   updated_at: string;
@@ -603,14 +610,26 @@ interface getTokensResponse {
   };
 }
 
-export async function getTokens(params?: getTokensParams): Promise<getTokensResponse[]> {
-  const query = params ? queryString.stringify({ ...params }) : '';
-  const url = new URL(`/api/v1/personal-access-tokens${query ? '?' : ''}${query}`, API_URL);
-  const response = await get(url);
-  return await response.json();
+interface getTokensResponse {
+  data: tokensResponse[];
+  total_page?: number;
 }
 
-export async function getToken(id: string): Promise<getTokensResponse> {
+export async function getTokens(params?: getTokensParams): Promise<getTokensResponse> {
+  const url = params
+    ? new URL(`/api/v1/personal-access-tokens?${queryString.stringify(params)}`, API_URL)
+    : new URL('/api/v1/personal-access-tokens', API_URL);
+
+  const response = await get(url);
+  const data = await response.json();
+  const linkHeader = response.headers.get('link');
+  const links = parseLinkHeader(linkHeader || null);
+  const totalPage = Number(links?.last?.page);
+  const responses = { data: data, total_page: totalPage };
+  return responses;
+}
+
+export async function getToken(id: string): Promise<tokensResponse> {
   const url = new URL(`/api/v1/personal-access-tokens/${id}`, API_URL);
   const response = await get(url);
   return await response.json();

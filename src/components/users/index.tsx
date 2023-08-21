@@ -401,17 +401,21 @@ export default function Users() {
           </TableBody>
         </Table>
       </Paper>
-      <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
-        <Pagination
-          count={userTotalPages}
-          page={userPage}
-          onChange={(_event: any, newPage: number) => {
-            setUserPage(newPage);
-          }}
-          color="primary"
-          size="small"
-        />
-      </Box>
+      {userTotalPages > 1 ? (
+        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+          <Pagination
+            count={userTotalPages}
+            page={userPage}
+            onChange={(_event: any, newPage: number) => {
+              setUserPage(newPage);
+            }}
+            color="primary"
+            size="small"
+          />
+        </Box>
+      ) : (
+        <></>
+      )}
       <Dialog
         open={switchUser}
         onClose={closeAllPopups}

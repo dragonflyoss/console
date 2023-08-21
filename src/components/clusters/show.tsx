@@ -864,17 +864,21 @@ export default function ShowCluster() {
           </LoadingButton>
         </DialogActions>
       </Dialog>
-      <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
-        <Pagination
-          count={schedulerTotalPages}
-          page={schedulerPage}
-          onChange={(_event: any, newPage: number) => {
-            setSchedulerPage(newPage);
-          }}
-          color="primary"
-          size="small"
-        />
-      </Box>
+      {schedulerTotalPages > 1 ? (
+        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+          <Pagination
+            count={schedulerTotalPages}
+            page={schedulerPage}
+            onChange={(_event: any, newPage: number) => {
+              setSchedulerPage(newPage);
+            }}
+            color="primary"
+            size="small"
+          />
+        </Box>
+      ) : (
+        <></>
+      )}
       <Typography variant="subtitle1" gutterBottom fontFamily="mabry-bold" mt="2rem" mb="1rem">
         Seed Peer Cluster
       </Typography>
@@ -1138,17 +1142,21 @@ export default function ShowCluster() {
           </LoadingButton>
         </DialogActions>
       </Dialog>
-      <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
-        <Pagination
-          count={seedPeerTotalPages}
-          page={seedPeerPage}
-          onChange={(_event: any, newPage: number) => {
-            setSeedPeerPage(newPage);
-          }}
-          color="primary"
-          size="small"
-        />
-      </Box>
+      {seedPeerTotalPages > 1 ? (
+        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+          <Pagination
+            count={seedPeerTotalPages}
+            page={seedPeerPage}
+            onChange={(_event: any, newPage: number) => {
+              setSeedPeerPage(newPage);
+            }}
+            color="primary"
+            size="small"
+          />
+        </Box>
+      ) : (
+        <></>
+      )}
       <Grid sx={{ height: 2 }}> </Grid>
     </ThemeProvider>
   );

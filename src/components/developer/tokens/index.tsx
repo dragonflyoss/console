@@ -199,125 +199,207 @@ export default function PersonalAccessTokens() {
       <Typography variant="subtitle2" mb="1rem" mt="1rem">
         Tokens you have generated that can be used to access the Dragonfly API.
       </Typography>
-      <Paper variant="outlined" sx={{ width: '100%' }}>
-        {showCopyColumn ? (
-          <>
-            <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center', backgroundColor: 'rgba(108,198,68,.1)' }}>
-              <Typography variant="body2" mr="0.2rem">
-                {newToken}
-              </Typography>
-              <IconButton
-                aria-label="delete"
-                sx={{
-                  p: '0',
-                  width: '1.6rem',
-                  height: '1.6rem',
-                }}
-                onClick={copyToken}
-              >
-                {showCopyIcon ? (
-                  <Tooltip
-                    placement="top"
-                    PopperProps={{
-                      disablePortal: true,
-                    }}
-                    onClose={() => {
-                      setShowCopyIcon(false);
-                    }}
-                    open={showCopyIcon}
-                    disableFocusListener
-                    disableHoverListener
-                    disableTouchListener
-                    title="copied!"
-                  >
-                    <Box component="img" sx={{ width: '1.2rem', height: '1.2rem' }} src="/icons/tokens/done.svg" />
-                  </Tooltip>
-                ) : (
-                  <Box component="img" sx={{ width: '1.2rem', height: '1.2rem' }} src="/icons/tokens/copy.svg" />
-                )}
-              </IconButton>
-            </Box>
-            <Divider />
-          </>
-        ) : (
-          <></>
-        )}
-        {Array.isArray(tokens) &&
-          tokens.map((item) => {
-            return (
-              <Box key={item.id}>
-                <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
-                      {isLoading ? (
-                        <Skeleton sx={{ width: '2rem' }} />
-                      ) : (
-                        <RouterLink
-                          component={Link}
-                          to={`/developer/personal-access-tokens/${item?.id}`}
-                          underline="hover"
-                          sx={{ color: 'var(--description-color)' }}
-                        >
-                          {item.name}
-                        </RouterLink>
-                      )}
-                      {isLoading ? (
-                        <>
-                          &nbsp;—&nbsp;
-                          <Skeleton sx={{ width: '1rem' }} />
-                        </>
-                      ) : (
-                        <Typography variant="body2">&nbsp;—&nbsp;{item?.user?.name}</Typography>
-                      )}
-                    </Box>
-                    {isLoading ? (
-                      <Skeleton />
-                    ) : (
-                      <>
-                        <Typography variant="body2" component="span" fontFamily="mabry-bold">
-                          Expires on&nbsp;
-                        </Typography>
-                        <Typography variant="body2" component="span">
-                          {formatDate(item?.expired_at) || ''}.
-                        </Typography>
-                      </>
-                    )}
-                  </Box>
-                  <Box>
-                    <Button
-                      size="small"
-                      sx={{
-                        '&.MuiButton-root': {
-                          backgroundColor: 'var(--button-color)',
-                          borderRadius: 0,
-                          color: '#fff',
-                        },
-                      }}
-                      variant="contained"
-                      onClick={() => {
-                        handleDeleteClose(item);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </Box>
-                </Box>
-                <Divider />
-              </Box>
-            );
-          })}
-      </Paper>
-      <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
-        <Pagination
-          count={tokensTotalPages}
-          page={tokensPage}
-          onChange={(_event: any, newPage: number) => {
-            setTokensPage(newPage);
+      {showCopyColumn ? (
+        <Box
+          sx={{
+            display: 'flex',
+            p: '0.8rem',
+            alignItems: 'center',
+            backgroundColor: 'rgba(108,198,68,.1)',
+            mb: '1rem',
           }}
-          color="primary"
-          size="small"
-        />
-      </Box>
+        >
+          <Typography variant="body2" mr="0.2rem">
+            {newToken}
+          </Typography>
+          <IconButton
+            aria-label="delete"
+            sx={{
+              p: '0',
+              width: '1.6rem',
+              height: '1.6rem',
+            }}
+            onClick={copyToken}
+          >
+            {showCopyIcon ? (
+              <Tooltip
+                placement="top"
+                PopperProps={{
+                  disablePortal: true,
+                }}
+                onClose={() => {
+                  setShowCopyIcon(false);
+                }}
+                open={showCopyIcon}
+                disableFocusListener
+                disableHoverListener
+                disableTouchListener
+                title="copied!"
+              >
+                <Box component="img" sx={{ width: '1.2rem', height: '1.2rem' }} src="/icons/tokens/done.svg" />
+              </Tooltip>
+            ) : (
+              <Box component="img" sx={{ width: '1.2rem', height: '1.2rem' }} src="/icons/tokens/copy.svg" />
+            )}
+          </IconButton>
+        </Box>
+      ) : (
+        <></>
+      )}
+
+      {tokens.length === 0 ? (
+        <Paper
+          variant="outlined"
+          sx={{ height: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+          You don't have any tokens.
+        </Paper>
+      ) : (
+        <>
+          <Paper variant="outlined">
+            {Array.isArray(tokens) &&
+              tokens.map((item, index) => {
+                return index !== tokens.length - 1 ? (
+                  <Box key={item.id}>
+                    <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
+                          {isLoading ? (
+                            <Skeleton sx={{ width: '2rem' }} />
+                          ) : (
+                            <RouterLink
+                              component={Link}
+                              to={`/developer/personal-access-tokens/${item?.id}`}
+                              underline="hover"
+                              sx={{ color: 'var(--description-color)' }}
+                            >
+                              {item.name}
+                            </RouterLink>
+                          )}
+                          {isLoading ? (
+                            <>
+                              &nbsp;—&nbsp;
+                              <Skeleton sx={{ width: '1rem' }} />
+                            </>
+                          ) : (
+                            <Typography variant="body2">&nbsp;—&nbsp;{item?.user?.name}</Typography>
+                          )}
+                        </Box>
+                        {isLoading ? (
+                          <Skeleton />
+                        ) : (
+                          <>
+                            <Typography variant="body2" component="span" fontFamily="mabry-bold">
+                              Expires on&nbsp;
+                            </Typography>
+                            <Typography variant="body2" component="span">
+                              {formatDate(item?.expired_at) || ''}.
+                            </Typography>
+                          </>
+                        )}
+                      </Box>
+                      <Box>
+                        <Button
+                          size="small"
+                          sx={{
+                            '&.MuiButton-root': {
+                              backgroundColor: 'var(--button-color)',
+                              borderRadius: 0,
+                              color: '#fff',
+                            },
+                          }}
+                          variant="contained"
+                          onClick={() => {
+                            handleDeleteClose(item);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </Box>
+                    </Box>
+                    <Divider />
+                  </Box>
+                ) : (
+                  <Box key={item.id}>
+                    <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
+                          {isLoading ? (
+                            <Skeleton sx={{ width: '2rem' }} />
+                          ) : (
+                            <RouterLink
+                              component={Link}
+                              to={`/developer/personal-access-tokens/${item?.id}`}
+                              underline="hover"
+                              sx={{ color: 'var(--description-color)' }}
+                            >
+                              {item.name}
+                            </RouterLink>
+                          )}
+                          {isLoading ? (
+                            <>
+                              &nbsp;—&nbsp;
+                              <Skeleton sx={{ width: '1rem' }} />
+                            </>
+                          ) : (
+                            <Typography variant="body2">&nbsp;—&nbsp;{item?.user?.name}</Typography>
+                          )}
+                        </Box>
+                        {isLoading ? (
+                          <Skeleton />
+                        ) : (
+                          <>
+                            <Typography variant="body2" component="span" fontFamily="mabry-bold">
+                              Expires on&nbsp;
+                            </Typography>
+                            <Typography variant="body2" component="span">
+                              {formatDate(item?.expired_at) || ''}.
+                            </Typography>
+                          </>
+                        )}
+                      </Box>
+                      <Box>
+                        <Button
+                          size="small"
+                          sx={{
+                            '&.MuiButton-root': {
+                              backgroundColor: 'var(--button-color)',
+                              borderRadius: 0,
+                              color: '#fff',
+                            },
+                          }}
+                          variant="contained"
+                          onClick={() => {
+                            handleDeleteClose(item);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </Box>
+                    </Box>
+                  </Box>
+                );
+              })}
+          </Paper>
+        </>
+      )}
+
+      {tokensTotalPages > 1 ? (
+        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+          <Pagination
+            count={tokensTotalPages}
+            page={tokensPage}
+            onChange={(_event: any, newPage: number) => {
+              setTokensPage(newPage);
+            }}
+            color="primary"
+            size="small"
+          />
+        </Box>
+      ) : (
+        <></>
+      )}
+
       <Dialog
         open={openDeletToken}
         onClose={() => {

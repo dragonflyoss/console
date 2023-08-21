@@ -26,7 +26,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import { useNavigate } from 'react-router-dom';
-import { DEFAULT_PAGE_SIZE ,MAX_PAGE_SIZE} from '../../lib/constants';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../lib/constants';
 
 const theme = createTheme({
   breakpoints: {
@@ -409,17 +409,21 @@ export default function Clusters() {
               </Box>
             ))}
         </Grid>
-        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={(_event: any, newPage: number) => {
-              setPage(newPage);
-            }}
-            color="primary"
-            size="small"
-          />
-        </Box>
+        {totalPages > 1 ? (
+          <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={(_event: any, newPage: number) => {
+                setPage(newPage);
+              }}
+              color="primary"
+              size="small"
+            />
+          </Box>
+        ) : (
+          <></>
+        )}
       </ThemeProvider>
     </Box>
   );

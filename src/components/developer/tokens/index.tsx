@@ -39,14 +39,15 @@ export default function PersonalAccessTokens() {
   const [tokenSelectedID, setTokenSelectedID] = useState('');
   const [tokensPage, setTokensPage] = useState(1);
   const [tokensTotalPages, setTokensTotalPages] = useState<number>(1);
-  const [tokensPageSize] = useState(10);
-  const [tokens, setTokens] = useState([
-    { name: '', id: 0, scopes: [''], token: '', created_at: '', expired_at: '', user: { name: '' } },
-  ]);
   const [showCopyColumn, setShowCopyColumn] = useState(false);
   const [showCopyIcon, setShowCopyIcon] = useState(false);
   const [newToken, setNewToken] = useState('');
   const [, setCopiedText] = useCopyToClipboard();
+  const [tokens, setTokens] = useState([
+    { name: '', id: 0, scopes: [''], token: '', created_at: '', expired_at: '', user: { name: '' } },
+  ]);
+
+  const tokensPageSize = 10;
   const navigate = useNavigate();
   const user = useContext(MyContext);
 

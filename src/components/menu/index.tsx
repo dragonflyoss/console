@@ -25,6 +25,7 @@ import { getUserRoles, getUser, signOut } from '../../lib/api';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { getJwtPayload, setPageTitle } from '../../lib/utils';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
+import { ROOT, GUEST } from '../../lib/constants';
 
 const Main = styled('div')(({ theme }) => ({
   flexGrow: 1,
@@ -51,8 +52,6 @@ export const MyContext = createContext<MyContextType>({
 
 export default function Layout(props: any) {
   const [role, setRole] = useState(['']);
-  const [root] = useState('root');
-  const [guest] = useState('guest');
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [pageLoding, setPageLoding] = useState(false);
@@ -212,7 +211,7 @@ export default function Layout(props: any) {
                 </Box>
                 <List component="nav" aria-label="main mailbox folders">
                   {role.map((item, id) => {
-                    return item === root ? (
+                    return item === ROOT ? (
                       rootMenu.map((items) =>
                         items.text === 'Developer' ? (
                           <Box key={items.href}>
@@ -287,7 +286,7 @@ export default function Layout(props: any) {
                           </ListItemButton>
                         ),
                       )
-                    ) : item === guest ? (
+                    ) : item === GUEST ? (
                       guestMenu.map((items) =>
                         items.text === 'Developer' ? (
                           <Box key={items.href}>

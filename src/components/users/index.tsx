@@ -43,6 +43,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import styles from './index.module.css';
 import _ from 'lodash';
+import { ROOT, GUEST, PAGE_SIZE } from '../../lib/constants';
 
 const useStyles = makeStyles((theme: any) => ({
   tableRow: {
@@ -96,9 +97,6 @@ export default function Users() {
   });
   const [role, setRole] = useState('');
   const [detailRole, setDetailRole] = useState('');
-  const root = 'root';
-  const guest = 'guest';
-  const userPageSize = 10;
 
   const classes = useStyles();
 
@@ -107,7 +105,7 @@ export default function Users() {
       try {
         setIsLoading(true);
 
-        const user = await getUsers({ page: userPage, per_page: userPageSize });
+        const user = await getUsers({ page: userPage, per_page: PAGE_SIZE });
         setUsers(user.data);
         setUserTotalPages(user.total_page || 1);
         setIsLoading(false);
@@ -119,7 +117,7 @@ export default function Users() {
         }
       }
     })();
-  }, [userPage, userPageSize]);
+  }, [userPage, PAGE_SIZE]);
 
   const theme = createTheme({
     palette: {
@@ -179,8 +177,8 @@ export default function Users() {
 
     if (role === 'root') {
       try {
-        await deleteUserRole(userID, guest);
-        await putUserRole(userID, root);
+        await deleteUserRole(userID, GUEST);
+        await putUserRole(userID, ROOT);
 
         setSuccessMessage(true);
         setLoadingButton(false);
@@ -196,8 +194,8 @@ export default function Users() {
       }
     } else if (role === 'guest') {
       try {
-        await deleteUserRole(userID, root);
-        await putUserRole(userID, guest);
+        await deleteUserRole(userID, ROOT);
+        await putUserRole(userID, GUEST);
 
         setSuccessMessage(true);
         setLoadingButton(false);

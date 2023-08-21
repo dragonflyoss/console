@@ -555,9 +555,11 @@ export async function putUserRole(id: string, role: string) {
 
 interface getTokensParams {
   user_id?: string;
+  page?: number;
+  per_page?: number;
 }
 
-interface getTokensResponse {
+interface tokensResponse {
   id: number;
   created_at: string;
   updated_at: string;
@@ -585,14 +587,24 @@ interface getTokensResponse {
   };
 }
 
-export async function getTokens(params?: getTokensParams): Promise<getTokensResponse[]> {
+interface getTokensResponse {
+  data: tokensResponse[];
+  total_page?: number;
+}
+
+export async function getTokens(params?: getTokensParams): Promise<getTokensResponse> {
   const query = params ? queryString.stringify({ ...params }) : '';
   const url = new URL(`/api/v1/personal-access-tokens${query ? '?' : ''}${query}`, API_URL);
   const response = await get(url);
-  return await response.json();
+  const data = await response.json();
+  const linkHeader = response.headers.get('link');
+  const links = parseLinkHeader(linkHeader || null);
+  const totalPage = Number(links?.last?.page);
+  const responses = { data: data, total_page: totalPage };
+  return responses;
 }
 
-export async function getToken(id: string): Promise<getTokensResponse> {
+export async function getToken(id: string): Promise<tokensResponse> {
   const url = new URL(`/api/v1/personal-access-tokens/${id}`, API_URL);
   const response = await get(url);
   return await response.json();

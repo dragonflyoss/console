@@ -14,6 +14,9 @@ import {
   Alert,
   Link as RouterLink,
   Divider,
+  Pagination,
+  ThemeProvider,
+  createTheme,
 } from '@mui/material';
 import { useState, useEffect, useContext } from 'react';
 import { getTokens, deleteTokens } from '../../../lib/api';
@@ -34,6 +37,9 @@ export default function PersonalAccessTokens() {
   const [openDeletToken, setOpenDeletToken] = useState(false);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [tokenSelectedID, setTokenSelectedID] = useState('');
+  const [tokensPage, setTokensPage] = useState(1);
+  const [tokensTotalPages, setTokensTotalPages] = useState<number>(1);
+  const [tokensPageSize] = useState(10);
   const [tokens, setTokens] = useState([
     { name: '', id: 0, scopes: [''], token: '', created_at: '', expired_at: '', user: { name: '' } },
   ]);
@@ -57,12 +63,16 @@ export default function PersonalAccessTokens() {
     (async function () {
       try {
         if (user.name === 'root') {
-          const token = await getTokens();
-          setTokens(token);
+          const token = await getTokens({ page: tokensPage, per_page: tokensPageSize });
+
+          setTokens(token.data);
+          setTokensTotalPages(token.total_page || 1);
           setIsLoading(false);
         } else if (user.name !== '') {
-          const token = await getTokens({ user_id: String(user.id) });
-          setTokens(token);
+          const token = await getTokens({ user_id: String(user.id), page: tokensPage, per_page: tokensPageSize });
+
+          setTokens(token.data);
+          setTokensTotalPages(token.total_page || 1);
           setIsLoading(false);
         }
       } catch (error) {
@@ -73,7 +83,15 @@ export default function PersonalAccessTokens() {
         }
       }
     })();
-  }, [user]);
+  }, [user, tokensPage, tokensPageSize]);
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#1C293A',
+      },
+    },
+  });
 
   const handleDeleteClose = async (row: any) => {
     setOpenDeletToken(true);
@@ -90,11 +108,19 @@ export default function PersonalAccessTokens() {
       setOpenDeletToken(false);
 
       if (user.name === 'root') {
-        const tokens = await getTokens();
-        setTokens(tokens);
+        const token = await getTokens({ page: tokensPage, per_page: tokensPageSize });
+
+        setTokensTotalPages(token.total_page || 1);
+
+        token.data.length === 0 && tokensPage > 1 ? setTokensPage(tokensPage - 1) : setTokens(token.data);
+        setIsLoading(false);
       } else if (user.name !== '') {
-        const token = await getTokens({ user_id: String(user.id) });
-        setTokens(token);
+        const token = await getTokens({ user_id: String(user.id), page: tokensPage, per_page: tokensPageSize });
+
+        setTokensTotalPages(token.total_page || 1);
+
+        token.data.length === 0 && tokensPage > 1 ? setTokensPage(tokensPage - 1) : setTokens(token.data);
+        setIsLoading(false);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -124,7 +150,7 @@ export default function PersonalAccessTokens() {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <ThemeProvider theme={theme}>
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -280,6 +306,17 @@ export default function PersonalAccessTokens() {
             );
           })}
       </Paper>
+      <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+        <Pagination
+          count={tokensTotalPages}
+          page={tokensPage}
+          onChange={(_event: any, newPage: number) => {
+            setTokensPage(newPage);
+          }}
+          color="primary"
+          size="small"
+        />
+      </Box>
       <Dialog
         open={openDeletToken}
         onClose={() => {
@@ -355,6 +392,6 @@ export default function PersonalAccessTokens() {
           </LoadingButton>
         </DialogActions>
       </Dialog>
-    </Box>
+    </ThemeProvider>
   );
 }

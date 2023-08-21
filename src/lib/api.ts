@@ -484,8 +484,10 @@ interface getUsersResponse {
 }
 
 export async function getUsers(params: getUserParams): Promise<getUsersResponse> {
-  const query = params ? queryString.stringify({ ...params }) : '';
-  const url = new URL(`/api/v1/users${query ? '?' : ''}${query}`, API_URL);
+  const url = params
+    ? new URL(`/api/v1/users?${queryString.stringify(params)}`, API_URL)
+    : new URL('/api/v1/users', API_URL);
+
   const response = await get(url);
   const data = await response.json();
   const linkHeader = response.headers.get('link');

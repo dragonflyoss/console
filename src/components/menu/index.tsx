@@ -25,7 +25,7 @@ import { getUserRoles, getUser, signOut } from '../../lib/api';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { getJwtPayload, setPageTitle } from '../../lib/utils';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
-import { ROOT, GUEST } from '../../lib/constants';
+import { ROLE_ROOT, ROLE_GUEST } from '../../lib/constants';
 
 const Main = styled('div')(({ theme }) => ({
   flexGrow: 1,
@@ -211,7 +211,7 @@ export default function Layout(props: any) {
                 </Box>
                 <List component="nav" aria-label="main mailbox folders">
                   {role.map((item, id) => {
-                    return item === ROOT ? (
+                    return item === ROLE_ROOT ? (
                       rootMenu.map((items) =>
                         items.text === 'Developer' ? (
                           <Box key={items.href}>
@@ -286,7 +286,7 @@ export default function Layout(props: any) {
                           </ListItemButton>
                         ),
                       )
-                    ) : item === GUEST ? (
+                    ) : item === ROLE_GUEST ? (
                       guestMenu.map((items) =>
                         items.text === 'Developer' ? (
                           <Box key={items.href}>

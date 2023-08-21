@@ -80,13 +80,10 @@ export default function Users() {
   const [userDetail, setUserDetail] = useState(false);
   const [switchUser, setSwitchUser] = useState(false);
   const [userID, setUserID] = useState('');
-  const [root] = useState('root');
-  const [guest] = useState('guest');
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadingButton, setLoadingButton] = useState(false);
   const [userPage, setUserPage] = useState(1);
   const [userTotalPages, setUserTotalPages] = useState<number>(1);
-  const [userPageSize] = useState(10);
   const [users, setUsers] = useState([{ avatar: '', id: 0, email: '', name: '', state: '', location: '' }]);
   const [user, setUser] = useState({
     id: 0,
@@ -99,6 +96,10 @@ export default function Users() {
   });
   const [role, setRole] = useState('');
   const [detailRole, setDetailRole] = useState('');
+  const root = 'root';
+  const guest = 'guest';
+  const userPageSize = 10;
+
   const classes = useStyles();
 
   useEffect(() => {

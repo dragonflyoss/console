@@ -43,7 +43,7 @@ export default function PersonalAccessTokens() {
   const [showCopyColumn, setShowCopyColumn] = useState(false);
   const [showCopyIcon, setShowCopyIcon] = useState(false);
   const [newToken, setNewToken] = useState('');
-  const [, setCopiedText] = useCopyToClipboard();
+  const [, setCopyToClipboard] = useCopyToClipboard();
   const [tokens, setTokens] = useState([
     { name: '', id: 0, scopes: [''], token: '', created_at: '', expired_at: '', user: { name: '' } },
   ]);
@@ -142,7 +142,7 @@ export default function PersonalAccessTokens() {
   };
 
   const copyToken = () => {
-    setCopiedText(newToken);
+    setCopyToClipboard(newToken);
     setShowCopyIcon(true);
 
     setTimeout(() => {

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Divider from '@mui/material/Divider';
 import { Box, Grid, Tooltip, Typography, Paper, DialogTitle, DialogContent, IconButton, Skeleton } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
@@ -6,6 +5,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import styles from './information.module.css';
 import HelpIcon from '@mui/icons-material/Help';
 import { useState } from 'react';
+import { useCopyToClipboard } from 'react-use';
 
 interface cluster {
   id: number;
@@ -37,6 +37,27 @@ interface cluster {
 export default function Information(props: { cluster: cluster; isLoading: boolean }) {
   const { cluster, isLoading } = props;
   const [openCIDRs, setOpenCIDRs] = useState(false);
+  const [showSchedulerClusterIDCopyIcon, setShowSchedulerClusterIDCopyIcon] = useState(false);
+  const [showSeedPeerClusterIDCopyIcon, setShowSeedPeerClusterIDCopyIcon] = useState(false);
+  const [, setCopyToClipboard] = useCopyToClipboard();
+
+  const copyClusterID = (title: string, clusterID: number) => {
+    if (title === 'schedulerClusterID') {
+      setCopyToClipboard(String(clusterID));
+      setShowSchedulerClusterIDCopyIcon(true);
+
+      setTimeout(() => {
+        setShowSchedulerClusterIDCopyIcon(false);
+      }, 1000);
+    } else if (title === 'seedPeerClusterID') {
+      setCopyToClipboard(String(clusterID));
+      setShowSeedPeerClusterIDCopyIcon(true);
+
+      setTimeout(() => {
+        setShowSeedPeerClusterIDCopyIcon(false);
+      }, 1000);
+    }
+  };
 
   return (
     <Box sx={{ mb: '2rem' }}>
@@ -120,9 +141,46 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                 <HelpIcon color="disabled" className={styles.descriptionIcon} />
               </Tooltip>
             </Box>
-            <Typography variant="subtitle1" component="div" fontFamily="mabry-bold">
-              {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.scheduler_cluster_id}
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography variant="subtitle1" component="div" fontFamily="mabry-bold" mr="0.4rem">
+                {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.scheduler_cluster_id}
+              </Typography>
+              {isLoading ? (
+                <></>
+              ) : (
+                <IconButton
+                  aria-label="copy"
+                  sx={{
+                    width: '1.2rem',
+                    height: '1.2rem',
+                  }}
+                  onClick={() => {
+                    copyClusterID('schedulerClusterID', cluster?.scheduler_cluster_id);
+                  }}
+                >
+                  {showSchedulerClusterIDCopyIcon ? (
+                    <Tooltip
+                      placement="top"
+                      PopperProps={{
+                        disablePortal: true,
+                      }}
+                      onClose={() => {
+                        setShowSchedulerClusterIDCopyIcon(false);
+                      }}
+                      open={showSchedulerClusterIDCopyIcon}
+                      disableFocusListener
+                      disableHoverListener
+                      disableTouchListener
+                      title="copied!"
+                    >
+                      <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/done.svg" />
+                    </Tooltip>
+                  ) : (
+                    <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/copy.svg" />
+                  )}
+                </IconButton>
+              )}
+            </Box>
           </Box>
           <Divider orientation="vertical" flexItem />
           <Box className={styles.clusterWrap}>
@@ -137,9 +195,46 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                 <HelpIcon color="disabled" className={styles.descriptionIcon} />
               </Tooltip>
             </Box>
-            <Typography variant="subtitle1" component="div" fontFamily="mabry-bold">
-              {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.seed_peer_cluster_id}
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography variant="subtitle1" component="div" fontFamily="mabry-bold" mr="0.4rem">
+                {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.seed_peer_cluster_id}
+              </Typography>
+              {isLoading ? (
+                <></>
+              ) : (
+                <IconButton
+                  aria-label="copy"
+                  sx={{
+                    width: '1.2rem',
+                    height: '1.2rem',
+                  }}
+                  onClick={() => {
+                    copyClusterID('seedPeerClusterID', cluster?.seed_peer_cluster_id);
+                  }}
+                >
+                  {showSeedPeerClusterIDCopyIcon ? (
+                    <Tooltip
+                      placement="top"
+                      PopperProps={{
+                        disablePortal: true,
+                      }}
+                      onClose={() => {
+                        setShowSeedPeerClusterIDCopyIcon(false);
+                      }}
+                      open={showSeedPeerClusterIDCopyIcon}
+                      disableFocusListener
+                      disableHoverListener
+                      disableTouchListener
+                      title="copied!"
+                    >
+                      <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/done.svg" />
+                    </Tooltip>
+                  ) : (
+                    <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/copy.svg" />
+                  )}
+                </IconButton>
+              )}
+            </Box>
           </Box>
         </Paper>
         <Paper variant="outlined" className={styles.container}>

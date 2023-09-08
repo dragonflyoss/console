@@ -50,7 +50,7 @@ export default function SignUp() {
       setError: setAccountError,
 
       validate: (value: string) => {
-        const reg = /^(?=.*[A-Za-z0-9@$!%*?&._-])[A-Za-z0-9@$!%*?&._-]{1,}$/;
+        const reg = /^(?=.*[A-Za-z0-9@$!%*?&._-])[A-Za-z0-9@$!%*?&._-]{3,10}$/;
         return reg.test(value);
       },
     },

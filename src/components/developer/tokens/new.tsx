@@ -46,6 +46,7 @@ export default function CreateTokens() {
   const [expiredTime, setExpiredTime] = useState('');
   const [preheat, setPreheat] = useState(false);
   const [job, setJob] = useState(false);
+  const [cluster, setCluster] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
 
   const formList = [
@@ -140,7 +141,7 @@ export default function CreateTokens() {
 
     const name = event.currentTarget.elements.name;
     const bio = event.currentTarget.elements.bio;
-    const scopes = [preheat ? 'preheat' : '', job ? 'job' : ''];
+    const scopes = [preheat ? 'preheat' : '', job ? 'job' : '', cluster ? 'cluster' : ''];
     const filteredScopes = scopes.filter((item) => item !== '');
 
     const data = new FormData(event.currentTarget);
@@ -315,6 +316,25 @@ export default function CreateTokens() {
                     />
                   }
                 />
+                <Box display="flex" alignItems="center">
+                  <Box width="10%">
+                    <FormControlLabel
+                      label="cluster"
+                      control={
+                        <Checkbox
+                          checked={cluster}
+                          onChange={(event: any) => {
+                            setCluster(event.target.checked);
+                          }}
+                          sx={{ color: 'var(--button-color)!important' }}
+                        />
+                      }
+                    />
+                  </Box>
+                  <Typography variant="body2" color="rgb(82 82 82 / 87%)" ml="1rem">
+                    Cluster is used by cluster preheat.
+                  </Typography>
+                </Box>
               </FormGroup>
             </Box>
             <Box sx={{ mt: '2rem' }}>

@@ -46,6 +46,7 @@ export default function UpdateTokens() {
   const [expiredTimeError, setExpiredTimeError] = useState(false);
   const [preheat, setPreheat] = useState(false);
   const [job, setJob] = useState(false);
+  const [cluster, setCluster] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const [tokens, setTokens] = useState({ name: '', bio: '', scopes: [''], expired_at: '', state: '', id: 0 });
 
@@ -99,6 +100,7 @@ export default function UpdateTokens() {
           setExpiredTime(tokens.expired_at);
           setPreheat(tokens.scopes.includes('preheat'));
           setJob(tokens.scopes.includes('job'));
+          setCluster(tokens.scopes.includes('cluster'));
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -126,7 +128,7 @@ export default function UpdateTokens() {
     setLoadingButton(true);
     event.preventDefault();
 
-    const scopes = [preheat ? 'preheat' : '', job ? 'job' : ''];
+    const scopes = [preheat ? 'preheat' : '', job ? 'job' : '', cluster ? 'cluster' : ''];
     const filteredScopes = scopes.filter((item) => item !== '');
 
     const data = new FormData(event.currentTarget);
@@ -319,6 +321,25 @@ export default function UpdateTokens() {
                     />
                   }
                 />
+                <Box display="flex" alignItems="center">
+                  <Box width="10%">
+                    <FormControlLabel
+                      label="cluster"
+                      control={
+                        <Checkbox
+                          checked={cluster}
+                          onChange={(event: any) => {
+                            setCluster(event.target.checked);
+                          }}
+                          sx={{ color: 'var(--button-color)!important' }}
+                        />
+                      }
+                    />
+                  </Box>
+                  <Typography variant="body2" color="rgb(82 82 82 / 87%)" ml="1rem">
+                    Cluster is used by cluster preheat.
+                  </Typography>
+                </Box>
               </FormGroup>
             </Box>
             <Box sx={{ mt: '2rem' }}>

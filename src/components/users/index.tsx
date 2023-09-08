@@ -95,8 +95,9 @@ export default function Users() {
     location: '',
     updated_at: '',
   });
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState(['']);
   const [detailRole, setDetailRole] = useState('');
+  const [updateRole, setUpdatelRole] = useState('');
 
   const classes = useStyles();
 
@@ -155,7 +156,9 @@ export default function Users() {
       setUserID(row.id);
 
       const role = await getUserRoles(row.id);
-      setRole(role[0] || '');
+
+      setRole(role);
+      setUpdatelRole(role.includes(ROLE_ROOT) ? ROLE_ROOT : ROLE_GUEST);
       setSwitchUser(true);
     } catch (error) {
       if (error instanceof Error) {
@@ -173,11 +176,10 @@ export default function Users() {
   };
 
   const handleSubmit = async () => {
-    setLoadingButton(true);
+    if (updateRole === ROLE_ROOT && !role.includes(ROLE_ROOT)) {
+      setLoadingButton(true);
 
-    if (role === 'root') {
       try {
-        await deleteUserRole(userID, ROLE_GUEST);
         await putUserRole(userID, ROLE_ROOT);
 
         setSuccessMessage(true);
@@ -192,10 +194,11 @@ export default function Users() {
           setLoadingButton(false);
         }
       }
-    } else if (role === 'guest') {
+    } else if (updateRole === ROLE_GUEST && role.includes(ROLE_ROOT)) {
+      setLoadingButton(true);
+
       try {
         await deleteUserRole(userID, ROLE_ROOT);
-        await putUserRole(userID, ROLE_GUEST);
 
         setSuccessMessage(true);
         setLoadingButton(false);
@@ -433,9 +436,9 @@ export default function Users() {
                 row
                 aria-labelledby="demo-controlled-radio-buttons-group"
                 name="controlled-radio-buttons-group"
-                value={role}
+                value={updateRole}
                 onChange={(e: any) => {
-                  setRole(e.target.value);
+                  setUpdatelRole(e.target.value);
                 }}
               >
                 <FormControlLabel

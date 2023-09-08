@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import SignIn from '../components/signin';
 import NotFound from '../components/404';
 import SignUp from '../components/signup';
@@ -14,8 +14,26 @@ import Users from '../components/users';
 import Tokens from '../components/developer/tokens';
 import NewTokens from '../components/developer/tokens/new';
 import EditTokens from '../components/developer/tokens/edit';
+import { useState, useEffect } from 'react';
+import { getJwtPayload } from '../lib/utils';
+import { getUserRoles } from '../lib/api';
+import { ROLE_ROOT } from '../lib/constants';
 
 function Main() {
+  const [isRoot, setIsRoot] = useState(true);
+  const location = useLocation();
+
+  useEffect(() => {
+    const payload = getJwtPayload();
+
+    (async function () {
+      if (payload?.id) {
+        const role = await getUserRoles(payload?.id);
+        setIsRoot(role.includes(ROLE_ROOT));
+      }
+    })();
+  }, [location]);
+
   return (
     <Routes>
       <Route path="*" element={<NotFound />} />
@@ -33,7 +51,7 @@ function Main() {
         <Route path="/developer/personal-access-tokens" element={<Tokens />} />
         <Route path="/developer/personal-access-tokens/new" element={<NewTokens />} />
         <Route path="/developer/personal-access-tokens/:id" element={<EditTokens />} />
-        <Route path="/users" element={<Users />} />
+        <Route path="/users" element={isRoot ? <Users /> : <NotFound />} />
       </Route>
     </Routes>
   );

@@ -291,30 +291,45 @@ export default function CreateTokens() {
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
               <FormGroup>
-                <FormControlLabel
-                  label="preheat"
-                  control={
-                    <Checkbox
-                      checked={preheat}
-                      onChange={(event: any) => {
-                        setPreheat(event.target.checked);
-                      }}
-                      sx={{ color: 'var(--button-color)!important' }}
+                <Box display="flex" alignItems="center">
+                  <Box width="10%">
+                    <FormControlLabel
+                      label="preheat"
+                      control={
+                        <Checkbox
+                          checked={preheat}
+                          onChange={(event: any) => {
+                            setPreheat(event.target.checked);
+                          }}
+                          sx={{ color: 'var(--button-color)!important' }}
+                        />
+                      }
                     />
-                  }
-                />
-                <FormControlLabel
-                  label="job"
-                  control={
-                    <Checkbox
-                      checked={job}
-                      onChange={(event: any) => {
-                        setJob(event.target.checked);
-                      }}
-                      sx={{ color: 'var(--button-color)!important' }}
+                  </Box>
+                  <Typography variant="body2" color="rgb(82 82 82 / 87%)" ml="1rem">
+                    Cluster is used by cluster preheat.
+                  </Typography>
+                </Box>
+                <Box display="flex" alignItems="center">
+                  <Box width="10%">
+                    <FormControlLabel
+                      label="job"
+                      control={
+                        <Checkbox
+                          checked={job}
+                          onChange={(event: any) => {
+                            setJob(event.target.checked);
+                          }}
+                          sx={{ color: 'var(--button-color)!important' }}
+                        />
+                      }
                     />
-                  }
-                />
+                  </Box>
+                  <Typography variant="body2" color="rgb(82 82 82 / 87%)" ml="1rem">
+                    The job includes the preheat job. If the user preheats through the open api, it is recommended to
+                    use the preheat job API
+                  </Typography>
+                </Box>
               </FormGroup>
             </Box>
             <Box sx={{ mt: '2rem' }}>

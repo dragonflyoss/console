@@ -20,7 +20,7 @@ import { getUserRoles } from '../lib/api';
 import { ROLE_ROOT } from '../lib/constants';
 
 function Main() {
-  const [isRoot, setIsRoot] = useState(true);
+  const [isRoot, setIsRoot] = useState(false);
   const location = useLocation();
 
   useEffect(() => {

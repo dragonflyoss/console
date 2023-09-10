@@ -13,7 +13,8 @@ export async function get(url: URL) {
     if (response.status === 200) {
       return response;
     }
-    throw new Error(String(response.statusText));
+    const errorMessage = (await response.json())?.message;
+    throw new Error(errorMessage && typeof errorMessage === 'string' ? errorMessage : response.statusText);
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -35,7 +36,8 @@ export async function post(url: URL, request = {}) {
     if (response.status === 200) {
       return response;
     }
-    throw new Error(String(response.statusText));
+    const errorMessage = (await response.json())?.message;
+    throw new Error(errorMessage && typeof errorMessage === 'string' ? errorMessage : response.statusText);
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -57,7 +59,8 @@ export async function patch(url: URL, request = {}) {
     if (response.status === 200) {
       return response;
     }
-    throw new Error(String(response.statusText));
+    const errorMessage = (await response.json())?.message;
+    throw new Error(errorMessage && typeof errorMessage === 'string' ? errorMessage : response.statusText);
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -74,10 +77,12 @@ export async function destroy(url: URL) {
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
     });
+
     if (response.status === 200) {
       return response;
     }
-    throw new Error(String(response.statusText));
+    const errorMessage = (await response.json())?.message;
+    throw new Error(errorMessage && typeof errorMessage === 'string' ? errorMessage : response.statusText);
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);
@@ -98,7 +103,8 @@ export async function put(url: URL) {
     if (response.status === 200) {
       return response;
     }
-    throw new Error(String(response.statusText));
+    const errorMessage = (await response.json())?.message;
+    throw new Error(errorMessage && typeof errorMessage === 'string' ? errorMessage : response.statusText);
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(err.message);

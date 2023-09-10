@@ -192,7 +192,7 @@ export default function Clusters() {
                 <Box marginLeft="0.6rem">
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : cluster.length || ''}
+                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : cluster?.length || ''}
                     </Typography>
                     <span>number of clusters</span>
                   </Box>
@@ -226,7 +226,7 @@ export default function Clusters() {
                 <Box sx={{ ml: '0.6rem' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : scheduler?.length}
+                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : scheduler?.length || ''}
                     </Typography>
                     <span>number of schedulers</span>
                   </Box>
@@ -260,7 +260,7 @@ export default function Clusters() {
                 <Box sx={{ ml: '0.6rem' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : seedPeer.length}
+                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : seedPeer.length || ''}
                     </Typography>
                     <span>number of seed peers</span>
                   </Box>

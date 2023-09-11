@@ -170,6 +170,7 @@ interface getClustersParams {
 interface clustersResponse {
   id: number;
   name: string;
+  bio:string;
   scopes: {
     idc: string;
     location: string;

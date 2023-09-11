@@ -19,7 +19,7 @@
 
 .scopesContainer {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column !important;
 }
 
 .configTitle {
@@ -42,6 +42,12 @@
   margin-top: 1rem !important;
   margin-bottom: 1rem !important;
   margin-right: 1rem !important;
+}
+
+.idcInput {
+  width: 37rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .cidrsInput {

@@ -112,12 +112,7 @@
   color: #b1b1b1;
 }
 
-.locationContainer {
-  width: 50%;
-  padding-right: 0.2rem;
-}
-
-.locationText {
+.descriptionText {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

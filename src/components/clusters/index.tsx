@@ -63,6 +63,7 @@ export default function Clusters() {
     {
       id: 0,
       name: '',
+      bio: '',
       scopes: {
         idc: '',
         location: '',
@@ -361,26 +362,11 @@ export default function Clusters() {
                       {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.name}
                     </Typography>
                     <Box display="flex" mt="0.4rem">
-                      <Box display="flex" className={styles.locationContainer}>
-                        <Typography variant="body2" fontFamily="mabry-bold">
-                          IDC&nbsp;:&nbsp;
+                      <Tooltip title={item.bio || '-'} placement="top">
+                        <Typography variant="body2" className={styles.descriptionText}>
+                          {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.bio || '-'}
                         </Typography>
-                        <Tooltip title={item.scopes.idc || '-'} placement="top">
-                          <Typography variant="body2" className={styles.locationText}>
-                            {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.scopes.idc || '-'}
-                          </Typography>
-                        </Tooltip>
-                      </Box>
-                      <Box display="flex" className={styles.locationContainer}>
-                        <Typography variant="body2" fontFamily="mabry-bold">
-                          Location&nbsp;:&nbsp;
-                        </Typography>
-                        <Tooltip title={item.scopes.location || '-'} placement="top">
-                          <Typography variant="body2" className={styles.locationText}>
-                            {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.scopes.location || '-'}
-                          </Typography>
-                        </Tooltip>
-                      </Box>
+                      </Tooltip>
                     </Box>
                     <Box className={styles.creatTimeContainer}>
                       <Chip

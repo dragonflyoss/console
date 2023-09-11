@@ -36,6 +36,7 @@ export default function NewCluster() {
   const [idcError, setIDCError] = useState(false);
   const [cidrsError, setCIDRsError] = useState(false);
   const [cidrs, setCIDRs] = useState([]);
+  const [idc, setIDC] = useState([]);
   const [loadingButton, setLoadingButton] = useState(false);
   const cidrsOptions = ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'];
   const navigate = useNavigate();
@@ -122,30 +123,42 @@ export default function NewCluster() {
       },
     },
     {
+      name: 'idc',
+      label: 'IDC',
+      CIDRsFormProps: {
+        value: idc,
+        options: [],
+        onChange: (_e: any, newValue: any) => {
+          if (!scopesForm[1].formProps.error) {
+            setIDC(newValue);
+          }
+        },
+
+        onInputChange: (e: any) => {
+          changeValidate(e.target.value, scopesForm[1]);
+        },
+
+        renderTags: (value: any, getTagProps: any) =>
+          value.map((option: any, index: any) => (
+            <Chip size="small" key={index} label={option} {...getTagProps({ index })} />
+          )),
+      },
+
       formProps: {
         id: 'idc',
         label: 'IDC',
         name: 'idc',
-        autoComplete: 'family-name',
         placeholder: 'Please enter IDC',
-        helperText: idcError ? 'Maximum length is 100' : '',
         error: idcError,
+        helperText: idcError ? 'Length: (0, 100]' : '',
 
-        onChange: (e: any) => {
-          changeValidate(e.target.value, scopesForm[1]);
-        },
-
-        InputProps: {
-          endAdornment: (
-            <Tooltip
-              title={`The cluster needs to serve all peers in the IDC. When the IDC in the peer configuration matches the IDC in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. IDC has higher priority than location in the scopes.`}
-              placement="top"
-            >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
-            </Tooltip>
-          ),
+        onKeyDown: (e: any) => {
+          if (e.keyCode === 13) {
+            e.preventDefault();
+          }
         },
       },
+
       syncError: false,
       setError: setIDCError,
 
@@ -172,7 +185,9 @@ export default function NewCluster() {
         },
 
         renderTags: (value: any, getTagProps: any) =>
-          value.map((option: any, index: any) => <Chip key={index} label={option} {...getTagProps({ index })} />),
+          value.map((option: any, index: any) => (
+            <Chip size="small" key={index} label={option} {...getTagProps({ index })} />
+          )),
       },
 
       formProps: {
@@ -391,7 +406,6 @@ export default function NewCluster() {
     const isDefault = event.currentTarget.elements.isDefault.checked;
     const description = event.currentTarget.elements.description.value;
     const location = event.currentTarget.elements.location.value;
-    const idc = event.currentTarget.elements.idc.value;
     const seedPeerLoadLimit = event.currentTarget.elements.seedPeerLoadLimit.value;
     const peerLoadLimit = event.currentTarget.elements.peerLoadLimit.value;
     const numberOfConcurrentDownloadPieces = event.currentTarget.elements.numberOfConcurrentDownloadPieces.value;
@@ -404,10 +418,14 @@ export default function NewCluster() {
       item.syncError = !item.validate(value as string);
     });
 
+    const idcs = idc.join('|');
+
     scopesForm.forEach((item) => {
-      const value = data.get(item.formProps.name);
-      item.setError(!item.validate(value as string));
-      item.syncError = !item.validate(value as string);
+      if (item.formProps.name === 'location') {
+        const value = data.get(item.formProps.name);
+        item.setError(!item.validate(value as string));
+        item.syncError = !item.validate(value as string);
+      }
     });
 
     configForm.forEach((item) => {
@@ -439,7 +457,7 @@ export default function NewCluster() {
       is_default: isDefault,
       scopes: {
         cidrs: cidrs,
-        idc: idc,
+        idc: idcs,
         location: location,
       },
     };
@@ -548,11 +566,20 @@ export default function NewCluster() {
             <HelpIcon color="disabled" className={styles.descriptionIcon} />
           </Tooltip>
         </Box>
-        <Grid sx={{ display: 'flex', flexWrap: 'wrap' }}>
+        <Grid display="flex" flexDirection="column">
           {scopesForm.map((item) => {
             return (
               <Box key={item.formProps.name}>
                 {item.label === 'CIDRs' ? (
+                  <Autocomplete
+                    freeSolo
+                    multiple
+                    {...item.CIDRsFormProps}
+                    size="small"
+                    className={styles.cidrsInput}
+                    renderInput={(params) => <TextField {...params} color="success" {...item.formProps} />}
+                  />
+                ) : item.label === 'IDC' ? (
                   <Autocomplete
                     freeSolo
                     multiple

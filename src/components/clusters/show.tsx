@@ -678,7 +678,7 @@ export default function ShowCluster() {
               {allSchedulers.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={9} align="center" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    -
+                    You don't have scheduler cluster.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -966,7 +966,7 @@ export default function ShowCluster() {
               {allseedPeers.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={9} align="center" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    -
+                    You don't have seed peer cluster.
                   </TableCell>
                 </TableRow>
               ) : (

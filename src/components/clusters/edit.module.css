@@ -17,11 +17,6 @@
   align-items: center;
 }
 
-.scopesContainer {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .configTitle {
   display: flex;
   align-items: center;
@@ -42,6 +37,12 @@
   margin-top: 1rem !important;
   margin-bottom: 1rem !important;
   margin-right: 1rem !important;
+}
+
+.idcInput {
+  width: 37rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .cidrsInput {

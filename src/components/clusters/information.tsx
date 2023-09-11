@@ -37,6 +37,7 @@ interface cluster {
 export default function Information(props: { cluster: cluster; isLoading: boolean }) {
   const { cluster, isLoading } = props;
   const [openCIDRs, setOpenCIDRs] = useState(false);
+  const [openIDC, setOpenIDC] = useState(false);
   const [showSchedulerClusterIDCopyIcon, setShowSchedulerClusterIDCopyIcon] = useState(false);
   const [showSeedPeerClusterIDCopyIcon, setShowSeedPeerClusterIDCopyIcon] = useState(false);
   const [, setCopyToClipboard] = useCopyToClipboard();
@@ -237,7 +238,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
             </Box>
           </Box>
         </Paper>
-        <Paper variant="outlined" className={styles.container}>
+        <Box className={styles.container}>
           <Box className={styles.scopesContainer}>
             <Grid sx={{ mb: '0.6rem', display: 'flex', alignItems: 'center' }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -254,128 +255,213 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
               </Box>
             </Grid>
             <Paper elevation={0} className={styles.scopesContentContainer}>
-              <Paper variant="outlined" className={styles.locationContainer}>
-                <Box className={styles.scopesIconContainer}>
-                  <Box component="img" className={styles.scopesIcon} src="/icons/cluster/location.svg" />
-                </Box>
-                <Box>
-                  <Box className={styles.locationTitle}>
-                    <Typography variant="body1" component="div" color="#80828B" sx={{ mr: '0.2rem' }}>
-                      Location
-                    </Typography>
-                    <Tooltip
-                      title={`The cluster needs to serve all peers in the location. When the location in the peer configuration matches the location in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. It separated by "|", for example "area|country|province|city".`}
-                      placement="top"
-                    >
-                      <HelpIcon color="disabled" className={styles.descriptionIcon} />
-                    </Tooltip>
+              <Box sx={{ width: '33.3333%', pr: '0.6rem' }}>
+                <Paper variant="outlined" className={styles.locationContainer}>
+                  <Box display="flex" justifyContent="space-between">
+                    <Box className={styles.locationTitle}>
+                      <Typography variant="body1" component="div" color="#80828B" sx={{ mr: '0.2rem' }}>
+                        Location
+                      </Typography>
+                      <Tooltip
+                        title={`The cluster needs to serve all peers in the location. When the location in the peer configuration matches the location in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. It separated by "|", for example "area|country|province|city".`}
+                        placement="top"
+                      >
+                        <HelpIcon color="disabled" className={styles.descriptionIcon} />
+                      </Tooltip>
+                    </Box>
+                    <Box className={styles.scopesIconContainer}>
+                      <Box component="img" className={styles.scopesIcon} src="/icons/cluster/location.svg" />
+                    </Box>
                   </Box>
-                  <Tooltip title={cluster?.scopes?.location || '-'} placement="top">
-                    <Box className={styles.locationTextContainer}>
-                      <Typography variant="body2" component="span" className={styles.locationContent}>
+                  <Box className={styles.locationTextContainer}>
+                    <Tooltip title={cluster?.scopes?.location || '-'} placement="top">
+                      <Typography variant="subtitle1" component="div" className={styles.locationContent}>
                         {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.scopes?.location || '-'}
                       </Typography>
-                    </Box>
-                  </Tooltip>
-                </Box>
-              </Paper>
-              <Paper variant="outlined" className={styles.idcContainer}>
-                <Box className={styles.scopesIconContainer}>
-                  <Box component="img" className={styles.scopesIcon} src="/icons/cluster/idc.svg" />
-                </Box>
-                <Box>
-                  <Box className={styles.idcTitle}>
-                    <Typography variant="body1" component="div" color="#80828B" sx={{ mr: '0.2rem' }}>
-                      IDC
-                    </Typography>
-                    <Tooltip
-                      title={`The cluster needs to serve all peers in the IDC. When the IDC in the peer configuration matches the IDC in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. IDC has higher priority than location in the scopes.`}
-                      placement="top"
-                    >
-                      <HelpIcon color="disabled" className={styles.descriptionIcon} />
                     </Tooltip>
                   </Box>
-                  <Tooltip title={cluster?.scopes?.idc || '-'} placement="top">
-                    <Box className={styles.idcTextContainer}>
-                      <Typography variant="body2" component="div" className={styles.idcContent}>
-                        {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.scopes?.idc || '-'}
+                </Paper>
+              </Box>
+              <Box sx={{ width: '33.3333%', pr: '0.6rem' }}>
+                <Paper variant="outlined" className={styles.cidrsContainer}>
+                  <Box display="flex" justifyContent="space-between">
+                    <Box className={styles.cidrsTitle}>
+                      <Typography variant="subtitle1" component="div" color="#80828B" sx={{ mr: '0.2rem' }}>
+                        IDC
                       </Typography>
+                      <Tooltip
+                        title={`The cluster needs to serve all peers in the IDC. When the IDC in the peer configuration matches the IDC in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. IDC has higher priority than location in the scopes.`}
+                        placement="top"
+                      >
+                        <HelpIcon color="disabled" className={styles.descriptionIcon} />
+                      </Tooltip>
                     </Box>
-                  </Tooltip>
-                </Box>
-              </Paper>
-              <Paper variant="outlined" className={styles.cidrsContainer}>
-                <Box className={styles.scopesIconContainer}>
-                  <Box component="img" className={styles.scopesIcon} src="/icons/cluster/cidrs.svg" />
-                </Box>
-                <Box>
-                  <Box className={styles.cidrsTitle}>
-                    <Typography variant="body1" component="div" color="#80828B" sx={{ mr: '0.2rem' }}>
-                      CIDRs
-                    </Typography>
-                    <Tooltip
-                      title={`The cluster needs to serve all peers in the CIDRs. The advertise IP will be reported in the peer configuration when the peer is started, and if the advertise IP is empty in the peer configuration, peer will automatically get expose IP as advertise IP. When advertise IP of the peer matches the CIDRs in cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. CIDRs has higher priority than IDC in the scopes.`}
-                      placement="top"
-                    >
-                      <HelpIcon color="disabled" className={styles.descriptionIcon} />
-                    </Tooltip>
+                    <Box className={styles.scopesIconContainer}>
+                      <Box component="img" className={styles.scopesIcon} src="/icons/cluster/idc.svg" />
+                    </Box>
+                  </Box>
+                  <Box className={styles.cidrsTags}>
+                    {cluster?.scopes?.idc ? (
+                      <>
+                        <Box sx={{ width: '80%' }}>
+                          <Paper variant="outlined" className={styles.cidrsContent}>
+                            <Tooltip title={cluster?.scopes?.idc.split('|')[0] || '-'} placement="top">
+                              <Typography variant="body2" component="div" className={styles.cidrsText}>
+                                {isLoading ? (
+                                  <Skeleton sx={{ width: '8rem' }} />
+                                ) : (
+                                  cluster?.scopes?.idc.split('|')[0] || '-'
+                                )}
+                              </Typography>
+                            </Tooltip>
+                          </Paper>
+                          {cluster?.scopes?.idc.split('|').length > 1 ? (
+                            <Paper variant="outlined" className={styles.cidrsContent}>
+                              <Tooltip title={cluster?.scopes?.idc.split('|')[0] || '-'} placement="top">
+                                <Typography variant="body2" component="div" className={styles.cidrsText}>
+                                  {isLoading ? (
+                                    <Skeleton sx={{ width: '8rem' }} />
+                                  ) : (
+                                    cluster?.scopes?.idc.split('|')[1] || '-'
+                                  )}
+                                </Typography>
+                              </Tooltip>
+                            </Paper>
+                          ) : (
+                            <></>
+                          )}
+                        </Box>
+                        {cluster?.scopes?.idc.split('|').length > 2 ? (
+                          <IconButton
+                            size="small"
+                            onClick={() => {
+                              setOpenIDC(true);
+                            }}
+                          >
+                            <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                          </IconButton>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                    ) : (
+                      <Typography variant="subtitle1" component="div">
+                        -
+                      </Typography>
+                    )}
+                  </Box>
+                  <Dialog
+                    maxWidth="sm"
+                    fullWidth
+                    open={openIDC}
+                    onClose={() => {
+                      setOpenIDC(false);
+                    }}
+                  >
+                    <DialogTitle fontFamily="mabry-bold">IDC</DialogTitle>
+                    <DialogContent dividers className={styles.idcDialogContainer}>
+                      {cluster?.scopes?.idc.split('|').map((item: any, id: any) => (
+                        <Paper key={id} elevation={0} className={styles.idcDialogContent}>
+                          <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/idc.svg" />
+                          <Tooltip title={item} placement="top">
+                            <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
+                              {item}
+                            </Typography>
+                          </Tooltip>
+                        </Paper>
+                      ))}
+                    </DialogContent>
+                  </Dialog>
+                </Paper>
+              </Box>
+              <Box sx={{ width: '33.3333%', pr: '0.6rem' }}>
+                <Paper variant="outlined" className={styles.cidrsContainer}>
+                  <Box display="flex" justifyContent="space-between">
+                    <Box className={styles.cidrsTitle}>
+                      <Typography variant="subtitle1" component="div" color="#80828B" sx={{ mr: '0.2rem' }}>
+                        CIDRs
+                      </Typography>
+                      <Tooltip
+                        title={`The cluster needs to serve all peers in the CIDRs. The advertise IP will be reported in the peer configuration when the peer is started, and if the advertise IP is empty in the peer configuration, peer will automatically get expose IP as advertise IP. When advertise IP of the peer matches the CIDRs in cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. CIDRs has higher priority than IDC in the scopes.`}
+                        placement="top"
+                      >
+                        <HelpIcon color="disabled" className={styles.descriptionIcon} />
+                      </Tooltip>
+                    </Box>
+                    <Box className={styles.scopesIconContainer}>
+                      <Box component="img" className={styles.scopesIcon} src="/icons/cluster/cidrs.svg" />
+                    </Box>
                   </Box>
                   {isLoading ? (
                     <Skeleton sx={{ width: '10rem' }} />
                   ) : (
                     <Box className={styles.cidrsTags}>
                       {cluster?.scopes?.cidrs?.length > 0 ? (
-                        <Paper variant="outlined" className={styles.cidrsContent}>
-                          <Typography variant="body2" sx={{ fontFamily: 'system-ui' }}>
-                            {cluster?.scopes?.cidrs[0]}
-                          </Typography>
-                        </Paper>
-                      ) : (
-                        <>-</>
-                      )}
-                      {cluster?.scopes?.cidrs?.length > 1 ? (
-                        <IconButton
-                          size="small"
-                          onClick={() => {
-                            setOpenCIDRs(true);
-                          }}
-                        >
-                          <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
-                        </IconButton>
-                      ) : (
-                        <></>
-                      )}
-                      <Dialog
-                        maxWidth="sm"
-                        fullWidth
-                        open={openCIDRs}
-                        onClose={() => {
-                          setOpenCIDRs(false);
-                        }}
-                      >
-                        <DialogTitle fontFamily="mabry-bold">CIDRs</DialogTitle>
-                        <DialogContent dividers className={styles.cidrsDialogContainer}>
-                          {cluster?.scopes?.cidrs?.map((item: any, id: any) => (
-                            <Paper key={id} elevation={0} className={styles.cidrsDialogContent}>
-                              <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/cidrs.svg" />
-                              <Tooltip title={item} placement="top">
-                                <Typography
-                                  variant="body2"
-                                  component="div"
-                                  className={styles.cidrsText}
-                                  alignSelf="center"
-                                >
-                                  {item}
+                        <>
+                          <Box sx={{ width: '80%' }}>
+                            <Paper variant="outlined" className={styles.cidrsContent}>
+                              <Tooltip title={cluster?.scopes?.cidrs[0] || '-'} placement="top">
+                                <Typography variant="body2" className={styles.cidrsText}>
+                                  {cluster?.scopes?.cidrs[0]}
                                 </Typography>
                               </Tooltip>
                             </Paper>
-                          ))}
-                        </DialogContent>
-                      </Dialog>
+                            {cluster?.scopes?.cidrs?.length > 1 ? (
+                              <Paper variant="outlined" className={styles.cidrsContent}>
+                                <Tooltip title={cluster?.scopes?.cidrs[1] || '-'} placement="top">
+                                  <Typography variant="body2" className={styles.cidrsText}>
+                                    {cluster?.scopes?.cidrs[1]}
+                                  </Typography>
+                                </Tooltip>
+                              </Paper>
+                            ) : (
+                              <></>
+                            )}
+                          </Box>
+                          {cluster?.scopes?.cidrs?.length > 2 ? (
+                            <IconButton
+                              size="small"
+                              onClick={() => {
+                                setOpenCIDRs(true);
+                              }}
+                            >
+                              <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                            </IconButton>
+                          ) : (
+                            <></>
+                          )}
+                        </>
+                      ) : (
+                        <Typography variant="subtitle1" component="div">
+                          -
+                        </Typography>
+                      )}
                     </Box>
                   )}
-                </Box>
-              </Paper>
+                </Paper>
+                <Dialog
+                  maxWidth="sm"
+                  fullWidth
+                  open={openCIDRs}
+                  onClose={() => {
+                    setOpenCIDRs(false);
+                  }}
+                >
+                  <DialogTitle fontFamily="mabry-bold">CIDRs</DialogTitle>
+                  <DialogContent dividers className={styles.cidrsDialogContainer}>
+                    {cluster?.scopes?.cidrs?.map((item: any, id: any) => (
+                      <Paper key={id} elevation={0} className={styles.cidrsDialogContent}>
+                        <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/cidrs.svg" />
+                        <Tooltip title={item} placement="top">
+                          <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
+                            {item}
+                          </Typography>
+                        </Tooltip>
+                      </Paper>
+                    ))}
+                  </DialogContent>
+                </Dialog>
+              </Box>
             </Paper>
           </Box>
           <Box className={styles.configRightContainer}>
@@ -500,7 +586,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
               </Box>
             </Paper>
           </Box>
-        </Paper>
+        </Box>
       </Grid>
     </Box>
   );

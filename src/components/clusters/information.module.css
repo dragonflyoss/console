@@ -29,7 +29,6 @@
 .container {
   display: flex;
   margin-top: 2rem;
-  padding: 0.6rem;
 }
 
 .scopesContainer {
@@ -46,11 +45,8 @@
 }
 
 .locationContainer {
-  padding: 1.6rem;
-  margin-right: 0.6rem;
-  width: 27%;
-  max-width: 27rem;
-  min-width: 11rem;
+  height: 100%;
+  padding: 1.4rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -60,15 +56,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--scopes-icon-color);
-  border-radius: 0.2rem;
-  width: 2.4rem;
-  height: 2.4rem;
+  background-color: #2e8f791c;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
 }
 
 .scopesIcon {
-  width: 2rem;
-  height: 2rem;
+  width: 1.4rem;
+  height: 1.4rem;
 }
 
 .locationTitle {
@@ -88,40 +84,10 @@
   text-overflow: ellipsis;
 }
 
-.idcContainer {
-  padding: 1.6rem;
-  margin-right: 0.6rem;
-  width: 27%;
-  max-width: 27rem;
-  min-width: 11rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.idcTitle {
-  display: flex;
-  align-items: center;
-}
-
-.idcTextContainer {
-  height: 2rem;
-  display: flex;
-  align-items: flex-end;
-}
-
-.idcContent {
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .cidrsContainer {
-  padding: 1.6rem;
-  width: 46%;
+  height: 100%;
+  padding: 1.4rem;
   display: flex;
-  max-width: 46rem;
   flex-direction: column;
   justify-content: space-between;
 }
@@ -135,20 +101,27 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  height: 2rem;
 }
 
 .cidrsContent {
   height: 1.6rem;
-  display: flex;
+  max-width: 100%;
+  margin-right: 0.6rem;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-right: 0.4rem;
-  padding: 0.4rem;
+  margin-top: 0.4rem;
+  padding: 0.5rem;
+  border-radius: 2rem !important;
+}
+
+.cidrsText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .configRightContainer {
-  margin-left: 0.6rem;
   width: 35%;
   max-width: 55rem;
 }
@@ -171,9 +144,10 @@
   margin-bottom: 0.4rem;
 }
 
-.cidrsDialogContainer {
+.idcDialogContainer {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .cidrsDialogContent {
@@ -188,14 +162,25 @@
   margin-left: 0.5rem;
 }
 
+.cidrsDialogContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.idcDialogContent {
+  width: 45%;
+  background-color: #f4f3f6 !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.4rem 0.8rem;
+  margin-bottom: 0.8rem;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+}
+
 .cidrsIcon {
   width: 1.6rem;
   height: 1.6rem;
   margin-right: 0.3rem;
-}
-
-.cidrsText {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }

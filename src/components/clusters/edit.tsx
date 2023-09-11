@@ -157,34 +157,44 @@ export default function EditCluster() {
       },
     },
     {
+      name: 'idc',
+      label: 'IDC',
+      CIDRsFormProps: {
+        value: cluster?.scopes?.idc ? cluster?.scopes?.idc.split('|') : [] || [],
+        options: [],
+
+        onChange: (_e: any, newValue: any) => {
+          if (!scopesForm[1].formProps.error) {
+            setCluster({ ...cluster, scopes: { ...cluster.scopes, idc: newValue.join('|') } });
+          }
+        },
+
+        onInputChange: (e: any) => {
+          changeValidate(e.target.value, scopesForm[1]);
+        },
+
+        renderTags: (value: any, getTagProps: any) =>
+          value.map((option: any, index: any) => (
+            <Chip size="small" key={index} label={option} {...getTagProps({ index })} />
+          )),
+      },
       formProps: {
         id: 'idc',
         label: 'IDC',
         name: 'idc',
-        autoComplete: 'family-name',
         placeholder: 'Please enter IDC',
-        value: idc,
-        helperText: idcError ? 'Maximum length is 100' : '',
         error: idcError,
-        onChange: (e: any) => {
-          setCluster({ ...cluster, scopes: { ...cluster.scopes, idc: e.target.value } });
-          changeValidate(e.target.value, scopesForm[1]);
-        },
-        InputProps: {
-          endAdornment: (
-            <Tooltip
-              title={
-                'String	The cluster needs to serve all peers in the IDC. When the IDC in the peer configuration matches the IDC in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. IDC has higher priority than location in the scopes.'
-              }
-              placement="top"
-            >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
-            </Tooltip>
-          ),
+        helperText: idcError ? 'Length: (0, 100]' : '',
+
+        onKeyDown: (e: any) => {
+          if (e.keyCode === 13) {
+            e.preventDefault();
+          }
         },
       },
       syncError: false,
       setError: setIDCError,
+
       validate: (value: string) => {
         const reg = /^(.{0,100})$/;
         return reg.test(value);
@@ -202,11 +212,15 @@ export default function EditCluster() {
             setCluster({ ...cluster, scopes: { ...cluster.scopes, cidrs: newValue } });
           }
         },
+
         onInputChange: (e: any) => {
           changeValidate(e.target.value, scopesForm[2]);
         },
+
         renderTags: (value: any, getTagProps: any) =>
-          value.map((option: any, index: any) => <Chip key={index} label={option} {...getTagProps({ index })} />),
+          value.map((option: any, index: any) => (
+            <Chip size="small" key={index} label={option} {...getTagProps({ index })} />
+          )),
       },
       formProps: {
         id: 'cidrs',
@@ -214,7 +228,7 @@ export default function EditCluster() {
         name: 'cidrs',
         placeholder: 'Please enter CIDRs',
         error: cidrsError,
-        helperText: cidrsError ? 'Length: (0, 100]' : '',
+        helperText: cidrsError ? 'Length: (0, 1000]' : '',
 
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
@@ -466,6 +480,12 @@ export default function EditCluster() {
       item.syncError = !item.validate(value as string);
     });
 
+    scopesForm.forEach((item) => {
+      const value = data.get(item.formProps.name);
+      item.setError(!item.validate(value as string));
+      item.syncError = !item.validate(value as string);
+    });
+
     const canSubmit = Boolean(
       !informationForm.filter((item) => item.syncError).length &&
         !scopesForm.filter((item) => item.syncError).length &&
@@ -600,7 +620,7 @@ export default function EditCluster() {
             <HelpIcon color="disabled" className={styles.descriptionIcon} />
           </Tooltip>
         </Box>
-        <Grid className={styles.scopesContainer}>
+        <Grid display="flex" flexDirection="column">
           {scopesForm.map((item) => {
             return (
               <Box key={item.formProps.name}>
@@ -611,6 +631,15 @@ export default function EditCluster() {
                     {...item.CIDRsFormProps}
                     size="small"
                     className={styles.cidrsInput}
+                    renderInput={(params) => <TextField {...params} color="success" {...item.formProps} />}
+                  />
+                ) : item.label === 'IDC' ? (
+                  <Autocomplete
+                    freeSolo
+                    multiple
+                    {...item.CIDRsFormProps}
+                    size="small"
+                    className={styles.idcInput}
                     renderInput={(params) => <TextField {...params} color="success" {...item.formProps} />}
                   />
                 ) : (

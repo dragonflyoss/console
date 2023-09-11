@@ -133,8 +133,8 @@ export default function Profile() {
         name: 'bio',
         multiline: true,
         autoComplete: 'family-name',
-        placeholder: 'Enter your Bio',
-        helperText: bioError ? 'The length is 0-1000' : '',
+        placeholder: 'Enter your description',
+        helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',
         error: bioError,
         value: user.bio,
 
@@ -169,7 +169,7 @@ export default function Profile() {
         autoComplete: 'family-name',
         value: user.phone,
         placeholder: 'Enter your Phone',
-        helperText: phoneError ? 'Please enter the correct phone number' : '',
+        helperText: phoneError ? 'Invalid phone number.' : '',
         error: phoneError,
 
         onChange: (e: any) => {
@@ -202,7 +202,7 @@ export default function Profile() {
         autoComplete: 'family-name',
         value: user.location,
         placeholder: 'Enter your location',
-        helperText: locationError ? 'Please enter your address' : '',
+        helperText: locationError ? 'Fill in the characters, the length is 0-100.' : '',
         error: locationError,
 
         onChange: (e: any) => {
@@ -222,7 +222,7 @@ export default function Profile() {
       setError: setLocationError,
 
       validate: (value: string) => {
-        const reg = /^[A-Za-z0-9]{0,1000}$/;
+        const reg = /^[A-Za-z0-9]{0,100}$/;
         return reg.test(value);
       },
     },
@@ -234,7 +234,7 @@ export default function Profile() {
         autoComplete: 'family-name',
         value: user.email,
         placeholder: 'Enter your Email',
-        helperText: emailError ? 'Please enter the correct email format' : '',
+        helperText: emailError ? 'Email is invalid or already taken.' : '',
         error: emailError,
 
         onChange: (e: any) => {
@@ -270,7 +270,7 @@ export default function Profile() {
         type: showOldPassword ? 'text' : 'password',
         placeholder: 'Enter your old password',
         value: old_password,
-        helperText: phoneError ? 'Please enter the correct password' : '',
+        helperText: phoneError ? 'Fill in the characters, the maximum length is 16.' : '',
         error: phoneError,
 
         onChange: (e: any) => {
@@ -314,9 +314,7 @@ export default function Profile() {
         type: showNewPassword ? 'text' : 'password',
         autoComplete: 'family-name',
         placeholder: 'Enter your new password',
-        helperText: locationError
-          ? 'At least 8-16 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number'
-          : '',
+        helperText: locationError ? `At least 8-16 characters, with at least 1 lowercase letter and 1 number.` : '',
         error: locationError,
         value: new_password,
 
@@ -349,7 +347,7 @@ export default function Profile() {
       syncError: false,
       setError: setLocationError,
       validate: (value: string) => {
-        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
+        const reg = /^(?=.*[a-z])(?=.*\d)[^]{8,16}$/;
         return reg.test(value);
       },
     },
@@ -361,7 +359,7 @@ export default function Profile() {
         type: showConfirmPassword ? 'text' : 'password',
         autoComplete: 'family-name',
         placeholder: 'Enter your payload',
-        helperText: emailError ? 'Please enter the same password' : '',
+        helperText: emailError ? 'Please enter the same password.' : '',
         error: emailError,
 
         onChange: (e: any) => {
@@ -392,7 +390,7 @@ export default function Profile() {
       setError: setEmailError,
 
       validate: (value: string) => {
-        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
+        const reg = /^(?=.*[a-z])(?=.*\d)[^]{8,16}$/;
         return value === newPassword && reg.test(value);
       },
     },

@@ -57,7 +57,7 @@ export default function CreateTokens() {
         name: 'name',
         autoComplete: 'family-name',
         placeholder: 'Enter your token name',
-        helperText: nameError ? 'Please enter the correct token name' : '',
+        helperText: nameError ? 'Fill in the characters, the length is 1-100.' : '',
         error: nameError,
         InputProps: {
           endAdornment: (
@@ -78,7 +78,7 @@ export default function CreateTokens() {
       setError: setNameError,
 
       validate: (value: string) => {
-        const reg = /^(?=.*[A-Za-z0-9@$!%*?&._-])[A-Za-z0-9@$!%*?&._-]{1,}$/;
+        const reg = /^(?=.*[A-Za-z0-9@$!%*?&._-])[A-Za-z0-9@$!%*?&._-]{1,100}$/;
         return reg.test(value);
       },
     },
@@ -89,7 +89,7 @@ export default function CreateTokens() {
         name: 'bio',
         autoComplete: 'family-name',
         placeholder: 'Enter your description',
-        helperText: bioError ? 'The length is 1-1000' : '',
+        helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',
         error: bioError,
         InputProps: {
           endAdornment: (

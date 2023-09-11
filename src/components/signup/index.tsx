@@ -27,7 +27,7 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [pageLoding, setPageLoding] = useState(false);
-  
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -40,7 +40,7 @@ export default function SignUp() {
         id: 'account',
         placeholder: 'Enter your account',
         error: accountError,
-        helperText: accountError ? 'At least four characters do not contain special characters' : '',
+        helperText: accountError ? 'Fill in the characters, the length is 3-10.' : '',
 
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[0]);
@@ -62,7 +62,7 @@ export default function SignUp() {
         id: 'email',
         placeholder: 'Enter your email',
         error: emailError,
-        helperText: emailError ? 'Enter the correct email' : '',
+        helperText: emailError ? 'Email is invalid or already taken.' : '',
 
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[1]);
@@ -83,9 +83,7 @@ export default function SignUp() {
         id: 'password',
         placeholder: 'Enter your password',
         autoComplete: 'new-password',
-        helperText: passwordError
-          ? 'At least 8-16 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number'
-          : '',
+        helperText: passwordError ? `At least 8-16 characters, with at least 1 lowercase letter and 1 number.` : '',
         type: showPassword ? 'text' : 'password',
         error: passwordError,
         InputProps: {
@@ -112,7 +110,7 @@ export default function SignUp() {
       setError: setPasswordError,
 
       validate: (value: string) => {
-        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
+        const reg = /^(?=.*[a-z])(?=.*\d)[^]{8,16}$/;
         return reg.test(value);
       },
     },
@@ -125,7 +123,7 @@ export default function SignUp() {
         autoComplete: 'new-password',
         placeholder: 'Repeat your new password',
         error: confirmPassworError,
-        helperText: confirmPassworError ? 'Please enter the same password' : '',
+        helperText: confirmPassworError ? 'Please enter the same password.' : '',
 
         InputProps: {
           endAdornment: (
@@ -152,7 +150,7 @@ export default function SignUp() {
       setError: setConfirmPassworError,
 
       validate: (value: string) => {
-        const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
+        const reg = /^(?=.*[a-z])(?=.*\d)[^]{8,16}$/;
         return value === password && reg.test(value);
       },
     },

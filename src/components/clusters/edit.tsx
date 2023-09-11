@@ -101,7 +101,7 @@ export default function EditCluster() {
         autoComplete: 'family-name',
         value: bio,
         placeholder: 'Please enter description',
-        helperText: bioError ? 'The length is 1-1000' : '',
+        helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',
         error: bioError,
 
         onChange: (e: any) => {
@@ -128,7 +128,7 @@ export default function EditCluster() {
         autoComplete: 'family-name',
         placeholder: 'Please enter Location',
         value: location,
-        helperText: locationError ? 'Maximum length is 100' : '',
+        helperText: locationError ? 'Fill in the characters, the length is 0-100.' : '',
         error: locationError,
 
         onChange: (e: any) => {
@@ -184,7 +184,7 @@ export default function EditCluster() {
         name: 'idc',
         placeholder: 'Please enter IDC',
         error: idcError,
-        helperText: idcError ? 'Maximum length is 100' : '',
+        helperText: idcError ? 'Fill in the characters, the length is 0-100.' : '',
 
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
@@ -228,7 +228,7 @@ export default function EditCluster() {
         name: 'cidrs',
         placeholder: 'Please enter CIDRs',
         error: cidrsError,
-        helperText: cidrsError ? 'Maximum length is 1000' : '',
+        helperText: cidrsError ? 'Fill in the characters, the length is 0-1000.' : '',
 
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
@@ -256,7 +256,7 @@ export default function EditCluster() {
         autoComplete: 'family-name',
         placeholder: 'Please enter Seed Peer load limit',
         value: seed_peer_cluster_config?.load_limit,
-        helperText: seedPeerLoadLimitError ? 'Must be a number and range from 0-5000' : '',
+        helperText: seedPeerLoadLimitError ? 'Fill in the number, the length is 0-5000.' : '',
         error: seedPeerLoadLimitError,
 
         onChange: (e: any) => {
@@ -293,7 +293,7 @@ export default function EditCluster() {
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Peer load limit',
-        helperText: peerLoadLimitError ? 'Must be a number and range from 0-2000' : '',
+        helperText: peerLoadLimitError ? 'Fill in the number, the length is 0-2000.' : '',
         error: peerLoadLimitError,
         value: load_limit,
 
@@ -334,7 +334,7 @@ export default function EditCluster() {
         autoComplete: 'family-name',
         placeholder: 'Please enter Number of concurrent download pieces',
         value: concurrent_piece_count,
-        helperText: numberOfConcurrentDownloadPiecesError ? 'Must be a number and range from 0-50' : '',
+        helperText: numberOfConcurrentDownloadPiecesError ? 'Fill in the number, the length is 0-50.' : '',
         error: numberOfConcurrentDownloadPiecesError,
 
         onChange: (e: any) => {
@@ -373,7 +373,7 @@ export default function EditCluster() {
         autoComplete: 'family-name',
         placeholder: 'Please enter Candidate parent limit',
         value: candidate_parent_limit,
-        helperText: candidateParentLimitError ? 'Must be a number and range from 1-20' : '',
+        helperText: candidateParentLimitError ? 'Fill in the number, the length is 1-20.' : '',
         error: candidateParentLimitError,
 
         onChange: (e: any) => {
@@ -415,7 +415,7 @@ export default function EditCluster() {
         autoComplete: 'family-name',
         placeholder: 'Please enter Filter parent limit',
         value: filter_parent_limit,
-        helperText: filterParentLimitError ? 'Must be a number and range from 10-1000' : '',
+        helperText: filterParentLimitError ? 'Fill in the number, the length is 10-1000.' : '',
         error: filterParentLimitError,
 
         onChange: (e: any) => {

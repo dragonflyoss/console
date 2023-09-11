@@ -59,7 +59,7 @@ export default function UpdateTokens() {
         autoComplete: 'family-name',
         placeholder: 'Enter your description',
         value: tokens.bio,
-        helperText: bioError ? 'The length is 1-1000' : '',
+        helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',
         error: bioError,
 
         InputProps: {

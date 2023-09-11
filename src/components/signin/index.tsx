@@ -35,7 +35,7 @@ export default function SignIn() {
         name: 'account',
         autoComplete: 'family-name',
         placeholder: 'Enter your account',
-        helperText: accountError ? 'Please enter the correct account number' : '',
+        helperText: accountError ? 'Fill in the characters, the length is 3-10.' : '',
         error: accountError,
 
         onChange: (e: any) => {
@@ -58,7 +58,7 @@ export default function SignIn() {
         type: showPassword ? 'text' : 'password',
         autoComplete: 'password',
         placeholder: 'Enter your password',
-        helperText: passwordError ? 'Please enter the correct password ' : '',
+        helperText: passwordError ? 'Fill in the characters, the maximum length is 16.' : '',
         error: passwordError,
 
         onChange: (e: any) => {

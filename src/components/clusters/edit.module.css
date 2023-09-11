@@ -17,6 +17,11 @@
   align-items: center;
 }
 
+.scopesContainer {
+  display: flex;
+  flex-direction: column !important;
+}
+
 .configTitle {
   display: flex;
   align-items: center;

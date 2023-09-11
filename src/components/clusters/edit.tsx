@@ -620,7 +620,7 @@ export default function EditCluster() {
             <HelpIcon color="disabled" className={styles.descriptionIcon} />
           </Tooltip>
         </Box>
-        <Grid display="flex" flexDirection="column">
+        <Grid className={styles.scopesContainer}>
           {scopesForm.map((item) => {
             return (
               <Box key={item.formProps.name}>

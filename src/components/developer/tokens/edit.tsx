@@ -332,8 +332,7 @@ export default function UpdateTokens() {
                     />
                   </Box>
                   <Typography variant="body2" color="rgb(82 82 82 / 87%)" ml="1rem">
-                    The job includes the preheat job. If the user preheats through the open api, it is recommended to
-                    use the preheat job API.
+                    The job includes the preheat job, it is recommended to use the open API of the preheat job.
                   </Typography>
                 </Box>
                 <Box display="flex" alignItems="center">

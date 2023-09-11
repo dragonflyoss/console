@@ -332,7 +332,7 @@ export default function UpdateTokens() {
                     />
                   </Box>
                   <Typography variant="body2" color="rgb(82 82 82 / 87%)" ml="1rem">
-                    Full control of job, if you need to call preheat job through open API, it is recommended to use
+                    Full control of job. If you need to call preheat job through open API, it is recommended to use
                     preheat job.
                   </Typography>
                 </Box>

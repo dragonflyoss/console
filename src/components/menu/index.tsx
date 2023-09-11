@@ -51,7 +51,7 @@ export const MyContext = createContext<MyContextType>({
 });
 
 export default function Layout(props: any) {
-  const [role, setRole] = useState(['']);
+  const [role, setRole] = useState('');
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [pageLoding, setPageLoding] = useState(false);
@@ -74,7 +74,7 @@ export default function Layout(props: any) {
         if (payload?.id) {
           const [user, userRoles] = await Promise.all([getUser(payload?.id), getUserRoles(payload?.id)]);
           setUser(user);
-          setRole(userRoles);
+          setRole(userRoles.includes(ROLE_ROOT) ? ROLE_ROOT : ROLE_GUEST);
         } else {
           navigate('/signin');
         }
@@ -210,65 +210,15 @@ export default function Layout(props: any) {
                   </Typography>
                 </Box>
                 <List component="nav" aria-label="main mailbox folders">
-                  {role.map((item, id) => {
-                    return item === ROLE_ROOT ? (
-                      rootMenu.map((items) =>
-                        items.text === 'Developer' ? (
-                          <Box key={items.href}>
-                            <ListItemButton
-                              key={items.href}
-                              onClick={() => {
-                                setExpandDeveloper(!expandDeveloper);
-                              }}
-                              sx={{
-                                '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                                '&.Mui-selected:hover': {
-                                  backgroundColor: '#DDFF55',
-                                  color: '#121726',
-                                },
-                                height: '2rem',
-                                mb: '0.4rem',
-                              }}
-                            >
-                              {items.icon}
-                              <Typography
-                                variant="subtitle1"
-                                sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
-                              >
-                                {items.text}
-                              </Typography>
-                              {expandDeveloper ? <ExpandLess /> : <ExpandMore />}
-                            </ListItemButton>
-                            <Collapse in={expandDeveloper} timeout="auto" unmountOnExit>
-                              <List component="div" disablePadding>
-                                <ListItemButton
-                                  selected={location.pathname.split('/')[2] === items?.menuProps?.label}
-                                  component={Link}
-                                  to={items?.menuProps?.href || ''}
-                                  sx={{
-                                    '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                                    '&.Mui-selected:hover': {
-                                      backgroundColor: '#DDFF55',
-                                      color: '#121726',
-                                    },
-                                    height: '2rem',
-                                    mb: '0.4rem',
-                                    pl: '1rem',
-                                  }}
-                                >
-                                  <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
-                                    {items?.menuProps?.text}
-                                  </Typography>
-                                </ListItemButton>
-                              </List>
-                            </Collapse>
-                          </Box>
-                        ) : (
+                  {role === ROLE_ROOT ? (
+                    rootMenu.map((items) =>
+                      items.text === 'Developer' ? (
+                        <Box key={items.href}>
                           <ListItemButton
                             key={items.href}
-                            selected={location.pathname.split('/')[1] === items.label}
-                            component={Link}
-                            to={items.href}
+                            onClick={() => {
+                              setExpandDeveloper(!expandDeveloper);
+                            }}
                             sx={{
                               '&.Mui-selected': { backgroundColor: '#DFFF55' },
                               '&.Mui-selected:hover': {
@@ -280,69 +230,69 @@ export default function Layout(props: any) {
                             }}
                           >
                             {items.icon}
-                            <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                            <Typography
+                              variant="subtitle1"
+                              sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                            >
                               {items.text}
                             </Typography>
+                            {expandDeveloper ? <ExpandLess /> : <ExpandMore />}
                           </ListItemButton>
-                        ),
-                      )
-                    ) : item === ROLE_GUEST ? (
-                      guestMenu.map((items) =>
-                        items.text === 'Developer' ? (
-                          <Box key={items.href}>
-                            <ListItemButton
-                              onClick={() => {
-                                setExpandDeveloper(!expandDeveloper);
-                              }}
-                              sx={{
-                                '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                                '&.Mui-selected:hover': {
-                                  backgroundColor: '#DDFF55',
-                                  color: '#121726',
-                                },
-                                height: '2rem',
-                                mb: '0.4rem',
-                              }}
-                            >
-                              {items.icon}
-                              <Typography
-                                variant="subtitle1"
-                                sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                          <Collapse in={expandDeveloper} timeout="auto" unmountOnExit>
+                            <List component="div" disablePadding>
+                              <ListItemButton
+                                selected={location.pathname.split('/')[2] === items?.menuProps?.label}
+                                component={Link}
+                                to={items?.menuProps?.href || ''}
+                                sx={{
+                                  '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                  '&.Mui-selected:hover': {
+                                    backgroundColor: '#DDFF55',
+                                    color: '#121726',
+                                  },
+                                  height: '2rem',
+                                  mb: '0.4rem',
+                                  pl: '1rem',
+                                }}
                               >
-                                {items.text}
-                              </Typography>
-                              {expandDeveloper ? <ExpandLess /> : <ExpandMore />}
-                            </ListItemButton>
-                            <Collapse in={expandDeveloper} timeout="auto" unmountOnExit>
-                              <List component="div" disablePadding>
-                                <ListItemButton
-                                  selected={location.pathname.split('/')[2] === items?.menuProps?.label}
-                                  component={Link}
-                                  to={items?.menuProps?.href || ''}
-                                  sx={{
-                                    '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                                    '&.Mui-selected:hover': {
-                                      backgroundColor: '#DDFF55',
-                                      color: '#121726',
-                                    },
-                                    height: '2rem',
-                                    mb: '0.4rem',
-                                    pl: '1rem',
-                                  }}
-                                >
-                                  <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
-                                    {items?.menuProps?.text}
-                                  </Typography>
-                                </ListItemButton>
-                              </List>
-                            </Collapse>
-                          </Box>
-                        ) : (
+                                <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
+                                  {items?.menuProps?.text}
+                                </Typography>
+                              </ListItemButton>
+                            </List>
+                          </Collapse>
+                        </Box>
+                      ) : (
+                        <ListItemButton
+                          key={items.href}
+                          selected={location.pathname.split('/')[1] === items.label}
+                          component={Link}
+                          to={items.href}
+                          sx={{
+                            '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                            '&.Mui-selected:hover': {
+                              backgroundColor: '#DDFF55',
+                              color: '#121726',
+                            },
+                            height: '2rem',
+                            mb: '0.4rem',
+                          }}
+                        >
+                          {items.icon}
+                          <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                            {items.text}
+                          </Typography>
+                        </ListItemButton>
+                      ),
+                    )
+                  ) : role === ROLE_GUEST ? (
+                    guestMenu.map((items) =>
+                      items.text === 'Developer' ? (
+                        <Box key={items.href}>
                           <ListItemButton
-                            key={items.href}
-                            selected={location.pathname.split('/')[1] === items.label}
-                            component={Link}
-                            to={items.href}
+                            onClick={() => {
+                              setExpandDeveloper(!expandDeveloper);
+                            }}
                             sx={{
                               '&.Mui-selected': { backgroundColor: '#DFFF55' },
                               '&.Mui-selected:hover': {
@@ -354,16 +304,64 @@ export default function Layout(props: any) {
                             }}
                           >
                             {items.icon}
-                            <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                            <Typography
+                              variant="subtitle1"
+                              sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                            >
                               {items.text}
                             </Typography>
+                            {expandDeveloper ? <ExpandLess /> : <ExpandMore />}
                           </ListItemButton>
-                        ),
-                      )
-                    ) : (
-                      <Box key={id}></Box>
-                    );
-                  })}
+                          <Collapse in={expandDeveloper} timeout="auto" unmountOnExit>
+                            <List component="div" disablePadding>
+                              <ListItemButton
+                                selected={location.pathname.split('/')[2] === items?.menuProps?.label}
+                                component={Link}
+                                to={items?.menuProps?.href || ''}
+                                sx={{
+                                  '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                  '&.Mui-selected:hover': {
+                                    backgroundColor: '#DDFF55',
+                                    color: '#121726',
+                                  },
+                                  height: '2rem',
+                                  mb: '0.4rem',
+                                  pl: '1rem',
+                                }}
+                              >
+                                <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
+                                  {items?.menuProps?.text}
+                                </Typography>
+                              </ListItemButton>
+                            </List>
+                          </Collapse>
+                        </Box>
+                      ) : (
+                        <ListItemButton
+                          key={items.href}
+                          selected={location.pathname.split('/')[1] === items.label}
+                          component={Link}
+                          to={items.href}
+                          sx={{
+                            '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                            '&.Mui-selected:hover': {
+                              backgroundColor: '#DDFF55',
+                              color: '#121726',
+                            },
+                            height: '2rem',
+                            mb: '0.4rem',
+                          }}
+                        >
+                          {items.icon}
+                          <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                            {items.text}
+                          </Typography>
+                        </ListItemButton>
+                      ),
+                    )
+                  ) : (
+                    <></>
+                  )}
                 </List>
               </Grid>
               <Grid sx={{ mb: '4rem', pl: '1rem', pr: '1rem' }}>

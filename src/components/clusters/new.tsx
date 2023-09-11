@@ -49,7 +49,7 @@ export default function NewCluster() {
         name: 'name',
         autoComplete: 'family-name',
         placeholder: 'Enter your name',
-        helperText: nameError ? 'Fill in the characters, the length is 1-40' : '',
+        helperText: nameError ? 'Fill in the characters, the length is 1-40.' : '',
         error: nameError,
 
         onChange: (e: any) => {
@@ -71,7 +71,7 @@ export default function NewCluster() {
         name: 'description',
         autoComplete: 'family-name',
         placeholder: 'Enter a cluster description',
-        helperText: bioError ? 'Fill in the characters, the length is 0-1000' : '',
+        helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',
         error: bioError,
 
         onChange: (e: any) => {

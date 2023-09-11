@@ -181,6 +181,7 @@ export default function Users() {
 
       try {
         await putUserRole(userID, ROLE_ROOT);
+        await deleteUserRole(userID, ROLE_GUEST);
 
         setSuccessMessage(true);
         setLoadingButton(false);
@@ -194,10 +195,13 @@ export default function Users() {
           setLoadingButton(false);
         }
       }
-    } else if (updateRole === ROLE_GUEST && role.includes(ROLE_ROOT)) {
+    }
+
+    if (updateRole === ROLE_GUEST && !role.includes(ROLE_GUEST)) {
       setLoadingButton(true);
 
       try {
+        await putUserRole(userID, ROLE_GUEST);
         await deleteUserRole(userID, ROLE_ROOT);
 
         setSuccessMessage(true);

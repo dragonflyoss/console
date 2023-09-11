@@ -159,7 +159,7 @@ export default function EditCluster() {
     {
       name: 'idc',
       label: 'IDC',
-      CIDRsFormProps: {
+      scopesFormProps: {
         value: cluster?.scopes?.idc ? cluster?.scopes?.idc.split('|') : [] || [],
         options: [],
 
@@ -184,7 +184,7 @@ export default function EditCluster() {
         name: 'idc',
         placeholder: 'Please enter IDC',
         error: idcError,
-        helperText: idcError ? 'Length: (0, 100]' : '',
+        helperText: idcError ? 'Maximum length is 100' : '',
 
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
@@ -203,7 +203,7 @@ export default function EditCluster() {
     {
       name: 'cidrs',
       label: 'CIDRs',
-      CIDRsFormProps: {
+      scopesFormProps: {
         value: cidrs || [],
         options: cidrsOptions,
 
@@ -228,7 +228,7 @@ export default function EditCluster() {
         name: 'cidrs',
         placeholder: 'Please enter CIDRs',
         error: cidrsError,
-        helperText: cidrsError ? 'Length: (0, 1000]' : '',
+        helperText: cidrsError ? 'Maximum length is 1000' : '',
 
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
@@ -628,7 +628,7 @@ export default function EditCluster() {
                   <Autocomplete
                     freeSolo
                     multiple
-                    {...item.CIDRsFormProps}
+                    {...item.scopesFormProps}
                     size="small"
                     className={styles.cidrsInput}
                     renderInput={(params) => <TextField {...params} color="success" {...item.formProps} />}
@@ -637,7 +637,7 @@ export default function EditCluster() {
                   <Autocomplete
                     freeSolo
                     multiple
-                    {...item.CIDRsFormProps}
+                    {...item.scopesFormProps}
                     size="small"
                     className={styles.idcInput}
                     renderInput={(params) => <TextField {...params} color="success" {...item.formProps} />}

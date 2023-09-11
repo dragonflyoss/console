@@ -95,7 +95,7 @@ export default function NewCluster() {
         label: 'Location',
         name: 'location',
         autoComplete: 'family-name',
-        placeholder: 'Please enter Location',
+        placeholder: 'Please enter location',
         helperText: locationError ? 'Maximum length is 100' : '',
         error: locationError,
 
@@ -125,7 +125,7 @@ export default function NewCluster() {
     {
       name: 'idc',
       label: 'IDC',
-      CIDRsFormProps: {
+      scopesFormProps: {
         value: idc,
         options: [],
         onChange: (_e: any, newValue: any) => {
@@ -150,7 +150,7 @@ export default function NewCluster() {
         name: 'idc',
         placeholder: 'Please enter IDC',
         error: idcError,
-        helperText: idcError ? 'Length: (0, 100]' : '',
+        helperText: idcError ? 'Maximum length is 100' : '',
 
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
@@ -170,7 +170,7 @@ export default function NewCluster() {
     {
       name: 'cidrs',
       label: 'CIDRs',
-      CIDRsFormProps: {
+      scopesFormProps: {
         value: cidrs,
         options: cidrsOptions,
 
@@ -196,7 +196,7 @@ export default function NewCluster() {
         name: 'cidrs',
         placeholder: 'Please enter CIDRs',
         error: cidrsError,
-        helperText: cidrsError ? 'Length: (0, 100]' : '',
+        helperText: cidrsError ? 'Maximum length is 1000' : '',
 
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
@@ -574,7 +574,7 @@ export default function NewCluster() {
                   <Autocomplete
                     freeSolo
                     multiple
-                    {...item.CIDRsFormProps}
+                    {...item.scopesFormProps}
                     size="small"
                     className={styles.cidrsInput}
                     renderInput={(params) => <TextField {...params} color="success" {...item.formProps} />}
@@ -583,7 +583,7 @@ export default function NewCluster() {
                   <Autocomplete
                     freeSolo
                     multiple
-                    {...item.CIDRsFormProps}
+                    {...item.scopesFormProps}
                     size="small"
                     className={styles.cidrsInput}
                     renderInput={(params) => <TextField {...params} color="success" {...item.formProps} />}

@@ -119,7 +119,7 @@ export default function Layout(props: any) {
       menuProps: {
         label: 'preheats',
         href: '/jobs/preheats',
-        text: 'Preheats',
+        text: 'Preheat',
       },
     },
     {
@@ -156,7 +156,7 @@ export default function Layout(props: any) {
       menuProps: {
         label: 'preheats',
         href: '/jobs/preheats',
-        text: 'Preheats',
+        text: 'Preheat',
       },
     },
   ];

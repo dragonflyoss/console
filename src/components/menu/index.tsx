@@ -115,7 +115,7 @@ export default function Layout(props: any) {
       label: 'Job',
       href: '/jobs',
       text: 'Job',
-      icon: <Box component="img" className={styles.menuIcon} src="/icons/task/task.svg" />,
+      icon: <Box component="img" className={styles.menuIcon} src="/icons/preheat/job.svg" />,
       menuProps: {
         label: 'preheats',
         href: '/jobs/preheats',
@@ -152,7 +152,7 @@ export default function Layout(props: any) {
       label: 'Job',
       href: '/jobs',
       text: 'Job',
-      icon: <Box component="img" className={styles.menuIcon} src="/icons/task/task.svg" />,
+      icon: <Box component="img" className={styles.menuIcon} src="/icons/preheat/job.svg" />,
       menuProps: {
         label: 'preheats',
         href: '/jobs/preheats',

@@ -245,19 +245,19 @@ export default function Preheats() {
                           <Box
                             component="img"
                             sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/task/success.svg"
+                            src="/icons/preheat/success.svg"
                           />
                         ) : item.state === 'FAILURE' ? (
                           <Box
                             component="img"
                             sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/task/failure.svg"
+                            src="/icons/preheat/failure.svg"
                           />
                         ) : (
                           <Box
                             component="img"
                             sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/task/pending.svg"
+                            src="/icons/preheat/pending.svg"
                           />
                         )}
                         <Box
@@ -314,11 +314,23 @@ export default function Preheats() {
                       {isLoading ? (
                         <Skeleton variant="circular" width="1.4rem" height="1.4rem" />
                       ) : item.state === 'SUCCESS' ? (
-                        <Box component="img" sx={{ width: '1.3rem', height: '1.3rem' }} src="/icons/task/success.svg" />
+                        <Box
+                          component="img"
+                          sx={{ width: '1.3rem', height: '1.3rem' }}
+                          src="/icons/preheat/success.svg"
+                        />
                       ) : item.state === 'FAILURE' ? (
-                        <Box component="img" sx={{ width: '1.3rem', height: '1.3rem' }} src="/icons/task/failure.svg" />
+                        <Box
+                          component="img"
+                          sx={{ width: '1.3rem', height: '1.3rem' }}
+                          src="/icons/preheat/failure.svg"
+                        />
                       ) : (
-                        <Box component="img" sx={{ width: '1.3rem', height: '1.3rem' }} src="/icons/task/pending.svg" />
+                        <Box
+                          component="img"
+                          sx={{ width: '1.3rem', height: '1.3rem' }}
+                          src="/icons/preheat/pending.svg"
+                        />
                       )}
                       <Box
                         sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}

@@ -162,7 +162,7 @@ export default function ShowPreheat() {
         <Paper variant="outlined" sx={{ p: '1rem 2rem', mt: '1rem' }}>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/task/id.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/id.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -178,7 +178,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/task/description.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/description.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -194,7 +194,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/task/status.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/status.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -226,11 +226,11 @@ export default function ShowPreheat() {
                     }}
                   >
                     {preheat.result.State === 'SUCCESS' ? (
-                      <Box component="img" className={styles.statusIcon} src="/icons/task/status-success.svg" />
+                      <Box component="img" className={styles.statusIcon} src="/icons/preheat/status-success.svg" />
                     ) : preheat.result.State === 'FAILURE' ? (
-                      <Box component="img" className={styles.statusIcon} src="/icons/task/status-failure.svg" />
+                      <Box component="img" className={styles.statusIcon} src="/icons/preheat/status-failure.svg" />
                     ) : (
-                      <Box component="img" className={styles.statusIcon} src="/icons/task/status-pending.svg" />
+                      <Box component="img" className={styles.statusIcon} src="/icons/preheat/status-pending.svg" />
                     )}
                     <Typography
                       variant="body2"
@@ -264,7 +264,7 @@ export default function ShowPreheat() {
                             <Box
                               component="img"
                               sx={{ width: '1.2rem', height: '1.2rem' }}
-                              src="/icons/task/error-log.svg"
+                              src="/icons/preheat/error-log.svg"
                             />
                           </IconButton>
                         </Tooltip>
@@ -279,7 +279,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/task/url.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/url.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -295,7 +295,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/task/filter.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/filter.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -337,7 +337,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/task/tag.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/tag.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -373,7 +373,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/task/headers.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/headers.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -404,7 +404,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/task/id.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/id.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -420,7 +420,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/task/created-at.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/created-at.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -486,7 +486,7 @@ export default function ShowPreheat() {
                         <Box
                           component="img"
                           sx={{ width: '1.4rem', height: '1.4rem', mr: '0.6rem' }}
-                          src="/icons/task/failure.svg"
+                          src="/icons/preheat/failure.svg"
                         />
                         <Typography variant="body2" fontFamily="mabry-bold" sx={{ color: '#d0d7de' }}>
                           Preheat

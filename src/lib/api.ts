@@ -170,7 +170,7 @@ interface getClustersParams {
 interface clustersResponse {
   id: number;
   name: string;
-  bio:string;
+  bio: string;
   scopes: {
     idc: string;
     location: string;
@@ -699,4 +699,132 @@ export async function updateTokens(id: string, request: updateTokensRequset): Pr
   const url = new URL(`/api/v1/personal-access-tokens/${id}`, API_URL);
   const response = await patch(url, request);
   return response.json();
+}
+
+interface getJobsParams {
+  page?: number;
+  per_page?: number;
+  user_id?: string;
+  state?: string;
+}
+
+interface jobResponse {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  task_id: string;
+  bio: string;
+  type: string;
+  state: string;
+  args: {
+    filter: string;
+    headers: { [key: string]: string };
+    tag: string;
+    type: string;
+    url: string;
+  };
+}
+
+interface getJobsResponse {
+  data: jobResponse[];
+  total_page?: number;
+}
+
+export async function getJobs(params?: getJobsParams): Promise<getJobsResponse> {
+  const url = params
+    ? new URL(`/api/v1/jobs?${queryString.stringify(params)}`, API_URL)
+    : new URL('/api/v1/jobs', API_URL);
+
+  const response = await get(url);
+  const data = await response.json();
+  const linkHeader = response.headers.get('link');
+  const links = parseLinkHeader(linkHeader || null);
+  const totalPage = Number(links?.last?.page);
+  const responses = { data: data, total_page: totalPage };
+  return responses;
+}
+
+interface getJobResponse {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  task_id: string;
+  bio: string;
+  type: string;
+  state: string;
+  args: {
+    filter: string;
+    headers: string;
+    tag: string;
+    type: string;
+    url: string;
+  };
+  result: {
+    CreatedAt: string;
+    GroupUUID: string;
+    JobStates: [
+      {
+        CreatedAt: string;
+        Error: string;
+        Results: Array<string>;
+        State: string;
+        TTL: number;
+        TaskName: string;
+        TaskUUID: string;
+      },
+    ];
+    State: string;
+  };
+  user_id: string;
+  scheduler_clusters: [
+    {
+      id: number;
+    },
+  ];
+}
+
+export async function getJob(id: string): Promise<getJobResponse> {
+  const url = new URL(`/api/v1/jobs/${id}`, API_URL);
+  const response = await patch(url);
+  return response.json();
+}
+
+interface createJobRequest {
+  bio: string;
+  type: string;
+  args: {
+    type: string;
+    url: string;
+    tag: string;
+    filter: string;
+    headers?: { [key: string]: string };
+  };
+  cdn_cluster_ids: Array<number>;
+}
+
+interface cerateJobResponse {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  task_id: string;
+  bio: string;
+  type: string;
+  state: string;
+  args: {
+    filter: string;
+    headers: { [key: string]: string };
+    tag: string;
+    type: string;
+    url: string;
+  };
+  result: string;
+}
+
+export async function createJob(request: createJobRequest): Promise<cerateJobResponse> {
+  const url = new URL(`/api/v1/jobs`, API_URL);
+  const response = await post(url, request);
+  return await response.json();
 }

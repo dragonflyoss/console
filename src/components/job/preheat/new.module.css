@@ -1,0 +1,18 @@
+.textField {
+  width: 18rem;
+  max-width: 25rem;
+}
+
+.filterInput {
+  width: 37rem;
+}
+
+.headersKeyInput {
+  width: 18rem;
+  margin-right: 1rem !important;
+}
+
+.headersValueInput {
+  width: 18rem;
+  max-width: 25rem;
+}

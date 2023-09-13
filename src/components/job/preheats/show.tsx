@@ -15,6 +15,8 @@ import {
   AccordionDetails,
   AccordionSummary,
   Accordion,
+  ThemeProvider,
+  createTheme,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getJob } from '../../../lib/api';
@@ -66,6 +68,14 @@ export default function ShowPreheat() {
   });
 
   const params = useParams();
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#1C293A',
+      },
+    },
+  });
 
   useEffect(() => {
     setIsLoading(true);
@@ -135,7 +145,7 @@ export default function ShowPreheat() {
   };
 
   return (
-    <Box>
+    <ThemeProvider theme={theme}>
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
@@ -509,6 +519,6 @@ export default function ShowPreheat() {
           </Box>
         </Drawer>
       </Box>
-    </Box>
+    </ThemeProvider>
   );
 }

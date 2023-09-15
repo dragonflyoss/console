@@ -334,7 +334,7 @@ interface updateClusterResponse {
 export async function updateCluster(id: string, request: updateClusterRequset): Promise<updateClusterResponse> {
   const url = new URL(`/api/v1/clusters/${id}`, API_URL);
   const response = await patch(url, request);
-  return response.json();
+  return await response.json();
 }
 
 export async function deleteCluster(id: string) {
@@ -560,7 +560,7 @@ interface updateUserResponse {
 export async function updateUser(id: string, request: updateUserRequset): Promise<updateUserResponse> {
   const url = new URL(`/api/v1/users/${id}`, API_URL);
   const response = await patch(url, request);
-  return response.json();
+  return await response.json();
 }
 
 interface updatePasswordRequset {
@@ -698,7 +698,7 @@ interface updateTokensResponse {
 export async function updateTokens(id: string, request: updateTokensRequset): Promise<updateTokensResponse> {
   const url = new URL(`/api/v1/personal-access-tokens/${id}`, API_URL);
   const response = await patch(url, request);
-  return response.json();
+  return await response.json();
 }
 
 interface getJobsParams {
@@ -732,7 +732,7 @@ export async function getJobs(params?: getJobsParams): Promise<getJobsResponse[]
     : new URL('/api/v1/jobs', API_URL);
 
   const response = await get(url);
-  return response.json();
+  return await response.json();
 }
 
 interface getJobResponse {
@@ -778,7 +778,7 @@ interface getJobResponse {
 export async function getJob(id: string): Promise<getJobResponse> {
   const url = new URL(`/api/v1/jobs/${id}`, API_URL);
   const response = await get(url);
-  return response.json();
+  return await response.json();
 }
 
 interface createJobRequest {
@@ -816,5 +816,5 @@ interface cerateJobResponse {
 export async function createJob(request: createJobRequest): Promise<cerateJobResponse> {
   const url = new URL(`/api/v1/jobs`, API_URL);
   const response = await post(url, request);
-  return response.json();
+  return await response.json();
 }

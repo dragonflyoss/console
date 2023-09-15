@@ -238,7 +238,6 @@ export default function UpdateTokens() {
               <TextField
                 margin="normal"
                 color="success"
-                required
                 size="small"
                 key={item.formProps.name}
                 {...item.formProps}
@@ -257,7 +256,7 @@ export default function UpdateTokens() {
               </Tooltip>
             </Box>
             <FormControl size="small" error={expiredTimeError}>
-              <InputLabel color="secondary" id="demo-simple-select-label">
+              <InputLabel color="secondary" required id="demo-simple-select-label">
                 Expiration
               </InputLabel>
               <Box display="flex" alignItems="center">

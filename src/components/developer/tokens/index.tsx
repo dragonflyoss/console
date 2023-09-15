@@ -173,8 +173,8 @@ export default function PersonalAccessTokens() {
         </Alert>
       </Snackbar>
       <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
-        <Typography>Developer</Typography>
-        <Typography color="text.primary">Personal access tokens</Typography>
+        <Typography>developer</Typography>
+        <Typography color="text.primary">personal access tokens</Typography>
       </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Typography variant="h5">Personal access tokens</Typography>
@@ -246,7 +246,6 @@ export default function PersonalAccessTokens() {
       ) : (
         <></>
       )}
-
       {tokens.length === 0 ? (
         <Paper
           variant="outlined"
@@ -383,7 +382,6 @@ export default function PersonalAccessTokens() {
           </Paper>
         </>
       )}
-
       {tokensTotalPages > 1 ? (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
           <Pagination
@@ -399,7 +397,6 @@ export default function PersonalAccessTokens() {
       ) : (
         <></>
       )}
-
       <Dialog
         open={openDeletToken}
         onClose={() => {

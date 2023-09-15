@@ -1,0 +1,50 @@
+.statusIcon {
+  width: 1.3rem !important;
+  height: 1.3rem !important;
+  margin-right: 0.4rem;
+}
+
+.informationContainer {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem 0rem;
+}
+
+.informationTitle {
+  width: 30%;
+  display: flex;
+  align-items: center;
+}
+
+.informationTitleIcon {
+  width: 1.4rem !important;
+  height: 1.4rem !important;
+}
+
+.informationTitleText {
+  margin-left: 1rem !important;
+  color: #515151;
+}
+
+.informationContent {
+  width: 70%;
+  overflow-wrap: break-word;
+  font-family: 'mabry-bold' !important;
+}
+
+.statusContent {
+  display: inline-flex;
+  align-items: center;
+}
+
+.headersContent {
+  width: 70%;
+  overflow-wrap: break-word;
+  padding-bottom: 1rem;
+  display: inline;
+}
+
+.headersText {
+  display: flex;
+  padding: 1rem 1rem 0 1rem;
+}

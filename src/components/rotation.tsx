@@ -2,7 +2,6 @@ import { Box, Grid, MobileStepper, ThemeProvider, createTheme } from '@mui/mater
 import { useState } from 'react';
 import { autoPlay } from 'react-swipeable-views-utils';
 import SwipeableViews from 'react-swipeable-views';
-import React from 'react';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 

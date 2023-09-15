@@ -1,0 +1,20 @@
+.textField {
+  width: 20rem;
+}
+
+.filterInput {
+  width: 40rem;
+}
+
+.headersKeyInput {
+  width: 20rem;
+  margin-right: 0.6rem !important;
+}
+
+.headersValueInput {
+  width: 20rem;
+}
+
+.title {
+  margin-bottom: 0.5rem;
+}

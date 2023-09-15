@@ -635,7 +635,7 @@ export default function ShowCluster() {
         <Box width="100%">
           <Divider />
           <Table sx={{ minWidth: 650 }} aria-label="a dense table">
-            <TableHead>
+            <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
               <TableRow>
                 <TableCell align="center">
                   <Typography variant="subtitle1" fontFamily="mabry-bold">
@@ -913,7 +913,7 @@ export default function ShowCluster() {
         <Box width="100%">
           <Divider />
           <Table sx={{ minWidth: 650 }} aria-label="a dense table">
-            <TableHead>
+            <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
               <TableRow>
                 <TableCell align="center">
                   <Typography variant="subtitle1" fontFamily="mabry-bold">

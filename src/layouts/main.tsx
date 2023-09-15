@@ -14,6 +14,9 @@ import Users from '../components/users';
 import Tokens from '../components/developer/tokens';
 import NewTokens from '../components/developer/tokens/new';
 import EditTokens from '../components/developer/tokens/edit';
+import Preheats from '../components/job/preheats';
+import NewPreheat from '../components/job/preheats/new';
+import ShowPreheat from '../components/job/preheats/show';
 import { useState, useEffect } from 'react';
 import { getJwtPayload } from '../lib/utils';
 import { getUserRoles } from '../lib/api';
@@ -51,6 +54,9 @@ function Main() {
         <Route path="/developer/personal-access-tokens" element={<Tokens />} />
         <Route path="/developer/personal-access-tokens/new" element={<NewTokens />} />
         <Route path="/developer/personal-access-tokens/:id" element={<EditTokens />} />
+        <Route path="/jobs/preheats" element={<Preheats />} />
+        <Route path="/jobs/preheats/new" element={<NewPreheat />} />
+        <Route path="/jobs/preheats/:id" element={<ShowPreheat />} />
         <Route path="/users" element={isRoot ? <Users /> : <NotFound />} />
       </Route>
     </Routes>

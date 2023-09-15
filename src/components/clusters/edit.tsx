@@ -556,7 +556,7 @@ export default function EditCluster() {
       <Typography variant="h5" fontFamily="mabry-bold">
         Update Cluster
       </Typography>
-      <Divider sx={{ mt: 2, mb: 2 }} />
+      <Divider sx={{ mt: '1rem', mb: '1rem' }} />
       <Paper variant="outlined" sx={{ display: 'inline-flex', alignItems: 'center', mb: '1rem', p: '1rem' }}>
         <Box component="img" src="/icons/cluster/cluster.svg" sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }} />
         <Box>
@@ -568,107 +568,171 @@ export default function EditCluster() {
           </Typography>
         </Box>
       </Paper>
-      <Grid className={styles.container} component="form" noValidate onSubmit={handleSubmit}>
-        <Box className={styles.informationTitle}>
-          <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
-            Information
-          </Typography>
-          <Tooltip title="The information of cluster." placement="top">
-            <HelpIcon color="disabled" className={styles.descriptionIcon} />
-          </Tooltip>
-        </Box>
-        <Box className={styles.defaultContainer}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={is_default}
-                onChange={(event: { target: { checked: any } }) => {
-                  setCluster({ ...cluster, is_default: event.target.checked });
-                }}
-                sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }}
-              />
-            }
-            label="Set cluster as your default cluster"
-            name="IsDefault"
-            sx={{ '&.MuiFormControlLabel-root': { mr: '0.6rem' } }}
-          />
-          <Tooltip
-            title="When peer does not find a matching cluster based on scopes, the default cluster will be used."
-            placement="top"
-          >
-            <HelpIcon color="disabled" className={styles.descriptionIcon} />
-          </Tooltip>
-        </Box>
-        {informationForm.map((item) => (
-          <TextField
-            size="small"
-            color="success"
-            key={item.formProps.name}
-            {...item.formProps}
-            className={styles.textField}
-          />
-        ))}
-        <Box className={styles.scopesTitle}>
-          <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
-            scopes
-          </Typography>
-          <Tooltip
-            title="The cluster needs to serve the scope. It wil provide scheduler services and seed peer services to peers in
-            the scope."
-            placement="top"
-          >
-            <HelpIcon color="disabled" className={styles.descriptionIcon} />
-          </Tooltip>
-        </Box>
-        <Grid className={styles.scopesContainer}>
-          {scopesForm.map((item) => {
-            return (
-              <Box key={item.formProps.name}>
-                {item.label === 'CIDRs' ? (
-                  <Autocomplete
-                    freeSolo
-                    multiple
-                    {...item.scopesFormProps}
-                    size="small"
-                    className={styles.cidrsInput}
-                    renderInput={(params) => <TextField {...params} color="success" {...item.formProps} />}
-                  />
-                ) : item.label === 'IDC' ? (
-                  <Autocomplete
-                    freeSolo
-                    multiple
-                    {...item.scopesFormProps}
-                    size="small"
-                    className={styles.idcInput}
-                    renderInput={(params) => <TextField {...params} color="success" {...item.formProps} />}
-                  />
-                ) : (
-                  <TextField size="small" className={styles.textField} color="success" {...item.formProps} />
-                )}
-              </Box>
-            );
-          })}
-        </Grid>
-        <Box className={styles.configTitle}>
-          <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
-            Config
-          </Typography>
-          <Tooltip title=" The configuration for P2P downloads." placement="top">
-            <HelpIcon color="disabled" className={styles.descriptionIcon} />
-          </Tooltip>
-        </Box>
-        <Grid className={styles.configContainer}>
-          {configForm.map((item) => (
+      <Grid component="form" noValidate onSubmit={handleSubmit}>
+        <Box className={styles.container}>
+          <Box className={styles.informationTitle}>
+            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              Information
+            </Typography>
+            <Tooltip title="The information of cluster." placement="top">
+              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+            </Tooltip>
+          </Box>
+          <Box className={styles.defaultContainer}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={is_default}
+                  onChange={(event: { target: { checked: any } }) => {
+                    setCluster({ ...cluster, is_default: event.target.checked });
+                  }}
+                  sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }}
+                />
+              }
+              label="Set cluster as your default cluster"
+              name="IsDefault"
+              sx={{ '&.MuiFormControlLabel-root': { mr: '0.6rem' } }}
+            />
+            <Tooltip
+              title="When peer does not find a matching cluster based on scopes, the default cluster will be used."
+              placement="top"
+            >
+              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+            </Tooltip>
+          </Box>
+          {informationForm.map((item) => (
             <TextField
               size="small"
-              className={styles.textField}
               color="success"
               key={item.formProps.name}
               {...item.formProps}
+              className={styles.textField}
             />
           ))}
-        </Grid>
-        <Box className={styles.footerButton}>
+          <Box className={styles.scopesTitle}>
+            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              scopes
+            </Typography>
+            <Tooltip
+              title="The cluster needs to serve the scope. It wil provide scheduler services and seed peer services to peers in
+            the scope."
+              placement="top"
+            >
+              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+            </Tooltip>
+          </Box>
+          <Grid className={styles.scopesContainer}>
+            {scopesForm.map((item) => {
+              return (
+                <Box key={item.formProps.name}>
+                  {item.label === 'CIDRs' ? (
+                    <Autocomplete
+                      freeSolo
+                      multiple
+                      disableClearable
+                      {...item.scopesFormProps}
+                      size="small"
+                      className={styles.cidrsInput}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <>
+                                {params.InputProps.endAdornment}
+                                <Tooltip
+                                  title={
+                                    'The cluster needs to serve all peers in the CIDRs. The advertise IP will be reported in the peer configuration when the peer is started, and if the advertise IP is empty in the peer configuration, peer will automatically get expose IP as advertise IP. When advertise IP of the peer matches the CIDRs in cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. CIDRs has higher priority than IDC in the scopes.'
+                                  }
+                                  placement="top"
+                                >
+                                  <HelpIcon
+                                    color="disabled"
+                                    sx={{
+                                      width: '0.8rem',
+                                      height: '0.8rem',
+                                      mr: '0.3rem',
+                                      ':hover': { color: 'var(--description-color)' },
+                                    }}
+                                  />
+                                </Tooltip>
+                              </>
+                            ),
+                          }}
+                          color="success"
+                          {...item.formProps}
+                        />
+                      )}
+                    />
+                  ) : item.label === 'IDC' ? (
+                    <Autocomplete
+                      freeSolo
+                      multiple
+                      disableClearable
+                      {...item.scopesFormProps}
+                      size="small"
+                      className={styles.idcInput}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <>
+                                {params.InputProps.endAdornment}
+                                <Tooltip
+                                  title={`The cluster needs to serve all peers in the IDC. When the IDC in the peer configuration matches the IDC in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. IDC has higher priority than location in the scopes.`}
+                                  placement="top"
+                                >
+                                  <HelpIcon
+                                    color="disabled"
+                                    sx={{
+                                      width: '0.8rem',
+                                      height: '0.8rem',
+                                      mr: '0.3rem',
+                                      ':hover': { color: 'var(--description-color)' },
+                                    }}
+                                  />
+                                </Tooltip>
+                              </>
+                            ),
+                          }}
+                          color="success"
+                          {...item.formProps}
+                        />
+                      )}
+                    />
+                  ) : (
+                    <TextField size="small" className={styles.textField} color="success" {...item.formProps} />
+                  )}
+                </Box>
+              );
+            })}
+          </Grid>
+          <Box className={styles.configTitle}>
+            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              Config
+            </Typography>
+            <Tooltip title=" The configuration for P2P downloads." placement="top">
+              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+            </Tooltip>
+          </Box>
+          <Grid className={styles.configContainer}>
+            {configForm.map((item) => (
+              <TextField
+                size="small"
+                className={styles.textField}
+                color="success"
+                required
+                key={item.formProps.name}
+                {...item.formProps}
+              />
+            ))}
+          </Grid>
+        </Box>
+        <Divider sx={{ mt: '1rem', mb: '2rem' }} />
+        <Box>
           <LoadingButton
             loading={loadingButton}
             endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}

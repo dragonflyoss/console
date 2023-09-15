@@ -352,7 +352,8 @@ export default function CreateTokens() {
                 </Box>
               </FormGroup>
             </Box>
-            <Box sx={{ mt: '2rem' }}>
+            <Divider sx={{ mt: '1.5rem', mb: '2rem' }} />
+            <Box>
               <LoadingButton
                 loading={loadingButton}
                 endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}

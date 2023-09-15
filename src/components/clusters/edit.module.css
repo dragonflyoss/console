@@ -32,10 +32,6 @@
   flex-wrap: wrap;
 }
 
-.footerButton {
-  margin-top: 2rem;
-}
-
 .textField {
   width: 18rem;
   max-width: 25rem;

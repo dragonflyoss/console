@@ -70,7 +70,7 @@ export default function NewPreheat() {
     })();
   }, []);
 
-  const formList = [
+  const informationForm = [
     {
       formProps: {
         id: 'bio',
@@ -92,7 +92,7 @@ export default function NewPreheat() {
           ),
         },
         onChange: (e: any) => {
-          changeValidate(e.target.value, formList[0]);
+          changeValidate(e.target.value, informationForm[0]);
         },
       },
       syncError: false,
@@ -254,7 +254,7 @@ export default function NewPreheat() {
 
     const data = new FormData(event.currentTarget);
 
-    formList.forEach((item) => {
+    informationForm.forEach((item) => {
       const value = data.get(item.formProps.name);
       item.setError(!item.validate(value as string));
       item.syncError = !item.validate(value as string);
@@ -288,7 +288,7 @@ export default function NewPreheat() {
     }
 
     const canSubmit = Boolean(
-      !formList.filter((item) => item.syncError).length &&
+      !informationForm.filter((item) => item.syncError).length &&
         !argsForm.filter((item) => item.syncError).length &&
         clusterIDValidate &&
         headerValidate,
@@ -374,7 +374,7 @@ export default function NewPreheat() {
                 />
               </Tooltip>
             </Box>
-            {formList.map((item) => (
+            {informationForm.map((item) => (
               <TextField
                 color="success"
                 size="small"

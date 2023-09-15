@@ -708,7 +708,7 @@ interface getJobsParams {
   state?: string;
 }
 
-interface jobResponse {
+interface getJobsResponse {
   id: number;
   created_at: string;
   updated_at: string;
@@ -726,23 +726,13 @@ interface jobResponse {
   };
 }
 
-interface getJobsResponse {
-  data: jobResponse[];
-  total_page?: number;
-}
-
-export async function getJobs(params?: getJobsParams): Promise<getJobsResponse> {
+export async function getJobs(params?: getJobsParams): Promise<getJobsResponse[]> {
   const url = params
     ? new URL(`/api/v1/jobs?${queryString.stringify(params)}`, API_URL)
     : new URL('/api/v1/jobs', API_URL);
 
   const response = await get(url);
-  const data = await response.json();
-  const linkHeader = response.headers.get('link');
-  const links = parseLinkHeader(linkHeader || null);
-  const totalPage = Number(links?.last?.page);
-  const responses = { data: data, total_page: totalPage };
-  return responses;
+  return response.json();
 }
 
 interface getJobResponse {
@@ -787,7 +777,7 @@ interface getJobResponse {
 
 export async function getJob(id: string): Promise<getJobResponse> {
   const url = new URL(`/api/v1/jobs/${id}`, API_URL);
-  const response = await patch(url);
+  const response = await get(url);
   return response.json();
 }
 
@@ -826,5 +816,5 @@ interface cerateJobResponse {
 export async function createJob(request: createJobRequest): Promise<cerateJobResponse> {
   const url = new URL(`/api/v1/jobs`, API_URL);
   const response = await post(url, request);
-  return await response.json();
+  return response.json();
 }

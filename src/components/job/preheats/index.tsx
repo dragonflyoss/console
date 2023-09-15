@@ -75,33 +75,29 @@ export default function Preheats() {
         setIsLoading(true);
 
         if (user.name === 'root') {
-          const [jobs] = await Promise.all([
-            getJobs({
-              page: 1,
-              per_page: MAX_PAGE_SIZE,
-              state: status === 'ALL' ? undefined : status,
-            }),
-          ]);
+          const jobs = await getJobs({
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+            state: status === 'ALL' ? undefined : status,
+          });
 
-          setAllPreheats(jobs.data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
+          setAllPreheats(jobs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
 
-          const states = jobs.data.filter((obj) => obj.state !== 'SUCCESS' && obj.state !== 'FAILURE').length;
+          const states = jobs.filter((obj) => obj.state !== 'SUCCESS' && obj.state !== 'FAILURE').length;
           states === 0 ? setShouldPoll(false) : setShouldPoll(true);
 
           setIsLoading(false);
         } else if (user.name !== '') {
-          const [jobs] = await Promise.all([
-            getJobs({
-              page: 1,
-              per_page: MAX_PAGE_SIZE,
-              state: status === 'ALL' ? undefined : status,
-              user_id: String(user.id),
-            }),
-          ]);
+          const jobs = await getJobs({
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+            state: status === 'ALL' ? undefined : status,
+            user_id: String(user.id),
+          });
 
-          setAllPreheats(jobs.data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
+          setAllPreheats(jobs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
 
-          const states = jobs.data.filter((obj) => obj.state !== 'SUCCESS' && obj.state !== 'FAILURE').length;
+          const states = jobs.filter((obj) => obj.state !== 'SUCCESS' && obj.state !== 'FAILURE').length;
           states === 0 ? setShouldPoll(false) : setShouldPoll(true);
 
           setIsLoading(false);
@@ -121,34 +117,25 @@ export default function Preheats() {
         const pollPreheat = async () => {
           try {
             if (user.name === 'root') {
-              const [jobs] = await Promise.all([
-                getJobs({
-                  page: 1,
-                  per_page: MAX_PAGE_SIZE,
-                  state: status === 'ALL' ? undefined : status,
-                }),
-              ]);
+              const jobs = await getJobs({
+                page: 1,
+                per_page: MAX_PAGE_SIZE,
+                state: status === 'ALL' ? undefined : status,
+              });
+              setAllPreheats(jobs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
 
-              setAllPreheats(
-                jobs.data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()),
-              );
-
-              const states = jobs.data.filter((obj) => obj.state !== 'SUCCESS' && obj.state !== 'FAILURE').length;
+              const states = jobs.filter((obj) => obj.state !== 'SUCCESS' && obj.state !== 'FAILURE').length;
               states === 0 ? setShouldPoll(false) : setShouldPoll(true);
             } else if (user.name !== '') {
-              const [jobs] = await Promise.all([
-                getJobs({
-                  page: 1,
-                  per_page: MAX_PAGE_SIZE,
-                  state: status === 'ALL' ? undefined : status,
-                }),
-              ]);
+              const jobs = await getJobs({
+                page: 1,
+                per_page: MAX_PAGE_SIZE,
+                state: status === 'ALL' ? undefined : status,
+                user_id: String(user.id),
+              });
+              setAllPreheats(jobs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
 
-              setAllPreheats(
-                jobs.data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()),
-              );
-
-              const states = jobs.data.filter((obj) => obj.state !== 'SUCCESS' && obj.state !== 'FAILURE').length;
+              const states = jobs.filter((obj) => obj.state !== 'SUCCESS' && obj.state !== 'FAILURE').length;
               states === 0 ? setShouldPoll(false) : setShouldPoll(true);
             }
           } catch (error) {

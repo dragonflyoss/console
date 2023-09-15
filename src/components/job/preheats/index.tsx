@@ -274,19 +274,19 @@ export default function Preheats() {
                           <Box
                             component="img"
                             sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/preheat/success.svg"
+                            src="/icons/job/preheat/success.svg"
                           />
                         ) : item.state === 'FAILURE' ? (
                           <Box
                             component="img"
                             sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/preheat/failure.svg"
+                            src="/icons/job/preheat/failure.svg"
                           />
                         ) : (
                           <Box
                             component="img"
                             sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/preheat/pending.svg"
+                            src="/icons/job/preheat/pending.svg"
                           />
                         )}
                         <Box
@@ -346,19 +346,19 @@ export default function Preheats() {
                         <Box
                           component="img"
                           sx={{ width: '1.3rem', height: '1.3rem' }}
-                          src="/icons/preheat/success.svg"
+                          src="/icons/job/preheat/success.svg"
                         />
                       ) : item.state === 'FAILURE' ? (
                         <Box
                           component="img"
                           sx={{ width: '1.3rem', height: '1.3rem' }}
-                          src="/icons/preheat/failure.svg"
+                          src="/icons/job/preheat/failure.svg"
                         />
                       ) : (
                         <Box
                           component="img"
                           sx={{ width: '1.3rem', height: '1.3rem' }}
-                          src="/icons/preheat/pending.svg"
+                          src="/icons/job/preheat/pending.svg"
                         />
                       )}
                       <Box

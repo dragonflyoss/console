@@ -175,7 +175,7 @@ export default function ShowPreheat() {
         <Paper variant="outlined" sx={{ p: '1rem 2rem' }}>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/id.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/id.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -191,7 +191,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/description.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/description.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -207,7 +207,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/status.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/status.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -243,7 +243,7 @@ export default function ShowPreheat() {
                     ) : preheat.result.State === 'FAILURE' ? (
                       <></>
                     ) : (
-                      <Box component="img" className={styles.statusIcon} src="/icons/preheat/status-pending.svg" />
+                      <Box component="img" className={styles.statusIcon} src="/icons/job/preheat/status-pending.svg" />
                     )}
                     <Typography
                       variant="body2"
@@ -276,7 +276,7 @@ export default function ShowPreheat() {
                             <Box
                               component="img"
                               sx={{ width: '1.2rem', height: '1.2rem' }}
-                              src="/icons/preheat/error-log.svg"
+                              src="/icons/job/preheat/error-log.svg"
                             />
                           </IconButton>
                         </Tooltip>
@@ -291,7 +291,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/url.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/url.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -307,7 +307,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/filter.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/filter.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -349,7 +349,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/tag.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/tag.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -385,7 +385,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/headers.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/headers.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -416,7 +416,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/id.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/id.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -432,7 +432,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/created-at.svg" />
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/created-at.svg" />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -498,7 +498,7 @@ export default function ShowPreheat() {
                         <Box
                           component="img"
                           sx={{ width: '1.4rem', height: '1.4rem', mr: '0.6rem' }}
-                          src="/icons/preheat/failure.svg"
+                          src="/icons/job/preheat/failure.svg"
                         />
                         <Typography variant="body2" fontFamily="mabry-bold" sx={{ color: '#d0d7de' }}>
                           Preheat

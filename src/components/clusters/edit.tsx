@@ -556,7 +556,7 @@ export default function EditCluster() {
       <Typography variant="h5" fontFamily="mabry-bold">
         Update Cluster
       </Typography>
-      <Divider sx={{ mt: 2, mb: 2 }} />
+      <Divider sx={{ mt: '1rem', mb: '1rem' }} />
       <Paper variant="outlined" sx={{ display: 'inline-flex', alignItems: 'center', mb: '1rem', p: '1rem' }}>
         <Box component="img" src="/icons/cluster/cluster.svg" sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }} />
         <Box>

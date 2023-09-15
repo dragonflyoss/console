@@ -678,7 +678,7 @@ export default function NewCluster() {
             ))}
           </Grid>
         </Box>
-        <Divider sx={{ mt: '1rem', mb: '1.5rem' }} />
+        <Divider sx={{ mt: '1rem', mb: '2rem' }} />
         <Box>
           <LoadingButton
             loading={loadingButton}

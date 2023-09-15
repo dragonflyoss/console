@@ -55,6 +55,7 @@ export default function CreateTokens() {
         id: 'name',
         label: 'Name',
         name: 'name',
+        required: true,
         autoComplete: 'family-name',
         placeholder: 'Enter your token name',
         helperText: nameError ? 'Fill in the characters, the length is 1-100.' : '',
@@ -236,7 +237,6 @@ export default function CreateTokens() {
               <TextField
                 margin="normal"
                 color="success"
-                required
                 size="small"
                 key={item.formProps.name}
                 {...item.formProps}
@@ -255,7 +255,7 @@ export default function CreateTokens() {
               </Tooltip>
             </Box>
             <FormControl size="small">
-              <InputLabel color="secondary" id="demo-simple-select-label">
+              <InputLabel color="secondary" required id="demo-simple-select-label">
                 Expiration
               </InputLabel>
               <Box display="flex" alignItems="center">

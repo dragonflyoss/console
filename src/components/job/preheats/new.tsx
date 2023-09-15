@@ -21,18 +21,20 @@ import {
   Divider,
   Snackbar,
   Alert,
+  Paper,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import HelpIcon from '@mui/icons-material/Help';
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { LoadingButton } from '@mui/lab';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import AddIcon from '@mui/icons-material/Add';
+import ClearIcon from '@mui/icons-material/Clear';
 import { useNavigate } from 'react-router-dom';
 import { createJob, getClusters } from '../../../lib/api';
 import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './new.module.css';
+import { MyContext } from '../../menu/index';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function NewPreheat() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -51,6 +53,7 @@ export default function NewPreheat() {
   const [clusterID, setClusterID] = useState<number[]>([]);
 
   const navigate = useNavigate();
+  const user = useContext(MyContext);
 
   const theme = createTheme({
     palette: {
@@ -59,6 +62,13 @@ export default function NewPreheat() {
       },
     },
   });
+
+  useEffect(() => {
+    (async function () {
+      const cluster = await getClusters({ page: 1, per_page: MAX_PAGE_SIZE });
+      setCluster(cluster.data);
+    })();
+  }, []);
 
   const formList = [
     {
@@ -73,7 +83,7 @@ export default function NewPreheat() {
         error: bioError,
         InputProps: {
           endAdornment: (
-            <Tooltip title={'Cluster preheat description.'} placement="top">
+            <Tooltip title={'Preheat description.'} placement="top">
               <HelpIcon
                 color="disabled"
                 sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
@@ -101,13 +111,14 @@ export default function NewPreheat() {
         id: 'url',
         label: 'URL',
         name: 'url',
+        required: true,
         autoComplete: 'family-name',
         placeholder: 'Enter your URL',
-        helperText: urlError ? 'Please enter the correct URL.' : '',
+        helperText: urlError ? 'Fill in the characters, the length is 1-1000.' : '',
         error: urlError,
         InputProps: {
           endAdornment: (
-            <Tooltip title={'URL address used to specify the resource to be preheat'} placement="top">
+            <Tooltip title={'URL address used to specify the resource to be preheat.'} placement="top">
               <HelpIcon
                 color="disabled"
                 sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
@@ -122,7 +133,7 @@ export default function NewPreheat() {
       syncError: false,
       setError: setURLError,
       validate: (value: string) => {
-        const reg = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s]*$/;
+        const reg = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s]*.{0,1000}$/;
         return reg.test(value);
       },
     },
@@ -137,7 +148,12 @@ export default function NewPreheat() {
         error: tagError,
         InputProps: {
           endAdornment: (
-            <Tooltip title={'Tag used to specify the resources to preheat'} placement="top">
+            <Tooltip
+              title={
+                'When the URL of the preheat tasks are the same but the Tag are different, they will be distinguished based on the Tag and the generated preheat tasks will be different.'
+              }
+              placement="top"
+            >
               <HelpIcon
                 color="disabled"
                 sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
@@ -168,7 +184,6 @@ export default function NewPreheat() {
             setFilter(newValue);
           }
         },
-
         onInputChange: (e: any) => {
           changeValidate(e.target.value, argsForm[2]);
         },
@@ -183,9 +198,10 @@ export default function NewPreheat() {
         id: 'filter',
         label: 'Filter',
         name: 'filter',
-        placeholder: 'Please enter Filter',
+        placeholder: 'Press the Enter key to confirm the entered value',
         error: filterError,
-        helperText: filterError ? 'Fill in the characters, the length is 0-1000.' : '',
+        helperText: filterError ? 'Fill in the characters, the length is 0-100.' : '',
+
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
             e.preventDefault();
@@ -197,7 +213,7 @@ export default function NewPreheat() {
       setError: setFilterError,
 
       validate: (value: string) => {
-        const reg = /^(.{0,1000})$/;
+        const reg = /^(.{0,100})$/;
         return reg.test(value);
       },
     },
@@ -211,13 +227,6 @@ export default function NewPreheat() {
     setClusterID(selectedIds);
     setClusterError(false);
   };
-
-  useEffect(() => {
-    (async function () {
-      const cluster = await getClusters({ page: 1, per_page: MAX_PAGE_SIZE });
-      setCluster(cluster.data);
-    })();
-  }, []);
 
   const headersKeyValidate = (key: any) => {
     const regex = /^.{1,50}$/;
@@ -296,6 +305,7 @@ export default function NewPreheat() {
         headers: headerList,
       },
       cdn_cluster_ids: clusterID,
+      user_id: user.id,
     };
 
     if (canSubmit) {
@@ -347,183 +357,263 @@ export default function NewPreheat() {
         </Alert>
       </Snackbar>
       <Typography variant="h5" fontFamily="mabry-bold">
-        Create preheat
+        Create Preheat
       </Typography>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <FormControl fullWidth>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
-              Information
-            </Typography>
-            <Tooltip title=" The information of preheat." placement="top">
-              <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+          <Box className={styles.title}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+                Information
+              </Typography>
+              <Tooltip title=" The information of preheat." placement="top">
+                <HelpIcon
+                  color="disabled"
+                  sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                />
+              </Tooltip>
+            </Box>
+            {formList.map((item) => (
+              <TextField
+                color="success"
+                size="small"
+                margin="normal"
+                key={item.formProps.name}
+                {...item.formProps}
+                className={styles.textField}
               />
-            </Tooltip>
+            ))}
           </Box>
-          {formList.map((item) => (
-            <TextField
-              color="success"
+          <Box className={styles.title}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+                Clusters
+              </Typography>
+              <Tooltip title="Used for clusters that need to be preheating." placement="top">
+                <HelpIcon
+                  color="disabled"
+                  sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                />
+              </Tooltip>
+            </Box>
+            <FormControl
+              sx={{ width: '20rem' }}
+              margin="normal"
               required
               size="small"
-              margin="normal"
-              key={item.formProps.name}
-              {...item.formProps}
-              className={styles.textField}
-            />
-          ))}
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: '1rem' }}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
-              Clusters
-            </Typography>
-            <Tooltip title="Used for clusters that need to be preheating." placement="top">
-              <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
-              />
-            </Tooltip>
-          </Box>
-          <FormControl sx={{ width: '20rem' }} size="small" color="secondary" error={clusterError}>
-            <InputLabel id="demo-multiple-checkbox-label">Clusters</InputLabel>
-            <Select
-              labelId="demo-multiple-checkbox-label"
-              id="demo-multiple-checkbox"
-              multiple
-              value={clusterName.map((name) => cluster.find((item) => item.name === name))}
-              onChange={handleSelectCluster}
-              input={<OutlinedInput label="clusters" />}
-              renderValue={(selected) => selected.map((item: any) => item.name).join(', ')}
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    maxHeight: '14rem',
-                    width: '18rem',
-                  },
-                },
-              }}
+              color="secondary"
+              error={clusterError}
             >
-              {cluster.map((item: any) => (
-                <MenuItem key={item.id} value={item} sx={{ height: '2.6rem' }}>
-                  <Checkbox
-                    size="small"
-                    sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }}
-                    checked={clusterName.indexOf(item.name) > -1}
-                  />
-                  <ListItemText primary={item.name} />
-                </MenuItem>
-              ))}
-            </Select>
-            {clusterError && <FormHelperText>Select at least one option.</FormHelperText>}
-          </FormControl>
-          <Box sx={{ display: 'flex', alignItems: 'center', mt: '1rem' }}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
-              Args
-            </Typography>
-            <Tooltip title="Args used to pass additional configuration options to the preheat task" placement="top">
-              <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
-              />
-            </Tooltip>
-          </Box>
-          {argsForm.map((item) => {
-            return (
-              <Box key={item.formProps.name}>
-                {item.label === 'Filter' ? (
-                  <Autocomplete
-                    freeSolo
-                    multiple
-                    {...item.filterFormProps}
-                    size="small"
-                    className={styles.filterInput}
-                    renderInput={(params) => (
-                      <TextField margin="normal" {...params} color="success" {...item.formProps} />
-                    )}
-                  />
-                ) : (
-                  <TextField
-                    color="success"
-                    required
-                    margin="normal"
-                    size="small"
-                    {...item.formProps}
-                    className={styles.filterInput}
-                  />
-                )}
-              </Box>
-            );
-          })}
-          <Button
-            sx={{
-              '&.MuiButton-root': {
-                backgroundColor: 'var(--button-color)',
-                borderRadius: 0,
-                color: '#fff',
-                width: '10rem',
-                mt: '1rem',
-                mb: '1rem',
-              },
-            }}
-            variant="contained"
-            size="small"
-            onClick={() => {
-              setheaders([...headers, { key: '', value: '' }]);
-            }}
-          >
-            <AddIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-            add headers
-          </Button>
-          {headers.map((item, index) => (
-            <Grid key={index} sx={{ display: 'flex', alignItems: 'flex-start', mt: '1rem', mb: '0.5rem' }}>
-              <TextField
-                label="Key"
-                color="success"
-                required
-                size="small"
-                error={!headersKeyValidate(item.key)}
-                helperText={!headersKeyValidate(item.key) && 'Fill in the characters, the length is 1-50.'}
-                className={styles.headersKeyInput}
-                value={item.key}
-                onChange={(event) => {
-                  const newheaders = [...headers];
-                  newheaders[index].key = event.target.value;
-                  setheaders(newheaders);
-                }}
-              />
-              <TextField
-                label="Value"
-                color="success"
-                required
-                size="small"
-                error={!headersValueValidate(item.value)}
-                helperText={!headersValueValidate(item.value) && 'Fill in the characters, the length is 1-1000.'}
-                className={styles.headersValueInput}
-                value={item.value}
-                onChange={(event) => {
-                  const newheaders = [...headers];
-
-                  newheaders[index].value = event.target.value;
-                  setheaders(newheaders);
-                }}
-              />
-              <IconButton
-                sx={{
-                  width: '2.6rem',
-                  height: '2.6rem',
-                }}
-                onClick={() => {
-                  const newheaders = [...headers];
-                  newheaders.splice(index, 1);
-                  setheaders(newheaders);
+              <InputLabel id="demo-simple-select-required-label">Clusters</InputLabel>
+              <Select
+                labelId="demo-simple-select-required-label"
+                id="demo-simple-select-required"
+                label="Clusters *"
+                multiple
+                value={clusterName.map((name) => cluster.find((item) => item.name === name))}
+                onChange={handleSelectCluster}
+                input={<OutlinedInput label="clusters" />}
+                renderValue={(selected) => selected.map((item: any) => item.name).join(', ')}
+                MenuProps={{
+                  PaperProps: {
+                    style: {
+                      maxHeight: '14rem',
+                      width: '18rem',
+                    },
+                  },
                 }}
               >
-                <RemoveCircleIcon sx={{ color: 'var(--button-color)', width: '1.6rem', height: '1.6rem' }} />
-              </IconButton>
-            </Grid>
-          ))}
-          <Box sx={{ mt: '2rem' }}>
+                {cluster.map((item: any) => (
+                  <MenuItem key={item.id} value={item} sx={{ height: '2.6rem' }}>
+                    <Checkbox
+                      size="small"
+                      sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }}
+                      checked={clusterName.indexOf(item.name) > -1}
+                    />
+                    <ListItemText primary={item.name} />
+                  </MenuItem>
+                ))}
+              </Select>
+              {clusterError && <FormHelperText>Select at least one option.</FormHelperText>}
+            </FormControl>
+          </Box>
+          <Box className={styles.title}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+                Args
+              </Typography>
+              <Tooltip title="Args used to pass additional configuration options to the preheat task." placement="top">
+                <HelpIcon
+                  color="disabled"
+                  sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                />
+              </Tooltip>
+            </Box>
+            {argsForm.map((item) => {
+              return (
+                <Box key={item.formProps.name}>
+                  {item.label === 'Filter' ? (
+                    <Autocomplete
+                      freeSolo
+                      multiple
+                      disableClearable
+                      {...item.filterFormProps}
+                      size="small"
+                      className={styles.filterInput}
+                      renderInput={(params) => (
+                        <TextField
+                          margin="normal"
+                          {...params}
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <>
+                                {params.InputProps.endAdornment}
+                                <Tooltip
+                                  title={
+                                    'By setting the filter parameter, you can specify the file type of the resource that needs to be preheated. The filter is used to generate a unique preheat task and filter unnecessary query parameters in the URL, separated by & characters.'
+                                  }
+                                  placement="top"
+                                >
+                                  <HelpIcon
+                                    color="disabled"
+                                    sx={{
+                                      width: '0.8rem',
+                                      height: '0.8rem',
+                                      mr: '0.3rem',
+                                      ':hover': { color: 'var(--description-color)' },
+                                    }}
+                                  />
+                                </Tooltip>
+                              </>
+                            ),
+                          }}
+                          color="success"
+                          {...item.formProps}
+                        />
+                      )}
+                    />
+                  ) : (
+                    <TextField
+                      color="success"
+                      margin="normal"
+                      size="small"
+                      {...item.formProps}
+                      className={styles.filterInput}
+                    />
+                  )}
+                </Box>
+              );
+            })}
+            {headers.length > 0 ? (
+              <Paper variant="outlined" sx={{ p: '1rem', width: '40rem', mt: '1rem' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="body1" fontFamily="mabry-bold" mr="0.4rem">
+                    Headers
+                  </Typography>
+                  <Tooltip title="Add headers for preheat request." placement="top">
+                    <HelpIcon
+                      color="disabled"
+                      sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                    />
+                  </Tooltip>
+                </Box>
+                {headers.map((item, index) => (
+                  <Grid key={index} sx={{ display: 'flex', alignItems: 'flex-start', mt: '1.5rem', mb: '0.5rem' }}>
+                    <TextField
+                      label="Key"
+                      color="success"
+                      size="small"
+                      error={!headersKeyValidate(item.key)}
+                      helperText={!headersKeyValidate(item.key) && 'Fill in the characters, the length is 1-100.'}
+                      className={styles.headersKeyInput}
+                      value={item.key}
+                      onChange={(event) => {
+                        const newheaders = [...headers];
+                        newheaders[index].key = event.target.value;
+                        setheaders(newheaders);
+                      }}
+                    />
+                    <TextField
+                      label="Value"
+                      color="success"
+                      size="small"
+                      multiline
+                      error={!headersValueValidate(item.value)}
+                      helperText={!headersValueValidate(item.value) && 'Fill in the characters, the length is 1-1000.'}
+                      className={styles.headersValueInput}
+                      value={item.value}
+                      onChange={(event) => {
+                        const newheaders = [...headers];
+                        newheaders[index].value = event.target.value;
+                        setheaders(newheaders);
+                      }}
+                    />
+                    <IconButton
+                      sx={{
+                        width: '2.6rem',
+                        height: '2.6rem',
+                      }}
+                      onClick={() => {
+                        const newheaders = [...headers];
+                        newheaders.splice(index, 1);
+                        setheaders(newheaders);
+                      }}
+                    >
+                      <ClearIcon sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--button-color)' }} />
+                    </IconButton>
+                  </Grid>
+                ))}
+                <Button
+                  sx={{
+                    '&.MuiButton-root': {
+                      backgroundColor: 'var(--description-color)',
+                      borderColor: 'var(--description-color)',
+                      borderRadius: 0,
+                      color: '#FFF',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                    },
+                    width: '100%',
+
+                    mt: '1.5rem',
+                  }}
+                  variant="outlined"
+                  size="small"
+                  startIcon={<AddIcon />}
+                  onClick={() => {
+                    setheaders([...headers, { key: '', value: '' }]);
+                  }}
+                >
+                  add headers
+                </Button>
+              </Paper>
+            ) : (
+              <Button
+                sx={{
+                  '&.MuiButton-root': {
+                    backgroundColor: 'var(--description-color)',
+                    borderColor: 'var(--description-color)',
+                    borderRadius: 0,
+                    color: '#FFF',
+                  },
+                  width: '8rem',
+
+                  mt: '1rem',
+                }}
+                variant="outlined"
+                size="small"
+                onClick={() => {
+                  setheaders([...headers, { key: '', value: '' }]);
+                }}
+              >
+                add headers
+              </Button>
+            )}
+          </Box>
+          <Divider sx={{ mt: '1rem', mb: '1.5rem' }} />
+          <Box>
             <LoadingButton
               loading={loadingButton}
               endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}

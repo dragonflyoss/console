@@ -75,6 +75,9 @@ export default function ShowPreheat() {
         main: '#1C293A',
       },
     },
+    typography: {
+      fontFamily: 'mabry-light,sans-serif',
+    },
   });
 
   useEffect(() => {
@@ -165,11 +168,11 @@ export default function ShowPreheat() {
           {preheat.id}
         </Typography>
       </Breadcrumbs>
-      <Typography variant="h5" mb="1rem">
+      <Typography variant="h5" mb="2rem">
         Preheat
       </Typography>
       <Box width="100%">
-        <Paper variant="outlined" sx={{ p: '1rem 2rem', mt: '1rem' }}>
+        <Paper variant="outlined" sx={{ p: '1rem 2rem' }}>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
               <Box component="img" className={styles.informationTitleIcon} src="/icons/preheat/id.svg" />
@@ -236,9 +239,9 @@ export default function ShowPreheat() {
                     }}
                   >
                     {preheat.result.State === 'SUCCESS' ? (
-                      <Box component="img" className={styles.statusIcon} src="/icons/preheat/status-success.svg" />
+                      <></>
                     ) : preheat.result.State === 'FAILURE' ? (
-                      <Box component="img" className={styles.statusIcon} src="/icons/preheat/status-failure.svg" />
+                      <></>
                     ) : (
                       <Box component="img" className={styles.statusIcon} src="/icons/preheat/status-pending.svg" />
                     )}
@@ -247,7 +250,6 @@ export default function ShowPreheat() {
                       fontFamily="mabry-bold"
                       sx={{
                         color: '#FFF',
-                        ml: '0.4rem',
                       }}
                     >
                       {preheat.result.State || ''}
@@ -399,10 +401,10 @@ export default function ShowPreheat() {
               <Paper variant="outlined" className={styles.headersContent}>
                 {Object.entries(preheat.args.headers).map(([key, value], index) => (
                   <Box key={index} className={styles.headersText}>
-                    <Box fontFamily="mabry-bold" width="40%">
+                    <Box fontFamily="mabry-bold" width="35%" mr="1rem">
                       {key}
                     </Box>
-                    <Box width="60%">{value}</Box>
+                    <Box width="65%">{value}</Box>
                   </Box>
                 ))}
               </Paper>

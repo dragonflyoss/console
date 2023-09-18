@@ -1,0 +1,20 @@
+.container {
+  height: 100vh;
+  overflow: hidden;
+  background: url(../../../public/images/404/background-image.png);
+}
+
+.content {
+  padding-top: 5%;
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logoContainer {
+  padding-left: 3rem;
+  padding-top: 1rem;
+  display: flex;
+  align-items: center;
+}

@@ -86,9 +86,9 @@ const convertToCSV = (headers: Header[], objArray: getPeersResponse[]) => {
 };
 
 export const exportCSVFile = (headers: Header[], items: getPeersResponse[], fileTitle: string) => {
-  const CSV = convertToCSV(headers, items);
-  const exportedFilenmae = fileTitle + '.CSV' || 'export.CSV';
-  const blob = new Blob([CSV], { type: 'text/CSV;charset=utf-8;' });
+  const csv = convertToCSV(headers, items);
+  const exportedFilenmae = fileTitle + '.csv' || 'export.csv';
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
 
   if (link.download !== undefined) {

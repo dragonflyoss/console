@@ -104,12 +104,10 @@ export default function Schedulers() {
         >
           {`scheduler-cluster-${scheduler.scheduler_cluster_id}`}
         </RouterLink>
-        <Typography color="text.primary">schedulers</Typography>
-        <Typography color="text.primary" fontFamily="mabry-bold">
-          {scheduler?.host_name}
-        </Typography>
+        <Typography color="inherit">schedulers</Typography>
+        <Typography color="text.primary">{scheduler?.host_name}</Typography>
       </Breadcrumbs>
-      <Typography variant="h5" fontFamily="mabry-bold" sx={{ pb: '1rem' }}>
+      <Typography variant="h5" sx={{ pb: '1rem' }}>
         Scheduler
       </Typography>
       <Box className={styles.container}>

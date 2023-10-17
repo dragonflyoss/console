@@ -818,3 +818,68 @@ export async function createJob(request: createJobRequest): Promise<cerateJobRes
   const response = await post(url, request);
   return await response.json();
 }
+
+interface getpeerParams {
+  page?: number;
+  per_page?: number;
+}
+
+export interface getPeersResponse {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  host_name: string;
+  type: string;
+  idc: string;
+  location: string;
+  ip: string;
+  port: number;
+  download_port: number;
+  object_storage_port: number;
+  state: string;
+  os: string;
+  platform: string;
+  platform_family: string;
+  platform_version: string;
+  kernel_version: string;
+  git_version: string;
+  git_commit: string;
+  build_platform: string;
+  scheduler_cluster_id: number;
+  scheduler_cluster: {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    is_del: 0;
+    name: string;
+    bio: string;
+    config: {
+      candidate_parent_limit: number;
+      filter_parent_limit: number;
+    };
+    client_config: {
+      concurrent_piece_count: number;
+      load_limit: number;
+    };
+    scopes: {
+      cidrs: Array<string>;
+      idc: '';
+      location: '';
+    };
+    is_default: boolean;
+    seed_peer_clusters: number;
+    schedulers: string;
+    peers: string;
+    jobs: string;
+  };
+}
+
+export async function getPeers(params?: getpeerParams): Promise<getPeersResponse[]> {
+  const url = params
+    ? new URL(`/api/v1/peers?${queryString.stringify(params)}`, API_URL)
+    : new URL('/api/v1/peers', API_URL);
+
+  const response = await get(url);
+  return await response.json();
+}

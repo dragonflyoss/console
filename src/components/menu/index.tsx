@@ -60,7 +60,7 @@ export default function Layout(props: any) {
   const [firstLogin, setFirstLogin] = useState(false);
   const [expandDeveloper, setExpandDeveloper] = useState(false);
   const [expandJob, setExpandJob] = useState(false);
-
+  const [expandInsight, setExpandInsight] = useState(false);
   const openProfile = Boolean(anchorElement);
   const location = useLocation();
   const navigate = useNavigate();
@@ -123,6 +123,17 @@ export default function Layout(props: any) {
       },
     },
     {
+      label: 'Insight',
+      href: '/insight',
+      text: 'Insight',
+      icon: <Box component="img" className={styles.menuIcon} src="/icons/insight/insight.svg" />,
+      menuProps: {
+        label: 'peers',
+        href: '/insight/peers',
+        text: 'Peer',
+      },
+    },
+    {
       label: 'users',
       href: '/users',
       text: 'User',
@@ -157,6 +168,17 @@ export default function Layout(props: any) {
         label: 'preheats',
         href: '/jobs/preheats',
         text: 'Preheat',
+      },
+    },
+    {
+      label: 'Insight',
+      href: '/insight',
+      text: 'Insight',
+      icon: <Box component="img" className={styles.menuIcon} src="/icons/insight/insight.svg" />,
+      menuProps: {
+        label: 'peers',
+        href: '/insight/peers',
+        text: 'Peer',
       },
     },
   ];
@@ -236,7 +258,7 @@ export default function Layout(props: any) {
                   {role === ROLE_ROOT ? (
                     rootMenu.map((items) =>
                       items.text === 'Developer' ? (
-                        <Box key={items.href}>
+                        <Box key={items.href} className={styles.expandMenu}>
                           <ListItemButton
                             key={items.href}
                             onClick={() => {
@@ -249,7 +271,6 @@ export default function Layout(props: any) {
                                 color: '#121726',
                               },
                               height: '2rem',
-                              mb: '0.4rem',
                             }}
                           >
                             {items.icon}
@@ -274,8 +295,8 @@ export default function Layout(props: any) {
                                     color: '#121726',
                                   },
                                   height: '2rem',
-                                  mb: '0.4rem',
                                   pl: '1rem',
+                                  mt: '0.8rem',
                                 }}
                               >
                                 <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
@@ -286,7 +307,7 @@ export default function Layout(props: any) {
                           </Collapse>
                         </Box>
                       ) : items.text === 'Job' ? (
-                        <Box key={items.href}>
+                        <Box className={styles.expandMenu}>
                           <ListItemButton
                             key={items.href}
                             onClick={() => {
@@ -299,7 +320,6 @@ export default function Layout(props: any) {
                                 color: '#121726',
                               },
                               height: '2rem',
-                              mb: '0.4rem',
                             }}
                           >
                             {items.icon}
@@ -324,8 +344,57 @@ export default function Layout(props: any) {
                                     color: '#121726',
                                   },
                                   height: '2rem',
-                                  mb: '0.4rem',
                                   pl: '1rem',
+                                  mt: '0.8rem',
+                                }}
+                              >
+                                <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
+                                  {items?.menuProps?.text}
+                                </Typography>
+                              </ListItemButton>
+                            </List>
+                          </Collapse>
+                        </Box>
+                      ) : items.text === 'Insight' ? (
+                        <Box className={styles.expandMenu}>
+                          <ListItemButton
+                            key={items.href}
+                            onClick={() => {
+                              setExpandInsight(!expandInsight);
+                            }}
+                            sx={{
+                              '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                              '&.Mui-selected:hover': {
+                                backgroundColor: '#DDFF55',
+                                color: '#121726',
+                              },
+                              height: '2rem',
+                            }}
+                          >
+                            {items.icon}
+                            <Typography
+                              variant="subtitle1"
+                              sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                            >
+                              {items.text}
+                            </Typography>
+                            {expandInsight ? <ExpandLess /> : <ExpandMore />}
+                          </ListItemButton>
+                          <Collapse in={expandInsight} timeout="auto" unmountOnExit>
+                            <List component="div" disablePadding>
+                              <ListItemButton
+                                selected={location.pathname.split('/')[2] === items?.menuProps?.label}
+                                component={Link}
+                                to={items?.menuProps?.href || ''}
+                                sx={{
+                                  '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                  '&.Mui-selected:hover': {
+                                    backgroundColor: '#DDFF55',
+                                    color: '#121726',
+                                  },
+                                  height: '2rem',
+                                  pl: '1rem',
+                                  mt: '0.8rem',
                                 }}
                               >
                                 <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
@@ -349,6 +418,7 @@ export default function Layout(props: any) {
                             },
                             height: '2rem',
                             mb: '0.4rem',
+                            mt: '0.4rem',
                           }}
                         >
                           {items.icon}
@@ -361,7 +431,7 @@ export default function Layout(props: any) {
                   ) : role === ROLE_GUEST ? (
                     guestMenu.map((items) =>
                       items.text === 'Developer' ? (
-                        <Box key={items.href}>
+                        <Box className={styles.expandMenu}>
                           <ListItemButton
                             onClick={() => {
                               setExpandDeveloper(!expandDeveloper);
@@ -374,6 +444,7 @@ export default function Layout(props: any) {
                               },
                               height: '2rem',
                               mb: '0.4rem',
+                              mt: '0.4rem',
                             }}
                           >
                             {items.icon}
@@ -398,8 +469,8 @@ export default function Layout(props: any) {
                                     color: '#121726',
                                   },
                                   height: '2rem',
-                                  mb: '0.4rem',
                                   pl: '1rem',
+                                  mt: '0.8rem',
                                 }}
                               >
                                 <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
@@ -410,7 +481,7 @@ export default function Layout(props: any) {
                           </Collapse>
                         </Box>
                       ) : items.text === 'Job' ? (
-                        <Box key={items.href}>
+                        <Box className={styles.expandMenu}>
                           <ListItemButton
                             key={items.href}
                             onClick={() => {
@@ -424,6 +495,7 @@ export default function Layout(props: any) {
                               },
                               height: '2rem',
                               mb: '0.4rem',
+                              mt: '0.4rem',
                             }}
                           >
                             {items.icon}
@@ -448,8 +520,57 @@ export default function Layout(props: any) {
                                     color: '#121726',
                                   },
                                   height: '2rem',
-                                  mb: '0.4rem',
                                   pl: '1rem',
+                                  mt: '0.8rem',
+                                }}
+                              >
+                                <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
+                                  {items?.menuProps?.text}
+                                </Typography>
+                              </ListItemButton>
+                            </List>
+                          </Collapse>
+                        </Box>
+                      ) : items.text === 'Insight' ? (
+                        <Box className={styles.expandMenu}>
+                          <ListItemButton
+                            key={items.href}
+                            onClick={() => {
+                              setExpandInsight(!expandInsight);
+                            }}
+                            sx={{
+                              '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                              '&.Mui-selected:hover': {
+                                backgroundColor: '#DDFF55',
+                                color: '#121726',
+                              },
+                              height: '2rem',
+                            }}
+                          >
+                            {items.icon}
+                            <Typography
+                              variant="subtitle1"
+                              sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                            >
+                              {items.text}
+                            </Typography>
+                            {expandInsight ? <ExpandLess /> : <ExpandMore />}
+                          </ListItemButton>
+                          <Collapse in={expandInsight} timeout="auto" unmountOnExit>
+                            <List component="div" disablePadding>
+                              <ListItemButton
+                                selected={location.pathname.split('/')[2] === items?.menuProps?.label}
+                                component={Link}
+                                to={items?.menuProps?.href || ''}
+                                sx={{
+                                  '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                  '&.Mui-selected:hover': {
+                                    backgroundColor: '#DDFF55',
+                                    color: '#121726',
+                                  },
+                                  height: '2rem',
+                                  pl: '1rem',
+                                  mt: '0.8rem',
                                 }}
                               >
                                 <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
@@ -473,6 +594,7 @@ export default function Layout(props: any) {
                             },
                             height: '2rem',
                             mb: '0.4rem',
+                            mt: '0.4rem',
                           }}
                         >
                           {items.icon}

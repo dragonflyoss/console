@@ -92,6 +92,9 @@ export default function PersonalAccessTokens() {
         main: '#1C293A',
       },
     },
+    typography: {
+      fontFamily: 'mabry-light,sans-serif',
+    },
   });
 
   const handleDeleteClose = async (row: any) => {
@@ -173,7 +176,7 @@ export default function PersonalAccessTokens() {
         </Alert>
       </Snackbar>
       <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
-        <Typography>developer</Typography>
+        <Typography color="inherit">developer</Typography>
         <Typography color="text.primary">personal access tokens</Typography>
       </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>

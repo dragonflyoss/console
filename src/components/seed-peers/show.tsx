@@ -115,12 +115,10 @@ export default function SeedPeer() {
         >
           {`seed-peer-cluster-${seedPeer.seed_peer_cluster_id}`}
         </RouterLink>
-        <Typography color="text.primary">seed-peers</Typography>
-        <Typography color="text.primary" fontFamily="mabry-bold">
-          {seedPeer?.host_name}
-        </Typography>
+        <Typography color="inherit">seed-peers</Typography>
+        <Typography color="text.primary">{seedPeer?.host_name}</Typography>
       </Breadcrumbs>
-      <Typography variant="h5" fontFamily="mabry-bold" sx={{ pb: '1rem' }}>
+      <Typography variant="h5" sx={{ pb: '1rem' }}>
         Seed-Peer
       </Typography>
       <Box className={styles.container}>

@@ -17,6 +17,7 @@ import EditTokens from '../components/developer/tokens/edit';
 import Preheats from '../components/job/preheats';
 import NewPreheat from '../components/job/preheats/new';
 import ShowPreheat from '../components/job/preheats/show';
+import Peers from '../components/Insight/peer';
 import { useState, useEffect } from 'react';
 import { getJwtPayload } from '../lib/utils';
 import { getUserRoles } from '../lib/api';
@@ -57,6 +58,7 @@ function Main() {
         <Route path="/jobs/preheats" element={<Preheats />} />
         <Route path="/jobs/preheats/new" element={<NewPreheat />} />
         <Route path="/jobs/preheats/:id" element={<ShowPreheat />} />
+        <Route path="/insight/peers" element={<Peers />} />
         <Route path="/users" element={isRoot ? <Users /> : <NotFound />} />
       </Route>
     </Routes>

@@ -39,3 +39,8 @@
   margin-right: 0.6rem;
   background: var(--button-color) !important;
 }
+
+.expandMenu {
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+}

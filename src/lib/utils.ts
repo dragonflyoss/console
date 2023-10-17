@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
 import { decode, JwtPayload } from 'jsonwebtoken';
+import { getPeersResponse } from './api';
 
 export const getDatetime = (time: string) => {
   const date = new Date(time);
@@ -44,4 +45,69 @@ export const formatDate = (time: string) => {
 export const getPaginatedList = (list: string | any[], currentPage: number, pageSize: number) => {
   const startIndex = (currentPage - 1) * pageSize;
   return list.slice(startIndex, startIndex + pageSize);
+};
+
+interface Header {
+  key: string;
+  label: string;
+}
+
+const getProperty = (obj: any, path: string): string => {
+  const properties = path.split('.');
+  let value = obj;
+
+  for (let i = 0; i < properties.length; i++) {
+    value = value?.[properties[i]];
+    if (properties[i] === 'cidrs' && Array.isArray(value)) {
+      return value.join('|');
+    }
+    if (typeof value === 'undefined') {
+      return '';
+    } else if (value === null) {
+      return 'null';
+    }
+  }
+
+  return value?.toString() || '';
+};
+
+const convertToCSV = (headers: Header[], objArray: getPeersResponse[]) => {
+  let title = '';
+
+  const headersMap = headers.reduce((acc, curr) => {
+    acc[curr.key] = curr;
+    return acc;
+  }, {} as Record<string, Header>);
+
+  title += headers.map((h) => h.label).join(',') + '\r\n';
+
+  for (let i = 0; i < objArray.length; i++) {
+    let line = '';
+    for (let index in headersMap) {
+      if (line !== '') line += ',';
+      const value = getProperty(objArray[i], index);
+      line += value;
+    }
+    title += line + '\r\n';
+  }
+
+  return title;
+};
+
+export const exportCSVFile = (headers: Header[], items: getPeersResponse[], fileTitle: string) => {
+  const csv = convertToCSV(headers, items);
+  const exportedFilenmae = fileTitle + '.csv' || 'export.csv';
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+
+    link.setAttribute('href', url);
+    link.setAttribute('download', exportedFilenmae);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 };

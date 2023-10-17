@@ -192,11 +192,11 @@ export default function Preheats() {
         </Alert>
       </Snackbar>
       <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
-        <Typography>jobs</Typography>
+        <Typography color="inherit">jobs</Typography>
         <Typography color="text.primary">preheats</Typography>
       </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '2rem' }}>
-        <Typography variant="h5">Preheat</Typography>
+        <Typography variant="h5">Preheats</Typography>
         <Button
           size="small"
           sx={{

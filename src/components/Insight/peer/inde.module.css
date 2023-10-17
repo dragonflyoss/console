@@ -1,0 +1,79 @@
+.navigationContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.navigationTitle {
+  padding-bottom: 1rem;
+}
+
+.navigationIcon {
+  width: 4.4rem;
+  height: 4.4rem;
+}
+
+.dashboard {
+  display: flex;
+  align-items: stretch;
+}
+
+.barContainer {
+  width: 67%;
+  padding: 1rem;
+}
+
+.barTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 1.2rem 0.2rem;
+}
+
+.doughnutTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 1.2rem 0.2rem;
+}
+
+.doughnutContainer {
+  margin-left: 1rem;
+  width: 33%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.activeContainer {
+  display: flex;
+  align-items: flex-end;
+}
+
+.activeIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: 0.6rem;
+}
+
+.activeContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.linearProgress {
+  width: 100%;
+  color: var(--description-color);
+}
+
+.descriptionIcon {
+  width: 1.2rem !important ;
+  height: 1.2rem !important;
+  color: rgb(188, 188, 188);
+}
+
+.descriptionIcon:hover {
+  color: var(--description-color);
+}

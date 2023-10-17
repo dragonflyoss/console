@@ -128,6 +128,9 @@ export default function ShowCluster() {
         main: '#2E8F79',
       },
     },
+    typography: {
+      fontFamily: 'mabry-light,sans-serif',
+    },
   });
 
   useEffect(() => {
@@ -433,9 +436,7 @@ export default function ShowCluster() {
         <RouterLink underline="hover" component={Link} color="inherit" to={`/clusters`}>
           clusters
         </RouterLink>
-        <Typography color="text.primary" fontFamily="mabry-bold">
-          {cluster?.name}
-        </Typography>
+        <Typography color="text.primary">{cluster?.name}</Typography>
       </Breadcrumbs>
       <Box className={styles.container}>
         <Typography variant="h5">Cluster</Typography>

@@ -83,8 +83,8 @@ export default function Peer() {
   const [gitCommitActive, setGitCommitActive] = useState(0);
   const [gitVersionCount, setGitVersionCount] = useState(0);
   const [gitCommitCount, setGitCommitCount] = useState(0);
-  const [selectedClusterValue, setSelectedClusterValue] = useState(['']);
-  const [selectedGitVersionValue, setSelectedGitVersionValue] = useState(['']);
+  const [selectedCluster, setSelectedCluster] = useState(['']);
+  const [selectedGitVersions, setSelectedGitVersions] = useState(['']);
   const [selectedGitVersion, setSelectedGitVersion] = useState<string>('All');
   const [selectedGitCommit, setSelectedGitCommit] = useState<string>('All');
   const [selectedGitCommitByVersion, setSelectedGitGitCommitByVersion] = useState<string>('All');
@@ -102,27 +102,16 @@ export default function Peer() {
       try {
         setIsLoading(true);
         const peer = await getPeers({ page: 1, per_page: MAX_PAGE_SIZE });
-        const clusterValue = Array.from(new Set(peer.map((item) => item.scheduler_cluster.name)));
+        const clusterName = Array.from(new Set(peer.map((item) => item.scheduler_cluster.name)));
 
         setPeer(peer);
-        setSelectedClusterValue(clusterValue);
+        setSelectedCluster(clusterName);
 
         const gitVersionCount = new Set(peer.map((item) => item.git_version)).size;
         const gitCommitCount = new Set(peer.map((item) => item.git_commit)).size;
 
         setGitVersionCount(gitVersionCount);
         setGitCommitCount(gitCommitCount);
-
-        const clusterNameCountMap: { [name: string]: number } = {};
-
-        peer.forEach((obj) => {
-          const clusterName = obj.scheduler_cluster.name;
-          if (clusterNameCountMap[clusterName]) {
-            clusterNameCountMap[clusterName]++;
-          } else {
-            clusterNameCountMap[clusterName] = 1;
-          }
-        });
 
         const cluster = Object.entries(
           peer.reduce<{ [key: string]: number }>((acc, curr) => {
@@ -229,7 +218,7 @@ export default function Peer() {
         ? peer.filter((item) => item.scheduler_cluster.name === selectedGitCommit)
         : peer;
 
-      const gitVersionValue = Array.from(new Set(filteredByCluster.map((item) => item.git_version)));
+      const gitVersion = Array.from(new Set(filteredByCluster.map((item) => item.git_version)));
 
       const gitCommit = Object.entries(
         peer.reduce<{ [key: string]: number }>((acc, curr) => {
@@ -246,14 +235,14 @@ export default function Peer() {
       const active = (peer.filter((item) => item.state === 'active').length / peer.length) * 100;
 
       setGitCommit(gitCommit);
-      setSelectedGitVersionValue(gitVersionValue);
+      setSelectedGitVersions(gitVersion);
       setGitCommitActive(Number(active.toFixed(2)));
     } else if (selectedGitCommit === 'All' || selectedGitCommitByVersion === 'All') {
       const filteredByCluster = selectedGitCommit
         ? peer.filter((item) => item.scheduler_cluster.name === selectedGitCommit)
         : peer;
 
-      const gitVersionValue = Array.from(new Set(filteredByCluster.map((item) => item.git_version)));
+      const gitVersion = Array.from(new Set(filteredByCluster.map((item) => item.git_version)));
 
       const gitCommit = Object.entries(
         filteredByCluster.reduce<{ [key: string]: number }>((acc, curr) => {
@@ -271,7 +260,7 @@ export default function Peer() {
         (filteredByCluster.filter((item) => item.state === 'active').length / filteredByCluster.length) * 100;
 
       setGitCommit(gitCommit);
-      setSelectedGitVersionValue(gitVersionValue);
+      setSelectedGitVersions(gitVersion);
       setGitCommitActive(Number(active.toFixed(2)));
     } else {
       const filteredByCluster = selectedGitCommit
@@ -282,9 +271,9 @@ export default function Peer() {
         ? filteredByCluster.filter((item) => item.git_version === selectedGitCommitByVersion)
         : filteredByCluster;
 
-      const gitVersionValue = Array.from(new Set(filteredByCluster.map((item) => item.git_version)));
+      const gitVersion = Array.from(new Set(filteredByCluster.map((item) => item.git_version)));
 
-      setSelectedGitVersionValue(gitVersionValue);
+      setSelectedGitVersions(gitVersion);
 
       const gitCommit = Object.entries(
         filteredByVersion.reduce<{ [key: string]: number }>((acc, curr) => {
@@ -311,18 +300,18 @@ export default function Peer() {
     const filteredByCluster = exportSelectedCluster
       ? peer.filter((item) => item.scheduler_cluster.name === exportSelectedCluster)
       : peer;
-    const gitVersionValue = Array.from(new Set(filteredByCluster.map((item) => item.git_version)));
+    const gitVersion = Array.from(new Set(filteredByCluster.map((item) => item.git_version)));
 
     setExportCluster(filteredByCluster);
-    setExportSelectedGitVersion(gitVersionValue);
+    setExportSelectedGitVersion(gitVersion);
 
     const filteredByVersion = exportSelectedVersion
       ? filteredByCluster.filter((item) => item.git_version === exportSelectedVersion)
       : filteredByCluster;
-    const gitCommitValue = Array.from(new Set(filteredByVersion.map((item) => item.git_commit)));
+    const gitCommit = Array.from(new Set(filteredByVersion.map((item) => item.git_commit)));
 
     setExportGitVersion(filteredByVersion);
-    setExportSelectedGitCommit(gitCommitValue);
+    setExportSelectedGitCommit(gitCommit);
 
     const filteredByCommit = exportSelectedCommit
       ? filteredByVersion.filter((item) => item.git_commit === exportSelectedCommit)
@@ -751,7 +740,7 @@ export default function Peer() {
                   <MenuItem key="All" value="All">
                     All
                   </MenuItem>
-                  {selectedClusterValue.map((item) => (
+                  {selectedCluster.map((item) => (
                     <MenuItem key={item} value={item}>
                       {item}
                     </MenuItem>
@@ -853,7 +842,7 @@ export default function Peer() {
                     <MenuItem key="All" value="All">
                       All
                     </MenuItem>
-                    {selectedClusterValue.map((item) => (
+                    {selectedCluster.map((item) => (
                       <MenuItem key={item} value={item}>
                         {item}
                       </MenuItem>
@@ -877,7 +866,7 @@ export default function Peer() {
                     <MenuItem key="All" value="All">
                       All
                     </MenuItem>
-                    {selectedGitVersionValue.map((item) => (
+                    {selectedGitVersions.map((item) => (
                       <MenuItem key={item} value={item}>
                         {item}
                       </MenuItem>
@@ -977,7 +966,7 @@ export default function Peer() {
                   <MenuItem key="All" value="All">
                     All
                   </MenuItem>
-                  {selectedClusterValue.map((item) => (
+                  {selectedCluster.map((item) => (
                     <MenuItem key={item} value={item}>
                       {item}
                     </MenuItem>

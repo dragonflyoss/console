@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import { decode, JwtPayload } from 'jsonwebtoken';
 import { getPeersResponse } from './api';
+import _ from 'lodash';
 
 export const getDatetime = (time: string) => {
   const date = new Date(time);
@@ -53,19 +54,18 @@ interface Header {
 }
 
 const getProperty = (obj: any, path: string): string => {
-  const properties = path.split('.');
-  let value = obj;
+  const value = _.get(obj, path);
 
-  for (let i = 0; i < properties.length; i++) {
-    value = value?.[properties[i]];
-    if (properties[i] === 'cidrs' && Array.isArray(value)) {
-      return value.join('|');
-    }
-    if (typeof value === 'undefined') {
-      return '';
-    } else if (value === null) {
-      return 'null';
-    }
+  if (Array.isArray(value)) {
+    return value.join('|');
+  }
+
+  if (typeof value === 'undefined') {
+    return '';
+  }
+
+  if (value === null) {
+    return 'null';
   }
 
   return value?.toString() || '';
@@ -85,7 +85,9 @@ const convertToCSV = (headers: Header[], objArray: getPeersResponse[]) => {
     let line = '';
     for (let index in headersMap) {
       if (line !== '') line += ',';
+
       const value = getProperty(objArray[i], index);
+
       line += value;
     }
     title += line + '\r\n';

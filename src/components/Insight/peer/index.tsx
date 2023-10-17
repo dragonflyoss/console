@@ -102,10 +102,10 @@ export default function Peer() {
       try {
         setIsLoading(true);
         const peer = await getPeers({ page: 1, per_page: MAX_PAGE_SIZE });
-        const clusterName = Array.from(new Set(peer.map((item) => item.scheduler_cluster.name)));
+        const clusterNames = Array.from(new Set(peer.map((item) => item.scheduler_cluster.name)));
 
         setPeer(peer);
-        setSelectedCluster(clusterName);
+        setSelectedCluster(clusterNames);
 
         const gitVersionCount = new Set(peer.map((item) => item.git_version)).size;
         const gitCommitCount = new Set(peer.map((item) => item.git_commit)).size;
@@ -439,7 +439,7 @@ export default function Peer() {
     ],
   };
 
-  const ExportCsv = async () => {
+  const ExportCSV = async () => {
     setLoadingButton(true);
 
     const headers = [
@@ -1077,7 +1077,7 @@ export default function Peer() {
                 },
                 width: '8rem',
               }}
-              onClick={ExportCsv}
+              onClick={ExportCSV}
             >
               Save
             </LoadingButton>

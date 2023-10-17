@@ -53,24 +53,6 @@ interface Header {
   label: string;
 }
 
-const getProperty = (obj: any, path: string): string => {
-  const value = _.get(obj, path);
-
-  if (Array.isArray(value)) {
-    return value.join('|');
-  }
-
-  if (typeof value === 'undefined') {
-    return '';
-  }
-
-  if (value === null) {
-    return 'null';
-  }
-
-  return value?.toString() || '';
-};
-
 const convertToCSV = (headers: Header[], objArray: getPeersResponse[]) => {
   let title = '';
 
@@ -85,10 +67,17 @@ const convertToCSV = (headers: Header[], objArray: getPeersResponse[]) => {
     let line = '';
     for (let index in headersMap) {
       if (line !== '') line += ',';
+      const value = _.get(objArray[i], index);
 
-      const value = getProperty(objArray[i], index);
-
-      line += value;
+      if (Array.isArray(value)) {
+        line += value.join('|');
+      } else if (typeof value === 'undefined') {
+        line += '';
+      } else if (value === null) {
+        line += 'null';
+      } else {
+        line += value.toString() || '';
+      }
     }
     title += line + '\r\n';
   }
@@ -97,9 +86,9 @@ const convertToCSV = (headers: Header[], objArray: getPeersResponse[]) => {
 };
 
 export const exportCSVFile = (headers: Header[], items: getPeersResponse[], fileTitle: string) => {
-  const csv = convertToCSV(headers, items);
-  const exportedFilenmae = fileTitle + '.csv' || 'export.csv';
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const CSV = convertToCSV(headers, items);
+  const exportedFilenmae = fileTitle + '.CSV' || 'export.CSV';
+  const blob = new Blob([CSV], { type: 'text/CSV;charset=utf-8;' });
   const link = document.createElement('a');
 
   if (link.download !== undefined) {

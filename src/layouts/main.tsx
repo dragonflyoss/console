@@ -17,7 +17,7 @@ import EditTokens from '../components/developer/tokens/edit';
 import Preheats from '../components/job/preheats';
 import NewPreheat from '../components/job/preheats/new';
 import ShowPreheat from '../components/job/preheats/show';
-import Peers from '../components/Insight/peer';
+import Peers from '../components/insight/peer';
 import { useState, useEffect } from 'react';
 import { getJwtPayload } from '../lib/utils';
 import { getUserRoles } from '../lib/api';

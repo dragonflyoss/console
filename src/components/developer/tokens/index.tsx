@@ -18,9 +18,9 @@ import {
   ThemeProvider,
   createTheme,
 } from '@mui/material';
-import { useState, useEffect, useContext } from 'react';
-import { getTokens, deleteTokens } from '../../../lib/api';
-import { formatDate } from '../../../lib/utils';
+import { useState, useEffect, useContext, useMemo } from 'react';
+import { getTokens, deleteTokens, getTokensResponse } from '../../../lib/api';
+import { formatDate, getPaginatedList } from '../../../lib/utils';
 import { useCopyToClipboard } from 'react-use';
 import { LoadingButton } from '@mui/lab';
 import { Link, useNavigate } from 'react-router-dom';
@@ -28,7 +28,7 @@ import { MyContext } from '../../menu/index';
 import AddIcon from '@mui/icons-material/Add';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { DEFAULT_PAGE_SIZE } from '../../../lib/constants';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
 
 export default function PersonalAccessTokens() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -44,12 +44,21 @@ export default function PersonalAccessTokens() {
   const [showCopyIcon, setShowCopyIcon] = useState(false);
   const [newToken, setNewToken] = useState('');
   const [, setCopyToClipboard] = useCopyToClipboard();
-  const [tokens, setTokens] = useState([
-    { name: '', id: 0, scopes: [''], token: '', created_at: '', expired_at: '', user: { name: '' } },
-  ]);
-
+  const [token, setToken] = useState<getTokensResponse[]>([]);
+  const [allTokens, setAllTokens] = useState<getTokensResponse[]>([]);
   const navigate = useNavigate();
   const user = useContext(MyContext);
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#1C293A',
+      },
+    },
+    typography: {
+      fontFamily: 'mabry-light,sans-serif',
+    },
+  });
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -64,16 +73,14 @@ export default function PersonalAccessTokens() {
     (async function () {
       try {
         if (user.name === 'root') {
-          const token = await getTokens({ page: tokensPage, per_page: DEFAULT_PAGE_SIZE });
+          const token = await getTokens({ page: 1, per_page: MAX_PAGE_SIZE });
 
-          setTokens(token.data);
-          setTokensTotalPages(token.total_page || 1);
+          setToken(token);
           setIsLoading(false);
         } else if (user.name !== '') {
-          const token = await getTokens({ user_id: String(user.id), page: tokensPage, per_page: DEFAULT_PAGE_SIZE });
+          const token = await getTokens({ user_id: String(user.id), page: 1, per_page: MAX_PAGE_SIZE });
 
-          setTokens(token.data);
-          setTokensTotalPages(token.total_page || 1);
+          setToken(token);
           setIsLoading(false);
         }
       } catch (error) {
@@ -84,18 +91,21 @@ export default function PersonalAccessTokens() {
         }
       }
     })();
-  }, [user, tokensPage]);
+  }, [user]);
 
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#1C293A',
-      },
-    },
-    typography: {
-      fontFamily: 'mabry-light,sans-serif',
-    },
-  });
+  useMemo(() => {
+    token.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+    const totalPage = Math.ceil(token.length / DEFAULT_PAGE_SIZE);
+    const currentPageData = getPaginatedList(token, tokensPage, DEFAULT_PAGE_SIZE);
+
+    if (currentPageData.length === 0 && tokensPage > 1) {
+      setTokensPage(tokensPage - 1);
+    }
+
+    setTokensTotalPages(totalPage || 1);
+    setAllTokens(currentPageData);
+  }, [token, tokensPage]);
 
   const handleDeleteClose = async (row: any) => {
     setOpenDeletToken(true);
@@ -112,18 +122,14 @@ export default function PersonalAccessTokens() {
       setOpenDeletToken(false);
 
       if (user.name === 'root') {
-        const token = await getTokens({ page: tokensPage, per_page: DEFAULT_PAGE_SIZE });
+        const token = await getTokens({ page: 1, per_page: DEFAULT_PAGE_SIZE });
 
-        setTokensTotalPages(token.total_page || 1);
-
-        token.data.length === 0 && tokensPage > 1 ? setTokensPage(tokensPage - 1) : setTokens(token.data);
+        setToken(token);
         setIsLoading(false);
       } else if (user.name !== '') {
-        const token = await getTokens({ user_id: String(user.id), page: tokensPage, per_page: DEFAULT_PAGE_SIZE });
+        const token = await getTokens({ user_id: String(user.id), page: 1, per_page: DEFAULT_PAGE_SIZE });
 
-        setTokensTotalPages(token.total_page || 1);
-
-        token.data.length === 0 && tokensPage > 1 ? setTokensPage(tokensPage - 1) : setTokens(token.data);
+        setToken(token);
         setIsLoading(false);
       }
     } catch (error) {
@@ -249,7 +255,7 @@ export default function PersonalAccessTokens() {
       ) : (
         <></>
       )}
-      {tokens.length === 0 ? (
+      {allTokens.length === 0 ? (
         <Paper
           variant="outlined"
           sx={{ height: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -259,9 +265,9 @@ export default function PersonalAccessTokens() {
       ) : (
         <>
           <Paper variant="outlined">
-            {Array.isArray(tokens) &&
-              tokens.map((item, index) => {
-                return index !== tokens.length - 1 ? (
+            {Array.isArray(allTokens) &&
+              allTokens.map((item, index) => {
+                return index !== allTokens.length - 1 ? (
                   <Box key={item.id}>
                     <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Box>

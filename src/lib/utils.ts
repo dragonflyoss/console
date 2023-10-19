@@ -43,7 +43,7 @@ export const formatDate = (time: string) => {
   return `${day}, ${month} ${date.getDate()} ${year}`;
 };
 
-export const getPaginatedList = (list: string | any[], currentPage: number, pageSize: number) => {
+export const getPaginatedList = (list: any[], currentPage: number, pageSize: number) => {
   const startIndex = (currentPage - 1) * pageSize;
   return list.slice(startIndex, startIndex + pageSize);
 };

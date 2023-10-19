@@ -349,7 +349,7 @@ interface getSchedulerParmas {
   host_name?: string;
 }
 
-interface schedulersResponse {
+export interface getSchedulersResponse {
   id: number;
   host_name: string;
   ip: string;
@@ -363,23 +363,13 @@ interface schedulersResponse {
   updated_at: string;
 }
 
-interface getSchedulersResponse {
-  data: schedulersResponse[];
-  total_page?: number;
-}
-
-export async function getSchedulers(params?: getSchedulerParmas): Promise<getSchedulersResponse> {
+export async function getSchedulers(params?: getSchedulerParmas): Promise<getSchedulersResponse[]> {
   const url = params
     ? new URL(`/api/v1/schedulers?${queryString.stringify(params)}`, API_URL)
     : new URL('/api/v1/schedulers', API_URL);
 
   const response = await get(url);
-  const data = await response.json();
-  const linkHeader = response.headers.get('link');
-  const links = parseLinkHeader(linkHeader || null);
-  const totalPage = Number(links?.last?.page);
-  const responses = { data: data, total_page: totalPage };
-  return responses;
+  return await response.json();
 }
 
 interface getSchedulerResponse {
@@ -414,7 +404,7 @@ interface getSeedPeersParmas {
   host_name?: string;
 }
 
-interface seedPeersResponse {
+export interface getSeedPeersResponse {
   id: number;
   host_name: string;
   ip: string;
@@ -430,23 +420,13 @@ interface seedPeersResponse {
   seed_peer_cluster_id: number;
 }
 
-interface getSeedPeersResponse {
-  data: seedPeersResponse[];
-  total_page?: number;
-}
-
-export async function getSeedPeers(params?: getSeedPeersParmas): Promise<getSeedPeersResponse> {
+export async function getSeedPeers(params?: getSeedPeersParmas): Promise<getSeedPeersResponse[]> {
   const url = params
     ? new URL(`/api/v1/seed-peers?${queryString.stringify(params)}`, API_URL)
     : new URL('/api/v1/seed-peers', API_URL);
 
   const response = await get(url);
-  const data = await response.json();
-  const linkHeader = response.headers.get('link');
-  const links = parseLinkHeader(linkHeader || null);
-  const totalPage = Number(links?.last?.page);
-  const responses = { data: data, total_page: totalPage };
-  return responses;
+  return await response.json();
 }
 
 interface getSeedPeerResponse {

@@ -27,8 +27,17 @@ import {
   Stack,
   Divider,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { getSchedulers, getSeedPeers, getCluster, deleteCluster, deleteScheduler, deleteSeedPeer } from '../../lib/api';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  getSchedulers,
+  getSeedPeers,
+  getCluster,
+  deleteCluster,
+  deleteScheduler,
+  deleteSeedPeer,
+  getSchedulersResponse,
+  getSeedPeersResponse,
+} from '../../lib/api';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';
@@ -41,6 +50,7 @@ import {
   DEFAULT_SCHEDULER_TABLE_PAGE_SIZE,
   DEFAULT_SEED_PEER_TABLE_PAGE_SIZE,
 } from '../../lib/constants';
+import { getPaginatedList } from '../../lib/utils';
 
 export default function ShowCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -63,8 +73,8 @@ export default function ShowCluster() {
   const [seedPeerTotalPages, setSeedPeerTotalPages] = useState<number>(1);
   const [searchSchedulers, setSearchSchedulers] = useState('');
   const [searchSeedPeers, setSearchSeedPeer] = useState('');
-  const [scheduler, setScheduler] = useState([{ host_name: '' }]);
-  const [seedPeer, setSeedPeer] = useState([{ host_name: '' }]);
+  const [scheduler, setScheduler] = useState<getSchedulersResponse[]>([]);
+  const [seedPeer, setSeedPeer] = useState<getSeedPeersResponse[]>([]);
   const [cluster, setCluster] = useState({
     id: 0,
     name: '',
@@ -91,30 +101,8 @@ export default function ShowCluster() {
     updated_at: '',
     is_default: true,
   });
-  const [allSchedulers, setAllSchedlers] = useState([
-    {
-      id: 0,
-      host_name: '',
-      idc: '',
-      location: '',
-      ip: '',
-      port: '',
-      state: '',
-      features: [''],
-    },
-  ]);
-  const [allseedPeers, setAllSeedPeers] = useState([
-    {
-      id: 0,
-      host_name: '',
-      download_port: '',
-      object_storage_port: '',
-      ip: '',
-      port: '',
-      state: '',
-      type: '',
-    },
-  ]);
+  const [allSchedulers, setAllSchedlers] = useState<getSchedulersResponse[]>([]);
+  const [allseedPeers, setAllSeedPeers] = useState<getSeedPeersResponse[]>([]);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -137,10 +125,36 @@ export default function ShowCluster() {
     (async function () {
       try {
         setInformationIsLoading(true);
+        setSeedPeerTableIsLoading(true);
+        setSchedulerTableIsLoading(true);
 
         if (typeof params.id === 'string') {
           const cluster = await getCluster(params.id);
+
           setCluster(cluster);
+
+          if (cluster.seed_peer_cluster_id !== 0) {
+            const seedPeer = await getSeedPeers({
+              seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
+              page: 1,
+              per_page: MAX_PAGE_SIZE,
+            });
+
+            setSeedPeer(seedPeer);
+          }
+
+          if (cluster.scheduler_cluster_id !== 0) {
+            const scheduler = await getSchedulers({
+              scheduler_cluster_id: String(cluster.scheduler_cluster_id),
+              page: 1,
+              per_page: MAX_PAGE_SIZE,
+            });
+
+            setScheduler(scheduler);
+          }
+
+          setSchedulerTableIsLoading(false);
+          setSeedPeerTableIsLoading(false);
           setInformationIsLoading(false);
         }
       } catch (error) {
@@ -153,73 +167,52 @@ export default function ShowCluster() {
     })();
   }, [params.id]);
 
-  useEffect(() => {
-    (async function () {
-      try {
-        setSchedulerTableIsLoading(true);
-
-        if (cluster.scheduler_cluster_id !== 0) {
-          const [scheduler, schedulers] = await Promise.all([
-            getSchedulers({
-              scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-              page: 1,
-              per_page: MAX_PAGE_SIZE,
-            }),
-            getSchedulers({
-              scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-              page: schedulerPage,
-              per_page: DEFAULT_SCHEDULER_TABLE_PAGE_SIZE,
-            }),
-          ]);
-
-          setScheduler(scheduler.data);
-          setAllSchedlers(schedulers.data);
-          setSchedulerTotalPages(schedulers.total_page || 1);
-          setSchedulerTableIsLoading(false);
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          setErrorMessage(true);
-          setErrorMessageText(error.message);
-          setSchedulerTableIsLoading(false);
-        }
+  useMemo(() => {
+    const totalPage = Math.ceil(scheduler.length / DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
+    scheduler.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    scheduler.sort((a, b) => {
+      if (a.state < b.state) {
+        return -1;
+      } else if (a.state > b.state) {
+        return 1;
+      } else {
+        return 0;
       }
-    })();
-  }, [cluster.scheduler_cluster_id, schedulerPage]);
+    });
 
-  useEffect(() => {
-    (async function () {
-      try {
-        setSeedPeerTableIsLoading(true);
+    const currentPageData = getPaginatedList(scheduler, schedulerPage, DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
 
-        if (cluster.seed_peer_cluster_id !== 0) {
-          const [seedPeer, seedPeers] = await Promise.all([
-            getSeedPeers({
-              seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
-              page: 1,
-              per_page: MAX_PAGE_SIZE,
-            }),
-            getSeedPeers({
-              seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
-              page: seedPeerPage,
-              per_page: DEFAULT_SEED_PEER_TABLE_PAGE_SIZE,
-            }),
-          ]);
+    if (currentPageData.length === 0 && schedulerPage > 1) {
+      setSchedulerPage(schedulerPage - 1);
+    }
 
-          setSeedPeer(seedPeer.data);
-          setAllSeedPeers(seedPeers.data);
-          setSeedPeerTotalPages(seedPeers.total_page || 1);
-          setSeedPeerTableIsLoading(false);
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          setErrorMessage(true);
-          setErrorMessageText(error.message);
-          setSeedPeerTableIsLoading(false);
-        }
+    setSchedulerTotalPages(totalPage);
+    setAllSchedlers(currentPageData);
+  }, [scheduler, schedulerPage]);
+
+  useMemo(() => {
+    const totalPage = Math.ceil(seedPeer.length / DEFAULT_SEED_PEER_TABLE_PAGE_SIZE);
+
+    seedPeer.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    seedPeer.sort((a, b) => {
+      if (a.state < b.state) {
+        return -1;
+      } else if (a.state > b.state) {
+        return 1;
+      } else {
+        return 0;
       }
-    })();
-  }, [cluster.seed_peer_cluster_id, seedPeerPage]);
+    });
+
+    const currentPageData = getPaginatedList(seedPeer, seedPeerPage, DEFAULT_SEED_PEER_TABLE_PAGE_SIZE);
+
+    if (currentPageData?.length === 0 && seedPeerPage > 1) {
+      setSeedPeerPage(seedPeerPage - 1);
+    }
+
+    setSeedPeerTotalPages(totalPage);
+    setAllSeedPeers(currentPageData);
+  }, [seedPeer, seedPeerPage]);
 
   const numberOfActiveSchedulers =
     Array.isArray(scheduler) && scheduler?.filter((item: any) => item?.state === 'active').length;
@@ -236,7 +229,10 @@ export default function ShowCluster() {
     setSuccessMessage(false);
   };
 
-  const handleDeleteClose = () => {
+  const handleDeleteClose = (_event: any, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
     setOpenDeleteCluster(false);
     setOpenDeleteScheduler(false);
     setSchedulerSelectedRow(null);
@@ -277,28 +273,16 @@ export default function ShowCluster() {
       await deleteScheduler(schedulerSelectedID);
       setSuccessMessage(true);
       setOpenDeleteScheduler(false);
-      setDeleteLoadingButton(false);
 
       if (cluster.scheduler_cluster_id !== 0) {
-        const [scheduler, schedulers] = await Promise.all([
-          getSchedulers({
-            scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-            page: 1,
-            per_page: MAX_PAGE_SIZE,
-          }),
-          getSchedulers({
-            scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-            page: schedulerPage,
-            per_page: DEFAULT_SCHEDULER_TABLE_PAGE_SIZE,
-          }),
-        ]);
+        const scheduler = await getSchedulers({
+          scheduler_cluster_id: String(cluster.scheduler_cluster_id),
+          page: 1,
+          per_page: MAX_PAGE_SIZE,
+        });
 
-        setScheduler(scheduler.data);
-        setSchedulerTotalPages(schedulers.total_page || 1);
-
-        schedulers.data.length === 0 && schedulerPage > 1
-          ? setSchedulerPage(schedulerPage - 1)
-          : setAllSchedlers(schedulers.data);
+        setScheduler(scheduler);
+        setDeleteLoadingButton(false);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -322,28 +306,16 @@ export default function ShowCluster() {
       await deleteSeedPeer(seedPeerSelectedID);
       setSuccessMessage(true);
       setOpenDeleteSeedPeer(false);
-      setDeleteLoadingButton(false);
 
       if (cluster.seed_peer_cluster_id !== 0) {
-        const [seedPeer, seedPeers] = await Promise.all([
-          getSeedPeers({
-            seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
-            page: 1,
-            per_page: MAX_PAGE_SIZE,
-          }),
-          getSeedPeers({
-            seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
-            page: seedPeerPage,
-            per_page: DEFAULT_SEED_PEER_TABLE_PAGE_SIZE,
-          }),
-        ]);
+        const seedPeer = await getSeedPeers({
+          seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
+          page: 1,
+          per_page: MAX_PAGE_SIZE,
+        });
 
-        setSeedPeer(seedPeer.data);
-        setSeedPeerTotalPages(seedPeers.total_page || 1);
-
-        seedPeers?.data.length === 0 && seedPeerPage > 1
-          ? setSeedPeerPage(seedPeerPage - 1)
-          : setAllSeedPeers(seedPeers.data);
+        setSeedPeer(seedPeer);
+        setDeleteLoadingButton(false);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -372,15 +344,39 @@ export default function ShowCluster() {
 
   const searchScheduler = async () => {
     try {
-      const scheduler = await getSchedulers({
-        scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-        page: 1,
-        per_page: DEFAULT_SCHEDULER_TABLE_PAGE_SIZE,
-        host_name: searchSchedulers,
-      });
+      const schedulers = searchSchedulers
+        ? scheduler.filter((item) => {
+            return item.host_name === searchSchedulers;
+          })
+        : scheduler;
 
-      setAllSchedlers(scheduler.data);
-      setSchedulerTotalPages(scheduler.total_page || 1);
+      if (searchSchedulers) {
+        const totalPage = Math.ceil(schedulers.length / DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
+
+        setSchedulerTotalPages(totalPage);
+        setAllSchedlers(schedulers);
+      } else {
+        const totalPage = Math.ceil(scheduler.length / DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
+        scheduler.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        scheduler.sort((a, b) => {
+          if (a.state < b.state) {
+            return -1;
+          } else if (a.state > b.state) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+        const currentPageData = getPaginatedList(scheduler, schedulerPage, DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
+
+        if (currentPageData.length === 0 && schedulerPage > 1) {
+          setSchedulerPage(schedulerPage - 1);
+        }
+
+        setSchedulerPage(1);
+        setSchedulerTotalPages(totalPage);
+        setAllSchedlers(currentPageData);
+      }
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(true);
@@ -392,15 +388,39 @@ export default function ShowCluster() {
 
   const searchSeedPeer = async () => {
     try {
-      const seedPeer = await getSeedPeers({
-        seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
-        page: 1,
-        per_page: DEFAULT_SEED_PEER_TABLE_PAGE_SIZE,
-        host_name: searchSeedPeers,
-      });
+      const seedPeers = searchSeedPeers
+        ? seedPeer.filter((item) => {
+            return item.host_name === searchSeedPeers;
+          })
+        : seedPeer;
 
-      setAllSeedPeers(seedPeer.data);
-      setSeedPeerTotalPages(seedPeer.total_page || 1);
+      if (searchSeedPeers) {
+        const totalPage = Math.ceil(seedPeers.length / DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
+
+        setAllSeedPeers(seedPeers);
+        setSeedPeerTotalPages(totalPage || 1);
+      } else {
+        const totalPage = Math.ceil(seedPeers.length / DEFAULT_SEED_PEER_TABLE_PAGE_SIZE);
+        seedPeers.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        seedPeers.sort((a, b) => {
+          if (a.state < b.state) {
+            return -1;
+          } else if (a.state > b.state) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+        const currentPageData = getPaginatedList(seedPeer, seedPeerPage, DEFAULT_SEED_PEER_TABLE_PAGE_SIZE);
+
+        if (currentPageData?.length === 0 && seedPeerPage > 1) {
+          setSeedPeerPage(seedPeerPage - 1);
+        }
+
+        setSeedPeerPage(1);
+        setSeedPeerTotalPages(totalPage);
+        setAllSeedPeers(currentPageData);
+      }
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(true);
@@ -754,7 +774,7 @@ export default function ShowCluster() {
                                         borderRadius: '0%',
                                         background: 'var(--button-color)',
                                         color: '#FFFFFF',
-                                        mr: '0.4rem',
+                                        m: '0.4rem',
                                         borderColor: 'var(--button-color)',
                                         fontWeight: 'bold',
                                       }}

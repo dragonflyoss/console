@@ -89,8 +89,8 @@ export default function Clusters() {
         ]);
 
         setCluster(cluster.data);
-        setScheduler(scheduler.data);
-        setSeedPeer(seedPeer.data);
+        setScheduler(scheduler);
+        setSeedPeer(seedPeer);
         setTotalPages(allClusters.total_page || 1);
         setAllClusters(allClusters.data);
         setIsLoading(false);

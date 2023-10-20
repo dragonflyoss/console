@@ -569,7 +569,7 @@ interface getTokensParams {
   per_page?: number;
 }
 
-interface tokensResponse {
+export interface getTokensResponse {
   id: number;
   created_at: string;
   updated_at: string;
@@ -597,26 +597,16 @@ interface tokensResponse {
   };
 }
 
-interface getTokensResponse {
-  data: tokensResponse[];
-  total_page?: number;
-}
-
-export async function getTokens(params?: getTokensParams): Promise<getTokensResponse> {
+export async function getTokens(params?: getTokensParams): Promise<getTokensResponse[]> {
   const url = params
     ? new URL(`/api/v1/personal-access-tokens?${queryString.stringify(params)}`, API_URL)
     : new URL('/api/v1/personal-access-tokens', API_URL);
 
   const response = await get(url);
-  const data = await response.json();
-  const linkHeader = response.headers.get('link');
-  const links = parseLinkHeader(linkHeader || null);
-  const totalPage = Number(links?.last?.page);
-  const responses = { data: data, total_page: totalPage };
-  return responses;
+  return await response.json();
 }
 
-export async function getToken(id: string): Promise<tokensResponse> {
+export async function getToken(id: string): Promise<getTokensResponse> {
   const url = new URL(`/api/v1/personal-access-tokens/${id}`, API_URL);
   const response = await get(url);
   return await response.json();

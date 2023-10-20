@@ -34,16 +34,16 @@ import {
   ThemeProvider,
   createTheme,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole } from '../../lib/api';
 import { makeStyles } from '@mui/styles';
-import { getDatetime } from '../../lib/utils';
+import { getDatetime, getPaginatedList } from '../../lib/utils';
 import { LoadingButton } from '@mui/lab';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import styles from './index.module.css';
 import _ from 'lodash';
-import { ROLE_ROOT, ROLE_GUEST, DEFAULT_PAGE_SIZE } from '../../lib/constants';
+import { ROLE_ROOT, ROLE_GUEST, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../lib/constants';
 
 const useStyles = makeStyles((theme: any) => ({
   tableRow: {
@@ -86,6 +86,7 @@ export default function Users() {
   const [userPage, setUserPage] = useState(1);
   const [userTotalPages, setUserTotalPages] = useState<number>(1);
   const [users, setUsers] = useState([{ avatar: '', id: 0, email: '', name: '', state: '', location: '' }]);
+  const [allUsers, setAllUsers] = useState([{ avatar: '', id: 0, email: '', name: '', state: '', location: '' }]);
   const [user, setUser] = useState({
     id: 0,
     email: '',
@@ -101,14 +102,22 @@ export default function Users() {
 
   const classes = useStyles();
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#1C293A',
+      },
+    },
+  });
+
   useEffect(() => {
     (async function () {
       try {
         setIsLoading(true);
 
-        const user = await getUsers({ page: userPage, per_page: DEFAULT_PAGE_SIZE });
-        setUsers(user.data);
-        setUserTotalPages(user.total_page || 1);
+        const user = await getUsers({ page: 1, per_page: MAX_PAGE_SIZE });
+
+        setUsers(user);
         setIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
@@ -120,13 +129,13 @@ export default function Users() {
     })();
   }, [userPage]);
 
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#1C293A',
-      },
-    },
-  });
+  useMemo(() => {
+    const totalPage = Math.ceil(users.length / DEFAULT_PAGE_SIZE);
+    const currentPageData = getPaginatedList(users, userPage, DEFAULT_PAGE_SIZE);
+
+    setUserTotalPages(totalPage || 1);
+    setAllUsers(currentPageData);
+  }, [users, userPage]);
 
   const handleChange = async (row: any) => {
     try {
@@ -277,8 +286,8 @@ export default function Users() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.isArray(users) &&
-              users.map((item) => (
+            {Array.isArray(allUsers) &&
+              allUsers.map((item) => (
                 <TableRow
                   sx={{
                     '&.MuiTableRow-root': {

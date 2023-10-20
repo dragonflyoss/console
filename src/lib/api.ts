@@ -461,7 +461,7 @@ interface getUserParams {
   per_page?: number;
 }
 
-interface usersResponse {
+interface getUsersResponse {
   avatar: string;
   id: number;
   email: string;
@@ -470,23 +470,13 @@ interface usersResponse {
   location: string;
 }
 
-interface getUsersResponse {
-  data: usersResponse[];
-  total_page?: number;
-}
-
-export async function getUsers(params: getUserParams): Promise<getUsersResponse> {
+export async function getUsers(params: getUserParams): Promise<getUsersResponse[]> {
   const url = params
     ? new URL(`/api/v1/users?${queryString.stringify(params)}`, API_URL)
     : new URL('/api/v1/users', API_URL);
 
   const response = await get(url);
-  const data = await response.json();
-  const linkHeader = response.headers.get('link');
-  const links = parseLinkHeader(linkHeader || null);
-  const totalPage = Number(links?.last?.page);
-  const responses = { data: data, total_page: totalPage };
-  return responses;
+  return await response.json();
 }
 
 interface getUserResponse {

@@ -74,6 +74,8 @@ export default function ShowCluster() {
   const [searchSchedulers, setSearchSchedulers] = useState('');
   const [searchSeedPeers, setSearchSeedPeer] = useState('');
   const [scheduler, setScheduler] = useState<getSchedulersResponse[]>([]);
+  const [schedulerCount, setSchedulerCount] = useState<getSchedulersResponse[]>([]);
+  const [seedPeerCount, setSeedPeerCount] = useState<getSeedPeersResponse[]>([]);
   const [seedPeer, setSeedPeer] = useState<getSeedPeersResponse[]>([]);
   const [cluster, setCluster] = useState({
     id: 0,
@@ -141,6 +143,7 @@ export default function ShowCluster() {
             });
 
             setSeedPeer(seedPeer);
+            setSeedPeerCount(seedPeer);
           }
 
           if (cluster.scheduler_cluster_id !== 0) {
@@ -151,6 +154,7 @@ export default function ShowCluster() {
             });
 
             setScheduler(scheduler);
+            setSchedulerCount(scheduler);
           }
 
           setSchedulerTableIsLoading(false);
@@ -168,7 +172,6 @@ export default function ShowCluster() {
   }, [params.id]);
 
   useMemo(() => {
-    const totalPage = Math.ceil(scheduler.length / DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
     scheduler.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     scheduler.sort((a, b) => {
       if (a.state < b.state) {
@@ -179,7 +182,7 @@ export default function ShowCluster() {
         return 0;
       }
     });
-
+    const totalPage = Math.ceil(scheduler.length / DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
     const currentPageData = getPaginatedList(scheduler, schedulerPage, DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
 
     if (currentPageData.length === 0 && schedulerPage > 1) {
@@ -191,8 +194,6 @@ export default function ShowCluster() {
   }, [scheduler, schedulerPage]);
 
   useMemo(() => {
-    const totalPage = Math.ceil(seedPeer.length / DEFAULT_SEED_PEER_TABLE_PAGE_SIZE);
-
     seedPeer.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     seedPeer.sort((a, b) => {
       if (a.state < b.state) {
@@ -203,7 +204,7 @@ export default function ShowCluster() {
         return 0;
       }
     });
-
+    const totalPage = Math.ceil(seedPeer.length / DEFAULT_SEED_PEER_TABLE_PAGE_SIZE);
     const currentPageData = getPaginatedList(seedPeer, seedPeerPage, DEFAULT_SEED_PEER_TABLE_PAGE_SIZE);
 
     if (currentPageData?.length === 0 && seedPeerPage > 1) {
@@ -215,10 +216,10 @@ export default function ShowCluster() {
   }, [seedPeer, seedPeerPage]);
 
   const numberOfActiveSchedulers =
-    Array.isArray(scheduler) && scheduler?.filter((item: any) => item?.state === 'active').length;
+    Array.isArray(schedulerCount) && schedulerCount?.filter((item: any) => item?.state === 'active').length;
 
   const numberOfActiveSeedPeers =
-    Array.isArray(seedPeer) && seedPeer?.filter((item: any) => item?.state === 'active').length;
+    Array.isArray(seedPeerCount) && seedPeerCount?.filter((item: any) => item?.state === 'active').length;
 
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
@@ -282,6 +283,7 @@ export default function ShowCluster() {
         });
 
         setScheduler(scheduler);
+        setSchedulerCount(scheduler);
         setDeleteLoadingButton(false);
       }
     } catch (error) {
@@ -315,6 +317,7 @@ export default function ShowCluster() {
         });
 
         setSeedPeer(seedPeer);
+        setSeedPeerCount(seedPeer);
         setDeleteLoadingButton(false);
       }
     } catch (error) {
@@ -344,39 +347,24 @@ export default function ShowCluster() {
 
   const searchScheduler = async () => {
     try {
+      setSchedulerTableIsLoading(true);
+
       const schedulers = searchSchedulers
-        ? scheduler.filter((item) => {
-            return item.host_name === searchSchedulers;
+        ? await getSchedulers({
+            scheduler_cluster_id: String(cluster.scheduler_cluster_id),
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+            host_name: searchSchedulers,
           })
-        : scheduler;
+        : await getSchedulers({
+            scheduler_cluster_id: String(cluster.scheduler_cluster_id),
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+          });
 
-      if (searchSchedulers) {
-        const totalPage = Math.ceil(schedulers.length / DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
-
-        setSchedulerTotalPages(totalPage);
-        setAllSchedlers(schedulers);
-      } else {
-        const totalPage = Math.ceil(scheduler.length / DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
-        scheduler.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-        scheduler.sort((a, b) => {
-          if (a.state < b.state) {
-            return -1;
-          } else if (a.state > b.state) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-        const currentPageData = getPaginatedList(scheduler, schedulerPage, DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
-
-        if (currentPageData.length === 0 && schedulerPage > 1) {
-          setSchedulerPage(schedulerPage - 1);
-        }
-
-        setSchedulerPage(1);
-        setSchedulerTotalPages(totalPage);
-        setAllSchedlers(currentPageData);
-      }
+      setScheduler(schedulers);
+      setSchedulerPage(1);
+      setSchedulerTableIsLoading(false);
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(true);
@@ -388,39 +376,23 @@ export default function ShowCluster() {
 
   const searchSeedPeer = async () => {
     try {
+      setSeedPeerTableIsLoading(true);
       const seedPeers = searchSeedPeers
-        ? seedPeer.filter((item) => {
-            return item.host_name === searchSeedPeers;
+        ? await getSeedPeers({
+            seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+            host_name: searchSeedPeers,
           })
-        : seedPeer;
+        : await getSeedPeers({
+            seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+          });
 
-      if (searchSeedPeers) {
-        const totalPage = Math.ceil(seedPeers.length / DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
-
-        setAllSeedPeers(seedPeers);
-        setSeedPeerTotalPages(totalPage || 1);
-      } else {
-        const totalPage = Math.ceil(seedPeers.length / DEFAULT_SEED_PEER_TABLE_PAGE_SIZE);
-        seedPeers.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-        seedPeers.sort((a, b) => {
-          if (a.state < b.state) {
-            return -1;
-          } else if (a.state > b.state) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-        const currentPageData = getPaginatedList(seedPeer, seedPeerPage, DEFAULT_SEED_PEER_TABLE_PAGE_SIZE);
-
-        if (currentPageData?.length === 0 && seedPeerPage > 1) {
-          setSeedPeerPage(seedPeerPage - 1);
-        }
-
-        setSeedPeerPage(1);
-        setSeedPeerTotalPages(totalPage);
-        setAllSeedPeers(currentPageData);
-      }
+      setSeedPeer(seedPeers);
+      setSeedPeerPage(1);
+      setSeedPeerTableIsLoading(false);
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(true);
@@ -594,7 +566,7 @@ export default function ShowCluster() {
           <Chip
             size="small"
             icon={<Box component="img" src="/icons/cluster/total.svg" sx={{ width: '1.2rem', height: '1.2rem' }} />}
-            label={`Total: ${scheduler.length}`}
+            label={`Total: ${schedulerCount.length}`}
           />
         </Paper>
         <Paper
@@ -618,7 +590,7 @@ export default function ShowCluster() {
           <Chip
             size="small"
             icon={<Box component="img" src="/icons/cluster/total.svg" sx={{ width: '1.2rem', height: '1.2rem' }} />}
-            label={`Total: ${seedPeer.length}`}
+            label={`Total: ${seedPeerCount.length}`}
           />
         </Paper>
       </Box>
@@ -638,7 +610,7 @@ export default function ShowCluster() {
               onInputChange={(_event, newInputValue) => {
                 setSearchSchedulers(newInputValue);
               }}
-              options={scheduler.map((option) => option?.host_name)}
+              options={schedulerCount.map((option) => option?.host_name)}
               renderInput={(params) => <TextField {...params} label="Search" />}
             />
           </Stack>
@@ -916,7 +888,7 @@ export default function ShowCluster() {
               onInputChange={(_event, newInputValue) => {
                 setSearchSeedPeer(newInputValue);
               }}
-              options={seedPeer.map((option) => option.host_name)}
+              options={seedPeerCount.map((option) => option.host_name)}
               renderInput={(params) => <TextField {...params} label="Search" />}
             />
           </Stack>

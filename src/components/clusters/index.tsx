@@ -18,10 +18,10 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
-import { getSchedulers, getSeedPeers, getClusters } from '../../lib/api';
+import { getSchedulers, getSeedPeers, getClusters, getClustersResponse } from '../../lib/api';
 import styles from './index.module.css';
-import { useEffect, useState } from 'react';
-import { getDatetime } from '../../lib/utils';
+import { useEffect, useMemo, useState } from 'react';
+import { getDatetime, getPaginatedList } from '../../lib/utils';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
@@ -53,26 +53,14 @@ export default function Clusters() {
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [clusterIsLoading, setClusterIsLoading] = useState(true);
-  const [page, setPage] = useState(1);
+  const [clusterPage, setClusterPage] = useState(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [searchClusters, setSearchClusters] = useState('');
-  const [cluster, setCluster] = useState([{ name: '' }]);
+  const [clusterCount, setClusterCount] = useState<getClustersResponse[]>([]);
+  const [cluster, setCluster] = useState<getClustersResponse[]>([]);
   const [scheduler, setScheduler] = useState([{}]);
   const [seedPeer, setSeedPeer] = useState([{}]);
-  const [allClusters, setAllClusters] = useState([
-    {
-      id: 0,
-      name: '',
-      bio: '',
-      scopes: {
-        idc: '',
-        location: '',
-        cidrs: [''],
-      },
-      created_at: '',
-      is_default: false,
-    },
-  ]);
+  const [allClusters, setAllClusters] = useState<getClustersResponse[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -81,18 +69,16 @@ export default function Clusters() {
         setIsLoading(true);
         setClusterIsLoading(true);
 
-        const [cluster, scheduler, seedPeer, allClusters] = await Promise.all([
+        const [cluster, scheduler, seedPeer] = await Promise.all([
           getClusters({ page: 1, per_page: MAX_PAGE_SIZE }),
           getSchedulers({ page: 1, per_page: MAX_PAGE_SIZE }),
           getSeedPeers({ page: 1, per_page: MAX_PAGE_SIZE }),
-          getClusters({ page: page, per_page: DEFAULT_PAGE_SIZE }),
         ]);
 
-        setCluster(cluster.data);
+        setCluster(cluster);
         setScheduler(scheduler);
         setSeedPeer(seedPeer);
-        setTotalPages(allClusters.total_page || 1);
-        setAllClusters(allClusters.data);
+        setClusterCount(cluster);
         setIsLoading(false);
         setClusterIsLoading(false);
       } catch (error) {
@@ -103,10 +89,29 @@ export default function Clusters() {
         }
       }
     })();
-  }, [page]);
+  }, []);
+
+  useMemo(() => {
+    cluster.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+    cluster.sort((a, b) => {
+      if (a.is_default && !b.is_default) {
+        return -1;
+      } else if (!a.is_default && b.is_default) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
+    const totalPage = Math.ceil(cluster.length / DEFAULT_PAGE_SIZE);
+    const currentPageData = getPaginatedList(cluster, clusterPage, DEFAULT_PAGE_SIZE);
+
+    setTotalPages(totalPage);
+    setAllClusters(currentPageData);
+  }, [cluster, clusterPage]);
 
   const numberOfDefaultClusters =
-    Array.isArray(cluster) && cluster?.filter((item: any) => item?.is_default === true).length;
+    Array.isArray(clusterCount) && clusterCount?.filter((item: any) => item?.is_default === true).length;
 
   const numberOfActiveSchedulers =
     Array.isArray(scheduler) && scheduler?.filter((item: any) => item?.state === 'active').length;
@@ -117,9 +122,12 @@ export default function Clusters() {
   const searchCluster = async (event: any) => {
     try {
       setClusterIsLoading(true);
-      const cluster = await getClusters({ page: 1, per_page: DEFAULT_PAGE_SIZE, name: searchClusters });
-      setAllClusters(cluster.data);
-      setTotalPages(cluster.total_page || 1);
+      const cluster = searchClusters
+        ? await getClusters({ page: 1, per_page: MAX_PAGE_SIZE, name: searchClusters })
+        : await getClusters({ page: 1, per_page: MAX_PAGE_SIZE });
+
+      setCluster(cluster);
+      setClusterPage(1);
       setClusterIsLoading(false);
     } catch (error) {
       if (error instanceof Error) {
@@ -193,7 +201,7 @@ export default function Clusters() {
                 <Box marginLeft="0.6rem">
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : cluster?.length || ''}
+                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : clusterCount?.length || ''}
                     </Typography>
                     <span>number of clusters</span>
                   </Box>
@@ -292,7 +300,7 @@ export default function Clusters() {
               onInputChange={(_event, newInputValue) => {
                 setSearchClusters(newInputValue);
               }}
-              options={(Array.isArray(cluster) && cluster.map((option) => option?.name)) || ['']}
+              options={(Array.isArray(clusterCount) && clusterCount.map((option) => option?.name)) || ['']}
               renderInput={(params) => <TextField {...params} label="Search" />}
             />
           </Stack>
@@ -399,9 +407,9 @@ export default function Clusters() {
           <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
             <Pagination
               count={totalPages}
-              page={page}
+              page={clusterPage}
               onChange={(_event: any, newPage: number) => {
-                setPage(newPage);
+                setClusterPage(newPage);
               }}
               color="primary"
               size="small"

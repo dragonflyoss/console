@@ -24,7 +24,6 @@ import { formatDate, getPaginatedList } from '../../../lib/utils';
 import { useCopyToClipboard } from 'react-use';
 import { LoadingButton } from '@mui/lab';
 import { Link, useNavigate } from 'react-router-dom';
-import { MyContext } from '../../menu/index';
 import AddIcon from '@mui/icons-material/Add';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -47,7 +46,6 @@ export default function PersonalAccessTokens() {
   const [token, setToken] = useState<getTokensResponse[]>([]);
   const [allTokens, setAllTokens] = useState<getTokensResponse[]>([]);
   const navigate = useNavigate();
-  const user = useContext(MyContext);
 
   const theme = createTheme({
     palette: {
@@ -72,17 +70,10 @@ export default function PersonalAccessTokens() {
 
     (async function () {
       try {
-        if (user.name === 'root') {
-          const token = await getTokens({ page: 1, per_page: MAX_PAGE_SIZE });
+        const token = await getTokens({ page: 1, per_page: MAX_PAGE_SIZE });
 
-          setToken(token);
-          setIsLoading(false);
-        } else if (user.name !== '') {
-          const token = await getTokens({ user_id: String(user.id), page: 1, per_page: MAX_PAGE_SIZE });
-
-          setToken(token);
-          setIsLoading(false);
-        }
+        setToken(token);
+        setIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
@@ -91,7 +82,7 @@ export default function PersonalAccessTokens() {
         }
       }
     })();
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     token.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
@@ -121,17 +112,10 @@ export default function PersonalAccessTokens() {
       setSuccessMessage(true);
       setOpenDeletToken(false);
 
-      if (user.name === 'root') {
-        const token = await getTokens({ page: 1, per_page: DEFAULT_PAGE_SIZE });
+      const token = await getTokens({ page: 1, per_page: DEFAULT_PAGE_SIZE });
 
-        setToken(token);
-        setIsLoading(false);
-      } else if (user.name !== '') {
-        const token = await getTokens({ user_id: String(user.id), page: 1, per_page: DEFAULT_PAGE_SIZE });
-
-        setToken(token);
-        setIsLoading(false);
-      }
+      setToken(token);
+      setIsLoading(false);
     } catch (error) {
       if (error instanceof Error) {
         setDeleteLoadingButton(false);

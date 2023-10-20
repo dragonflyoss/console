@@ -17,13 +17,12 @@ import {
   FormGroup,
   InputLabel,
 } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { formatDate, getExpiredTime } from '../../../lib/utils';
 import { LoadingButton } from '@mui/lab';
 import { useNavigate } from 'react-router-dom';
 import { createTokens } from '../../../lib/api';
 import HelpIcon from '@mui/icons-material/Help';
-import { MyContext } from '../../menu/index';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
@@ -116,7 +115,6 @@ export default function CreateTokens() {
     },
   ];
 
-  const user = useContext(MyContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -158,7 +156,6 @@ export default function CreateTokens() {
       bio: bio.value,
       scopes: filteredScopes,
       expired_at: expiredTime,
-      user_id: user.id,
     };
 
     const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);

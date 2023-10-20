@@ -40,16 +40,6 @@ const Main = styled('div')(({ theme }) => ({
   },
 }));
 
-interface MyContextType {
-  name: string;
-  id: number;
-}
-
-export const MyContext = createContext<MyContextType>({
-  name: '',
-  id: 0,
-});
-
 export default function Layout(props: any) {
   const [role, setRole] = useState('');
   const [errorMessage, setErrorMessage] = useState(false);
@@ -207,209 +197,61 @@ export default function Layout(props: any) {
   };
 
   return (
-    <MyContext.Provider value={user}>
-      <Box>
-        <Backdrop
-          open={pageLoding}
-          sx={{
-            zIndex: (theme) => theme.zIndex.drawer + 1,
-            backgroundColor: 'rgba(0,0,0,0.3)',
-          }}
-        >
-          <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
-        </Backdrop>
-        <Snackbar
-          open={firstLogin}
-          autoHideDuration={60000}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          onClose={handleClose}
-          sx={{ alignItems: 'center' }}
-        >
-          <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
-            Please change the password in time for the first login!
-          </Alert>
-        </Snackbar>
-        <Snackbar
-          open={errorMessage}
-          autoHideDuration={3000}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        >
-          <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-            {errorMessageText}
-          </Alert>
-        </Snackbar>
-        {location.pathname === '/signin' || location.pathname === '/signup' ? (
-          <main>{props.children}</main>
-        ) : (
-          <Box className={styles.container}>
-            <CssBaseline />
-            <Box className={styles.navigationBarContainer}>
-              <Grid sx={{ pl: '1rem', pr: '1rem' }}>
-                <Box className={styles.title}>
-                  <picture>
-                    <Box component="img" className={styles.logo} src="/icons/cluster/logo.svg" />
-                  </picture>
-                  <Typography variant="h6" gutterBottom sx={{ fontFamily: 'mabry-bold' }}>
-                    Dragonfly
-                  </Typography>
-                </Box>
-                <List component="nav" aria-label="main mailbox folders">
-                  {role === ROLE_ROOT ? (
-                    rootMenu.map((items) =>
-                      items.text === 'Developer' ? (
-                        <Box key={items.href} className={styles.expandMenu}>
-                          <ListItemButton
-                            key={items.href}
-                            onClick={() => {
-                              setExpandDeveloper(!expandDeveloper);
-                            }}
-                            sx={{
-                              '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                              '&.Mui-selected:hover': {
-                                backgroundColor: '#DDFF55',
-                                color: '#121726',
-                              },
-                              height: '2rem',
-                            }}
-                          >
-                            {items.icon}
-                            <Typography
-                              variant="subtitle1"
-                              sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
-                            >
-                              {items.text}
-                            </Typography>
-                            {expandDeveloper ? <ExpandLess /> : <ExpandMore />}
-                          </ListItemButton>
-                          <Collapse in={expandDeveloper} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                              <ListItemButton
-                                selected={location.pathname.split('/')[2] === items?.menuProps?.label}
-                                component={Link}
-                                to={items?.menuProps?.href || ''}
-                                sx={{
-                                  '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                                  '&.Mui-selected:hover': {
-                                    backgroundColor: '#DDFF55',
-                                    color: '#121726',
-                                  },
-                                  height: '2rem',
-                                  pl: '1rem',
-                                  mt: '0.8rem',
-                                }}
-                              >
-                                <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
-                                  {items?.menuProps?.text}
-                                </Typography>
-                              </ListItemButton>
-                            </List>
-                          </Collapse>
-                        </Box>
-                      ) : items.text === 'Job' ? (
-                        <Box className={styles.expandMenu}>
-                          <ListItemButton
-                            key={items.href}
-                            onClick={() => {
-                              setExpandJob(!expandJob);
-                            }}
-                            sx={{
-                              '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                              '&.Mui-selected:hover': {
-                                backgroundColor: '#DDFF55',
-                                color: '#121726',
-                              },
-                              height: '2rem',
-                            }}
-                          >
-                            {items.icon}
-                            <Typography
-                              variant="subtitle1"
-                              sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
-                            >
-                              {items.text}
-                            </Typography>
-                            {expandJob ? <ExpandLess /> : <ExpandMore />}
-                          </ListItemButton>
-                          <Collapse in={expandJob} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                              <ListItemButton
-                                selected={location.pathname.split('/')[2] === items?.menuProps?.label}
-                                component={Link}
-                                to={items?.menuProps?.href || ''}
-                                sx={{
-                                  '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                                  '&.Mui-selected:hover': {
-                                    backgroundColor: '#DDFF55',
-                                    color: '#121726',
-                                  },
-                                  height: '2rem',
-                                  pl: '1rem',
-                                  mt: '0.8rem',
-                                }}
-                              >
-                                <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
-                                  {items?.menuProps?.text}
-                                </Typography>
-                              </ListItemButton>
-                            </List>
-                          </Collapse>
-                        </Box>
-                      ) : items.text === 'Insight' ? (
-                        <Box className={styles.expandMenu}>
-                          <ListItemButton
-                            key={items.href}
-                            onClick={() => {
-                              setExpandInsight(!expandInsight);
-                            }}
-                            sx={{
-                              '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                              '&.Mui-selected:hover': {
-                                backgroundColor: '#DDFF55',
-                                color: '#121726',
-                              },
-                              height: '2rem',
-                            }}
-                          >
-                            {items.icon}
-                            <Typography
-                              variant="subtitle1"
-                              sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
-                            >
-                              {items.text}
-                            </Typography>
-                            {expandInsight ? <ExpandLess /> : <ExpandMore />}
-                          </ListItemButton>
-                          <Collapse in={expandInsight} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                              <ListItemButton
-                                selected={location.pathname.split('/')[2] === items?.menuProps?.label}
-                                component={Link}
-                                to={items?.menuProps?.href || ''}
-                                sx={{
-                                  '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                                  '&.Mui-selected:hover': {
-                                    backgroundColor: '#DDFF55',
-                                    color: '#121726',
-                                  },
-                                  height: '2rem',
-                                  pl: '1rem',
-                                  mt: '0.8rem',
-                                }}
-                              >
-                                <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
-                                  {items?.menuProps?.text}
-                                </Typography>
-                              </ListItemButton>
-                            </List>
-                          </Collapse>
-                        </Box>
-                      ) : (
+    <Box>
+      <Backdrop
+        open={pageLoding}
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          backgroundColor: 'rgba(0,0,0,0.3)',
+        }}
+      >
+        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
+      </Backdrop>
+      <Snackbar
+        open={firstLogin}
+        autoHideDuration={60000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={handleClose}
+        sx={{ alignItems: 'center' }}
+      >
+        <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+          Please change the password in time for the first login!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={errorMessage}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          {errorMessageText}
+        </Alert>
+      </Snackbar>
+      {location.pathname === '/signin' || location.pathname === '/signup' ? (
+        <main>{props.children}</main>
+      ) : (
+        <Box className={styles.container}>
+          <CssBaseline />
+          <Box className={styles.navigationBarContainer}>
+            <Grid sx={{ pl: '1rem', pr: '1rem' }}>
+              <Box className={styles.title}>
+                <picture>
+                  <Box component="img" className={styles.logo} src="/icons/cluster/logo.svg" />
+                </picture>
+                <Typography variant="h6" gutterBottom sx={{ fontFamily: 'mabry-bold' }}>
+                  Dragonfly
+                </Typography>
+              </Box>
+              <List component="nav" aria-label="main mailbox folders">
+                {role === ROLE_ROOT ? (
+                  rootMenu.map((items) =>
+                    items.text === 'Developer' ? (
+                      <Box key={items.href} className={styles.expandMenu}>
                         <ListItemButton
-                          key={items.href}
-                          selected={location.pathname.split('/')[1] === items.label}
-                          component={Link}
-                          to={items.href}
+                          onClick={() => {
+                            setExpandDeveloper(!expandDeveloper);
+                          }}
                           sx={{
                             '&.Mui-selected': { backgroundColor: '#DFFF55' },
                             '&.Mui-selected:hover': {
@@ -417,175 +259,48 @@ export default function Layout(props: any) {
                               color: '#121726',
                             },
                             height: '2rem',
-                            mb: '0.4rem',
-                            mt: '0.4rem',
                           }}
                         >
                           {items.icon}
-                          <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                          >
                             {items.text}
                           </Typography>
+                          {expandDeveloper ? <ExpandLess /> : <ExpandMore />}
                         </ListItemButton>
-                      ),
-                    )
-                  ) : role === ROLE_GUEST ? (
-                    guestMenu.map((items) =>
-                      items.text === 'Developer' ? (
-                        <Box className={styles.expandMenu}>
-                          <ListItemButton
-                            onClick={() => {
-                              setExpandDeveloper(!expandDeveloper);
-                            }}
-                            sx={{
-                              '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                              '&.Mui-selected:hover': {
-                                backgroundColor: '#DDFF55',
-                                color: '#121726',
-                              },
-                              height: '2rem',
-                              mb: '0.4rem',
-                              mt: '0.4rem',
-                            }}
-                          >
-                            {items.icon}
-                            <Typography
-                              variant="subtitle1"
-                              sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                        <Collapse in={expandDeveloper} timeout="auto" unmountOnExit>
+                          <List component="div" disablePadding>
+                            <ListItemButton
+                              selected={location.pathname.split('/')[2] === items?.menuProps?.label}
+                              component={Link}
+                              to={items?.menuProps?.href || ''}
+                              sx={{
+                                '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                '&.Mui-selected:hover': {
+                                  backgroundColor: '#DDFF55',
+                                  color: '#121726',
+                                },
+                                height: '2rem',
+                                pl: '1rem',
+                                mt: '0.8rem',
+                              }}
                             >
-                              {items.text}
-                            </Typography>
-                            {expandDeveloper ? <ExpandLess /> : <ExpandMore />}
-                          </ListItemButton>
-                          <Collapse in={expandDeveloper} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                              <ListItemButton
-                                selected={location.pathname.split('/')[2] === items?.menuProps?.label}
-                                component={Link}
-                                to={items?.menuProps?.href || ''}
-                                sx={{
-                                  '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                                  '&.Mui-selected:hover': {
-                                    backgroundColor: '#DDFF55',
-                                    color: '#121726',
-                                  },
-                                  height: '2rem',
-                                  pl: '1rem',
-                                  mt: '0.8rem',
-                                }}
-                              >
-                                <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
-                                  {items?.menuProps?.text}
-                                </Typography>
-                              </ListItemButton>
-                            </List>
-                          </Collapse>
-                        </Box>
-                      ) : items.text === 'Job' ? (
-                        <Box className={styles.expandMenu}>
-                          <ListItemButton
-                            key={items.href}
-                            onClick={() => {
-                              setExpandJob(!expandJob);
-                            }}
-                            sx={{
-                              '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                              '&.Mui-selected:hover': {
-                                backgroundColor: '#DDFF55',
-                                color: '#121726',
-                              },
-                              height: '2rem',
-                              mb: '0.4rem',
-                              mt: '0.4rem',
-                            }}
-                          >
-                            {items.icon}
-                            <Typography
-                              variant="subtitle1"
-                              sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
-                            >
-                              {items.text}
-                            </Typography>
-                            {expandJob ? <ExpandLess /> : <ExpandMore />}
-                          </ListItemButton>
-                          <Collapse in={expandJob} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                              <ListItemButton
-                                selected={location.pathname.split('/')[2] === items?.menuProps?.label}
-                                component={Link}
-                                to={items?.menuProps?.href || ''}
-                                sx={{
-                                  '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                                  '&.Mui-selected:hover': {
-                                    backgroundColor: '#DDFF55',
-                                    color: '#121726',
-                                  },
-                                  height: '2rem',
-                                  pl: '1rem',
-                                  mt: '0.8rem',
-                                }}
-                              >
-                                <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
-                                  {items?.menuProps?.text}
-                                </Typography>
-                              </ListItemButton>
-                            </List>
-                          </Collapse>
-                        </Box>
-                      ) : items.text === 'Insight' ? (
-                        <Box className={styles.expandMenu}>
-                          <ListItemButton
-                            key={items.href}
-                            onClick={() => {
-                              setExpandInsight(!expandInsight);
-                            }}
-                            sx={{
-                              '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                              '&.Mui-selected:hover': {
-                                backgroundColor: '#DDFF55',
-                                color: '#121726',
-                              },
-                              height: '2rem',
-                            }}
-                          >
-                            {items.icon}
-                            <Typography
-                              variant="subtitle1"
-                              sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
-                            >
-                              {items.text}
-                            </Typography>
-                            {expandInsight ? <ExpandLess /> : <ExpandMore />}
-                          </ListItemButton>
-                          <Collapse in={expandInsight} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                              <ListItemButton
-                                selected={location.pathname.split('/')[2] === items?.menuProps?.label}
-                                component={Link}
-                                to={items?.menuProps?.href || ''}
-                                sx={{
-                                  '&.Mui-selected': { backgroundColor: '#DFFF55' },
-                                  '&.Mui-selected:hover': {
-                                    backgroundColor: '#DDFF55',
-                                    color: '#121726',
-                                  },
-                                  height: '2rem',
-                                  pl: '1rem',
-                                  mt: '0.8rem',
-                                }}
-                              >
-                                <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
-                                  {items?.menuProps?.text}
-                                </Typography>
-                              </ListItemButton>
-                            </List>
-                          </Collapse>
-                        </Box>
-                      ) : (
+                              <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
+                                {items?.menuProps?.text}
+                              </Typography>
+                            </ListItemButton>
+                          </List>
+                        </Collapse>
+                      </Box>
+                    ) : items.text === 'Job' ? (
+                      <Box key={items.href} className={styles.expandMenu}>
                         <ListItemButton
                           key={items.href}
-                          selected={location.pathname.split('/')[1] === items.label}
-                          component={Link}
-                          to={items.href}
+                          onClick={() => {
+                            setExpandJob(!expandJob);
+                          }}
                           sx={{
                             '&.Mui-selected': { backgroundColor: '#DFFF55' },
                             '&.Mui-selected:hover': {
@@ -593,109 +308,377 @@ export default function Layout(props: any) {
                               color: '#121726',
                             },
                             height: '2rem',
-                            mb: '0.4rem',
-                            mt: '0.4rem',
                           }}
                         >
                           {items.icon}
-                          <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                          >
                             {items.text}
                           </Typography>
+                          {expandJob ? <ExpandLess /> : <ExpandMore />}
                         </ListItemButton>
-                      ),
-                    )
-                  ) : (
-                    <></>
-                  )}
-                </List>
-              </Grid>
-              <Grid sx={{ mb: '4rem', pl: '1rem', pr: '1rem' }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Avatar className={styles.avatar} src={user?.avatar} />
-                    <Box
-                      sx={{
-                        width: '7rem',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <Typography component="div" fontFamily="mabry-bold">
-                        {user?.name || '-'}
-                      </Typography>
-                      <Tooltip title={user?.email || '-'} placement="top">
-                        <Typography
-                          component="div"
-                          variant="caption"
+                        <Collapse in={expandJob} timeout="auto" unmountOnExit>
+                          <List component="div" disablePadding>
+                            <ListItemButton
+                              selected={location.pathname.split('/')[2] === items?.menuProps?.label}
+                              component={Link}
+                              to={items?.menuProps?.href || ''}
+                              sx={{
+                                '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                '&.Mui-selected:hover': {
+                                  backgroundColor: '#DDFF55',
+                                  color: '#121726',
+                                },
+                                height: '2rem',
+                                pl: '1rem',
+                                mt: '0.8rem',
+                              }}
+                            >
+                              <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
+                                {items?.menuProps?.text}
+                              </Typography>
+                            </ListItemButton>
+                          </List>
+                        </Collapse>
+                      </Box>
+                    ) : items.text === 'Insight' ? (
+                      <Box key={items.href} className={styles.expandMenu}>
+                        <ListItemButton
+                          key={items.href}
+                          onClick={() => {
+                            setExpandInsight(!expandInsight);
+                          }}
                           sx={{
-                            width: '7rem',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
+                            '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                            '&.Mui-selected:hover': {
+                              backgroundColor: '#DDFF55',
+                              color: '#121726',
+                            },
+                            height: '2rem',
                           }}
                         >
-                          {user?.email || '-'}
+                          {items.icon}
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                          >
+                            {items.text}
+                          </Typography>
+                          {expandInsight ? <ExpandLess /> : <ExpandMore />}
+                        </ListItemButton>
+                        <Collapse in={expandInsight} timeout="auto" unmountOnExit>
+                          <List component="div" disablePadding>
+                            <ListItemButton
+                              selected={location.pathname.split('/')[2] === items?.menuProps?.label}
+                              component={Link}
+                              to={items?.menuProps?.href || ''}
+                              sx={{
+                                '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                '&.Mui-selected:hover': {
+                                  backgroundColor: '#DDFF55',
+                                  color: '#121726',
+                                },
+                                height: '2rem',
+                                pl: '1rem',
+                                mt: '0.8rem',
+                              }}
+                            >
+                              <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
+                                {items?.menuProps?.text}
+                              </Typography>
+                            </ListItemButton>
+                          </List>
+                        </Collapse>
+                      </Box>
+                    ) : (
+                      <ListItemButton
+                        key={items.href}
+                        selected={location.pathname.split('/')[1] === items.label}
+                        component={Link}
+                        to={items.href}
+                        sx={{
+                          '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                          '&.Mui-selected:hover': {
+                            backgroundColor: '#DDFF55',
+                            color: '#121726',
+                          },
+                          height: '2rem',
+                          mb: '0.4rem',
+                          mt: '0.4rem',
+                        }}
+                      >
+                        {items.icon}
+                        <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                          {items.text}
                         </Typography>
-                      </Tooltip>
-                    </Box>
+                      </ListItemButton>
+                    ),
+                  )
+                ) : role === ROLE_GUEST ? (
+                  guestMenu.map((items) =>
+                    items.text === 'Developer' ? (
+                      <Box key={items.href} className={styles.expandMenu}>
+                        <ListItemButton
+                          onClick={() => {
+                            setExpandDeveloper(!expandDeveloper);
+                          }}
+                          sx={{
+                            '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                            '&.Mui-selected:hover': {
+                              backgroundColor: '#DDFF55',
+                              color: '#121726',
+                            },
+                            height: '2rem',
+                          }}
+                        >
+                          {items.icon}
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                          >
+                            {items.text}
+                          </Typography>
+                          {expandDeveloper ? <ExpandLess /> : <ExpandMore />}
+                        </ListItemButton>
+                        <Collapse in={expandDeveloper} timeout="auto" unmountOnExit>
+                          <List component="div" disablePadding>
+                            <ListItemButton
+                              selected={location.pathname.split('/')[2] === items?.menuProps?.label}
+                              component={Link}
+                              to={items?.menuProps?.href || ''}
+                              sx={{
+                                '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                '&.Mui-selected:hover': {
+                                  backgroundColor: '#DDFF55',
+                                  color: '#121726',
+                                },
+                                height: '2rem',
+                                pl: '1rem',
+                                mt: '0.8rem',
+                              }}
+                            >
+                              <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
+                                {items?.menuProps?.text}
+                              </Typography>
+                            </ListItemButton>
+                          </List>
+                        </Collapse>
+                      </Box>
+                    ) : items.text === 'Job' ? (
+                      <Box key={items.href} className={styles.expandMenu}>
+                        <ListItemButton
+                          key={items.href}
+                          onClick={() => {
+                            setExpandJob(!expandJob);
+                          }}
+                          sx={{
+                            '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                            '&.Mui-selected:hover': {
+                              backgroundColor: '#DDFF55',
+                              color: '#121726',
+                            },
+                            height: '2rem',
+                          }}
+                        >
+                          {items.icon}
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                          >
+                            {items.text}
+                          </Typography>
+                          {expandJob ? <ExpandLess /> : <ExpandMore />}
+                        </ListItemButton>
+                        <Collapse in={expandJob} timeout="auto" unmountOnExit>
+                          <List component="div" disablePadding>
+                            <ListItemButton
+                              selected={location.pathname.split('/')[2] === items?.menuProps?.label}
+                              component={Link}
+                              to={items?.menuProps?.href || ''}
+                              sx={{
+                                '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                '&.Mui-selected:hover': {
+                                  backgroundColor: '#DDFF55',
+                                  color: '#121726',
+                                },
+                                height: '2rem',
+                                pl: '1rem',
+                                mt: '0.8rem',
+                              }}
+                            >
+                              <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
+                                {items?.menuProps?.text}
+                              </Typography>
+                            </ListItemButton>
+                          </List>
+                        </Collapse>
+                      </Box>
+                    ) : items.text === 'Insight' ? (
+                      <Box key={items.href} className={styles.expandMenu}>
+                        <ListItemButton
+                          key={items.href}
+                          onClick={() => {
+                            setExpandInsight(!expandInsight);
+                          }}
+                          sx={{
+                            '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                            '&.Mui-selected:hover': {
+                              backgroundColor: '#DDFF55',
+                              color: '#121726',
+                            },
+                            height: '2rem',
+                          }}
+                        >
+                          {items.icon}
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                          >
+                            {items.text}
+                          </Typography>
+                          {expandInsight ? <ExpandLess /> : <ExpandMore />}
+                        </ListItemButton>
+                        <Collapse in={expandInsight} timeout="auto" unmountOnExit>
+                          <List component="div" disablePadding>
+                            <ListItemButton
+                              selected={location.pathname.split('/')[2] === items?.menuProps?.label}
+                              component={Link}
+                              to={items?.menuProps?.href || ''}
+                              sx={{
+                                '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                '&.Mui-selected:hover': {
+                                  backgroundColor: '#DDFF55',
+                                  color: '#121726',
+                                },
+                                height: '2rem',
+                                pl: '1rem',
+                                mt: '0.8rem',
+                              }}
+                            >
+                              <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
+                                {items?.menuProps?.text}
+                              </Typography>
+                            </ListItemButton>
+                          </List>
+                        </Collapse>
+                      </Box>
+                    ) : (
+                      <ListItemButton
+                        key={items.href}
+                        selected={location.pathname.split('/')[1] === items.label}
+                        component={Link}
+                        to={items.href}
+                        sx={{
+                          '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                          '&.Mui-selected:hover': {
+                            backgroundColor: '#DDFF55',
+                            color: '#121726',
+                          },
+                          height: '2rem',
+                          mb: '0.4rem',
+                          mt: '0.4rem',
+                        }}
+                      >
+                        {items.icon}
+                        <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                          {items.text}
+                        </Typography>
+                      </ListItemButton>
+                    ),
+                  )
+                ) : (
+                  <></>
+                )}
+              </List>
+            </Grid>
+            <Grid sx={{ mb: '4rem', pl: '1rem', pr: '1rem' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Avatar className={styles.avatar} src={user?.avatar} />
+                  <Box
+                    sx={{
+                      width: '7rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <Typography component="div" fontFamily="mabry-bold">
+                      {user?.name || '-'}
+                    </Typography>
+                    <Tooltip title={user?.email || '-'} placement="top">
+                      <Typography
+                        component="div"
+                        variant="caption"
+                        sx={{
+                          width: '7rem',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        {user?.email || '-'}
+                      </Typography>
+                    </Tooltip>
                   </Box>
-                  <IconButton
-                    onClick={(event: any) => {
-                      setAnchorElement(event.currentTarget);
-                    }}
-                    size="small"
-                    aria-controls={openProfile ? 'account-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={openProfile ? 'true' : undefined}
-                    sx={{ position: 'relative', padding: '0' }}
-                  >
-                    <UnfoldMoreIcon />
-                  </IconButton>
                 </Box>
-                <Menu
-                  anchorEl={anchorElement}
-                  id="account-menu"
-                  open={openProfile}
-                  onClose={() => {
-                    setAnchorElement(null);
+                <IconButton
+                  onClick={(event: any) => {
+                    setAnchorElement(event.currentTarget);
                   }}
-                  sx={{ position: 'absolute', top: '-5.8rem', left: '-5rem' }}
+                  size="small"
+                  aria-controls={openProfile ? 'account-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={openProfile ? 'true' : undefined}
+                  sx={{ position: 'relative', padding: '0' }}
                 >
-                  <MenuItem
-                    onClick={() => {
-                      setAnchorElement(null);
+                  <UnfoldMoreIcon />
+                </IconButton>
+              </Box>
+              <Menu
+                anchorEl={anchorElement}
+                id="account-menu"
+                open={openProfile}
+                onClose={() => {
+                  setAnchorElement(null);
+                }}
+                sx={{ position: 'absolute', top: '-5.8rem', left: '-5rem' }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    setAnchorElement(null);
 
-                      navigate('/profile');
-                    }}
-                  >
-                    <ListItemIcon>
-                      <PersonAdd fontSize="small" />
-                    </ListItemIcon>
-                    Profile
-                  </MenuItem>
-                  <MenuItem onClick={handleLogout}>
-                    <ListItemIcon>
-                      <Logout fontSize="small" />
-                    </ListItemIcon>
-                    Logout
-                  </MenuItem>
-                </Menu>
-              </Grid>
-            </Box>
-            <Divider orientation="vertical" flexItem />
-            <Main>
-              <Outlet />
-            </Main>
+                    navigate('/profile');
+                  }}
+                >
+                  <ListItemIcon>
+                    <PersonAdd fontSize="small" />
+                  </ListItemIcon>
+                  Profile
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <ListItemIcon>
+                    <Logout fontSize="small" />
+                  </ListItemIcon>
+                  Logout
+                </MenuItem>
+              </Menu>
+            </Grid>
           </Box>
-        )}
-      </Box>
-    </MyContext.Provider>
+          <Divider orientation="vertical" flexItem />
+          <Main>
+            <Outlet />
+          </Main>
+        </Box>
+      )}
+    </Box>
   );
 }

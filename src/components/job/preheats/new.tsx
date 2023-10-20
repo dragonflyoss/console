@@ -23,7 +23,7 @@ import {
   Alert,
   Paper,
 } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import HelpIcon from '@mui/icons-material/Help';
 import { LoadingButton } from '@mui/lab';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -33,7 +33,6 @@ import { useNavigate } from 'react-router-dom';
 import { createJob, getClusters } from '../../../lib/api';
 import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './new.module.css';
-import { MyContext } from '../../menu/index';
 import AddIcon from '@mui/icons-material/Add';
 
 export default function NewPreheat() {
@@ -53,7 +52,6 @@ export default function NewPreheat() {
   const [clusterID, setClusterID] = useState<number[]>([]);
 
   const navigate = useNavigate();
-  const user = useContext(MyContext);
 
   const theme = createTheme({
     palette: {
@@ -305,7 +303,6 @@ export default function NewPreheat() {
         headers: headerList,
       },
       cdn_cluster_ids: clusterID,
-      user_id: user.id,
     };
 
     if (canSubmit) {

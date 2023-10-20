@@ -66,7 +66,7 @@ export default function NewPreheat() {
   useEffect(() => {
     (async function () {
       const cluster = await getClusters({ page: 1, per_page: MAX_PAGE_SIZE });
-      setCluster(cluster.data);
+      setCluster(cluster);
     })();
   }, []);
 

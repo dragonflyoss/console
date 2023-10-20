@@ -1,4 +1,3 @@
-import { parseLinkHeader } from '@web3-storage/parse-link-header';
 import queryString from 'query-string';
 
 const API_URL = process.env.REACT_APP_API_URL || window.location.href;
@@ -167,7 +166,7 @@ interface getClustersParams {
   name?: string;
 }
 
-interface clustersResponse {
+export interface getClustersResponse {
   id: number;
   name: string;
   bio: string;
@@ -180,23 +179,13 @@ interface clustersResponse {
   is_default: boolean;
 }
 
-interface getClustersResponse {
-  data: clustersResponse[];
-  total_page?: number;
-}
-
-export async function getClusters(params?: getClustersParams): Promise<getClustersResponse> {
+export async function getClusters(params?: getClustersParams): Promise<getClustersResponse[]> {
   const url = params
     ? new URL(`/api/v1/clusters?${queryString.stringify(params)}`, API_URL)
     : new URL('/api/v1/clusters', API_URL);
 
   const response = await get(url);
-  const data = await response.json();
-  const linkHeader = response.headers.get('link');
-  const links = parseLinkHeader(linkHeader || null);
-  const totalPage = Number(links?.last?.page);
-  const responses = { data: data, total_page: totalPage };
-  return responses;
+  return await response.json();
 }
 
 interface getClusterResponse {

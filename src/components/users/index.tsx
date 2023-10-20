@@ -34,7 +34,7 @@ import {
   ThemeProvider,
   createTheme,
 } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole } from '../../lib/api';
 import { makeStyles } from '@mui/styles';
 import { getDatetime, getPaginatedList } from '../../lib/utils';
@@ -129,7 +129,7 @@ export default function Users() {
     })();
   }, [userPage]);
 
-  useMemo(() => {
+  useEffect(() => {
     const totalPage = Math.ceil(users.length / DEFAULT_PAGE_SIZE);
     const currentPageData = getPaginatedList(users, userPage, DEFAULT_PAGE_SIZE);
 

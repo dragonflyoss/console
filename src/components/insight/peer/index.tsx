@@ -39,7 +39,7 @@ import { Bar, Pie } from 'react-chartjs-2';
 import { getPeers, getPeersResponse } from '../../../lib/api';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './inde.module.css';
 import { LoadingButton } from '@mui/lab';
@@ -169,7 +169,7 @@ export default function Peer() {
     })();
   }, []);
 
-  useMemo(() => {
+  useEffect(() => {
     if (selectedGitVersion === 'All') {
       const gitVersion = Object.entries(
         peer.reduce<{ [key: string]: number }>((acc, curr) => {
@@ -212,7 +212,7 @@ export default function Peer() {
     }
   }, [selectedGitVersion, peer]);
 
-  useMemo(() => {
+  useEffect(() => {
     if (selectedGitCommit === 'All') {
       const filteredByCluster = selectedGitCommit
         ? peer.filter((item) => item.scheduler_cluster.name === selectedGitCommit)
@@ -296,7 +296,7 @@ export default function Peer() {
     }
   }, [selectedGitCommit, selectedGitCommitByVersion, peer]);
 
-  useMemo(() => {
+  useEffect(() => {
     const filteredByCluster = exportSelectedCluster
       ? peer.filter((item) => item.scheduler_cluster.name === exportSelectedCluster)
       : peer;

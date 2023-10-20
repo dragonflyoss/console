@@ -18,7 +18,7 @@ import {
   ThemeProvider,
   createTheme,
 } from '@mui/material';
-import { useState, useEffect, useContext, useMemo } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { getTokens, deleteTokens, getTokensResponse } from '../../../lib/api';
 import { formatDate, getPaginatedList } from '../../../lib/utils';
 import { useCopyToClipboard } from 'react-use';
@@ -93,7 +93,7 @@ export default function PersonalAccessTokens() {
     })();
   }, [user]);
 
-  useMemo(() => {
+  useEffect(() => {
     token.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
     const totalPage = Math.ceil(token.length / DEFAULT_PAGE_SIZE);

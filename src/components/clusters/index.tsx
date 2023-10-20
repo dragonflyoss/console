@@ -20,7 +20,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import { getSchedulers, getSeedPeers, getClusters, getClustersResponse } from '../../lib/api';
 import styles from './index.module.css';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getDatetime, getPaginatedList } from '../../lib/utils';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
@@ -91,7 +91,7 @@ export default function Clusters() {
     })();
   }, []);
 
-  useMemo(() => {
+  useEffect(() => {
     cluster.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
     cluster.sort((a, b) => {
       if (a.is_default && !b.is_default) {

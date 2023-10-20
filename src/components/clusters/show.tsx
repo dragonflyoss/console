@@ -27,7 +27,7 @@ import {
   Stack,
   Divider,
 } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   getSchedulers,
   getSeedPeers,
@@ -171,7 +171,7 @@ export default function ShowCluster() {
     })();
   }, [params.id]);
 
-  useMemo(() => {
+  useEffect(() => {
     scheduler.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     scheduler.sort((a, b) => {
       if (a.state < b.state) {
@@ -193,7 +193,7 @@ export default function ShowCluster() {
     setAllSchedlers(currentPageData);
   }, [scheduler, schedulerPage]);
 
-  useMemo(() => {
+  useEffect(() => {
     seedPeer.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     seedPeer.sort((a, b) => {
       if (a.state < b.state) {

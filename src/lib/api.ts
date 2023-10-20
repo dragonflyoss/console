@@ -543,7 +543,6 @@ export async function putUserRole(id: string, role: string) {
 }
 
 interface getTokensParams {
-  user_id?: string;
   page?: number;
   per_page?: number;
 }
@@ -596,7 +595,6 @@ interface createTokensRequest {
   bio: string;
   scopes: Array<string>;
   expired_at: string;
-  user_id: number;
 }
 
 interface createTokensResponse {
@@ -657,7 +655,7 @@ interface getJobsParams {
   state?: string;
 }
 
-interface getJobsResponse {
+export interface getJobsResponse {
   id: number;
   created_at: string;
   updated_at: string;
@@ -672,6 +670,22 @@ interface getJobsResponse {
     tag: string;
     type: string;
     url: string;
+  };
+  result: {
+    CreatedAt: string;
+    GroupUUID: string;
+    JobStates: [
+      {
+        CreatedAt: string;
+        Error: string;
+        Results: Array<string>;
+        State: string;
+        TTL: number;
+        TaskName: string;
+        TaskUUID: string;
+      },
+    ];
+    State: string;
   };
 }
 

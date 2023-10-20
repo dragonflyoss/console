@@ -21,11 +21,10 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { useNavigate, Link } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
-import { getJobs } from '../../../lib/api';
+import { useEffect, useState } from 'react';
+import { getJobs, getJobsResponse } from '../../../lib/api';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
 import { getDatetime, getPaginatedList } from '../../../lib/utils';
-import { MyContext } from '../../menu/index';
 
 export default function Preheats() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -35,27 +34,8 @@ export default function Preheats() {
   const [status, setStatus] = useState<string>('ALL');
   const [shouldPoll, setShouldPoll] = useState(false);
   const [openStatusSelect, setOpenStatusSelect] = useState(false);
-  const [allPreheats, setAllPreheats] = useState([
-    {
-      id: 0,
-      created_at: '',
-      updated_at: '',
-      is_del: 0,
-      task_id: '',
-      bio: '',
-      type: '',
-      state: '',
-      args: {
-        filter: '',
-        headers: {},
-        tag: '',
-        type: '',
-        url: '',
-      },
-    },
-  ]);
+  const [allPreheats, setAllPreheats] = useState<getJobsResponse[]>([]);
 
-  const user = useContext(MyContext);
   const navigate = useNavigate();
 
   const theme = createTheme({
@@ -74,34 +54,18 @@ export default function Preheats() {
       try {
         setIsLoading(true);
 
-        if (user.name === 'root') {
-          const jobs = await getJobs({
-            page: 1,
-            per_page: MAX_PAGE_SIZE,
-            state: status === 'ALL' ? undefined : status,
-          });
+        const jobs = await getJobs({
+          page: 1,
+          per_page: MAX_PAGE_SIZE,
+          state: status === 'ALL' ? undefined : status,
+        });
 
-          setAllPreheats(jobs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
+        setAllPreheats(jobs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
 
-          const states = jobs.filter((obj) => obj.state !== 'SUCCESS' && obj.state !== 'FAILURE').length;
-          states === 0 ? setShouldPoll(false) : setShouldPoll(true);
+        const states = jobs.filter((obj) => obj.result.State !== 'SUCCESS' && obj.result.State !== 'FAILURE').length;
+        states === 0 ? setShouldPoll(false) : setShouldPoll(true);
 
-          setIsLoading(false);
-        } else if (user.name !== '') {
-          const jobs = await getJobs({
-            page: 1,
-            per_page: MAX_PAGE_SIZE,
-            state: status === 'ALL' ? undefined : status,
-            user_id: String(user.id),
-          });
-
-          setAllPreheats(jobs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
-
-          const states = jobs.filter((obj) => obj.state !== 'SUCCESS' && obj.state !== 'FAILURE').length;
-          states === 0 ? setShouldPoll(false) : setShouldPoll(true);
-
-          setIsLoading(false);
-        }
+        setIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
@@ -109,35 +73,24 @@ export default function Preheats() {
         }
       }
     })();
-  }, [status, user]);
+  }, [status]);
 
   useEffect(() => {
     if (shouldPoll) {
       const pollingInterval = setInterval(() => {
         const pollPreheat = async () => {
           try {
-            if (user.name === 'root') {
-              const jobs = await getJobs({
-                page: 1,
-                per_page: MAX_PAGE_SIZE,
-                state: status === 'ALL' ? undefined : status,
-              });
-              setAllPreheats(jobs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
+            const jobs = await getJobs({
+              page: 1,
+              per_page: MAX_PAGE_SIZE,
+              state: status === 'ALL' ? undefined : status,
+            });
+            setAllPreheats(jobs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
 
-              const states = jobs.filter((obj) => obj.state !== 'SUCCESS' && obj.state !== 'FAILURE').length;
-              states === 0 ? setShouldPoll(false) : setShouldPoll(true);
-            } else if (user.name !== '') {
-              const jobs = await getJobs({
-                page: 1,
-                per_page: MAX_PAGE_SIZE,
-                state: status === 'ALL' ? undefined : status,
-                user_id: String(user.id),
-              });
-              setAllPreheats(jobs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
-
-              const states = jobs.filter((obj) => obj.state !== 'SUCCESS' && obj.state !== 'FAILURE').length;
-              states === 0 ? setShouldPoll(false) : setShouldPoll(true);
-            }
+            const states = jobs.filter(
+              (obj) => obj.result.State !== 'SUCCESS' && obj.result.State !== 'FAILURE',
+            ).length;
+            states === 0 ? setShouldPoll(false) : setShouldPoll(true);
           } catch (error) {
             if (error instanceof Error) {
               setErrorMessage(true);
@@ -153,7 +106,7 @@ export default function Preheats() {
         clearInterval(pollingInterval);
       };
     }
-  }, [status, shouldPoll, user]);
+  }, [status, shouldPoll]);
 
   const statusList = [
     { lable: 'Pending', name: 'PENDING' },
@@ -270,13 +223,13 @@ export default function Preheats() {
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
                         {isLoading ? (
                           <Skeleton variant="circular" width="1.4rem" height="1.4rem" />
-                        ) : item.state === 'SUCCESS' ? (
+                        ) : item.result.State === 'SUCCESS' ? (
                           <Box
                             component="img"
                             sx={{ width: '1.3rem', height: '1.3rem' }}
                             src="/icons/job/preheat/success.svg"
                           />
-                        ) : item.state === 'FAILURE' ? (
+                        ) : item.result.State === 'FAILURE' ? (
                           <Box
                             component="img"
                             sx={{ width: '1.3rem', height: '1.3rem' }}
@@ -342,13 +295,13 @@ export default function Preheats() {
                     <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
                       {isLoading ? (
                         <Skeleton variant="circular" width="1.4rem" height="1.4rem" />
-                      ) : item.state === 'SUCCESS' ? (
+                      ) : item.result.State === 'SUCCESS' ? (
                         <Box
                           component="img"
                           sx={{ width: '1.3rem', height: '1.3rem' }}
                           src="/icons/job/preheat/success.svg"
                         />
-                      ) : item.state === 'FAILURE' ? (
+                      ) : item.result.State === 'FAILURE' ? (
                         <Box
                           component="img"
                           sx={{ width: '1.3rem', height: '1.3rem' }}

@@ -595,6 +595,7 @@ interface createTokensRequest {
   bio: string;
   scopes: Array<string>;
   expired_at: string;
+  user_id: number;
 }
 
 interface createTokensResponse {

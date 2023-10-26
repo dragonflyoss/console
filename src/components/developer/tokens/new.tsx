@@ -17,7 +17,7 @@ import {
   FormGroup,
   InputLabel,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { formatDate, getExpiredTime } from '../../../lib/utils';
 import { LoadingButton } from '@mui/lab';
 import { useNavigate } from 'react-router-dom';
@@ -25,6 +25,7 @@ import { createTokens } from '../../../lib/api';
 import HelpIcon from '@mui/icons-material/Help';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { MyContext } from '../../menu';
 
 const theme = createTheme({
   palette: {
@@ -116,6 +117,7 @@ export default function CreateTokens() {
   ];
 
   const navigate = useNavigate();
+  const { user } = useContext(MyContext);
 
   useEffect(() => {
     const expiredTime = getExpiredTime(Number(3650));
@@ -156,6 +158,7 @@ export default function CreateTokens() {
       bio: bio.value,
       scopes: filteredScopes,
       expired_at: expiredTime,
+      user_id: user.id,
     };
 
     const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);

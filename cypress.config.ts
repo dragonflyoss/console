@@ -7,7 +7,7 @@ export default defineConfig({
 
       return config;
     },
-    baseUrl: 'http://fe.alipay.net:3000',
+    baseUrl: 'https://dragonfly.alipay.com/api/v1',
   },
 
   component: {

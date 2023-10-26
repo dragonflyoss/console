@@ -18,7 +18,7 @@
     "lint": "react-scripts lint",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "coverage:report":"npx nyc report --reporter=text-summary"
+    "coverage:report": "npx nyc report --reporter=text-summary"
   },
   "dependencies": {
     "@cypress/instrument-cra": "^1.4.0",

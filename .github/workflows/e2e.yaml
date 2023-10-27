@@ -12,22 +12,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-      - run: yarn
-
-      - name: Set environment variables
-        run: |
-          echo "PORT=3000" >> $GITHUB_ENV
-          echo "HOST=fe.alipay.net" >> $GITHUB_ENV
-          echo "REACT_APP_API_URL=http://fe.alipay.net:8080" >> $GITHUB_ENV
-
       - name: Cypress run
         uses: cypress-io/github-action@v6
-        with:
-          build: yarn build
-          start: yarn start
-          cypress:run: yarn cypress:run
-          coverage:report: yarn coverage:report

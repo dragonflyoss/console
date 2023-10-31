@@ -50,6 +50,7 @@ export default function NewPreheat() {
   const [filter, setFilter] = useState([]);
   const [clusterName, setClusterName] = useState<string[]>([]);
   const [clusterID, setClusterID] = useState<number[]>([]);
+  const [filterHelperText, setFilterHelperText] = useState('Fill in the characters, the length is 0-100.');
 
   const navigate = useNavigate();
 
@@ -183,6 +184,7 @@ export default function NewPreheat() {
           }
         },
         onInputChange: (e: any) => {
+          setFilterHelperText('Fill in the characters, the length is 0-100.');
           changeValidate(e.target.value, argsForm[2]);
         },
 
@@ -198,7 +200,7 @@ export default function NewPreheat() {
         name: 'filter',
         placeholder: 'Press the Enter key to confirm the entered value',
         error: filterError,
-        helperText: filterError ? 'Fill in the characters, the length is 0-100.' : '',
+        helperText: filterError ? filterHelperText : '',
 
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
@@ -245,12 +247,21 @@ export default function NewPreheat() {
     setLoadingButton(true);
 
     event.preventDefault();
-    const bio = event.currentTarget.elements.bio;
-    const url = event.currentTarget.elements.url;
-    const tag = event.currentTarget.elements.tag;
+    const bio = event.currentTarget.elements.bio.value;
+    const url = event.currentTarget.elements.url.value;
+    const tag = event.currentTarget.elements.tag.value;
+    const filterText = event.currentTarget.elements.filter.value;
     const filters = filter.join('&');
 
     const data = new FormData(event.currentTarget);
+
+    if (filterText) {
+      setFilterError(true);
+      setFilterHelperText('Please press ENTER to end the filter creation');
+    } else {
+      setFilterError(false);
+      setFilterHelperText('Fill in the characters, the length is 0-100.');
+    }
 
     informationForm.forEach((item) => {
       const value = data.get(item.formProps.name);
@@ -259,9 +270,11 @@ export default function NewPreheat() {
     });
 
     argsForm.forEach((item) => {
-      const value = data.get(item.formProps.name);
-      item.setError(!item.validate(value as string));
-      item.syncError = !item.validate(value as string);
+      if (item.formProps.name !== 'filter') {
+        const value = data.get(item.formProps.name);
+        item.setError(!item.validate(value as string));
+        item.syncError = !item.validate(value as string);
+      }
     });
 
     const headerValidate = headers.every((item) => {
@@ -289,16 +302,17 @@ export default function NewPreheat() {
       !informationForm.filter((item) => item.syncError).length &&
         !argsForm.filter((item) => item.syncError).length &&
         clusterIDValidate &&
-        headerValidate,
+        headerValidate &&
+        Boolean(!filterText),
     );
 
     const formDate = {
-      bio: bio.value,
+      bio: bio,
       type: 'preheat',
       args: {
         type: 'file',
-        url: url.value,
-        tag: tag.value,
+        url: url,
+        tag: tag,
         filter: filters,
         headers: headerList,
       },

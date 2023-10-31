@@ -25,7 +25,17 @@ import { getUserRoles, getUser, signOut } from '../../lib/api';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { getJwtPayload, setPageTitle } from '../../lib/utils';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
+
 import { ROLE_ROOT, ROLE_GUEST } from '../../lib/constants';
+interface MyContextType {
+  user: { name: string; id: number };
+  role: string;
+}
+
+export const MyContext = createContext<MyContextType>({
+  user: { name: '', id: 0 },
+  role: '',
+});
 
 const Main = styled('div')(({ theme }) => ({
   flexGrow: 1,
@@ -197,7 +207,7 @@ export default function Layout(props: any) {
   };
 
   return (
-    <Box>
+    <MyContext.Provider value={{ user, role }}>
       <Backdrop
         open={pageLoding}
         sx={{
@@ -679,6 +689,6 @@ export default function Layout(props: any) {
           </Main>
         </Box>
       )}
-    </Box>
+    </MyContext.Provider>
   );
 }

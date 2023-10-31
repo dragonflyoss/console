@@ -14,12 +14,12 @@ import {
 } from '@mui/material';
 import styles from './new.module.css';
 import { useState } from 'react';
-import { createCluster } from '../../lib/api';
 import HelpIcon from '@mui/icons-material/Help';
 import { LoadingButton } from '@mui/lab';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate } from 'react-router-dom';
+import { createCluster } from '../../lib/api';
 
 export default function NewCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -39,6 +39,8 @@ export default function NewCluster() {
   const [idc, setIDC] = useState([]);
   const [loadingButton, setLoadingButton] = useState(false);
   const cidrsOptions = ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'];
+  const [idcHelperText, setIDCHelperText] = useState('Fill in the characters, the length is 0-100.');
+  const [cidrsHelperText, setCIDRsHelperText] = useState('Fill in the characters, the length is 0-1000.');
   const navigate = useNavigate();
 
   const informationForm = [
@@ -136,6 +138,7 @@ export default function NewCluster() {
         },
 
         onInputChange: (e: any) => {
+          setIDCHelperText('Fill in the characters, the length is 0-100.');
           changeValidate(e.target.value, scopesForm[1]);
         },
 
@@ -151,7 +154,7 @@ export default function NewCluster() {
         name: 'idc',
         placeholder: 'Please enter IDC',
         error: idcError,
-        helperText: idcError ? 'Fill in the characters, the length is 0-100.' : '',
+        helperText: idcError ? idcHelperText : '',
 
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
@@ -182,6 +185,7 @@ export default function NewCluster() {
         },
 
         onInputChange: (e: any) => {
+          setIDCHelperText('Fill in the characters, the length is 0-1000.');
           changeValidate(e.target.value, scopesForm[2]);
         },
 
@@ -197,7 +201,7 @@ export default function NewCluster() {
         name: 'cidrs',
         placeholder: 'Please enter CIDRs',
         error: cidrsError,
-        helperText: cidrsError ? 'Fill in the characters, the length is 0-1000.' : '',
+        helperText: cidrsError ? cidrsHelperText : '',
 
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
@@ -412,6 +416,24 @@ export default function NewCluster() {
     const numberOfConcurrentDownloadPieces = event.currentTarget.elements.numberOfConcurrentDownloadPieces.value;
     const candidateParentLimit = event.currentTarget.elements.candidateParentLimit.value;
     const filterParentLimit = event.currentTarget.elements.filterParentLimit.value;
+    const idcText = event.currentTarget.elements.idc.value;
+    const cidrsText = event.currentTarget.elements.cidrs.value;
+
+    if (idcText) {
+      setIDCHelperText('Please press ENTER to end the IDC creation');
+      setIDCError(true);
+    } else {
+      setIDCError(false);
+      setIDCHelperText('Fill in the characters, the length is 0-100.');
+    }
+
+    if (cidrsText) {
+      setCIDRsHelperText('Please press ENTER to end the CIDRs creation');
+      setCIDRsError(true);
+    } else {
+      setCIDRsError(false);
+      setCIDRsHelperText('Fill in the characters, the length is 0-100.');
+    }
 
     informationForm.forEach((item) => {
       const value = data.get(item.formProps.name);
@@ -438,7 +460,9 @@ export default function NewCluster() {
     const canSubmit = Boolean(
       !informationForm.filter((item) => item.syncError).length &&
         !scopesForm.filter((item) => item.syncError).length &&
-        !configForm.filter((item) => item.syncError).length,
+        !configForm.filter((item) => item.syncError).length &&
+        Boolean(!idcText) &&
+        Boolean(!cidrsText),
     );
 
     const formData = {

@@ -1,4 +1,5 @@
 import queryString from 'query-string';
+import { parseLinkHeader } from '@web3-storage/parse-link-header';
 
 const API_URL = process.env.REACT_APP_API_URL || window.location.href;
 
@@ -655,7 +656,7 @@ interface getJobsParams {
   state?: string;
 }
 
-export interface getJobsResponse {
+export interface JobsResponse {
   id: number;
   created_at: string;
   updated_at: string;
@@ -689,13 +690,23 @@ export interface getJobsResponse {
   };
 }
 
-export async function getJobs(params?: getJobsParams): Promise<getJobsResponse[]> {
+interface getJobsResponse {
+  data: JobsResponse[];
+  total_page?: number;
+}
+
+export async function getJobs(params?: getJobsParams): Promise<getJobsResponse> {
   const url = params
     ? new URL(`/api/v1/jobs?${queryString.stringify(params)}`, API_URL)
     : new URL('/api/v1/jobs', API_URL);
 
   const response = await get(url);
-  return await response.json();
+  const data = await response.json();
+  const linkHeader = response.headers.get('link');
+  const links = parseLinkHeader(linkHeader || null);
+  const totalPage = Number(links?.last?.page);
+  const responses = { data: data, total_page: totalPage };
+  return responses;
 }
 
 interface getJobResponse {

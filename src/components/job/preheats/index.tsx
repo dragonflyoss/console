@@ -22,19 +22,20 @@ import AddIcon from '@mui/icons-material/Add';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getJobs, getJobsResponse } from '../../../lib/api';
-import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
-import { getDatetime, getPaginatedList } from '../../../lib/utils';
+import { getJobs, JobsResponse } from '../../../lib/api';
+import { DEFAULT_PAGE_SIZE } from '../../../lib/constants';
+import { getDatetime } from '../../../lib/utils';
 
 export default function Preheats() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [preheatPage, setPreheatPage] = useState(1);
+  const [preheatTotalPages, setPreheatTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<string>('ALL');
   const [shouldPoll, setShouldPoll] = useState(false);
   const [openStatusSelect, setOpenStatusSelect] = useState(false);
-  const [allPreheats, setAllPreheats] = useState<getJobsResponse[]>([]);
+  const [allPreheats, setAllPreheats] = useState<JobsResponse[]>([]);
 
   const navigate = useNavigate();
 
@@ -55,14 +56,18 @@ export default function Preheats() {
         setIsLoading(true);
 
         const jobs = await getJobs({
-          page: 1,
-          per_page: MAX_PAGE_SIZE,
+          page: preheatPage,
+          per_page: DEFAULT_PAGE_SIZE,
           state: status === 'ALL' ? undefined : status,
         });
 
-        setAllPreheats(jobs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
+        setAllPreheats(jobs.data);
+        setPreheatTotalPages(jobs.total_page || 1);
 
-        const states = jobs.filter((obj) => obj.result.State !== 'SUCCESS' && obj.result.State !== 'FAILURE').length;
+        const states = jobs.data.filter(
+          (obj) => obj.result.State !== 'SUCCESS' && obj.result.State !== 'FAILURE',
+        ).length;
+
         states === 0 ? setShouldPoll(false) : setShouldPoll(true);
 
         setIsLoading(false);
@@ -73,7 +78,7 @@ export default function Preheats() {
         }
       }
     })();
-  }, [status]);
+  }, [status, preheatPage]);
 
   useEffect(() => {
     if (shouldPoll) {
@@ -81,15 +86,18 @@ export default function Preheats() {
         const pollPreheat = async () => {
           try {
             const jobs = await getJobs({
-              page: 1,
-              per_page: MAX_PAGE_SIZE,
+              page: preheatPage,
+              per_page: DEFAULT_PAGE_SIZE,
               state: status === 'ALL' ? undefined : status,
             });
-            setAllPreheats(jobs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
 
-            const states = jobs.filter(
+            setAllPreheats(jobs.data);
+            setPreheatTotalPages(jobs.total_page || 1);
+
+            const states = jobs.data.filter(
               (obj) => obj.result.State !== 'SUCCESS' && obj.result.State !== 'FAILURE',
             ).length;
+
             states === 0 ? setShouldPoll(false) : setShouldPoll(true);
           } catch (error) {
             if (error instanceof Error) {
@@ -106,7 +114,7 @@ export default function Preheats() {
         clearInterval(pollingInterval);
       };
     }
-  }, [status, shouldPoll]);
+  }, [status, shouldPoll, preheatPage]);
 
   const statusList = [
     { lable: 'Pending', name: 'PENDING' },
@@ -114,9 +122,6 @@ export default function Preheats() {
     { lable: 'Success', name: 'SUCCESS' },
     { lable: 'Failure', name: 'FAILURE' },
   ];
-
-  const totalPage = Math.ceil(allPreheats.length / DEFAULT_PAGE_SIZE);
-  const currentPageData = getPaginatedList(allPreheats, preheatPage, DEFAULT_PAGE_SIZE);
 
   const changeStatus = (event: any) => {
     setStatus(event.target.value);
@@ -209,15 +214,15 @@ export default function Preheats() {
           </FormControl>
         </Box>
         <Divider />
-        {currentPageData.length === 0 ? (
+        {allPreheats.length === 0 ? (
           <Box sx={{ height: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             You don't have any preheat tasks.
           </Box>
         ) : (
           <>
-            {Array.isArray(currentPageData) &&
-              currentPageData.map((item, index) => {
-                return index !== currentPageData.length - 1 ? (
+            {Array.isArray(allPreheats) &&
+              allPreheats.map((item, index) => {
+                return index !== allPreheats.length - 1 ? (
                   <Box key={item.id}>
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
@@ -365,10 +370,10 @@ export default function Preheats() {
           </>
         )}
       </Paper>
-      {totalPage > 1 ? (
+      {preheatTotalPages > 1 ? (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
           <Pagination
-            count={totalPage}
+            count={preheatTotalPages}
             onChange={(_event: any, newPage: number) => {
               setPreheatPage(newPage);
             }}

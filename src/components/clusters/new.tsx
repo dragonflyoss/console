@@ -710,6 +710,7 @@ export default function NewCluster() {
             size="small"
             variant="outlined"
             loadingPosition="end"
+            id="cancle"
             sx={{
               '&.MuiLoadingButton-root': {
                 color: 'var(--calcel-size-color)',

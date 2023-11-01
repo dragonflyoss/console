@@ -16,15 +16,8 @@ jobs:
 
       - run: yarn
 
-      - name: Set environment variables
-        run: |
-          echo "REACT_APP_API_URL=http://fe.alipay.net:8080" >> $GITHUB_ENV
-          echo "PORT=3000" >> $GITHUB_ENV
-          echo "HOST=fe.alipay.net" >> $GITHUB_ENV
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
       - name: Install dependencies
-        run: yarn install
+        run: yarn
 
       - name: Cypress run
         uses: cypress-io/github-action@v6

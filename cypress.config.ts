@@ -14,6 +14,7 @@ export default defineConfig({
     },
     baseUrl: 'http://localhost:3000',
   },
-  requestTimeout: 120000,
-  responseTimeout: 120000,
+  requestTimeout: 10000,
+  pageLoadTimeout: 10000,
+  responseTimeout: 10000,
 });

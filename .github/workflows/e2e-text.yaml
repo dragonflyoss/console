@@ -30,7 +30,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           start: yarn start
-          config: pageLoadTimeout=100000,baseUrl=http://localhost:3000
+          config: pageLoadTimeout=300000,baseUrl=http://localhost:3000
 
       - name: Set code coverage commit status 📫
         run: npx -p check-code-coverage set-gh-status

@@ -12,7 +12,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '16'
 
       - name: Install dependencies
         run: yarn
@@ -21,16 +21,15 @@ jobs:
         run: |
           echo "REACT_APP_API_URL=http://localhost:3000" >> $GITHUB_ENV
 
+      - name: Build
+        run: |
+          cd src
+          yarn build
+
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
           start: yarn start
-          wait-on: 'http://[::1]:3000'
-          wait-on-timeout: 120
-          browser: chrome
-
-        env:
-          REACT_APP_API_URL: ${{ env.REACT_APP_API_URL }}
 
       - name: Set code coverage commit status 📫
         run: npx -p check-code-coverage set-gh-status

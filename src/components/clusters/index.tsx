@@ -292,33 +292,37 @@ export default function Clusters() {
             </Box>
           </Paper>
         </Grid>
-        <Box className={styles.searchContainer}>
-          <Stack spacing={2} sx={{ width: '20rem' }}>
-            <Autocomplete
+        {cluster != null && cluster.length > 0 ? (
+          <Box className={styles.searchContainer}>
+            <Stack spacing={2} sx={{ width: '20rem' }}>
+              <Autocomplete
+                size="small"
+                color="secondary"
+                id="free-solo-demo"
+                freeSolo
+                onKeyDown={searchClusterKeyDown}
+                inputValue={searchClusters}
+                onInputChange={(_event, newInputValue) => {
+                  setSearchClusters(newInputValue);
+                }}
+                options={(Array.isArray(clusterCount) && clusterCount.map((option) => option?.name)) || ['']}
+                renderInput={(params) => <TextField {...params} label="Search" />}
+              />
+            </Stack>
+            <IconButton
+              type="button"
+              aria-label="search"
+              id="submit-button"
               size="small"
-              color="secondary"
-              id="free-solo-demo"
-              freeSolo
-              onKeyDown={searchClusterKeyDown}
-              inputValue={searchClusters}
-              onInputChange={(_event, newInputValue) => {
-                setSearchClusters(newInputValue);
-              }}
-              options={(Array.isArray(clusterCount) && clusterCount.map((option) => option?.name)) || ['']}
-              renderInput={(params) => <TextField {...params} label="Search" />}
-            />
-          </Stack>
-          <IconButton
-            type="button"
-            aria-label="search"
-            id="submit-button"
-            size="small"
-            onClick={searchCluster}
-            sx={{ width: '3rem' }}
-          >
-            <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
-          </IconButton>
-        </Box>
+              onClick={searchCluster}
+              sx={{ width: '3rem' }}
+            >
+              <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
+            </IconButton>
+          </Box>
+        ) : (
+          <></>
+        )}
         <Grid item xs={12} className={styles.clusterListContainer} component="form" noValidate>
           {Array.isArray(allClusters) &&
             allClusters.map((item) => (

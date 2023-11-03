@@ -1,12 +1,37 @@
-name: End-to-end tests
+name: Cypress Tests
+
 on: push
+
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # Install npm dependencies, cache them correctly
-      # and run all Cypress tests
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Set Environment Variables
+        run: |
+          echo "REACT_APP_API_URL=http://localhost:3000" >> $GITHUB_ENV
+
       - name: Cypress run
         uses: cypress-io/github-action@v6
+        with:
+          start: yarn start
+          wait-on: 'http://localhost:3000'
+          browser: chrome
+
+        env:
+          REACT_APP_API_URL: ${{ env.REACT_APP_API_URL }}
+
+      - name: Set code coverage commit status 📫
+        run: npx -p check-code-coverage set-gh-status
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

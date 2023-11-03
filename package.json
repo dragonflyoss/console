@@ -62,6 +62,7 @@
     "@cypress/code-coverage": "^3.12.6",
     "@web3-storage/parse-link-header": "^3.1.0",
     "chart.js": "^4.4.0",
+    "check-code-coverage": "^1.10.5",
     "cypress": "^13.3.3",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^9.0.0",

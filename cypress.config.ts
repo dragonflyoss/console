@@ -12,7 +12,7 @@ export default defineConfig({
       // with any changed environment variables
       return config;
     },
-    baseUrl: 'http://fe.alipay.net:3000',
+    baseUrl: 'http://localhost:3000',
   },
 
   component: {

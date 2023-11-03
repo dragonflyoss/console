@@ -1,12 +1,36 @@
 describe('The Signin Page', () => {
-  //   beforeEach(() => {
-  //     // reset and seed the database prior to every test
-  //     // cy.exec('npm run db:reset && npm run db:seed');
+  beforeEach(() => {
+    cy.intercept('POST', '/api/v1/users/signup', (req) => {
+      const { name, password, email } = req.body;
 
-  //     // seed a user in the DB that we can control from our tests
-  //     // assuming it generates a random password for us
-  //     cy.request('POST', '/signin', { naeme: 'root', password: 'dragonfly' }).its('body').as('currentUser');
-  //   });
+      if (name === 'root-1' && password === 'dragonfly1' && email === 'root@d7y.com') {
+        req.reply({
+          statusCode: 200,
+          body: {
+            id: 31,
+            created_at: '2023-11-03T02:27:10Z',
+            updated_at: '2023-11-03T02:27:10Z',
+            is_del: 0,
+            email: 'root@d7y.com',
+            name: 'root-1',
+            avatar: '',
+            phone: '',
+            state: 'enable',
+            location: '',
+            bio: '',
+            configs: null,
+          },
+        });
+      } else {
+        req.reply({
+          statusCode: 401,
+          body: {
+            message: 'Conflict',
+          },
+        });
+      }
+    });
+  });
 
   it('sets auth cookie when logging in via form submission', function () {
     // destructuring assignment of the this.currentUser object
@@ -19,7 +43,6 @@ describe('The Signin Page', () => {
       }
       return result;
     }
-    const randomUsername = generateRandomString(6);
 
     function generateRandomEmail() {
       const randomString = Math.random().toString(36).substring(2, 10);
@@ -27,20 +50,19 @@ describe('The Signin Page', () => {
       return `${randomString}@${domain}`;
     }
 
-    const randomEmail = generateRandomEmail();
-
     cy.visit('/signup');
 
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
     cy.url().should('include', '/signin');
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
     cy.url().should('include', '/signup');
-    cy.get('#account').type(randomUsername);
 
-    cy.get('#email').type(randomEmail);
+    cy.get('#account').type('root-1');
+
+    cy.get('#email').type('root@d7y.com');
     cy.get('#password').type('dragonfly1');
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
-    // we should be redirected to /dashboard
+
     cy.url().should('include', '/signin');
 
     // our auth cookie should be present

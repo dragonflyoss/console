@@ -92,22 +92,26 @@ export default function Clusters() {
   }, []);
 
   useEffect(() => {
-    cluster.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-    cluster.sort((a, b) => {
-      if (a.is_default && !b.is_default) {
-        return -1;
-      } else if (!a.is_default && b.is_default) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
+    if (cluster != null && cluster.length > 0) {
+      cluster.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
-    const totalPage = Math.ceil(cluster.length / DEFAULT_PAGE_SIZE);
-    const currentPageData = getPaginatedList(cluster, clusterPage, DEFAULT_PAGE_SIZE);
+      cluster.sort((a, b) => {
+        if (a.is_default && !b.is_default) {
+          return -1;
+        } else if (!a.is_default && b.is_default) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
 
-    setTotalPages(totalPage);
-    setAllClusters(currentPageData);
+      const totalPage = Math.ceil(cluster.length / DEFAULT_PAGE_SIZE);
+
+      const currentPageData = getPaginatedList(cluster, clusterPage, DEFAULT_PAGE_SIZE);
+
+      setTotalPages(totalPage);
+      setAllClusters(currentPageData);
+    }
   }, [cluster, clusterPage]);
 
   const numberOfDefaultClusters =

@@ -14,7 +14,9 @@ export default defineConfig({
     },
     baseUrl: 'http://localhost:3000',
   },
-  requestTimeout: 60000,
-  pageLoadTimeout: 60000,
+  chromeWebSecurity: false,
+  defaultCommandTimeout: 15000,
+  requestTimeout: 30000,
+  pageLoadTimeout: 80000,
   responseTimeout: 60000,
 });

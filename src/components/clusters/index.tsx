@@ -92,22 +92,26 @@ export default function Clusters() {
   }, []);
 
   useEffect(() => {
-    cluster.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-    cluster.sort((a, b) => {
-      if (a.is_default && !b.is_default) {
-        return -1;
-      } else if (!a.is_default && b.is_default) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
+    if (cluster != null && cluster.length > 0) {
+      cluster.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
-    const totalPage = Math.ceil(cluster.length / DEFAULT_PAGE_SIZE);
-    const currentPageData = getPaginatedList(cluster, clusterPage, DEFAULT_PAGE_SIZE);
+      cluster.sort((a, b) => {
+        if (a.is_default && !b.is_default) {
+          return -1;
+        } else if (!a.is_default && b.is_default) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
 
-    setTotalPages(totalPage);
-    setAllClusters(currentPageData);
+      const totalPage = Math.ceil(cluster.length / DEFAULT_PAGE_SIZE);
+
+      const currentPageData = getPaginatedList(cluster, clusterPage, DEFAULT_PAGE_SIZE);
+
+      setTotalPages(totalPage);
+      setAllClusters(currentPageData);
+    }
   }, [cluster, clusterPage]);
 
   const numberOfDefaultClusters =
@@ -201,7 +205,7 @@ export default function Clusters() {
                 <Box marginLeft="0.6rem">
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : clusterCount?.length || ''}
+                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : clusterCount?.length || 0}
                     </Typography>
                     <span>number of clusters</span>
                   </Box>
@@ -235,7 +239,7 @@ export default function Clusters() {
                 <Box sx={{ ml: '0.6rem' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : scheduler?.length || ''}
+                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : scheduler?.length || 0}
                     </Typography>
                     <span>number of schedulers</span>
                   </Box>
@@ -269,7 +273,7 @@ export default function Clusters() {
                 <Box sx={{ ml: '0.6rem' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : seedPeer.length || ''}
+                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : seedPeer.length || 0}
                     </Typography>
                     <span>number of seed peers</span>
                   </Box>
@@ -288,33 +292,37 @@ export default function Clusters() {
             </Box>
           </Paper>
         </Grid>
-        <Box className={styles.searchContainer}>
-          <Stack spacing={2} sx={{ width: '20rem' }}>
-            <Autocomplete
+        {cluster != null && cluster.length > 0 ? (
+          <Box className={styles.searchContainer}>
+            <Stack spacing={2} sx={{ width: '20rem' }}>
+              <Autocomplete
+                size="small"
+                color="secondary"
+                id="free-solo-demo"
+                freeSolo
+                onKeyDown={searchClusterKeyDown}
+                inputValue={searchClusters}
+                onInputChange={(_event, newInputValue) => {
+                  setSearchClusters(newInputValue);
+                }}
+                options={(Array.isArray(clusterCount) && clusterCount.map((option) => option?.name)) || ['']}
+                renderInput={(params) => <TextField {...params} label="Search" />}
+              />
+            </Stack>
+            <IconButton
+              type="button"
+              aria-label="search"
+              id="submit-button"
               size="small"
-              color="secondary"
-              id="free-solo-demo"
-              freeSolo
-              onKeyDown={searchClusterKeyDown}
-              inputValue={searchClusters}
-              onInputChange={(_event, newInputValue) => {
-                setSearchClusters(newInputValue);
-              }}
-              options={(Array.isArray(clusterCount) && clusterCount.map((option) => option?.name)) || ['']}
-              renderInput={(params) => <TextField {...params} label="Search" />}
-            />
-          </Stack>
-          <IconButton
-            type="button"
-            aria-label="search"
-            id="submit-button"
-            size="small"
-            onClick={searchCluster}
-            sx={{ width: '3rem' }}
-          >
-            <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
-          </IconButton>
-        </Box>
+              onClick={searchCluster}
+              sx={{ width: '3rem' }}
+            >
+              <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
+            </IconButton>
+          </Box>
+        ) : (
+          <></>
+        )}
         <Grid item xs={12} className={styles.clusterListContainer} component="form" noValidate>
           {Array.isArray(allClusters) &&
             allClusters.map((item) => (

@@ -14,11 +14,7 @@ export default defineConfig({
     },
     baseUrl: 'http://localhost:3000',
   },
-
-  component: {
-    devServer: {
-      framework: 'create-react-app',
-      bundler: 'webpack',
-    },
-  },
+  requestTimeout: 100000,
+  pageLoadTimeout: 100000,
+  responseTimeout: 100000,
 });

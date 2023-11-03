@@ -31,7 +31,7 @@ jobs:
         with:
           start: yarn start
           config: baseUrl=http://localhost:3000
-          wait-on-timeout: 180
+          wait-on-timeout: 200
 
       - name: Set code coverage commit status 📫
         run: npx -p check-code-coverage set-gh-status

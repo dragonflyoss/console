@@ -35,10 +35,6 @@ jobs:
       - name: Update code coverage badge
         run: npx update-badge
 
-      - uses: mikeal/publish-to-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Set code coverage commit status 📫
         run: npx -p check-code-coverage set-gh-status
         env:

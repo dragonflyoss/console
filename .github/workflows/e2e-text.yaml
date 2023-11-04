@@ -30,8 +30,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           start: yarn start
-          config: baseUrl=http://localhost:3000
-          wait-on-timeout: 200
+          wait-on: 'http://localhost:3000'
 
-      - name: Generate code coverage report
-        run: npx nyc report --reporter=text-summary
+      - name: Update code coverage badge
+        run: npx update-badge

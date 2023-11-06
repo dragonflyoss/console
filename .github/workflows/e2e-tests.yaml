@@ -15,7 +15,7 @@ jobs:
           node-version: '18.x'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --force
 
       - name: Set Environment Variables
         run: |
@@ -30,12 +30,7 @@ jobs:
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
 
-      - name: Set code coverage commit status
-        run: npx -p check-code-coverage set-gh-status
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Ensure coverage has not dropped
-        run: npx -p check-code-coverage set-gh-status --check-against-readme
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

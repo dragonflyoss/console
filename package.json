@@ -73,7 +73,6 @@
     "react-app-rewired": "^2.2.1",
     "react-chartjs-2": "^5.2.0",
     "react-use": "^17.4.0",
-    "start-server-and-test": "^2.0.1",
     "typescript": "^5.2.2"
   },
   "eslintConfig": {
@@ -109,8 +108,5 @@
     "*.{css,sass}": [
       "prettier --write"
     ]
-  },
-  "nyc": {
-    "exclude": "server/lib/migrations"
   }
 }

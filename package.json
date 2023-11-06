@@ -14,7 +14,8 @@
     "build": "BUILD_PATH='./dist' react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "lint": "react-scripts lint"
+    "lint": "react-scripts lint",
+    "cypress open":"npx cypress open"
   },
   "dependencies": {
     "@cypress/instrument-cra": "^1.4.0",

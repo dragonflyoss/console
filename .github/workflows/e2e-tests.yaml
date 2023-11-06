@@ -15,32 +15,27 @@ jobs:
           node-version: '18.x'
 
       - name: Install dependencies
-        run: yarn
+        run: yarn install --frozen-lockfile
 
       - name: Set Environment Variables
         run: |
           echo "REACT_APP_API_URL=http://localhost:3000" >> $GITHUB_ENV
 
-      - name: Build
-        run: |
-          cd src
-          yarn build
-
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
+          build: yarn build
           start: yarn start
+          browser: chrome
           wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
 
-      - name: Update code coverage badge
-        run: npx update-badge
-
-      - name: Set code coverage commit status 📫
+      - name: Set code coverage commit status
         run: npx -p check-code-coverage set-gh-status
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Ensure coverage has not dropped 📈
+      - name: Ensure coverage has not dropped
         run: npx -p check-code-coverage set-gh-status --check-against-readme
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

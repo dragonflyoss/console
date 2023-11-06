@@ -35,7 +35,7 @@ describe('The Signin Page', () => {
   it('sets auth cookie when logging in via form submission', function () {
     // destructuring assignment of the this.currentUser object
     // const { username, password } = this.currentUser;
-    function generateRandomString(length) {
+    function generateRandomString(length: number) {
       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       let result = '';
       for (let i = 0; i < length; i++) {

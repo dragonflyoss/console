@@ -2,7 +2,7 @@
 
 [![GitHub release](https://img.shields.io/github/release/dragonflyoss/console.svg)](https://github.com/dragonflyoss/console/releases)
 [![LICENSE](https://img.shields.io/github/license/dragonflyoss/console.svg?style=flat-square)](https://github.com/dragonflyoss/console/blob/main/LICENSE)
-![code coverage](https://img.shields.io/badge/code--coverage-60%25-red)
+![code coverage](https://img.shields.io/badge/code--coverage-10.86%25-red)
 
 ## Introduction
 

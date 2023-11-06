@@ -29,7 +29,6 @@ function Main() {
 
   useEffect(() => {
     const payload = getJwtPayload();
-console.log(payload);
 
     (async function () {
       if (payload?.id) {

@@ -32,26 +32,9 @@ describe('The Signin Page', () => {
     });
   });
 
-  it('sets auth cookie when logging in via form submission', function () {
-    // destructuring assignment of the this.currentUser object
-    // const { username, password } = this.currentUser;
-    function generateRandomString(length: number) {
-      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      let result = '';
-      for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * characters.length));
-      }
-      return result;
-    }
-
-    function generateRandomEmail() {
-      const randomString = Math.random().toString(36).substring(2, 10);
-      const domain = 'example.com';
-      return `${randomString}@${domain}`;
-    }
+  it('signup', function () {
 
     cy.visit('/signup');
-
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
     cy.url().should('include', '/signin');
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
@@ -64,13 +47,5 @@ describe('The Signin Page', () => {
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
 
     cy.url().should('include', '/signin');
-
-    // our auth cookie should be present
-    // cy.getCookie('jwt').should(
-    //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTgzMDY2MDYsImlkIjoxLCJvcmlnX2lhdCI6MTY5ODEzMzgwNn0.br3tl104dPNi5_kZy8i63lKb5dlozLII-u0IQatt-Bs',
-    // );
-
-    // UI should reflect this user being logged in
-    // cy.get('h1').should('contain', 'jane.lane');
   });
 });

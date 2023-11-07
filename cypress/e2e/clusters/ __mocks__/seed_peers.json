@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "created_at": "2023-11-06T06:09:08Z",
+    "updated_at": "2023-11-06T06:09:13Z",
+    "is_del": 0,
+    "host_name": "f986e1e161da",
+    "type": "super",
+    "idc": "",
+    "location": "",
+    "ip": "30.44.98.202",
+    "port": 65006,
+    "download_port": 65008,
+    "object_storage_port": 0,
+    "state": "active",
+    "seed_peer_cluster_id": 1,
+    "seed_peer_cluster": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "name": "",
+      "bio": "",
+      "config": null,
+      "scheduler_clusters": null,
+      "seed_peer": null,
+      "jobs": null
+    }
+  }
+]

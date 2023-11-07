@@ -15,7 +15,9 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "lint": "react-scripts lint",
-    "cypress open":"npx cypress open"
+    "cypress open": "npx cypress open",
+    "e2e": "npx cypress run --env coverage=true",
+    "coverage:verify": "npx nyc report --reporter=text-summary"
   },
   "dependencies": {
     "@cypress/instrument-cra": "^1.4.0",

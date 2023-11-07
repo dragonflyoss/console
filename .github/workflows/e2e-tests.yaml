@@ -17,10 +17,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --force
 
-      - name: Set Environment Variables
-        run: |
-          echo "REACT_APP_API_URL=http://localhost:3000" >> $GITHUB_ENV
-
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:

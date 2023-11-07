@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "name": "cluster-1",
+    "bio": "",
+    "scopes": {
+      "idc": "",
+      "location": "",
+      "cidrs": null
+    },
+    "scheduler_cluster_id": 1,
+    "seed_peer_cluster_id": 1,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50,
+      "concurrent_piece_count": 4
+    },
+    "created_at": "2023-11-06T06:09:04Z",
+    "updated_at": "2023-11-06T06:09:04Z",
+    "is_default": true
+  }
+]

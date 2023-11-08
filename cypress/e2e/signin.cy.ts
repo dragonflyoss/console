@@ -1,4 +1,6 @@
 import signin from '../fixtures/api/signin.json';
+import root from '../fixtures/api/role-root.json';
+import user from '../fixtures/api/user.json';
 import _ from 'lodash';
 
 describe('Signin', () => {
@@ -20,6 +22,30 @@ describe('Signin', () => {
         });
       }
     });
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/users/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: user,
+        });
+      },
+    );
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/users/1/roles',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: root,
+        });
+      },
+    );
     cy.visit('/signin');
   });
 
@@ -28,13 +54,16 @@ describe('Signin', () => {
     cy.get('#password').type('rooot1');
     cy.get('form').submit();
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
+    cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
   });
 
   it('Signin suceesfully', () => {
     cy.get('#account').type('root');
     cy.get('#password').type(`dragonfly`);
-    cy.get('.MuiInputBase-root > .MuiButtonBase-root').click();
+    cy.signin();
     cy.get('form').submit();
+    cy.location('pathname').should('eq', '/clusters');
   });
 
   it('Switch to the signup page', () => {

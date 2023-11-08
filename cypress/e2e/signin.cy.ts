@@ -20,18 +20,17 @@ describe('Signin', () => {
         });
       }
     });
+    cy.visit('/signin');
   });
 
-  it('signin failed', () => {
-    cy.visit('/signin');
+  it('Signin failed', () => {
     cy.get('#account').type('root');
     cy.get('#password').type('rooot1');
     cy.get('form').submit();
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
   });
 
-  it('signin suceesfully', () => {
-    cy.visit('/signin');
+  it('Signin suceesfully', () => {
     cy.get('#account').type('root');
     cy.get('#password').type(`dragonfly`);
     cy.get('.MuiInputBase-root > .MuiButtonBase-root').click();
@@ -39,26 +38,24 @@ describe('Signin', () => {
   });
 
   it('Switch to the signup page', () => {
-    cy.visit('/signin');
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
     cy.url().should('include', '/signup');
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
     cy.url().should('include', '/signin');
   });
 
-  it('password hidden function', () => {
-    cy.visit('/signin');
+  it('Password hidden function', () => {
     cy.get('#account').type('root');
     cy.get('#password').type(`dragonfly`);
     cy.get('.MuiInputBase-root > .MuiButtonBase-root').click();
     cy.get('#password').should('have.value', 'dragonfly');
   });
 
-  it('ErrorVerification', () => {
-    cy.visit('/signin');
+  it('Validation error', () => {
     const NameNotLongEnough = _.times(2, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
     const nameLengthExceeds = _.times(11, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
     const passwordLengthExceeds = _.times(17, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
+
     cy.get('#account').type(NameNotLongEnough);
     cy.get('#account-helper-text').should('be.visible').and('contain', 'Fill in the characters, the length is 3-10.');
     cy.get('#account').type(nameLengthExceeds);

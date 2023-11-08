@@ -10,11 +10,14 @@
   ],
   "repository": "git@github.com:dragonflyoss/console.git",
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "react-app-rewired -r @cypress/instrument-cra start",
     "build": "BUILD_PATH='./dist' react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "lint": "react-scripts lint"
+    "lint": "react-scripts lint",
+    "cy:open": "npx cypress open",
+    "cy:run": "npx cypress run --browser chrome",
+    "coverage:verify": "npx nyc report --check-coverage true --lines 10"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -58,8 +61,11 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@commitlint/cli": "^18.2.0",
     "@commitlint/config-conventional": "^18.0.0",
+    "@cypress/code-coverage": "^3.12.6",
+    "@cypress/instrument-cra": "^1.4.0",
     "@web3-storage/parse-link-header": "^3.1.0",
     "chart.js": "^4.4.0",
+    "cypress": "^13.3.3",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-react-app": "^7.0.1",

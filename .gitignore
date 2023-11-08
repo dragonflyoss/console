@@ -46,3 +46,6 @@ tsconfig.tsbuildinfo
 
 # mock
 /mock
+
+#nyc
+/.nyc_output

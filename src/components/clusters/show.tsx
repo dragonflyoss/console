@@ -804,6 +804,7 @@ export default function ShowCluster() {
             size="small"
             variant="outlined"
             loadingPosition="end"
+            id="cancelDeleteScheduler"
             sx={{
               '&.MuiLoadingButton-root': {
                 color: 'var(--calcel-size-color)',
@@ -1082,6 +1083,7 @@ export default function ShowCluster() {
             size="small"
             variant="outlined"
             loadingPosition="end"
+            id="cancelDeleteSeedPeer"
             sx={{
               '&.MuiLoadingButton-root': {
                 color: 'var(--calcel-size-color)',

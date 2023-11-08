@@ -3,12 +3,12 @@
   "created_at": "2023-11-06T06:09:04Z",
   "updated_at": "2023-11-06T06:09:04Z",
   "is_del": 0,
-  "email": "",
+  "email": "root@console.com",
   "name": "root",
   "avatar": "",
   "phone": "",
   "state": "enable",
-  "location": "",
+  "location": "Hangzhou",
   "bio": "",
   "configs": null
 }

@@ -117,7 +117,7 @@ describe('Clusters', () => {
       .should('be.visible')
       .and('contain', 'cluster-1');
     cy.get(
-      ':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .clusters_creatTimeContainer__k6XfL > .MuiChip-root > .MuiChip-label',
+      ':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .clusters_creatTimeContainer__k6XfL > .MuiChip-root',
     )
       .should('be.visible')
       .and('contain', '2023-10-31-15:48');

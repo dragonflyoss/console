@@ -761,6 +761,7 @@ export default function ShowCluster() {
                           </TableCell>
                           <TableCell align="center">
                             <IconButton
+                              id={item?.host_name}
                               sx={{
                                 '&.MuiButton-root': {
                                   backgroundColor: 'var(--button-color)',
@@ -1042,6 +1043,7 @@ export default function ShowCluster() {
                           </TableCell>
                           <TableCell align="center">
                             <IconButton
+                              id={item?.host_name}
                               sx={{
                                 '&.MuiButton-root': {
                                   backgroundColor: 'var(--button-color)',

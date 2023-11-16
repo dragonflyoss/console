@@ -683,7 +683,7 @@ describe('Show cluster', () => {
           statusCode: 200,
         });
       },
-    ).as('deleteScheduler');
+    );
     cy.intercept(
       {
         method: 'GET',
@@ -700,7 +700,7 @@ describe('Show cluster', () => {
     cy.get('#cancelDeleteScheduler').click();
     cy.get(':nth-child(7) > .MuiButtonBase-root').click();
     cy.get('#deleteScheduler').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'Submission successful!');
+    cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
 
     cy.get(
       ':nth-child(7) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
@@ -733,9 +733,9 @@ describe('Show cluster', () => {
           body: { message: 'Unauthorized' },
         });
       },
-    ).as('deleteScheduler');
+    );
     cy.get('#deleteScheduler').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'Unauthorized');
+    cy.get('.MuiAlert-message').should('have.text', 'Unauthorized');
   });
 
   it('Role guest delete scheduler', () => {
@@ -790,7 +790,7 @@ describe('Show cluster', () => {
 
     cy.get(':nth-child(1) > :nth-child(7) > .MuiButtonBase-root').click();
     cy.get('#deleteScheduler').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'permission deny');
+    cy.get('.MuiAlert-message').should('have.text', 'permission deny');
   });
 
   it('Search scheduler', () => {
@@ -904,7 +904,7 @@ describe('Show cluster', () => {
     );
 
     cy.get('#deleteScheduler').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'Submission successful!');
+    cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
     cy.get('.css-ms744u-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
     cy.get('#schedulerPagination > .MuiPagination-ul').children().should('have.length', 4);
     cy.get(
@@ -998,7 +998,7 @@ describe('Show cluster', () => {
     cy.get('.MuiDialogContent-root').should('not.exist');
     cy.get(':nth-child(9) > .MuiButtonBase-root').click();
     cy.get('#deleteSeedPeer').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'Submission successful!');
+    cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
     cy.wait(1000);
 
     cy.get('.css-1o0u1hg-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
@@ -1032,7 +1032,7 @@ describe('Show cluster', () => {
 
     cy.get(':nth-child(1) > :nth-child(9) > .MuiButtonBase-root').click();
     cy.get('#deleteSeedPeer').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'Unauthorized');
+    cy.get('.MuiAlert-message').should('have.text', 'Unauthorized');
   });
 
   it('Role guest delete seedPeer', () => {
@@ -1090,7 +1090,7 @@ describe('Show cluster', () => {
     cy.get(':nth-child(1) > :nth-child(9) > .MuiButtonBase-root').click();
     cy.get('#deleteSeedPeer').click();
 
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'permission deny');
+    cy.get('.MuiAlert-message').should('have.text', 'permission deny');
   });
 
   it('Search seedPeer', () => {
@@ -1193,7 +1193,7 @@ describe('Show cluster', () => {
 
     cy.get(':nth-child(5) > :nth-child(9) > .MuiButtonBase-root').click();
     cy.get('#deleteSeedPeer').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'Submission successful!');
+    cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
     cy.get('#seedPeerPagination > .MuiPagination-ul').scrollIntoView();
     cy.get('.css-1o0u1hg-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
     cy.get('#seedPeerPagination > .MuiPagination-ul').children().should('have.length', 4);

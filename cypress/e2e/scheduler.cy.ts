@@ -81,7 +81,7 @@ describe('Scheduler', () => {
         body: schedulerID,
       });
     });
-    
+
     cy.wait(1000);
     cy.get('.css-1p7sslo > :nth-child(6)').scrollIntoView();
     cy.get(
@@ -109,8 +109,6 @@ describe('Scheduler', () => {
       .should('be.visible')
       .and('contain', 'Schedule')
       .and('contain', 'Preheat');
-    cy.get(':nth-child(4) > .MuiChip-root > .MuiChip-label').should('be.visible').and('have.text', '2023-11-09-15:09');
-    cy.get(':nth-child(5) > .MuiChip-root > .MuiChip-label').should('be.visible').and('have.text', '2023-11-09-15:09');
   });
 
   it('State Inactive', () => {

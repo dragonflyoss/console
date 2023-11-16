@@ -110,6 +110,7 @@ describe('Clusters', () => {
   });
 
   it('Clusters card', () => {
+    cy.wait(1000);
     cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .css-qg3jsa > .MuiTypography-root')
       .should('be.visible')
       .and('contain', 'Default');

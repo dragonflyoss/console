@@ -82,6 +82,7 @@ describe('SeedPeer', () => {
       });
     });
 
+    cy.wait(1000);
     cy.get(
       ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2)',
     ).scrollIntoView();

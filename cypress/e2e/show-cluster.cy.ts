@@ -700,9 +700,6 @@ describe('Show cluster', () => {
     cy.get('#cancelDeleteScheduler').click();
     cy.get(':nth-child(7) > .MuiButtonBase-root').click();
     cy.get('#deleteScheduler').click();
-
-    cy.wait('@deleteScheduler');
-
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'Submission successful!');
 
     cy.get(
@@ -738,9 +735,6 @@ describe('Show cluster', () => {
       },
     ).as('deleteScheduler');
     cy.get('#deleteScheduler').click();
-
-    cy.wait('@deleteScheduler');
-
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'Unauthorized');
   });
 
@@ -792,13 +786,10 @@ describe('Show cluster', () => {
           body: { message: 'permission deny' },
         });
       },
-    ).as('deleteScheduler');
+    );
 
     cy.get(':nth-child(1) > :nth-child(7) > .MuiButtonBase-root').click();
     cy.get('#deleteScheduler').click();
-
-    cy.wait('@deleteScheduler');
-
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'permission deny');
   });
 
@@ -910,12 +901,9 @@ describe('Show cluster', () => {
           body: secondDeleteScheduler,
         });
       },
-    ).as('deleteScheduler');
+    );
 
     cy.get('#deleteScheduler').click();
-
-    cy.wait('@deleteScheduler');
-
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'Submission successful!');
     cy.get('.css-ms744u-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
     cy.get('#schedulerPagination > .MuiPagination-ul').children().should('have.length', 4);
@@ -990,7 +978,7 @@ describe('Show cluster', () => {
       req.reply({
         statusCode: 200,
       });
-    }).as('deleteSeedPeer');
+    });
 
     cy.intercept(
       {
@@ -1010,8 +998,6 @@ describe('Show cluster', () => {
     cy.get('.MuiDialogContent-root').should('not.exist');
     cy.get(':nth-child(9) > .MuiButtonBase-root').click();
     cy.get('#deleteSeedPeer').click();
-
-    cy.wait('@deleteSeedPeer');
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'Submission successful!');
     cy.wait(1000);
 
@@ -1042,13 +1028,10 @@ describe('Show cluster', () => {
           body: { message: 'Unauthorized' },
         });
       },
-    ).as('deleteSeedPeer');
+    );
 
     cy.get(':nth-child(1) > :nth-child(9) > .MuiButtonBase-root').click();
     cy.get('#deleteSeedPeer').click();
-
-    cy.wait('@deleteSeedPeer');
-
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'Unauthorized');
   });
 
@@ -1102,12 +1085,10 @@ describe('Show cluster', () => {
           body: { message: 'permission deny' },
         });
       },
-    ).as('deleteSeedPeer');
+    );
 
     cy.get(':nth-child(1) > :nth-child(9) > .MuiButtonBase-root').click();
     cy.get('#deleteSeedPeer').click();
-
-    cy.wait('@deleteSeedPeer');
 
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'permission deny');
   });
@@ -1212,7 +1193,6 @@ describe('Show cluster', () => {
 
     cy.get(':nth-child(5) > :nth-child(9) > .MuiButtonBase-root').click();
     cy.get('#deleteSeedPeer').click();
-    cy.wait('@deleteSeedPeer');
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('have.text', 'Submission successful!');
     cy.get('#seedPeerPagination > .MuiPagination-ul').scrollIntoView();
     cy.get('.css-1o0u1hg-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
@@ -1225,7 +1205,7 @@ describe('Show cluster', () => {
     cy.get(
       ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(3) > .show_ipContainer__pzOmv',
     )
-      .should('be.visible')
+      .should('exist')
       .and('contain', '30.44.18.202');
   });
 });

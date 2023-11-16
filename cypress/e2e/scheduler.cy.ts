@@ -81,7 +81,8 @@ describe('Scheduler', () => {
         body: schedulerID,
       });
     });
-
+    
+    cy.wait(1000);
     cy.get('.css-1p7sslo > :nth-child(6)').scrollIntoView();
     cy.get(
       ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',

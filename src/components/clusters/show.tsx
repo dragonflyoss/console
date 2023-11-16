@@ -405,6 +405,7 @@ export default function ShowCluster() {
   return (
     <ThemeProvider theme={theme}>
       <Snackbar
+        id="successMessage"
         open={successMessage}
         autoHideDuration={3000}
         onClose={handleClose}
@@ -415,6 +416,7 @@ export default function ShowCluster() {
         </Alert>
       </Snackbar>
       <Snackbar
+        id="errorMessage"
         open={errorMessage}
         autoHideDuration={3000}
         onClose={handleClose}

@@ -123,623 +123,6 @@ describe('Show cluster', () => {
     cy.viewport(1440, 1080);
   });
 
-  it('Schedulers and seedPeers total', () => {
-    cy.visit('/clusters/1');
-    cy.get('.css-ms744u-MuiPaper-root > .css-1m2ggra > .css-1vkqvkd > .MuiBox-root > .MuiTypography-root')
-      .should('be.visible')
-      .and('contain', '4');
-    cy.get('.css-ms744u-MuiPaper-root > .MuiChip-root > .MuiChip-label')
-      .should('be.visible')
-      .and('contain', 'Total: 11');
-    cy.get('.css-1o0u1hg-MuiPaper-root > .css-1m2ggra > .css-1vkqvkd > .MuiBox-root > .MuiTypography-root')
-      .should('be.visible')
-      .and('contain', '8');
-    cy.get('.css-1o0u1hg-MuiPaper-root > .MuiChip-root > .MuiChip-label')
-      .should('be.visible')
-      .and('contain', 'Total: 11');
-  });
-
-  it('Schedulers', () => {
-    cy.visit('/clusters/1');
-
-    cy.get('.css-1p7sslo > :nth-child(7)').scrollIntoView();
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'scheduler-7');
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(3) > .show_ipContainer__pzOmv',
-    )
-      .should('be.visible')
-      .and('contain', '30.44.98.202');
-    cy.get(':nth-child(1) > :nth-child(5) > .MuiChip-root > .MuiChip-label')
-      .should('be.visible')
-      .and('contain', 'Active');
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'scheduler-5');
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(3) > .show_ipContainer__pzOmv',
-    )
-      .should('be.visible')
-      .and('contain', '20.14.28.202');
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'scheduler-10');
-    cy.get(':nth-child(5) > :nth-child(5) > .MuiChip-root > .MuiChip-label')
-      .should('be.visible')
-      .and('contain', 'Inactive');
-    cy.get(':nth-child(7) > .MuiPagination-root > .MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
-    ).scrollIntoView();
-    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'scheduler-11');
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(3) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'scheduler-8');
-    cy.get('#schedulerPagination > .MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
-    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'scheduler-2');
-  });
-
-  it('Delete scheduler', () => {
-    cy.visit('/clusters/1');
-
-    cy.get('#schedulerPagination > .MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
-    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
-
-    cy.intercept(
-      {
-        method: 'DELETE',
-        url: '/api/v1/schedulers/2',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: afterDeleteSchedulers,
-        });
-      },
-    );
-    cy.get('#scheduler-2').click();
-    cy.get('#cancelDeleteScheduler').click();
-    cy.get('#scheduler-2').click();
-    cy.get('#deleteScheduler').click();
-    cy.get('#successMessage > .MuiPaper-root').should('have.text', 'Submission successful!').should('be.visible');
-
-    cy.get(
-      ':nth-child(7) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
-    ).scrollIntoView();
-
-    cy.get('.css-ms744u-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
-
-    cy.get(
-      ':nth-child(7) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'scheduler-11');
-    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
-  });
-
-  it('Failed to delete scheduler', () => {
-    cy.visit('/clusters/1');
-
-    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').scrollIntoView();
-    cy.get(':nth-child(1) > :nth-child(7) > .MuiButtonBase-root > [data-testid="DeleteIcon"]').click();
-
-    cy.intercept(
-      {
-        method: 'DELETE',
-        url: '/api/v1/schedulers/7',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 401,
-          body: { message: 'Unauthorized' },
-        });
-      },
-    );
-    cy.get('#deleteScheduler').click();
-    cy.get('#errorMessage > .MuiPaper-root').should('have.text', 'Unauthorized').should('be.visible');
-  });
-
-  it('Role guest delete scheduler', () => {
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guestUser,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guest,
-        });
-      },
-    );
-
-    cy.visit('/clusters/1');
-
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
-    ).scrollIntoView();
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'scheduler-7');
-
-    cy.intercept(
-      {
-        method: 'DELETE',
-        url: '/api/v1/schedulers/7',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 401,
-          body: { message: 'permission deny' },
-        });
-      },
-    );
-
-    cy.get('#scheduler-7').click();
-    cy.get('#deleteScheduler').click();
-    cy.get('#errorMessage > .MuiPaper-root').should('have.text', 'permission deny').should('be.visible');
-  });
-
-  it('Search scheduler', () => {
-    cy.visit('/clusters/1');
-
-    cy.get('.css-1p7sslo > :nth-child(5)').scrollIntoView();
-
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/schedulers?host_name=scheduler-8&page=1&per_page=10000000&scheduler_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: searchScheduler,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/schedulers?host_name=scheduler-3&page=1&per_page=10000000&scheduler_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          forceNetworkError: true,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/schedulers?host_name=scheduler-100&page=1&per_page=10000000&scheduler_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: [],
-        });
-      },
-    );
-
-    cy.get(
-      ':nth-child(6) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
-    ).type('scheduler-8{enter}');
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'scheduler-8');
-    cy.get('.MuiAutocomplete-endAdornment').click();
-    cy.get('#scheduler-button').click();
-    cy.wait(1000);
-    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '1');
-    cy.get('#schedulerPagination > .MuiPagination-ul').children().should('have.length', 5);
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'scheduler-7');
-    cy.get(
-      ':nth-child(6) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
-    ).type('scheduler-3{enter}');
-    cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch').should('be.visible');
-    cy.get('.MuiAutocomplete-endAdornment').click();
-    cy.get(
-      ':nth-child(7) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
-    ).type('scheduler-100{enter}');
-    cy.get(
-      ':nth-child(7) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > .MuiTableCell-root',
-    ).and('contain', `You don't have scheduler cluster.`);
-  });
-
-  it('Delete the scheduler, but there is only one scheduler on the next page', () => {
-    cy.visit('/clusters/1');
-
-    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').scrollIntoView();
-    cy.get('#schedulerPagination > .MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
-    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'scheduler-4');
-    cy.get('#scheduler-4').click();
-    cy.get('#schedulerPagination > .MuiPagination-ul').children().should('have.length', 5);
-
-    cy.intercept(
-      {
-        method: 'DELETE',
-        url: '/api/v1/schedulers/4',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: secondDeleteScheduler,
-        });
-      },
-    );
-
-    cy.get('#deleteScheduler').click();
-    cy.get('#successMessage > .MuiPaper-root').should('have.text', 'Submission successful!').should('be.visible');
-    cy.get('.css-ms744u-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
-    cy.get('#schedulerPagination > .MuiPagination-ul').children().should('have.length', 4);
-    cy.get(
-      ':nth-child(7) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'scheduler-2');
-  });
-
-  it('seedPeers', () => {
-    cy.visit('/clusters/1');
-
-    cy.get(
-      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
-    ).scrollIntoView();
-    cy.get(
-      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'seed-peer-10');
-    cy.get(
-      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(3) > .show_ipContainer__pzOmv',
-    )
-      .should('be.visible')
-      .and('contain', '192.168.255.255');
-    cy.get(':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(4)')
-      .should('be.visible')
-      .and('contain', '65006');
-    cy.get(':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(5)')
-      .should('be.visible')
-      .and('contain', '65002');
-    cy.get(':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(7)')
-      .should('be.visible')
-      .and('contain', 'Super');
-    cy.get(':nth-child(1) > :nth-child(8) > .MuiChip-root').should('be.visible').and('contain', 'Active');
-    cy.get('#seedPeerPagination > .MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
-    cy.get('#seedPeerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
-    cy.get(
-      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(4) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'seed-peer-11');
-    cy.get(':nth-child(4) > :nth-child(8) > .MuiChip-root > .MuiChip-label')
-      .should('be.visible')
-      .and('contain', 'Inactive');
-    cy.get('#seedPeerPagination > .MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
-    cy.get('#seedPeerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
-    cy.get(
-      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'seed-peer-3');
-    cy.get('#seedPeerPagination > .MuiPagination-ul > :nth-child(1) > .MuiButtonBase-root').click();
-    cy.get('#seedPeerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
-    cy.get('#seedPeerPagination > .MuiPagination-ul > :nth-child(5) > .MuiButtonBase-root').click();
-    cy.get('#seedPeerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
-  });
-
-  it('Delete seedPeer', () => {
-    cy.visit('/clusters/1');
-
-    cy.get('#seedPeerPagination > .MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
-    cy.get('#seedPeerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
-    cy.get(
-      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'seed-peer-3');
-
-    cy.intercept({ method: 'DELETE', url: '/api/v1/seed-peers/3' }, (req) => {
-      req.reply({
-        statusCode: 200,
-      });
-    });
-
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/seed-peers?page=1&per_page=10000000&seed_peer_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: afterDeleteSeedPeers,
-        });
-      },
-    );
-
-    cy.get('#seed-peer-3').click();
-    cy.get('#cancelDeleteSeedPeer').click();
-    cy.get('.MuiDialogContent-root').should('not.exist');
-    cy.get('#seed-peer-3').click();
-    cy.get('#deleteSeedPeer').click();
-    cy.get('#successMessage > .MuiPaper-root').should('have.text', 'Submission successful!').should('be.visible');
-    cy.wait(1000);
-
-    cy.get('.css-1o0u1hg-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
-    cy.get('#seedPeerPagination > .MuiPagination-ul').children().should('have.length', 4);
-  });
-
-  it('Failed to delete seedPeer', () => {
-    cy.visit('/clusters/1');
-
-    cy.get(
-      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
-    ).scrollIntoView();
-    cy.get(
-      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'seed-peer-10');
-
-    cy.intercept(
-      {
-        method: 'DELETE',
-        url: '/api/v1/seed-peers/10',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 401,
-          body: { message: 'Unauthorized' },
-        });
-      },
-    );
-
-    cy.get('#seed-peer-10').click();
-    cy.get('#deleteSeedPeer').click();
-    cy.get('#errorMessage > .MuiPaper-root').should('have.text', 'Unauthorized').should('be.visible');
-  });
-
-  it('Role guest delete seedPeer', () => {
-    cy.guestSignin();
-
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guestUser,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guest,
-        });
-      },
-    );
-
-    cy.visit('/clusters/1');
-
-    cy.get(
-      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
-    ).scrollIntoView();
-    cy.get(
-      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'seed-peer-10');
-
-    cy.intercept(
-      {
-        method: 'DELETE',
-        url: '/api/v1/seed-peers/10',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 401,
-          body: { message: 'permission deny' },
-        });
-      },
-    );
-
-    cy.get('#seed-peer-10').click();
-    cy.get('#deleteSeedPeer').click();
-
-    cy.get('#errorMessage > .MuiPaper-root').should('have.text', 'permission deny').should('be.visible');
-  });
-
-  it('Search seedPeer', () => {
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/seed-peers?host_name=seed-peer-4&page=1&per_page=10000000&seed_peer_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: searchSeedPeer,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/seed-peers?host_name=seed-peer-3&page=1&per_page=10000000&seed_peer_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          forceNetworkError: true,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/seed-peers?host_name=seed-peer-100&page=1&per_page=10000000&seed_peer_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: [],
-        });
-      },
-    );
-
-    cy.visit('/clusters/1');
-    cy.get(
-      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
-    ).scrollIntoView();
-    cy.get(
-      ':nth-child(9) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
-    ).type('seed-peer-4{enter}');
-    cy.get('#seedPeerPagination > .MuiPagination-ul').should('not.exist');
-    cy.get('.MuiAutocomplete-endAdornment').click();
-    cy.get('#seedPeer-button').click();
-    cy.wait(1000);
-    cy.get('#seedPeerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '1');
-    cy.get('#seedPeerPagination > .MuiPagination-ul').children().should('have.length', 5);
-    cy.get(
-      ':nth-child(9) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
-    ).type('seed-peer-3{enter}');
-    cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch').should('be.visible');
-    cy.get('.MuiAutocomplete-endAdornment').click();
-    cy.get('.css-1p7sslo > :nth-child(10)').scrollIntoView();
-    cy.get(
-      ':nth-child(9) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
-    ).type('seed-peer-100{enter}');
-    cy.get(':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > .MuiTableCell-root')
-      .should('be.visible')
-      .and('contain', `You don't have seed peer cluster.`);
-  });
-
-  it('Delete the seed-peer, but there is only one seed-peer on the next page', () => {
-    cy.visit('/clusters/1');
-
-    cy.get('#seedPeerPagination > .MuiPagination-ul').scrollIntoView();
-    cy.get('#seedPeerPagination > .MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
-    cy.get('#seedPeerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
-    cy.get(
-      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
-    )
-      .scrollIntoView()
-      .should('be.visible')
-      .and('contain', 'seed-peer-9');
-    cy.get(':nth-child(5) > :nth-child(8) > .MuiChip-root > .MuiChip-label')
-      .should('be.visible')
-      .and('contain', 'Inactive');
-
-    cy.intercept({ method: 'DELETE', url: '/api/v1/seed-peers/9' }, (req) => {
-      req.reply({
-        statusCode: 200,
-      });
-    }).as('deleteSeedPeer');
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/seed-peers?page=1&per_page=10000000&seed_peer_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: secondDeleteSeedPeer,
-        });
-      },
-    );
-
-    cy.get(':nth-child(5) > :nth-child(9) > .MuiButtonBase-root').click();
-    cy.get('#deleteSeedPeer').click();
-    cy.get('#successMessage > .MuiPaper-root').should('have.text', 'Submission successful!').should('be.visible');
-    cy.get('#seedPeerPagination > .MuiPagination-ul').scrollIntoView();
-    cy.get('.css-1o0u1hg-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
-    cy.get('#seedPeerPagination > .MuiPagination-ul').children().should('have.length', 4);
-    cy.get(
-      ':nth-child(10) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', 'seed-peer-3');
-    cy.get(
-      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(3) > .show_ipContainer__pzOmv',
-    )
-      .should('exist')
-      .and('contain', '30.44.18.202');
-  });
-
   it('Cluster', () => {
     cy.get(
       ':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .clusters_creatTimeContainer__k6XfL > .MuiButtonBase-root',
@@ -1207,5 +590,640 @@ describe('Show cluster', () => {
     cy.get('.css-1rqacr6-MuiButtonBase-root-MuiButton-root').click();
     cy.get('#deleteCluster').click();
     cy.get('.MuiAlert-message').should('have.text', 'scheduler cluster exists scheduler').should('be.visible');
+  });
+
+  it('Schedulers and seedPeers total', () => {
+    cy.visit('/clusters/1');
+    cy.get('.css-ms744u-MuiPaper-root > .css-1m2ggra > .css-1vkqvkd > .MuiBox-root > .MuiTypography-root')
+      .should('be.visible')
+      .and('contain', '4');
+    cy.get('.css-ms744u-MuiPaper-root > .MuiChip-root > .MuiChip-label')
+      .should('be.visible')
+      .and('contain', 'Total: 11');
+    cy.get('.css-1o0u1hg-MuiPaper-root > .css-1m2ggra > .css-1vkqvkd > .MuiBox-root > .MuiTypography-root')
+      .should('be.visible')
+      .and('contain', '8');
+    cy.get('.css-1o0u1hg-MuiPaper-root > .MuiChip-root > .MuiChip-label')
+      .should('be.visible')
+      .and('contain', 'Total: 11');
+  });
+
+  it('Schedulers', () => {
+    cy.visit('/clusters/1');
+
+    cy.get('.css-1p7sslo > :nth-child(7)').scrollIntoView();
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'scheduler-7');
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(3) > .show_ipContainer__pzOmv',
+    )
+      .should('be.visible')
+      .and('contain', '30.44.98.202');
+    cy.get(':nth-child(1) > :nth-child(5) > .MuiChip-root > .MuiChip-label')
+      .should('be.visible')
+      .and('contain', 'Active');
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'scheduler-5');
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(3) > .show_ipContainer__pzOmv',
+    )
+      .should('be.visible')
+      .and('contain', '20.14.28.202');
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'scheduler-10');
+    cy.get(':nth-child(5) > :nth-child(5) > .MuiChip-root > .MuiChip-label')
+      .should('be.visible')
+      .and('contain', 'Inactive');
+    cy.get(':nth-child(7) > .MuiPagination-root > .MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
+    ).scrollIntoView();
+    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'scheduler-11');
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(3) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'scheduler-8');
+    cy.get('#schedulerPagination > .MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
+    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'scheduler-2');
+  });
+
+  it('Delete scheduler', () => {
+    cy.visit('/clusters/1');
+
+    cy.get('#schedulerPagination > .MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
+    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
+
+    cy.intercept(
+      {
+        method: 'DELETE',
+        url: '/api/v1/schedulers/2',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+        });
+      },
+    );
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: afterDeleteSchedulers,
+        });
+      },
+    );
+    cy.get('#scheduler-2').click();
+    cy.get('#cancelDeleteScheduler').click();
+    cy.get('#scheduler-2').click();
+    cy.get('#deleteScheduler').click();
+    cy.get('#successMessage > .MuiPaper-root')
+      .scrollIntoView()
+      .should('have.text', 'Submission successful!')
+      .should('be.visible');
+
+    cy.get(
+      ':nth-child(7) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
+    ).scrollIntoView();
+
+    cy.get('.css-ms744u-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
+
+    cy.get(
+      ':nth-child(7) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'scheduler-11');
+    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+  });
+
+  it('Failed to delete scheduler', () => {
+    cy.visit('/clusters/1');
+
+    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').scrollIntoView();
+    cy.get(':nth-child(1) > :nth-child(7) > .MuiButtonBase-root > [data-testid="DeleteIcon"]').click();
+
+    cy.intercept(
+      {
+        method: 'DELETE',
+        url: '/api/v1/schedulers/7',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 401,
+          body: { message: 'Unauthorized' },
+        });
+      },
+    );
+    cy.get('#deleteScheduler').click();
+    cy.get('#errorMessage > .MuiPaper-root').scrollIntoView().should('have.text', 'Unauthorized').should('be.visible');
+  });
+
+  it('Role guest delete scheduler', () => {
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/users/2',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: guestUser,
+        });
+      },
+    );
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/users/2/roles',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: guest,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
+    ).scrollIntoView();
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'scheduler-7');
+
+    cy.intercept(
+      {
+        method: 'DELETE',
+        url: '/api/v1/schedulers/7',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 401,
+          body: { message: 'permission deny' },
+        });
+      },
+    );
+
+    cy.get('#scheduler-7').click();
+    cy.get('#deleteScheduler').click();
+    cy.get('#errorMessage > .MuiPaper-root')
+      .scrollIntoView()
+      .should('have.text', 'permission deny')
+      .should('be.visible');
+  });
+
+  it('Search scheduler', () => {
+    cy.visit('/clusters/1');
+
+    cy.get('.css-1p7sslo > :nth-child(5)').scrollIntoView();
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/schedulers?host_name=scheduler-8&page=1&per_page=10000000&scheduler_cluster_id=1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: searchScheduler,
+        });
+      },
+    );
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/schedulers?host_name=scheduler-3&page=1&per_page=10000000&scheduler_cluster_id=1',
+      },
+      (req) => {
+        req.reply({
+          forceNetworkError: true,
+        });
+      },
+    );
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/schedulers?host_name=scheduler-100&page=1&per_page=10000000&scheduler_cluster_id=1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: [],
+        });
+      },
+    );
+
+    cy.get(
+      ':nth-child(6) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
+    ).type('scheduler-8{enter}');
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'scheduler-8');
+    cy.get('.MuiAutocomplete-endAdornment').click();
+    cy.get('#scheduler-button').click();
+    cy.wait(1000);
+    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '1');
+    cy.get('#schedulerPagination > .MuiPagination-ul').children().should('have.length', 5);
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'scheduler-7');
+    cy.get(
+      ':nth-child(6) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
+    ).type('scheduler-3{enter}');
+    cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch').should('be.visible');
+    cy.get('.MuiAutocomplete-endAdornment').click();
+    cy.get(
+      ':nth-child(7) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
+    ).type('scheduler-100{enter}');
+    cy.get(
+      ':nth-child(7) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > .MuiTableCell-root',
+    ).and('contain', `You don't have scheduler cluster.`);
+  });
+
+  it('Delete the scheduler, but there is only one scheduler on the next page', () => {
+    cy.visit('/clusters/1');
+
+    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').scrollIntoView();
+    cy.get('#schedulerPagination > .MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
+    cy.get('#schedulerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'scheduler-4');
+    cy.get('#scheduler-4').click();
+    cy.get('#schedulerPagination > .MuiPagination-ul').children().should('have.length', 5);
+
+    cy.intercept(
+      {
+        method: 'DELETE',
+        url: '/api/v1/schedulers/4',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+        });
+      },
+    );
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: secondDeleteScheduler,
+        });
+      },
+    );
+
+    cy.get('#deleteScheduler').click();
+    cy.get('#successMessage > .MuiPaper-root')
+      .scrollIntoView()
+      .should('have.text', 'Submission successful!')
+      .should('be.visible');
+    cy.get('.css-ms744u-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
+    cy.get('#schedulerPagination > .MuiPagination-ul').children().should('have.length', 4);
+    cy.get(
+      ':nth-child(7) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'scheduler-2');
+  });
+
+  it('seedPeers', () => {
+    cy.visit('/clusters/1');
+
+    cy.get(
+      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
+    ).scrollIntoView();
+    cy.get(
+      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'seed-peer-10');
+    cy.get(
+      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(3) > .show_ipContainer__pzOmv',
+    )
+      .should('be.visible')
+      .and('contain', '192.168.255.255');
+    cy.get(':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(4)')
+      .should('be.visible')
+      .and('contain', '65006');
+    cy.get(':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(5)')
+      .should('be.visible')
+      .and('contain', '65002');
+    cy.get(':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(7)')
+      .should('be.visible')
+      .and('contain', 'Super');
+    cy.get(':nth-child(1) > :nth-child(8) > .MuiChip-root').should('be.visible').and('contain', 'Active');
+    cy.get('#seedPeerPagination > .MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
+    cy.get('#seedPeerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+    cy.get(
+      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(4) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'seed-peer-11');
+    cy.get(':nth-child(4) > :nth-child(8) > .MuiChip-root > .MuiChip-label')
+      .should('be.visible')
+      .and('contain', 'Inactive');
+    cy.get('#seedPeerPagination > .MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
+    cy.get('#seedPeerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
+    cy.get(
+      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'seed-peer-3');
+    cy.get('#seedPeerPagination > .MuiPagination-ul > :nth-child(1) > .MuiButtonBase-root').click();
+    cy.get('#seedPeerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+    cy.get('#seedPeerPagination > .MuiPagination-ul > :nth-child(5) > .MuiButtonBase-root').click();
+    cy.get('#seedPeerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
+  });
+
+  it('Delete seedPeer', () => {
+    cy.visit('/clusters/1');
+
+    cy.get('#seedPeerPagination > .MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
+    cy.get('#seedPeerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
+    cy.get(
+      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'seed-peer-3');
+
+    cy.intercept({ method: 'DELETE', url: '/api/v1/seed-peers/3' }, (req) => {
+      req.reply({
+        statusCode: 200,
+      });
+    });
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/seed-peers?page=1&per_page=10000000&seed_peer_cluster_id=1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: afterDeleteSeedPeers,
+        });
+      },
+    );
+
+    cy.get('#seed-peer-3').click();
+    cy.get('#cancelDeleteSeedPeer').click();
+    cy.get('.MuiDialogContent-root').should('not.exist');
+    cy.get('#seed-peer-3').click();
+    cy.get('#deleteSeedPeer').click();
+    cy.get('#successMessage > .MuiPaper-root')
+      .scrollIntoView()
+      .should('have.text', 'Submission successful!')
+      .should('be.visible');
+    cy.wait(1000);
+
+    cy.get('.css-1o0u1hg-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
+    cy.get('#seedPeerPagination > .MuiPagination-ul').children().should('have.length', 4);
+  });
+
+  it('Failed to delete seedPeer', () => {
+    cy.visit('/clusters/1');
+
+    cy.get(
+      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
+    ).scrollIntoView();
+    cy.get(
+      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'seed-peer-10');
+
+    cy.intercept(
+      {
+        method: 'DELETE',
+        url: '/api/v1/seed-peers/10',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 401,
+          body: { message: 'Unauthorized' },
+        });
+      },
+    );
+
+    cy.get('#seed-peer-10').click();
+    cy.get('#deleteSeedPeer').click();
+    cy.get('#errorMessage > .MuiPaper-root').scrollIntoView().should('have.text', 'Unauthorized').should('be.visible');
+  });
+
+  it('Role guest delete seedPeer', () => {
+    cy.guestSignin();
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/users/2',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: guestUser,
+        });
+      },
+    );
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/users/2/roles',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: guest,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+
+    cy.get(
+      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
+    ).scrollIntoView();
+    cy.get(
+      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'seed-peer-10');
+
+    cy.intercept(
+      {
+        method: 'DELETE',
+        url: '/api/v1/seed-peers/10',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 401,
+          body: { message: 'permission deny' },
+        });
+      },
+    );
+
+    cy.get('#seed-peer-10').click();
+    cy.get('#deleteSeedPeer').click();
+
+    cy.get('#errorMessage > .MuiPaper-root')
+      .scrollIntoView()
+      .should('have.text', 'permission deny')
+      .should('be.visible');
+  });
+
+  it('Search seedPeer', () => {
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/seed-peers?host_name=seed-peer-4&page=1&per_page=10000000&seed_peer_cluster_id=1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: searchSeedPeer,
+        });
+      },
+    );
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/seed-peers?host_name=seed-peer-3&page=1&per_page=10000000&seed_peer_cluster_id=1',
+      },
+      (req) => {
+        req.reply({
+          forceNetworkError: true,
+        });
+      },
+    );
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/seed-peers?host_name=seed-peer-100&page=1&per_page=10000000&seed_peer_cluster_id=1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: [],
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get(
+      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
+    ).scrollIntoView();
+    cy.get(
+      ':nth-child(9) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
+    ).type('seed-peer-4{enter}');
+    cy.get('#seedPeerPagination > .MuiPagination-ul').should('not.exist');
+    cy.get('.MuiAutocomplete-endAdornment').click();
+    cy.get('#seedPeer-button').click();
+    cy.wait(1000);
+    cy.get('#seedPeerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '1');
+    cy.get('#seedPeerPagination > .MuiPagination-ul').children().should('have.length', 5);
+    cy.get(
+      ':nth-child(9) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
+    ).type('seed-peer-3{enter}');
+    cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch').should('be.visible');
+    cy.get('.MuiAutocomplete-endAdornment').click();
+    cy.get('.css-1p7sslo > :nth-child(10)').scrollIntoView();
+    cy.get(
+      ':nth-child(9) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
+    ).type('seed-peer-100{enter}');
+    cy.get(':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > .MuiTableCell-root')
+      .should('be.visible')
+      .and('contain', `You don't have seed peer cluster.`);
+  });
+
+  it('Delete the seed-peer, but there is only one seed-peer on the next page', () => {
+    cy.visit('/clusters/1');
+
+    cy.get('#seedPeerPagination > .MuiPagination-ul').scrollIntoView();
+    cy.get('#seedPeerPagination > .MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
+    cy.get('#seedPeerPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+    cy.get(
+      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
+    )
+      .scrollIntoView()
+      .should('be.visible')
+      .and('contain', 'seed-peer-9');
+    cy.get(':nth-child(5) > :nth-child(8) > .MuiChip-root > .MuiChip-label')
+      .should('be.visible')
+      .and('contain', 'Inactive');
+
+    cy.intercept({ method: 'DELETE', url: '/api/v1/seed-peers/9' }, (req) => {
+      req.reply({
+        statusCode: 200,
+      });
+    }).as('deleteSeedPeer');
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/seed-peers?page=1&per_page=10000000&seed_peer_cluster_id=1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: secondDeleteSeedPeer,
+        });
+      },
+    );
+
+    cy.get(':nth-child(5) > :nth-child(9) > .MuiButtonBase-root').click();
+    cy.get('#deleteSeedPeer').click();
+    cy.get('#successMessage > .MuiPaper-root')
+      .scrollIntoView()
+      .should('have.text', 'Submission successful!')
+      .should('be.visible');
+    cy.get('#seedPeerPagination > .MuiPagination-ul').scrollIntoView();
+    cy.get('.css-1o0u1hg-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
+    cy.get('#seedPeerPagination > .MuiPagination-ul').children().should('have.length', 4);
+    cy.get(
+      ':nth-child(10) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
+    )
+      .should('be.visible')
+      .and('contain', 'seed-peer-3');
+    cy.get(
+      ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(3) > .show_ipContainer__pzOmv',
+    )
+      .should('exist')
+      .and('contain', '30.44.18.202');
   });
 });

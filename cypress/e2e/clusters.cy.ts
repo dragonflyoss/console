@@ -120,7 +120,7 @@ describe('Clusters', () => {
       ':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .clusters_creatTimeContainer__k6XfL > .MuiChip-root',
     )
       .should('be.visible')
-      .and('contain', '2023-10-31-15:48');
+      .and('have.text', '2023-10-31-15:48');
 
     cy.get(':nth-child(8) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
       .should('be.visible')

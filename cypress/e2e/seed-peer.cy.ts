@@ -110,8 +110,8 @@ describe('SeedPeer', () => {
       .should('be.visible')
       .and('contain', 'Active')
       .and('have.css', 'background-color', 'rgb(46, 143, 121)');
-    cy.get(':nth-child(6) > .MuiChip-root > .MuiChip-label').should('be.visible').and('contain', '2023-11-12-04:09');
-    cy.get(':nth-child(7) > .MuiChip-root > .MuiChip-label').should('be.visible').and('contain', '2023-11-12-04:09');
+    cy.get(':nth-child(6) > .MuiChip-root > .MuiChip-label').should('be.visible').and('have.text', '2023-11-12-04:09');
+    cy.get(':nth-child(7) > .MuiChip-root > .MuiChip-label').should('be.visible').and('have.text', '2023-11-12-04:09');
   });
 
   it('State Inactive', () => {

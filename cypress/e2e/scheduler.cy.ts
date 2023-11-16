@@ -108,47 +108,47 @@ describe('Scheduler', () => {
       .should('be.visible')
       .and('contain', 'Schedule')
       .and('contain', 'Preheat');
-    cy.get(':nth-child(4) > .MuiChip-root > .MuiChip-label').should('be.visible').and('contain', '2023-11-09-15:09');
-    cy.get(':nth-child(5) > .MuiChip-root > .MuiChip-label').should('be.visible').and('contain', '2023-11-09-15:09');
+    cy.get(':nth-child(4) > .MuiChip-root > .MuiChip-label').should('be.visible').and('have.text', '2023-11-09-15:09');
+    cy.get(':nth-child(5) > .MuiChip-root > .MuiChip-label').should('be.visible').and('have.text', '2023-11-09-15:09');
   });
 
-    it('State Inactive', () => {
-      cy.intercept({ method: 'GET', url: '/api/v1/schedulers/10' }, (req) => {
-        req.reply({
-          statusCode: 200,
-          body: inactiveScheduler,
-        });
+  it('State Inactive', () => {
+    cy.intercept({ method: 'GET', url: '/api/v1/schedulers/10' }, (req) => {
+      req.reply({
+        statusCode: 200,
+        body: inactiveScheduler,
       });
-
-      cy.get('.css-1p7sslo > :nth-child(6)').scrollIntoView();
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
-      ).click();
-      cy.get('.show_container__qetel > :nth-child(2)').should('be.visible').and('contain', 'scheduler-10');
-      cy.get(':nth-child(2) > .MuiChip-root')
-        .should('be.visible')
-        .and('contain', 'Inactive')
-        .and('have.css', 'background-color', 'rgb(28, 41, 58)');
     });
 
-    it('Interface error', () => {
-      cy.intercept({ method: 'GET', url: '/api/v1/schedulers/10' }, (req) => {
-        req.reply({
-          statusCode: 404,
-          body: { message: 'Not Found' },
-        });
-      });
+    cy.get('.css-1p7sslo > :nth-child(6)').scrollIntoView();
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
+    ).click();
+    cy.get('.show_container__qetel > :nth-child(2)').should('be.visible').and('contain', 'scheduler-10');
+    cy.get(':nth-child(2) > .MuiChip-root')
+      .should('be.visible')
+      .and('contain', 'Inactive')
+      .and('have.css', 'background-color', 'rgb(28, 41, 58)');
+  });
 
-      cy.get('.css-1p7sslo > :nth-child(6)').scrollIntoView();
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
-      ).click();
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Not Found');
-      cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
-      cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
-        .should('be.visible')
-        .and('contain', 'scheduler-cluster-1');
-      cy.get(':nth-child(2) > .css-1n0qe7k-MuiTypography-root').should('be.visible').and('contain', '-');
+  it('Interface error', () => {
+    cy.intercept({ method: 'GET', url: '/api/v1/schedulers/10' }, (req) => {
+      req.reply({
+        statusCode: 404,
+        body: { message: 'Not Found' },
+      });
     });
+
+    cy.get('.css-1p7sslo > :nth-child(6)').scrollIntoView();
+    cy.get(
+      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
+    ).click();
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Not Found');
+    cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+    cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
+      .should('be.visible')
+      .and('contain', 'scheduler-cluster-1');
+    cy.get(':nth-child(2) > .css-1n0qe7k-MuiTypography-root').should('be.visible').and('contain', '-');
+  });
 });

@@ -1,0 +1,31 @@
+{
+  "id": 10,
+  "created_at": "2023-11-12T06:09:06Z",
+  "updated_at": "2023-11-12T06:09:11Z",
+  "is_del": 0,
+  "host_name": "scheduler-10",
+  "idc": "",
+  "location": "",
+  "ip": "192.168.0.0/16",
+  "port": 8002,
+  "state": "inactive",
+  "features": ["schedule", "preheat"],
+  "scheduler_cluster_id": 1,
+  "scheduler_cluster": {
+    "id": 0,
+    "created_at": "0001-01-01T00:00:00Z",
+    "updated_at": "0001-01-01T00:00:00Z",
+    "is_del": 0,
+    "name": "",
+    "bio": "",
+    "config": null,
+    "client_config": null,
+    "scopes": null,
+    "is_default": false,
+    "seed_peer_clusters": null,
+    "schedulers": null,
+    "peers": null,
+    "jobs": null
+  },
+  "models": null
+}

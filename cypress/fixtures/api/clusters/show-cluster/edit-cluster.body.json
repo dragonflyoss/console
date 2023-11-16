@@ -1,0 +1,20 @@
+{
+  "scheduler_cluster_config": {
+    "filter_parent_limit": 8,
+    "filter_parent_range_limit": 50
+  },
+  "seed_peer_cluster_config": {
+    "load_limit": 400
+  },
+  "peer_cluster_config": {
+    "load_limit": 50,
+    "concurrent_piece_count": 5
+  },
+  "scopes": {
+    "location": "China|Shang|Hai",
+    "idc": "Hangzhou|Shanghai",
+    "cidrs": ["10.0.0.0/8", "192.168.0.0/16", "172.16.0.0/12", "192.168.20.2"]
+  },
+  "is_default": false,
+  "bio": "update cluster-1"
+}

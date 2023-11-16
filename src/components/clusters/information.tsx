@@ -165,16 +165,19 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                       PopperProps={{
                         disablePortal: true,
                       }}
-                      onClose={() => {
-                        setShowSchedulerClusterIDCopyIcon(false);
-                      }}
                       open={showSchedulerClusterIDCopyIcon}
                       disableFocusListener
                       disableHoverListener
                       disableTouchListener
                       title="copied!"
+                      id="schedulerClusterIDTooltip"
                     >
-                      <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/done.svg" />
+                      <Box
+                        component="img"
+                        id="schedulerClusterIDCopyIcon"
+                        sx={{ width: '1rem', height: '1rem' }}
+                        src="/icons/tokens/done.svg"
+                      />
                     </Tooltip>
                   ) : (
                     <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/copy.svg" />
@@ -219,16 +222,19 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                       PopperProps={{
                         disablePortal: true,
                       }}
-                      onClose={() => {
-                        setShowSeedPeerClusterIDCopyIcon(false);
-                      }}
                       open={showSeedPeerClusterIDCopyIcon}
                       disableFocusListener
                       disableHoverListener
                       disableTouchListener
                       title="copied!"
+                      id="seedPeerClusterIDTooltip"
                     >
-                      <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/done.svg" />
+                      <Box
+                        component="img"
+                        id="seedPeerClusterIDCopyIcon"
+                        sx={{ width: '1rem', height: '1rem' }}
+                        src="/icons/tokens/done.svg"
+                      />
                     </Tooltip>
                   ) : (
                     <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/copy.svg" />
@@ -334,6 +340,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                         {cluster?.scopes?.idc.split('|').length > 2 ? (
                           <IconButton
                             size="small"
+                            id="idc"
                             onClick={() => {
                               setOpenIDC(true);
                             }}
@@ -421,6 +428,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                           {cluster?.scopes?.cidrs?.length > 2 ? (
                             <IconButton
                               size="small"
+                              id="cidrs"
                               onClick={() => {
                                 setOpenCIDRs(true);
                               }}

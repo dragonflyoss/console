@@ -3,31 +3,22 @@ import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, 
 import { useEffect, useState } from 'react';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import HistoryIcon from '@mui/icons-material/History';
-import { getScheduler } from '../../lib/api';
+import { getScheduler, getSchedulerResponse } from '../../lib/api';
 import { getDatetime } from '../../lib/utils';
 import styles from './show.module.css';
 import _ from 'lodash';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 
 export default function Schedulers() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [scheduler, setScheduler] = useState({
-    id: 0,
-    host_name: '',
-    ip: '',
-    scheduler_cluster_id: 0,
-    port: '',
-    state: '',
-    idc: '',
-    features: [''],
-    location: '',
-    created_at: '',
-    updated_at: '',
-  });
+  const [scheduler, setScheduler] = useState<getSchedulerResponse>();
 
   const params = useParams();
+  const location = useLocation();
+  const pathSegments = location.pathname.split('/');
+  const clusterID = pathSegments[pathSegments.length - 3];
 
   const schedulerLabel = [
     {
@@ -96,13 +87,8 @@ export default function Schedulers() {
         <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters`}>
           clusters
         </RouterLink>
-        <RouterLink
-          component={Link}
-          underline="hover"
-          color="inherit"
-          to={`/clusters/${scheduler.scheduler_cluster_id}`}
-        >
-          {`scheduler-cluster-${scheduler.scheduler_cluster_id}`}
+        <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}`}>
+          {`scheduler-cluster-${clusterID}`}
         </RouterLink>
         <Typography color="inherit">schedulers</Typography>
         <Typography color="text.primary">{scheduler?.host_name}</Typography>
@@ -141,7 +127,7 @@ export default function Schedulers() {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : scheduler?.ip}
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : scheduler?.ip || '-'}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.clusterIDContaine}>
@@ -152,7 +138,7 @@ export default function Schedulers() {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : scheduler?.scheduler_cluster_id}
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : scheduler?.scheduler_cluster_id || '-'}
           </Typography>
         </Paper>
       </Box>
@@ -168,37 +154,49 @@ export default function Schedulers() {
               ) : (
                 <>
                   {item.name === 'created_at' ? (
-                    <Chip
-                      avatar={<MoreTimeIcon />}
-                      label={getDatetime(scheduler?.[item?.name] || '')}
-                      variant="outlined"
-                      size="small"
-                    />
+                    scheduler?.[item?.name] ? (
+                      <Chip
+                        avatar={<MoreTimeIcon />}
+                        label={getDatetime(scheduler?.[item?.name])}
+                        variant="outlined"
+                        size="small"
+                      />
+                    ) : (
+                      '-'
+                    )
                   ) : item.name === 'updated_at' ? (
-                    <Chip
-                      avatar={<HistoryIcon />}
-                      label={getDatetime(scheduler?.[item?.name])}
-                      variant="outlined"
-                      size="small"
-                    />
+                    scheduler?.[item?.name] ? (
+                      <Chip
+                        avatar={<HistoryIcon />}
+                        label={getDatetime(scheduler?.[item?.name])}
+                        variant="outlined"
+                        size="small"
+                      />
+                    ) : (
+                      '-'
+                    )
                   ) : item.name === 'state' ? (
-                    <Chip
-                      label={_.upperFirst(scheduler?.[item.name]) || ''}
-                      size="small"
-                      variant="outlined"
-                      sx={{
-                        borderRadius: '0%',
-                        backgroundColor:
-                          scheduler?.[item?.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                        color: scheduler?.[item?.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
-                        borderColor:
-                          scheduler?.[item?.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                        fontWeight: 'bold',
-                      }}
-                    />
+                    scheduler?.[item.name] ? (
+                      <Chip
+                        label={_.upperFirst(scheduler?.[item.name]) || ''}
+                        size="small"
+                        variant="outlined"
+                        sx={{
+                          borderRadius: '0%',
+                          backgroundColor:
+                            scheduler?.[item?.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                          color: scheduler?.[item?.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
+                          borderColor:
+                            scheduler?.[item?.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                          fontWeight: 'bold',
+                        }}
+                      />
+                    ) : (
+                      '-'
+                    )
                   ) : item.name === 'features' ? (
-                    <>
-                      {scheduler?.[item?.name]?.map((items: string, id: any) => (
+                    scheduler?.[item?.name] ? (
+                      scheduler?.[item?.name]?.map((items: string, id: any) => (
                         <Chip
                           key={id}
                           label={_.upperFirst(items) || ''}
@@ -213,8 +211,10 @@ export default function Schedulers() {
                             fontWeight: 'bold',
                           }}
                         />
-                      ))}
-                    </>
+                      ))
+                    ) : (
+                      '-'
+                    )
                   ) : (
                     <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
                       {scheduler?.[item?.name as keyof typeof scheduler] || '-'}

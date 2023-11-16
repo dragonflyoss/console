@@ -492,6 +492,7 @@ export default function ShowCluster() {
               size="small"
               variant="outlined"
               loadingPosition="end"
+              id="cancelDeleteCluster"
               sx={{
                 '&.MuiLoadingButton-root': {
                   color: 'var(--calcel-size-color)',
@@ -521,6 +522,7 @@ export default function ShowCluster() {
               variant="outlined"
               type="submit"
               loadingPosition="end"
+              id="deleteCluster"
               sx={{
                 '&.MuiLoadingButton-root': {
                   backgroundColor: 'var(--save-color)',
@@ -837,6 +839,7 @@ export default function ShowCluster() {
             variant="outlined"
             type="submit"
             loadingPosition="end"
+            id="deleteScheduler"
             sx={{
               '&.MuiLoadingButton-root': {
                 backgroundColor: 'var(--save-color)',
@@ -868,6 +871,7 @@ export default function ShowCluster() {
             }}
             color="primary"
             size="small"
+            id="schedulerPagination"
           />
         </Box>
       ) : (
@@ -1116,6 +1120,7 @@ export default function ShowCluster() {
             variant="outlined"
             type="submit"
             loadingPosition="end"
+            id="deleteSeedPeer"
             sx={{
               '&.MuiLoadingButton-root': {
                 backgroundColor: 'var(--save-color)',
@@ -1147,6 +1152,7 @@ export default function ShowCluster() {
             }}
             color="primary"
             size="small"
+            id="seedPeerPagination"
           />
         </Box>
       ) : (

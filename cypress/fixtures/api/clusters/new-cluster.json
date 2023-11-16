@@ -1,0 +1,314 @@
+[
+  {
+    "id": 1,
+    "name": "cluster-1",
+    "bio": "Cluster-1 is a high-performance computing cluster located in China, specifically in Hangzhou and Beijing data centers.",
+    "scopes": {
+      "idc": "Hangzhou|Shanghai|Beijing",
+      "location": "China|Hang|Zhou",
+      "cidrs": ["10.0.0.0/8", "192.168.0.0/16", "172.16.0.0/12"]
+    },
+    "scheduler_cluster_id": 1,
+    "seed_peer_cluster_id": 1,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 51,
+      "concurrent_piece_count": 4
+    },
+    "created_at": "2023-10-31T07:48:35Z",
+    "updated_at": "2023-10-31T07:48:35Z",
+    "is_default": true
+  },
+  {
+    "id": 2,
+    "name": "cluster-2",
+    "bio": "",
+    "scopes": {
+      "idc": "",
+      "location": "",
+      "cidrs": []
+    },
+    "scheduler_cluster_id": 2,
+    "seed_peer_cluster_id": 2,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50,
+      "concurrent_piece_count": 4
+    },
+    "created_at": "2023-10-31T17:48:35Z",
+    "updated_at": "2023-10-31T17:48:35Z",
+    "is_default": false
+  },
+  {
+    "id": 3,
+    "name": "cluster-3",
+    "bio": "Cluster-3 is a high-performance computing cluster located in Korea, specifically in Seoul data centers.",
+    "scopes": {
+      "idc": "Korea",
+      "location": "Seoul|Korea",
+      "cidrs": ["192.168.0.0/16", "172.16.0.0/12"]
+    },
+    "scheduler_cluster_id": 3,
+    "seed_peer_cluster_id": 3,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50,
+      "concurrent_piece_count": 4
+    },
+    "created_at": "2023-11-08T11:19:36Z",
+    "updated_at": "2023-11-08T11:19:36Z",
+    "is_default": true
+  },
+  {
+    "id": 4,
+    "name": "cluster-4",
+    "bio": "Cluster-4 is a high-performance computing cluster located in China, specifically in Hangzhou data centers.",
+    "scopes": {
+      "idc": "hz|dl",
+      "location": "China|Hang|Zhou",
+      "cidrs": ["10.0.0.0/8", "192.168.0.0/16"]
+    },
+    "scheduler_cluster_id": 4,
+    "seed_peer_cluster_id": 4,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 5,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50,
+      "concurrent_piece_count": 5
+    },
+    "created_at": "2023-11-09T18:19:36Z",
+    "updated_at": "2023-11-09T18:19:36Z",
+    "is_default": true
+  },
+  {
+    "id": 5,
+    "name": "cluster-5",
+    "bio": "Cluster-5 is a high-performance computing cluster located in China, specifically in Chongqing data centers.",
+    "scopes": {
+      "idc": "cq|cd",
+      "location": "China|Chong|Qing",
+      "cidrs": ["10.0.0.0/8", "192.168.0.0/16"]
+    },
+    "scheduler_cluster_id": 5,
+    "seed_peer_cluster_id": 5,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50,
+      "concurrent_piece_count": 4
+    },
+    "created_at": "2023-11-01T10:19:36Z",
+    "updated_at": "2023-11-01T10:19:36Z",
+    "is_default": false
+  },
+  {
+    "id": 6,
+    "name": "cluster-6",
+    "bio": "Cluster-6 is a high-performance computing cluster located in China, specifically in Chongdu data centers.",
+    "scopes": {
+      "idc": "cq|cd",
+      "location": "China|Chong|Du",
+      "cidrs": ["10.0.0.0/8", "192.168.0.0/16"]
+    },
+    "scheduler_cluster_id": 6,
+    "seed_peer_cluster_id": 6,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50,
+      "concurrent_piece_count": 4
+    },
+    "created_at": "2023-11-09T20:12:36Z",
+    "updated_at": "2023-11-09T20:12:36Z",
+    "is_default": true
+  },
+  {
+    "id": 7,
+    "name": "cluster-7",
+    "bio": "Cluster-7 is a high-performance computing cluster located in China, specifically in Chongdu data centers.",
+    "scopes": {
+      "idc": "cd",
+      "location": "China|Cheng|Du",
+      "cidrs": ["10.0.0.0/8", "172.16.0.0/19"]
+    },
+    "scheduler_cluster_id": 7,
+    "seed_peer_cluster_id": 7,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50,
+      "concurrent_piece_count": 4
+    },
+    "created_at": "2023-11-11T10:19:36Z",
+    "updated_at": "2023-11-11T10:19:36Z",
+    "is_default": true
+  },
+  {
+    "id": 8,
+    "name": "cluster-8",
+    "bio": "Cluster-8 is a high-performance computing cluster located in China, specifically in Jiangsu data centers.",
+    "scopes": {
+      "idc": "js",
+      "location": "China|Jiang|Su",
+      "cidrs": ["10.0.0.0/5", "172.16.0.0/19"]
+    },
+    "scheduler_cluster_id": 8,
+    "seed_peer_cluster_id": 8,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50,
+      "concurrent_piece_count": 4
+    },
+    "created_at": "2023-11-11T13:19:36Z",
+    "updated_at": "2023-11-11T13:19:36Z",
+    "is_default": false
+  },
+  {
+    "id": 9,
+    "name": "cluster-9",
+    "bio": "Cluster-9 is a high-performance computing cluster located in China, specifically in Hangzhou data centers.",
+    "scopes": {
+      "idc": "hz|hf",
+      "location": "China|Hang|Zhou",
+      "cidrs": ["10.0.0.0/8", "192.168.0.0/16"]
+    },
+    "scheduler_cluster_id": 9,
+    "seed_peer_cluster_id": 9,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50,
+      "concurrent_piece_count": 4
+    },
+    "created_at": "2023-11-11T10:29:36Z",
+    "updated_at": "2023-11-11T10:29:36Z",
+    "is_default": true
+  },
+  {
+    "id": 10,
+    "name": "cluster-10",
+    "bio": "Cluster-10 is a high-performance computing cluster located in England, specifically in London data centers.",
+    "scopes": {
+      "idc": "London",
+      "location": "London|England",
+      "cidrs": ["192.168.255.255"]
+    },
+    "scheduler_cluster_id": 10,
+    "seed_peer_cluster_id": 10,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50,
+      "concurrent_piece_count": 4
+    },
+    "created_at": "2023-11-15T05:19:36Z",
+    "updated_at": "2023-11-15T05:19:36Z",
+    "is_default": true
+  },
+  {
+    "id": 11,
+    "name": "cluster-11",
+    "bio": "Cluster-10 is a high-performance computing cluster located in France, specifically in Paris data centers.",
+    "scopes": {
+      "idc": "Paris",
+      "location": "Paris|France",
+      "cidrs": ["192.168.0.0", "10.0.0.0"]
+    },
+    "scheduler_cluster_id": 11,
+    "seed_peer_cluster_id": 11,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50,
+      "concurrent_piece_count": 4
+    },
+    "created_at": "2023-11-01T10:19:36Z",
+    "updated_at": "2023-11-01T10:19:36Z",
+    "is_default": false
+  },
+  {
+    "id": 12,
+    "name": "cluster-12",
+    "bio": "Add new cluster case",
+    "scopes": {
+      "idc": "hz|sh",
+      "location": "China|Hang|Zhou",
+      "cidrs": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
+    },
+    "scheduler_cluster_id": 12,
+    "seed_peer_cluster_id": 12,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50,
+      "concurrent_piece_count": 10
+    },
+    "created_at": "2023-11-21T06:49:41Z",
+    "updated_at": "2023-11-21T06:49:41Z",
+    "is_default": true
+  }
+]

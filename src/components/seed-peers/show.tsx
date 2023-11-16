@@ -2,35 +2,25 @@ import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { getSeedPeer } from '../../lib/api';
+import { getSeedPeer, getSeedPeerResponse } from '../../lib/api';
 import { getDatetime } from '../../lib/utils';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import HistoryIcon from '@mui/icons-material/History';
 import styles from './show.module.css';
 import _ from 'lodash';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation, useNavigate, useMatch } from 'react-router-dom';
 
 export default function SeedPeer() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [seedPeer, setSeedPeer] = useState({
-    id: 0,
-    host_name: '',
-    ip: '',
-    port: '',
-    download_port: '',
-    object_storage_port: '',
-    type: '',
-    state: '',
-    idc: '',
-    location: '',
-    created_at: '',
-    updated_at: '',
-    seed_peer_cluster_id: 0,
-  });
+  const [seedPeer, setSeedPeer] = useState<getSeedPeerResponse>();
 
   const params = useParams();
+
+  const location = useLocation();
+  const pathSegments = location.pathname.split('/');
+  const clusterID = pathSegments[pathSegments.length - 3];
 
   const seedPeerLabel = [
     {
@@ -107,13 +97,8 @@ export default function SeedPeer() {
         <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters`}>
           clusters
         </RouterLink>
-        <RouterLink
-          component={Link}
-          underline="hover"
-          color="inherit"
-          to={`/clusters/${seedPeer.seed_peer_cluster_id}`}
-        >
-          {`seed-peer-cluster-${seedPeer.seed_peer_cluster_id}`}
+        <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}`}>
+          {`seed-peer-cluster-${clusterID}`}
         </RouterLink>
         <Typography color="inherit">seed-peers</Typography>
         <Typography color="text.primary">{seedPeer?.host_name}</Typography>
@@ -130,7 +115,7 @@ export default function SeedPeer() {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.id}
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.id || '-'}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.headerContainer}>
@@ -141,7 +126,7 @@ export default function SeedPeer() {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.host_name}
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.host_name || '-'}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.headerContainer}>
@@ -152,7 +137,7 @@ export default function SeedPeer() {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.ip}
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.ip || '-'}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.clusterIDContaine}>
@@ -163,7 +148,7 @@ export default function SeedPeer() {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.seed_peer_cluster_id}
+            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.seed_peer_cluster_id || '-'}
           </Typography>
         </Paper>
       </Box>
@@ -179,37 +164,49 @@ export default function SeedPeer() {
               ) : (
                 <>
                   {item.name === 'created_at' ? (
-                    <Chip
-                      avatar={<MoreTimeIcon />}
-                      label={getDatetime(seedPeer?.[item?.name] || '')}
-                      variant="outlined"
-                      size="small"
-                    />
+                    seedPeer?.[item?.name] ? (
+                      <Chip
+                        avatar={<MoreTimeIcon />}
+                        label={getDatetime(seedPeer?.[item?.name])}
+                        variant="outlined"
+                        size="small"
+                      />
+                    ) : (
+                      '-'
+                    )
                   ) : item.name === 'updated_at' ? (
-                    <Chip
-                      avatar={<HistoryIcon />}
-                      label={getDatetime(seedPeer?.[item?.name] || '')}
-                      variant="outlined"
-                      size="small"
-                    />
+                    seedPeer?.[item?.name] ? (
+                      <Chip
+                        avatar={<HistoryIcon />}
+                        label={getDatetime(seedPeer?.[item?.name])}
+                        variant="outlined"
+                        size="small"
+                      />
+                    ) : (
+                      '-'
+                    )
                   ) : item.name === 'state' ? (
-                    <Chip
-                      label={_.upperFirst(seedPeer?.[item?.name]) || ''}
-                      size="small"
-                      variant="outlined"
-                      sx={{
-                        borderRadius: '0%',
-                        backgroundColor:
-                          seedPeer?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                        color: seedPeer?.[item.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
-                        borderColor:
-                          seedPeer?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                        fontWeight: 'bold',
-                      }}
-                    />
+                    seedPeer?.[item?.name] ? (
+                      <Chip
+                        label={_.upperFirst(seedPeer?.[item?.name])}
+                        size="small"
+                        variant="outlined"
+                        sx={{
+                          borderRadius: '0%',
+                          backgroundColor:
+                            seedPeer?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                          color: seedPeer?.[item.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
+                          borderColor:
+                            seedPeer?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                          fontWeight: 'bold',
+                        }}
+                      />
+                    ) : (
+                      '-'
+                    )
                   ) : item.name === 'type' ? (
                     <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-                      {_.upperFirst(seedPeer?.[item.name]) || ''}
+                      {_.upperFirst(seedPeer?.[item.name]) || '-'}
                     </Typography>
                   ) : (
                     <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">

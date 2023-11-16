@@ -98,9 +98,9 @@ export default function EditCluster() {
   const informationForm = [
     {
       formProps: {
-        id: 'bio',
+        id: 'description',
         label: 'Description',
-        name: 'bio',
+        name: 'description',
         autoComplete: 'family-name',
         value: bio,
         placeholder: 'Please enter description',
@@ -254,7 +254,7 @@ export default function EditCluster() {
   const configForm = [
     {
       formProps: {
-        id: 'seed peer load limit',
+        id: 'seedPeerLoadLimit',
         label: 'Seed Peer load limit',
         name: 'seedPeerLoadLimit',
         type: 'number',
@@ -292,7 +292,7 @@ export default function EditCluster() {
     },
     {
       formProps: {
-        id: 'peer load limit',
+        id: 'peerLoadLimit',
         label: 'Peer load limit',
         name: 'peerLoadLimit',
         type: 'number',
@@ -332,7 +332,7 @@ export default function EditCluster() {
     },
     {
       formProps: {
-        id: 'number of concurrent download pieces',
+        id: 'numberOfConcurrentDownloadPieces',
         label: 'Number of concurrent download pieces',
         name: 'numberOfConcurrentDownloadPieces',
         type: 'number',
@@ -371,7 +371,7 @@ export default function EditCluster() {
     },
     {
       formProps: {
-        id: 'candidate parent limit',
+        id: 'candidateParentLimit',
         label: 'Candidate parent limit',
         name: 'candidateParentLimit',
         type: 'number',
@@ -413,9 +413,9 @@ export default function EditCluster() {
     },
     {
       formProps: {
-        id: 'filter parent limit',
+        id: 'filterParentLimit',
         label: 'Filter parent limit',
-        name: 'filter parent limit',
+        name: 'filterParentLimit',
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Filter parent limit',
@@ -476,7 +476,7 @@ export default function EditCluster() {
     const cidrsText = event.currentTarget.elements.cidrs.value;
 
     if (idcText) {
-      setIDCHelperText('Please press ENTER to end the IDC creation');
+      setIDCHelperText('Please press ENTER to end the IDC creation.');
       setIDCError(true);
     } else {
       setIDCError(false);
@@ -484,7 +484,7 @@ export default function EditCluster() {
     }
 
     if (cidrsText) {
-      setCIDRsHelperText('Please press ENTER to end the CIDRs creation');
+      setCIDRsHelperText('Please press ENTER to end the CIDRs creation.');
       setCIDRsError(true);
     } else {
       setCIDRsError(false);
@@ -766,6 +766,7 @@ export default function EditCluster() {
             size="small"
             variant="outlined"
             loadingPosition="end"
+            id="cancel"
             sx={{
               '&.MuiLoadingButton-root': {
                 color: 'var(--calcel-size-color)',
@@ -798,6 +799,7 @@ export default function EditCluster() {
             variant="outlined"
             type="submit"
             loadingPosition="end"
+            id="save"
             sx={{
               '&.MuiLoadingButton-root': {
                 backgroundColor: 'var(--save-color)',

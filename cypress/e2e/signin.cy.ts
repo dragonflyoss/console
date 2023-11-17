@@ -72,7 +72,7 @@ describe('Signin', () => {
       (req) => {
         req.reply({
           statusCode: 200,
-          body: schedulers,
+          body: [],
         });
       },
     );
@@ -84,7 +84,7 @@ describe('Signin', () => {
       (req) => {
         req.reply({
           statusCode: 200,
-          body: clusters,
+          body: [],
         });
       },
     );
@@ -96,11 +96,11 @@ describe('Signin', () => {
       (req) => {
         req.reply({
           statusCode: 200,
-          body: seedPeers,
+          body: [],
         });
       },
     );
-    
+
     cy.get('#account').type('root');
     cy.get('#password').type(`dragonfly`);
     cy.signin();

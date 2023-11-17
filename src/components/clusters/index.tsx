@@ -18,7 +18,14 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
-import { getSchedulers, getSeedPeers, getClusters, getClustersResponse } from '../../lib/api';
+import {
+  getSchedulers,
+  getSeedPeers,
+  getClusters,
+  getClustersResponse,
+  getSchedulersResponse,
+  getSeedPeersResponse,
+} from '../../lib/api';
 import styles from './index.module.css';
 import { useEffect, useState } from 'react';
 import { getDatetime, getPaginatedList } from '../../lib/utils';
@@ -58,8 +65,8 @@ export default function Clusters() {
   const [searchClusters, setSearchClusters] = useState('');
   const [clusterCount, setClusterCount] = useState<getClustersResponse[]>([]);
   const [cluster, setCluster] = useState<getClustersResponse[]>([]);
-  const [scheduler, setScheduler] = useState([{}]);
-  const [seedPeer, setSeedPeer] = useState([{}]);
+  const [scheduler, setScheduler] = useState<getSchedulersResponse[]>([]);
+  const [seedPeer, setSeedPeer] = useState<getSeedPeersResponse[]>([]);
   const [allClusters, setAllClusters] = useState<getClustersResponse[]>([]);
   const navigate = useNavigate();
 
@@ -92,7 +99,7 @@ export default function Clusters() {
   }, []);
 
   useEffect(() => {
-    if (cluster != null && cluster.length > 0) {
+    if (Array.isArray(cluster) && cluster.length > 0) {
       cluster.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
       cluster.sort((a, b) => {
@@ -123,7 +130,7 @@ export default function Clusters() {
   const numberOfActiveSeedPeers =
     Array.isArray(seedPeer) && seedPeer?.filter((item: any) => item?.state === 'active').length;
 
-  const searchCluster = async (event: any) => {
+  const searchCluster = async () => {
     try {
       setClusterIsLoading(true);
       const cluster = searchClusters
@@ -135,6 +142,7 @@ export default function Clusters() {
       setClusterIsLoading(false);
     } catch (error) {
       if (error instanceof Error) {
+        setClusterIsLoading(false);
         setErrorMessage(true);
         setErrorMessageText(error.message);
       }
@@ -292,39 +300,35 @@ export default function Clusters() {
             </Box>
           </Paper>
         </Grid>
-        {cluster != null && cluster.length > 0 ? (
-          <Box className={styles.searchContainer}>
-            <Stack spacing={2} sx={{ width: '20rem' }}>
-              <Autocomplete
-                size="small"
-                color="secondary"
-                id="free-solo-demo"
-                freeSolo
-                onKeyDown={searchClusterKeyDown}
-                inputValue={searchClusters}
-                onInputChange={(_event, newInputValue) => {
-                  setSearchClusters(newInputValue);
-                }}
-                options={(Array.isArray(clusterCount) && clusterCount.map((option) => option?.name)) || ['']}
-                renderInput={(params) => <TextField {...params} label="Search" />}
-              />
-            </Stack>
-            <IconButton
-              type="button"
-              aria-label="search"
-              id="submit-button"
+        <Box className={styles.searchContainer}>
+          <Stack spacing={2} sx={{ width: '20rem' }}>
+            <Autocomplete
               size="small"
-              onClick={searchCluster}
-              sx={{ width: '3rem' }}
-            >
-              <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
-            </IconButton>
-          </Box>
-        ) : (
-          <></>
-        )}
+              color="secondary"
+              id="free-solo-demo"
+              freeSolo
+              onKeyDown={searchClusterKeyDown}
+              inputValue={searchClusters}
+              onInputChange={(_event, newInputValue) => {
+                setSearchClusters(newInputValue);
+              }}
+              options={(Array.isArray(clusterCount) && clusterCount.map((option) => option?.name)) || ['']}
+              renderInput={(params) => <TextField {...params} label="Search" />}
+            />
+          </Stack>
+          <IconButton
+            type="button"
+            aria-label="search"
+            id="submit-button"
+            size="small"
+            onClick={searchCluster}
+            sx={{ width: '3rem' }}
+          >
+            <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
+          </IconButton>
+        </Box>
         <Grid item xs={12} className={styles.clusterListContainer} component="form" noValidate>
-          {Array.isArray(allClusters) &&
+          {Array.isArray(allClusters) ? (
             allClusters.map((item) => (
               <Box
                 key={item.id}
@@ -360,6 +364,7 @@ export default function Clusters() {
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
+                        id="isDefault"
                         sx={{
                           mt: '0.8rem',
                           mb: '0.8rem',
@@ -409,7 +414,10 @@ export default function Clusters() {
                   </Box>
                 </Paper>
               </Box>
-            ))}
+            ))
+          ) : (
+            <></>
+          )}
         </Grid>
         {totalPages > 1 ? (
           <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
@@ -421,6 +429,7 @@ export default function Clusters() {
               }}
               color="primary"
               size="small"
+              id="clusterPagination"
             />
           </Box>
         ) : (

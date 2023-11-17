@@ -103,10 +103,13 @@ describe('Signin', () => {
 
     cy.get('#account').type('root');
     cy.get('#password').type(`dragonfly`);
+
     cy.signin();
+
     cy.get('form').submit();
     cy.location('pathname').should('eq', '/clusters');
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('exist');
+
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
     cy.get('[href="/users"]').should('exist');
@@ -144,12 +147,16 @@ describe('Signin', () => {
           body: signin,
         });
     });
+
     cy.get('#account').type('root-2');
     cy.get('#password').type(`dragonfly`);
+
     cy.guestSignin();
+
     cy.get('form').submit();
     cy.location('pathname').should('eq', '/clusters');
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('exist');
+
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
     cy.get('[href="/users"]').should('not.exist');
@@ -158,6 +165,7 @@ describe('Signin', () => {
   it('Switch to the signup page', () => {
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
     cy.url().should('include', '/signup');
+
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
     cy.url().should('include', '/signin');
   });
@@ -165,6 +173,7 @@ describe('Signin', () => {
   it('Password hidden function', () => {
     cy.get('#account').type('root');
     cy.get('#password').type(`dragonfly`);
+    
     cy.get('.MuiInputBase-root > .MuiButtonBase-root').click();
     cy.get('#password').should('have.value', 'dragonfly');
   });

@@ -8,6 +8,7 @@ import searchCluster from '../fixtures/api/clusters/search-cluster.json';
 describe('Clusters', () => {
   beforeEach(() => {
     cy.signin();
+
     cy.intercept(
       {
         method: 'GET',
@@ -96,6 +97,7 @@ describe('Clusters', () => {
     )
       .should('be.visible')
       .and('contain', '4');
+
     cy.get(
       '.clusters_seedPeerContainer__u4Xst > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
     )
@@ -122,6 +124,7 @@ describe('Clusters', () => {
         'contain',
         'Cluster-1 is a high-performance computing cluster located in China, specifically in Hangzhou and Beijing data centers.',
       );
+
     cy.get(':nth-child(8) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
       .should('be.visible')
       .and('contain', 'cluster-2');
@@ -129,6 +132,7 @@ describe('Clusters', () => {
       .should('be.visible')
       .and('contain', 'Non-Default')
       .and('have.css', 'background-color', 'rgb(28, 41, 58)');
+
     cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
     cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
     cy.get('.clusters_clusterListContent__UwWjF > .css-k008qs').should('be.visible').and('contain', '8');
@@ -147,9 +151,11 @@ describe('Clusters', () => {
 
   it('Toggle pagination', () => {
     cy.get('.Mui-selected').invoke('text').should('eq', 'Cluster1');
+
     cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
     cy.get('.clusters_clusterListContent__UwWjF > .MuiTypography-h6').should('be.visible').and('contain', 'cluster-8');
     cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+
     cy.get('.MuiPagination-ul > :nth-child(2) > .MuiButtonBase-root').click();
     cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '1');
     cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
@@ -198,6 +204,7 @@ describe('Clusters', () => {
     )
       .should('be.visible')
       .and('contain', '0');
+
     cy.get(
       ':nth-child(2) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
     )
@@ -208,6 +215,7 @@ describe('Clusters', () => {
     )
       .should('be.visible')
       .and('contain', '0');
+
     cy.get(
       '.clusters_seedPeerContainer__u4Xst > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
     )
@@ -232,12 +240,12 @@ describe('Clusters', () => {
         });
       },
     );
-    cy.intercept('GET', '/api/v1/seed-peers?page=1&per_page=10000000', (req) => {
+    cy.intercept({ method: 'GET', url: '/api/v1/seed-peers?page=1&per_page=10000000' }, (req) => {
       req.reply({
         forceNetworkError: true,
       });
     });
-    cy.intercept('GET', '/api/v1/schedulers?page=1&per_page=10000000', (req) => {
+    cy.intercept({ method: 'GET', url: '/api/v1/schedulers?page=1&per_page=10000000' }, (req) => {
       req.reply({
         forceNetworkError: true,
       });
@@ -271,9 +279,11 @@ describe('Clusters', () => {
     cy.get('.css-1rr4qq7 > .MuiSnackbar-root > .MuiPaper-root > .MuiAlert-message')
       .should('be.visible')
       .and('contain', 'Failed to fetch');
+
     cy.get('.css-1rr4qq7 > .MuiSnackbar-root > .MuiPaper-root > .MuiAlert-action > .MuiButtonBase-root').click();
     cy.get('.css-1rr4qq7 > .MuiSnackbar-root > .MuiPaper-root > .MuiAlert-message').should('not.exist');
     cy.get('.MuiList-root').should('exist').should('not.have.descendants');
+
     cy.get(
       ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
     )
@@ -286,6 +296,7 @@ describe('Clusters', () => {
     )
       .should('be.visible')
       .and('contain', '0');
+
     cy.get(
       ':nth-child(2) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
     )
@@ -296,6 +307,7 @@ describe('Clusters', () => {
     )
       .should('be.visible')
       .and('contain', '0');
+
     cy.get(
       '.clusters_seedPeerContainer__u4Xst > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
     )
@@ -341,10 +353,12 @@ describe('Clusters', () => {
     cy.get('#free-solo-demo').type('cluster-22{enter}');
     cy.get('.MuiGrid-item').should('exist');
     cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');
+
     cy.get('#free-solo-demo').clear();
     cy.get('#free-solo-demo').type('{enter}');
     cy.get('#clusterPagination > .MuiPagination-ul').should('exist');
     cy.get('#clusterPagination > .MuiPagination-ul').children().should('have.length', 4);
+    
     cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
       .should('be.visible')
       .and('contain', 'cluster-1');

@@ -3,9 +3,6 @@ import root from '../fixtures/api/role-root.json';
 import guest from '../fixtures/api/role-guest.json';
 import user from '../fixtures/api/user.json';
 import guestUser from '../fixtures/api/guest-user.json';
-import clusters from '../fixtures/api/clusters/clusters.json';
-import seedPeers from '../fixtures/api/clusters/seed-peers.json';
-import schedulers from '../fixtures/api/clusters/schedulers.json';
 import _ from 'lodash';
 
 describe('Signin', () => {
@@ -173,7 +170,7 @@ describe('Signin', () => {
   it('Password hidden function', () => {
     cy.get('#account').type('root');
     cy.get('#password').type(`dragonfly`);
-    
+
     cy.get('.MuiInputBase-root > .MuiButtonBase-root').click();
     cy.get('#password').should('have.value', 'dragonfly');
   });

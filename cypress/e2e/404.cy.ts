@@ -1,14 +1,9 @@
-import clusters from '../fixtures/api/clusters/clusters.json';
 import root from '../fixtures/api/role-root.json';
 import user from '../fixtures/api/user.json';
-import seedPeers from '../fixtures/api/clusters/seed-peers.json';
-import schedulers from '../fixtures/api/clusters/schedulers.json';
-import searchCluster from '../fixtures/api/clusters/search-cluster.json';
 
 describe('404', () => {
   beforeEach(() => {
     cy.signin();
-
     cy.intercept(
       {
         method: 'GET',

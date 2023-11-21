@@ -106,6 +106,7 @@ describe('Signin', () => {
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
     // menu exists for users
     cy.get('[href="/users"]').should('exist');
+    cy.get('[href="/users"]').click();
   });
 
   it('submits form with incorrect email format', () => {
@@ -179,6 +180,7 @@ describe('Signin', () => {
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
     //menu not exists for users
     cy.get('[href="/users"]').should('not.exist');
+    cy.visit('/users');
   });
 
   it('click the Create an account button', () => {

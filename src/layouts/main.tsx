@@ -31,7 +31,7 @@ function Main() {
     const payload = getJwtPayload();
     (async function () {
       try {
-        if (!payload?.id) {
+        if (payload?.id) {
           const role = await getUserRoles(payload?.id);
           setIsRoot(role.includes(ROLE_ROOT));
         }

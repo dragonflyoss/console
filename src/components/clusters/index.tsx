@@ -119,6 +119,10 @@ export default function Clusters() {
       setTotalPages(totalPage);
       setAllClusters(currentPageData);
     }
+    if (cluster === null) {
+      setTotalPages(1);
+      setAllClusters([]);
+    }
   }, [cluster, clusterPage]);
 
   const numberOfDefaultClusters =
@@ -327,11 +331,14 @@ export default function Clusters() {
             <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
           </IconButton>
         </Box>
-        <Box className={styles.clusterListContainer} id="clusters">
-          {Array.isArray(allClusters) ? (
+        <Box className={styles.clusterListContainer}>
+          {allClusters.length === 0 ? (
+            <></>
+          ) : (
             allClusters.map((item) => (
               <Box
                 key={item.id}
+                id="clusters"
                 sx={{
                   maxWidth: '28rem',
                   width: '33.333%',
@@ -415,8 +422,6 @@ export default function Clusters() {
                 </Paper>
               </Box>
             ))
-          ) : (
-            <></>
           )}
         </Box>
         {totalPages > 1 ? (

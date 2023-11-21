@@ -51,16 +51,7 @@ describe('Signin', () => {
     cy.visit('/signin');
   });
 
-  it('Signin failed', () => {
-    cy.get('#account').type('root');
-    cy.get('#password').type('rooot1');
-    cy.get('form').submit();
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
-    cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
-  });
-
-  it('Signin suceesfully', () => {
+  it('log in with valid account and password', () => {
     cy.intercept(
       {
         method: 'GET',
@@ -102,17 +93,44 @@ describe('Signin', () => {
     cy.get('#password').type(`dragonfly`);
 
     cy.signin();
-
     cy.get('form').submit();
-    cy.location('pathname').should('eq', '/clusters');
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('exist');
 
+    // Then I see that the current page is the clusters
+    cy.url().should('include', '/clusters');
+    cy.location('pathname').should('eq', '/clusters');
+    //prompt message: Please change your password promptly when logging in for the first time!
+    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('exist');
+    // close prompt message
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+    // menu exists for users
     cy.get('[href="/users"]').should('exist');
   });
 
-  it('Role guest signin', () => {
+  it('submits form with incorrect email format', () => {
+    cy.get('#account').type('root');
+    cy.get('#password').type('rooot1');
+    cy.get('form').submit();
+    // show error message
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
+    // close error message
+    cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+  });
+
+  it('try to log in with invalid account', () => {
+    cy.get('#account').type('root-1');
+    cy.get('#password').type('dragonfly');
+    cy.get('form').submit();
+    // show error message
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
+    // close error message
+    cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+  });
+
+  it('Try to log in with guest user', () => {
     cy.intercept(
       {
         method: 'GET',
@@ -147,27 +165,33 @@ describe('Signin', () => {
 
     cy.get('#account').type('root-2');
     cy.get('#password').type(`dragonfly`);
-
+    // guest user
     cy.guestSignin();
 
     cy.get('form').submit();
+    // Then I see that the current page is the clusters
+    cy.url().should('include', '/clusters');
     cy.location('pathname').should('eq', '/clusters');
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('exist');
 
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+    // users menu does not exist
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+    //menu not exists for users
     cy.get('[href="/users"]').should('not.exist');
   });
 
-  it('Switch to the signup page', () => {
+  it('click the Create an account button', () => {
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
+    // Then I see that the current page is the signup
     cy.url().should('include', '/signup');
 
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
+    // Then I see that the current page is the signin
     cy.url().should('include', '/signin');
   });
 
-  it('Password hidden function', () => {
+  it('click the password hide button', () => {
     cy.get('#account').type('root');
     cy.get('#password').type(`dragonfly`);
 
@@ -175,15 +199,17 @@ describe('Signin', () => {
     cy.get('#password').should('have.value', 'dragonfly');
   });
 
-  it('Validation error', () => {
+  it('try to verify account and password', () => {
     const NameNotLongEnough = _.times(2, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
     const nameLengthExceeds = _.times(11, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
     const passwordLengthExceeds = _.times(17, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
 
     cy.get('#account').type(NameNotLongEnough);
     cy.get('#account-helper-text').should('be.visible').and('contain', 'Fill in the characters, the length is 3-10.');
+
     cy.get('#account').type(nameLengthExceeds);
     cy.get('#account-helper-text').should('be.visible').and('contain', 'Fill in the characters, the length is 3-10.');
+
     cy.get('#password').type(passwordLengthExceeds);
     cy.get('#password-helper-text')
       .should('be.visible')

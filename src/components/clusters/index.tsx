@@ -327,7 +327,7 @@ export default function Clusters() {
             <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
           </IconButton>
         </Box>
-        <Grid item xs={12} className={styles.clusterListContainer} component="form" noValidate>
+        <Box className={styles.clusterListContainer} id="clusters">
           {Array.isArray(allClusters) ? (
             allClusters.map((item) => (
               <Box
@@ -418,7 +418,7 @@ export default function Clusters() {
           ) : (
             <></>
           )}
-        </Grid>
+        </Box>
         {totalPages > 1 ? (
           <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
             <Pagination

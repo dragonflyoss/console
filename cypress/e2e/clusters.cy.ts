@@ -197,7 +197,7 @@ describe('Clusters', () => {
     )
       .should('be.visible')
       .and('contain', '0');
-    cy.get('.MuiGrid-item').should('exist').should('be.empty');
+    cy.get('#clusters').should('exist').should('be.empty');
     cy.get('.css-iusmz7').should('not.exist');
     cy.get(
       ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
@@ -289,7 +289,7 @@ describe('Clusters', () => {
     )
       .should('be.visible')
       .and('contain', '0');
-    cy.get('.MuiGrid-item').should('exist').should('be.empty');
+    cy.get('#clusters').should('exist').should('be.empty');
     cy.get('.css-iusmz7').should('not.exist');
     cy.get(
       ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
@@ -351,14 +351,14 @@ describe('Clusters', () => {
 
     cy.get('#free-solo-demo').clear();
     cy.get('#free-solo-demo').type('cluster-22{enter}');
-    cy.get('.MuiGrid-item').should('exist');
+    cy.get('#clusters').should('exist');
     cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');
 
     cy.get('#free-solo-demo').clear();
     cy.get('#free-solo-demo').type('{enter}');
     cy.get('#clusterPagination > .MuiPagination-ul').should('exist');
     cy.get('#clusterPagination > .MuiPagination-ul').children().should('have.length', 4);
-    
+
     cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
       .should('be.visible')
       .and('contain', 'cluster-1');

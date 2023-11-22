@@ -51,7 +51,7 @@ describe('Signin', () => {
     cy.visit('/signin');
   });
 
-  it('log in with valid account and password', () => {
+  it('signin with valid account and password', () => {
     cy.intercept(
       {
         method: 'GET',
@@ -94,7 +94,6 @@ describe('Signin', () => {
 
     cy.signin();
     cy.get('form').submit();
-
     // Then I see that the current page is the clusters
     cy.url().should('include', '/clusters');
     cy.location('pathname').should('eq', '/clusters');
@@ -106,10 +105,9 @@ describe('Signin', () => {
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
     // menu exists for users
     cy.get('[href="/users"]').should('exist');
-    cy.get('[href="/users"]').click();
   });
 
-  it('submits form with incorrect email format', () => {
+  it('try to signin with valid account and invalid password', () => {
     cy.get('#account').type('root');
     cy.get('#password').type('rooot1');
     cy.get('form').submit();
@@ -117,10 +115,11 @@ describe('Signin', () => {
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
     // close error message
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
   });
 
-  it('try to log in with invalid account', () => {
+  it('try to signin with invalid account', () => {
     cy.get('#account').type('root-1');
     cy.get('#password').type('dragonfly');
     cy.get('form').submit();
@@ -128,10 +127,11 @@ describe('Signin', () => {
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
     // close error message
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
   });
 
-  it('Try to log in with guest user', () => {
+  it('try to signin with guest user', () => {
     cy.intercept(
       {
         method: 'GET',
@@ -180,10 +180,9 @@ describe('Signin', () => {
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
     //menu not exists for users
     cy.get('[href="/users"]').should('not.exist');
-    cy.visit('/users');
   });
 
-  it('click the Create an account button', () => {
+  it('click the `Create an account` button', () => {
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
     // Then I see that the current page is the signup
     cy.url().should('include', '/signup');
@@ -199,14 +198,17 @@ describe('Signin', () => {
 
     cy.get('.MuiInputBase-root > .MuiButtonBase-root').click();
     cy.get('#password').should('have.value', 'dragonfly');
+
+    cy.get('.MuiInputBase-root > .MuiButtonBase-root').click();
+    cy.get('#password').should('not.have.text', 'dragonfly');
   });
 
   it('try to verify account and password', () => {
-    const NameNotLongEnough = _.times(2, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
+    const nameNotLongEnough = _.times(2, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
     const nameLengthExceeds = _.times(11, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
     const passwordLengthExceeds = _.times(17, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
 
-    cy.get('#account').type(NameNotLongEnough);
+    cy.get('#account').type(nameNotLongEnough);
     cy.get('#account-helper-text').should('be.visible').and('contain', 'Fill in the characters, the length is 3-10.');
 
     cy.get('#account').type(nameLengthExceeds);

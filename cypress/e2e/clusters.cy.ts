@@ -74,7 +74,7 @@ describe('Clusters', () => {
   });
 
   describe('when data is loaded', () => {
-    it('display clusters and the default number', () => {
+    it('display the total number of clusters and the default number', () => {
       cy.get(
         ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
       )
@@ -88,7 +88,7 @@ describe('Clusters', () => {
         .and('contain', '7');
     });
 
-    it('display schedulers and the default number', () => {
+    it('display the total number of schedulers and the active number', () => {
       cy.get(
         ':nth-child(2) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
       )
@@ -102,7 +102,7 @@ describe('Clusters', () => {
         .and('contain', '4');
     });
 
-    it('display seed peer and the default number', () => {
+    it('display the total number of seed peers and the active number', () => {
       cy.get(
         '.clusters_seedPeerContainer__u4Xst > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
       )
@@ -117,21 +117,21 @@ describe('Clusters', () => {
     });
 
     it('can display clusters card', () => {
-      //displays a card componen
+      // displays a card componen
       cy.get('.MuiBackdrop-root > .MuiBox-root').should('exist');
 
-      // Display Default cluster
+      // display Default background color
       cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > #isDefault')
         .should('be.visible')
         .and('contain', 'Default')
         .and('have.css', 'background-color', 'rgb(46, 143, 121)');
 
-      // Display cluster name
+      // display cluster name
       cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
         .should('be.visible')
         .and('contain', 'cluster-1');
 
-      // Display cluster description
+      // display cluster description
       cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .css-m4gmz7 > .MuiTypography-root')
         .should('be.visible')
         .and(
@@ -139,12 +139,12 @@ describe('Clusters', () => {
           'Cluster-1 is a high-performance computing cluster located in China, specifically in Hangzhou and Beijing data centers.',
         );
 
-      // Display Non-Default cluster
+      // display Non-Default cluster
       cy.get(':nth-child(8) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
         .should('be.visible')
         .and('contain', 'cluster-2');
 
-      // Display Non-Default background color
+      // display Non-Default background color
       cy.get(':nth-child(8) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > #isDefault')
         .should('be.visible')
         .and('contain', 'Non-Default')
@@ -167,22 +167,35 @@ describe('Clusters', () => {
           });
         },
       );
-      cy.intercept('GET', '/api/v1/seed-peers?page=1&per_page=10000000', (req) => {
-        req.reply({
-          statusCode: 200,
-          body: [],
-        });
-      });
-      cy.intercept('GET', '/api/v1/schedulers?page=1&per_page=10000000', (req) => {
-        req.reply({
-          statusCode: 200,
-          body: [],
-        });
-      });
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/seed-peers?page=1&per_page=10000000',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: [],
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/schedulers?page=1&per_page=10000000',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: [],
+          });
+        },
+      );
+
       cy.visit('/clusters');
     });
 
-    it('display clusters and the default number', () => {
+    it('display the total number of clusters and the default number', () => {
       cy.get(
         ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
       )
@@ -196,7 +209,7 @@ describe('Clusters', () => {
         .and('contain', '0');
     });
 
-    it('display schedulers and the default number', () => {
+    it('display the total number of schedulers and the active number', () => {
       cy.get(
         ':nth-child(2) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
       )
@@ -210,7 +223,7 @@ describe('Clusters', () => {
         .and('contain', '0');
     });
 
-    it('display seed peer and the default number', () => {
+    it('display the total number of seed peers and the active number', () => {
       cy.get(
         '.clusters_seedPeerContainer__u4Xst > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
       )
@@ -227,7 +240,7 @@ describe('Clusters', () => {
     it('cluster card should present an empty status', () => {
       cy.get('#clusters').should('not.exist');
       // shouldn't render pagination buttons
-      cy.get('.css-iusmz7').should('not.exist');
+      cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');
     });
   });
 
@@ -235,22 +248,25 @@ describe('Clusters', () => {
     it('pagination updates results and page number', () => {
       cy.get('.Mui-selected').invoke('text').should('eq', 'Cluster1');
 
+      //total number of pages
       cy.get('#clusterPagination > .MuiPagination-ul').children().should('have.length', 4);
+
       // show cluster name
       cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
         .should('be.visible')
         .and('contain', 'cluster-1');
     });
 
-    it('pagination keeps track of page results when tabs change', () => {
+    it('when pagination changes, different page results are rendered', () => {
       cy.get('.Mui-selected').invoke('text').should('eq', 'Cluster1');
 
-      // Go to last page
+      // go to last page
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
       // display last page cluster information
       cy.get('.clusters_clusterListContent__UwWjF > .css-k008qs').should('be.visible').and('contain', '8');
 
+      // display cluster information
       cy.get('#isDefault')
         .should('be.visible')
         .and('contain', 'Non-Default')
@@ -266,6 +282,7 @@ describe('Clusters', () => {
           'contain',
           'Cluster-8 is a high-performance computing cluster located in China, specifically in Jiangsu data centers.',
         );
+
       // current page number
       cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
     });
@@ -331,14 +348,14 @@ describe('Clusters', () => {
       cy.get('.css-1rr4qq7 > .MuiSnackbar-root > .MuiPaper-root > .MuiAlert-message').should('not.exist');
     });
 
-    it('display clusters and the default number', () => {
+    it('display the total number of clusters and the default number', () => {
       cy.get(
         ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
       )
         .should('be.visible')
         .and('contain', '0');
 
-      cy.get('.css-iusmz7').should('not.exist');
+      cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');
       cy.get(
         ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
       )
@@ -346,7 +363,7 @@ describe('Clusters', () => {
         .and('contain', '0');
     });
 
-    it('display schedulers and the default number', () => {
+    it('display the total number of schedulers and the active number', () => {
       cy.get(
         ':nth-child(2) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
       )
@@ -360,7 +377,7 @@ describe('Clusters', () => {
         .and('contain', '0');
     });
 
-    it('display seed peer and the default number', () => {
+    it('display the total number of seed peers and the active number', () => {
       cy.get(
         '.clusters_seedPeerContainer__u4Xst > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
       )
@@ -432,6 +449,7 @@ describe('Clusters', () => {
       );
 
       cy.get('#free-solo-demo').type('cluster-16{enter}');
+      //no clusters card
       cy.get('#clusters').should('not.exist');
       // hidden pagination
       cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');

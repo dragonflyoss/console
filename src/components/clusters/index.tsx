@@ -62,7 +62,7 @@ export default function Clusters() {
   const [clusterIsLoading, setClusterIsLoading] = useState(true);
   const [clusterPage, setClusterPage] = useState(1);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [searchClusters, setSearchClusters] = useState('');
+  const [clusterSearch, setClusterSearch] = useState('');
   const [clusterCount, setClusterCount] = useState<getClustersResponse[]>([]);
   const [cluster, setCluster] = useState<getClustersResponse[]>([]);
   const [scheduler, setScheduler] = useState<getSchedulersResponse[]>([]);
@@ -137,8 +137,8 @@ export default function Clusters() {
   const searchCluster = async () => {
     try {
       setClusterIsLoading(true);
-      const cluster = searchClusters
-        ? await getClusters({ page: 1, per_page: MAX_PAGE_SIZE, name: searchClusters })
+      const cluster = clusterSearch
+        ? await getClusters({ page: 1, per_page: MAX_PAGE_SIZE, name: clusterSearch })
         : await getClusters({ page: 1, per_page: MAX_PAGE_SIZE });
 
       setCluster(cluster);
@@ -312,9 +312,9 @@ export default function Clusters() {
               id="free-solo-demo"
               freeSolo
               onKeyDown={searchClusterKeyDown}
-              inputValue={searchClusters}
+              inputValue={clusterSearch}
               onInputChange={(_event, newInputValue) => {
-                setSearchClusters(newInputValue);
+                setClusterSearch(newInputValue);
               }}
               options={(Array.isArray(clusterCount) && clusterCount.map((option) => option?.name)) || ['']}
               renderInput={(params) => <TextField {...params} label="Search" />}

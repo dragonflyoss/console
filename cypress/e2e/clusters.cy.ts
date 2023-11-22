@@ -3,7 +3,7 @@ import root from '../fixtures/api/role-root.json';
 import user from '../fixtures/api/user.json';
 import seedPeers from '../fixtures/api/clusters/seed-peers.json';
 import schedulers from '../fixtures/api/clusters/schedulers.json';
-import clusterSearchResults from '../fixtures/api/clusters/cluster-search.json';
+import clusterSearch from '../fixtures/api/clusters/cluster-search.json';
 
 describe('Clusters', () => {
   beforeEach(() => {
@@ -409,7 +409,7 @@ describe('Clusters', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: clusterSearchResults,
+            body: clusterSearch,
           });
         },
       );

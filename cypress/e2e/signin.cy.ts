@@ -203,7 +203,28 @@ describe('Signin', () => {
     cy.get('#password').should('not.have.text', 'dragonfly');
   });
 
-  it('try to verify account and password', () => {
+  it('should handle API error response', () => {
+    cy.intercept('POST', '/api/v1/users/signin', (req) => {
+      (req.body = { name: 'root', password: 'dragonfly' }),
+        req.reply({
+          forceNetworkError: true,
+        });
+    });
+
+    cy.get('#account').type('root');
+    cy.get('#password').type(`dragonfly`);
+
+    cy.get('form').submit();
+
+    // show error message
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+    // close error message
+    cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+
+    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+  });
+
+  it('cannot signup with invalid attributes', () => {
     const nameNotLongEnough = _.times(2, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
     const nameLengthExceeds = _.times(11, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
     const passwordLengthExceeds = _.times(17, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');

@@ -3,7 +3,7 @@ import root from '../fixtures/api/role-root.json';
 import user from '../fixtures/api/user.json';
 import seedPeers from '../fixtures/api/clusters/seed-peers.json';
 import schedulers from '../fixtures/api/clusters/schedulers.json';
-import clusterSearchResults from '../fixtures/api/clusters/clusters-search-results.json';
+import clusterSearchResults from '../fixtures/api/clusters/cluster-search-results.json';
 
 describe('Clusters', () => {
   beforeEach(() => {

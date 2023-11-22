@@ -224,7 +224,7 @@ describe('Signin', () => {
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
   });
 
-  it('cannot signup with invalid attributes', () => {
+  it('try to verify account and password', () => {
     const nameNotLongEnough = _.times(2, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
     const nameLengthExceeds = _.times(11, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
     const passwordLengthExceeds = _.times(17, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');

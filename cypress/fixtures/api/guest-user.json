@@ -1,0 +1,14 @@
+{
+  "id": 2,
+  "created_at": "2023-11-07T06:09:04Z",
+  "updated_at": "2023-11-07T06:09:04Z",
+  "is_del": 0,
+  "email": "jack@example.com",
+  "name": "jack",
+  "avatar": "https://example.com/avatar.png",
+  "phone": "1234567890",
+  "state": "enable",
+  "location": "Shanghai",
+  "bio": "I am jack",
+  "configs": null
+}

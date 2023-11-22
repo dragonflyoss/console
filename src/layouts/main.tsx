@@ -29,11 +29,16 @@ function Main() {
 
   useEffect(() => {
     const payload = getJwtPayload();
-
     (async function () {
-      if (payload?.id) {
-        const role = await getUserRoles(payload?.id);
-        setIsRoot(role.includes(ROLE_ROOT));
+      try {
+        if (payload?.id) {
+          const role = await getUserRoles(payload?.id);
+          setIsRoot(role.includes(ROLE_ROOT));
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          setIsRoot(false);
+        }
       }
     })();
   }, [location]);
@@ -59,7 +64,7 @@ function Main() {
         <Route path="/jobs/preheats/new" element={<NewPreheat />} />
         <Route path="/jobs/preheats/:id" element={<ShowPreheat />} />
         <Route path="/insight/peers" element={<Peers />} />
-        <Route path="/users" element={isRoot ? <Users /> : <NotFound />} />
+        {isRoot && <Route path="/users" element={<Users />} />}
       </Route>
     </Routes>
   );

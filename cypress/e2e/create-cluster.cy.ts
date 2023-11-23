@@ -5,7 +5,7 @@ import user from '../fixtures/api/user.json';
 import guestUser from '../fixtures/api/guest-user.json';
 import seedPeers from '../fixtures/api/clusters/seed-peers.json';
 import schedulers from '../fixtures/api/clusters/schedulers.json';
-import newClustes from '../fixtures/api/clusters/create-cluster.json';
+import createClustes from '../fixtures/api/clusters/create-cluster.json';
 import _ from 'lodash';
 
 describe('Create cluster', () => {
@@ -156,7 +156,7 @@ describe('Create cluster', () => {
       (req) => {
         req.reply({
           statusCode: 200,
-          body: newClustes,
+          body: createClustes,
         });
       },
     );

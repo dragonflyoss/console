@@ -109,10 +109,11 @@ export default function NewCluster() {
         InputProps: {
           endAdornment: (
             <Tooltip
+              id="locationTooltip"
               title={`The cluster needs to serve all peers in the location. When the location in the peer configuration matches the location in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. It separated by "|", for example "area|country|province|city".`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon id="helpIcon" color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -223,7 +224,7 @@ export default function NewCluster() {
   const configForm = [
     {
       formProps: {
-        id: 'seed peer load limit',
+        id: 'seedPeerLoadLimit',
         label: 'Seed Peer load limit',
         name: 'seedPeerLoadLimit',
         type: 'number',
@@ -240,10 +241,11 @@ export default function NewCluster() {
         InputProps: {
           endAdornment: (
             <Tooltip
+              id="seedPeerLoadLimitTooltip"
               title={`If other peers download from the seed peer, the load of the seed peer will increase. When the load limit of the seed peer is reached, the scheduler will no longer schedule other peers to download from the seed peer until the it has the free load.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon id="helpIcon" color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -258,7 +260,7 @@ export default function NewCluster() {
     },
     {
       formProps: {
-        id: 'peer load limit',
+        id: 'peerLoadLimit',
         label: 'Peer load limit',
         name: 'peerLoadLimit',
         type: 'number',
@@ -275,12 +277,13 @@ export default function NewCluster() {
         InputProps: {
           endAdornment: (
             <Tooltip
+              id="peerLoadLimitTooltip"
               title={
                 'If other peers download from the peer, the load of the peer will increase. When the load limit of the peer is reached, the scheduler will no longer schedule other peers to download from the peer until the it has the free load.'
               }
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon id="helpIcon" color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -295,7 +298,7 @@ export default function NewCluster() {
     },
     {
       formProps: {
-        id: 'number of concurrent download pieces',
+        id: 'numberOfConcurrentDownloadPieces',
         label: 'Number of concurrent download pieces',
         name: 'numberOfConcurrentDownloadPieces',
         type: 'number',
@@ -312,10 +315,11 @@ export default function NewCluster() {
         InputProps: {
           endAdornment: (
             <Tooltip
+              id="numberOfConcurrentDownloadPiecesTooltip"
               title={`The number of pieces that a peer can concurrent download from other peers.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon id="helpIcon" color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -330,7 +334,7 @@ export default function NewCluster() {
     },
     {
       formProps: {
-        id: 'candidate parent limit',
+        id: 'candidateParentLimit',
         label: 'Candidate parent limit',
         name: 'candidateParentLimit',
         type: 'number',
@@ -347,10 +351,11 @@ export default function NewCluster() {
         InputProps: {
           endAdornment: (
             <Tooltip
+              id="candidateParentLimitTooltip"
               title={`The maximum number of parents that the scheduler can schedule for download peer.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon id="helpIcon" color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -365,7 +370,7 @@ export default function NewCluster() {
     },
     {
       formProps: {
-        id: 'filter parent limit',
+        id: 'filterParentLimit',
         label: 'Filter parent limit',
         name: 'filterParentLimit',
         type: 'number',
@@ -383,10 +388,11 @@ export default function NewCluster() {
         InputProps: {
           endAdornment: (
             <Tooltip
+              id="filterParentLimitTooltip"
               title={`The scheduler will randomly select the  number of parents from all the parents according to the filter parent limit and evaluate the optimal parents in selecting parents for the peer to download task. The number of optimal parent is the scheduling parent limit.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon id="helpIcon" color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -420,7 +426,7 @@ export default function NewCluster() {
     const cidrsText = event.currentTarget.elements.cidrs.value;
 
     if (idcText) {
-      setIDCHelperText('Please press ENTER to end the IDC creation');
+      setIDCHelperText('Please press ENTER to end the IDC creation.');
       setIDCError(true);
     } else {
       setIDCError(false);
@@ -428,7 +434,7 @@ export default function NewCluster() {
     }
 
     if (cidrsText) {
-      setCIDRsHelperText('Please press ENTER to end the CIDRs creation');
+      setCIDRsHelperText('Please press ENTER to end the CIDRs creation.');
       setCIDRsError(true);
     } else {
       setCIDRsError(false);
@@ -551,8 +557,8 @@ export default function NewCluster() {
             <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
               Information
             </Typography>
-            <Tooltip title="The information of cluster." placement="top">
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+            <Tooltip id="tooltip" title="The information of cluster." placement="top">
+              <HelpIcon id="informationHelpIcon" color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           <Box className={styles.defaultContainer}>
@@ -563,10 +569,11 @@ export default function NewCluster() {
               sx={{ '&.MuiFormControlLabel-root': { mr: '0.6rem' } }}
             />
             <Tooltip
+              id="isDefaultTooltip"
               title="When peer does not find a matching cluster based on scopes, the default cluster will be used."
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon id="isDefaultHelpIcon" color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           <Grid sx={{ display: 'flex' }}>
@@ -585,11 +592,12 @@ export default function NewCluster() {
               Scopes
             </Typography>
             <Tooltip
+              id="scopesTooltip"
               title="The cluster needs to serve the scope. It wil provide scheduler services and seed peer services to peers in
             the scope."
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon id="helpIcon" color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           <Grid className={styles.scopesContainer}>
@@ -613,12 +621,14 @@ export default function NewCluster() {
                               <>
                                 {params.InputProps.endAdornment}
                                 <Tooltip
+                                  id="cidrsTooltip"
                                   title={
                                     'The cluster needs to serve all peers in the CIDRs. The advertise IP will be reported in the peer configuration when the peer is started, and if the advertise IP is empty in the peer configuration, peer will automatically get expose IP as advertise IP. When advertise IP of the peer matches the CIDRs in cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. CIDRs has higher priority than IDC in the scopes.'
                                   }
                                   placement="top"
                                 >
                                   <HelpIcon
+                                    id="helpIcon"
                                     color="disabled"
                                     sx={{
                                       width: '0.8rem',
@@ -653,10 +663,12 @@ export default function NewCluster() {
                               <>
                                 {params.InputProps.endAdornment}
                                 <Tooltip
+                                  id="idcTooltip"
                                   title={`The cluster needs to serve all peers in the IDC. When the IDC in the peer configuration matches the IDC in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. IDC has higher priority than location in the scopes.`}
                                   placement="top"
                                 >
                                   <HelpIcon
+                                    id="helpIcon"
                                     color="disabled"
                                     sx={{
                                       width: '0.8rem',
@@ -685,8 +697,8 @@ export default function NewCluster() {
             <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
               Config
             </Typography>
-            <Tooltip title=" The configuration for P2P downloads." placement="top">
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+            <Tooltip id="configTooltip" title=" The configuration for P2P downloads." placement="top">
+              <HelpIcon id="helpIcon" color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           <Grid sx={{ display: 'flex', flexWrap: 'wrap' }}>
@@ -710,7 +722,7 @@ export default function NewCluster() {
             size="small"
             variant="outlined"
             loadingPosition="end"
-            id="cancle"
+            id="cancel"
             sx={{
               '&.MuiLoadingButton-root': {
                 color: 'var(--calcel-size-color)',
@@ -743,6 +755,7 @@ export default function NewCluster() {
             variant="outlined"
             type="submit"
             loadingPosition="end"
+            id="save"
             sx={{
               '&.MuiLoadingButton-root': {
                 backgroundColor: 'var(--save-color)',

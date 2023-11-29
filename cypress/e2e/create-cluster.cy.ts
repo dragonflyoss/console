@@ -121,30 +121,10 @@ describe('Create cluster', () => {
         url: '/api/v1/clusters',
       },
       (req) => {
-        req.body = {
-          name: 'cluster-12',
-          bio: 'Add new cluster cas',
-          scopes: {
-            idc: 'hz|sh',
-            location: 'China|Hang|Zhou',
-            cidrs: ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'],
-          },
-          scheduler_cluster_config: {
-            filter_parent_limit: 4,
-            filter_parent_range_limit: 40,
-          },
-          seed_peer_cluster_config: {
-            load_limit: 300,
-          },
-          peer_cluster_config: {
-            load_limit: 50,
-            concurrent_piece_count: 10,
-          },
-          is_default: true,
-        };
+        req.body = '';
         req.reply({
           statusCode: 200,
-          body: root,
+          body: [],
         });
       },
     );
@@ -239,8 +219,6 @@ describe('Create cluster', () => {
   });
 
   it('try to create cluster with guest user', () => {
-    cy.guestSignin();
-
     cy.intercept(
       {
         method: 'GET',
@@ -265,6 +243,9 @@ describe('Create cluster', () => {
         });
       },
     );
+
+    cy.guestSignin();
+
     cy.intercept({ method: 'POST', url: '/api/v1/clusters' }, (req) => {
       (req.body = ''),
         req.reply({

@@ -239,6 +239,7 @@ describe('Clusters', () => {
 
     it('cluster card should present an empty status', () => {
       cy.get('#clusters').should('not.exist');
+
       // Shouldn't render pagination buttons.
       cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');
     });
@@ -296,6 +297,7 @@ describe('Clusters', () => {
         .and('contain', 'cluster-8');
 
       cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+
       // Refresh page.
       cy.reload().then(() => {
         cy.wait(2000);
@@ -394,6 +396,7 @@ describe('Clusters', () => {
     it('cluster card should present an empty status', () => {
       // No clusters.
       cy.get('#clusters').should('not.exist');
+
       // No pagination.
       cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');
     });
@@ -418,6 +421,7 @@ describe('Clusters', () => {
 
       // Clear search box.
       cy.get('#free-solo-demo').clear();
+
       //search all clusters
       cy.get('#free-solo-demo').type('{enter}');
       cy.get('#clusterPagination > .MuiPagination-ul').should('exist');
@@ -449,8 +453,10 @@ describe('Clusters', () => {
       );
 
       cy.get('#free-solo-demo').type('cluster-16{enter}');
+
       // No clusters card.
       cy.get('#clusters').should('not.exist');
+
       // Hidden pagination.
       cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');
     });
@@ -470,6 +476,7 @@ describe('Clusters', () => {
 
       cy.get('#free-solo-demo').clear();
       cy.get('#free-solo-demo').type('cluster-1{enter}');
+      
       // Error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
     });

@@ -94,15 +94,18 @@ describe('Signin', () => {
 
     cy.signin();
     cy.get('form').submit();
+
     // Then I see that the current page is the clusters.
     cy.url().should('include', '/clusters');
     cy.location('pathname').should('eq', '/clusters');
+
     // Prompt message: Please change your password promptly when logging in for the first time!
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('exist');
 
+    // Close the prompt message.
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+
     // Menu exists for users.
     cy.get('[href="/users"]').should('exist');
   });
@@ -111,6 +114,7 @@ describe('Signin', () => {
     cy.get('#account').type('root');
     cy.get('#password').type('rooot1');
     cy.get('form').submit();
+
     // Show error message.
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
@@ -121,6 +125,7 @@ describe('Signin', () => {
     cy.get('#account').type('root-1');
     cy.get('#password').type('dragonfly');
     cy.get('form').submit();
+
     // Show error message.
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
@@ -166,24 +171,29 @@ describe('Signin', () => {
     cy.guestSignin();
 
     cy.get('form').submit();
+
     // Then I see that the current page is the clusters!
     cy.url().should('include', '/clusters');
     cy.location('pathname').should('eq', '/clusters');
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('exist');
 
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+
     // Users menu does not exist.
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+
     // Menu not exists for users.
     cy.get('[href="/users"]').should('not.exist');
   });
 
   it('click the `Create an account` button', () => {
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
+
     // Then I see that the current page is the signup!
     cy.url().should('include', '/signup');
 
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
+
     // Then I see that the current page is the signin!
     cy.url().should('include', '/signin');
   });

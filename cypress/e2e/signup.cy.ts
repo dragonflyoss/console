@@ -27,6 +27,7 @@ describe('Signup', () => {
     cy.get('#email').type('root@console.com');
     cy.get('#password').type('dragonfly1');
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
+
     // Then I see that the current page is the signin!
     cy.url().should('include', '/signin');
   });
@@ -36,8 +37,10 @@ describe('Signup', () => {
     cy.get('#email').type('lucy@example.com');
     cy.get('#password').type('dragonfly1');
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
+
     // Show error message.
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
+
     // Close error message.
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
@@ -48,6 +51,7 @@ describe('Signup', () => {
     cy.get('#email').type('root@console.co');
     cy.get('#password').type('dragonfly1');
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
+
     // Show error message.
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
@@ -95,10 +99,12 @@ describe('Signup', () => {
 
   it('click the `Sign in` button', () => {
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
+
     // Then I see that the current page is the signin!
     cy.url().should('include', '/signin');
 
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
+
     // Then I see that the current page is the signup!
     cy.url().should('include', '/signup');
   });
@@ -118,6 +124,7 @@ describe('Signup', () => {
     cy.get('#account').clear();
 
     cy.get('#account').type('root');
+
     // Verification passed.
     cy.get('#account-helper-text').should('not.exist');
 
@@ -128,11 +135,13 @@ describe('Signup', () => {
     cy.get('#email').clear();
 
     cy.get('#email').type('root@console.com');
+
     // Verification passed.
     cy.get('#email-helper-text').should('not.exist');
 
     // Should display message password the validation error.
     cy.get('#password').type(passsword);
+
     // Missing number.
     cy.get('#password-helper-text')
       .should('be.visible')
@@ -141,17 +150,20 @@ describe('Signup', () => {
     cy.get('#password').clear();
 
     cy.get('#password').type('dragonfly1');
+
     // Verification passed.
     cy.get('#password-helper-text').should('not.exist');
 
     // Should display message confirm password the validation error.
     cy.get('#confirmPassword').type(`dragonfly`);
+
     // Confirm password verification error when the two passwords are not the same.
     cy.get('#confirmPassword-helper-text').should('be.visible').and('contain', 'Please enter the same password.');
 
     cy.get('#confirmPassword').clear();
 
     cy.get('#confirmPassword').type('dragonfly1');
+    
     // verification passed.
     cy.get('#confirmPassword-helper-text').should('not.exist');
   });

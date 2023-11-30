@@ -223,7 +223,7 @@ export default function NewCluster() {
   const configForm = [
     {
       formProps: {
-        id: 'seed peer load limit',
+        id: 'seedPeerLoadLimit',
         label: 'Seed Peer load limit',
         name: 'seedPeerLoadLimit',
         type: 'number',
@@ -258,7 +258,7 @@ export default function NewCluster() {
     },
     {
       formProps: {
-        id: 'peer load limit',
+        id: 'peerLoadLimit',
         label: 'Peer load limit',
         name: 'peerLoadLimit',
         type: 'number',
@@ -295,7 +295,7 @@ export default function NewCluster() {
     },
     {
       formProps: {
-        id: 'number of concurrent download pieces',
+        id: 'numberOfConcurrentDownloadPieces',
         label: 'Number of concurrent download pieces',
         name: 'numberOfConcurrentDownloadPieces',
         type: 'number',
@@ -330,7 +330,7 @@ export default function NewCluster() {
     },
     {
       formProps: {
-        id: 'candidate parent limit',
+        id: 'candidateParentLimit',
         label: 'Candidate parent limit',
         name: 'candidateParentLimit',
         type: 'number',
@@ -365,7 +365,7 @@ export default function NewCluster() {
     },
     {
       formProps: {
-        id: 'filter parent limit',
+        id: 'filterParentLimit',
         label: 'Filter parent limit',
         name: 'filterParentLimit',
         type: 'number',
@@ -420,7 +420,7 @@ export default function NewCluster() {
     const cidrsText = event.currentTarget.elements.cidrs.value;
 
     if (idcText) {
-      setIDCHelperText('Please press ENTER to end the IDC creation');
+      setIDCHelperText('Please press ENTER to end the IDC creation.');
       setIDCError(true);
     } else {
       setIDCError(false);
@@ -428,7 +428,7 @@ export default function NewCluster() {
     }
 
     if (cidrsText) {
-      setCIDRsHelperText('Please press ENTER to end the CIDRs creation');
+      setCIDRsHelperText('Please press ENTER to end the CIDRs creation.');
       setCIDRsError(true);
     } else {
       setCIDRsError(false);
@@ -710,7 +710,7 @@ export default function NewCluster() {
             size="small"
             variant="outlined"
             loadingPosition="end"
-            id="cancle"
+            id="cancel"
             sx={{
               '&.MuiLoadingButton-root': {
                 color: 'var(--calcel-size-color)',
@@ -743,6 +743,7 @@ export default function NewCluster() {
             variant="outlined"
             type="submit"
             loadingPosition="end"
+            id="save"
             sx={{
               '&.MuiLoadingButton-root': {
                 backgroundColor: 'var(--save-color)',

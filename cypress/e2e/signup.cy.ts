@@ -27,7 +27,8 @@ describe('Signup', () => {
     cy.get('#email').type('root@console.com');
     cy.get('#password').type('dragonfly1');
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
-    // then I see that the current page is the signin
+
+    // Then I see that the current page is the signin!
     cy.url().should('include', '/signin');
   });
 
@@ -36,11 +37,12 @@ describe('Signup', () => {
     cy.get('#email').type('lucy@example.com');
     cy.get('#password').type('dragonfly1');
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
-    // show error message
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
-    // close error message
-    cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
 
+    // Show error message.
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
+
+    // Close error message.
+    cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
   });
 
@@ -49,11 +51,10 @@ describe('Signup', () => {
     cy.get('#email').type('root@console.co');
     cy.get('#password').type('dragonfly1');
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
-    // show error message
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
-    // close error message
-    cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
 
+    // Show error message.
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
+    cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
   });
 
@@ -90,21 +91,21 @@ describe('Signup', () => {
     cy.get('#password').type('dragonfly1');
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
 
-    // show error message
+    // Show error message.
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
-    // close error message
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
   });
 
   it('click the `Sign in` button', () => {
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
-    // Then I see that the current page is the signin
+
+    // Then I see that the current page is the signin!
     cy.url().should('include', '/signin');
 
     cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
-    // Then I see that the current page is the signup
+
+    // Then I see that the current page is the signup!
     cy.url().should('include', '/signup');
   });
 
@@ -113,6 +114,7 @@ describe('Signup', () => {
     const nameLengthExceeds = _.times(11, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
     const passsword = _.times(8, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
 
+    // Should display message account the validation error.
     cy.get('#account').type(nameNotLongEnough);
     cy.get('#account-helper-text').should('be.visible').and('contain', 'Fill in the characters, the length is 3-10.');
 
@@ -122,20 +124,25 @@ describe('Signup', () => {
     cy.get('#account').clear();
 
     cy.get('#account').type('root');
-    // verification passed
+
+    // Verification passed.
     cy.get('#account-helper-text').should('not.exist');
 
+    // Should display message email the validation error.
     cy.get('#email').type('root');
     cy.get('#email-helper-text').should('be.visible').and('contain', 'Email is invalid or already taken.');
 
     cy.get('#email').clear();
 
     cy.get('#email').type('root@console.com');
-    // verification passed
+
+    // Verification passed.
     cy.get('#email-helper-text').should('not.exist');
 
+    // Should display message password the validation error.
     cy.get('#password').type(passsword);
-    // missing number
+
+    // Missing number.
     cy.get('#password-helper-text')
       .should('be.visible')
       .and('contain', 'At least 8-16 characters, with at least 1 lowercase letter and 1 number.');
@@ -143,17 +150,21 @@ describe('Signup', () => {
     cy.get('#password').clear();
 
     cy.get('#password').type('dragonfly1');
-    // verification passed
+
+    // Verification passed.
     cy.get('#password-helper-text').should('not.exist');
 
+    // Should display message confirm password the validation error.
     cy.get('#confirmPassword').type(`dragonfly`);
-    // confirm password verification error when the two passwords are not the same
+
+    // Confirm password verification error when the two passwords are not the same.
     cy.get('#confirmPassword-helper-text').should('be.visible').and('contain', 'Please enter the same password.');
 
     cy.get('#confirmPassword').clear();
 
     cy.get('#confirmPassword').type('dragonfly1');
-    // verification passed
+    
+    // verification passed.
     cy.get('#confirmPassword-helper-text').should('not.exist');
   });
 });

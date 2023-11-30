@@ -62,7 +62,7 @@ export default function Clusters() {
   const [clusterIsLoading, setClusterIsLoading] = useState(true);
   const [clusterPage, setClusterPage] = useState(1);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [clustersSearch, setClustersSearch] = useState('');
+  const [searchClusters, setSearchClusters] = useState('');
   const [clusterCount, setClusterCount] = useState<getClustersResponse[]>([]);
   const [cluster, setCluster] = useState<getClustersResponse[]>([]);
   const [scheduler, setScheduler] = useState<getSchedulersResponse[]>([]);
@@ -134,11 +134,11 @@ export default function Clusters() {
   const numberOfActiveSeedPeers =
     Array.isArray(seedPeer) && seedPeer?.filter((item: any) => item?.state === 'active').length;
 
-  const clusterSearch = async () => {
+  const searchCluster = async () => {
     try {
       setClusterIsLoading(true);
-      const cluster = clustersSearch
-        ? await getClusters({ page: 1, per_page: MAX_PAGE_SIZE, name: clustersSearch })
+      const cluster = searchClusters
+        ? await getClusters({ page: 1, per_page: MAX_PAGE_SIZE, name: searchClusters })
         : await getClusters({ page: 1, per_page: MAX_PAGE_SIZE });
 
       setCluster(cluster);
@@ -153,7 +153,7 @@ export default function Clusters() {
     }
   };
 
-  const clusterSearchKeyDown = (event: any) => {
+  const searchClusterKeyDown = (event: any) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       const submitButton = document.getElementById('submit-button');
@@ -311,10 +311,10 @@ export default function Clusters() {
               color="secondary"
               id="free-solo-demo"
               freeSolo
-              onKeyDown={clusterSearchKeyDown}
-              inputValue={clustersSearch}
+              onKeyDown={searchClusterKeyDown}
+              inputValue={searchClusters}
               onInputChange={(_event, newInputValue) => {
-                setClustersSearch(newInputValue);
+                setSearchClusters(newInputValue);
               }}
               options={(Array.isArray(clusterCount) && clusterCount.map((option) => option?.name)) || ['']}
               renderInput={(params) => <TextField {...params} label="Search" />}
@@ -325,7 +325,7 @@ export default function Clusters() {
             aria-label="search"
             id="submit-button"
             size="small"
-            onClick={clusterSearch}
+            onClick={searchCluster}
             sx={{ width: '3rem' }}
           >
             <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />

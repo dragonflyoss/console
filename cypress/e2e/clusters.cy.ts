@@ -249,7 +249,7 @@ describe('Clusters', () => {
     it('pagination updates results and page number', () => {
       cy.get('.Mui-selected').invoke('text').should('eq', 'Cluster1');
 
-      // Total number of pages.
+      // Check number of pagination.
       cy.get('#clusterPagination > .MuiPagination-ul').children().should('have.length', 4);
 
       // Show cluster name.
@@ -284,7 +284,7 @@ describe('Clusters', () => {
           'Cluster-8 is a high-performance computing cluster located in China, specifically in Jiangsu data centers.',
         );
 
-      // Current page number.
+      // Check the current page number.
       cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
     });
 
@@ -296,6 +296,7 @@ describe('Clusters', () => {
         .should('be.visible')
         .and('contain', 'cluster-8');
 
+      // Check the current page number.
       cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
       // Refresh page.
@@ -303,7 +304,7 @@ describe('Clusters', () => {
         cy.wait(2000);
       });
 
-      // Page numbers have been reset.
+      // Check if the page number has been reset.
       cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '1');
 
       cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
@@ -422,11 +423,11 @@ describe('Clusters', () => {
       // Clear search box.
       cy.get('#free-solo-demo').clear();
 
-      //search all clusters
+      // If the search is empty, all clusters will be displayed.
       cy.get('#free-solo-demo').type('{enter}');
       cy.get('#clusterPagination > .MuiPagination-ul').should('exist');
 
-      // Number of pagination.
+      // Check number of pagination.
       cy.get('#clusterPagination > .MuiPagination-ul').children().should('have.length', 4);
 
       cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
@@ -457,7 +458,7 @@ describe('Clusters', () => {
       // No clusters card.
       cy.get('#clusters').should('not.exist');
 
-      // Hidden pagination.
+      // Pagination has been hidden.
       cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');
     });
 
@@ -476,8 +477,8 @@ describe('Clusters', () => {
 
       cy.get('#free-solo-demo').clear();
       cy.get('#free-solo-demo').type('cluster-1{enter}');
-      
-      // Error message.
+
+      // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
     });
   });

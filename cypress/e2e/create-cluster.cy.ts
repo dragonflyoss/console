@@ -79,14 +79,14 @@ describe('Create cluster', () => {
   it('can create cluster', () => {
     cy.visit('/clusters');
 
-    // Number of cluster.
+    // Show number of cluster.
     cy.get(
       ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
     )
       .should('be.visible')
       .and('contain', '11');
 
-    // Number of cluster default.
+    // Show number of cluster default.
     cy.get(
       ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
     )
@@ -152,7 +152,7 @@ describe('Create cluster', () => {
     // Then I see that the current page is the clusters.
     cy.url().should('include', '/clusters');
 
-    // Cluster added successfully.
+    // Displays successfully added clusters.
     cy.get(':nth-child(8) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
       .should('be.visible')
       .and('contain', 'cluster-12');
@@ -211,9 +211,7 @@ describe('Create cluster', () => {
 
     // Show error message.
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
-
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-
     cy.get('.MuiPaper-root').should('not.exist');
   });
 
@@ -305,18 +303,24 @@ describe('Create cluster', () => {
       cy.get('#name-helper-text').should('be.visible').and('contain', 'Fill in the characters, the length is 1-40.');
       cy.get('#name').type(name);
 
-      // Show verification error.
+      // Show verification error message.
       cy.get('#name-helper-text').should('be.visible').and('contain', 'Fill in the characters, the length is 1-40.');
+
+      // Submit form when validation fails
       cy.get('#save').click();
+
+      // Cluster creation failed, the page is still in cluster/new.
       cy.url().should('include', '/clusters/new');
       cy.get('#name').clear();
+
+      // Enter the correct name。
       cy.get('#name').type('cluster-12');
       cy.get('#name-helper-text').should('not.exist');
 
       // Should display message describing the validation error.
       cy.get('#description').type(description);
 
-      // Show verification error.
+      // Show verification error message.
       cy.get('#description-helper-text')
         .should('be.visible')
         .and('contain', 'Fill in the characters, the length is 0-1000.');
@@ -334,41 +338,44 @@ describe('Create cluster', () => {
       // Name is a required attribute.
       cy.get('#name').type('cluster-12');
 
-      // Should display message location the validation error.
+      // Should display location the validation error message.
       cy.get('#location').type(location);
 
-      // Show verification error.
+      // Show verification error message.
       cy.get('#location-helper-text')
         .should('be.visible')
         .and('contain', 'Fill in the characters, the length is 0-100.');
       cy.get('#save').click();
       cy.url().should('include', '/clusters/new');
       cy.get('#location').clear();
+
+      // Verification passed.
       cy.get('#location').type('Beijing');
       cy.get('#location-helper-text').should('not.exist');
 
-      // Should display message idc the validation error.
+      // Should display idc the validation error message.
       cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('hz');
       cy.get('#save').click();
       cy.url().should('include', '/clusters/new');
       cy.get('#idc-helper-text').should('be.visible').and('contain', `Please press ENTER to end the IDC creation.`);
-
-      // Show verification passed.
       cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('hz{enter}');
+
+      // Verification passed.
       cy.get('#idc-helper-text').should('not.exist');
 
-      // Should display message cidrs the validation error.
+      // Should display cidrs the validation error message.
       cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
         '192.168.40.0/24',
       );
       cy.get('#save').click();
       cy.url().should('include', '/clusters/new');
-
-      // Show verification passed.
       cy.get('#cidrs-helper-text').should('be.visible').and('contain', `Please press ENTER to end the CIDRs creation.`);
+
       cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
         '192.168.40.0/24{enter}',
       );
+
+      // Verification passed.
       cy.get('#cidrs-helper-text').should('not.exist');
     });
 
@@ -376,14 +383,12 @@ describe('Create cluster', () => {
       // Name is a required attribute.
       cy.get('#name').type('cluster-12');
 
-      // Should display message seed peer load limit the validation error.
+      // Should display seed peer load limit the validation error message.
       cy.get('#seedPeerLoadLimit').type('5000');
       cy.get('#seedPeerLoadLimit-helper-text')
         .should('be.visible')
         .and('contain', `Fill in the number, the length is 0-5000.`);
       cy.get('#save').click();
-
-      // Cluster creation failed, the page is still in cluster/new.
       cy.url().should('include', '/clusters/new');
       cy.get('#seedPeerLoadLimit').clear();
       cy.get('#seedPeerLoadLimit').type('400');
@@ -391,15 +396,13 @@ describe('Create cluster', () => {
       // Verification passed.
       cy.get('#seedPeerLoadLimit-helper-text').should('not.exist');
 
-      // Should display message peer load limit the validation error.
+      // Should display peer load limit the validation error message.
       cy.get('#peerLoadLimit').clear();
       cy.get('#peerLoadLimit').type('2001');
       cy.get('#peerLoadLimit-helper-text')
         .should('be.visible')
         .and('contain', `Fill in the number, the length is 0-2000.`);
       cy.get('#save').click();
-
-      // Cluster creation failed, the page is still in cluster/new.
       cy.url().should('include', '/clusters/new');
       cy.get('#peerLoadLimit').clear();
       cy.get('#peerLoadLimit').type('50');
@@ -407,7 +410,7 @@ describe('Create cluster', () => {
       // Verification passed.
       cy.get('#peerLoadLimit-helper-text').should('not.exist');
 
-      // Should display message number of concurrent download pieces the validation error.
+      // Should display number of concurrent download pieces the validation error message.
       cy.get('#numberOfConcurrentDownloadPieces').clear();
       cy.get('#numberOfConcurrentDownloadPieces').type('51');
       cy.get('#numberOfConcurrentDownloadPieces-helper-text')
@@ -421,7 +424,7 @@ describe('Create cluster', () => {
       // Verification passed.
       cy.get('#numberOfConcurrentDownloadPieces-helper-text').should('not.exist');
 
-      // Should display message candidate parent limit the validation error.
+      // Should display candidate parent limit the validation error message.
       cy.get('#candidateParentLimit').clear();
       cy.get('#candidateParentLimit').type('21');
       cy.get('#candidateParentLimit-helper-text')
@@ -433,10 +436,10 @@ describe('Create cluster', () => {
       cy.get('#candidateParentLimit').type('5');
       cy.get('#candidateParentLimit-helper-text').should('not.exist');
 
-      // Should display message filter parent limit the validation error.
+      // Should display filter parent limit the validation error message.
       cy.get('#filterParentLimit').clear();
 
-      // Validation minimum range.
+      // Minimum validation range not reached.
       cy.get('#filterParentLimit').type('9');
       cy.get('#filterParentLimit-helper-text')
         .should('be.visible')
@@ -445,7 +448,7 @@ describe('Create cluster', () => {
       cy.url().should('include', '/clusters/new');
       cy.get('#filterParentLimit').clear();
 
-      // Verify maximum range.
+      // Maximum verification range exceeded.
       cy.get('#filterParentLimit').type('1001');
       cy.get('#filterParentLimit-helper-text')
         .should('be.visible')
@@ -454,7 +457,7 @@ describe('Create cluster', () => {
       cy.url().should('include', '/clusters/new');
       cy.get('#filterParentLimit').clear();
       cy.get('#filterParentLimit').type('100');
-      
+
       // Verification passed.
       cy.get('#filterParentLimit-helper-text').should('not.exist');
     });

@@ -35,6 +35,7 @@ import {
   deleteCluster,
   deleteScheduler,
   deleteSeedPeer,
+  getClusterResponse,
   getSchedulersResponse,
   getSeedPeersResponse,
 } from '../../lib/api';
@@ -77,14 +78,14 @@ export default function ShowCluster() {
   const [schedulerCount, setSchedulerCount] = useState<getSchedulersResponse[]>([]);
   const [seedPeerCount, setSeedPeerCount] = useState<getSeedPeersResponse[]>([]);
   const [seedPeer, setSeedPeer] = useState<getSeedPeersResponse[]>([]);
-  const [cluster, setCluster] = useState({
+  const [cluster, setCluster] = useState<getClusterResponse>({
     id: 0,
     name: '',
     bio: '',
     scopes: {
       idc: '',
       location: '',
-      cidrs: [''],
+      cidrs: [],
     },
     scheduler_cluster_id: 0,
     seed_peer_cluster_id: 0,
@@ -101,7 +102,7 @@ export default function ShowCluster() {
     },
     created_at: '',
     updated_at: '',
-    is_default: true,
+    is_default: false,
   });
   const [allSchedulers, setAllSchedlers] = useState<getSchedulersResponse[]>([]);
   const [allseedPeers, setAllSeedPeers] = useState<getSeedPeersResponse[]>([]);
@@ -370,6 +371,7 @@ export default function ShowCluster() {
         setErrorMessage(true);
         setErrorMessageText(error.message);
         setDeleteLoadingButton(false);
+        setSchedulerTableIsLoading(false);
       }
     }
   };
@@ -398,6 +400,7 @@ export default function ShowCluster() {
         setErrorMessage(true);
         setErrorMessageText(error.message);
         setDeleteLoadingButton(false);
+        setSeedPeerTableIsLoading(false);
       }
     }
   };
@@ -405,6 +408,7 @@ export default function ShowCluster() {
   return (
     <ThemeProvider theme={theme}>
       <Snackbar
+        id="successMessage"
         open={successMessage}
         autoHideDuration={3000}
         onClose={handleClose}
@@ -415,6 +419,7 @@ export default function ShowCluster() {
         </Alert>
       </Snackbar>
       <Snackbar
+        id="errorMessage"
         open={errorMessage}
         autoHideDuration={3000}
         onClose={handleClose}
@@ -428,7 +433,7 @@ export default function ShowCluster() {
         <RouterLink underline="hover" component={Link} color="inherit" to={`/clusters`}>
           clusters
         </RouterLink>
-        <Typography color="text.primary">{cluster?.name}</Typography>
+        <Typography color="text.primary">{cluster?.name || '-'}</Typography>
       </Breadcrumbs>
       <Box className={styles.container}>
         <Typography variant="h5">Cluster</Typography>
@@ -492,6 +497,7 @@ export default function ShowCluster() {
               size="small"
               variant="outlined"
               loadingPosition="end"
+              id="cancelDeleteCluster"
               sx={{
                 '&.MuiLoadingButton-root': {
                   color: 'var(--calcel-size-color)',
@@ -521,6 +527,7 @@ export default function ShowCluster() {
               variant="outlined"
               type="submit"
               loadingPosition="end"
+              id="deleteCluster"
               sx={{
                 '&.MuiLoadingButton-root': {
                   backgroundColor: 'var(--save-color)',
@@ -627,7 +634,7 @@ export default function ShowCluster() {
         </Box>
         <Box width="100%">
           <Divider />
-          <Table sx={{ minWidth: 650 }} aria-label="a dense table">
+          <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
             <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
               <TableRow>
                 <TableCell align="center">
@@ -667,7 +674,7 @@ export default function ShowCluster() {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody id="scheduler-table-body">
               {allSchedulers.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={9} align="center" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
@@ -757,6 +764,7 @@ export default function ShowCluster() {
                           </TableCell>
                           <TableCell align="center">
                             <IconButton
+                              id={item?.host_name}
                               sx={{
                                 '&.MuiButton-root': {
                                   backgroundColor: 'var(--button-color)',
@@ -837,6 +845,7 @@ export default function ShowCluster() {
             variant="outlined"
             type="submit"
             loadingPosition="end"
+            id="deleteScheduler"
             sx={{
               '&.MuiLoadingButton-root': {
                 backgroundColor: 'var(--save-color)',
@@ -868,6 +877,7 @@ export default function ShowCluster() {
             }}
             color="primary"
             size="small"
+            id="scheduler-pagination"
           />
         </Box>
       ) : (
@@ -906,7 +916,7 @@ export default function ShowCluster() {
         </Box>
         <Box width="100%">
           <Divider />
-          <Table sx={{ minWidth: 650 }} aria-label="a dense table">
+          <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="seed-peer-table">
             <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
               <TableRow>
                 <TableCell align="center">
@@ -956,7 +966,7 @@ export default function ShowCluster() {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody id="seed-peer-table-body">
               {allseedPeers.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={9} align="center" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
@@ -1036,6 +1046,7 @@ export default function ShowCluster() {
                           </TableCell>
                           <TableCell align="center">
                             <IconButton
+                              id={item?.host_name}
                               sx={{
                                 '&.MuiButton-root': {
                                   backgroundColor: 'var(--button-color)',
@@ -1116,6 +1127,7 @@ export default function ShowCluster() {
             variant="outlined"
             type="submit"
             loadingPosition="end"
+            id="deleteSeedPeer"
             sx={{
               '&.MuiLoadingButton-root': {
                 backgroundColor: 'var(--save-color)',
@@ -1147,6 +1159,7 @@ export default function ShowCluster() {
             }}
             color="primary"
             size="small"
+            id="seed-peer-pagination"
           />
         </Box>
       ) : (

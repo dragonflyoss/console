@@ -6,35 +6,9 @@ import styles from './information.module.css';
 import HelpIcon from '@mui/icons-material/Help';
 import { useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
+import { getClusterResponse } from '../../lib/api';
 
-interface cluster {
-  id: number;
-  name: string;
-  bio: string;
-  scopes: {
-    idc: string;
-    location: string;
-    cidrs: Array<string>;
-  };
-  scheduler_cluster_id: number;
-  seed_peer_cluster_id: number;
-  scheduler_cluster_config: {
-    candidate_parent_limit: number;
-    filter_parent_limit: number;
-  };
-  seed_peer_cluster_config: {
-    load_limit: number;
-  };
-  peer_cluster_config: {
-    load_limit: number;
-    concurrent_piece_count: number;
-  };
-  created_at: string;
-  updated_at: string;
-  is_default: boolean;
-}
-
-export default function Information(props: { cluster: cluster; isLoading: boolean }) {
+export default function Information(props: { cluster: getClusterResponse; isLoading: boolean }) {
   const { cluster, isLoading } = props;
   const [openCIDRs, setOpenCIDRs] = useState(false);
   const [openIDC, setOpenIDC] = useState(false);
@@ -82,7 +56,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
               </Tooltip>
             </Box>
             <Typography variant="subtitle1" component="div" fontFamily="mabry-bold">
-              {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster.name}
+              {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster.name || '-'}
             </Typography>
           </Box>
           <Divider orientation="vertical" flexItem />
@@ -144,7 +118,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="subtitle1" component="div" fontFamily="mabry-bold" mr="0.4rem">
-                {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.scheduler_cluster_id}
+                {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.scheduler_cluster_id || 0}
               </Typography>
               {isLoading ? (
                 <></>
@@ -156,7 +130,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                     height: '1.2rem',
                   }}
                   onClick={() => {
-                    copyClusterID('schedulerClusterID', cluster?.scheduler_cluster_id);
+                    copyClusterID('schedulerClusterID', cluster?.scheduler_cluster_id || 0);
                   }}
                 >
                   {showSchedulerClusterIDCopyIcon ? (
@@ -165,16 +139,19 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                       PopperProps={{
                         disablePortal: true,
                       }}
-                      onClose={() => {
-                        setShowSchedulerClusterIDCopyIcon(false);
-                      }}
                       open={showSchedulerClusterIDCopyIcon}
                       disableFocusListener
                       disableHoverListener
                       disableTouchListener
                       title="copied!"
+                      id="schedulerClusterIDTooltip"
                     >
-                      <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/done.svg" />
+                      <Box
+                        component="img"
+                        id="schedulerClusterIDCopyIcon"
+                        sx={{ width: '1rem', height: '1rem' }}
+                        src="/icons/tokens/done.svg"
+                      />
                     </Tooltip>
                   ) : (
                     <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/copy.svg" />
@@ -198,7 +175,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="subtitle1" component="div" fontFamily="mabry-bold" mr="0.4rem">
-                {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.seed_peer_cluster_id}
+                {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.seed_peer_cluster_id || 0}
               </Typography>
               {isLoading ? (
                 <></>
@@ -210,7 +187,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                     height: '1.2rem',
                   }}
                   onClick={() => {
-                    copyClusterID('seedPeerClusterID', cluster?.seed_peer_cluster_id);
+                    copyClusterID('seedPeerClusterID', cluster?.seed_peer_cluster_id || 0);
                   }}
                 >
                   {showSeedPeerClusterIDCopyIcon ? (
@@ -219,16 +196,19 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                       PopperProps={{
                         disablePortal: true,
                       }}
-                      onClose={() => {
-                        setShowSeedPeerClusterIDCopyIcon(false);
-                      }}
                       open={showSeedPeerClusterIDCopyIcon}
                       disableFocusListener
                       disableHoverListener
                       disableTouchListener
                       title="copied!"
+                      id="seedPeerClusterIDTooltip"
                     >
-                      <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/done.svg" />
+                      <Box
+                        component="img"
+                        id="seedPeerClusterIDCopyIcon"
+                        sx={{ width: '1rem', height: '1rem' }}
+                        src="/icons/tokens/done.svg"
+                      />
                     </Tooltip>
                   ) : (
                     <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/copy.svg" />
@@ -334,6 +314,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                         {cluster?.scopes?.idc.split('|').length > 2 ? (
                           <IconButton
                             size="small"
+                            id="idc"
                             onClick={() => {
                               setOpenIDC(true);
                             }}
@@ -421,6 +402,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                           {cluster?.scopes?.cidrs?.length > 2 ? (
                             <IconButton
                               size="small"
+                              id="cidrs"
                               onClick={() => {
                                 setOpenCIDRs(true);
                               }}
@@ -493,7 +475,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                     <Skeleton />
                   </Box>
                 ) : (
-                  <Typography component="div">{cluster?.seed_peer_cluster_config?.load_limit || '-'}</Typography>
+                  <Typography component="div">{cluster?.seed_peer_cluster_config?.load_limit || 0}</Typography>
                 )}
               </Box>
               <Divider />
@@ -514,7 +496,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                     <Skeleton />
                   </Box>
                 ) : (
-                  <Typography component="div"> {cluster?.peer_cluster_config?.load_limit || '-'}</Typography>
+                  <Typography component="div">{cluster?.peer_cluster_config?.load_limit || 0}</Typography>
                 )}
               </Box>
               <Divider />
@@ -535,7 +517,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                     <Skeleton />
                   </Box>
                 ) : (
-                  <Typography component="div">{cluster?.peer_cluster_config?.concurrent_piece_count || '-'}</Typography>
+                  <Typography component="div">{cluster?.peer_cluster_config?.concurrent_piece_count || 0}</Typography>
                 )}
               </Box>
               <Divider />
@@ -557,7 +539,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                   </Box>
                 ) : (
                   <Typography component="div">
-                    {cluster?.scheduler_cluster_config?.candidate_parent_limit || '-'}
+                    {cluster?.scheduler_cluster_config?.candidate_parent_limit || 0}
                   </Typography>
                 )}
               </Box>
@@ -579,9 +561,7 @@ export default function Information(props: { cluster: cluster; isLoading: boolea
                     <Skeleton />
                   </Box>
                 ) : (
-                  <Typography component="div">
-                    {cluster?.scheduler_cluster_config?.filter_parent_limit || '-'}
-                  </Typography>
+                  <Typography component="div">{cluster?.scheduler_cluster_config?.filter_parent_limit || 0}</Typography>
                 )}
               </Box>
             </Paper>

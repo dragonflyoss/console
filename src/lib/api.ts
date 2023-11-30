@@ -189,7 +189,7 @@ export async function getClusters(params?: getClustersParams): Promise<getCluste
   return await response.json();
 }
 
-interface getClusterResponse {
+export interface getClusterResponse {
   id: number;
   name: string;
   bio: string;
@@ -362,7 +362,7 @@ export async function getSchedulers(params?: getSchedulerParmas): Promise<getSch
   return await response.json();
 }
 
-interface getSchedulerResponse {
+export interface getSchedulerResponse {
   id: number;
   host_name: string;
   ip: string;
@@ -419,7 +419,7 @@ export async function getSeedPeers(params?: getSeedPeersParmas): Promise<getSeed
   return await response.json();
 }
 
-interface getSeedPeerResponse {
+export interface getSeedPeerResponse {
   id: number;
   host_name: string;
   ip: string;

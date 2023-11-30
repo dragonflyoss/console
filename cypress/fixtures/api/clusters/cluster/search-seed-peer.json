@@ -1,0 +1,30 @@
+[
+  {
+    "id": 4,
+    "created_at": "2023-11-09T06:12:32+08:00",
+    "updated_at": "2023-11-09T06:12:32+08:00",
+    "is_del": 0,
+    "host_name": "seed-peer-4",
+    "type": "super",
+    "idc": "Berlin",
+    "location": "Berlin|Germany",
+    "ip": "33.149.137.183",
+    "port": 65000,
+    "download_port": 65002,
+    "object_storage_port": 443,
+    "state": "active",
+    "seed_peer_cluster_id": 1,
+    "seed_peer_cluster": {
+      "id": 1,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "name": "cluster-1",
+      "bio": "cluster-1",
+      "config": null,
+      "scheduler_clusters": null,
+      "seed_peer": null,
+      "jobs": null
+    }
+  }
+]

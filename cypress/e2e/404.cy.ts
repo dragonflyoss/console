@@ -40,7 +40,7 @@ describe('404', () => {
     cy.visit('/root');
     cy.get('.MuiTypography-h4').should('have.text', 'Something gone wrong!');
     cy.get('.MuiButtonBase-root').click();
-    // Then I see that the current page is the clusters
+    // Then I see that the current page is the clusters.
     cy.url().should('include', '/clusters');
   });
 });

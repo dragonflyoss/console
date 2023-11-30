@@ -78,40 +78,40 @@ describe('Create cluster', () => {
 
   it('can create cluster', () => {
     cy.visit('/clusters');
-    // number of cluster
+    // Number of cluster.
     cy.get(
       ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
     )
       .should('be.visible')
       .and('contain', '11');
-    // number of cluster default
+    // Number of cluster default.
     cy.get(
       ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
     )
       .should('be.visible')
       .and('contain', '7');
 
-    // click the `ADD CLUSTER` button
+    // Click the `ADD CLUSTER` button.
     cy.get('.clusters_clusterTitle__5Lhnw > .MuiButtonBase-root').click();
 
     cy.url().should('include', '/clusters/new');
 
-    // add Information
+    // Add Information.
     cy.get('.PrivateSwitchBase-input').click();
     cy.get('#name').type('cluster-12');
     cy.get('#description').type('Add new cluster case');
     cy.get('#location').type('China|Hang|Zhou');
-    // add idc
+    // Add idc.
     cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('hz{enter}');
     cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('sh{enter}');
     cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click();
-    // add cidrs
+    // Add cidrs.
     cy.contains('li', '10.0.0.0/8').click();
     cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click();
     cy.contains('li', '172.16.0.0/12').click();
     cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click();
     cy.contains('li', '192.168.0.0/16').click();
-    // add config
+    // Add config.
     cy.get(':nth-child(3) > .MuiInputBase-root').clear();
     cy.get(':nth-child(3) > .MuiInputBase-root').type('10');
 
@@ -140,21 +140,21 @@ describe('Create cluster', () => {
         });
       },
     );
-    // click the `save` button
+    // Click the `save` button.
     cy.get('#save').click();
-    // Then I see that the current page is the clusters
+    // Then I see that the current page is the clusters.
     cy.url().should('include', '/clusters');
-    // cluster added successfully
+    // Cluster added successfully.
     cy.get(':nth-child(8) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
       .should('be.visible')
       .and('contain', 'cluster-12');
-    // the number of clusters has been increased
+    // The number of clusters has been increased.
     cy.get(
       ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
     )
       .should('be.visible')
       .and('contain', '12');
-    // the default number of clusters has been increased
+    // The default number of clusters has been increased.
     cy.get(
       ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
     )
@@ -198,9 +198,9 @@ describe('Create cluster', () => {
     );
 
     cy.get('#name').type('cluster-1{enter}');
-    // show error message
+    // Show error message.
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
-    // close error message
+
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
 
     cy.get('.MuiPaper-root').should('not.exist');
@@ -208,7 +208,7 @@ describe('Create cluster', () => {
 
   it('click the `CANCEL button', () => {
     cy.get('#cancel').click();
-    // Then I see that the current page is the clusters
+    // Then I see that the current page is the clusters.
     cy.url().should('include', '/clusters');
   });
 
@@ -255,12 +255,13 @@ describe('Create cluster', () => {
     });
 
     cy.get('#name').type('cluster-12{enter}');
-    // show error message
+    // Show error message.
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'permission deny');
-    // click cancel button
+
     cy.get('#cancel').click();
 
     cy.wait(1000);
+    // Then I see that the current page is the clusters!
     cy.url().should('include', '/clusters');
   });
 
@@ -273,9 +274,7 @@ describe('Create cluster', () => {
     });
 
     cy.get('#name').type('cluster-12');
-
     cy.get('#save').click();
-    // show error message
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
   });
 
@@ -285,30 +284,28 @@ describe('Create cluster', () => {
       const name = _.times(41, () => _.sample(characters)).join('');
       const description = _.times(1001, () => _.sample(characters)).join('');
 
+      // Should display message name the validation error.
       cy.get('#save').click();
-      // name is a required attribute
+      // Name is a required attribute.
       cy.get('#name-helper-text').should('be.visible').and('contain', 'Fill in the characters, the length is 1-40.');
       cy.get('#name').type(name);
-      // verification error
+      // Show verification error.
       cy.get('#name-helper-text').should('be.visible').and('contain', 'Fill in the characters, the length is 1-40.');
-      // try to create a cluster
       cy.get('#save').click();
       cy.url().should('include', '/clusters/new');
       cy.get('#name').clear();
-      // verification passed
       cy.get('#name').type('cluster-12');
       cy.get('#name-helper-text').should('not.exist');
 
+      // Should display message describing the validation error.
       cy.get('#description').type(description);
-      // verification error
+      // Show verification error.
       cy.get('#description-helper-text')
         .should('be.visible')
         .and('contain', 'Fill in the characters, the length is 0-1000.');
-      // try to create a cluster
       cy.get('#save').click();
       cy.url().should('include', '/clusters/new');
       cy.get('#description').clear();
-      // verification passed
       cy.get('#description').type('cluster description');
       cy.get('#name-helper-text').should('not.exist');
     });
@@ -317,41 +314,38 @@ describe('Create cluster', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       const location = _.times(101, () => _.sample(characters)).join('');
 
-      // name is a required attribute
+      // Name is a required attribute.
       cy.get('#name').type('cluster-12');
 
+      // Should display message location the validation error.
       cy.get('#location').type(location);
-      // verification error
+      // Show verification error.
       cy.get('#location-helper-text')
         .should('be.visible')
         .and('contain', 'Fill in the characters, the length is 0-100.');
-      // try to create a cluster
       cy.get('#save').click();
       cy.url().should('include', '/clusters/new');
       cy.get('#location').clear();
-      // verification passed
       cy.get('#location').type('Beijing');
       cy.get('#location-helper-text').should('not.exist');
 
+      // Should display message idc the validation error.
       cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('hz');
-      // try to create a cluster
       cy.get('#save').click();
-      // verification error
       cy.url().should('include', '/clusters/new');
       cy.get('#idc-helper-text').should('be.visible').and('contain', `Please press ENTER to end the IDC creation.`);
-      // verification passed
+      // Show verification passed.
       cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('hz{enter}');
       cy.get('#idc-helper-text').should('not.exist');
 
+      // Should display message cidrs the validation error.
       cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
         '192.168.40.0/24',
       );
-      // try to create a cluster
       cy.get('#save').click();
       cy.url().should('include', '/clusters/new');
-      // verification error
+      // Show verification passed.
       cy.get('#cidrs-helper-text').should('be.visible').and('contain', `Please press ENTER to end the CIDRs creation.`);
-      // verification passed
       cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
         '192.168.40.0/24{enter}',
       );
@@ -359,89 +353,81 @@ describe('Create cluster', () => {
     });
 
     it('try to verify config', () => {
-      // name is a required attribute
+      // Name is a required attribute.
       cy.get('#name').type('cluster-12');
 
+      // Should display message seed peer load limit the validation error.
       cy.get('#seedPeerLoadLimit').type('5000');
-      // verification error
       cy.get('#seedPeerLoadLimit-helper-text')
         .should('be.visible')
         .and('contain', `Fill in the number, the length is 0-5000.`);
-      // try to create a cluster
       cy.get('#save').click();
-      // cluster creation failed, the page is still in cluster/new
+      // Cluster creation failed, the page is still in cluster/new.
       cy.url().should('include', '/clusters/new');
       cy.get('#seedPeerLoadLimit').clear();
       cy.get('#seedPeerLoadLimit').type('400');
-      // verification passed
+      // Verification passed.
       cy.get('#seedPeerLoadLimit-helper-text').should('not.exist');
 
+      // Should display message peer load limit the validation error.
       cy.get('#peerLoadLimit').clear();
       cy.get('#peerLoadLimit').type('2001');
-      // verification error
       cy.get('#peerLoadLimit-helper-text')
         .should('be.visible')
         .and('contain', `Fill in the number, the length is 0-2000.`);
-      // try to create a cluster
       cy.get('#save').click();
-      // cluster creation failed, the page is still in cluster/new
+      // Cluster creation failed, the page is still in cluster/new.
       cy.url().should('include', '/clusters/new');
       cy.get('#peerLoadLimit').clear();
       cy.get('#peerLoadLimit').type('50');
-      // verification passed
+      // Verification passed.
       cy.get('#peerLoadLimit-helper-text').should('not.exist');
 
+      // Should display message number of concurrent download pieces the validation error.
       cy.get('#numberOfConcurrentDownloadPieces').clear();
       cy.get('#numberOfConcurrentDownloadPieces').type('51');
-      // verification error
       cy.get('#numberOfConcurrentDownloadPieces-helper-text')
         .should('be.visible')
         .and('contain', `Fill in the number, the length is 0-50.`);
-      // try to create a cluster
       cy.get('#save').click();
-      // cluster creation failed, the page is still in cluster/new
       cy.url().should('include', '/clusters/new');
       cy.get('#numberOfConcurrentDownloadPieces').clear();
       cy.get('#numberOfConcurrentDownloadPieces').type('10');
-      // verification passed
+      // Verification passed.
       cy.get('#numberOfConcurrentDownloadPieces-helper-text').should('not.exist');
 
+      // Should display message candidate parent limit the validation error.
       cy.get('#candidateParentLimit').clear();
       cy.get('#candidateParentLimit').type('21');
       cy.get('#candidateParentLimit-helper-text')
         .should('be.visible')
         .and('contain', `Fill in the number, the length is 1-20.`);
-      // try to create a cluster
       cy.get('#save').click();
-      // cluster creation failed, the page is still in cluster/new
       cy.url().should('include', '/clusters/new');
       cy.get('#candidateParentLimit').clear();
       cy.get('#candidateParentLimit').type('5');
       cy.get('#candidateParentLimit-helper-text').should('not.exist');
 
+      // Should display message filter parent limit the validation error.
       cy.get('#filterParentLimit').clear();
-      // validation minimum range
+      // Validation minimum range.
       cy.get('#filterParentLimit').type('9');
       cy.get('#filterParentLimit-helper-text')
         .should('be.visible')
         .and('contain', `Fill in the number, the length is 10-1000.`);
-      // try to create a cluster
       cy.get('#save').click();
-      // cluster creation failed, the page is still in cluster/new
       cy.url().should('include', '/clusters/new');
       cy.get('#filterParentLimit').clear();
-      // verify maximum range
+      // Verify maximum range.
       cy.get('#filterParentLimit').type('1001');
       cy.get('#filterParentLimit-helper-text')
         .should('be.visible')
         .and('contain', `Fill in the number, the length is 10-1000.`);
-      // try to create a cluster
       cy.get('#save').click();
-      // cluster creation failed, the page is still in cluster/new
       cy.url().should('include', '/clusters/new');
       cy.get('#filterParentLimit').clear();
       cy.get('#filterParentLimit').type('100');
-      // verification passed
+      // Verification passed.
       cy.get('#filterParentLimit-helper-text').should('not.exist');
     });
   });

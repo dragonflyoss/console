@@ -404,7 +404,7 @@ describe('Schedulers', () => {
             statusCode: 200,
           });
         },
-      );
+      ).as('delete');
       cy.intercept(
         {
           method: 'GET',
@@ -424,6 +424,7 @@ describe('Schedulers', () => {
 
       // Confirm delete.
       cy.get('#deleteScheduler').click();
+      cy.wait('@delete');
 
       // Delete success message.
       cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
@@ -462,7 +463,7 @@ describe('Schedulers', () => {
             statusCode: 200,
           });
         },
-      );
+      ).as('delete');
       cy.intercept(
         {
           method: 'GET',
@@ -477,6 +478,7 @@ describe('Schedulers', () => {
       );
 
       cy.get('#deleteScheduler').click();
+      cy.wait('@delete');
 
       // Delete success message.
       cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
@@ -530,8 +532,7 @@ describe('Schedulers', () => {
             body: { message: 'permission deny' },
           });
         },
-      );
-      cy.guestSignin();
+      ).as('delete');
 
       cy.get(
         ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
@@ -541,6 +542,8 @@ describe('Schedulers', () => {
 
       cy.get('#scheduler-7').click();
       cy.get('#deleteScheduler').click();
+      cy.wait('@delete');
+
       // Show error message.
       cy.get('.MuiAlert-message').should('have.text', 'permission deny');
     });
@@ -556,7 +559,7 @@ describe('Schedulers', () => {
             forceNetworkError: true,
           });
         },
-      );
+      ).as('delete');
 
       cy.get(
         ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
@@ -567,6 +570,7 @@ describe('Schedulers', () => {
       cy.get('#scheduler-7').click();
 
       cy.get('#deleteScheduler').click();
+      cy.wait('@delete');
 
       // Show error message.
       cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch');

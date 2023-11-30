@@ -273,8 +273,6 @@ export default function ShowCluster() {
 
     try {
       await deleteScheduler(schedulerSelectedID);
-      setSuccessMessage(true);
-      setOpenDeleteScheduler(false);
 
       if (cluster.scheduler_cluster_id !== 0) {
         const scheduler = await getSchedulers({
@@ -282,7 +280,8 @@ export default function ShowCluster() {
           page: 1,
           per_page: MAX_PAGE_SIZE,
         });
-
+        setSuccessMessage(true);
+        setOpenDeleteScheduler(false);
         setScheduler(scheduler);
         setSchedulerCount(scheduler);
         setDeleteLoadingButton(false);
@@ -307,8 +306,6 @@ export default function ShowCluster() {
 
     try {
       await deleteSeedPeer(seedPeerSelectedID);
-      setSuccessMessage(true);
-      setOpenDeleteSeedPeer(false);
 
       if (cluster.seed_peer_cluster_id !== 0) {
         const seedPeer = await getSeedPeers({
@@ -316,7 +313,8 @@ export default function ShowCluster() {
           page: 1,
           per_page: MAX_PAGE_SIZE,
         });
-
+        setSuccessMessage(true);
+        setOpenDeleteSeedPeer(false);
         setSeedPeer(seedPeer);
         setSeedPeerCount(seedPeer);
         setDeleteLoadingButton(false);
@@ -408,24 +406,22 @@ export default function ShowCluster() {
   return (
     <ThemeProvider theme={theme}>
       <Snackbar
-        id="successMessage"
         open={successMessage}
         autoHideDuration={3000}
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+        <Alert id="successMessage" onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Submission successful!
         </Alert>
       </Snackbar>
       <Snackbar
-        id="errorMessage"
         open={errorMessage}
         autoHideDuration={3000}
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+        <Alert id="errorMessage" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
           {errorMessageText}
         </Alert>
       </Snackbar>

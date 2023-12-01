@@ -1,0 +1,26 @@
+{
+  "id": 1,
+  "name": "cluster-1",
+  "bio": "Cluster-1 is a high-performance computing cluster located in China, specifically in Hangzhou and Beijing data centers.",
+  "scopes": {
+    "idc": "Hangzhou|Shanghai|Beijing",
+    "location": "China|Hang|Zhou",
+    "cidrs": ["10.0.0.0/8", "192.168.0.0/16", "172.16.0.0/12"]
+  },
+  "scheduler_cluster_id": 1,
+  "seed_peer_cluster_id": 1,
+  "scheduler_cluster_config": {
+    "candidate_parent_limit": 4,
+    "filter_parent_limit": 40
+  },
+  "seed_peer_cluster_config": {
+    "load_limit": 300
+  },
+  "peer_cluster_config": {
+    "load_limit": 51,
+    "concurrent_piece_count": 4
+  },
+  "created_at": "2023-10-31T07:48:35Z",
+  "updated_at": "2023-10-31T07:48:35Z",
+  "is_default": true
+}

@@ -362,7 +362,7 @@ export async function getSchedulers(params?: getSchedulerParmas): Promise<getSch
   return await response.json();
 }
 
-interface getSchedulerResponse {
+export interface getSchedulerResponse {
   id: number;
   host_name: string;
   ip: string;

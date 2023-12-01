@@ -43,6 +43,21 @@ export default function Schedulers() {
     },
   ];
 
+  function getModificationDate(time: string) {
+    const date = new Date(time);
+    const buffer = [
+      date.getUTCFullYear().toString(),
+      (date.getUTCMonth() + 1).toString().padStart(2, '0'),
+      date.getUTCDate().toString().padStart(2, '0'),
+      date.getUTCHours().toString().padStart(2, '0'),
+      date.getUTCMinutes().toString().padStart(2, '0'),
+      date.getUTCSeconds().toString().padStart(2, '0'),
+    ];
+
+    return buffer.join('');
+  }
+  console.log(getModificationDate('2023-11-27T07:31:24Z'));
+
   useEffect(() => {
     (async function () {
       try {

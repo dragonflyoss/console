@@ -159,124 +159,124 @@ describe('Scheduler', () => {
       cy.get(':nth-child(4) > .MuiChip-root').should('have.text', '2023-11-09-07:09:06');
 
       // Show updated at.
-      cy.get(':nth-child(5) > .MuiChip-root').should('have.text', '2023-11-09-07:09:06');
+      cy.get(':nth-child(5) > .MuiChip-root').should('have.text', '2023-11-09-07:09:11');
     });
   });
 
-  // describe('when no data is loaded', () => {
-  //   beforeEach(() => {
-  //     cy.intercept({ method: 'GET', url: '/api/v1/schedulers/7' }, (req) => {
-  //       req.reply({
-  //         statusCode: 200,
-  //         body: [],
-  //       });
-  //     });
-  //   });
+  describe('when no data is loaded', () => {
+    beforeEach(() => {
+      cy.intercept({ method: 'GET', url: '/api/v1/schedulers/7' }, (req) => {
+        req.reply({
+          statusCode: 200,
+          body: [],
+        });
+      });
+    });
 
-  //   it('unable to display breadcrumb', () => {
-  //     cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
-  //       .should('be.visible')
-  //       .and('contain', 'scheduler-cluster-1');
+    it('unable to display breadcrumb', () => {
+      cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
+        .should('be.visible')
+        .and('contain', 'scheduler-cluster-1');
 
-  //     cy.get(':nth-child(7) > .MuiTypography-root').should('be.visible').and('contain', '-');
-  //   });
+      cy.get(':nth-child(7) > .MuiTypography-root').should('be.visible').and('contain', '-');
+    });
 
-  //   it('scheduler should render empty status', () => {
-  //     // Show ID.
-  //     cy.get('.show_container__qetel > :nth-child(1) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+    it('scheduler should render empty status', () => {
+      // Show ID.
+      cy.get('.show_container__qetel > :nth-child(1) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
 
-  //     // Show Hostname.
-  //     cy.get(':nth-child(2) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      // Show Hostname.
+      cy.get(':nth-child(2) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
 
-  //     // Show IP.
-  //     cy.get(':nth-child(3) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      // Show IP.
+      cy.get(':nth-child(3) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
 
-  //     // Show Cluster ID.
-  //     cy.get('.show_clusterIDContaine__Gvk7F > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      // Show Cluster ID.
+      cy.get('.show_clusterIDContaine__Gvk7F > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
 
-  //     // Show Port.
-  //     cy.get('.show_schedulerContainer__euX4O > :nth-child(1) > .css-1n0qe7k-MuiTypography-root').should(
-  //       'contain',
-  //       '-',
-  //     );
+      // Show Port.
+      cy.get('.show_schedulerContainer__euX4O > :nth-child(1) > .css-1n0qe7k-MuiTypography-root').should(
+        'contain',
+        '-',
+      );
 
-  //     // Show Start.
-  //     cy.get('.show_schedulerContainer__euX4O > :nth-child(2)').should('contain', '-');
+      // Show Start.
+      cy.get('.show_schedulerContainer__euX4O > :nth-child(2)').should('contain', '-');
 
-  //     // Show Features.
-  //     cy.get('.show_schedulerContainer__euX4O > :nth-child(3)').should('contain', '-');
+      // Show Features.
+      cy.get('.show_schedulerContainer__euX4O > :nth-child(3)').should('contain', '-');
 
-  //     // Show Created At.
-  //     cy.get(':nth-child(4) > .MuiChip-root').should('not.exist');
+      // Show Created At.
+      cy.get(':nth-child(4) > .MuiChip-root').should('not.exist');
 
-  //     // Show Updated At.
-  //     cy.get(':nth-child(5) > .MuiChip-root').should('not.exist');
-  //   });
-  // });
+      // Show Updated At.
+      cy.get(':nth-child(5) > .MuiChip-root').should('not.exist');
+    });
+  });
 
-  // describe('should handle API error response', () => {
-  //   beforeEach(() => {
-  //     cy.intercept(
-  //       {
-  //         method: 'GET',
-  //         url: '/api/v1/schedulers/1',
-  //       },
-  //       (req) => {
-  //         req.reply({
-  //           forceNetworkError: true,
-  //         });
-  //       },
-  //     );
-  //     cy.visit('/clusters/1/schedulers/1');
-  //   });
+  describe('should handle API error response', () => {
+    beforeEach(() => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/schedulers/1',
+        },
+        (req) => {
+          req.reply({
+            forceNetworkError: true,
+          });
+        },
+      );
+      cy.visit('/clusters/1/schedulers/1');
+    });
 
-  //   it('show error message', () => {
-  //     // Show error message
-  //     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+    it('show error message', () => {
+      // Show error message
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
 
-  //     // Close error message.
-  //     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-  //     cy.get('.MuiAlert-message').should('not.exist');
-  //   });
+      // Close error message.
+      cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+      cy.get('.MuiAlert-message').should('not.exist');
+    });
 
-  //   it('unable to display breadcrumb', () => {
-  //     cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
-  //       .should('be.visible')
-  //       .and('contain', 'scheduler-cluster-1');
+    it('unable to display breadcrumb', () => {
+      cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
+        .should('be.visible')
+        .and('contain', 'scheduler-cluster-1');
 
-  //     cy.get(':nth-child(7) > .MuiTypography-root').should('be.visible').and('contain', '-');
-  //   });
+      cy.get(':nth-child(7) > .MuiTypography-root').should('be.visible').and('contain', '-');
+    });
 
-  //   it('scheduler should render empty status', () => {
-  //     // Show ID.
-  //     cy.get('.show_container__qetel > :nth-child(1) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+    it('scheduler should render empty status', () => {
+      // Show ID.
+      cy.get('.show_container__qetel > :nth-child(1) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
 
-  //     // Show Hostname.
-  //     cy.get(':nth-child(2) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      // Show Hostname.
+      cy.get(':nth-child(2) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
 
-  //     // Show IP.
-  //     cy.get(':nth-child(3) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      // Show IP.
+      cy.get(':nth-child(3) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
 
-  //     // Show Cluster ID.
-  //     cy.get('.show_clusterIDContaine__Gvk7F > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      // Show Cluster ID.
+      cy.get('.show_clusterIDContaine__Gvk7F > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
 
-  //     // Show Port.
-  //     cy.get('.show_schedulerContainer__euX4O > :nth-child(1) > .css-1n0qe7k-MuiTypography-root').should(
-  //       'contain',
-  //       '-',
-  //     );
+      // Show Port.
+      cy.get('.show_schedulerContainer__euX4O > :nth-child(1) > .css-1n0qe7k-MuiTypography-root').should(
+        'contain',
+        '-',
+      );
 
-  //     // Show Start.
-  //     cy.get('.show_schedulerContainer__euX4O > :nth-child(2)').should('contain', '-');
+      // Show Start.
+      cy.get('.show_schedulerContainer__euX4O > :nth-child(2)').should('contain', '-');
 
-  //     // Show Features.
-  //     cy.get('.show_schedulerContainer__euX4O > :nth-child(3)').should('contain', '-');
+      // Show Features.
+      cy.get('.show_schedulerContainer__euX4O > :nth-child(3)').should('contain', '-');
 
-  //     // Show Created At.
-  //     cy.get(':nth-child(4) > .MuiChip-root').should('not.exist');
+      // Show Created At.
+      cy.get(':nth-child(4) > .MuiChip-root').should('not.exist');
 
-  //     // Show Updated At.
-  //     cy.get(':nth-child(5) > .MuiChip-root').should('not.exist');
-  //   });
-  // });
+      // Show Updated At.
+      cy.get(':nth-child(5) > .MuiChip-root').should('not.exist');
+    });
+  });
 });

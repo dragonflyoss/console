@@ -3,6 +3,7 @@ import user from '../fixtures/api/user.json';
 import cluster from '../fixtures/api/clusters/cluster/cluster.json';
 import schedulers from '../fixtures/api/clusters/cluster/scheduler.json';
 import scheduler from '../fixtures/api/scheduler.json';
+import schedulerInactive from '../fixtures/api/scheduler-inactive.json';
 
 describe('Scheduler', () => {
   beforeEach(() => {
@@ -161,6 +162,32 @@ describe('Scheduler', () => {
       // Show updated at.
       cy.get(':nth-child(5) > .MuiChip-root').should('have.text', '2023-11-09 07:09:11');
     });
+
+    it('can display inactive scheduler', () => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/schedulers/2',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: schedulerInactive,
+          });
+        },
+      );
+
+      cy.visit('/clusters/1/schedulers/2');
+
+      // Show hostname.
+      cy.get(':nth-child(2) > .css-1n0qe7k-MuiTypography-root').should('be.visible').and('contain', 'scheduler-2');
+
+      // Show Inactive background color.
+      cy.get(':nth-child(2) > .MuiChip-root')
+        .should('be.visible')
+        .and('contain', 'Inactive')
+        .and('have.css', 'background-color', 'rgb(28, 41, 58)');
+    });
   });
 
   describe('when no data is loaded', () => {
@@ -231,7 +258,7 @@ describe('Scheduler', () => {
     });
 
     it('show error message', () => {
-      // Show error message
+      // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
 
       // Close error message.

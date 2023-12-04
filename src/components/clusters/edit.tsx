@@ -17,7 +17,7 @@ import { LoadingButton } from '@mui/lab';
 import styles from './edit.module.css';
 import HelpIcon from '@mui/icons-material/Help';
 import { useEffect, useState } from 'react';
-import { getCluster, updateCluster } from '../../lib/api';
+import { getCluster, updateCluster, getClusterResponse } from '../../lib/api';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -36,14 +36,14 @@ export default function EditCluster() {
   const [idcError, setIDCError] = useState(false);
   const [cidrsError, setCIDRsError] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
-  const [cluster, setCluster] = useState({
+  const [cluster, setCluster] = useState<getClusterResponse>({
     id: 0,
     name: '',
     bio: '',
     scopes: {
       idc: '',
       location: '',
-      cidrs: [''],
+      cidrs: [],
     },
     scheduler_cluster_id: 0,
     seed_peer_cluster_id: 0,
@@ -98,9 +98,9 @@ export default function EditCluster() {
   const informationForm = [
     {
       formProps: {
-        id: 'bio',
+        id: 'description',
         label: 'Description',
-        name: 'bio',
+        name: 'description',
         autoComplete: 'family-name',
         value: bio,
         placeholder: 'Please enter description',
@@ -254,7 +254,7 @@ export default function EditCluster() {
   const configForm = [
     {
       formProps: {
-        id: 'seed peer load limit',
+        id: 'seedPeerLoadLimit',
         label: 'Seed Peer load limit',
         name: 'seedPeerLoadLimit',
         type: 'number',
@@ -292,7 +292,7 @@ export default function EditCluster() {
     },
     {
       formProps: {
-        id: 'peer load limit',
+        id: 'peerLoadLimit',
         label: 'Peer load limit',
         name: 'peerLoadLimit',
         type: 'number',
@@ -332,7 +332,7 @@ export default function EditCluster() {
     },
     {
       formProps: {
-        id: 'number of concurrent download pieces',
+        id: 'numberOfConcurrentDownloadPieces',
         label: 'Number of concurrent download pieces',
         name: 'numberOfConcurrentDownloadPieces',
         type: 'number',
@@ -371,7 +371,7 @@ export default function EditCluster() {
     },
     {
       formProps: {
-        id: 'candidate parent limit',
+        id: 'candidateParentLimit',
         label: 'Candidate parent limit',
         name: 'candidateParentLimit',
         type: 'number',
@@ -413,9 +413,9 @@ export default function EditCluster() {
     },
     {
       formProps: {
-        id: 'filter parent limit',
+        id: 'filterParentLimit',
         label: 'Filter parent limit',
-        name: 'filter parent limit',
+        name: 'filterParentLimit',
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Filter parent limit',
@@ -476,7 +476,7 @@ export default function EditCluster() {
     const cidrsText = event.currentTarget.elements.cidrs.value;
 
     if (idcText) {
-      setIDCHelperText('Please press ENTER to end the IDC creation');
+      setIDCHelperText('Please press ENTER to end the IDC creation.');
       setIDCError(true);
     } else {
       setIDCError(false);
@@ -484,7 +484,7 @@ export default function EditCluster() {
     }
 
     if (cidrsText) {
-      setCIDRsHelperText('Please press ENTER to end the CIDRs creation');
+      setCIDRsHelperText('Please press ENTER to end the CIDRs creation.');
       setCIDRsError(true);
     } else {
       setCIDRsError(false);
@@ -638,7 +638,7 @@ export default function EditCluster() {
           ))}
           <Box className={styles.scopesTitle}>
             <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
-              scopes
+              Scopes
             </Typography>
             <Tooltip
               title="The cluster needs to serve the scope. It wil provide scheduler services and seed peer services to peers in
@@ -766,6 +766,7 @@ export default function EditCluster() {
             size="small"
             variant="outlined"
             loadingPosition="end"
+            id="cancel"
             sx={{
               '&.MuiLoadingButton-root': {
                 color: 'var(--calcel-size-color)',
@@ -798,6 +799,7 @@ export default function EditCluster() {
             variant="outlined"
             type="submit"
             loadingPosition="end"
+            id="save"
             sx={{
               '&.MuiLoadingButton-root': {
                 backgroundColor: 'var(--save-color)',

@@ -156,10 +156,10 @@ describe('Scheduler', () => {
         .and('contain', 'Preheat');
 
       // Show created at.
-      cy.get(':nth-child(4) > .MuiChip-root').should('have.text', '2023-11-09-07:09:06');
+      cy.get(':nth-child(4) > .MuiChip-root').should('have.text', '2023-11-09 07:09:06');
 
       // Show updated at.
-      cy.get(':nth-child(5) > .MuiChip-root').should('have.text', '2023-11-09-07:09:11');
+      cy.get(':nth-child(5) > .MuiChip-root').should('have.text', '2023-11-09 07:09:11');
     });
   });
 

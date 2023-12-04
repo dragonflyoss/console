@@ -79,6 +79,31 @@ describe('Seed peer', () => {
     cy.viewport(1440, 1080);
   });
 
+  it('click the hostname', () => {
+    cy.visit('/clusters/1');
+
+    cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(2) > .MuiTypography-root').should(
+      'have.text',
+      'seed-peer-10',
+    );
+    cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(2) > .MuiTypography-root').click();
+
+    // Then I see that the current page is the clusters/1/seed-peers/10!
+    cy.url().should('include', '/clusters/1/seed-peers/10');
+  });
+
+  it('click the breadcrumb', () => {
+    // Check for breadcrumb.
+    cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
+      .should('be.visible')
+      .and('contain', 'seed-peer-cluster-1');
+
+    cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root').click();
+
+    // Then I see that the current page is the clusters/1!
+    cy.url().should('include', '/clusters/1');
+  });
+
   describe('when data is loaded', () => {
     it('can display breadcrumb', () => {
       cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')

@@ -189,7 +189,7 @@ export async function getClusters(params?: getClustersParams): Promise<getCluste
   return await response.json();
 }
 
-interface getClusterResponse {
+export interface getClusterResponse {
   id: number;
   name: string;
   bio: string;
@@ -383,7 +383,7 @@ export async function getScheduler(id: string): Promise<getSchedulerResponse> {
 }
 
 export async function deleteScheduler(id: string) {
-  const url = new URL(`api/v1/schedulers/${id}`, API_URL);
+  const url = new URL(`/api/v1/schedulers/${id}`, API_URL);
   return await destroy(url);
 }
 
@@ -419,7 +419,7 @@ export async function getSeedPeers(params?: getSeedPeersParmas): Promise<getSeed
   return await response.json();
 }
 
-interface getSeedPeerResponse {
+export interface getSeedPeerResponse {
   id: number;
   host_name: string;
   ip: string;
@@ -442,7 +442,7 @@ export async function getSeedPeer(id: string): Promise<getSeedPeerResponse> {
 }
 
 export async function deleteSeedPeer(id: string) {
-  const url = new URL(`api/v1/seed-peers/${id}`, API_URL);
+  const url = new URL(`/api/v1/seed-peers/${id}`, API_URL);
   return await destroy(url);
 }
 
@@ -534,12 +534,12 @@ export async function updatePassword(id: string, request: updatePasswordRequset)
 }
 
 export async function deleteUserRole(id: string, role: string) {
-  const url = new URL(`api/v1/users/${id}/roles/${role}`, API_URL);
+  const url = new URL(`/api/v1/users/${id}/roles/${role}`, API_URL);
   return await destroy(url);
 }
 
 export async function putUserRole(id: string, role: string) {
-  const url = new URL(`api/v1/users/${id}/roles/${role}`, API_URL);
+  const url = new URL(`/api/v1/users/${id}/roles/${role}`, API_URL);
   return await put(url);
 }
 

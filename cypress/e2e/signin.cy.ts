@@ -106,7 +106,7 @@ describe('Signin', () => {
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
     cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
 
-    // Menu exists for users.
+    // Menu exists users.
     cy.get('[href="/users"]').should('exist');
   });
 

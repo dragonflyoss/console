@@ -5,8 +5,8 @@ import guestUser from '../../fixtures/api/guest-user.json';
 import cluster from '../../fixtures/api/clusters/cluster/cluster.json';
 import seedPeer from '../../fixtures/api/clusters/cluster/seed-peer.json';
 import scheduler from '../../fixtures/api/clusters/cluster/scheduler.json';
-import deleteSchedulers from '../../fixtures/api/clusters/cluster/delete-schedulers.json';
-import againDeleteScheduler from '../../fixtures/api/clusters/cluster/again-delete-scheduler.json';
+import deleteScheduler from '../../fixtures/api/clusters/cluster/delete-scheduler.json';
+import schedulerDeleteAfter from '../../fixtures/api/clusters/cluster/scheduler-delete-after.json';
 import searchScheduler from '../../fixtures/api/clusters/cluster/search-scheduler.json';
 
 describe('Schedulers', () => {
@@ -413,7 +413,7 @@ describe('Schedulers', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: deleteSchedulers,
+            body: deleteScheduler,
           });
         },
       );
@@ -472,7 +472,7 @@ describe('Schedulers', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: againDeleteScheduler,
+            body: schedulerDeleteAfter,
           });
         },
       );

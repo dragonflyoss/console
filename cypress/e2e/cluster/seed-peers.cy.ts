@@ -5,8 +5,8 @@ import guestUser from '../../fixtures/api/guest-user.json';
 import cluster from '../../fixtures/api/clusters/cluster/cluster.json';
 import seedPeer from '../../fixtures/api/clusters/cluster/seed-peer.json';
 import scheduler from '../../fixtures/api/clusters/cluster/scheduler.json';
-import deleteSeedPeers from '../../fixtures/api/clusters/cluster/delete-seed-peers.json';
-import againDeleteSeedPeer from '../../fixtures/api/clusters/cluster/again-delete-seed-peer.json';
+import deleteSeedPeer from '../../fixtures/api/clusters/cluster/delete-seed-peer.json';
+import seedPeerDeleteAfter from '../../fixtures/api/clusters/cluster/seed-peer-delete-after.json';
 import searchSeedPeer from '../../fixtures/api/clusters/cluster/search-seed-peer.json';
 
 describe('Seed peers', () => {
@@ -406,7 +406,7 @@ describe('Seed peers', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: deleteSeedPeers,
+            body: deleteSeedPeer,
           });
         },
       );
@@ -476,7 +476,7 @@ describe('Seed peers', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: againDeleteSeedPeer,
+            body: seedPeerDeleteAfter,
           });
         },
       );
@@ -551,7 +551,7 @@ describe('Seed peers', () => {
       cy.get('#seed-peer-10').click();
 
       cy.get('#deleteSeedPeer').click();
-      // show error message
+      // show error message.
       cy.contains('.MuiAlert-message', 'permission deny');
     });
 

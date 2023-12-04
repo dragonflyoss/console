@@ -306,7 +306,7 @@ describe('Create cluster', () => {
       // Show verification error message.
       cy.get('#name-helper-text').should('be.visible').and('contain', 'Fill in the characters, the length is 1-40.');
 
-      // Submit form when validation fails
+      // Submit form when validation fails.
       cy.get('#save').click();
 
       // Cluster creation failed, the page is still in cluster/new.

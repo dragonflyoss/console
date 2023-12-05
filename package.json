@@ -16,7 +16,7 @@
     "eject": "react-scripts eject",
     "lint": "react-scripts lint",
     "cy:open": "npx cypress open",
-    "cy:run": "npx cypress run --browser chrome",
+    "cy:run": "npx cypress run --headed",
     "coverage:verify": "npx nyc report --check-coverage true --lines 10"
   },
   "dependencies": {

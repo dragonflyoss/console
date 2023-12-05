@@ -216,9 +216,6 @@ export default function PersonalAccessTokens() {
                 PopperProps={{
                   disablePortal: true,
                 }}
-                onClose={() => {
-                  setShowCopyIcon(false);
-                }}
                 open={showCopyIcon}
                 disableFocusListener
                 disableHoverListener

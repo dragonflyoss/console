@@ -313,7 +313,7 @@ describe('Create cluster', () => {
       cy.url().should('include', '/clusters/new');
       cy.get('#name').clear();
 
-      // Enter the correct name。
+      // Enter the correct name.
       cy.get('#name').type('cluster-12');
       cy.get('#name-helper-text').should('not.exist');
 

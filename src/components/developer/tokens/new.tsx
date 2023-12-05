@@ -361,6 +361,7 @@ export default function CreateTokens() {
                 size="small"
                 variant="outlined"
                 loadingPosition="end"
+                id="cancel"
                 sx={{
                   '&.MuiLoadingButton-root': {
                     color: 'var(--calcel-size-color)',
@@ -392,6 +393,7 @@ export default function CreateTokens() {
                 variant="outlined"
                 type="submit"
                 loadingPosition="end"
+                id="save"
                 sx={{
                   '&.MuiLoadingButton-root': {
                     backgroundColor: 'var(--save-color)',

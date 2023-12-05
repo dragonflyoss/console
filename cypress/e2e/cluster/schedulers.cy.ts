@@ -382,7 +382,7 @@ describe('Schedulers', () => {
   });
 
   describe('delete', () => {
-    it('when a scheduler is removed, this scheduler is the only scheduler on the last page', () => {
+    it('when a scheduler is removed, this scheduler is the only scheduler on the last page.', () => {
       // Check the total number of schedulers.
       cy.get('.css-ms744u-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 11');
 

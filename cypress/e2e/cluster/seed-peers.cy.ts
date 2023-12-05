@@ -375,7 +375,7 @@ describe('Seed peers', () => {
   });
 
   describe('delete', () => {
-    it('when a seed peer is deleted, the seed peer is the only seed peer on the last page', () => {
+    it('when a seed peer is deleted, the seed peer is the only seed peer on the last page.', () => {
       // Check the total number of seed peers.
       cy.get('.css-1o0u1hg-MuiPaper-root > .MuiChip-root > .MuiChip-label')
         .should('be.visible')

@@ -18,7 +18,7 @@ import {
   ThemeProvider,
   createTheme,
 } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { getTokens, deleteTokens, getTokensResponse } from '../../../lib/api';
 import { formatDate, getPaginatedList } from '../../../lib/utils';
 import { useCopyToClipboard } from 'react-use';
@@ -112,7 +112,7 @@ export default function PersonalAccessTokens() {
       setSuccessMessage(true);
       setOpenDeletToken(false);
 
-      const token = await getTokens({ page: 1, per_page: MAX_PAGE_SIZE });
+      const token = await getTokens({ page: 1, per_page: DEFAULT_PAGE_SIZE });
 
       setToken(token);
       setIsLoading(false);
@@ -248,7 +248,7 @@ export default function PersonalAccessTokens() {
         </Paper>
       ) : (
         <>
-          <Paper variant="outlined" id="tokens-list">
+          <Paper variant="outlined">
             {Array.isArray(allTokens) &&
               allTokens.map((item, index) => {
                 return index !== allTokens.length - 1 ? (
@@ -260,7 +260,6 @@ export default function PersonalAccessTokens() {
                             <Skeleton sx={{ width: '2rem' }} />
                           ) : (
                             <RouterLink
-                              id={item.name}
                               component={Link}
                               to={`/developer/personal-access-tokens/${item?.id}`}
                               underline="hover"
@@ -270,31 +269,30 @@ export default function PersonalAccessTokens() {
                             </RouterLink>
                           )}
                           {isLoading ? (
-                            <Box sx={{ display: 'flex' }}>
+                            <>
                               &nbsp;—&nbsp;
                               <Skeleton sx={{ width: '1rem' }} />
-                            </Box>
+                            </>
                           ) : (
                             <Typography variant="body2">&nbsp;—&nbsp;{item?.user?.name}</Typography>
                           )}
                         </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Typography variant="body2" component="span" fontFamily="mabry-bold">
-                            Expires on&nbsp;
-                          </Typography>
-                          {isLoading ? (
-                            <Skeleton sx={{ width: '5rem' }} />
-                          ) : (
+                        {isLoading ? (
+                          <Skeleton />
+                        ) : (
+                          <>
+                            <Typography variant="body2" component="span" fontFamily="mabry-bold">
+                              Expires on&nbsp;
+                            </Typography>
                             <Typography variant="body2" component="span">
                               {formatDate(item?.expired_at) || ''}.
                             </Typography>
-                          )}
-                        </Box>
+                          </>
+                        )}
                       </Box>
                       <Box>
                         <Button
                           size="small"
-                          id="delete-token"
                           sx={{
                             '&.MuiButton-root': {
                               backgroundColor: 'var(--button-color)',
@@ -322,7 +320,6 @@ export default function PersonalAccessTokens() {
                             <Skeleton sx={{ width: '2rem' }} />
                           ) : (
                             <RouterLink
-                              id={item.name}
                               component={Link}
                               to={`/developer/personal-access-tokens/${item?.id}`}
                               underline="hover"
@@ -332,31 +329,30 @@ export default function PersonalAccessTokens() {
                             </RouterLink>
                           )}
                           {isLoading ? (
-                            <Box sx={{ display: 'flex' }}>
+                            <>
                               &nbsp;—&nbsp;
                               <Skeleton sx={{ width: '1rem' }} />
-                            </Box>
+                            </>
                           ) : (
                             <Typography variant="body2">&nbsp;—&nbsp;{item?.user?.name}</Typography>
                           )}
                         </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Typography variant="body2" component="span" fontFamily="mabry-bold">
-                            Expires on&nbsp;
-                          </Typography>
-                          {isLoading ? (
-                            <Skeleton sx={{ width: '5rem' }} />
-                          ) : (
+                        {isLoading ? (
+                          <Skeleton />
+                        ) : (
+                          <>
+                            <Typography variant="body2" component="span" fontFamily="mabry-bold">
+                              Expires on&nbsp;
+                            </Typography>
                             <Typography variant="body2" component="span">
                               {formatDate(item?.expired_at) || ''}.
                             </Typography>
-                          )}
-                        </Box>
+                          </>
+                        )}
                       </Box>
                       <Box>
                         <Button
                           size="small"
-                          id="delete-token"
                           sx={{
                             '&.MuiButton-root': {
                               backgroundColor: 'var(--button-color)',
@@ -382,7 +378,6 @@ export default function PersonalAccessTokens() {
       {tokensTotalPages > 1 ? (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
           <Pagination
-            id="tokens-pagination"
             count={tokensTotalPages}
             page={tokensPage}
             onChange={(_event: any, newPage: number) => {
@@ -418,7 +413,6 @@ export default function PersonalAccessTokens() {
             size="small"
             variant="outlined"
             loadingPosition="end"
-            id="cancel"
             sx={{
               '&.MuiLoadingButton-root': {
                 color: 'var(--calcel-size-color)',
@@ -450,7 +444,6 @@ export default function PersonalAccessTokens() {
             variant="outlined"
             type="submit"
             loadingPosition="end"
-            id="delete"
             sx={{
               '&.MuiLoadingButton-root': {
                 backgroundColor: 'var(--save-color)',

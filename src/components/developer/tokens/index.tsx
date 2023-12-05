@@ -33,7 +33,6 @@ export default function PersonalAccessTokens() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
   const [openDeletToken, setOpenDeletToken] = useState(false);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [tokenSelectedID, setTokenSelectedID] = useState('');
@@ -73,12 +72,10 @@ export default function PersonalAccessTokens() {
         const token = await getTokens({ page: 1, per_page: MAX_PAGE_SIZE });
 
         setToken(token);
-        setIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
-          setIsLoading(false);
         }
       }
     })();
@@ -115,7 +112,6 @@ export default function PersonalAccessTokens() {
       const token = await getTokens({ page: 1, per_page: MAX_PAGE_SIZE });
 
       setToken(token);
-      setIsLoading(false);
     } catch (error) {
       if (error instanceof Error) {
         setDeleteLoadingButton(false);
@@ -247,137 +243,105 @@ export default function PersonalAccessTokens() {
           You don't have any tokens.
         </Paper>
       ) : (
-        <>
-          <Paper variant="outlined" id="tokens-list">
-            {Array.isArray(allTokens) &&
-              allTokens.map((item, index) => {
-                return index !== allTokens.length - 1 ? (
-                  <Box key={item.id}>
-                    <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
-                          {isLoading ? (
-                            <Skeleton sx={{ width: '2rem' }} />
-                          ) : (
-                            <RouterLink
-                              id={item.name}
-                              component={Link}
-                              to={`/developer/personal-access-tokens/${item?.id}`}
-                              underline="hover"
-                              sx={{ color: 'var(--description-color)' }}
-                            >
-                              {item.name}
-                            </RouterLink>
-                          )}
-                          {isLoading ? (
-                            <Box sx={{ display: 'flex' }}>
-                              &nbsp;—&nbsp;
-                              <Skeleton sx={{ width: '1rem' }} />
-                            </Box>
-                          ) : (
-                            <Typography variant="body2">&nbsp;—&nbsp;{item?.user?.name}</Typography>
-                          )}
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Typography variant="body2" component="span" fontFamily="mabry-bold">
-                            Expires on&nbsp;
-                          </Typography>
-                          {isLoading ? (
-                            <Skeleton sx={{ width: '5rem' }} />
-                          ) : (
-                            <Typography variant="body2" component="span">
-                              {formatDate(item?.expired_at) || ''}.
-                            </Typography>
-                          )}
-                        </Box>
-                      </Box>
-                      <Box>
-                        <Button
-                          size="small"
-                          id="delete-token"
-                          sx={{
-                            '&.MuiButton-root': {
-                              backgroundColor: 'var(--button-color)',
-                              borderRadius: 0,
-                              color: '#fff',
-                            },
-                          }}
-                          variant="contained"
-                          onClick={() => {
-                            handleDeleteClose(item);
-                          }}
+        <Paper variant="outlined" id="tokens-list">
+          {Array.isArray(allTokens) &&
+            allTokens.map((item, index) => {
+              return index !== allTokens.length - 1 ? (
+                <Box key={item.id}>
+                  <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
+                        <RouterLink
+                          id={item.name}
+                          component={Link}
+                          to={`/developer/personal-access-tokens/${item?.id}`}
+                          underline="hover"
+                          sx={{ color: 'var(--description-color)' }}
                         >
-                          Delete
-                        </Button>
+                          {item.name}
+                        </RouterLink>
+                        <Typography variant="body2">&nbsp;—&nbsp;{item?.user?.name}</Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography variant="body2" component="span" fontFamily="mabry-bold">
+                          Expires on&nbsp;
+                        </Typography>
+                        <Typography variant="body2" component="span">
+                          {formatDate(item?.expired_at) || ''}.
+                        </Typography>
                       </Box>
                     </Box>
-                    <Divider />
-                  </Box>
-                ) : (
-                  <Box key={item.id}>
-                    <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
-                          {isLoading ? (
-                            <Skeleton sx={{ width: '2rem' }} />
-                          ) : (
-                            <RouterLink
-                              id={item.name}
-                              component={Link}
-                              to={`/developer/personal-access-tokens/${item?.id}`}
-                              underline="hover"
-                              sx={{ color: 'var(--description-color)' }}
-                            >
-                              {item.name}
-                            </RouterLink>
-                          )}
-                          {isLoading ? (
-                            <Box sx={{ display: 'flex' }}>
-                              &nbsp;—&nbsp;
-                              <Skeleton sx={{ width: '1rem' }} />
-                            </Box>
-                          ) : (
-                            <Typography variant="body2">&nbsp;—&nbsp;{item?.user?.name}</Typography>
-                          )}
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Typography variant="body2" component="span" fontFamily="mabry-bold">
-                            Expires on&nbsp;
-                          </Typography>
-                          {isLoading ? (
-                            <Skeleton sx={{ width: '5rem' }} />
-                          ) : (
-                            <Typography variant="body2" component="span">
-                              {formatDate(item?.expired_at) || ''}.
-                            </Typography>
-                          )}
-                        </Box>
-                      </Box>
-                      <Box>
-                        <Button
-                          size="small"
-                          id="delete-token"
-                          sx={{
-                            '&.MuiButton-root': {
-                              backgroundColor: 'var(--button-color)',
-                              borderRadius: 0,
-                              color: '#fff',
-                            },
-                          }}
-                          variant="contained"
-                          onClick={() => {
-                            handleDeleteClose(item);
-                          }}
-                        >
-                          Delete
-                        </Button>
-                      </Box>
+                    <Box>
+                      <Button
+                        size="small"
+                        id="delete-token"
+                        sx={{
+                          '&.MuiButton-root': {
+                            backgroundColor: 'var(--button-color)',
+                            borderRadius: 0,
+                            color: '#fff',
+                          },
+                        }}
+                        variant="contained"
+                        onClick={() => {
+                          handleDeleteClose(item);
+                        }}
+                      >
+                        Delete
+                      </Button>
                     </Box>
                   </Box>
-                );
-              })}
-          </Paper>
-        </>
+                  <Divider />
+                </Box>
+              ) : (
+                <Box key={item.id}>
+                  <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
+                        <RouterLink
+                          id={item.name}
+                          component={Link}
+                          to={`/developer/personal-access-tokens/${item?.id}`}
+                          underline="hover"
+                          sx={{ color: 'var(--description-color)' }}
+                        >
+                          {item.name}
+                        </RouterLink>
+                        <Typography variant="body2">&nbsp;—&nbsp;{item?.user?.name}</Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography variant="body2" component="span" fontFamily="mabry-bold">
+                          Expires on&nbsp;
+                        </Typography>
+                        <Typography variant="body2" component="span">
+                          {formatDate(item?.expired_at) || ''}.
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Box>
+                      <Button
+                        size="small"
+                        id="delete-token"
+                        sx={{
+                          '&.MuiButton-root': {
+                            backgroundColor: 'var(--button-color)',
+                            borderRadius: 0,
+                            color: '#fff',
+                          },
+                        }}
+                        variant="contained"
+                        onClick={() => {
+                          handleDeleteClose(item);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </Box>
+                  </Box>
+                </Box>
+              );
+            })}
+        </Paper>
       )}
       {tokensTotalPages > 1 ? (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>

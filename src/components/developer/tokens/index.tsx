@@ -216,19 +216,21 @@ export default function PersonalAccessTokens() {
                 PopperProps={{
                   disablePortal: true,
                 }}
-                onClose={() => {
-                  setShowCopyIcon(false);
-                }}
                 open={showCopyIcon}
                 disableFocusListener
                 disableHoverListener
                 disableTouchListener
                 title="copied!"
               >
-                <Box component="img" sx={{ width: '1.2rem', height: '1.2rem' }} src="/icons/tokens/done.svg" />
+                <Box
+                  component="img"
+                  id="done"
+                  sx={{ width: '1.2rem', height: '1.2rem' }}
+                  src="/icons/tokens/done.svg"
+                />
               </Tooltip>
             ) : (
-              <Box component="img" sx={{ width: '1.2rem', height: '1.2rem' }} src="/icons/tokens/copy.svg" />
+              <Box component="img" id="copy" sx={{ width: '1.2rem', height: '1.2rem' }} src="/icons/tokens/copy.svg" />
             )}
           </IconButton>
         </Box>

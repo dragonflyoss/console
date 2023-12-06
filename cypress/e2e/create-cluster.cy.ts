@@ -5,7 +5,7 @@ import user from '../fixtures/api/user.json';
 import guestUser from '../fixtures/api/guest-user.json';
 import seedPeers from '../fixtures/api/clusters/seed-peers.json';
 import schedulers from '../fixtures/api/clusters/schedulers.json';
-import createClustes from '../fixtures/api/clusters/create-cluster.json';
+import createCluster from '../fixtures/api/clusters/create-cluster.json';
 import _ from 'lodash';
 
 describe('Create cluster', () => {
@@ -141,7 +141,7 @@ describe('Create cluster', () => {
       (req) => {
         req.reply({
           statusCode: 200,
-          body: createClustes,
+          body: createCluster,
         });
       },
     );
@@ -313,7 +313,7 @@ describe('Create cluster', () => {
       cy.url().should('include', '/clusters/new');
       cy.get('#name').clear();
 
-      // Enter the correct name。
+      // Enter the correct name.
       cy.get('#name').type('cluster-12');
       cy.get('#name-helper-text').should('not.exist');
 

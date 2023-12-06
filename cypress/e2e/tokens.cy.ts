@@ -2,7 +2,7 @@ import root from '../fixtures/api/role-root.json';
 import user from '../fixtures/api/user.json';
 import tokens from '../fixtures/api/tokens/tokens.json';
 import deleteToken from '../fixtures/api/tokens/delete-tokens.json';
-import deleteTokenAfter from '../fixtures/api/tokens/token-delete-after.json';
+import tokenDeleteAfter from '../fixtures/api/tokens/token-delete-after.json';
 
 describe('Tokens', () => {
   beforeEach(() => {
@@ -262,7 +262,7 @@ describe('Tokens', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: deleteTokenAfter,
+            body: tokenDeleteAfter,
           });
         },
       ).as('delete');

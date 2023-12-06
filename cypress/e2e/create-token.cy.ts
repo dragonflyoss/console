@@ -3,7 +3,7 @@ import guest from '../fixtures/api/role-guest.json';
 import user from '../fixtures/api/user.json';
 import guestUser from '../fixtures/api/guest-user.json';
 import tokens from '../fixtures/api/tokens/tokens.json';
-import createTokens from '../fixtures/api/tokens/create-token.json';
+import createToken from '../fixtures/api/tokens/create-token.json';
 import _ from 'lodash';
 
 describe('Create token', () => {
@@ -98,7 +98,7 @@ describe('Create token', () => {
       (req) => {
         req.reply({
           statusCode: 200,
-          body: createTokens,
+          body: createToken,
         });
       },
     );
@@ -134,7 +134,7 @@ describe('Create token', () => {
     cy.get('#copy').should('exist');
     cy.get('#done').should('not.exist');
     cy.get('.MuiTooltip-tooltip').should('not.exist');
-    
+
     // Display successfully created token information.
     cy.get('#root-12').should('be.visible').and('have.text', 'root-12');
 
@@ -161,6 +161,7 @@ describe('Create token', () => {
         });
       },
     );
+
     cy.get('#name').type('root-12{enter}');
 
     // Show error message.
@@ -176,7 +177,7 @@ describe('Create token', () => {
     cy.url().should('include', '/developer/personal-access-tokens');
   });
 
-  it('cannot create token without required attributes', () => {
+  it('token cannot be created without required attributes', () => {
     cy.get('#save').click();
 
     cy.get('#name-helper-text').should('exist').and('have.text', 'Fill in the characters, the length is 1-100.');
@@ -272,7 +273,6 @@ describe('Create token', () => {
 
     // Then I see that the current page is the developer/personal-access-tokens/new!
     cy.url().should('include', '/developer/personal-access-tokens/new');
-
     cy.get('#name').clear();
 
     // Enter the correct name.

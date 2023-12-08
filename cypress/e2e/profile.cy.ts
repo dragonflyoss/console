@@ -407,6 +407,12 @@ describe('Profile', () => {
             statusCode: 200,
           });
       });
+      cy.intercept({ method: 'POST', url: '/api/v1/users/signout' }, (req) => {
+        (req.body = ''),
+          req.reply({
+            statusCode: 200,
+          });
+      });
 
       // Click change password button.
       cy.get('.css-1a9getn > .MuiButtonBase-root').click();
@@ -480,6 +486,12 @@ describe('Profile', () => {
       );
       cy.intercept({ method: 'POST', url: '/api/v1/users/2/reset_password' }, (req) => {
         (req.body = { new_password: 'dragonfly2', old_password: 'dragonfly2' }),
+          req.reply({
+            statusCode: 200,
+          });
+      });
+      cy.intercept({ method: 'POST', url: '/api/v1/users/signout' }, (req) => {
+        (req.body = ''),
           req.reply({
             statusCode: 200,
           });

@@ -72,6 +72,8 @@ export default function NewCluster() {
         id: 'description',
         label: 'Description',
         name: 'description',
+        multiline: true,
+        maxRows: 2,
         autoComplete: 'family-name',
         placeholder: 'Enter a cluster description',
         helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',

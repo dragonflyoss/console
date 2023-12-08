@@ -7,7 +7,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  ListItemText,
   Menu,
   MenuItem,
   Snackbar,
@@ -20,21 +19,35 @@ import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import { ListItemButton, ListItemIcon } from '@mui/material';
 import { createContext, useEffect, useState } from 'react';
-import { ExpandLess, ExpandMore, Logout, PersonAdd, StarBorder } from '@mui/icons-material';
-import { getUserRoles, getUser, signOut } from '../../lib/api';
+import { ExpandLess, ExpandMore, Logout, PersonAdd } from '@mui/icons-material';
+import { getUserRoles, getUser, signOut, getUserResponse } from '../../lib/api';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { getJwtPayload, setPageTitle } from '../../lib/utils';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
-
 import { ROLE_ROOT, ROLE_GUEST } from '../../lib/constants';
+
 interface MyContextType {
-  user: { name: string; id: number };
+  user: getUserResponse;
   role: string;
+  onUserUpdate: (newUser: getUserResponse) => void;
 }
 
 export const MyContext = createContext<MyContextType>({
-  user: { name: '', id: 0 },
+  user: {
+    id: 0,
+    created_at: '',
+    updated_at: '',
+    is_del: 0,
+    email: '',
+    name: '',
+    avatar: '',
+    phone: '',
+    state: '',
+    location: '',
+    bio: '',
+  },
   role: '',
+  onUserUpdate: (newUser) => {},
 });
 
 const Main = styled('div')(({ theme }) => ({
@@ -55,12 +68,25 @@ export default function Layout(props: any) {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [pageLoding, setPageLoding] = useState(false);
-  const [user, setUser] = useState({ name: '', email: '', avatar: '', id: 0 });
+  const [user, setUser] = useState<getUserResponse>({
+    id: 0,
+    created_at: '',
+    updated_at: '',
+    is_del: 0,
+    email: '',
+    name: '',
+    avatar: '',
+    phone: '',
+    state: '',
+    location: '',
+    bio: '',
+  });
   const [anchorElement, setAnchorElement] = useState(null);
   const [firstLogin, setFirstLogin] = useState(false);
   const [expandDeveloper, setExpandDeveloper] = useState(false);
   const [expandJob, setExpandJob] = useState(false);
   const [expandInsight, setExpandInsight] = useState(false);
+
   const openProfile = Boolean(anchorElement);
   const location = useLocation();
   const navigate = useNavigate();
@@ -92,6 +118,10 @@ export default function Layout(props: any) {
       setFirstLogin(true);
     }
   }, [location, navigate]);
+
+  const handleUserUpdate = (newUser: getUserResponse) => {
+    setUser(newUser);
+  };
 
   const rootMenu = [
     {
@@ -207,7 +237,7 @@ export default function Layout(props: any) {
   };
 
   return (
-    <MyContext.Provider value={{ user, role }}>
+    <MyContext.Provider value={{ user, role, onUserUpdate: handleUserUpdate }}>
       <Backdrop
         open={pageLoding}
         sx={{
@@ -645,6 +675,7 @@ export default function Layout(props: any) {
                     setAnchorElement(event.currentTarget);
                   }}
                   size="small"
+                  id="unfold-more"
                   aria-controls={openProfile ? 'account-menu' : undefined}
                   aria-haspopup="true"
                   aria-expanded={openProfile ? 'true' : undefined}
@@ -663,6 +694,7 @@ export default function Layout(props: any) {
                 sx={{ position: 'absolute', top: '-5.8rem', left: '-5rem' }}
               >
                 <MenuItem
+                  id="profile-menu"
                   onClick={() => {
                     setAnchorElement(null);
 
@@ -674,7 +706,7 @@ export default function Layout(props: any) {
                   </ListItemIcon>
                   Profile
                 </MenuItem>
-                <MenuItem onClick={handleLogout}>
+                <MenuItem id="logout-menu" onClick={handleLogout}>
                   <ListItemIcon>
                     <Logout fontSize="small" />
                   </ListItemIcon>

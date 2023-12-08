@@ -29,7 +29,7 @@ import { ROLE_ROOT, ROLE_GUEST } from '../../lib/constants';
 interface MyContextType {
   user: getUserResponse;
   role: string;
-  onUserUpdate: (newUser: getUserResponse) => void;
+  handleUserUpdate: (newUser: getUserResponse) => void;
 }
 
 export const MyContext = createContext<MyContextType>({
@@ -47,7 +47,9 @@ export const MyContext = createContext<MyContextType>({
     bio: '',
   },
   role: '',
-  onUserUpdate: (newUser) => {},
+  handleUserUpdate: () => {
+    return;
+  },
 });
 
 const Main = styled('div')(({ theme }) => ({
@@ -120,6 +122,8 @@ export default function Layout(props: any) {
   }, [location, navigate]);
 
   const handleUserUpdate = (newUser: getUserResponse) => {
+    console.log(newUser);
+
     setUser(newUser);
   };
 
@@ -237,7 +241,7 @@ export default function Layout(props: any) {
   };
 
   return (
-    <MyContext.Provider value={{ user, role, onUserUpdate: handleUserUpdate }}>
+    <MyContext.Provider value={{ user, role, handleUserUpdate }}>
       <Backdrop
         open={pageLoding}
         sx={{

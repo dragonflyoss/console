@@ -67,7 +67,7 @@ export default function Profile() {
     new_password: '',
   });
 
-  const { user, onUserUpdate } = useContext(MyContext);
+  const { user, handleUserUpdate } = useContext(MyContext);
 
   const navigate = useNavigate();
 
@@ -428,7 +428,7 @@ export default function Profile() {
 
           const user = await getUser(String(users.id));
 
-          onUserUpdate(user);
+          handleUserUpdate(user);
           setPersonalLoadingButton(false);
           setShowPersonalInformation(true);
           setSuccessMessage(true);

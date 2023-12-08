@@ -8,6 +8,13 @@
   padding: 2rem;
 }
 
+.textField {
+  width: 22rem;
+  max-width: 28rem;
+  margin-top: 0.8rem !important;
+  margin-bottom: 0.8rem !important;
+}
+
 .avatarContainer {
   display: flex;
   justify-content: space-between;
@@ -23,7 +30,7 @@
 .informationHeader {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .informationContainer {

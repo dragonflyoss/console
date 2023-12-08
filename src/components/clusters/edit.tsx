@@ -101,6 +101,8 @@ export default function EditCluster() {
         id: 'description',
         label: 'Description',
         name: 'description',
+        multiline: true,
+        maxRows: 2,
         autoComplete: 'family-name',
         value: bio,
         placeholder: 'Please enter description',

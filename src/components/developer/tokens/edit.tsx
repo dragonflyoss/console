@@ -56,6 +56,8 @@ export default function UpdateTokens() {
         id: 'bio',
         label: 'Description',
         name: 'bio',
+        multiline: true,
+        maxRows: 2,
         autoComplete: 'family-name',
         placeholder: 'Enter your description',
         value: tokens.bio,

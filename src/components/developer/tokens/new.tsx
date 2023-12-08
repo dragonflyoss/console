@@ -90,6 +90,8 @@ export default function CreateTokens() {
         id: 'bio',
         label: 'Description',
         name: 'bio',
+        multiline: true,
+        maxRows: 2,
         autoComplete: 'family-name',
         placeholder: 'Enter your description',
         helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',

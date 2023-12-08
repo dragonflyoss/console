@@ -469,7 +469,7 @@ export async function getUsers(params: getUserParams): Promise<getUsersResponse[
   return await response.json();
 }
 
-interface getUserResponse {
+export interface getUserResponse {
   id: number;
   created_at: string;
   updated_at: string;

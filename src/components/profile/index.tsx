@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {
   Alert,
   Box,
@@ -7,15 +6,14 @@ import {
   IconButton,
   InputAdornment,
   Paper,
-  Skeleton,
   Snackbar,
   TextField,
   Typography,
 } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
-import { useState, useEffect } from 'react';
-import { updateUser, getUser, updatePassword, signOut } from '../../lib/api';
+import { useState, useEffect, useContext } from 'react';
+import { updateUser, getUser, updatePassword, signOut, getUserResponse } from '../../lib/api';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -27,18 +25,21 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import styles from './index.module.css';
-import { getDatetime, getJwtPayload } from '../../lib/utils';
+import { getDatetime } from '../../lib/utils';
 import { useNavigate } from 'react-router-dom';
+import { MyContext } from '../menu/index';
 
 export default function Profile() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
   const [bioError, setBioError] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
   const [locationError, setLocationError] = useState(false);
   const [emailError, setEmailError] = useState(false);
+  const [oldPasswordError, setOldPasswordError] = useState(false);
+  const [newPasswordError, setNewPasswordError] = useState(false);
+  const [confirmNewPasswordError, setConfirmNewPasswordErrorError] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [showOldPassword, setShowOldPassword] = useState(false);
@@ -47,48 +48,33 @@ export default function Profile() {
   const [personalLoadingButton, setPersonalLoadingButton] = useState(false);
   const [showMyProfile, setShowMyProfile] = useState(true);
   const [showPersonalInformation, setShowPersonalInformation] = useState(true);
-  const [userID, setUserID] = useState('');
   const [bio, setBio] = useState('');
-  const [user, setUser] = useState({
-    bio: '',
-    avatar: '',
+  const [users, setUsers] = useState<getUserResponse>({
     id: 0,
-    name: '',
-    email: '',
-    location: '',
-    phone: '',
     created_at: '',
+    updated_at: '',
+    is_del: 0,
+    email: '',
+    name: '',
+    avatar: '',
+    phone: '',
+    state: '',
+    location: '',
+    bio: '',
   });
   const [password, setPassword] = useState({
     old_password: '',
     new_password: '',
   });
 
+  const { user, handleUserUpdate } = useContext(MyContext);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const payload = getJwtPayload();
-    setUserID(payload?.id);
-
-    (async function () {
-      try {
-        setIsLoading(true);
-
-        if (payload?.id) {
-          const user = await getUser(payload?.id);
-          setUser(user);
-          setBio(user.bio);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          setErrorMessage(true);
-          setErrorMessageText(error.message);
-          setIsLoading(false);
-        }
-      }
-    })();
-  }, []);
+    setUsers(user);
+    setBio(user.bio);
+  }, [user]);
 
   const { old_password, new_password } = password;
 
@@ -120,7 +106,7 @@ export default function Profile() {
     },
     {
       name: 'created_at',
-      label: 'created_at',
+      label: 'Created At',
       icon: <Box component="img" className={styles.userIcon} src="/icons/user/created-at.svg" />,
     },
   ];
@@ -132,14 +118,15 @@ export default function Profile() {
         label: 'Bio',
         name: 'bio',
         multiline: true,
+        maxRows: 2,
         autoComplete: 'family-name',
         placeholder: 'Enter your description',
         helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',
         error: bioError,
-        value: user.bio,
+        value: users.bio,
 
         onChange: (e: any) => {
-          setUser({ ...user, bio: e.target.value });
+          setUsers({ ...users, bio: e.target.value });
           changeValidate(e.target.value, profileForm[0]);
         },
 
@@ -167,13 +154,13 @@ export default function Profile() {
         label: 'Phone',
         name: 'phone',
         autoComplete: 'family-name',
-        value: user.phone,
+        value: users.phone,
         placeholder: 'Enter your Phone',
         helperText: phoneError ? 'Invalid phone number.' : '',
         error: phoneError,
 
         onChange: (e: any) => {
-          setUser({ ...user, phone: e.target.value });
+          setUsers({ ...users, phone: e.target.value });
           changeValidate(e.target.value, profileForm[1]);
         },
 
@@ -200,13 +187,13 @@ export default function Profile() {
         label: 'Location',
         name: 'location',
         autoComplete: 'family-name',
-        value: user.location,
+        value: users.location,
         placeholder: 'Enter your location',
         helperText: locationError ? 'Fill in the characters, the length is 0-100.' : '',
         error: locationError,
 
         onChange: (e: any) => {
-          setUser({ ...user, location: e.target.value });
+          setUsers({ ...users, location: e.target.value });
           changeValidate(e.target.value, profileForm[2]);
         },
 
@@ -231,14 +218,15 @@ export default function Profile() {
         id: 'email',
         label: 'Email',
         name: 'email',
+        required: true,
         autoComplete: 'family-name',
-        value: user.email,
+        value: users.email,
         placeholder: 'Enter your Email',
         helperText: emailError ? 'Email is invalid or already taken.' : '',
         error: emailError,
 
         onChange: (e: any) => {
-          setUser({ ...user, email: e.target.value });
+          setUsers({ ...users, email: e.target.value });
           changeValidate(e.target.value, profileForm[3]);
         },
 
@@ -270,8 +258,8 @@ export default function Profile() {
         type: showOldPassword ? 'text' : 'password',
         placeholder: 'Enter your old password',
         value: old_password,
-        helperText: phoneError ? 'Fill in the characters, the maximum length is 16.' : '',
-        error: phoneError,
+        helperText: oldPasswordError ? 'Fill in the characters, the maximum length is 16.' : '',
+        error: oldPasswordError,
 
         onChange: (e: any) => {
           changeValidate(e.target.value, passwordForm[0]);
@@ -299,7 +287,7 @@ export default function Profile() {
         },
       },
       syncError: false,
-      setError: setPhoneError,
+      setError: setOldPasswordError,
 
       validate: (value: string) => {
         const reg = /^(?=.*[a-z])[^]{0,16}$/;
@@ -314,8 +302,8 @@ export default function Profile() {
         type: showNewPassword ? 'text' : 'password',
         autoComplete: 'family-name',
         placeholder: 'Enter your new password',
-        helperText: locationError ? `At least 8-16 characters, with at least 1 lowercase letter and 1 number.` : '',
-        error: locationError,
+        helperText: newPasswordError ? `At least 8-16 characters, with at least 1 lowercase letter and 1 number.` : '',
+        error: newPasswordError,
         value: new_password,
 
         onChange: (e: any) => {
@@ -345,7 +333,7 @@ export default function Profile() {
         },
       },
       syncError: false,
-      setError: setLocationError,
+      setError: setNewPasswordError,
       validate: (value: string) => {
         const reg = /^(?=.*[a-z])(?=.*\d)[^]{8,16}$/;
         return reg.test(value);
@@ -353,14 +341,14 @@ export default function Profile() {
     },
     {
       formProps: {
-        id: 'confirmPassword',
+        id: 'confirmNewPassword',
         label: 'Confirm new password',
-        name: 'confirmPassword',
+        name: 'confirmNewPassword',
         type: showConfirmPassword ? 'text' : 'password',
         autoComplete: 'family-name',
         placeholder: 'Enter your payload',
-        helperText: emailError ? 'Please enter the same password.' : '',
-        error: emailError,
+        helperText: confirmNewPasswordError ? 'Please enter the same password.' : '',
+        error: confirmNewPasswordError,
 
         onChange: (e: any) => {
           changeValidate(e.target.value, passwordForm[2]);
@@ -387,7 +375,7 @@ export default function Profile() {
         },
       },
       syncError: false,
-      setError: setEmailError,
+      setError: setConfirmNewPasswordErrorError,
 
       validate: (value: string) => {
         const reg = /^(?=.*[a-z])(?=.*\d)[^]{8,16}$/;
@@ -427,21 +415,23 @@ export default function Profile() {
     const canSubmit = Boolean(!profileForm.filter((item) => item.syncError).length);
 
     const formData = {
-      bio: user.bio,
-      email: user.email,
-      location: user.location,
-      phone: user.phone,
+      bio: users.bio,
+      email: users.email,
+      location: users.location,
+      phone: users.phone,
     };
 
     if (canSubmit) {
       try {
-        if (userID) {
-          await updateUser(userID, { ...formData });
+        if (users.id) {
+          await updateUser(String(users.id), { ...formData });
 
+          const user = await getUser(String(users.id));
+
+          handleUserUpdate(user);
           setPersonalLoadingButton(false);
           setShowPersonalInformation(true);
           setSuccessMessage(true);
-          setBio(user.bio);
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -456,22 +446,9 @@ export default function Profile() {
   };
 
   const cancelHandlePersonalInformation = async () => {
+    setUsers(user);
+    setBio(user.bio);
     setShowPersonalInformation(true);
-
-    try {
-      if (userID) {
-        const user = await getUser(userID);
-
-        setUser(user);
-        setBio(user.bio);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        setErrorMessage(true);
-        setErrorMessageText(error.message);
-        setPersonalLoadingButton(false);
-      }
-    }
   };
 
   const handleChangePassword = async (event: any) => {
@@ -495,8 +472,8 @@ export default function Profile() {
 
     if (canSubmit) {
       try {
-        if (userID) {
-          await updatePassword(userID, { ...formData });
+        if (user.id) {
+          await updatePassword(String(user.id), { ...formData });
 
           setSuccessMessage(true);
           setPasswordLoadingButton(false);
@@ -513,6 +490,11 @@ export default function Profile() {
     } else {
       setPasswordLoadingButton(false);
     }
+  };
+
+  const cancelChangePassword = () => {
+    setShowMyProfile(true);
+    setPassword({ ...password, old_password: '', new_password: '' });
   };
 
   const handleClose = (_event: any, reason?: string) => {
@@ -554,12 +536,12 @@ export default function Profile() {
           <Box className={styles.avatarContainer}>
             <Box display="flex" alignItems="center">
               <Stack direction="row" spacing={2}>
-                <Avatar alt="Remy Sharp" src={user?.avatar} className={styles.avatarContent} />
+                <Avatar alt="Remy Sharp" src={users?.avatar} className={styles.avatarContent} />
               </Stack>
               <Box sx={{ pl: '1rem' }}>
-                <Typography variant="h5">{isLoading ? <Skeleton /> : user?.name}</Typography>
+                <Typography variant="h5">{users?.name || '-'}</Typography>
                 <Typography variant="subtitle1" component="div" width="36rem">
-                  {isLoading ? <Skeleton /> : bio || '-'}
+                  {bio || '-'}
                 </Typography>
               </Box>
             </Box>
@@ -587,7 +569,9 @@ export default function Profile() {
           </Box>
         ) : (
           <Grid sx={{ width: '40rem' }} onSubmit={handleChangePassword} component="form" noValidate>
-            <Typography variant="h6">Change Password</Typography>
+            <Typography variant="h6" fontFamily="mabry-bold" mb="1rem">
+              Change Password
+            </Typography>
             {passwordForm.map((item) => (
               <Box key={item.formProps.name}>
                 <TextField size="small" margin="normal" color="success" fullWidth required {...item.formProps} />
@@ -600,6 +584,7 @@ export default function Profile() {
                 size="small"
                 variant="outlined"
                 loadingPosition="end"
+                id="cancel-change-password"
                 sx={{
                   '&.MuiLoadingButton-root': {
                     color: 'var(--calcel-size-color)',
@@ -618,9 +603,7 @@ export default function Profile() {
                   mr: '1rem',
                   width: '7rem',
                 }}
-                onClick={() => {
-                  setShowMyProfile(true);
-                }}
+                onClick={cancelChangePassword}
               >
                 cancel
               </LoadingButton>
@@ -631,6 +614,7 @@ export default function Profile() {
                 variant="outlined"
                 type="submit"
                 loadingPosition="end"
+                id="change-password"
                 sx={{
                   '&.MuiLoadingButton-root': {
                     backgroundColor: 'var(--save-color)',
@@ -660,7 +644,9 @@ export default function Profile() {
         {showPersonalInformation ? (
           <Box>
             <Grid className={styles.informationHeader}>
-              <Typography variant="h6">Personal Information</Typography>
+              <Typography variant="h6" fontFamily="mabry-bold">
+                Personal Information
+              </Typography>
               <Button
                 size="small"
                 variant="contained"
@@ -688,16 +674,30 @@ export default function Profile() {
                     <Box display="flex" alignItems="center" mb="0.6rem">
                       {item.icon}
                       {item.name === 'created_at' ? (
-                        <Typography component="div" variant="body1" fontFamily="mabry-bold" ml="0.6rem">
-                          {isLoading ? <Skeleton sx={{ width: '10rem' }} /> : getDatetime(user?.[item.name]) || '-'}
-                        </Typography>
+                        users?.[item.name] ? (
+                          <Typography
+                            id={item.name}
+                            component="div"
+                            variant="body1"
+                            fontFamily="mabry-bold"
+                            ml="0.6rem"
+                          >
+                            {getDatetime(users?.[item.name]) || '-'}
+                          </Typography>
+                        ) : (
+                          <Typography
+                            id={item.name}
+                            component="div"
+                            variant="body1"
+                            fontFamily="mabry-bold"
+                            ml="0.6rem"
+                          >
+                            -
+                          </Typography>
+                        )
                       ) : (
-                        <Typography component="div" variant="body1" fontFamily="mabry-bold" ml="0.6rem">
-                          {isLoading ? (
-                            <Skeleton sx={{ width: '10rem' }} />
-                          ) : (
-                            user?.[item?.name as keyof typeof user] || '-'
-                          )}
+                        <Typography id={item.name} component="div" variant="body1" fontFamily="mabry-bold" ml="0.6rem">
+                          {users?.[item?.name as keyof typeof users] || '-'}
                         </Typography>
                       )}
                     </Box>
@@ -708,17 +708,19 @@ export default function Profile() {
           </Box>
         ) : (
           <Box>
-            <Typography variant="h6">Personal Information</Typography>
+            <Typography variant="h6" fontFamily="mabry-bold" mb="1rem">
+              Update Personal Information
+            </Typography>
             <Box component="form" onSubmit={handlePersonalInformation} noValidate>
               {profileForm.map((item) => (
                 <Box key={item.formProps.name}>
                   <TextField
                     size="small"
-                    margin="normal"
+                    margin="dense"
                     color="success"
-                    required
+                    variant="outlined"
                     {...item.formProps}
-                    sx={{ width: '18rem' }}
+                    className={styles.textField}
                   />
                 </Box>
               ))}
@@ -729,6 +731,7 @@ export default function Profile() {
                   size="small"
                   variant="outlined"
                   loadingPosition="end"
+                  id="cancel"
                   sx={{
                     '&.MuiLoadingButton-root': {
                       color: 'var(--calcel-size-color)',
@@ -758,6 +761,7 @@ export default function Profile() {
                   variant="outlined"
                   type="submit"
                   loadingPosition="end"
+                  id="save"
                   sx={{
                     '&.MuiLoadingButton-root': {
                       backgroundColor: 'var(--save-color)',

@@ -98,7 +98,6 @@ export default function ShowCluster() {
     },
     peer_cluster_config: {
       load_limit: 0,
-      concurrent_piece_count: 0,
     },
     created_at: '',
     updated_at: '',

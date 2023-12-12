@@ -494,10 +494,6 @@ export default function Peer() {
         key: 'scheduler_cluster.config.filter_parent_limit',
         label: 'schedulerCluster.config.filterParentLimit',
       },
-      {
-        key: 'scheduler_cluster.client_config.concurrent_piece_count',
-        label: 'schedulerCluster.clientConfig concurrentPieceCount',
-      },
       { key: 'scheduler_cluster.client_config.load_limit', label: 'schedulerCluster.clientConfig.loadLimit' },
     ];
     try {

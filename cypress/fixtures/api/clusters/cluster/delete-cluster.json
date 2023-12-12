@@ -17,8 +17,7 @@
     "load_limit": 300
   },
   "peer_cluster_config": {
-    "load_limit": 50,
-    "concurrent_piece_count": 4
+    "load_limit": 50
   },
   "created_at": "2023-11-15T05:19:36Z",
   "updated_at": "2023-11-15T05:19:36Z",

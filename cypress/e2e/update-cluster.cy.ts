@@ -97,7 +97,6 @@ describe('Update cluster', () => {
     // Show config.
     cy.get('#seedPeerLoadLimit').should('have.value', 300);
     cy.get('#peerLoadLimit').should('have.value', 51);
-    cy.get('#numberOfConcurrentDownloadPieces').should('have.value', 4);
     cy.get('#candidateParentLimit').should('have.value', 4);
     cy.get('#filterParentLimit').should('have.value', 40);
   });
@@ -139,7 +138,6 @@ describe('Update cluster', () => {
     // Show config.
     cy.get('#seedPeerLoadLimit').should('have.value', 0);
     cy.get('#peerLoadLimit').should('have.value', 0);
-    cy.get('#numberOfConcurrentDownloadPieces').should('have.value', 0);
     cy.get('#candidateParentLimit').should('have.value', 0);
     cy.get('#filterParentLimit').should('have.value', 0);
   });
@@ -184,9 +182,6 @@ describe('Update cluster', () => {
 
     cy.get('#peerLoadLimit').clear();
     cy.get('#peerLoadLimit').type('50');
-
-    cy.get('#numberOfConcurrentDownloadPieces').clear();
-    cy.get('#numberOfConcurrentDownloadPieces').type('8');
 
     cy.get('#candidateParentLimit').clear();
     cy.get('#candidateParentLimit').type('5');
@@ -426,22 +421,6 @@ describe('Update cluster', () => {
 
       // Verification passed.
       cy.get('#peerLoadLimit-helper-text').should('not.exist');
-
-      // Should display number of concurrent download pieces the validation error message.
-      cy.get('#numberOfConcurrentDownloadPieces').clear();
-      cy.get('#numberOfConcurrentDownloadPieces').type('51');
-
-      // Show verification error message.
-      cy.get('#numberOfConcurrentDownloadPieces-helper-text')
-        .should('be.visible')
-        .and('contain', `Fill in the number, the length is 0-50.`);
-      cy.get('#save').click();
-      cy.url().should('include', '/clusters/1/edit');
-      cy.get('#numberOfConcurrentDownloadPieces').clear();
-      cy.get('#numberOfConcurrentDownloadPieces').type('10');
-
-      // Verification passed.
-      cy.get('#numberOfConcurrentDownloadPieces-helper-text').should('not.exist');
 
       // Should display candidate parent limit the validation error message.
       cy.get('#candidateParentLimit').clear();

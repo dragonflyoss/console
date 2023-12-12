@@ -503,27 +503,6 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
               <Box className={styles.configContent}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography variant="body2" component="div" color="#80828B" sx={{ mr: '0.2rem' }}>
-                    Number of concurrent download pieces
-                  </Typography>
-                  <Tooltip
-                    title="The number of pieces that a peer can concurrent download from other peers."
-                    placement="top"
-                  >
-                    <HelpIcon color="disabled" className={styles.descriptionIcon} />
-                  </Tooltip>
-                </Box>
-                {isLoading ? (
-                  <Box sx={{ width: '20%' }}>
-                    <Skeleton />
-                  </Box>
-                ) : (
-                  <Typography component="div">{cluster?.peer_cluster_config?.concurrent_piece_count || 0}</Typography>
-                )}
-              </Box>
-              <Divider />
-              <Box className={styles.configContent}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography variant="body2" component="div" color="#80828B" sx={{ mr: '0.2rem' }}>
                     Candidate parent limit
                   </Typography>
                   <Tooltip

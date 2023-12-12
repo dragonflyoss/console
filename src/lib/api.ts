@@ -225,7 +225,6 @@ export async function getCluster(id: string): Promise<getClusterResponse> {
 interface createClusterRequest {
   name: string;
   peer_cluster_config: {
-    concurrent_piece_count: number;
     load_limit: number;
   };
   scheduler_cluster_config: {
@@ -279,7 +278,6 @@ interface updateClusterRequset {
   is_default: boolean;
   bio: string;
   peer_cluster_config: {
-    concurrent_piece_count: number;
     load_limit: number;
   };
   scheduler_cluster_config: {

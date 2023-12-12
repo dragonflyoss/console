@@ -29,7 +29,6 @@ export default function NewCluster() {
   const [bioError, setBioError] = useState(false);
   const [seedPeerLoadLimitError, setSeedPeerLoadLimitError] = useState(false);
   const [peerLoadLimitError, setPeerLoadLimitError] = useState(false);
-  const [numberOfConcurrentDownloadPiecesError, setNumberOfConcurrentDownloadPiecesError] = useState(false);
   const [candidateParentLimitError, setCandidateParentLimitError] = useState(false);
   const [filterParentLimitError, setFilterParentLimitError] = useState(false);
   const [locationError, setLocationError] = useState(false);
@@ -297,41 +296,6 @@ export default function NewCluster() {
     },
     {
       formProps: {
-        id: 'numberOfConcurrentDownloadPieces',
-        label: 'Number of concurrent download pieces',
-        name: 'numberOfConcurrentDownloadPieces',
-        type: 'number',
-        autoComplete: 'family-name',
-        placeholder: 'Please enter Number of concurrent download pieces',
-        defaultValue: 4,
-        helperText: numberOfConcurrentDownloadPiecesError ? 'Fill in the number, the length is 0-50.' : '',
-        error: numberOfConcurrentDownloadPiecesError,
-
-        onChange: (e: any) => {
-          changeValidate(e.target.value, configForm[2]);
-        },
-
-        InputProps: {
-          endAdornment: (
-            <Tooltip
-              title={`The number of pieces that a peer can concurrent download from other peers.`}
-              placement="top"
-            >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
-            </Tooltip>
-          ),
-        },
-      },
-      syncError: false,
-      setError: setNumberOfConcurrentDownloadPiecesError,
-
-      validate: (value: string) => {
-        const reg = /^(?:[0-9]|[1-4][0-9]|50)$/;
-        return reg.test(value);
-      },
-    },
-    {
-      formProps: {
         id: 'candidateParentLimit',
         label: 'Candidate parent limit',
         name: 'candidateParentLimit',
@@ -343,7 +307,7 @@ export default function NewCluster() {
         error: candidateParentLimitError,
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, configForm[3]);
+          changeValidate(e.target.value, configForm[2]);
         },
 
         InputProps: {
@@ -379,7 +343,7 @@ export default function NewCluster() {
         error: filterParentLimitError,
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, configForm[4]);
+          changeValidate(e.target.value, configForm[3]);
         },
 
         InputProps: {
@@ -415,7 +379,6 @@ export default function NewCluster() {
     const location = event.currentTarget.elements.location.value;
     const seedPeerLoadLimit = event.currentTarget.elements.seedPeerLoadLimit.value;
     const peerLoadLimit = event.currentTarget.elements.peerLoadLimit.value;
-    const numberOfConcurrentDownloadPieces = event.currentTarget.elements.numberOfConcurrentDownloadPieces.value;
     const candidateParentLimit = event.currentTarget.elements.candidateParentLimit.value;
     const filterParentLimit = event.currentTarget.elements.filterParentLimit.value;
     const idcText = event.currentTarget.elements.idc.value;
@@ -470,7 +433,6 @@ export default function NewCluster() {
     const formData = {
       name: String(name),
       peer_cluster_config: {
-        concurrent_piece_count: Number(numberOfConcurrentDownloadPieces),
         load_limit: Number(peerLoadLimit),
       },
       scheduler_cluster_config: {

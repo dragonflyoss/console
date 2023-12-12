@@ -202,11 +202,10 @@ describe('Cluster', () => {
     });
 
     it('can display config', () => {
-      cy.get('.MuiPaper-root > :nth-child(1) > .MuiTypography-body1').should('be.visible').and('contain', '300');
-      cy.get('.MuiPaper-root > :nth-child(3) > .MuiTypography-body1').should('be.visible').and('contain', '51');
-      cy.get(':nth-child(5) > .MuiTypography-body1').should('be.visible').and('contain', '4');
-      cy.get(':nth-child(7) > .MuiTypography-body1').should('be.visible').and('contain', '4');
-      cy.get(':nth-child(9) > .MuiTypography-body1').should('be.visible').and('contain', '40');
+      cy.get('.MuiPaper-root > :nth-child(1) > .MuiTypography-body1').should('be.visible').and('have.text', '300');
+      cy.get('.MuiPaper-root > :nth-child(3) > .MuiTypography-body1').should('be.visible').and('have.text', '51');
+      cy.get(':nth-child(5) > .MuiTypography-body1').should('be.visible').and('have.text', '4');
+      cy.get(':nth-child(7) > .MuiTypography-body1').should('be.visible').and('have.text', '40');
     });
 
     it('copies text to clipboard', () => {
@@ -311,7 +310,6 @@ describe('Cluster', () => {
       cy.get('.MuiPaper-root > :nth-child(3) > .MuiTypography-body1').should('have.text', 0);
       cy.get(':nth-child(5) > .MuiTypography-body1').should('have.text', 0);
       cy.get(':nth-child(7) > .MuiTypography-body1').should('have.text', 0);
-      cy.get(':nth-child(9) > .MuiTypography-body1').should('have.text', 0);
     });
   });
 

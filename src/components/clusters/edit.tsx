@@ -29,7 +29,6 @@ export default function EditCluster() {
   const [bioError, setBioError] = useState(false);
   const [seedPeerLoadLimitError, setSeedPeerLoadLimitError] = useState(false);
   const [peerLoadLimitError, setPeerLoadLimitError] = useState(false);
-  const [numberOfConcurrentDownloadPiecesError, setNumberOfConcurrentDownloadPiecesError] = useState(false);
   const [candidateParentLimitError, setCandidateParentLimitError] = useState(false);
   const [filterParentLimitError, setFilterParentLimitError] = useState(false);
   const [locationError, setLocationError] = useState(false);
@@ -56,7 +55,6 @@ export default function EditCluster() {
     },
     peer_cluster_config: {
       load_limit: 0,
-      concurrent_piece_count: 0,
     },
     created_at: '',
     updated_at: '',
@@ -73,7 +71,7 @@ export default function EditCluster() {
     bio,
     is_default,
     id,
-    peer_cluster_config: { load_limit, concurrent_piece_count },
+    peer_cluster_config: { load_limit },
     scheduler_cluster_config: { candidate_parent_limit, filter_parent_limit },
     scopes: { idc, location, cidrs },
     seed_peer_cluster_config,
@@ -334,45 +332,6 @@ export default function EditCluster() {
     },
     {
       formProps: {
-        id: 'numberOfConcurrentDownloadPieces',
-        label: 'Number of concurrent download pieces',
-        name: 'numberOfConcurrentDownloadPieces',
-        type: 'number',
-        autoComplete: 'family-name',
-        placeholder: 'Please enter Number of concurrent download pieces',
-        value: concurrent_piece_count,
-        helperText: numberOfConcurrentDownloadPiecesError ? 'Fill in the number, the length is 0-50.' : '',
-        error: numberOfConcurrentDownloadPiecesError,
-
-        onChange: (e: any) => {
-          setCluster({
-            ...cluster,
-            peer_cluster_config: { ...cluster.peer_cluster_config, concurrent_piece_count: e.target.value },
-          });
-          changeValidate(e.target.value, configForm[2]);
-        },
-
-        InputProps: {
-          endAdornment: (
-            <Tooltip
-              title={`The number of pieces that a peer can concurrent download from other peers.`}
-              placement="top"
-            >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
-            </Tooltip>
-          ),
-        },
-      },
-      syncError: false,
-      setError: setNumberOfConcurrentDownloadPiecesError,
-
-      validate: (value: string) => {
-        const reg = /^(?:[0-9]|[1-4][0-9]|50)$/;
-        return reg.test(value);
-      },
-    },
-    {
-      formProps: {
         id: 'candidateParentLimit',
         label: 'Candidate parent limit',
         name: 'candidateParentLimit',
@@ -391,7 +350,7 @@ export default function EditCluster() {
               candidate_parent_limit: e.target.value,
             },
           });
-          changeValidate(e.target.value, configForm[3]);
+          changeValidate(e.target.value, configForm[2]);
         },
 
         InputProps: {
@@ -433,7 +392,7 @@ export default function EditCluster() {
               filter_parent_limit: e.target.value,
             },
           });
-          changeValidate(e.target.value, configForm[4]);
+          changeValidate(e.target.value, configForm[3]);
         },
 
         InputProps: {
@@ -525,7 +484,6 @@ export default function EditCluster() {
       is_default: is_default,
       bio: String(bio),
       peer_cluster_config: {
-        concurrent_piece_count: Number(concurrent_piece_count),
         load_limit: Number(load_limit),
       },
       scheduler_cluster_config: {

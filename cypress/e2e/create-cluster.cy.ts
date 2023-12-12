@@ -196,7 +196,6 @@ describe('Create cluster', () => {
           },
           peer_cluster_config: {
             load_limit: 50,
-            concurrent_piece_count: 4,
           },
           is_default: true,
         };
@@ -409,20 +408,6 @@ describe('Create cluster', () => {
 
       // Verification passed.
       cy.get('#peerLoadLimit-helper-text').should('not.exist');
-
-      // Should display number of concurrent download pieces the validation error message.
-      cy.get('#numberOfConcurrentDownloadPieces').clear();
-      cy.get('#numberOfConcurrentDownloadPieces').type('51');
-      cy.get('#numberOfConcurrentDownloadPieces-helper-text')
-        .should('be.visible')
-        .and('contain', `Fill in the number, the length is 0-50.`);
-      cy.get('#save').click();
-      cy.url().should('include', '/clusters/new');
-      cy.get('#numberOfConcurrentDownloadPieces').clear();
-      cy.get('#numberOfConcurrentDownloadPieces').type('10');
-
-      // Verification passed.
-      cy.get('#numberOfConcurrentDownloadPieces-helper-text').should('not.exist');
 
       // Should display candidate parent limit the validation error message.
       cy.get('#candidateParentLimit').clear();

@@ -209,7 +209,6 @@ export interface getClusterResponse {
   };
   peer_cluster_config: {
     load_limit: number;
-    concurrent_piece_count: number;
   };
   created_at: string;
   updated_at: string;
@@ -225,7 +224,6 @@ export async function getCluster(id: string): Promise<getClusterResponse> {
 interface createClusterRequest {
   name: string;
   peer_cluster_config: {
-    concurrent_piece_count: number;
     load_limit: number;
   };
   scheduler_cluster_config: {
@@ -248,7 +246,6 @@ interface createClusterResponse {
   id: string;
   name: string;
   peer_cluster_config: {
-    concurrent_piece_count: number;
     load_limit: number;
   };
   scheduler_cluster_config: {
@@ -279,7 +276,6 @@ interface updateClusterRequset {
   is_default: boolean;
   bio: string;
   peer_cluster_config: {
-    concurrent_piece_count: number;
     load_limit: number;
   };
   scheduler_cluster_config: {
@@ -300,7 +296,6 @@ interface updateClusterResponse {
   id: string;
   name: string;
   peer_cluster_config: {
-    concurrent_piece_count: number;
     load_limit: number;
   };
   scheduler_cluster_config: {
@@ -833,7 +828,6 @@ export interface getPeersResponse {
       filter_parent_limit: number;
     };
     client_config: {
-      concurrent_piece_count: number;
       load_limit: number;
     };
     scopes: {

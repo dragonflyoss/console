@@ -353,7 +353,7 @@ describe('Users', () => {
       // Go to next page.
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
-      cy.get('#user-table-row > :nth-child(2)').should('be.visible').and('have.text', 'root-11');
+      cy.get('#user-table-row > :nth-child(2)').should('be.visible').and('have.text', 'noah');
 
       // There is only one user on the current page.
       cy.get('#user-table-body').children().should('have.length', 1);

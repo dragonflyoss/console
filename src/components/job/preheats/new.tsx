@@ -316,7 +316,7 @@ export default function NewPreheat() {
         filter: filters,
         headers: headerList,
       },
-      cdn_cluster_ids: clusterID,
+      scheduler_cluster_ids: clusterID,
     };
 
     if (canSubmit) {

@@ -88,18 +88,18 @@ describe('Profile', () => {
   });
 
   it('when data is loaded', () => {
-    cy.get('.css-70qvj9 > .MuiBox-root > .MuiTypography-body1').should('be.visible').and('have.text', 'lucy');
+    cy.get('.css-70qvj9 > .MuiBox-root > .MuiTypography-body1').should('be.visible').and('have.text', 'root');
 
-    cy.get('.MuiTypography-caption').should('be.visible').and('have.text', 'lucy@example.com');
+    cy.get('.MuiTypography-caption').should('be.visible').and('have.text', 'root@example.com');
 
     // Show user name.
-    cy.get('.css-70qvj9 > .MuiBox-root > .MuiTypography-h5').should('be.visible').and('have.text', 'lucy');
+    cy.get('.css-70qvj9 > .MuiBox-root > .MuiTypography-h5').should('be.visible').and('have.text', 'root');
 
     // Show user description.
-    cy.get('.MuiBox-root > .MuiTypography-subtitle1').should('be.visible').and('have.text', 'I am lucy');
+    cy.get('.MuiBox-root > .MuiTypography-subtitle1').should('be.visible').and('have.text', 'I am root');
     cy.get('#id').should('be.visible').and('have.text', 1);
-    cy.get('#name').should('be.visible').and('have.text', 'lucy');
-    cy.get('#email').should('be.visible').and('have.text', 'lucy@example.com');
+    cy.get('#name').should('be.visible').and('have.text', 'root');
+    cy.get('#email').should('be.visible').and('have.text', 'root@example.com');
     cy.get('#location').should('be.visible').and('have.text', 'Hangzhou');
     cy.get('#phone').should('be.visible').and('have.text', 1234567890);
     cy.get('#created_at').should('be.visible').and('have.text', '2023-11-06 06:09:04');
@@ -107,10 +107,10 @@ describe('Profile', () => {
     // Check Update Personal Information form.
     cy.get('.MuiGrid-root > .MuiButtonBase-root').click();
 
-    cy.get('#bio').should('have.value', 'I am lucy');
+    cy.get('#bio').should('have.value', 'I am root');
     cy.get('#phone').should('have.value', 1234567890);
     cy.get('#location').should('have.value', 'Hangzhou');
-    cy.get('#email').should('have.value', 'lucy@example.com');
+    cy.get('#email').should('have.value', 'root@example.com');
   });
 
   it('when no data is loaded', () => {
@@ -195,7 +195,7 @@ describe('Profile', () => {
 
       // Update user name.
       cy.get('#bio').clear();
-      cy.get('#bio').type('I am lucy, I will change the description');
+      cy.get('#bio').type('I am root, I will change the description');
 
       // Update user phone.
       cy.get('#phone').clear();
@@ -207,7 +207,7 @@ describe('Profile', () => {
 
       // Update user email.
       cy.get('#email').clear();
-      cy.get('#email').type('lucy@gmail.com');
+      cy.get('#email').type('root@gmail.com');
 
       cy.intercept(
         {
@@ -225,15 +225,15 @@ describe('Profile', () => {
       cy.get('#save').click();
 
       // Check whether the navigation bar email has changed.
-      cy.get('.MuiTypography-caption').should('have.text', 'lucy@gmail.com');
+      cy.get('.MuiTypography-caption').should('have.text', 'root@gmail.com');
 
       // Check if profile description is updated.
       cy.get('.MuiBox-root > .MuiTypography-subtitle1')
         .should('be.visible')
-        .and('have.text', 'I am lucy, I will change the description');
+        .and('have.text', 'I am root, I will change the description');
 
       // Check if profile email is updated.
-      cy.get('#email').should('be.visible').and('have.text', 'lucy@gmail.com');
+      cy.get('#email').should('be.visible').and('have.text', 'root@gmail.com');
 
       // Check if profile location is updated.
       cy.get('#location').should('be.visible').and('have.text', 'Shanghai');
@@ -246,22 +246,22 @@ describe('Profile', () => {
       // Click EDIT button.
       cy.get('.MuiGrid-root > .MuiButtonBase-root').click();
       cy.get('#bio').clear();
-      cy.get('#bio').type('I am lucy, I will change the description');
+      cy.get('#bio').type('I am root, I will change the description');
 
       // Update user email.
       cy.get('#email').clear();
-      cy.get('#email').type('lucy@gmail.com');
+      cy.get('#email').type('root@gmail.com');
       cy.get('#cancel').click();
-      cy.get('.MuiBox-root > .MuiTypography-subtitle1').should('be.visible').and('have.text', 'I am lucy');
+      cy.get('.MuiBox-root > .MuiTypography-subtitle1').should('be.visible').and('have.text', 'I am root');
 
       // Check whether the navigation bar email has changed.
-      cy.get('.MuiTypography-caption').should('have.text', 'lucy@example.com');
-      cy.get('#email').should('be.visible').and('have.text', 'lucy@example.com');
+      cy.get('.MuiTypography-caption').should('have.text', 'root@example.com');
+      cy.get('#email').should('be.visible').and('have.text', 'root@example.com');
 
       // Click EDIT button.
       cy.get('.MuiGrid-root > .MuiButtonBase-root').click();
-      cy.get('#bio').should('have.value', 'I am lucy');
-      cy.get('#email').should('have.value', 'lucy@example.com');
+      cy.get('#bio').should('have.value', 'I am root');
+      cy.get('#email').should('have.value', 'root@example.com');
     });
 
     it('try to update user with guest user', () => {
@@ -353,7 +353,7 @@ describe('Profile', () => {
         .and('have.text', 'Update Personal Information');
 
       cy.get('#bio').clear();
-      cy.get('#bio').type('I am lucy');
+      cy.get('#bio').type('I am root');
 
       // Verification passed.
       cy.get('#bio-helper-text').should('not.exist');
@@ -389,12 +389,12 @@ describe('Profile', () => {
 
       // Should display message email the validation error.
       cy.get('#email').clear();
-      cy.get('#email').type('lucy');
+      cy.get('#email').type('root');
 
       // Show verification error message.
       cy.get('#email-helper-text').should('be.visible').and('have.text', 'Email is invalid or already taken.');
       cy.get('#email').clear();
-      cy.get('#email').type('lucy@example.com');
+      cy.get('#email').type('root@example.com');
       cy.get('#email-helper-text').should('not.exist');
     });
   });

@@ -35,7 +35,7 @@ import {
   createTheme,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole } from '../../lib/api';
+import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole, getUsersResponse } from '../../lib/api';
 import { makeStyles } from '@mui/styles';
 import { getDatetime, getPaginatedList } from '../../lib/utils';
 import { LoadingButton } from '@mui/lab';
@@ -85,8 +85,8 @@ export default function Users() {
   const [loadingButton, setLoadingButton] = useState(false);
   const [userPage, setUserPage] = useState(1);
   const [userTotalPages, setUserTotalPages] = useState<number>(1);
-  const [users, setUsers] = useState([{ avatar: '', id: 0, email: '', name: '', state: '', location: '' }]);
-  const [allUsers, setAllUsers] = useState([{ avatar: '', id: 0, email: '', name: '', state: '', location: '' }]);
+  const [users, setUsers] = useState<getUsersResponse[]>([]);
+  const [allUsers, setAllUsers] = useState<getUsersResponse[]>([]);
   const [user, setUser] = useState({
     id: 0,
     email: '',
@@ -285,10 +285,11 @@ export default function Users() {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody id="user-table-body">
             {Array.isArray(allUsers) &&
               allUsers.map((item) => (
                 <TableRow
+                  id="user-table-row"
                   sx={{
                     '&.MuiTableRow-root': {
                       ':hover': {
@@ -371,6 +372,7 @@ export default function Users() {
                             color: '#fff',
                           },
                         }}
+                        id={`detail-${item.name}`}
                         onClick={() => {
                           handleChange(item);
                         }}
@@ -388,6 +390,7 @@ export default function Users() {
                               color: '#fff',
                             },
                           }}
+                          id={`edit-${item.name}`}
                           onClick={() => {
                             openSwitchUser(item);
                           }}
@@ -403,6 +406,7 @@ export default function Users() {
                               color: '#fff',
                             },
                           }}
+                          id={`detail-${item.name}`}
                           onClick={() => {
                             handleChange(item);
                           }}
@@ -420,6 +424,7 @@ export default function Users() {
       {userTotalPages > 1 ? (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
           <Pagination
+            id="user-pagination"
             count={userTotalPages}
             page={userPage}
             onChange={(_event: any, newPage: number) => {
@@ -458,6 +463,7 @@ export default function Users() {
                   value="root"
                   control={
                     <Radio
+                      id="role-root"
                       sx={{
                         '&.MuiRadio-root': {
                           color: 'var(--button-color)',
@@ -471,6 +477,7 @@ export default function Users() {
                   value="guest"
                   control={
                     <Radio
+                      id="role-guest"
                       sx={{
                         '&.MuiRadio-root': {
                           color: 'var(--button-color)',
@@ -491,6 +498,7 @@ export default function Users() {
             size="small"
             variant="outlined"
             loadingPosition="end"
+            id="cancel"
             sx={{
               '&.MuiLoadingButton-root': {
                 color: 'var(--calcel-size-color)',
@@ -520,6 +528,7 @@ export default function Users() {
             variant="outlined"
             type="submit"
             loadingPosition="end"
+            id="save"
             sx={{
               '&.MuiLoadingButton-root': {
                 backgroundColor: 'var(--save-color)',
@@ -583,7 +592,7 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2">
-                {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.name}
+                {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.name || '-'}
               </Typography>
             </ListItem>
             <Divider />
@@ -597,7 +606,7 @@ export default function Users() {
               <Typography variant="body2" component="div">
                 {detailIsLoading ? (
                   <Skeleton sx={{ width: '8rem' }} />
-                ) : (
+                ) : detailRole ? (
                   <Chip
                     label={detailRole}
                     size="small"
@@ -611,6 +620,8 @@ export default function Users() {
                       fontWeight: 'bold',
                     }}
                   />
+                ) : (
+                  '-'
                 )}
               </Typography>
             </ListItem>
@@ -666,13 +677,15 @@ export default function Users() {
               </ListItemAvatar>
               {detailIsLoading ? (
                 <Skeleton sx={{ width: '8rem' }} />
-              ) : (
+              ) : user.created_at ? (
                 <Chip
                   avatar={<Box component="img" src="/icons/user/created-at.svg" />}
                   label={getDatetime(user.created_at || '-')}
                   variant="outlined"
                   size="small"
                 />
+              ) : (
+                '-'
               )}
             </ListItem>
             <Divider />
@@ -685,13 +698,15 @@ export default function Users() {
               </ListItemAvatar>
               {detailIsLoading ? (
                 <Skeleton sx={{ width: '8rem' }} />
-              ) : (
+              ) : user.updated_at ? (
                 <Chip
                   avatar={<Box component="img" src="/icons/user/updated-at.svg" />}
                   label={getDatetime(user.updated_at || '-')}
                   variant="outlined"
                   size="small"
                 />
+              ) : (
+                '-'
               )}
             </ListItem>
           </List>

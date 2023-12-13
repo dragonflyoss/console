@@ -446,7 +446,7 @@ interface getUserParams {
   per_page?: number;
 }
 
-interface getUsersResponse {
+export interface getUsersResponse {
   avatar: string;
   id: number;
   email: string;
@@ -760,7 +760,7 @@ interface createJobRequest {
     filter: string;
     headers?: { [key: string]: string };
   };
-  cdn_cluster_ids: Array<number>;
+  scheduler_cluster_ids: Array<number>;
 }
 
 interface cerateJobResponse {

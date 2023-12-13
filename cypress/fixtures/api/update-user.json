@@ -3,12 +3,12 @@
   "created_at": "2023-11-06T06:09:04Z",
   "updated_at": "2023-11-06T06:09:04Z",
   "is_del": 0,
-  "email": "lucy@gmail.com",
-  "name": "lucy",
+  "email": "root@gmail.com",
+  "name": "root",
   "avatar": "https://example.com/avatar.png",
   "phone": "15123456789",
   "state": "enable",
   "location": "Shanghai",
-  "bio": "I am lucy, I will change the description",
+  "bio": "I am root, I will change the description",
   "configs": null
 }

@@ -1,36 +1,13 @@
-import root from '../fixtures/api/role-root.json';
-import user from '../fixtures/api/user.json';
-import users from '../fixtures/api/users.json';
-import guestUser from '../fixtures/api/guest-user.json';
-import guest from '../fixtures/api/role-guest.json';
+import root from '../fixtures/role-root.json';
+import user from '../fixtures/user.json';
+import users from '../fixtures/users.json';
+import guestUser from '../fixtures/guest-user.json';
+import guest from '../fixtures/role-guest.json';
 
 describe('Users', () => {
   beforeEach(() => {
     cy.signin();
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: user,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: root,
-        });
-      },
-    );
+
     cy.intercept(
       {
         method: 'GET',
@@ -248,31 +225,6 @@ describe('Users', () => {
 
   it('try to show users page using guest user', () => {
     cy.guestSignin();
-
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guestUser,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guest,
-        });
-      },
-    );
 
     // The 404 page is displayed and the user page does not exist.
     cy.get('.MuiTypography-h4').should('have.text', 'Something gone wrong!');
@@ -550,7 +502,9 @@ describe('Users', () => {
         },
       );
 
-      cy.guestSignin();
+      const jwtToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDAwNTExMDcsImlkIjoyLCJvcmlnX2lhdCI6MTY5OTg3ODMwN30.GynYMK_KKFfbAe_NAtFgthmEg_p8xKJOu_ZhRkr1ECE';
+      cy.setCookie('jwt', jwtToken);
 
       cy.intercept(
         {

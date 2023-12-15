@@ -1,39 +1,12 @@
-import root from '../fixtures/api/role-root.json';
-import guest from '../fixtures/api/role-guest.json';
-import user from '../fixtures/api/user.json';
-import guestUser from '../fixtures/api/guest-user.json';
-import tokens from '../fixtures/api/tokens/tokens.json';
-import token from '../fixtures/api/tokens/token.json';
-import updateToken from '../fixtures/api/tokens/update-token.json';
+import tokens from '../fixtures/tokens/tokens.json';
+import token from '../fixtures/tokens/token.json';
+import updateToken from '../fixtures/tokens/update-token.json';
 import _ from 'lodash';
 
 describe('Update token', () => {
   beforeEach(() => {
     cy.signin();
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: user,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: root,
-        });
-      },
-    );
+
     cy.intercept(
       {
         method: 'GET',
@@ -242,30 +215,6 @@ describe('Update token', () => {
 
     cy.guestSignin();
 
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guestUser,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guest,
-        });
-      },
-    );
     cy.intercept(
       {
         method: 'PATCH',

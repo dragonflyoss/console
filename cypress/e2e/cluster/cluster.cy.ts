@@ -1,15 +1,11 @@
-import clusters from '../../fixtures/api/clusters/clusters.json';
-import root from '../../fixtures/api/role-root.json';
-import guest from '../../fixtures/api/role-guest.json';
-import user from '../../fixtures/api/user.json';
-import guestUser from '../../fixtures/api/guest-user.json';
-import seedPeers from '../../fixtures/api/clusters/seed-peers.json';
-import schedulers from '../../fixtures/api/clusters/schedulers.json';
-import cluster from '../../fixtures/api/clusters/cluster/cluster.json';
-import seedPeer from '../../fixtures/api/clusters/cluster/seed-peer.json';
-import scheduler from '../../fixtures/api/clusters/cluster/scheduler.json';
-import deleteCluster from '../../fixtures/api/clusters/cluster/delete-cluster.json';
-import deleteClusters from '../../fixtures/api/clusters/cluster/delete-clusters.json';
+import clusters from '../../fixtures/clusters/clusters.json';
+import seedPeers from '../../fixtures/clusters/seed-peers.json';
+import schedulers from '../../fixtures/clusters/schedulers.json';
+import cluster from '../../fixtures/clusters/cluster/cluster.json';
+import seedPeer from '../../fixtures/clusters/cluster/seed-peer.json';
+import scheduler from '../../fixtures/clusters/cluster/scheduler.json';
+import deleteCluster from '../../fixtures/clusters/cluster/delete-cluster.json';
+import deleteClusters from '../../fixtures/clusters/cluster/delete-clusters.json';
 
 describe('Cluster', () => {
   beforeEach(() => {
@@ -47,30 +43,6 @@ describe('Cluster', () => {
         req.reply({
           statusCode: 200,
           body: seedPeers,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: user,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: root,
         });
       },
     );
@@ -569,30 +541,6 @@ describe('Cluster', () => {
     });
 
     it('try to delete cluster with guest user', () => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/users/2',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: guestUser,
-          });
-        },
-      );
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/users/2/roles',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: guest,
-          });
-        },
-      );
       cy.intercept(
         {
           method: 'GET',

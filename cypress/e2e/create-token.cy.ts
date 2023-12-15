@@ -1,38 +1,11 @@
-import root from '../fixtures/api/role-root.json';
-import guest from '../fixtures/api/role-guest.json';
-import user from '../fixtures/api/user.json';
-import guestUser from '../fixtures/api/guest-user.json';
-import tokens from '../fixtures/api/tokens/tokens.json';
-import createToken from '../fixtures/api/tokens/create-token.json';
+import tokens from '../fixtures/tokens/tokens.json';
+import createToken from '../fixtures/tokens/create-token.json';
 import _ from 'lodash';
 
 describe('Create token', () => {
   beforeEach(() => {
     cy.signin();
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: user,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: root,
-        });
-      },
-    );
+
     cy.intercept(
       {
         method: 'GET',
@@ -188,30 +161,6 @@ describe('Create token', () => {
 
     cy.guestSignin();
 
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guestUser,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guest,
-        });
-      },
-    );
     cy.intercept(
       {
         method: 'POST',

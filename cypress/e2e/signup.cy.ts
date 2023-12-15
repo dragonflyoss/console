@@ -1,4 +1,4 @@
-import signup from '../fixtures/api/signup.json';
+import signup from '../fixtures/signup.json';
 import _ from 'lodash';
 
 describe('Signup', () => {
@@ -163,7 +163,7 @@ describe('Signup', () => {
     cy.get('#confirmPassword').clear();
 
     cy.get('#confirmPassword').type('dragonfly1');
-    
+
     // verification passed.
     cy.get('#confirmPassword-helper-text').should('not.exist');
   });

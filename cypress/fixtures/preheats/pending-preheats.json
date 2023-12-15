@@ -1,0 +1,54 @@
+[
+  {
+    "id": 11,
+    "created_at": "2023-03-23T16:29:18+08:00",
+    "updated_at": "2023-03-23T16:29:18+08:00",
+    "is_del": 0,
+    "task_id": "group_2e5c8b9f-96be-4ef6-9bf4-23d25675dfac",
+    "bio": "This is a preheat task with status pending",
+    "type": "preheat",
+    "state": "PENDING",
+    "args": {
+      "filter": "",
+      "headers": {
+        "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
+      },
+      "tag": "",
+      "type": "file",
+      "url": "https://example.com/path/to/file"
+    },
+    "result": {
+      "CreatedAt": "2023-03-23T08:29:18.204923418Z",
+      "GroupUUID": "group_2e5c8b9f-96be-4ef6-9bf4-23d25675dfac",
+      "JobStates": [
+        {
+          "CreatedAt": "2023-12-12T06:16:10.243413422Z",
+          "Error": "",
+          "Results": [],
+          "State": "SUCCESS",
+          "TTL": 0,
+          "TaskName": "preheat",
+          "TaskUUID": "task_3b5417ed-6d5f-4528-8061-bbcfa502f773"
+        }
+      ],
+      "State": "PENDING"
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  }
+]

@@ -1,37 +1,14 @@
-import root from '../fixtures/api/role-root.json';
-import guest from '../fixtures/api/role-guest.json';
-import user from '../fixtures/api/user.json';
-import guestUser from '../fixtures/api/guest-user.json';
-import updateUser from '../fixtures/api/update-user.json';
+import root from '../fixtures/role-root.json';
+import guest from '../fixtures/role-guest.json';
+import user from '../fixtures/user.json';
+import guestUser from '../fixtures/guest-user.json';
+import updateUser from '../fixtures/update-user.json';
 import _ from 'lodash';
 
 describe('Profile', () => {
   beforeEach(() => {
     cy.signin();
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: user,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: root,
-        });
-      },
-    );
+
     cy.intercept(
       {
         method: 'GET',
@@ -268,30 +245,6 @@ describe('Profile', () => {
       cy.visit('/signin');
       cy.guestSignin();
 
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/users/2',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: guestUser,
-          });
-        },
-      );
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/users/2/roles',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: guest,
-          });
-        },
-      );
       cy.intercept({ method: 'PATCH', url: '/api/v1/users/2' }, (req) => {
         (req.body = ''),
           req.reply({
@@ -460,30 +413,6 @@ describe('Profile', () => {
       cy.visit('/signin');
       cy.guestSignin();
 
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/users/2',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: guestUser,
-          });
-        },
-      );
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/users/2/roles',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: guest,
-          });
-        },
-      );
       cy.intercept({ method: 'POST', url: '/api/v1/users/2/reset_password' }, (req) => {
         (req.body = { new_password: 'dragonfly2', old_password: 'dragonfly2' }),
           req.reply({

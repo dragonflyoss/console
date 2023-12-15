@@ -1,40 +1,12 @@
-import root from '../../fixtures/api/role-root.json';
-import guest from '../../fixtures/api/role-guest.json';
-import user from '../../fixtures/api/user.json';
-import guestUser from '../../fixtures/api/guest-user.json';
-import cluster from '../../fixtures/api/clusters/cluster/cluster.json';
-import seedPeer from '../../fixtures/api/clusters/cluster/seed-peer.json';
-import scheduler from '../../fixtures/api/clusters/cluster/scheduler.json';
-import deleteScheduler from '../../fixtures/api/clusters/cluster/delete-scheduler.json';
-import schedulerDeleteAfter from '../../fixtures/api/clusters/cluster/scheduler-delete-after.json';
-import searchScheduler from '../../fixtures/api/clusters/cluster/search-scheduler.json';
+import cluster from '../../fixtures/clusters/cluster/cluster.json';
+import seedPeer from '../../fixtures/clusters/cluster/seed-peer.json';
+import scheduler from '../../fixtures/clusters/cluster/scheduler.json';
+import deleteScheduler from '../../fixtures/clusters/cluster/delete-scheduler.json';
+import schedulerDeleteAfter from '../../fixtures/clusters/cluster/scheduler-delete-after.json';
+import searchScheduler from '../../fixtures/clusters/cluster/search-scheduler.json';
 
 describe('Schedulers', () => {
   beforeEach(() => {
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: user,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: root,
-        });
-      },
-    );
     cy.intercept(
       {
         method: 'GET',
@@ -497,30 +469,8 @@ describe('Schedulers', () => {
     });
 
     it('try to delete scheduler using guest user', () => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/users/2',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: guestUser,
-          });
-        },
-      );
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/users/2/roles',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: guest,
-          });
-        },
-      );
+      cy.guestSignin();
+
       cy.intercept(
         {
           method: 'DELETE',

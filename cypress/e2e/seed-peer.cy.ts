@@ -1,36 +1,10 @@
-import root from '../fixtures/api/role-root.json';
-import user from '../fixtures/api/user.json';
-import cluster from '../fixtures/api/clusters/cluster/cluster.json';
-import seedPeers from '../fixtures/api/clusters/cluster/seed-peer.json';
-import seedPeer from '../fixtures/api/seed-peer.json';
-import seedPeerInactive from '../fixtures/api/seed-peer-inactive.json';
+import cluster from '../fixtures/clusters/cluster/cluster.json';
+import seedPeers from '../fixtures/clusters/cluster/seed-peer.json';
+import seedPeer from '../fixtures/seed-peer.json';
+import seedPeerInactive from '../fixtures/seed-peer-inactive.json';
 
 describe('Seed peer', () => {
   beforeEach(() => {
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: user,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: root,
-        });
-      },
-    );
     cy.intercept(
       {
         method: 'GET',

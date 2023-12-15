@@ -1,11 +1,7 @@
-import clusters from '../fixtures/api/clusters/clusters.json';
-import root from '../fixtures/api/role-root.json';
-import guest from '../fixtures/api/role-guest.json';
-import user from '../fixtures/api/user.json';
-import guestUser from '../fixtures/api/guest-user.json';
-import seedPeers from '../fixtures/api/clusters/seed-peers.json';
-import schedulers from '../fixtures/api/clusters/schedulers.json';
-import createCluster from '../fixtures/api/clusters/create-cluster.json';
+import clusters from '../fixtures/clusters/clusters.json';
+import seedPeers from '../fixtures/clusters/seed-peers.json';
+import schedulers from '../fixtures/clusters/schedulers.json';
+import createCluster from '../fixtures/clusters/create-cluster.json';
 import _ from 'lodash';
 
 describe('Create cluster', () => {
@@ -43,30 +39,6 @@ describe('Create cluster', () => {
         req.reply({
           statusCode: 200,
           body: seedPeers,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: user,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: root,
         });
       },
     );
@@ -228,31 +200,6 @@ describe('Create cluster', () => {
   });
 
   it('try to create cluster with guest user', () => {
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guestUser,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guest,
-        });
-      },
-    );
-
     cy.guestSignin();
 
     cy.intercept({ method: 'POST', url: '/api/v1/clusters' }, (req) => {

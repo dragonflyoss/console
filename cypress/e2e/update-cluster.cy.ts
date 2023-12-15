@@ -1,39 +1,11 @@
-import root from '../fixtures/api/role-root.json';
-import guest from '../fixtures/api/role-guest.json';
-import user from '../fixtures/api/user.json';
-import guestUser from '../fixtures/api/guest-user.json';
-import cluster from '../fixtures/api/clusters/cluster/cluster.json';
-import updateCluster from '../fixtures/api/clusters/cluster/update-cluster.json';
+import cluster from '../fixtures/clusters/cluster/cluster.json';
+import updateCluster from '../fixtures/clusters/cluster/update-cluster.json';
 import _ from 'lodash';
 
 describe('Update cluster', () => {
   beforeEach(() => {
     cy.signin();
 
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: user,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: root,
-        });
-      },
-    );
     cy.intercept(
       {
         method: 'GET',
@@ -239,30 +211,6 @@ describe('Update cluster', () => {
   });
 
   it('try to update cluster with guest user', () => {
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guestUser,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guest,
-        });
-      },
-    );
     cy.intercept({ method: 'PATCH', url: '/api/v1/clusters/1' }, (req) => {
       (req.body = ''),
         req.reply({

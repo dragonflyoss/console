@@ -287,6 +287,7 @@ export default function Preheats() {
                         ) : (
                           <RouterLink
                             component={Link}
+                            id={`preheat-${item?.id}`}
                             to={`/jobs/preheats/${item?.id}`}
                             underline="hover"
                             sx={{ color: 'var(--description-color)' }}
@@ -362,6 +363,7 @@ export default function Preheats() {
                       ) : (
                         <RouterLink
                           component={Link}
+                          id={`preheat-${item?.id}`}
                           to={`/jobs/preheats/${item?.id}`}
                           underline="hover"
                           sx={{ color: 'var(--description-color)' }}

@@ -19,7 +19,7 @@ import {
   createTheme,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { getJob } from '../../../lib/api';
+import { getJob, getJobResponse } from '../../../lib/api';
 import { useParams, Link } from 'react-router-dom';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { getDatetime } from '../../../lib/utils';
@@ -32,40 +32,7 @@ export default function ShowPreheat() {
   const [isLoading, setIsLoading] = useState(false);
   const [shouldPoll, setShouldPoll] = useState(false);
   const [errorLog, setErrorLog] = useState(false);
-  const [preheat, setPreheat] = useState({
-    id: 0,
-    created_at: '',
-    updated_at: '',
-    is_del: 0,
-    task_id: '',
-    bio: '',
-    type: '',
-    state: '',
-    args: {
-      filter: '',
-      headers: '',
-      tag: '',
-      type: '',
-      url: '',
-    },
-    result: {
-      CreatedAt: '',
-      GroupUUID: '',
-      JobStates: [
-        {
-          CreatedAt: '',
-          Error: '',
-          Results: [''],
-          State: '',
-          TTL: 0,
-          TaskName: '',
-          TaskUUID: '',
-        },
-      ],
-      State: '',
-    },
-    scheduler_clusters: [{ id: 0 }],
-  });
+  const [preheat, setPreheat] = useState<getJobResponse>();
 
   const params = useParams();
 
@@ -112,11 +79,7 @@ export default function ShowPreheat() {
               const job = await getJob(params.id);
               setPreheat(job);
 
-              if (job.result.State && job.result.State === 'SUCCESS') {
-                setShouldPoll(false);
-              }
-
-              if (job.result.State && job.result.State === 'FAILURE') {
+              if ((job?.result?.State && job?.result?.State === 'SUCCESS') || job?.result?.State === 'FAILURE') {
                 setShouldPoll(false);
               }
             }
@@ -165,7 +128,7 @@ export default function ShowPreheat() {
           preheats
         </RouterLink>
         <Typography color="text.primary" fontFamily="mabry-bold">
-          {preheat.id}
+          {preheat?.id || '-'}
         </Typography>
       </Breadcrumbs>
       <Typography variant="h5" mb="2rem">
@@ -186,7 +149,7 @@ export default function ShowPreheat() {
               </Typography>
             </Box>
             <Typography variant="body1" className={styles.informationContent}>
-              {isLoading ? <Skeleton sx={{ width: '2rem' }} /> : preheat.id || ''}
+              {isLoading ? <Skeleton sx={{ width: '2rem' }} /> : preheat?.id || 0}
             </Typography>
           </Box>
           <Box className={styles.informationContainer}>
@@ -202,7 +165,7 @@ export default function ShowPreheat() {
               </Typography>
             </Box>
             <Typography variant="body1" className={styles.informationContent}>
-              {isLoading ? <Skeleton sx={{ width: '2rem' }} /> : preheat.bio || '-'}
+              {isLoading ? <Skeleton sx={{ width: '2rem' }} /> : preheat?.bio || '-'}
             </Typography>
           </Box>
           <Box className={styles.informationContainer}>
@@ -220,7 +183,7 @@ export default function ShowPreheat() {
             <Box className={styles.statusContent}>
               {isLoading ? (
                 <Skeleton sx={{ width: '4rem' }} />
-              ) : (
+              ) : preheat?.result?.State ? (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Box
                     sx={{
@@ -237,13 +200,19 @@ export default function ShowPreheat() {
                           ? '#D42536'
                           : '#DBAB0A',
                     }}
+                    id="status"
                   >
                     {preheat.result.State === 'SUCCESS' ? (
                       <></>
                     ) : preheat.result.State === 'FAILURE' ? (
                       <></>
                     ) : (
-                      <Box component="img" className={styles.statusIcon} src="/icons/job/preheat/status-pending.svg" />
+                      <Box
+                        component="img"
+                        id="pending-icon"
+                        className={styles.statusIcon}
+                        src="/icons/job/preheat/status-pending.svg"
+                      />
                     )}
                     <Typography
                       variant="body2"
@@ -254,7 +223,7 @@ export default function ShowPreheat() {
                     >
                       {preheat.result.State || ''}
                     </Typography>
-                    {preheat.result.State === 'FAILURE' ? (
+                    {preheat?.result.State === 'FAILURE' ? (
                       <>
                         <Box
                           sx={{ ml: '0.4rem', mr: '0.2rem', backgroundColor: '#fff', height: '1rem', width: '0.08rem' }}
@@ -274,6 +243,7 @@ export default function ShowPreheat() {
                             }}
                           >
                             <Box
+                              id="error-log-icon"
                               component="img"
                               sx={{ width: '1.2rem', height: '1.2rem' }}
                               src="/icons/job/preheat/error-log.svg"
@@ -286,6 +256,8 @@ export default function ShowPreheat() {
                     )}
                   </Box>
                 </Box>
+              ) : (
+                '-'
               )}
             </Box>
           </Box>
@@ -302,7 +274,7 @@ export default function ShowPreheat() {
               </Typography>
             </Box>
             <Typography variant="body1" className={styles.informationContent}>
-              {isLoading ? <Skeleton sx={{ width: '4rem' }} /> : preheat.args.url || '-'}
+              {isLoading ? <Skeleton sx={{ width: '4rem' }} /> : preheat?.args?.url || '-'}
             </Typography>
           </Box>
           <Box className={styles.informationContainer}>
@@ -320,30 +292,28 @@ export default function ShowPreheat() {
             <Box className={styles.informationContent} sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {isLoading ? (
                 <Skeleton sx={{ width: '4rem' }} />
+              ) : preheat?.args?.filter ? (
+                preheat?.args?.filter.split('&').map((item) => (
+                  <Chip
+                    key={item}
+                    label={item}
+                    size="small"
+                    variant="outlined"
+                    sx={{
+                      borderRadius: '0%',
+                      background: 'var(--description-color)',
+                      color: '#FFFFFF',
+                      mr: '0.4rem',
+                      mb: '0.4rem',
+                      borderColor: 'var(--description-color)',
+                      fontWeight: 'bold',
+                    }}
+                  />
+                ))
               ) : (
-                preheat.args.filter.split('&').map((item) =>
-                  item ? (
-                    <Chip
-                      key={item}
-                      label={item}
-                      size="small"
-                      variant="outlined"
-                      sx={{
-                        borderRadius: '0%',
-                        background: 'var(--description-color)',
-                        color: '#FFFFFF',
-                        mr: '0.4rem',
-                        mb: '0.4rem',
-                        borderColor: 'var(--description-color)',
-                        fontWeight: 'bold',
-                      }}
-                    />
-                  ) : (
-                    <Typography key={item} variant="body1" className={styles.informationContent}>
-                      -
-                    </Typography>
-                  ),
-                )
+                <Typography variant="body1" className={styles.informationContent}>
+                  -
+                </Typography>
               )}
             </Box>
           </Box>
@@ -362,7 +332,7 @@ export default function ShowPreheat() {
             <Box className={styles.informationContent}>
               {isLoading ? (
                 <Skeleton sx={{ width: '4rem' }} />
-              ) : preheat.args.tag ? (
+              ) : preheat?.args?.tag ? (
                 <Chip
                   label={preheat.args.tag}
                   size="small"
@@ -397,17 +367,23 @@ export default function ShowPreheat() {
             </Box>
             {isLoading ? (
               <Skeleton sx={{ width: '4rem' }} />
-            ) : Object.keys(preheat.args.headers).length > 0 ? (
-              <Paper variant="outlined" className={styles.headersContent}>
-                {Object.entries(preheat.args.headers).map(([key, value], index) => (
-                  <Box key={index} className={styles.headersText}>
-                    <Box fontFamily="mabry-bold" width="35%" mr="1rem">
-                      {key}
+            ) : preheat?.args?.headers ? (
+              Object.keys(preheat?.args?.headers).length > 0 ? (
+                <Paper variant="outlined" className={styles.headersContent}>
+                  {Object.entries(preheat?.args.headers).map(([key, value], index) => (
+                    <Box key={index} className={styles.headersText}>
+                      <Box fontFamily="mabry-bold" width="35%" mr="1rem">
+                        {key}
+                      </Box>
+                      <Box width="65%">{value}</Box>
                     </Box>
-                    <Box width="65%">{value}</Box>
-                  </Box>
-                ))}
-              </Paper>
+                  ))}
+                </Paper>
+              ) : (
+                <Typography variant="body1" className={styles.informationContent}>
+                  -
+                </Typography>
+              )
             ) : (
               <Typography variant="body1" className={styles.informationContent}>
                 -
@@ -426,9 +402,15 @@ export default function ShowPreheat() {
                 Scheduler clusters ID
               </Typography>
             </Box>
-            <Typography variant="body1" className={styles.informationContent}>
-              {isLoading ? <Skeleton sx={{ width: '4rem' }} /> : preheat.scheduler_clusters[0].id || '-'}
-            </Typography>
+            <Box className={styles.schedulerClustersID}>
+              {preheat?.scheduler_clusters?.map((item) => {
+                return (
+                  <Typography variant="body1" sx={{ mr: '2rem' }}>
+                    {isLoading ? <Skeleton sx={{ width: '4rem' }} /> : item.id || '-'}
+                  </Typography>
+                );
+              }) || '-'}
+            </Box>
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
@@ -444,21 +426,18 @@ export default function ShowPreheat() {
             </Box>
             {isLoading ? (
               <Skeleton sx={{ width: '4rem' }} />
+            ) : preheat?.created_at ? (
+              <Chip avatar={<MoreTimeIcon />} label={getDatetime(preheat.created_at)} variant="outlined" size="small" />
             ) : (
-              (
-                <Chip
-                  avatar={<MoreTimeIcon />}
-                  label={getDatetime(preheat.created_at)}
-                  variant="outlined"
-                  size="small"
-                />
-              ) || '-'
+              <Typography variant="body1" className={styles.informationContent}>
+                -
+              </Typography>
             )}
           </Box>
         </Paper>
         <Drawer anchor="right" open={errorLog} onClose={handleClose}>
           <Box role="presentation" sx={{ width: '28rem' }}>
-            {preheat.result.JobStates.map((item) => (
+            {preheat?.result?.JobStates.map((item) => (
               <Box key={item.Error} sx={{ height: '100vh', backgroundColor: '#24292f' }}>
                 <Typography variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#fff' }}>
                   Error log

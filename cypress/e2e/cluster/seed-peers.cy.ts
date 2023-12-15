@@ -1,42 +1,14 @@
-import root from '../../fixtures/api/role-root.json';
-import guest from '../../fixtures/api/role-guest.json';
-import user from '../../fixtures/api/user.json';
-import guestUser from '../../fixtures/api/guest-user.json';
-import cluster from '../../fixtures/api/clusters/cluster/cluster.json';
-import seedPeer from '../../fixtures/api/clusters/cluster/seed-peer.json';
-import scheduler from '../../fixtures/api/clusters/cluster/scheduler.json';
-import deleteSeedPeer from '../../fixtures/api/clusters/cluster/delete-seed-peer.json';
-import seedPeerDeleteAfter from '../../fixtures/api/clusters/cluster/seed-peer-delete-after.json';
-import searchSeedPeer from '../../fixtures/api/clusters/cluster/search-seed-peer.json';
+import cluster from '../../fixtures/clusters/cluster/cluster.json';
+import seedPeer from '../../fixtures/clusters/cluster/seed-peer.json';
+import scheduler from '../../fixtures/clusters/cluster/scheduler.json';
+import deleteSeedPeer from '../../fixtures/clusters/cluster/delete-seed-peer.json';
+import seedPeerDeleteAfter from '../../fixtures/clusters/cluster/seed-peer-delete-after.json';
+import searchSeedPeer from '../../fixtures/clusters/cluster/search-seed-peer.json';
 
 describe('Seed peers', () => {
   beforeEach(() => {
     cy.signin();
 
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: user,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: root,
-        });
-      },
-    );
     cy.intercept(
       {
         method: 'GET',
@@ -502,30 +474,6 @@ describe('Seed peers', () => {
     });
 
     it('try to delete seed peer using guest user', () => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/users/2',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: guestUser,
-          });
-        },
-      );
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/users/2/roles',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: guest,
-          });
-        },
-      );
       cy.guestSignin();
 
       cy.get(

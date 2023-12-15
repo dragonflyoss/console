@@ -219,29 +219,32 @@ export default function Preheats() {
             You don't have any preheat tasks.
           </Box>
         ) : (
-          <>
+          <Box id="preheats-list">
             {Array.isArray(allPreheats) &&
               allPreheats.map((item, index) => {
                 return index !== allPreheats.length - 1 ? (
-                  <Box key={item.id}>
+                  <Box key={item.id} id={`list-${item.id}`}>
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
                         {isLoading ? (
                           <Skeleton variant="circular" width="1.4rem" height="1.4rem" />
                         ) : item.result.State === 'SUCCESS' ? (
                           <Box
+                            id={`SUCCESS-${item.id}`}
                             component="img"
                             sx={{ width: '1.3rem', height: '1.3rem' }}
                             src="/icons/job/preheat/success.svg"
                           />
                         ) : item.result.State === 'FAILURE' ? (
                           <Box
+                            id={`FAILURE-${item.id}`}
                             component="img"
                             sx={{ width: '1.3rem', height: '1.3rem' }}
                             src="/icons/job/preheat/failure.svg"
                           />
                         ) : (
                           <Box
+                            id={`PENDING-${item.id}`}
                             component="img"
                             sx={{ width: '1.3rem', height: '1.3rem' }}
                             src="/icons/job/preheat/pending.svg"
@@ -296,24 +299,27 @@ export default function Preheats() {
                     <Divider />
                   </Box>
                 ) : (
-                  <Box key={item.id} sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
+                  <Box key={item.id} id={`list-${item.id}`} sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                     <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
                       {isLoading ? (
                         <Skeleton variant="circular" width="1.4rem" height="1.4rem" />
                       ) : item.result.State === 'SUCCESS' ? (
                         <Box
+                          id={`SUCCESS-${item.id}`}
                           component="img"
                           sx={{ width: '1.3rem', height: '1.3rem' }}
                           src="/icons/job/preheat/success.svg"
                         />
                       ) : item.result.State === 'FAILURE' ? (
                         <Box
+                          id={`FAILURE-${item.id}`}
                           component="img"
                           sx={{ width: '1.3rem', height: '1.3rem' }}
                           src="/icons/job/preheat/failure.svg"
                         />
                       ) : (
                         <Box
+                          id={`PENDING-${item.id}`}
                           component="img"
                           sx={{ width: '1.3rem', height: '1.3rem' }}
                           src="/icons/job/preheat/pending.svg"
@@ -367,7 +373,7 @@ export default function Preheats() {
                   </Box>
                 );
               })}
-          </>
+          </Box>
         )}
       </Paper>
       {preheatTotalPages > 1 ? (
@@ -380,6 +386,7 @@ export default function Preheats() {
             boundaryCount={1}
             color="primary"
             size="small"
+            id="preheat-pagination"
           />
         </Box>
       ) : (

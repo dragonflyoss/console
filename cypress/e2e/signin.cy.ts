@@ -1,8 +1,4 @@
-import signin from '../fixtures/api/signin.json';
-import root from '../fixtures/api/role-root.json';
-import guest from '../fixtures/api/role-guest.json';
-import user from '../fixtures/api/user.json';
-import guestUser from '../fixtures/api/guest-user.json';
+import signin from '../fixtures/signin.json';
 import _ from 'lodash';
 
 describe('Signin', () => {
@@ -24,30 +20,7 @@ describe('Signin', () => {
         });
       }
     });
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: user,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: root,
-        });
-      },
-    );
+
     cy.visit('/signin');
   });
 
@@ -133,30 +106,6 @@ describe('Signin', () => {
   });
 
   it('try to signin with guest user', () => {
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guestUser,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/2/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: guest,
-        });
-      },
-    );
     cy.intercept('POST', '/api/v1/users/signin', (req) => {
       (req.body = { name: 'root-2', password: 'dragonrly' }),
         req.reply({

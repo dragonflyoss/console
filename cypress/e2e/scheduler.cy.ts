@@ -1,36 +1,10 @@
-import root from '../fixtures/api/role-root.json';
-import user from '../fixtures/api/user.json';
-import cluster from '../fixtures/api/clusters/cluster/cluster.json';
-import schedulers from '../fixtures/api/clusters/cluster/scheduler.json';
-import scheduler from '../fixtures/api/scheduler.json';
-import schedulerInactive from '../fixtures/api/scheduler-inactive.json';
+import cluster from '../fixtures/clusters/cluster/cluster.json';
+import schedulers from '../fixtures/clusters/cluster/scheduler.json';
+import scheduler from '../fixtures/scheduler.json';
+import schedulerInactive from '../fixtures/scheduler-inactive.json';
 
 describe('Scheduler', () => {
   beforeEach(() => {
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: user,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/users/1/roles',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: root,
-        });
-      },
-    );
     cy.intercept(
       {
         method: 'GET',

@@ -1,0 +1,75 @@
+{
+  "id": 10,
+  "created_at": "2023-12-13T11:58:53Z",
+  "updated_at": "2023-12-13T11:59:02Z",
+  "is_del": 0,
+  "task_id": "group_f60c3730-b718-45c7-98a5-014052c1c02a",
+  "bio": "This is a preheat task with status failure",
+  "type": "preheat",
+  "state": "FAILURE",
+  "args": {
+    "filter": "Expires&Signature",
+    "headers": {
+      "Connection": "keep-alive"
+    },
+    "tag": "prheat tag",
+    "type": "file",
+    "url": "http://dock.io/preheat/test"
+  },
+  "result": {
+    "CreatedAt": "2023-12-13T11:58:53.535716295Z",
+    "GroupUUID": "group_f60c3730-b718-45c7-98a5-014052c1c02a",
+    "JobStates": [
+      {
+        "CreatedAt": "2023-12-13T11:58:53.535716295Z",
+        "Error": "rpc error: code = Aborted desc = source response 401/401 Unauthorized is not valid",
+        "Results": null,
+        "State": "FAILURE",
+        "TTL": 0,
+        "TaskName": "preheat",
+        "TaskUUID": "task_8cd497e9-4748-45c3-acc4-db32aebe44ed3"
+      }
+    ],
+    "State": "FAILURE"
+  },
+  "user_id": 0,
+  "user": {
+    "id": 0,
+    "created_at": "0001-01-01T00:00:00Z",
+    "updated_at": "0001-01-01T00:00:00Z",
+    "is_del": 0,
+    "email": "",
+    "name": "",
+    "avatar": "",
+    "phone": "",
+    "state": "",
+    "location": "",
+    "bio": "",
+    "configs": null
+  },
+  "seed_peer_clusters": [],
+  "scheduler_clusters": [
+    {
+      "id": 1,
+      "created_at": "2023-11-27T07:31:23Z",
+      "updated_at": "2023-11-27T07:31:23Z",
+      "is_del": 0,
+      "name": "cluster-1",
+      "bio": "",
+      "config": {
+        "candidate_parent_limit": 4,
+        "filter_parent_limit": 40
+      },
+      "client_config": {
+        "concurrent_piece_count": 4,
+        "load_limit": 50
+      },
+      "scopes": {},
+      "is_default": true,
+      "seed_peer_clusters": null,
+      "schedulers": null,
+      "peers": null,
+      "jobs": null
+    }
+  ]
+}

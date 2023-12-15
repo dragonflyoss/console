@@ -704,7 +704,7 @@ export async function getJobs(params?: getJobsParams): Promise<getJobsResponse> 
   return responses;
 }
 
-interface getJobResponse {
+export interface getJobResponse {
   id: number;
   created_at: string;
   updated_at: string;
@@ -715,7 +715,7 @@ interface getJobResponse {
   state: string;
   args: {
     filter: string;
-    headers: string;
+    headers: { [key: string]: string };
     tag: string;
     type: string;
     url: string;

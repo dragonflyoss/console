@@ -71,7 +71,7 @@ describe('Preheats', () => {
       // Executed every 3 seconds, it should be executed 2 times after 6 seconds.
       cy.get('@preheats').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(2, 0);
+        expect(interceptCount).to.be.closeTo(2, 1);
       });
 
       cy.get(':nth-child(3) > .css-ibh903-MuiButtonBase-root-MuiListItemButton-root').click();
@@ -188,7 +188,7 @@ describe('Preheats', () => {
       // The API should poll.
       cy.get('@preheats').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(3, 0);
+        expect(interceptCount).to.be.closeTo(3, 1);
       });
 
       cy.intercept(

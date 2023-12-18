@@ -72,10 +72,11 @@ export default function NewPreheat() {
   const informationForm = [
     {
       formProps: {
-        id: 'bio',
+        id: 'description',
         label: 'Description',
-        name: 'bio',
+        name: 'description',
         multiline: true,
+        maxRows: 2,
         autoComplete: 'family-name',
         placeholder: 'Enter your description',
         helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',
@@ -132,7 +133,7 @@ export default function NewPreheat() {
       syncError: false,
       setError: setURLError,
       validate: (value: string) => {
-        const reg = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s]*.{0,1000}$/;
+        const reg = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s].{1,1000}$/;
         return reg.test(value);
       },
     },
@@ -141,6 +142,8 @@ export default function NewPreheat() {
         id: 'tag',
         label: 'Tag',
         name: 'tag',
+        multiline: true,
+        maxRows: 2,
         autoComplete: 'family-name',
         placeholder: 'Enter your tag',
         helperText: tagError ? 'Fill in the characters, the length is 0-1000.' : '',
@@ -173,6 +176,7 @@ export default function NewPreheat() {
       },
     },
     {
+      id: 'filter',
       name: 'filter',
       label: 'Filter',
       filterFormProps: {
@@ -247,7 +251,7 @@ export default function NewPreheat() {
     setLoadingButton(true);
 
     event.preventDefault();
-    const bio = event.currentTarget.elements.bio.value;
+    const bio = event.currentTarget.elements.description.value;
     const url = event.currentTarget.elements.url.value;
     const tag = event.currentTarget.elements.tag.value;
     const filterText = event.currentTarget.elements.filter.value;
@@ -416,10 +420,10 @@ export default function NewPreheat() {
               color="secondary"
               error={clusterError}
             >
-              <InputLabel id="demo-simple-select-required-label">Clusters</InputLabel>
+              <InputLabel id="select-clusters">Clusters</InputLabel>
               <Select
-                labelId="demo-simple-select-required-label"
-                id="demo-simple-select-required"
+                labelId="select-clusters"
+                id="select-cluster"
                 label="Clusters *"
                 multiple
                 value={clusterName.map((name) => cluster.find((item) => item.name === name))}
@@ -438,6 +442,7 @@ export default function NewPreheat() {
                 {cluster.map((item: any) => (
                   <MenuItem key={item.id} value={item} sx={{ height: '2.6rem' }}>
                     <Checkbox
+                      id={`cluster-${item.id}`}
                       size="small"
                       sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }}
                       checked={clusterName.indexOf(item.name) > -1}
@@ -446,7 +451,7 @@ export default function NewPreheat() {
                   </MenuItem>
                 ))}
               </Select>
-              {clusterError && <FormHelperText>Select at least one option.</FormHelperText>}
+              {clusterError && <FormHelperText id="clusters-helper-text">Select at least one option.</FormHelperText>}
             </FormControl>
           </Box>
           <Box className={styles.title}>
@@ -518,7 +523,7 @@ export default function NewPreheat() {
               );
             })}
             {headers.length > 0 ? (
-              <Paper variant="outlined" sx={{ p: '1rem', width: '40rem', mt: '1rem' }}>
+              <Paper id="header" variant="outlined" sx={{ p: '1rem', width: '40rem', mt: '1rem' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography variant="body1" fontFamily="mabry-bold" mr="0.4rem">
                     Headers
@@ -536,6 +541,7 @@ export default function NewPreheat() {
                       label="Key"
                       color="success"
                       size="small"
+                      id={item.key}
                       error={!headersKeyValidate(item.key)}
                       helperText={!headersKeyValidate(item.key) && 'Fill in the characters, the length is 1-100.'}
                       className={styles.headersKeyInput}
@@ -550,7 +556,9 @@ export default function NewPreheat() {
                       label="Value"
                       color="success"
                       size="small"
+                      id={item.value}
                       multiline
+                      maxRows={3}
                       error={!headersValueValidate(item.value)}
                       helperText={!headersValueValidate(item.value) && 'Fill in the characters, the length is 1-1000.'}
                       className={styles.headersValueInput}
@@ -652,6 +660,7 @@ export default function NewPreheat() {
               onClick={() => {
                 navigate('/jobs/preheats');
               }}
+              id="cancel"
             >
               Cancel
             </LoadingButton>
@@ -680,6 +689,7 @@ export default function NewPreheat() {
                 },
                 width: '8rem',
               }}
+              id="save"
             >
               Save
             </LoadingButton>

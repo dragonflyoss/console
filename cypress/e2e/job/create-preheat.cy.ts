@@ -277,7 +277,6 @@ describe('Create preheat', () => {
       cy.get('#tag').clear();
 
       // Should display message filter the validation error.
-
       cy.get('.MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('filter');
 
       cy.get('#save').click();

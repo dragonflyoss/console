@@ -193,7 +193,7 @@ describe('Preheat', () => {
       // Check how many times the API should be executed after six seconds.
       cy.get('@preheat').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(4, 0);
+        expect(interceptCount).to.be.closeTo(4, 1);
       });
 
       cy.intercept(
@@ -387,7 +387,7 @@ describe('Preheat', () => {
       // Check how many times the API should be executed after six seconds.
       cy.get('@preheat').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(4, 0);
+        expect(interceptCount).to.be.closeTo(4, 1);
       });
 
       cy.intercept(

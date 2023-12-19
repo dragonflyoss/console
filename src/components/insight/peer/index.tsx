@@ -20,7 +20,6 @@ import {
   Snackbar,
   Alert,
   Tooltip as MuiTooltip,
-  Chip,
 } from '@mui/material';
 import {
   Chart as ChartJS,
@@ -497,6 +496,10 @@ export default function Peer() {
       { key: 'scheduler_cluster.client_config.load_limit', label: 'schedulerCluster.clientConfig.loadLimit' },
     ];
     try {
+      if (peer.length === 0) {
+        throw Error;
+      }
+
       if (exportSelectedVersion === 'All' && exportSelectedCommit === 'All' && exportSelectedCluster === 'All') {
         exportCSVFile(headers, peer, 'Peer Data');
         setLoadingButton(false);
@@ -692,7 +695,7 @@ export default function Peer() {
                       <Typography variant="subtitle2" fontFamily="mabry-light">
                         Active
                       </Typography>
-                      <Typography variant="subtitle1" fontFamily="mabry-bold">
+                      <Typography id="cluster-active" variant="subtitle1" fontFamily="mabry-bold">
                         {isLoading ? <Skeleton width="2rem" /> : clusterActive ? `${clusterActive}%` : '0'}
                       </Typography>
                     </Box>
@@ -790,7 +793,7 @@ export default function Peer() {
                       <Typography variant="subtitle2" fontFamily="mabry-light">
                         Active
                       </Typography>
-                      <Typography variant="subtitle1" fontFamily="mabry-bold">
+                      <Typography id="git-version-active" variant="subtitle1" fontFamily="mabry-bold">
                         {isLoading ? <Skeleton width="2rem" /> : gitVersionActive ? `${gitVersionActive}%` : '0'}
                       </Typography>
                     </Box>
@@ -914,7 +917,7 @@ export default function Peer() {
                       <Typography variant="subtitle2" fontFamily="mabry-light">
                         Active
                       </Typography>
-                      <Typography variant="subtitle1" fontFamily="mabry-bold">
+                      <Typography id="git-commit-active" variant="subtitle1" fontFamily="mabry-bold">
                         {isLoading ? <Skeleton width="2rem" /> : gitCommitActive ? `${gitCommitActive}%` : '0'}
                       </Typography>
                     </Box>
@@ -1024,6 +1027,7 @@ export default function Peer() {
               size="small"
               variant="outlined"
               loadingPosition="end"
+              id="cancel"
               sx={{
                 '&.MuiLoadingButton-root': {
                   color: 'var(--calcel-size-color)',
@@ -1058,6 +1062,7 @@ export default function Peer() {
               variant="outlined"
               type="submit"
               loadingPosition="end"
+              id="save"
               sx={{
                 '&.MuiLoadingButton-root': {
                   backgroundColor: 'var(--save-color)',

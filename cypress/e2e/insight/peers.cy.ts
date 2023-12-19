@@ -1,4 +1,5 @@
 import peers from '../../fixtures/peers/peers.json';
+
 const path = require('path');
 declare const expect: Chai.ExpectStatic;
 

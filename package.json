@@ -110,8 +110,5 @@
     "*.{css,sass}": [
       "prettier --write"
     ]
-  },
-  "nyc": {
-    "exclude": "src/reportWebVitals.ts"
   }
 }

@@ -122,8 +122,6 @@ export default function Layout(props: any) {
   }, [location, navigate]);
 
   const handleUserUpdate = (newUser: getUserResponse) => {
-    console.log(newUser);
-
     setUser(newUser);
   };
 

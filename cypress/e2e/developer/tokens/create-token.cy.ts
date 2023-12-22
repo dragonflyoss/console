@@ -1,5 +1,5 @@
-import tokens from '../fixtures/tokens/tokens.json';
-import createToken from '../fixtures/tokens/create-token.json';
+import tokens from '../../../fixtures/developer/tokens/tokens.json';
+import createToken from '../../../fixtures/developer/tokens/create-token.json';
 import _ from 'lodash';
 
 describe('Create token', () => {

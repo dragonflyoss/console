@@ -15,14 +15,14 @@ Cypress.Commands.add('signin', () => {
       method: 'GET',
       url: '/api/v1/users/1',
     },
-    { fixture: 'user.json' },
+    { fixture: 'users/user.json' },
   );
   cy.intercept(
     {
       method: 'GET',
       url: '/api/v1/users/1/roles',
     },
-    { fixture: 'role-root.json' },
+    { fixture: 'users/role-root.json' },
   );
 });
 
@@ -36,13 +36,13 @@ Cypress.Commands.add('guestSignin', () => {
       method: 'GET',
       url: '/api/v1/users/2',
     },
-    { fixture: 'guest-user.json' },
+    { fixture: 'users/guest-user.json' },
   );
   cy.intercept(
     {
       method: 'GET',
       url: '/api/v1/users/2/roles',
     },
-    { fixture: 'role-guest.json' },
+    { fixture: 'users/role-guest.json' },
   );
 });

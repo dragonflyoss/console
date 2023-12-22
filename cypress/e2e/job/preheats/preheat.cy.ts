@@ -1,7 +1,7 @@
-import preheats from '../../fixtures/preheats/preheats.json';
-import failurePreheat from '../../fixtures/preheats/failure-preheat.json';
-import successPreheat from '../../fixtures/preheats/success-preheat.json';
-import pendingPreheat from '../../fixtures/preheats/pending-preheat.json';
+import preheats from '../../../fixtures/job/preheats/preheats.json';
+import failurePreheat from '../../../fixtures/job/preheats/failure-preheat.json';
+import successPreheat from '../../../fixtures/job/preheats/success-preheat.json';
+import pendingPreheat from '../../../fixtures/job/preheats/pending-preheat.json';
 
 declare const expect: Chai.ExpectStatic;
 

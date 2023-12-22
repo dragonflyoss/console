@@ -1,6 +1,6 @@
-import tokens from '../fixtures/tokens/tokens.json';
-import token from '../fixtures/tokens/token.json';
-import updateToken from '../fixtures/tokens/update-token.json';
+import tokens from '../../../fixtures/developer/tokens/tokens.json';
+import token from '../../../fixtures/developer/tokens/token.json';
+import updateToken from '../../../fixtures/developer/tokens/update-token.json';
 import _ from 'lodash';
 
 describe('Update token', () => {

@@ -1,8 +1,4 @@
-import root from '../fixtures/role-root.json';
-import guest from '../fixtures/role-guest.json';
-import user from '../fixtures/user.json';
-import guestUser from '../fixtures/guest-user.json';
-import updateUser from '../fixtures/update-user.json';
+import updateUser from '../../fixtures/users/update-user.json';
 import _ from 'lodash';
 
 describe('Profile', () => {

@@ -1,6 +1,6 @@
-import clusters from '../../fixtures/clusters/clusters.json';
-import preheats from '../../fixtures/preheats/preheats.json';
-import createPreheat from '../../fixtures/preheats/create-preheat.json';
+import clusters from '../../../fixtures/clusters/clusters.json';
+import preheats from '../../../fixtures/job/preheats/preheats.json';
+import createPreheat from '../../../fixtures/job/preheats/create-preheat.json';
 import _ from 'lodash';
 
 describe('Create preheat', () => {

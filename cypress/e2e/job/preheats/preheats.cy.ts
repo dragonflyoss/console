@@ -1,8 +1,8 @@
-import preheats from '../../fixtures/preheats/preheats.json';
-import paginationPreheats from '../../fixtures/preheats/pagination-preheats.json';
-import successPreheats from '../../fixtures/preheats/success-preheats.json';
-import failurePreheats from '../../fixtures/preheats/failure-preheats.json';
-import pendingPreheats from '../../fixtures/preheats/pending-preheats.json';
+import preheats from '../../../fixtures/job/preheats/preheats.json';
+import paginationPreheats from '../../../fixtures/job/preheats/pagination-preheats.json';
+import successPreheats from '../../../fixtures/job/preheats/success-preheats.json';
+import failurePreheats from '../../../fixtures/job/preheats/failure-preheats.json';
+import pendingPreheats from '../../../fixtures/job/preheats/pending-preheats.json';
 
 declare const expect: Chai.ExpectStatic;
 

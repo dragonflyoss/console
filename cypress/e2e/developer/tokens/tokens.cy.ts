@@ -1,6 +1,6 @@
-import tokens from '../fixtures/tokens/tokens.json';
-import deleteToken from '../fixtures/tokens/delete-tokens.json';
-import tokenDeleteAfter from '../fixtures/tokens/token-delete-after.json';
+import tokens from '../../../fixtures/developer/tokens/tokens.json';
+import deleteToken from '../../../fixtures/developer/tokens/delete-tokens.json';
+import tokenDeleteAfter from '../../../fixtures/developer/tokens/token-delete-after.json';
 
 describe('Tokens', () => {
   beforeEach(() => {

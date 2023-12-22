@@ -1,7 +1,7 @@
-import cluster from '../fixtures/clusters/cluster/cluster.json';
-import seedPeers from '../fixtures/clusters/cluster/seed-peer.json';
-import seedPeer from '../fixtures/seed-peer.json';
-import seedPeerInactive from '../fixtures/seed-peer-inactive.json';
+import cluster from '../../fixtures/clusters/cluster/cluster.json';
+import seedPeers from '../../fixtures/clusters/cluster/seed-peer.json';
+import seedPeer from '../../fixtures/seed-peers/seed-peer.json';
+import seedPeerInactive from '../../fixtures/seed-peers/seed-peer-inactive.json';
 
 describe('Seed peer', () => {
   beforeEach(() => {

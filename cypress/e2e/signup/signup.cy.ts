@@ -1,4 +1,4 @@
-import signup from '../fixtures/signup.json';
+import signup from '../../fixtures/signup/signup.json';
 import _ from 'lodash';
 
 describe('Signup', () => {

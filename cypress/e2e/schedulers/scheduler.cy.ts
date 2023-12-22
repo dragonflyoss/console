@@ -1,7 +1,7 @@
-import cluster from '../fixtures/clusters/cluster/cluster.json';
-import schedulers from '../fixtures/clusters/cluster/scheduler.json';
-import scheduler from '../fixtures/scheduler.json';
-import schedulerInactive from '../fixtures/scheduler-inactive.json';
+import cluster from '../../fixtures/clusters/cluster/cluster.json';
+import schedulers from '../../fixtures/clusters/cluster/scheduler.json';
+import scheduler from '../../fixtures/schedulers/scheduler.json';
+import schedulerInactive from '../../fixtures/schedulers/scheduler-inactive.json';
 
 describe('Scheduler', () => {
   beforeEach(() => {

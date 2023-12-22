@@ -337,11 +337,10 @@ export default function Peer() {
     datasets: [
       {
         data: cluster.map((item) => item.count),
-        backgroundColor: 'rgba(46,143,121,0.6)',
+        backgroundColor: 'rgb(46,143,121)',
         borderColor: 'rgb(46,143,121)',
         borderWidth: 1,
         borderRadius: 5,
-        hoverBackgroundColor: 'rgb(46,143,121)',
         barPercentage: 0.6,
       },
     ],
@@ -377,11 +376,10 @@ export default function Peer() {
     datasets: [
       {
         data: gitVersion.map((item) => item.count),
-        backgroundColor: 'rgba(46,143,121,0.6)',
+        backgroundColor: 'rgb(46,143,121)',
         borderColor: 'rgb(46,143,121)',
         borderWidth: 1,
         borderRadius: 5,
-        hoverBackgroundColor: 'rgb(46,143,121)',
         barPercentage: 0.6,
       },
     ],
@@ -410,11 +408,10 @@ export default function Peer() {
     datasets: [
       {
         data: gitCommit.map((item) => item.count),
-        backgroundColor: 'rgba(46,143,121,0.6)',
+        backgroundColor: 'rgb(46,143,121)',
         borderColor: 'rgb(46,143,121)',
         borderWidth: 1,
         borderRadius: 5,
-        hoverBackgroundColor: 'rgb(46,143,121)',
         barPercentage: 0.6,
       },
     ],

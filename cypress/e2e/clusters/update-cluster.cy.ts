@@ -1,5 +1,5 @@
-import cluster from '../fixtures/clusters/cluster/cluster.json';
-import updateCluster from '../fixtures/clusters/cluster/update-cluster.json';
+import cluster from '../../fixtures/clusters/cluster/cluster.json';
+import updateCluster from '../../fixtures/clusters/cluster/update-cluster.json';
 import _ from 'lodash';
 
 describe('Update cluster', () => {

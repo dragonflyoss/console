@@ -1,8 +1,8 @@
-import root from '../fixtures/role-root.json';
-import user from '../fixtures/user.json';
-import users from '../fixtures/users.json';
-import guestUser from '../fixtures/guest-user.json';
-import guest from '../fixtures/role-guest.json';
+import root from '../../fixtures/users/role-root.json';
+import user from '../../fixtures/users/user.json';
+import users from '../../fixtures/users/users.json';
+import guestUser from '../../fixtures/users/guest-user.json';
+import guest from '../../fixtures/users/role-guest.json';
 
 describe('Users', () => {
   beforeEach(() => {

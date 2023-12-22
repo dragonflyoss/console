@@ -1,9 +1,9 @@
 import cluster from '../../fixtures/clusters/cluster/cluster.json';
 import seedPeer from '../../fixtures/clusters/cluster/seed-peer.json';
 import scheduler from '../../fixtures/clusters/cluster/scheduler.json';
-import deleteSeedPeer from '../../fixtures/clusters/cluster/delete-seed-peer.json';
-import seedPeerDeleteAfter from '../../fixtures/clusters/cluster/seed-peer-delete-after.json';
-import searchSeedPeer from '../../fixtures/clusters/cluster/search-seed-peer.json';
+import deleteSeedPeer from '../../fixtures/seed-peers/delete-seed-peer.json';
+import seedPeerDeleteAfter from '../../fixtures/seed-peers/seed-peer-delete-after.json';
+import searchSeedPeer from '../../fixtures/seed-peers/search-seed-peer.json';
 
 describe('Seed peers', () => {
   beforeEach(() => {

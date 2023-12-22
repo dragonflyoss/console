@@ -1,6 +1,6 @@
 import clusters from '../../fixtures/clusters/clusters.json';
-import seedPeers from '../../fixtures/clusters/seed-peers.json';
-import schedulers from '../../fixtures/clusters/schedulers.json';
+import seedPeers from '../../fixtures/seed-peers/seed-peers.json';
+import schedulers from '../../fixtures/schedulers/schedulers.json';
 import searchCluster from '../../fixtures/clusters/search-cluster.json';
 
 describe('Clusters', () => {

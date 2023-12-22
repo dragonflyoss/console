@@ -25,23 +25,23 @@ describe('Peers', () => {
 
   describe('when data is loaded', () => {
     it('should display the total number of peers', () => {
-      cy.get(':nth-child(1) > .MuiPaper-root > .inde_navigationContent__kHaOF').should('exist');
+      cy.get('.css-18k9q32 > :nth-child(1) > .MuiPaper-root').should('exist');
       cy.get(
-        ':nth-child(1) > .MuiPaper-root > .inde_navigationContent__kHaOF > div.MuiBox-root > .MuiTypography-h5',
+        ':nth-child(1) > .MuiPaper-root > .inde_navigationContent__tkUaj > div.MuiBox-root > .MuiTypography-h5',
       ).should('have.text', 7);
     });
 
     it('should display the total number of git version', () => {
-      cy.get(':nth-child(2) > .MuiPaper-root > .inde_navigationContent__kHaOF').should('exist');
+      cy.get('.css-18k9q32 > :nth-child(2) > .MuiPaper-root').should('exist');
       cy.get(
-        ':nth-child(2) > .MuiPaper-root > .inde_navigationContent__kHaOF > div.MuiBox-root > .MuiTypography-h5',
+        ':nth-child(2) > .MuiPaper-root > .inde_navigationContent__tkUaj > div.MuiBox-root > .MuiTypography-h5',
       ).should('have.text', 4);
     });
 
     it('should display the total number of git commit', () => {
-      cy.get(':nth-child(3) > .MuiPaper-root > .inde_navigationContent__kHaOF').should('exist');
+      cy.get('.css-1l3zj38 > .MuiPaper-root').should('exist');
       cy.get(
-        ':nth-child(3) > .MuiPaper-root > .inde_navigationContent__kHaOF > div.MuiBox-root > .MuiTypography-h5',
+        '.css-1l3zj38 > .MuiPaper-root > .inde_navigationContent__tkUaj > div.MuiBox-root > .MuiTypography-h5',
       ).should('have.text', 5);
     });
 
@@ -218,23 +218,23 @@ describe('Peers', () => {
     });
 
     it('should display the total number of peers', () => {
-      cy.get(':nth-child(1) > .MuiPaper-root > .inde_navigationContent__kHaOF').should('exist');
+      cy.get('.css-18k9q32 > :nth-child(1) > .MuiPaper-root').should('exist');
       cy.get(
-        ':nth-child(1) > .MuiPaper-root > .inde_navigationContent__kHaOF > div.MuiBox-root > .MuiTypography-h5',
+        ':nth-child(1) > .MuiPaper-root > .inde_navigationContent__tkUaj > div.MuiBox-root > .MuiTypography-h5',
       ).should('have.text', 0);
     });
 
     it('should display the total number of git version', () => {
-      cy.get(':nth-child(2) > .MuiPaper-root > .inde_navigationContent__kHaOF').should('exist');
+      cy.get('.css-18k9q32 > :nth-child(2) > .MuiPaper-root').should('exist');
       cy.get(
-        ':nth-child(2) > .MuiPaper-root > .inde_navigationContent__kHaOF > div.MuiBox-root > .MuiTypography-h5',
+        ':nth-child(2) > .MuiPaper-root > .inde_navigationContent__tkUaj > div.MuiBox-root > .MuiTypography-h5',
       ).should('have.text', 0);
     });
 
     it('should display the total number of git commit', () => {
-      cy.get(':nth-child(3) > .MuiPaper-root > .inde_navigationContent__kHaOF').should('exist');
+      cy.get('.css-1l3zj38 > .MuiPaper-root').should('exist');
       cy.get(
-        ':nth-child(3) > .MuiPaper-root > .inde_navigationContent__kHaOF > div.MuiBox-root > .MuiTypography-h5',
+        '.css-1l3zj38 > .MuiPaper-root > .inde_navigationContent__tkUaj > div.MuiBox-root > .MuiTypography-h5',
       ).should('have.text', 0);
     });
 
@@ -270,23 +270,23 @@ describe('Peers', () => {
     });
 
     it('should display the total number of peers', () => {
-      cy.get(':nth-child(1) > .MuiPaper-root > .inde_navigationContent__kHaOF').should('exist');
+      cy.get('.css-18k9q32 > :nth-child(1) > .MuiPaper-root').should('exist');
       cy.get(
-        ':nth-child(1) > .MuiPaper-root > .inde_navigationContent__kHaOF > div.MuiBox-root > .MuiTypography-h5',
+        ':nth-child(1) > .MuiPaper-root > .inde_navigationContent__tkUaj > div.MuiBox-root > .MuiTypography-h5',
       ).should('have.text', 0);
     });
 
     it('should display the total number of git version', () => {
-      cy.get(':nth-child(2) > .MuiPaper-root > .inde_navigationContent__kHaOF').should('exist');
+      cy.get('.css-18k9q32 > :nth-child(2) > .MuiPaper-root').should('exist');
       cy.get(
-        ':nth-child(2) > .MuiPaper-root > .inde_navigationContent__kHaOF > div.MuiBox-root > .MuiTypography-h5',
+        ':nth-child(2) > .MuiPaper-root > .inde_navigationContent__tkUaj > div.MuiBox-root > .MuiTypography-h5',
       ).should('have.text', 0);
     });
 
     it('should display the total number of git commit', () => {
-      cy.get(':nth-child(3) > .MuiPaper-root > .inde_navigationContent__kHaOF').should('exist');
+      cy.get('.css-1l3zj38 > .MuiPaper-root').should('exist');
       cy.get(
-        ':nth-child(3) > .MuiPaper-root > .inde_navigationContent__kHaOF > div.MuiBox-root > .MuiTypography-h5',
+        '.css-1l3zj38 > .MuiPaper-root > .inde_navigationContent__tkUaj > div.MuiBox-root > .MuiTypography-h5',
       ).should('have.text', 0);
     });
 

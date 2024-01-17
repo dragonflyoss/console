@@ -715,7 +715,7 @@ export interface getJobResponse {
   state: string;
   args: {
     filter: string;
-    headers: { [key: string]: string };
+    headers: { [key: string]: string } | null;
     tag: string;
     type: string;
     url: string;
@@ -736,7 +736,7 @@ export interface getJobResponse {
     ];
     State: string;
   };
-  user_id: string;
+  user_id: number;
   scheduler_clusters: [
     {
       id: number;
@@ -758,7 +758,7 @@ interface createJobRequest {
     url: string;
     tag: string;
     filter: string;
-    headers?: { [key: string]: string };
+    headers?: { [key: string]: string } | null;
   };
   scheduler_cluster_ids: Array<number>;
 }

@@ -367,7 +367,7 @@ export default function ShowPreheat() {
             </Box>
             {isLoading ? (
               <Skeleton sx={{ width: '4rem' }} />
-            ) : preheat?.args?.headers ? (
+            ) : preheat?.args?.headers && preheat?.args?.headers !== null ? (
               Object.keys(preheat?.args?.headers).length > 0 ? (
                 <Paper variant="outlined" className={styles.headersContent}>
                   {Object.entries(preheat?.args.headers).map(([key, value], index) => (
@@ -403,9 +403,9 @@ export default function ShowPreheat() {
               </Typography>
             </Box>
             <Box className={styles.schedulerClustersID}>
-              {preheat?.scheduler_clusters?.map((item) => {
+              {preheat?.scheduler_clusters?.map((item, index) => {
                 return (
-                  <Typography variant="body1" sx={{ mr: '2rem' }}>
+                  <Typography key={index} variant="body1" sx={{ mr: '2rem' }}>
                     {isLoading ? <Skeleton sx={{ width: '4rem' }} /> : item.id || '-'}
                   </Typography>
                 );

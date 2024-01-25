@@ -9,7 +9,7 @@
     "type": "preheat",
     "state": "FAILURE",
     "args": {
-      "filter": "",
+      "filteredQueryParams": "",
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
@@ -61,7 +61,7 @@
     "type": "preheat",
     "state": "FAILURE",
     "args": {
-      "filter": "",
+      "filteredQueryParams": "",
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
@@ -113,7 +113,7 @@
     "type": "preheat",
     "state": "FAILURE",
     "args": {
-      "filter": "",
+      "filteredQueryParams": "",
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
@@ -165,7 +165,7 @@
     "type": "preheat",
     "state": "FAILURE",
     "args": {
-      "filter": "",
+      "filteredQueryParams": "",
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },

@@ -176,9 +176,9 @@ export default function NewPreheat() {
       },
     },
     {
-      id: 'filter',
-      name: 'filter',
-      label: 'Filter',
+      id: 'filteredQueryParams',
+      name: 'filteredQueryParams',
+      label: 'Filter Query Params',
       filterFormProps: {
         value: filter,
         options: [],
@@ -199,9 +199,9 @@ export default function NewPreheat() {
       },
 
       formProps: {
-        id: 'filter',
-        label: 'Filter',
-        name: 'filter',
+        id: 'filteredQueryParams',
+        name: 'filteredQueryParams',
+        label: 'Filtered Query Params',
         placeholder: 'Press the Enter key to confirm the entered value',
         error: filterError,
         helperText: filterError ? filterHelperText : '',
@@ -254,7 +254,7 @@ export default function NewPreheat() {
     const bio = event.currentTarget.elements.description.value;
     const url = event.currentTarget.elements.url.value;
     const tag = event.currentTarget.elements.tag.value;
-    const filterText = event.currentTarget.elements.filter.value;
+    const filterText = event.currentTarget.elements.filteredQueryParams.value;
     const filters = filter.join('&');
 
     const data = new FormData(event.currentTarget);
@@ -274,7 +274,7 @@ export default function NewPreheat() {
     });
 
     argsForm.forEach((item) => {
-      if (item.formProps.name !== 'filter') {
+      if (item.formProps.name !== 'filteredQueryParams') {
         const value = data.get(item.formProps.name);
         item.setError(!item.validate(value as string));
         item.syncError = !item.validate(value as string);
@@ -317,7 +317,7 @@ export default function NewPreheat() {
         type: 'file',
         url: url,
         tag: tag,
-        filter: filters,
+        filteredQueryParams: filters,
         headers: headerList,
       },
       scheduler_cluster_ids: clusterID,
@@ -469,7 +469,7 @@ export default function NewPreheat() {
             {argsForm.map((item) => {
               return (
                 <Box key={item.formProps.name}>
-                  {item.label === 'Filter' ? (
+                  {item.id === 'filteredQueryParams' ? (
                     <Autocomplete
                       freeSolo
                       multiple

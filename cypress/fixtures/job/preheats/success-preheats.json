@@ -9,7 +9,7 @@
     "type": "preheat",
     "state": "SUCCESS",
     "args": {
-      "filter": "",
+      "filteredQueryParams": "",
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },

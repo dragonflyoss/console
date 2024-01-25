@@ -8,7 +8,7 @@
   "type": "preheat",
   "state": "PENDING",
   "args": {
-    "filter": "Expires&Signature",
+    "filteredQueryParams": "Expires&Signature",
     "headers": {
       "Connection": "keep-alive"
     },

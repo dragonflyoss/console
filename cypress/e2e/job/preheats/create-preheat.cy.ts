@@ -282,7 +282,7 @@ describe('Create preheat', () => {
       cy.get('#save').click();
 
       // Show verification error message.
-      cy.get('#filter-helper-text')
+      cy.get('#filteredQueryParams-helper-text')
         .should('be.visible')
         .and('have.text', 'Please press ENTER to end the filter creation');
 
@@ -293,7 +293,7 @@ describe('Create preheat', () => {
       cy.get('.MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(filter);
 
       // Show verification error message.
-      cy.get('#filter-helper-text')
+      cy.get('#filteredQueryParams-helper-text')
         .should('be.visible')
         .and('have.text', 'Fill in the characters, the length is 0-100.');
 

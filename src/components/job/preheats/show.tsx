@@ -286,14 +286,14 @@ export default function ShowPreheat() {
                 component="div"
                 className={styles.informationTitleText}
               >
-                Filter
+                Filtered Query Params
               </Typography>
             </Box>
             <Box className={styles.informationContent} sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {isLoading ? (
                 <Skeleton sx={{ width: '4rem' }} />
-              ) : preheat?.args?.filter ? (
-                preheat?.args?.filter.split('&').map((item) => (
+              ) : preheat?.args?.filteredQueryParams ? (
+                preheat?.args?.filteredQueryParams.split('&').map((item) => (
                   <Chip
                     key={item}
                     label={item}

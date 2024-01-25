@@ -661,7 +661,7 @@ export interface JobsResponse {
   type: string;
   state: string;
   args: {
-    filter: string;
+    filteredQueryParams: string;
     headers: { [key: string]: string };
     tag: string;
     type: string;
@@ -714,7 +714,7 @@ export interface getJobResponse {
   type: string;
   state: string;
   args: {
-    filter: string;
+    filteredQueryParams: string;
     headers: { [key: string]: string } | null;
     tag: string;
     type: string;
@@ -757,7 +757,7 @@ interface createJobRequest {
     type: string;
     url: string;
     tag: string;
-    filter: string;
+    filteredQueryParams: string;
     headers?: { [key: string]: string } | null;
   };
   scheduler_cluster_ids: Array<number>;
@@ -773,7 +773,7 @@ interface cerateJobResponse {
   type: string;
   state: string;
   args: {
-    filter: string;
+    filteredQueryParams: string;
     headers: { [key: string]: string };
     tag: string;
     type: string;

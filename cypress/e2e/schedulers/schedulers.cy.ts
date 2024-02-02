@@ -398,6 +398,10 @@ describe('Schedulers', () => {
 
       cy.get('#scheduler-pagination > .MuiPagination-ul').children().should('have.length', 5);
 
+      cy.get('#scheduler-2').click();
+      cy.get('#cancelDeleteScheduler').click();
+      cy.get('#scheduler-2').click();
+
       cy.intercept(
         {
           method: 'DELETE',
@@ -408,7 +412,7 @@ describe('Schedulers', () => {
             statusCode: 200,
           });
         },
-      ).as('delete');
+      );
       cy.intercept(
         {
           method: 'GET',
@@ -422,13 +426,8 @@ describe('Schedulers', () => {
         },
       );
 
-      cy.get('#scheduler-2').click();
-      cy.get('#cancelDeleteScheduler').click();
-      cy.get('#scheduler-2').click();
-
       // Confirm delete.
       cy.get('#deleteScheduler').click();
-      cy.wait('@delete');
 
       // Delete success message.
       cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');

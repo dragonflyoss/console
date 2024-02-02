@@ -369,9 +369,14 @@ export default function ShowCluster() {
             per_page: MAX_PAGE_SIZE,
           });
 
-      setScheduler(schedulers);
-      setSchedulerPage(1);
-      setSchedulerTableIsLoading(false);
+      if (schedulers.length > 0) {
+        setScheduler(schedulers);
+        setSchedulerPage(1);
+        setSchedulerTableIsLoading(false);
+      } else {
+        setSchedulerTotalPages(1);
+        setAllSchedlers([]);
+      }
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(true);
@@ -398,9 +403,14 @@ export default function ShowCluster() {
             per_page: MAX_PAGE_SIZE,
           });
 
-      setSeedPeer(seedPeers);
-      setSeedPeerPage(1);
-      setSeedPeerTableIsLoading(false);
+      if (seedPeers.length > 0) {
+        setSeedPeer(seedPeers);
+        setSeedPeerPage(1);
+        setSeedPeerTableIsLoading(false);
+      } else {
+        setSeedPeerTotalPages(1);
+        setAllSeedPeers([]);
+      }
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(true);

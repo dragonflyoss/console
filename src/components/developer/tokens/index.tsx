@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { getTokens, deleteTokens, getTokensResponse } from '../../../lib/api';
-import { formatDate, getPaginatedList } from '../../../lib/utils';
+import { formatDate, getPaginatedList, useQuery } from '../../../lib/utils';
 import { useCopyToClipboard } from 'react-use';
 import { LoadingButton } from '@mui/lab';
 import { Link, useNavigate } from 'react-router-dom';
@@ -28,6 +28,17 @@ import AddIcon from '@mui/icons-material/Add';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1C293A',
+    },
+  },
+  typography: {
+    fontFamily: 'mabry-light,sans-serif',
+  },
+});
 
 export default function PersonalAccessTokens() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -44,21 +55,15 @@ export default function PersonalAccessTokens() {
   const [, setCopyToClipboard] = useCopyToClipboard();
   const [token, setToken] = useState<getTokensResponse[]>([]);
   const [allTokens, setAllTokens] = useState<getTokensResponse[]>([]);
-  const navigate = useNavigate();
 
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#1C293A',
-      },
-    },
-    typography: {
-      fontFamily: 'mabry-light,sans-serif',
-    },
-  });
+  const navigate = useNavigate();
+  const query = useQuery();
+  const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+
+    setTokensPage(page);
 
     if (token) {
       const newToken = JSON.parse(token);
@@ -79,20 +84,22 @@ export default function PersonalAccessTokens() {
         }
       }
     })();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
-    token.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    if (token.length > 1) {
+      token.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
-    const totalPage = Math.ceil(token.length / DEFAULT_PAGE_SIZE);
-    const currentPageData = getPaginatedList(token, tokensPage, DEFAULT_PAGE_SIZE);
+      const totalPage = Math.ceil(token.length / DEFAULT_PAGE_SIZE);
+      const currentPageData = getPaginatedList(token, tokensPage, DEFAULT_PAGE_SIZE);
 
-    if (currentPageData.length === 0 && tokensPage > 1) {
-      setTokensPage(tokensPage - 1);
+      if (currentPageData.length === 0 && tokensPage > 1) {
+        setTokensPage(tokensPage - 1);
+      }
+
+      setTokensTotalPages(totalPage || 1);
+      setAllTokens(currentPageData);
     }
-
-    setTokensTotalPages(totalPage || 1);
-    setAllTokens(currentPageData);
   }, [token, tokensPage]);
 
   const handleDeleteClose = async (row: any) => {
@@ -353,6 +360,7 @@ export default function PersonalAccessTokens() {
             page={tokensPage}
             onChange={(_event: any, newPage: number) => {
               setTokensPage(newPage);
+              navigate(`/developer/personal-access-tokens${newPage > 1 ? `?page=${newPage}` : ''}`);
             }}
             color="primary"
             size="small"

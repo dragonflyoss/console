@@ -24,7 +24,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getJobs, JobsResponse } from '../../../lib/api';
 import { DEFAULT_PAGE_SIZE } from '../../../lib/constants';
-import { getDatetime } from '../../../lib/utils';
+import { getDatetime, useQuery } from '../../../lib/utils';
 
 export default function Preheats() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -38,6 +38,8 @@ export default function Preheats() {
   const [allPreheats, setAllPreheats] = useState<JobsResponse[]>([]);
 
   const navigate = useNavigate();
+  const query = useQuery();
+  const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
 
   const theme = createTheme({
     palette: {
@@ -54,6 +56,7 @@ export default function Preheats() {
     (async function () {
       try {
         setIsLoading(true);
+        setPreheatPage(page);
 
         const jobs = await getJobs({
           page: preheatPage,
@@ -78,7 +81,7 @@ export default function Preheats() {
         }
       }
     })();
-  }, [status, preheatPage]);
+  }, [status, preheatPage, page]);
 
   useEffect(() => {
     if (shouldPoll) {
@@ -382,8 +385,10 @@ export default function Preheats() {
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
           <Pagination
             count={preheatTotalPages}
+            page={preheatPage}
             onChange={(_event: any, newPage: number) => {
               setPreheatPage(newPage);
+              navigate(`/jobs/preheats${newPage > 1 ? `?page=${newPage}` : ''}`);
             }}
             boundaryCount={1}
             color="primary"

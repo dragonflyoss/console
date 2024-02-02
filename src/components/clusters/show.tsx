@@ -51,7 +51,7 @@ import {
   DEFAULT_SCHEDULER_TABLE_PAGE_SIZE,
   DEFAULT_SEED_PEER_TABLE_PAGE_SIZE,
 } from '../../lib/constants';
-import { getPaginatedList } from '../../lib/utils';
+import { getPaginatedList, useQuery } from '../../lib/utils';
 
 export default function ShowCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -108,6 +108,9 @@ export default function ShowCluster() {
 
   const params = useParams();
   const navigate = useNavigate();
+  const query = useQuery();
+  const schedulerPageSize = query.get('schedulerPage') ? parseInt(query.get('schedulerPage') as string, 10) || 1 : 1;
+  const seedPeerPageSize = query.get('seedPeerPage') ? parseInt(query.get('seedPeerPage') as string, 10) || 1 : 1;
 
   const theme = createTheme({
     palette: {
@@ -129,6 +132,8 @@ export default function ShowCluster() {
         setInformationIsLoading(true);
         setSeedPeerTableIsLoading(true);
         setSchedulerTableIsLoading(true);
+        setSchedulerPage(schedulerPageSize);
+        setSeedPeerPage(seedPeerPageSize);
 
         if (typeof params.id === 'string') {
           const cluster = await getCluster(params.id);
@@ -169,50 +174,54 @@ export default function ShowCluster() {
         }
       }
     })();
-  }, [params.id]);
+  }, [params.id, schedulerPageSize, seedPeerPageSize]);
 
   useEffect(() => {
-    scheduler.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-    scheduler.sort((a, b) => {
-      if (a.state < b.state) {
-        return -1;
-      } else if (a.state > b.state) {
-        return 1;
-      } else {
-        return 0;
+    if (scheduler.length > 0) {
+      scheduler.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      scheduler.sort((a, b) => {
+        if (a.state < b.state) {
+          return -1;
+        } else if (a.state > b.state) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+      const totalPage = Math.ceil(scheduler.length / DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
+      const currentPageData = getPaginatedList(scheduler, schedulerPage, DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
+
+      if (currentPageData.length === 0 && schedulerPage > 1) {
+        setSchedulerPage(schedulerPage - 1);
       }
-    });
-    const totalPage = Math.ceil(scheduler.length / DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
-    const currentPageData = getPaginatedList(scheduler, schedulerPage, DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
 
-    if (currentPageData.length === 0 && schedulerPage > 1) {
-      setSchedulerPage(schedulerPage - 1);
+      setSchedulerTotalPages(totalPage);
+      setAllSchedlers(currentPageData);
     }
-
-    setSchedulerTotalPages(totalPage);
-    setAllSchedlers(currentPageData);
   }, [scheduler, schedulerPage]);
 
   useEffect(() => {
-    seedPeer.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-    seedPeer.sort((a, b) => {
-      if (a.state < b.state) {
-        return -1;
-      } else if (a.state > b.state) {
-        return 1;
-      } else {
-        return 0;
+    if (seedPeer.length > 0) {
+      seedPeer.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      seedPeer.sort((a, b) => {
+        if (a.state < b.state) {
+          return -1;
+        } else if (a.state > b.state) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+      const totalPage = Math.ceil(seedPeer.length / DEFAULT_SEED_PEER_TABLE_PAGE_SIZE);
+      const currentPageData = getPaginatedList(seedPeer, seedPeerPage, DEFAULT_SEED_PEER_TABLE_PAGE_SIZE);
+
+      if (currentPageData?.length === 0 && seedPeerPage > 1) {
+        setSeedPeerPage(seedPeerPage - 1);
       }
-    });
-    const totalPage = Math.ceil(seedPeer.length / DEFAULT_SEED_PEER_TABLE_PAGE_SIZE);
-    const currentPageData = getPaginatedList(seedPeer, seedPeerPage, DEFAULT_SEED_PEER_TABLE_PAGE_SIZE);
 
-    if (currentPageData?.length === 0 && seedPeerPage > 1) {
-      setSeedPeerPage(seedPeerPage - 1);
+      setSeedPeerTotalPages(totalPage);
+      setAllSeedPeers(currentPageData);
     }
-
-    setSeedPeerTotalPages(totalPage);
-    setAllSeedPeers(currentPageData);
   }, [seedPeer, seedPeerPage]);
 
   const numberOfActiveSchedulers =
@@ -869,6 +878,11 @@ export default function ShowCluster() {
             page={schedulerPage}
             onChange={(_event: any, newPage: number) => {
               setSchedulerPage(newPage);
+              navigate(
+                `/clusters/${params.id}${newPage > 1 ? `?schedulerPage=${newPage}` : ''}${
+                  seedPeerPage > 1 ? `${newPage > 1 ? '&' : '?'}seedPeerPage=${seedPeerPage}` : ''
+                }`,
+              );
             }}
             color="primary"
             size="small"
@@ -1151,6 +1165,11 @@ export default function ShowCluster() {
             page={seedPeerPage}
             onChange={(_event: any, newPage: number) => {
               setSeedPeerPage(newPage);
+              navigate(
+                `/clusters/${params.id}${schedulerPage > 1 ? `?schedulerPage=${schedulerPage}` : ''}${
+                  newPage > 1 ? `${schedulerPage > 1 ? '&' : '?'}seedPeerPage=${newPage}` : ''
+                }`,
+              );
             }}
             color="primary"
             size="small"

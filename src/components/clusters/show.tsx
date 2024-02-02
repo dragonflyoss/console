@@ -109,8 +109,8 @@ export default function ShowCluster() {
   const params = useParams();
   const navigate = useNavigate();
   const query = useQuery();
-  const schedulerPageSize = query.get('schedulerPage') ? parseInt(query.get('schedulerPage') as string, 10) || 1 : 1;
-  const seedPeerPageSize = query.get('seedPeerPage') ? parseInt(query.get('seedPeerPage') as string, 10) || 1 : 1;
+  const schedulerCurrentPage = query.get('schedulerPage') ? parseInt(query.get('schedulerPage') as string, 10) || 1 : 1;
+  const seedPeerCurrentPage = query.get('seedPeerPage') ? parseInt(query.get('seedPeerPage') as string, 10) || 1 : 1;
 
   const theme = createTheme({
     palette: {
@@ -132,8 +132,8 @@ export default function ShowCluster() {
         setInformationIsLoading(true);
         setSeedPeerTableIsLoading(true);
         setSchedulerTableIsLoading(true);
-        setSchedulerPage(schedulerPageSize);
-        setSeedPeerPage(seedPeerPageSize);
+        setSchedulerPage(schedulerCurrentPage);
+        setSeedPeerPage(seedPeerCurrentPage);
 
         if (typeof params.id === 'string') {
           const cluster = await getCluster(params.id);
@@ -174,7 +174,7 @@ export default function ShowCluster() {
         }
       }
     })();
-  }, [params.id, schedulerPageSize, seedPeerPageSize]);
+  }, [params.id, schedulerCurrentPage, seedPeerCurrentPage]);
 
   useEffect(() => {
     if (scheduler.length > 0) {

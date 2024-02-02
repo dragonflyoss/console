@@ -231,7 +231,7 @@ describe('Seed peers', () => {
       cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
     });
 
-    it('pagination resets results and page number to first page when refresh is clicked', () => {
+    it('when you click refresh, the paginated results and page numbers remain unchanged.', () => {
       // Go to last page.
       cy.get('#seed-peer-pagination > .MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
 
@@ -251,11 +251,46 @@ describe('Seed peers', () => {
       });
 
       // Check if the page number has been reset.
-      cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').scrollIntoView().should('have.text', '1');
+      cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').scrollIntoView().should('have.text', '3');
 
       cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(2) > .MuiTypography-root')
         .should('be.visible')
-        .and('contain', 'seed-peer-10');
+        .and('contain', 'seed-peer-3');
+    });
+
+    it('when returning to the previous page, pagination and results remain unchanged', () => {
+      // Go to last page.
+      cy.get('#seed-peer-pagination > .MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
+
+      // Check the current page number.
+      cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
+
+      // show hostname.
+      cy.get(
+        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
+      )
+        .should('be.visible')
+        .and('contain', 'seed-peer-3');
+
+      // Go to show seedPeer page.
+      cy.get('#seed-peer-table-body > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root').click();
+
+      // Then I see that the current page is the show update personal-access-tokens.
+      cy.url().should('include', '/clusters/1/seed-peers/3');
+
+      // Go back to the last page。
+      cy.go('back');
+
+      // Check the current page number.
+      cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
+
+      // show hostname.
+      cy.get(
+        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
+      )
+        .scrollIntoView()
+        .should('be.visible')
+        .and('contain', 'seed-peer-3');
     });
   });
 

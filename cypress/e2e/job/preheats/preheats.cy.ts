@@ -288,7 +288,7 @@ describe('Preheats', () => {
       cy.get('.css-mu8687 > .MuiTypography-body1').should('have.text', 1);
     });
 
-    it('pagination resets results and page number to first page when refresh is clicked', () => {
+    it('when you click refresh, the paginated results and page numbers remain unchanged.', () => {
       // Go to next page.
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
@@ -303,10 +303,34 @@ describe('Preheats', () => {
       });
 
       // Check the current page number.
-      cy.get('#preheat-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '1');
+      cy.get('#preheat-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
       // Show page 1 preheat task.
-      cy.get('#list-11 > .css-1mlhis1').should('exist').find('#PENDING-11').should('exist');
+      cy.get('#list-1').should('exist').find('#SUCCESS-1').should('exist');
+    });
+
+    it('when returning to the previous page, pagination and results remain unchanged.', () => {
+      // Go to next page.
+      cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
+
+      // Check the current page number.
+      cy.get('#preheat-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+
+      cy.get('#list-1').should('exist').find('#SUCCESS-1').should('exist');
+
+      // Go to show preheat page.
+      cy.get('#preheat-1 > .MuiBox-root').click();
+
+      // Then I see that the current page is the show update personal-access-tokens.
+      cy.url().should('include', '/jobs/preheats/1');
+
+      // Go back to the last page。
+      cy.go('back');
+
+      // Check the current page number.
+      cy.get('#preheat-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+
+      cy.get('#list-1').should('exist').find('#SUCCESS-1').should('exist');
     });
   });
 });

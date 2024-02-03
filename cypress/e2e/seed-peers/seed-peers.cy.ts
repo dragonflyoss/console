@@ -400,6 +400,11 @@ describe('Seed peers', () => {
         .should('be.visible')
         .and('contain', 'seed-peer-3');
 
+      cy.get('#seed-peer-3').click();
+      cy.get('#cancelDeleteSeedPeer').click();
+      cy.get('.MuiDialogContent-root').should('not.exist');
+      cy.get('#seed-peer-3').click();
+
       cy.intercept({ method: 'DELETE', url: '/api/v1/seed-peers/3' }, (req) => {
         req.reply({
           statusCode: 200,
@@ -417,11 +422,6 @@ describe('Seed peers', () => {
           });
         },
       );
-
-      cy.get('#seed-peer-3').click();
-      cy.get('#cancelDeleteSeedPeer').click();
-      cy.get('.MuiDialogContent-root').should('not.exist');
-      cy.get('#seed-peer-3').click();
 
       // Confirm delete.
       cy.get('#deleteSeedPeer').click();

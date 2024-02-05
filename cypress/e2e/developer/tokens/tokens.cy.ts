@@ -139,7 +139,7 @@ describe('Tokens', () => {
       cy.get('span.css-189ppmh-MuiTypography-root').should('be.visible').and('have.text', 'Thu, Dec 1 2033.');
     });
 
-    it('pagination resets results and page number to first page when refresh is clicked', () => {
+    it('when you click refresh, the paginated results and page numbers remain unchanged.', () => {
       // Go to next page.
       cy.get('.MuiPagination-ul > :nth-child(3)').click();
 
@@ -151,8 +151,31 @@ describe('Tokens', () => {
         cy.wait(2000);
       });
 
-      // Check if the page number has been reset.
-      cy.get('#tokens-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '1');
+      // Check if the page number is the last page number.
+      cy.get('#tokens-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+    });
+
+    it('when returning to the previous page, pagination and results remain unchanged', () => {
+      // Go to next page.
+      cy.get('.MuiPagination-ul > :nth-child(3)').click();
+
+      // Check the current page number.
+      cy.get('#tokens-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+
+      cy.get('#root-1').should('have.text', 'root-1');
+
+      cy.get('#root-1').click();
+
+      // Then I see that the current page is the show update personal-access-tokens.
+      cy.url().should('include', '/developer/personal-access-tokens/1');
+
+      // Go back to the last page。
+      cy.go('back');
+
+      // Check the current page number.
+      cy.get('#tokens-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+
+      cy.get('#root-1').should('have.text', 'root-1');
     });
   });
 

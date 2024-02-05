@@ -262,7 +262,7 @@ describe('Clusters', () => {
       cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
     });
 
-    it('pagination resets results and page number to first page when refresh is clicked', () => {
+    it('when you click refresh, the paginated results and page numbers remain unchanged.', () => {
       // Go to last page.
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
@@ -279,11 +279,36 @@ describe('Clusters', () => {
       });
 
       // Check if the page number has been reset.
-      cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '1');
+      cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
-      cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
+      cy.get('.clusters_clusterListContent__UwWjF > .MuiTypography-h6')
         .should('be.visible')
-        .and('contain', 'cluster-1');
+        .and('contain', 'cluster-8');
+    });
+
+    it('when returning to the previous page, pagination and results remain unchanged', () => {
+      // Go to last page.
+      cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
+
+      cy.get('.clusters_clusterListContent__UwWjF > .MuiTypography-h6')
+        .should('be.visible')
+        .and('contain', 'cluster-8');
+
+      // Go to show cluster page.
+      cy.get('.clusters_creatTimeContainer__k6XfL > .MuiButtonBase-root').click();
+
+      // Then I see that the current page is the show cluster.
+      cy.url().should('include', '/clusters/8');
+
+      // Go back to the last page。
+      cy.go('back');
+
+      // Check the current page number.
+      cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+
+      cy.get('.clusters_clusterListContent__UwWjF > .MuiTypography-h6')
+        .should('be.visible')
+        .and('contain', 'cluster-8');
     });
   });
 

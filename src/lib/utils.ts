@@ -1,11 +1,16 @@
 import Cookies from 'js-cookie';
 import { decode, JwtPayload } from 'jsonwebtoken';
 import { getPeersResponse } from './api';
+import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
+
+export function useQuery(): URLSearchParams {
+  return new URLSearchParams(useLocation().search);
+}
 
 export const getDatetime = (time: string) => {
   const date = new Date(time);
-  
+
   const year = date.getUTCFullYear().toString();
   const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
   const day = date.getUTCDate().toString().padStart(2, '0');

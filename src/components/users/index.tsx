@@ -37,13 +37,14 @@ import {
 import { useEffect, useState } from 'react';
 import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole, getUsersResponse } from '../../lib/api';
 import { makeStyles } from '@mui/styles';
-import { getDatetime, getPaginatedList } from '../../lib/utils';
+import { getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
 import { LoadingButton } from '@mui/lab';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import styles from './index.module.css';
 import _ from 'lodash';
 import { ROLE_ROOT, ROLE_GUEST, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../lib/constants';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: any) => ({
   tableRow: {
@@ -71,6 +72,14 @@ const useStyles = makeStyles((theme: any) => ({
     backgroundColor: '#fff!important',
   },
 }));
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1C293A',
+    },
+  },
+});
 
 export default function Users() {
   const [isLoading, setIsLoading] = useState(true);
@@ -101,18 +110,14 @@ export default function Users() {
   const [updateRole, setUpdatelRole] = useState('');
 
   const classes = useStyles();
-
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#1C293A',
-      },
-    },
-  });
+  const navigate = useNavigate();
+  const query = useQuery();
+  const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
 
   useEffect(() => {
     (async function () {
       try {
+        setUserPage(page);
         setIsLoading(true);
 
         const user = await getUsers({ page: 1, per_page: MAX_PAGE_SIZE });
@@ -127,7 +132,7 @@ export default function Users() {
         }
       }
     })();
-  }, [userPage]);
+  }, [userPage, page]);
 
   useEffect(() => {
     const totalPage = Math.ceil(users.length / DEFAULT_PAGE_SIZE);
@@ -429,6 +434,7 @@ export default function Users() {
             page={userPage}
             onChange={(_event: any, newPage: number) => {
               setUserPage(newPage);
+              navigate(`/users${newPage > 1 ? `?page=${newPage}` : ''}`);
             }}
             color="primary"
             size="small"

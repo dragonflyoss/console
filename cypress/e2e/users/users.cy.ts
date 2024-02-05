@@ -314,7 +314,7 @@ describe('Users', () => {
       cy.get('#user-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
     });
 
-    it('pagination resets results and page number to first page when refresh is clicked', () => {
+    it('when you click refresh, the paginated results and page numbers remain unchanged.', () => {
       // Go to next page.
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
@@ -330,10 +330,37 @@ describe('Users', () => {
       });
 
       // There are ten users on the current page.
-      cy.get('#user-table-body').children().should('have.length', 10);
+      cy.get('#user-table-body').children().should('have.length', 1);
 
       // Check the current page number.
-      cy.get('#user-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '1');
+      cy.get('#user-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+    });
+
+    it('when returning to the previous page, pagination and results remain unchanged', () => {
+      // Go to next page.
+      cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
+
+      // There is only one user on the current page.
+      cy.get('#user-table-body').children().should('have.length', 1);
+
+      // Check the current page number.
+      cy.get('#user-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+
+      cy.get('[href="/clusters"]').click();
+
+      // Then I see that the current page is the show update personal-access-tokens.
+      cy.url().should('include', '/clusters');
+
+      // Go back to the last page。
+      cy.go('back');
+
+      // There is only one user on the current page.
+      cy.get('#user-table-body').children().should('have.length', 1);
+
+      // Check the current page number.
+      cy.get('#user-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+
+      cy.get('#user-table-row > :nth-child(2)').should('have.text', 'noah');
     });
   });
 

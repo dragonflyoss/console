@@ -28,7 +28,7 @@ import {
 } from '../../lib/api';
 import styles from './index.module.css';
 import { useEffect, useState } from 'react';
-import { getDatetime, getPaginatedList } from '../../lib/utils';
+import { getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
@@ -68,13 +68,17 @@ export default function Clusters() {
   const [scheduler, setScheduler] = useState<getSchedulersResponse[]>([]);
   const [seedPeer, setSeedPeer] = useState<getSeedPeersResponse[]>([]);
   const [allClusters, setAllClusters] = useState<getClustersResponse[]>([]);
+  
   const navigate = useNavigate();
+  const query = useQuery();
+  const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
 
   useEffect(() => {
     (async function () {
       try {
         setIsLoading(true);
         setClusterIsLoading(true);
+        setClusterPage(page);
 
         const [cluster, scheduler, seedPeer] = await Promise.all([
           getClusters({ page: 1, per_page: MAX_PAGE_SIZE }),
@@ -96,7 +100,7 @@ export default function Clusters() {
         }
       }
     })();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     if (Array.isArray(cluster) && cluster.length > 0) {
@@ -431,6 +435,7 @@ export default function Clusters() {
               page={clusterPage}
               onChange={(_event: any, newPage: number) => {
                 setClusterPage(newPage);
+                navigate(`/clusters${newPage > 1 ? `?page=${newPage}` : ''}`);
               }}
               color="primary"
               size="small"

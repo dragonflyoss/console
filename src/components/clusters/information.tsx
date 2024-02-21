@@ -364,7 +364,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                         CIDRs
                       </Typography>
                       <Tooltip
-                        title={`The cluster needs to serve all peers in the CIDRs. The advertise IP will be reported in the peer configuration when the peer is started, and if the advertise IP is empty in the peer configuration, peer will automatically get expose IP as advertise IP. When advertise IP of the peer matches the CIDRs in cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. CIDRs has higher priority than IDC in the scopes.`}
+                        title={`The cluster needs to serve all peers in the CIDRs. The advertise IP will be reported in the peer configuration when the peer is started, and if the advertise IP is empty in the peer configuration, peer will automatically get expose IP as advertise IP. When advertise IP of the peer matches the CIDRs in cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. CIDRs has higher priority than IDC in the scopes. CIDRs has higher priority than IDC in the scopes. CIDRs has priority equal to hostname in the scopes.`}
                         placement="top"
                       >
                         <HelpIcon color="disabled" className={styles.descriptionIcon} />
@@ -454,7 +454,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                       </Typography>
                       <Tooltip
                         title={
-                          'The cluster needs to serve all peers in Hostname. When a peer starts, which cluster to use is chosen based on the node hostname.  When the Hostname in the peer configuration matches the Hostnames in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. The priority of hostnames in the range is equal to CIDRs.'
+                          'The cluster needs to serve all peers in hostname. The input parameter is the multiple hostname regexes. The hostname will be reported in the peer configuration when the peer is started. When the hostname matches the multiple hostname regexes in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. Hostname has higher priority than IDC in the scopes. Hostname has priority equal to CIDRs in the scopes.'
                         }
                         placement="top"
                       >

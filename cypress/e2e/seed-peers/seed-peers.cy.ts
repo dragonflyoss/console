@@ -183,7 +183,7 @@ describe('Seed peers', () => {
 
   describe('pagination', () => {
     it('pagination updates results and page number', () => {
-      cy.get('#seed-peer-table').should('be.visible');
+      cy.get('#seed-peer-table').scrollIntoView().should('be.visible');
 
       // Check number of pagination.
       cy.get('#seed-peer-pagination > .MuiPagination-ul').children().should('have.length', 5);

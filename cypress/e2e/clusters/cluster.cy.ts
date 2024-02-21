@@ -377,6 +377,7 @@ describe('Cluster', () => {
       ).click();
 
       cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
+        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'cluster-10');
 
@@ -448,6 +449,7 @@ describe('Cluster', () => {
       ).click();
 
       cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
+        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'cluster-1');
 
@@ -520,6 +522,7 @@ describe('Cluster', () => {
       ).click();
 
       cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
+        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'cluster-10');
 
@@ -569,6 +572,7 @@ describe('Cluster', () => {
       ).click();
 
       cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
+        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'cluster-10');
 

@@ -66,6 +66,11 @@ describe('Update cluster', () => {
       .and('contain', '192.168.0.0/16')
       .and('contain', '172.16.0.0/12');
 
+    cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root')
+      .should('contain', 'cluster-1')
+      .and('contain', 'cluster-2')
+      .and('contain', 'cluster-3');
+
     // Show config.
     cy.get('#seedPeerLoadLimit').should('have.value', 300);
     cy.get('#peerLoadLimit').should('have.value', 51);
@@ -332,6 +337,22 @@ describe('Update cluster', () => {
         '192.168.40.0/24{enter}',
       );
       cy.get('#cidrs-helper-text').should('not.exist');
+
+      // Should display hostnames the validation error message.
+      cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('cluster-2');
+
+      cy.get('#save').click();
+      cy.url().should('include', '/clusters/1/edit');
+
+      // Show verification error message.
+      cy.get('#hostnames-helper-text')
+        .should('be.visible')
+        .and('contain', `Please press ENTER to end the Hostnames creation.`);
+
+      cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
+        'cluster-1{enter}',
+      );
+      cy.get('#hostnames-helper-text').should('not.exist');
     });
 
     it('try to verify config', () => {

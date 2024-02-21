@@ -35,12 +35,26 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 65%;
+  width: 60%;
   align-items: stretch;
+}
+
+.scopesCard {
+  width: 50%;
+  padding-right: 0.6rem;
+}
+
+.scopesCard:nth-child(1) {
+  padding-bottom: 0.6rem !important;
+}
+
+.scopesCard:nth-child(2) {
+  padding-bottom: 0.6rem !important;
 }
 
 .scopesContentContainer {
   display: flex;
+  flex-wrap: wrap;
   height: 100%;
 }
 
@@ -86,10 +100,14 @@
 
 .cidrsContainer {
   height: 100%;
-  padding: 1.4rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.cidrsTitleWrapper {
+  padding-bottom: 1rem;
 }
 
 .cidrsTitle {
@@ -122,26 +140,29 @@
 }
 
 .configRightContainer {
-  width: 35%;
+  width: 40%;
   max-width: 55rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .configContainer {
   display: flex;
   align-items: center;
-  margin-bottom: 0.6rem;
+  margin-bottom: 1rem;
 }
 
 .configListContainer {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-around;
 }
 
 .configContent {
+  padding: 1rem;
   display: flex;
   justify-content: space-between;
-  margin-top: 0.6rem;
-  margin-bottom: 0.6rem;
 }
 
 .idcDialogContainer {

@@ -171,6 +171,10 @@ describe('Cluster', () => {
       cy.get('.MuiDialogContent-root').should('be.visible').and('contain', '10.0.0.0/8');
 
       cy.get('body').click('topLeft');
+
+      cy.get(':nth-child(4) > .MuiPaper-root > .information_cidrsTags__4sKxa')
+        .should('be.visible')
+        .and('contain', 'cluster-1');
     });
 
     it('can display config', () => {

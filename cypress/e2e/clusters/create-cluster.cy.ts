@@ -280,6 +280,7 @@ describe('Create cluster', () => {
     it('try to verify scopes', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       const location = _.times(101, () => _.sample(characters)).join('');
+      const hostnames = _.times(31, () => _.sample(characters)).join('');
 
       // Name is a required attribute.
       cy.get('#name').type('cluster-12');
@@ -323,6 +324,22 @@ describe('Create cluster', () => {
 
       // Verification passed.
       cy.get('#cidrs-helper-text').should('not.exist');
+
+      // Should display cidrs the validation error message.
+      cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('sigma');
+      cy.get('#save').click();
+      cy.url().should('include', '/clusters/new');
+      cy.get('#hostnames-helper-text')
+        .should('be.visible')
+        .and('contain', `Please press ENTER to end the Hostnames creation.`);
+      cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
+        'hostname{enter}',
+      );
+      cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(hostnames);
+
+      cy.get('#hostnames-helper-text')
+        .should('be.visible')
+        .and('contain', `Fill in the characters, the length is 1-30.`);
     });
 
     it('try to verify config', () => {

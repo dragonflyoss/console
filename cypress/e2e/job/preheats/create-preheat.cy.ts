@@ -359,12 +359,12 @@ describe('Create preheat', () => {
       // Incorrect header value entered.
       cy.get('.new_headersValueInput__zn-9E > .MuiInputBase-root').type(value);
 
-      // Show  header value verification error message.
+      // Show header value verification error message.
       cy.get('.new_headersValueInput__zn-9E > .MuiFormHelperText-root')
         .should('be.visible')
         .and('have.text', 'Fill in the characters, the length is 1-1000.');
 
-      // Show  header value verification error message.
+      // Show header value verification error message.
       cy.get('.new_headersValueInput__zn-9E > .MuiFormHelperText-root')
         .should('be.visible')
         .and('have.text', 'Fill in the characters, the length is 1-1000.');

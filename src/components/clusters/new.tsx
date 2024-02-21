@@ -20,6 +20,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate } from 'react-router-dom';
 import { createCluster } from '../../lib/api';
+import { hostname } from 'os';
 
 export default function NewCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -34,12 +35,15 @@ export default function NewCluster() {
   const [locationError, setLocationError] = useState(false);
   const [idcError, setIDCError] = useState(false);
   const [cidrsError, setCIDRsError] = useState(false);
+  const [hostnamesError, setHostnamesError] = useState(false);
   const [cidrs, setCIDRs] = useState([]);
   const [idc, setIDC] = useState([]);
+  const [hostnames, setHostnames] = useState([]);
   const [loadingButton, setLoadingButton] = useState(false);
   const cidrsOptions = ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'];
   const [idcHelperText, setIDCHelperText] = useState('Fill in the characters, the length is 0-100.');
   const [cidrsHelperText, setCIDRsHelperText] = useState('Fill in the characters, the length is 0-1000.');
+  const [hostnamesHelperText, setHostnamesHelperText] = useState('Fill in the characters, the length is 1-30.');
   const navigate = useNavigate();
 
   const informationForm = [
@@ -129,6 +133,7 @@ export default function NewCluster() {
     {
       name: 'idc',
       label: 'IDC',
+      enterMultiple: true,
       scopesFormProps: {
         value: idc,
         options: [],
@@ -156,7 +161,24 @@ export default function NewCluster() {
         placeholder: 'Please enter IDC',
         error: idcError,
         helperText: idcError ? idcHelperText : '',
-
+        endadornment: (
+          <>
+            <Tooltip
+              title={`The cluster needs to serve all peers in the IDC. When the IDC in the peer configuration matches the IDC in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. IDC has higher priority than location in the scopes.`}
+              placement="top"
+            >
+              <HelpIcon
+                color="disabled"
+                sx={{
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  mr: '0.3rem',
+                  ':hover': { color: 'var(--description-color)' },
+                }}
+              />
+            </Tooltip>
+          </>
+        ),
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
             e.preventDefault();
@@ -175,6 +197,7 @@ export default function NewCluster() {
     {
       name: 'cidrs',
       label: 'CIDRs',
+      enterMultiple: true,
       scopesFormProps: {
         value: cidrs,
         options: cidrsOptions,
@@ -204,6 +227,24 @@ export default function NewCluster() {
         error: cidrsError,
         helperText: cidrsError ? cidrsHelperText : '',
 
+        endadornment: (
+          <Tooltip
+            title={
+              'The cluster needs to serve all peers in the CIDRs. The advertise IP will be reported in the peer configuration when the peer is started, and if the advertise IP is empty in the peer configuration, peer will automatically get expose IP as advertise IP. When advertise IP of the peer matches the CIDRs in cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. CIDRs has higher priority than IDC in the scopes.'
+            }
+            placement="top"
+          >
+            <HelpIcon
+              color="disabled"
+              sx={{
+                width: '0.8rem',
+                height: '0.8rem',
+                mr: '0.3rem',
+                ':hover': { color: 'var(--description-color)' },
+              }}
+            />
+          </Tooltip>
+        ),
         onKeyDown: (e: any) => {
           if (e.keyCode === 13) {
             e.preventDefault();
@@ -216,6 +257,71 @@ export default function NewCluster() {
 
       validate: (value: string) => {
         const reg = /^(.{0,1000})$/;
+        return reg.test(value);
+      },
+    },
+    {
+      name: 'hostnames',
+      label: 'Hostnames',
+      enterMultiple: true,
+      scopesFormProps: {
+        value: hostnames,
+        options: [],
+
+        onChange: (_e: any, newValue: any) => {
+          if (!scopesForm[3].formProps.error) {
+            setHostnames(newValue);
+          }
+        },
+
+        onInputChange: (e: any) => {
+          setHostnamesHelperText('Fill in the characters, the length is 1-30.');
+          changeValidate(e.target.value, scopesForm[3]);
+        },
+
+        renderTags: (value: any, getTagProps: any) =>
+          value.map((option: any, index: any) => (
+            <Chip size="small" key={index} label={option} {...getTagProps({ index })} />
+          )),
+      },
+
+      formProps: {
+        id: 'hostnames',
+        label: 'Hostnames',
+        name: 'hostnames',
+        placeholder: 'Please enter Hostnames',
+        error: hostnamesError,
+        helperText: hostnamesError ? hostnamesHelperText : '',
+        endadornment: (
+          <Tooltip
+            title={
+              'The cluster needs to serve all peers in Hostname. When a peer starts, which cluster to use is chosen based on the node hostname.  When the Hostname in the peer configuration matches the Hostnames in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. The priority of hostnames in the range is equal to CIDRs.'
+            }
+            placement="top"
+          >
+            <HelpIcon
+              color="disabled"
+              sx={{
+                width: '0.8rem',
+                height: '0.8rem',
+                mr: '0.3rem',
+                ':hover': { color: 'var(--description-color)' },
+              }}
+            />
+          </Tooltip>
+        ),
+        onKeyDown: (e: any) => {
+          if (e.keyCode === 13) {
+            e.preventDefault();
+          }
+        },
+      },
+
+      syncError: false,
+      setError: setHostnamesError,
+
+      validate: (value: string) => {
+        const reg = /^(.{1,30})$/;
         return reg.test(value);
       },
     },
@@ -383,6 +489,7 @@ export default function NewCluster() {
     const filterParentLimit = event.currentTarget.elements.filterParentLimit.value;
     const idcText = event.currentTarget.elements.idc.value;
     const cidrsText = event.currentTarget.elements.cidrs.value;
+    const hostnamesText = event.currentTarget.elements.hostnames.value;
 
     if (idcText) {
       setIDCHelperText('Please press ENTER to end the IDC creation.');
@@ -397,7 +504,15 @@ export default function NewCluster() {
       setCIDRsError(true);
     } else {
       setCIDRsError(false);
-      setCIDRsHelperText('Fill in the characters, the length is 0-100.');
+      setCIDRsHelperText('Fill in the characters, the length is 0-1000.');
+    }
+
+    if (hostnamesText) {
+      setHostnamesHelperText('Please press ENTER to end the Hostnames creation.');
+      setHostnamesError(true);
+    } else {
+      setHostnamesError(false);
+      setHostnamesHelperText('Fill in the characters, the length is 1-30.');
     }
 
     informationForm.forEach((item) => {
@@ -427,7 +542,8 @@ export default function NewCluster() {
         !scopesForm.filter((item) => item.syncError).length &&
         !configForm.filter((item) => item.syncError).length &&
         Boolean(!idcText) &&
-        Boolean(!cidrsText),
+        Boolean(!cidrsText) &&
+        Boolean(!hostnamesText),
     );
 
     const formData = {
@@ -448,6 +564,7 @@ export default function NewCluster() {
         cidrs: cidrs,
         idc: idcs,
         location: location,
+        hostnames: hostnames,
       },
     };
 
@@ -560,7 +677,7 @@ export default function NewCluster() {
             {scopesForm.map((item) => {
               return (
                 <Box key={item.formProps.name}>
-                  {item.label === 'CIDRs' ? (
+                  {item.enterMultiple ? (
                     <Autocomplete
                       freeSolo
                       multiple
@@ -573,65 +690,7 @@ export default function NewCluster() {
                           {...params}
                           InputProps={{
                             ...params.InputProps,
-                            endAdornment: (
-                              <>
-                                {params.InputProps.endAdornment}
-                                <Tooltip
-                                  title={
-                                    'The cluster needs to serve all peers in the CIDRs. The advertise IP will be reported in the peer configuration when the peer is started, and if the advertise IP is empty in the peer configuration, peer will automatically get expose IP as advertise IP. When advertise IP of the peer matches the CIDRs in cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. CIDRs has higher priority than IDC in the scopes.'
-                                  }
-                                  placement="top"
-                                >
-                                  <HelpIcon
-                                    color="disabled"
-                                    sx={{
-                                      width: '0.8rem',
-                                      height: '0.8rem',
-                                      mr: '0.3rem',
-                                      ':hover': { color: 'var(--description-color)' },
-                                    }}
-                                  />
-                                </Tooltip>
-                              </>
-                            ),
-                          }}
-                          color="success"
-                          {...item.formProps}
-                        />
-                      )}
-                    />
-                  ) : item.label === 'IDC' ? (
-                    <Autocomplete
-                      freeSolo
-                      multiple
-                      disableClearable
-                      {...item.scopesFormProps}
-                      size="small"
-                      className={styles.cidrsInput}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          InputProps={{
-                            ...params.InputProps,
-                            endAdornment: (
-                              <>
-                                {params.InputProps.endAdornment}
-                                <Tooltip
-                                  title={`The cluster needs to serve all peers in the IDC. When the IDC in the peer configuration matches the IDC in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. IDC has higher priority than location in the scopes.`}
-                                  placement="top"
-                                >
-                                  <HelpIcon
-                                    color="disabled"
-                                    sx={{
-                                      width: '0.8rem',
-                                      height: '0.8rem',
-                                      mr: '0.3rem',
-                                      ':hover': { color: 'var(--description-color)' },
-                                    }}
-                                  />
-                                </Tooltip>
-                              </>
-                            ),
+                            endAdornment: item.formProps.endadornment,
                           }}
                           color="success"
                           {...item.formProps}

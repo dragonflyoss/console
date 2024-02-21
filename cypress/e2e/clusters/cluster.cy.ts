@@ -171,6 +171,10 @@ describe('Cluster', () => {
       cy.get('.MuiDialogContent-root').should('be.visible').and('contain', '10.0.0.0/8');
 
       cy.get('body').click('topLeft');
+
+      cy.get(':nth-child(4) > .MuiPaper-root > .information_cidrsTags__4sKxa')
+        .should('be.visible')
+        .and('contain', 'cluster-1');
     });
 
     it('can display config', () => {
@@ -373,6 +377,7 @@ describe('Cluster', () => {
       ).click();
 
       cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
+        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'cluster-10');
 
@@ -444,6 +449,7 @@ describe('Cluster', () => {
       ).click();
 
       cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
+        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'cluster-1');
 
@@ -516,6 +522,7 @@ describe('Cluster', () => {
       ).click();
 
       cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
+        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'cluster-10');
 
@@ -565,6 +572,7 @@ describe('Cluster', () => {
       ).click();
 
       cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
+        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'cluster-10');
 

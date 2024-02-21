@@ -12,6 +12,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
   const { cluster, isLoading } = props;
   const [openCIDRs, setOpenCIDRs] = useState(false);
   const [openIDC, setOpenIDC] = useState(false);
+  const [openHostnames, setOpenHostnames] = useState(false);
   const [showSchedulerClusterIDCopyIcon, setShowSchedulerClusterIDCopyIcon] = useState(false);
   const [showSeedPeerClusterIDCopyIcon, setShowSeedPeerClusterIDCopyIcon] = useState(false);
   const [, setCopyToClipboard] = useCopyToClipboard();
@@ -220,7 +221,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
         </Paper>
         <Box className={styles.container}>
           <Box className={styles.scopesContainer}>
-            <Grid sx={{ mb: '0.6rem', display: 'flex', alignItems: 'center' }}>
+            <Grid sx={{ mb: '1rem', display: 'flex', alignItems: 'center' }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography variant="subtitle1" color="text.primary" fontFamily="mabry-bold" sx={{ mr: '0.4rem' }}>
                   Scopes
@@ -235,8 +236,8 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
               </Box>
             </Grid>
             <Paper elevation={0} className={styles.scopesContentContainer}>
-              <Box sx={{ width: '33.3333%', pr: '0.6rem' }}>
-                <Paper variant="outlined" className={styles.locationContainer}>
+              <Box className={styles.scopesCard}>
+                <Paper variant="outlined" className={styles.cidrsContainer}>
                   <Box display="flex" justifyContent="space-between">
                     <Box className={styles.locationTitle}>
                       <Typography variant="body1" component="div" color="#80828B" sx={{ mr: '0.2rem' }}>
@@ -262,7 +263,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                   </Box>
                 </Paper>
               </Box>
-              <Box sx={{ width: '33.3333%', pr: '0.6rem' }}>
+              <Box className={styles.scopesCard}>
                 <Paper variant="outlined" className={styles.cidrsContainer}>
                   <Box display="flex" justifyContent="space-between">
                     <Box className={styles.cidrsTitle}>
@@ -355,7 +356,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                   </Dialog>
                 </Paper>
               </Box>
-              <Box sx={{ width: '33.3333%', pr: '0.6rem' }}>
+              <Box className={styles.scopesCard}>
                 <Paper variant="outlined" className={styles.cidrsContainer}>
                   <Box display="flex" justifyContent="space-between">
                     <Box className={styles.cidrsTitle}>
@@ -363,7 +364,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                         CIDRs
                       </Typography>
                       <Tooltip
-                        title={`The cluster needs to serve all peers in the CIDRs. The advertise IP will be reported in the peer configuration when the peer is started, and if the advertise IP is empty in the peer configuration, peer will automatically get expose IP as advertise IP. When advertise IP of the peer matches the CIDRs in cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. CIDRs has higher priority than IDC in the scopes.`}
+                        title={`The cluster needs to serve all peers in the CIDRs. The advertise IP will be reported in the peer configuration when the peer is started, and if the advertise IP is empty in the peer configuration, peer will automatically get expose IP as advertise IP. When advertise IP of the peer matches the CIDRs in cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. CIDRs has higher priority than IDC in the scopes. CIDRs has higher priority than IDC in the scopes. CIDRs has priority equal to hostname in the scopes.`}
                         placement="top"
                       >
                         <HelpIcon color="disabled" className={styles.descriptionIcon} />
@@ -434,6 +435,97 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                     {cluster?.scopes?.cidrs?.map((item: any, id: any) => (
                       <Paper key={id} elevation={0} className={styles.cidrsDialogContent}>
                         <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/cidrs.svg" />
+                        <Tooltip title={item} placement="top">
+                          <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
+                            {item}
+                          </Typography>
+                        </Tooltip>
+                      </Paper>
+                    ))}
+                  </DialogContent>
+                </Dialog>
+              </Box>
+              <Box className={styles.scopesCard}>
+                <Paper variant="outlined" className={styles.cidrsContainer}>
+                  <Box display="flex" justifyContent="space-between">
+                    <Box className={styles.cidrsTitle}>
+                      <Typography variant="subtitle1" component="div" color="#80828B" sx={{ mr: '0.2rem' }}>
+                        Hostnames
+                      </Typography>
+                      <Tooltip
+                        title={
+                          'The cluster needs to serve all peers in hostname. The input parameter is the multiple hostname regexes. The hostname will be reported in the peer configuration when the peer is started. When the hostname matches the multiple hostname regexes in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. Hostname has higher priority than IDC in the scopes. Hostname has priority equal to CIDRs in the scopes.'
+                        }
+                        placement="top"
+                      >
+                        <HelpIcon color="disabled" className={styles.descriptionIcon} />
+                      </Tooltip>
+                    </Box>
+                    <Box className={styles.scopesIconContainer}>
+                      <Box component="img" className={styles.scopesIcon} src="/icons/cluster/hostnames.svg" />
+                    </Box>
+                  </Box>
+                  {isLoading ? (
+                    <Skeleton sx={{ width: '10rem' }} />
+                  ) : (
+                    <Box className={styles.cidrsTags}>
+                      {cluster?.scopes?.hostnames?.length > 0 ? (
+                        <>
+                          <Box sx={{ width: '80%' }}>
+                            <Paper variant="outlined" className={styles.cidrsContent}>
+                              <Tooltip title={cluster?.scopes?.hostnames[0] || '-'} placement="top">
+                                <Typography variant="body2" className={styles.cidrsText}>
+                                  {cluster?.scopes?.hostnames[0]}
+                                </Typography>
+                              </Tooltip>
+                            </Paper>
+                            {cluster?.scopes?.hostnames?.length > 1 ? (
+                              <Paper variant="outlined" className={styles.cidrsContent}>
+                                <Tooltip title={cluster?.scopes?.hostnames[1] || '-'} placement="top">
+                                  <Typography variant="body2" className={styles.cidrsText}>
+                                    {cluster?.scopes?.hostnames[1]}
+                                  </Typography>
+                                </Tooltip>
+                              </Paper>
+                            ) : (
+                              <></>
+                            )}
+                          </Box>
+                          {cluster?.scopes?.hostnames?.length > 2 ? (
+                            <IconButton
+                              size="small"
+                              id="cidrs"
+                              onClick={() => {
+                                setOpenHostnames(true);
+                              }}
+                            >
+                              <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                            </IconButton>
+                          ) : (
+                            <></>
+                          )}
+                        </>
+                      ) : (
+                        <Typography variant="subtitle1" component="div">
+                          -
+                        </Typography>
+                      )}
+                    </Box>
+                  )}
+                </Paper>
+                <Dialog
+                  maxWidth="sm"
+                  fullWidth
+                  open={openHostnames}
+                  onClose={() => {
+                    setOpenHostnames(false);
+                  }}
+                >
+                  <DialogTitle fontFamily="mabry-bold">Hostnames</DialogTitle>
+                  <DialogContent dividers className={styles.cidrsDialogContainer}>
+                    {cluster?.scopes?.hostnames?.map((item: any, id: any) => (
+                      <Paper key={id} elevation={0} className={styles.cidrsDialogContent}>
+                        <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/hostnames.svg" />
                         <Tooltip title={item} placement="top">
                           <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
                             {item}

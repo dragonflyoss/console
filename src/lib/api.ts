@@ -175,6 +175,7 @@ export interface getClustersResponse {
     idc: string;
     location: string;
     cidrs: Array<string>;
+    hostnames: Array<string>;
   };
   created_at: string;
   is_default: boolean;
@@ -197,6 +198,7 @@ export interface getClusterResponse {
     idc: string;
     location: string;
     cidrs: Array<string>;
+    hostnames: Array<string>;
   };
   scheduler_cluster_id: number;
   seed_peer_cluster_id: number;
@@ -239,6 +241,7 @@ interface createClusterRequest {
     cidrs: Array<string>;
     idc: string;
     location: string;
+    hostnames: Array<string>;
   };
 }
 
@@ -263,6 +266,7 @@ interface createClusterResponse {
     cidrs: Array<string>;
     idc: string;
     location: string;
+    hostnames: Array<string>;
   };
 }
 
@@ -286,6 +290,7 @@ interface updateClusterRequset {
     cidrs: Array<string>;
     idc: string;
     location: string;
+    hostnames: Array<string>;
   };
   seed_peer_cluster_config: {
     load_limit: number;
@@ -313,6 +318,7 @@ interface updateClusterResponse {
     cidrs: Array<string>;
     idc: string;
     location: string;
+    hostnames: Array<string>;
   };
 }
 

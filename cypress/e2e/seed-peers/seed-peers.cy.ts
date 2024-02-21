@@ -183,7 +183,7 @@ describe('Seed peers', () => {
 
   describe('pagination', () => {
     it('pagination updates results and page number', () => {
-      cy.get('#seed-peer-table').should('be.visible');
+      cy.get('#seed-peer-table').scrollIntoView().should('be.visible');
 
       // Check number of pagination.
       cy.get('#seed-peer-pagination > .MuiPagination-ul').children().should('have.length', 5);
@@ -470,6 +470,8 @@ describe('Seed peers', () => {
         .should('be.visible')
         .and('contain', 'Inactive');
 
+      cy.get(':nth-child(5) > :nth-child(9) > .MuiButtonBase-root').click();
+
       cy.intercept({ method: 'DELETE', url: '/api/v1/seed-peers/9' }, (req) => {
         req.reply({
           statusCode: 200,
@@ -487,8 +489,6 @@ describe('Seed peers', () => {
           });
         },
       );
-
-      cy.get(':nth-child(5) > :nth-child(9) > .MuiButtonBase-root').click();
 
       cy.get('#deleteSeedPeer').click();
 

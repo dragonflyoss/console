@@ -86,6 +86,7 @@ export default function ShowCluster() {
       idc: '',
       location: '',
       cidrs: [],
+      hostnames: [],
     },
     scheduler_cluster_id: 0,
     seed_peer_cluster_id: 0,

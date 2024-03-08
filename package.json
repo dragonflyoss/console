@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@commitlint/cli": "^18.2.0",
+    "@commitlint/cli": "^19.0.3",
     "@commitlint/config-conventional": "^19.0.3",
     "@cypress/code-coverage": "^3.12.6",
     "@cypress/instrument-cra": "^1.4.0",

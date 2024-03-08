@@ -87,7 +87,7 @@ export default function PersonalAccessTokens() {
   }, [page]);
 
   useEffect(() => {
-    if (token.length > 1) {
+    if (Array.isArray(token) && token.length >= 1) {
       token.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
       const totalPage = Math.ceil(token.length / DEFAULT_PAGE_SIZE);
@@ -99,8 +99,13 @@ export default function PersonalAccessTokens() {
 
       setTokensTotalPages(totalPage || 1);
       setAllTokens(currentPageData);
+    } else {
+      setTokensTotalPages(1);
+      setAllTokens([]);
     }
   }, [token, tokensPage]);
+
+  console.log(token, allTokens);
 
   const handleDeleteClose = async (row: any) => {
     setOpenDeletToken(true);

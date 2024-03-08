@@ -178,7 +178,7 @@ export default function ShowCluster() {
   }, [params.id, schedulerCurrentPage, seedPeerCurrentPage]);
 
   useEffect(() => {
-    if (scheduler.length > 0) {
+    if (Array.isArray(scheduler) && scheduler.length >= 1) {
       scheduler.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
       scheduler.sort((a, b) => {
         if (a.state < b.state) {
@@ -198,11 +198,14 @@ export default function ShowCluster() {
 
       setSchedulerTotalPages(totalPage);
       setAllSchedlers(currentPageData);
+    } else {
+      setSchedulerTotalPages(1);
+      setAllSchedlers([]);
     }
   }, [scheduler, schedulerPage]);
 
   useEffect(() => {
-    if (seedPeer.length > 0) {
+    if (Array.isArray(seedPeer) && seedPeer.length >= 1) {
       seedPeer.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
       seedPeer.sort((a, b) => {
         if (a.state < b.state) {
@@ -222,6 +225,9 @@ export default function ShowCluster() {
 
       setSeedPeerTotalPages(totalPage);
       setAllSeedPeers(currentPageData);
+    } else {
+      setSeedPeerTotalPages(1);
+      setAllSeedPeers([]);
     }
   }, [seedPeer, seedPeerPage]);
 
@@ -359,16 +365,16 @@ export default function ShowCluster() {
 
       const schedulers = searchSchedulers
         ? await getSchedulers({
-            scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-            page: 1,
-            per_page: MAX_PAGE_SIZE,
-            host_name: searchSchedulers,
-          })
+          scheduler_cluster_id: String(cluster.scheduler_cluster_id),
+          page: 1,
+          per_page: MAX_PAGE_SIZE,
+          host_name: searchSchedulers,
+        })
         : await getSchedulers({
-            scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-            page: 1,
-            per_page: MAX_PAGE_SIZE,
-          });
+          scheduler_cluster_id: String(cluster.scheduler_cluster_id),
+          page: 1,
+          per_page: MAX_PAGE_SIZE,
+        });
 
       if (schedulers.length > 0) {
         setScheduler(schedulers);
@@ -393,16 +399,16 @@ export default function ShowCluster() {
       setSeedPeerTableIsLoading(true);
       const seedPeers = searchSeedPeers
         ? await getSeedPeers({
-            seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
-            page: 1,
-            per_page: MAX_PAGE_SIZE,
-            host_name: searchSeedPeers,
-          })
+          seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
+          page: 1,
+          per_page: MAX_PAGE_SIZE,
+          host_name: searchSeedPeers,
+        })
         : await getSeedPeers({
-            seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
-            page: 1,
-            per_page: MAX_PAGE_SIZE,
-          });
+          seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
+          page: 1,
+          per_page: MAX_PAGE_SIZE,
+        });
 
       if (seedPeers.length > 0) {
         setSeedPeer(seedPeers);
@@ -890,8 +896,7 @@ export default function ShowCluster() {
             onChange={(_event: any, newPage: number) => {
               setSchedulerPage(newPage);
               navigate(
-                `/clusters/${params.id}${newPage > 1 ? `?schedulerPage=${newPage}` : ''}${
-                  seedPeerPage > 1 ? `${newPage > 1 ? '&' : '?'}seedPeerPage=${seedPeerPage}` : ''
+                `/clusters/${params.id}${newPage > 1 ? `?schedulerPage=${newPage}` : ''}${seedPeerPage > 1 ? `${newPage > 1 ? '&' : '?'}seedPeerPage=${seedPeerPage}` : ''
                 }`,
               );
             }}
@@ -1177,8 +1182,7 @@ export default function ShowCluster() {
             onChange={(_event: any, newPage: number) => {
               setSeedPeerPage(newPage);
               navigate(
-                `/clusters/${params.id}${schedulerPage > 1 ? `?schedulerPage=${schedulerPage}` : ''}${
-                  newPage > 1 ? `${schedulerPage > 1 ? '&' : '?'}seedPeerPage=${newPage}` : ''
+                `/clusters/${params.id}${schedulerPage > 1 ? `?schedulerPage=${schedulerPage}` : ''}${newPage > 1 ? `${schedulerPage > 1 ? '&' : '?'}seedPeerPage=${newPage}` : ''
                 }`,
               );
             }}

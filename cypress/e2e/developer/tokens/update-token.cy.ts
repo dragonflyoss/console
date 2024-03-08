@@ -70,8 +70,8 @@ describe('Update token', () => {
       },
       (req) => {
         req.reply({
-          statusCode: 401,
-          body: { message: 'Not Found' },
+          statusCode: 200,
+          body: {},
         });
       },
     );

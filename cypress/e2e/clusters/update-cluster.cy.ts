@@ -82,32 +82,66 @@ describe('Update cluster', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/clusters/1',
+        url: '/api/v1/clusters/2',
       },
       (req) => {
         req.reply({
-          statusCode: 401,
-          body: { message: 'Not Found' },
+          statusCode: 200,
+          body: {
+            "id": 0,
+            "name": "",
+            "bio": "",
+            "scopes": {
+              "idc": "",
+              "location": "",
+              "cidrs": null,
+              "hostnames": null
+            },
+            "scheduler_cluster_id": 1,
+            "seed_peer_cluster_id": 1,
+            "scheduler_cluster_config": {
+              "candidate_parent_limit": 0,
+              "filter_parent_limit": 0
+            },
+            "seed_peer_cluster_config": {
+              "load_limit": 0
+            },
+            "peer_cluster_config": {
+              "load_limit": 0
+            },
+            "created_at": "2023-03-08T02:39:03Z",
+            "updated_at": "2023-03-08T02:39:03Z",
+            "is_default": true
+          },
         });
       },
     );
+
+    cy.visit('/clusters/2/edit');
+
     // Show cluster information.
 
-    cy.get('.MuiPaper-outlined > .css-0 > :nth-child(1)').should('not.contain', '1');
+    cy.get('.MuiPaper-outlined > .css-0 > :nth-child(1)').should('contain', '0');
 
-    cy.get('.MuiPaper-root > .css-0 > :nth-child(2)').should('not.contain', 'cluster-1');
+    cy.get('.MuiPaper-root > .css-0 > :nth-child(2)').should('contain', '');
 
     cy.get('.PrivateSwitchBase-input').should('not.be.checked').check({ force: false });
 
-    // Show scopes.
+    // When location is empty.
     cy.get('#location').should('have.value', '');
 
+    // When idc is empty.
     cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').should(
       'have.value',
       '',
     );
-
+    // When CIDRs is empty.
     cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').should(
+      'have.value',
+      '',
+    );
+    // When Hostname is empty.
+    cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').should(
       'have.value',
       '',
     );

@@ -290,7 +290,7 @@ export default function EditCluster() {
       label: 'Hostnames',
       enterMultiple: true,
       scopesFormProps: {
-        value: hostnames,
+        value: hostnames || [],
         options: [],
 
         onChange: (_e: any, newValue: any) => {
@@ -584,11 +584,11 @@ export default function EditCluster() {
 
     const canSubmit = Boolean(
       !informationForm.filter((item) => item.syncError).length &&
-        !scopesForm.filter((item) => item.syncError).length &&
-        !configForm.filter((item) => item.syncError).length &&
-        Boolean(!idcText) &&
-        Boolean(!cidrsText) &&
-        Boolean(!hostnamesText),
+      !scopesForm.filter((item) => item.syncError).length &&
+      !configForm.filter((item) => item.syncError).length &&
+      Boolean(!idcText) &&
+      Boolean(!cidrsText) &&
+      Boolean(!hostnamesText),
     );
 
     const formdata = {

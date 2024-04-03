@@ -6,14 +6,8 @@
     "scopes": {
       "idc": "Hangzhou|Shanghai|Beijing",
       "location": "China|Hang|Zhou",
-      "cidrs": [
-        "10.0.0.0/8",
-        "192.168.0.0/16",
-        "172.16.0.0/12"
-      ],
-      "hostnames": [
-        "cluster-1"
-      ]
+      "cidrs": ["10.0.0.0/8", "192.168.0.0/16", "172.16.0.0/12"],
+      "hostnames": ["cluster-1"]
     },
     "scheduler_cluster_id": 1,
     "seed_peer_cluster_id": 1,
@@ -63,10 +57,7 @@
     "scopes": {
       "idc": "Korea",
       "location": "Seoul|Korea",
-      "cidrs": [
-        "192.168.0.0/16",
-        "172.16.0.0/12"
-      ]
+      "cidrs": ["192.168.0.0/16", "172.16.0.0/12"]
     },
     "scheduler_cluster_id": 3,
     "seed_peer_cluster_id": 3,
@@ -91,10 +82,7 @@
     "scopes": {
       "idc": "hz|dl",
       "location": "China|Hang|Zhou",
-      "cidrs": [
-        "10.0.0.0/8",
-        "192.168.0.0/16"
-      ]
+      "cidrs": ["10.0.0.0/8", "192.168.0.0/16"]
     },
     "scheduler_cluster_id": 4,
     "seed_peer_cluster_id": 4,
@@ -119,10 +107,7 @@
     "scopes": {
       "idc": "cq|cd",
       "location": "China|Chong|Qing",
-      "cidrs": [
-        "10.0.0.0/8",
-        "192.168.0.0/16"
-      ]
+      "cidrs": ["10.0.0.0/8", "192.168.0.0/16"]
     },
     "scheduler_cluster_id": 5,
     "seed_peer_cluster_id": 5,
@@ -147,10 +132,7 @@
     "scopes": {
       "idc": "cq|cd",
       "location": "China|Chong|Du",
-      "cidrs": [
-        "10.0.0.0/8",
-        "192.168.0.0/16"
-      ]
+      "cidrs": ["10.0.0.0/8", "192.168.0.0/16"]
     },
     "scheduler_cluster_id": 6,
     "seed_peer_cluster_id": 6,
@@ -175,10 +157,7 @@
     "scopes": {
       "idc": "cd",
       "location": "China|Cheng|Du",
-      "cidrs": [
-        "10.0.0.0/8",
-        "172.16.0.0/19"
-      ]
+      "cidrs": ["10.0.0.0/8", "172.16.0.0/19"]
     },
     "scheduler_cluster_id": 7,
     "seed_peer_cluster_id": 7,
@@ -203,10 +182,7 @@
     "scopes": {
       "idc": "js",
       "location": "China|Jiang|Su",
-      "cidrs": [
-        "10.0.0.0/5",
-        "172.16.0.0/19"
-      ]
+      "cidrs": ["10.0.0.0/5", "172.16.0.0/19"]
     },
     "scheduler_cluster_id": 8,
     "seed_peer_cluster_id": 8,
@@ -231,10 +207,7 @@
     "scopes": {
       "idc": "hz|hf",
       "location": "China|Hang|Zhou",
-      "cidrs": [
-        "10.0.0.0/8",
-        "192.168.0.0/16"
-      ]
+      "cidrs": ["10.0.0.0/8", "192.168.0.0/16"]
     },
     "scheduler_cluster_id": 9,
     "seed_peer_cluster_id": 9,
@@ -259,10 +232,7 @@
     "scopes": {
       "idc": "Paris",
       "location": "Paris|France",
-      "cidrs": [
-        "192.168.0.0",
-        "10.0.0.0"
-      ]
+      "cidrs": ["192.168.0.0", "10.0.0.0"]
     },
     "scheduler_cluster_id": 11,
     "seed_peer_cluster_id": 11,

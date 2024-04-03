@@ -590,7 +590,6 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                           ) : (
                             <></>
                           )}
-
                         </>
                       ) : (
                         <Typography variant="subtitle1" component="div">

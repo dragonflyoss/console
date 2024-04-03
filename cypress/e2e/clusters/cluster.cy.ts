@@ -149,18 +149,19 @@ describe('Cluster', () => {
         .should('be.visible')
         .and('contain', 'Shanghai');
 
-      // Click the button to show more idc.
-      cy.get('#idc').should('exist').click();
+      // The number of idc is 2 and the button is no longer displayed.
+      cy.get('#idc').should('not.exist')
 
-      // Show idc dialog module.
-      cy.get('.MuiDialogContent-root').should('exist');
-      cy.get('.MuiDialogContent-root > :nth-child(3)').should('be.visible').and('contain', 'Beijing');
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root > .MuiChip-label').should('contain', 'Total: 2')
+
       cy.get('body').click('topLeft');
       cy.get(
         ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .MuiBox-root > :nth-child(2) > .MuiTypography-root',
       )
         .should('be.visible')
         .and('contain', '192.168.0.0/16');
+
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root > .MuiChip-label').should('contain', 'Total: 3')
 
       // Click the button to show more cidrs.
       cy.get('#cidrs').should('exist').click();
@@ -175,7 +176,40 @@ describe('Cluster', () => {
       cy.get(':nth-child(4) > .MuiPaper-root > .information_cidrsTags__4sKxa')
         .should('be.visible')
         .and('contain', 'cluster-1');
+
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root').should('contain', 'Total: 4')
+
+      // Click the button to show more cidrs.
+      cy.get('#hostnames').should('exist').click();
+
+
+      // Show hostnames dialog module.
+      cy.get('.MuiDialogContent-root').children().should('have.length', 4);
     });
+
+    it('the visible width of the screen is 1920px. Display scopes', () => {
+      cy.viewport(1920, 1080);
+      // The number of CIDRs displayed is 3.  
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)').should('have.text', '10.0.0.0/8');
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)').should('have.text', '192.168.0.0/16');
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)').should('have.text', '172.16.0.0/12');
+
+
+      // The number of hostnames displayed is 3.  
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)').should('have.text', 'cluster-1');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)').should('have.text', 'cluster-2');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)').should('have.text', 'cluster-3');
+    })
+
+    it('the visible width of the screen is 1920px. Display scopes', () => {
+      cy.viewport(2560, 1080);
+
+      // The number of hostnames displayed is 4.  
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)').should('have.text', 'cluster-1');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)').should('have.text', 'cluster-2');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)').should('have.text', 'cluster-3');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)').should('have.text', 'cluster-4');
+    })
 
     it('can display config', () => {
       cy.get('.MuiPaper-root > :nth-child(1) > .MuiTypography-body1').should('be.visible').and('have.text', '300');
@@ -376,8 +410,9 @@ describe('Cluster', () => {
         ':nth-child(7) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .clusters_creatTimeContainer__k6XfL > .MuiButtonBase-root',
       ).click();
 
+      cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1').scrollIntoView();
+
       cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
-        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'cluster-10');
 

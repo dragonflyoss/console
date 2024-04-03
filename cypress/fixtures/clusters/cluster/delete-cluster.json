@@ -5,7 +5,12 @@
   "scopes": {
     "idc": "London",
     "location": "London|England",
-    "cidrs": ["192.168.255.255"]
+    "cidrs": [
+      "192.168.255.255"
+    ],
+    "hostnames": [
+      "cluster-1"
+    ]
   },
   "scheduler_cluster_id": 10,
   "seed_peer_cluster_id": 10,

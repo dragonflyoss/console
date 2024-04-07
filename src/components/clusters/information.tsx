@@ -294,19 +294,19 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                                 {isLoading ? (
                                   <Skeleton sx={{ width: '8rem' }} />
                                 ) : (
-                                  cluster?.scopes?.idc.split('|') || '-'
+                                  cluster?.scopes?.idc.split('|')[0] || '-'
                                 )}
                               </Typography>
                             </Tooltip>
                           </Paper>
                           {cluster?.scopes?.idc.split('|').length > 1 ? (
                             <Paper variant="outlined" className={styles.cidrsContent}>
-                              <Tooltip title={cluster?.scopes?.idc.split('|')[1] || '-'} placement="top">
+                              <Tooltip title={cluster?.scopes?.idc.split('|')[1] || ''} placement="top">
                                 <Typography variant="body2" component="div" className={styles.cidrsText}>
                                   {isLoading ? (
                                     <Skeleton sx={{ width: '8rem' }} />
                                   ) : (
-                                    cluster?.scopes?.idc.split('|')[1] || '-'
+                                    cluster?.scopes?.idc.split('|')[1] || ''
                                   )}
                                 </Typography>
                               </Tooltip>
@@ -317,12 +317,12 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                             )}
                           {cluster?.scopes?.idc.split('|').length > 2 ? (
                             <Paper variant="outlined" className={styles.cidrsContent}>
-                              <Tooltip title={cluster?.scopes?.idc.split('|')[2] || '-'} placement="top">
+                              <Tooltip title={cluster?.scopes?.idc.split('|')[2] || ''} placement="top">
                                 <Typography variant="body2" component="div" className={styles.cidrsText}>
                                   {isLoading ? (
                                     <Skeleton sx={{ width: '8rem' }} />
                                   ) : (
-                                    cluster?.scopes?.idc.split('|')[2] || '-'
+                                    cluster?.scopes?.idc.split('|')[2] || ''
                                   )}
                                 </Typography>
                               </Tooltip>
@@ -333,12 +333,12 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                             )}
                           {cluster?.scopes?.idc.split('|').length > 3 ? (
                             <Paper variant="outlined" className={styles.cidrsContent}>
-                              <Tooltip title={cluster?.scopes?.idc.split('|')[3] || '-'} placement="top">
+                              <Tooltip title={cluster?.scopes?.idc.split('|')[3] || ''} placement="top">
                                 <Typography variant="body2" component="div" className={styles.cidrsText}>
                                   {isLoading ? (
                                     <Skeleton sx={{ width: '8rem' }} />
                                   ) : (
-                                    cluster?.scopes?.idc.split('|')[3] || '-'
+                                    cluster?.scopes?.idc.split('|')[3] || ''
                                   )}
                                 </Typography>
                               </Tooltip>
@@ -411,7 +411,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                       icon={
                         <Box component="img" className={styles.scopesIcon} src="/icons/cluster/cidrs.svg" />
                       }
-                      label={`Total: ${cluster?.scopes?.cidrs.length}`} />
+                      label={`Total: ${cluster?.scopes?.cidrs?.length ? cluster?.scopes?.cidrs?.length : 0}`} />
                   </Box>
                   {isLoading ? (
                     <Skeleton sx={{ width: '10rem' }} />
@@ -423,15 +423,15 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                             <Paper variant="outlined" className={styles.cidrsContent}>
                               <Tooltip title={cluster?.scopes?.cidrs[0] || '-'} placement="top">
                                 <Typography variant="body2" className={styles.cidrsText}>
-                                  {cluster?.scopes?.cidrs[0]}
+                                  {cluster?.scopes?.cidrs[0] || ''}
                                 </Typography>
                               </Tooltip>
                             </Paper>
                             {cluster?.scopes?.cidrs?.length > 1 ? (
                               <Paper variant="outlined" className={styles.cidrsContent}>
-                                <Tooltip title={cluster?.scopes?.cidrs[1] || '-'} placement="top">
+                                <Tooltip title={cluster?.scopes?.cidrs[1] || ''} placement="top">
                                   <Typography variant="body2" className={styles.cidrsText}>
-                                    {cluster?.scopes?.cidrs[1]}
+                                    {cluster?.scopes?.cidrs[1] || ''}
                                   </Typography>
                                 </Tooltip>
                               </Paper>
@@ -440,9 +440,9 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                             )}
                             {cluster?.scopes?.cidrs?.length > 2 ? (
                               <Paper variant="outlined" className={styles.cidrsContent}>
-                                <Tooltip title={cluster?.scopes?.cidrs[2] || '-'} placement="top">
+                                <Tooltip title={cluster?.scopes?.cidrs[2] || ''} placement="top">
                                   <Typography variant="body2" className={styles.cidrsText}>
-                                    {cluster?.scopes?.cidrs[2]}
+                                    {cluster?.scopes?.cidrs[2] || ''}
                                   </Typography>
                                 </Tooltip>
                               </Paper>
@@ -451,9 +451,9 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                             )}
                             {cluster?.scopes?.cidrs?.length > 3 ? (
                               <Paper variant="outlined" className={styles.cidrsContent}>
-                                <Tooltip title={cluster?.scopes?.cidrs[3] || '-'} placement="top">
+                                <Tooltip title={cluster?.scopes?.cidrs[3] || ''} placement="top">
                                   <Typography variant="body2" className={styles.cidrsText}>
-                                    {cluster?.scopes?.cidrs[3]}
+                                    {cluster?.scopes?.cidrs[3] || ''}
                                   </Typography>
                                 </Tooltip>
                               </Paper>
@@ -527,7 +527,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                       icon={
                         <Box component="img" className={styles.scopesIcon} src="/icons/cluster/hostnames.svg" />
                       }
-                      label={`Total: ${cluster?.scopes?.hostnames.length}`} />
+                      label={`Total: ${cluster?.scopes?.hostnames?.length ? cluster?.scopes?.hostnames?.length : 0}`} />
                   </Box>
                   {isLoading ? (
                     <Skeleton sx={{ width: '10rem' }} />
@@ -539,15 +539,15 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                             <Paper variant="outlined" className={styles.cidrsContent}>
                               <Tooltip title={cluster?.scopes?.hostnames[0] || '-'} placement="top">
                                 <Typography variant="body2" className={styles.cidrsText}>
-                                  {cluster?.scopes?.hostnames[0]}
+                                  {cluster?.scopes?.hostnames[0] || '-'}
                                 </Typography>
                               </Tooltip>
                             </Paper>
                             {cluster?.scopes?.hostnames?.length > 1 ? (
                               <Paper variant="outlined" className={styles.cidrsContent}>
-                                <Tooltip title={cluster?.scopes?.hostnames[1] || '-'} placement="top">
+                                <Tooltip title={cluster?.scopes?.hostnames[1] || ''} placement="top">
                                   <Typography variant="body2" className={styles.cidrsText}>
-                                    {cluster?.scopes?.hostnames[1]}
+                                    {cluster?.scopes?.hostnames[1] || ''}
                                   </Typography>
                                 </Tooltip>
                               </Paper>
@@ -556,9 +556,9 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                             )}
                             {cluster?.scopes?.hostnames?.length > 2 ? (
                               <Paper variant="outlined" className={styles.cidrsContent}>
-                                <Tooltip title={cluster?.scopes?.hostnames[2] || '-'} placement="top">
+                                <Tooltip title={cluster?.scopes?.hostnames[2] || ''} placement="top">
                                   <Typography variant="body2" className={styles.cidrsText}>
-                                    {cluster?.scopes?.hostnames[2]}
+                                    {cluster?.scopes?.hostnames[2] || ''}
                                   </Typography>
                                 </Tooltip>
                               </Paper>
@@ -567,9 +567,9 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                             )}
                             {cluster?.scopes?.hostnames?.length > 3 ? (
                               <Paper variant="outlined" className={styles.cidrsContent}>
-                                <Tooltip title={cluster?.scopes?.hostnames[3] || '-'} placement="top">
+                                <Tooltip title={cluster?.scopes?.hostnames[3] || ''} placement="top">
                                   <Typography variant="body2" className={styles.cidrsText}>
-                                    {cluster?.scopes?.hostnames[3]}
+                                    {cluster?.scopes?.hostnames[3] || ''}
                                   </Typography>
                                 </Tooltip>
                               </Paper>

@@ -149,18 +149,30 @@ describe('Cluster', () => {
         .should('be.visible')
         .and('contain', 'Shanghai');
 
-      // Click the button to show more idc.
+      // The number of idc is 2 and the button is no longer displayed.
       cy.get('#idc').should('exist').click();
 
-      // Show idc dialog module.
-      cy.get('.MuiDialogContent-root').should('exist');
-      cy.get('.MuiDialogContent-root > :nth-child(3)').should('be.visible').and('contain', 'Beijing');
+      // Click the button to show more idc.
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)').should('be.visible').and('have.text', 'Hangzhou')
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)').should('be.visible').and('have.text', 'Shanghai')
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)').should('not.be.visible');
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)').should('not.be.visible');
+
+
+      cy.get('.MuiDialogContent-root').should('exist')
+
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root > .MuiChip-label').should('contain', 'Total: 4')
+
       cy.get('body').click('topLeft');
+
+      // Show CIDRs
       cy.get(
         ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .MuiBox-root > :nth-child(2) > .MuiTypography-root',
       )
         .should('be.visible')
         .and('contain', '192.168.0.0/16');
+
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root > .MuiChip-label').should('contain', 'Total: 4')
 
       // Click the button to show more cidrs.
       cy.get('#cidrs').should('exist').click();
@@ -172,10 +184,81 @@ describe('Cluster', () => {
 
       cy.get('body').click('topLeft');
 
+      // The number of CIDRs displayed is 2.  
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)').should('have.text', '10.0.0.0/8');
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)').should('have.text', '192.168.0.0/16');
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)').should('not.be.visible');
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)').should('not.be.visible');
+
+      // The number of hostnames displayed is 2.  
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)').should('have.text', 'cluster-1');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)').should('have.text', 'cluster-2');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)').should('not.be.visible');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)').should('not.be.visible');
+
       cy.get(':nth-child(4) > .MuiPaper-root > .information_cidrsTags__4sKxa')
         .should('be.visible')
         .and('contain', 'cluster-1');
+
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root').should('contain', 'Total: 4')
+
+      // Click the button to show more cidrs.
+      cy.get('#hostnames').should('exist').click();
+
+      // Show hostnames dialog module.
+      cy.get('.MuiDialogContent-root').children().should('have.length', 4);
+
+      cy.get('body').click('topLeft');
+
+      cy.get('.MuiDialogContent-root').should('not.be.visible')
     });
+
+    it('the visible width of the screen is 1920px. Display scopes', () => {
+      cy.viewport(1920, 1080);
+
+      // The number of idc displayed is 3.  
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)').should('be.visible').and('have.text', 'Hangzhou')
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)').should('be.visible').and('have.text', 'Shanghai')
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)').should('be.visible').and('have.text', 'Beijing')
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)').should('not.be.visible');
+
+
+      // The number of CIDRs displayed is 3.  
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)').should('have.text', '10.0.0.0/8');
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)').should('have.text', '192.168.0.0/16');
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)').should('have.text', '172.16.0.0/12');
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)').should('not.be.visible');
+
+      // The number of hostnames displayed is 3.  
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)').should('have.text', 'cluster-1');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)').should('have.text', 'cluster-2');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)').should('have.text', 'cluster-3');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)').should('not.be.visible');
+
+    })
+
+    it('the visible width of the screen is 1920px. Display scopes', () => {
+      cy.viewport(2560, 1080);
+
+      // The number of idc displayed is 4.  
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)').should('be.visible').and('have.text', 'Hangzhou')
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)').should('be.visible').and('have.text', 'Shanghai')
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)').should('be.visible').and('have.text', 'Beijing')
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)').should('be.visible').and('have.text', 'Xiamen')
+
+
+      // The number of CIDRs displayed is 4.  
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)').should('have.text', '10.0.0.0/8');
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)').should('have.text', '192.168.0.0/16');
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)').should('have.text', '172.16.0.0/12');
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)').should('have.text', '173.16.0.1/11');
+
+      // The number of hostnames displayed is 4.  
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)').should('have.text', 'cluster-1');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)').should('have.text', 'cluster-2');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)').should('have.text', 'cluster-3');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)').should('have.text', 'cluster-4');
+    })
 
     it('can display config', () => {
       cy.get('.MuiPaper-root > :nth-child(1) > .MuiTypography-body1').should('be.visible').and('have.text', '300');
@@ -232,7 +315,32 @@ describe('Cluster', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: [],
+            body: {
+              "id": 1,
+              "name": "cluster-1",
+              "bio": "",
+              "scopes": {
+                "idc": "",
+                "location": "",
+                "cidrs": null,
+                "hostnames": null
+              },
+              "scheduler_cluster_id": 1,
+              "seed_peer_cluster_id": 1,
+              "scheduler_cluster_config": {
+                "candidate_parent_limit": 4,
+                "filter_parent_limit": 15
+              },
+              "seed_peer_cluster_config": {
+                "load_limit": 500
+              },
+              "peer_cluster_config": {
+                "load_limit": 200
+              },
+              "created_at": "2024-04-07T06:30:14Z",
+              "updated_at": "2024-04-07T06:30:14Z",
+              "is_default": true
+            },
           });
         },
       );
@@ -251,7 +359,7 @@ describe('Cluster', () => {
     it('unable to display information', () => {
       cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1').should(
         'have.text',
-        '-',
+        'cluster-1',
       );
       cy.get('.information_clusterContainer__l8H8p > :nth-child(3) > .MuiTypography-subtitle1').should(
         'have.text',
@@ -259,33 +367,45 @@ describe('Cluster', () => {
       );
       cy.get('.information_clusterContainer__l8H8p > :nth-child(5) > .MuiTypography-subtitle1').should(
         'have.text',
-        'No',
+        'Yes',
       );
       cy.get('.information_clusterContainer__l8H8p > :nth-child(7) > .css-70qvj9 > .MuiTypography-root').should(
         'have.text',
-        '0',
+        '1',
       );
       cy.get('.information_clusterContainer__l8H8p > :nth-child(9) > .css-70qvj9 > .MuiTypography-root').should(
         'have.text',
-        '0',
+        '1',
       );
     });
 
     it('unable to display scopes', () => {
+
+      // Show location.
       cy.get('.information_locationTextContainer__ZdjKa').should('have.text', '-');
-      cy.get(':nth-child(2) > .MuiPaper-root > .information_cidrsTags__4sKxa').should('have.text', '-');
 
+      // Show idc.
       cy.get('#idc').should('not.exist');
+      cy.get(':nth-child(2) > .MuiPaper-root > .information_cidrsTags__4sKxa').should('have.text', '-');
+      cy.get(':nth-child(2) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root > .MuiChip-label').should('have.text', 'Total: 0')
 
-      cy.get(':nth-child(3) > .MuiPaper-root > .information_cidrsTags__4sKxa').should('have.text', '-');
+      // Show cidrs.
       cy.get('#cidrs').should('not.exist');
+      cy.get(':nth-child(3) > .MuiPaper-root > .information_cidrsTags__4sKxa').should('have.text', '-');
+      cy.get(':nth-child(3) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root > .MuiChip-label').should('have.text', 'Total: 0')
+
+      // Show hostnames.
+      cy.get('#hostnames').should('not.exist');
+      cy.get(':nth-child(4) > .MuiPaper-root > .information_cidrsTags__4sKxa').should('have.text', '-');
+      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root > .MuiChip-label').should('have.text', 'Total: 0')
+
     });
 
     it('unable to display config', () => {
-      cy.get('.MuiPaper-root > :nth-child(1) > .MuiTypography-body1').should('have.text', 0);
-      cy.get('.MuiPaper-root > :nth-child(3) > .MuiTypography-body1').should('have.text', 0);
-      cy.get(':nth-child(5) > .MuiTypography-body1').should('have.text', 0);
-      cy.get(':nth-child(7) > .MuiTypography-body1').should('have.text', 0);
+      cy.get('.MuiPaper-root > :nth-child(1) > .MuiTypography-body1').should('have.text', 500);
+      cy.get('.MuiPaper-root > :nth-child(3) > .MuiTypography-body1').should('have.text', 200);
+      cy.get(':nth-child(5) > .MuiTypography-body1').should('have.text', 4);
+      cy.get(':nth-child(7) > .MuiTypography-body1').should('have.text', 15);
     });
   });
 
@@ -376,8 +496,9 @@ describe('Cluster', () => {
         ':nth-child(7) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .clusters_creatTimeContainer__k6XfL > .MuiButtonBase-root',
       ).click();
 
+      cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1').scrollIntoView();
+
       cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
-        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'cluster-10');
 

@@ -1,5 +1,5 @@
 import Divider from '@mui/material/Divider';
-import { Box, Grid, Tooltip, Typography, Paper, DialogTitle, DialogContent, IconButton, Skeleton } from '@mui/material';
+import { Box, Grid, Tooltip, Typography, Paper, DialogTitle, DialogContent, IconButton, Skeleton, Chip } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import styles from './information.module.css';
@@ -277,14 +277,17 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                         <HelpIcon color="disabled" className={styles.descriptionIcon} />
                       </Tooltip>
                     </Box>
-                    <Box className={styles.scopesIconContainer}>
-                      <Box component="img" className={styles.scopesIcon} src="/icons/cluster/idc.svg" />
-                    </Box>
+                    <Chip
+                      size="small"
+                      icon={
+                        <Box component="img" className={styles.scopesIcon} src="/icons/cluster/idc.svg" />
+                      }
+                      label={`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`} />
                   </Box>
                   <Box className={styles.cidrsTags}>
                     {cluster?.scopes?.idc ? (
                       <>
-                        <Box sx={{ width: '80%' }}>
+                        <Box className={styles.cidrWrapper}>
                           <Paper variant="outlined" className={styles.cidrsContent}>
                             <Tooltip title={cluster?.scopes?.idc.split('|')[0] || '-'} placement="top">
                               <Typography variant="body2" component="div" className={styles.cidrsText}>
@@ -298,19 +301,52 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                           </Paper>
                           {cluster?.scopes?.idc.split('|').length > 1 ? (
                             <Paper variant="outlined" className={styles.cidrsContent}>
-                              <Tooltip title={cluster?.scopes?.idc.split('|')[0] || '-'} placement="top">
+                              <Tooltip title={cluster?.scopes?.idc.split('|')[1] || ''} placement="top">
                                 <Typography variant="body2" component="div" className={styles.cidrsText}>
                                   {isLoading ? (
                                     <Skeleton sx={{ width: '8rem' }} />
                                   ) : (
-                                    cluster?.scopes?.idc.split('|')[1] || '-'
+                                    cluster?.scopes?.idc.split('|')[1] || ''
                                   )}
                                 </Typography>
                               </Tooltip>
                             </Paper>
-                          ) : (
-                            <></>
-                          )}
+                          )
+                            : (
+                              <></>
+                            )}
+                          {cluster?.scopes?.idc.split('|').length > 2 ? (
+                            <Paper variant="outlined" className={styles.cidrsContent}>
+                              <Tooltip title={cluster?.scopes?.idc.split('|')[2] || ''} placement="top">
+                                <Typography variant="body2" component="div" className={styles.cidrsText}>
+                                  {isLoading ? (
+                                    <Skeleton sx={{ width: '8rem' }} />
+                                  ) : (
+                                    cluster?.scopes?.idc.split('|')[2] || ''
+                                  )}
+                                </Typography>
+                              </Tooltip>
+                            </Paper>
+                          )
+                            : (
+                              <></>
+                            )}
+                          {cluster?.scopes?.idc.split('|').length > 3 ? (
+                            <Paper variant="outlined" className={styles.cidrsContent}>
+                              <Tooltip title={cluster?.scopes?.idc.split('|')[3] || ''} placement="top">
+                                <Typography variant="body2" component="div" className={styles.cidrsText}>
+                                  {isLoading ? (
+                                    <Skeleton sx={{ width: '8rem' }} />
+                                  ) : (
+                                    cluster?.scopes?.idc.split('|')[3] || ''
+                                  )}
+                                </Typography>
+                              </Tooltip>
+                            </Paper>
+                          )
+                            : (
+                              <></>
+                            )}
                         </Box>
                         {cluster?.scopes?.idc.split('|').length > 2 ? (
                           <IconButton
@@ -370,9 +406,12 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                         <HelpIcon color="disabled" className={styles.descriptionIcon} />
                       </Tooltip>
                     </Box>
-                    <Box className={styles.scopesIconContainer}>
-                      <Box component="img" className={styles.scopesIcon} src="/icons/cluster/cidrs.svg" />
-                    </Box>
+                    <Chip
+                      size="small"
+                      icon={
+                        <Box component="img" className={styles.scopesIcon} src="/icons/cluster/cidrs.svg" />
+                      }
+                      label={`Total: ${cluster?.scopes?.cidrs?.length ? cluster?.scopes?.cidrs?.length : 0}`} />
                   </Box>
                   {isLoading ? (
                     <Skeleton sx={{ width: '10rem' }} />
@@ -380,19 +419,41 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                     <Box className={styles.cidrsTags}>
                       {cluster?.scopes?.cidrs?.length > 0 ? (
                         <>
-                          <Box sx={{ width: '80%' }}>
+                          <Box className={styles.cidrWrapper}>
                             <Paper variant="outlined" className={styles.cidrsContent}>
                               <Tooltip title={cluster?.scopes?.cidrs[0] || '-'} placement="top">
                                 <Typography variant="body2" className={styles.cidrsText}>
-                                  {cluster?.scopes?.cidrs[0]}
+                                  {cluster?.scopes?.cidrs[0] || ''}
                                 </Typography>
                               </Tooltip>
                             </Paper>
                             {cluster?.scopes?.cidrs?.length > 1 ? (
                               <Paper variant="outlined" className={styles.cidrsContent}>
-                                <Tooltip title={cluster?.scopes?.cidrs[1] || '-'} placement="top">
+                                <Tooltip title={cluster?.scopes?.cidrs[1] || ''} placement="top">
                                   <Typography variant="body2" className={styles.cidrsText}>
-                                    {cluster?.scopes?.cidrs[1]}
+                                    {cluster?.scopes?.cidrs[1] || ''}
+                                  </Typography>
+                                </Tooltip>
+                              </Paper>
+                            ) : (
+                              <></>
+                            )}
+                            {cluster?.scopes?.cidrs?.length > 2 ? (
+                              <Paper variant="outlined" className={styles.cidrsContent}>
+                                <Tooltip title={cluster?.scopes?.cidrs[2] || ''} placement="top">
+                                  <Typography variant="body2" className={styles.cidrsText}>
+                                    {cluster?.scopes?.cidrs[2] || ''}
+                                  </Typography>
+                                </Tooltip>
+                              </Paper>
+                            ) : (
+                              <></>
+                            )}
+                            {cluster?.scopes?.cidrs?.length > 3 ? (
+                              <Paper variant="outlined" className={styles.cidrsContent}>
+                                <Tooltip title={cluster?.scopes?.cidrs[3] || ''} placement="top">
+                                  <Typography variant="body2" className={styles.cidrsText}>
+                                    {cluster?.scopes?.cidrs[3] || ''}
                                   </Typography>
                                 </Tooltip>
                               </Paper>
@@ -461,9 +522,12 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                         <HelpIcon color="disabled" className={styles.descriptionIcon} />
                       </Tooltip>
                     </Box>
-                    <Box className={styles.scopesIconContainer}>
-                      <Box component="img" className={styles.scopesIcon} src="/icons/cluster/hostnames.svg" />
-                    </Box>
+                    <Chip
+                      size="small"
+                      icon={
+                        <Box component="img" className={styles.scopesIcon} src="/icons/cluster/hostnames.svg" />
+                      }
+                      label={`Total: ${cluster?.scopes?.hostnames?.length ? cluster?.scopes?.hostnames?.length : 0}`} />
                   </Box>
                   {isLoading ? (
                     <Skeleton sx={{ width: '10rem' }} />
@@ -471,19 +535,41 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                     <Box className={styles.cidrsTags}>
                       {cluster?.scopes?.hostnames?.length > 0 ? (
                         <>
-                          <Box sx={{ width: '80%' }}>
+                          <Box className={styles.cidrWrapper}>
                             <Paper variant="outlined" className={styles.cidrsContent}>
                               <Tooltip title={cluster?.scopes?.hostnames[0] || '-'} placement="top">
                                 <Typography variant="body2" className={styles.cidrsText}>
-                                  {cluster?.scopes?.hostnames[0]}
+                                  {cluster?.scopes?.hostnames[0] || '-'}
                                 </Typography>
                               </Tooltip>
                             </Paper>
                             {cluster?.scopes?.hostnames?.length > 1 ? (
                               <Paper variant="outlined" className={styles.cidrsContent}>
-                                <Tooltip title={cluster?.scopes?.hostnames[1] || '-'} placement="top">
+                                <Tooltip title={cluster?.scopes?.hostnames[1] || ''} placement="top">
                                   <Typography variant="body2" className={styles.cidrsText}>
-                                    {cluster?.scopes?.hostnames[1]}
+                                    {cluster?.scopes?.hostnames[1] || ''}
+                                  </Typography>
+                                </Tooltip>
+                              </Paper>
+                            ) : (
+                              <></>
+                            )}
+                            {cluster?.scopes?.hostnames?.length > 2 ? (
+                              <Paper variant="outlined" className={styles.cidrsContent}>
+                                <Tooltip title={cluster?.scopes?.hostnames[2] || ''} placement="top">
+                                  <Typography variant="body2" className={styles.cidrsText}>
+                                    {cluster?.scopes?.hostnames[2] || ''}
+                                  </Typography>
+                                </Tooltip>
+                              </Paper>
+                            ) : (
+                              <></>
+                            )}
+                            {cluster?.scopes?.hostnames?.length > 3 ? (
+                              <Paper variant="outlined" className={styles.cidrsContent}>
+                                <Tooltip title={cluster?.scopes?.hostnames[3] || ''} placement="top">
+                                  <Typography variant="body2" className={styles.cidrsText}>
+                                    {cluster?.scopes?.hostnames[3] || ''}
                                   </Typography>
                                 </Tooltip>
                               </Paper>
@@ -494,7 +580,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                           {cluster?.scopes?.hostnames?.length > 2 ? (
                             <IconButton
                               size="small"
-                              id="cidrs"
+                              id="hostnames"
                               onClick={() => {
                                 setOpenHostnames(true);
                               }}

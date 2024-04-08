@@ -6,7 +6,8 @@
     "scopes": {
       "idc": "Hangzhou|Shanghai|Beijing",
       "location": "China|Hang|Zhou",
-      "cidrs": ["10.0.0.0/8", "192.168.0.0/16", "172.16.0.0/12"]
+      "cidrs": ["10.0.0.0/8", "192.168.0.0/16", "172.16.0.0/12"],
+      "hostnames": null
     },
     "scheduler_cluster_id": 1,
     "seed_peer_cluster_id": 1,

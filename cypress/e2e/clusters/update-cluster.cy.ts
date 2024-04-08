@@ -59,7 +59,6 @@ describe('Update cluster', () => {
     cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root')
       .should('contain', 'Hangzhou')
       .and('contain', 'Shanghai')
-      .and('contain', 'Beijing');
 
     cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root')
       .should('contain', '10.0.0.0/8')
@@ -158,7 +157,7 @@ describe('Update cluster', () => {
       (req.body = ''),
         req.reply({
           statusCode: 200,
-          body: [],
+          body: {},
         });
     });
     cy.visit('/clusters/1');

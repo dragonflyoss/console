@@ -66,6 +66,11 @@
   justify-content: space-between;
 }
 
+.scopesIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
 .scopesIconContainer {
   display: flex;
   align-items: center;
@@ -74,11 +79,6 @@
   border-radius: 50%;
   width: 2rem;
   height: 2rem;
-}
-
-.scopesIcon {
-  width: 1.4rem;
-  height: 1.4rem;
 }
 
 .locationTitle {
@@ -121,9 +121,62 @@
   justify-content: space-between;
 }
 
+@media only screen and (min-width: 2049px) and (max-width: 2560px) {
+  .cidrsContent:nth-child(3) {
+    display: flex !important;
+  }
+
+  .cidrsContent:nth-child(4) {
+    display: flex !important;
+  }
+
+  .cidrsContent {
+    width: 8rem !important;
+  }
+}
+
+@media only screen and (max-width: 1920px) {
+  .cidrsContent:nth-child(3) {
+    display: flex !important;
+  }
+
+  .cidrsContent:nth-child(4) {
+    display: none !important;
+  }
+
+  .cidrsContent {
+    width: 7rem !important;
+  }
+}
+
+@media only screen and (max-width: 1600px) {
+  .cidrsContent:nth-child(3) {
+    display: none !important;
+  }
+
+  .cidrsContent:nth-child(4) {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 1440px) {
+  .cidrsContent:nth-child(3) {
+    display: none !important;
+  }
+
+  .cidrsContent:nth-child(4) {
+    display: none !important;
+  }
+}
+
+.cidrWrapper {
+  display: flex;
+  width: 80%;
+}
+
 .cidrsContent {
+  width: 6rem;
   height: 1.6rem;
-  max-width: 100%;
   margin-right: 0.6rem;
   display: inline-flex;
   align-items: center;
@@ -172,7 +225,7 @@
 }
 
 .cidrsDialogContent {
-  width: 30.4%;
+  width: 45%;
   background-color: #f4f3f6 !important;
   display: flex;
   align-items: center;

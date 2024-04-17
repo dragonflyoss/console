@@ -52,11 +52,13 @@ import {
   DEFAULT_SEED_PEER_TABLE_PAGE_SIZE,
 } from '../../lib/constants';
 import { getPaginatedList, useQuery } from '../../lib/utils';
+import LoadingBackdrop from '../loading-backdrop';
 
 export default function ShowCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
+  const [pageLoding, setPageLoding] = useState(false);
   const [informationIsLoading, setInformationIsLoading] = useState(true);
   const [schedulerTableIsLoading, setSchedulerTableIsLoading] = useState(true);
   const [seedPeerTableIsLoading, setSeedPeerTableIsLoading] = useState(true);
@@ -130,6 +132,7 @@ export default function ShowCluster() {
   useEffect(() => {
     (async function () {
       try {
+        setPageLoding(true);
         setInformationIsLoading(true);
         setSeedPeerTableIsLoading(true);
         setSchedulerTableIsLoading(true);
@@ -162,7 +165,7 @@ export default function ShowCluster() {
             setScheduler(scheduler);
             setSchedulerCount(scheduler);
           }
-
+          setPageLoding(false);
           setSchedulerTableIsLoading(false);
           setSeedPeerTableIsLoading(false);
           setInformationIsLoading(false);
@@ -171,6 +174,7 @@ export default function ShowCluster() {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
+          setPageLoding(false);
           setInformationIsLoading(false);
         }
       }
@@ -365,16 +369,16 @@ export default function ShowCluster() {
 
       const schedulers = searchSchedulers
         ? await getSchedulers({
-          scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-          page: 1,
-          per_page: MAX_PAGE_SIZE,
-          host_name: searchSchedulers,
-        })
+            scheduler_cluster_id: String(cluster.scheduler_cluster_id),
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+            host_name: searchSchedulers,
+          })
         : await getSchedulers({
-          scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-          page: 1,
-          per_page: MAX_PAGE_SIZE,
-        });
+            scheduler_cluster_id: String(cluster.scheduler_cluster_id),
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+          });
 
       if (schedulers.length > 0) {
         setScheduler(schedulers);
@@ -399,16 +403,16 @@ export default function ShowCluster() {
       setSeedPeerTableIsLoading(true);
       const seedPeers = searchSeedPeers
         ? await getSeedPeers({
-          seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
-          page: 1,
-          per_page: MAX_PAGE_SIZE,
-          host_name: searchSeedPeers,
-        })
+            seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+            host_name: searchSeedPeers,
+          })
         : await getSeedPeers({
-          seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
-          page: 1,
-          per_page: MAX_PAGE_SIZE,
-        });
+            seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+          });
 
       if (seedPeers.length > 0) {
         setSeedPeer(seedPeers);
@@ -430,6 +434,7 @@ export default function ShowCluster() {
 
   return (
     <ThemeProvider theme={theme}>
+      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -896,7 +901,8 @@ export default function ShowCluster() {
             onChange={(_event: any, newPage: number) => {
               setSchedulerPage(newPage);
               navigate(
-                `/clusters/${params.id}${newPage > 1 ? `?schedulerPage=${newPage}` : ''}${seedPeerPage > 1 ? `${newPage > 1 ? '&' : '?'}seedPeerPage=${seedPeerPage}` : ''
+                `/clusters/${params.id}${newPage > 1 ? `?schedulerPage=${newPage}` : ''}${
+                  seedPeerPage > 1 ? `${newPage > 1 ? '&' : '?'}seedPeerPage=${seedPeerPage}` : ''
                 }`,
               );
             }}
@@ -1182,7 +1188,8 @@ export default function ShowCluster() {
             onChange={(_event: any, newPage: number) => {
               setSeedPeerPage(newPage);
               navigate(
-                `/clusters/${params.id}${schedulerPage > 1 ? `?schedulerPage=${schedulerPage}` : ''}${newPage > 1 ? `${schedulerPage > 1 ? '&' : '?'}seedPeerPage=${newPage}` : ''
+                `/clusters/${params.id}${schedulerPage > 1 ? `?schedulerPage=${schedulerPage}` : ''}${
+                  newPage > 1 ? `${schedulerPage > 1 ? '&' : '?'}seedPeerPage=${newPage}` : ''
                 }`,
               );
             }}

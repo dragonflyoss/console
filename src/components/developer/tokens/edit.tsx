@@ -18,6 +18,7 @@ import {
   FormGroup,
   FormHelperText,
   Paper,
+  Skeleton,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { formatDate, getExpiredTime } from '../../../lib/utils';
@@ -27,6 +28,7 @@ import { getToken, updateTokens } from '../../../lib/api';
 import HelpIcon from '@mui/icons-material/Help';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import LoadingBackdrop from '../../loading-backdrop';
 
 const theme = createTheme({
   palette: {
@@ -40,6 +42,8 @@ export default function UpdateTokens() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
+  const [pageLoding, setPageLoding] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [bioError, setBioError] = useState(false);
   const [selectedTime, setSelectedTime] = useState('');
   const [expiredTime, setExpiredTime] = useState('');
@@ -96,6 +100,9 @@ export default function UpdateTokens() {
   useEffect(() => {
     (async function () {
       try {
+        setPageLoding(true);
+        setIsLoading(true);
+
         if (params?.id) {
           const tokens = await getToken(params?.id);
           setTokens(tokens);
@@ -103,9 +110,13 @@ export default function UpdateTokens() {
           setPreheat(tokens.scopes.includes('preheat'));
           setJob(tokens.scopes.includes('job'));
           setCluster(tokens.scopes.includes('cluster'));
+          setPageLoding(false);
+          setIsLoading(false);
         }
       } catch (error) {
         if (error instanceof Error) {
+          setPageLoding(false);
+          setIsLoading(false);
           setErrorMessage(true);
           setErrorMessageText(error.message);
         }
@@ -184,6 +195,7 @@ export default function UpdateTokens() {
 
   return (
     <Box>
+      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -215,12 +227,30 @@ export default function UpdateTokens() {
         >
           <Box component="img" src="/icons/tokens/key.svg" sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }} />
           <Box>
-            <Typography component="div" variant="body1" fontFamily="mabry-bold">
-              ID:&nbsp;&nbsp;{tokens.id}
-            </Typography>
-            <Typography component="div" variant="body1" fontFamily="mabry-bold">
-              Name:&nbsp;&nbsp;{tokens.name}
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography component="span" variant="body1" fontFamily="mabry-bold">
+                ID:&nbsp;&nbsp;
+              </Typography>
+              {isLoading ? (
+                <Skeleton sx={{ width: '2rem' }} />
+              ) : (
+                <Typography component="div" variant="body1" fontFamily="mabry-bold">
+                  {tokens.id}
+                </Typography>
+              )}
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography component="span" variant="body1" fontFamily="mabry-bold">
+                Name:&nbsp;&nbsp;
+              </Typography>
+              {isLoading ? (
+                <Skeleton sx={{ width: '3rem' }} />
+              ) : (
+                <Typography component="div" variant="body1" fontFamily="mabry-bold">
+                  {tokens.name}
+                </Typography>
+              )}
+            </Box>
           </Box>
         </Paper>
         <Box component="form" onSubmit={handleSubmit} noValidate>

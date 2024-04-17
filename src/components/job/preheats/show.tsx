@@ -25,11 +25,13 @@ import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { getDatetime } from '../../../lib/utils';
 import styles from './show.module.css';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import LoadingBackdrop from '../../loading-backdrop';
 
 export default function ShowPreheat() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [pageLoding, setPageLoding] = useState(false);
   const [shouldPoll, setShouldPoll] = useState(false);
   const [errorLog, setErrorLog] = useState(false);
   const [preheat, setPreheat] = useState<getJobResponse>();
@@ -49,13 +51,14 @@ export default function ShowPreheat() {
 
   useEffect(() => {
     setIsLoading(true);
+    setPageLoding(true);
     (async function () {
       try {
         if (typeof params.id === 'string') {
           const job = await getJob(params.id);
           setPreheat(job);
           setIsLoading(false);
-
+          setPageLoding(false);
           if (job.result.State !== 'SUCCESS' && job.result.State !== 'FAILURE') {
             setShouldPoll(true);
           }
@@ -65,6 +68,7 @@ export default function ShowPreheat() {
           setErrorMessage(true);
           setErrorMessageText(error.message);
           setIsLoading(false);
+          setPageLoding(false);
         }
       }
     })();
@@ -112,6 +116,7 @@ export default function ShowPreheat() {
 
   return (
     <ThemeProvider theme={theme}>
+      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}

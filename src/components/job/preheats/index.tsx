@@ -25,10 +25,12 @@ import { useEffect, useState } from 'react';
 import { getJobs, JobsResponse } from '../../../lib/api';
 import { DEFAULT_PAGE_SIZE } from '../../../lib/constants';
 import { getDatetime, useQuery } from '../../../lib/utils';
+import LoadingBackdrop from '../../loading-backdrop';
 
 export default function Preheats() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
+  const [pageLoding, setPageLoding] = useState(false);
   const [preheatPage, setPreheatPage] = useState(1);
   const [preheatTotalPages, setPreheatTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,6 +57,7 @@ export default function Preheats() {
   useEffect(() => {
     (async function () {
       try {
+        setPageLoding(true);
         setIsLoading(true);
         setPreheatPage(page);
 
@@ -74,10 +77,13 @@ export default function Preheats() {
         states === 0 ? setShouldPoll(false) : setShouldPoll(true);
 
         setIsLoading(false);
+        setPageLoding(false);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
+          setPageLoding(false);
+          setIsLoading(false);
         }
       }
     })();
@@ -142,6 +148,7 @@ export default function Preheats() {
 
   return (
     <ThemeProvider theme={theme}>
+      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}

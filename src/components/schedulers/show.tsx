@@ -8,9 +8,11 @@ import { getDatetime } from '../../lib/utils';
 import styles from './show.module.css';
 import _ from 'lodash';
 import { useParams, Link, useLocation } from 'react-router-dom';
+import LoadingBackdrop from '../loading-backdrop';
 
 export default function Schedulers() {
   const [isLoading, setIsLoading] = useState(false);
+  const [pageLoding, setPageLoding] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [scheduler, setScheduler] = useState<getSchedulerResponse>();
@@ -46,17 +48,21 @@ export default function Schedulers() {
   useEffect(() => {
     (async function () {
       try {
+        setPageLoding(true);
         setIsLoading(true);
 
         if (typeof params.id === 'string') {
           const scheduler = await getScheduler(params.id);
+
           setScheduler(scheduler);
+          setPageLoding(false);
           setIsLoading(false);
         }
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
+          setPageLoding(false);
           setIsLoading(false);
         }
       }
@@ -73,6 +79,7 @@ export default function Schedulers() {
 
   return (
     <Box>
+      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}

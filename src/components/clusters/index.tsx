@@ -34,6 +34,7 @@ import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import { useNavigate } from 'react-router-dom';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../lib/constants';
+import LoadingBackdrop from '../loading-backdrop';
 
 const theme = createTheme({
   breakpoints: {
@@ -58,6 +59,7 @@ const theme = createTheme({
 export default function Clusters() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
+  const [pageLoding, setPageLoding] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [clusterIsLoading, setClusterIsLoading] = useState(true);
   const [clusterPage, setClusterPage] = useState(1);
@@ -68,7 +70,6 @@ export default function Clusters() {
   const [scheduler, setScheduler] = useState<getSchedulersResponse[]>([]);
   const [seedPeer, setSeedPeer] = useState<getSeedPeersResponse[]>([]);
   const [allClusters, setAllClusters] = useState<getClustersResponse[]>([]);
-  
   const navigate = useNavigate();
   const query = useQuery();
   const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
@@ -76,6 +77,7 @@ export default function Clusters() {
   useEffect(() => {
     (async function () {
       try {
+        setPageLoding(true);
         setIsLoading(true);
         setClusterIsLoading(true);
         setClusterPage(page);
@@ -90,12 +92,14 @@ export default function Clusters() {
         setScheduler(scheduler);
         setSeedPeer(seedPeer);
         setClusterCount(cluster);
+        setPageLoding(false);
         setIsLoading(false);
         setClusterIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
+          setPageLoding(false);
           setIsLoading(false);
         }
       }
@@ -175,6 +179,7 @@ export default function Clusters() {
 
   return (
     <Box flex="1">
+      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}

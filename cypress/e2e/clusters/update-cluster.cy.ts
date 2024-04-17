@@ -58,7 +58,7 @@ describe('Update cluster', () => {
 
     cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root')
       .should('contain', 'Hangzhou')
-      .and('contain', 'Shanghai')
+      .and('contain', 'Shanghai');
 
     cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root')
       .should('contain', '10.0.0.0/8')
@@ -87,30 +87,30 @@ describe('Update cluster', () => {
         req.reply({
           statusCode: 200,
           body: {
-            "id": 0,
-            "name": "",
-            "bio": "",
-            "scopes": {
-              "idc": "",
-              "location": "",
-              "cidrs": null,
-              "hostnames": null
+            id: 0,
+            name: '',
+            bio: '',
+            scopes: {
+              idc: '',
+              location: '',
+              cidrs: null,
+              hostnames: null,
             },
-            "scheduler_cluster_id": 1,
-            "seed_peer_cluster_id": 1,
-            "scheduler_cluster_config": {
-              "candidate_parent_limit": 0,
-              "filter_parent_limit": 0
+            scheduler_cluster_id: 1,
+            seed_peer_cluster_id: 1,
+            scheduler_cluster_config: {
+              candidate_parent_limit: 0,
+              filter_parent_limit: 0,
             },
-            "seed_peer_cluster_config": {
-              "load_limit": 0
+            seed_peer_cluster_config: {
+              load_limit: 0,
             },
-            "peer_cluster_config": {
-              "load_limit": 0
+            peer_cluster_config: {
+              load_limit: 0,
             },
-            "created_at": "2023-03-08T02:39:03Z",
-            "updated_at": "2023-03-08T02:39:03Z",
-            "is_default": true
+            created_at: '2023-03-08T02:39:03Z',
+            updated_at: '2023-03-08T02:39:03Z',
+            is_default: false,
           },
         });
       },

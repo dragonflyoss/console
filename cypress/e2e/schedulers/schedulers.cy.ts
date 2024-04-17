@@ -62,16 +62,12 @@ describe('Schedulers', () => {
 
     it('can display schedulers table', () => {
       // Show hostname.
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(2) > .MuiTypography-root')
         .should('be.visible')
         .and('contain', 'scheduler-7');
 
       // Show ip.
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(3) > .show_ipContainer__pzOmv',
-      )
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(3) > .show_ipContainer__pzOmv')
         .should('be.visible')
         .and('contain', '30.44.98.202');
 
@@ -82,27 +78,21 @@ describe('Schedulers', () => {
         .and('have.css', 'background-color', 'rgb(46, 143, 121)');
 
       // Show features.
-      cy.get(':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(6)')
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)')
         .should('be.visible')
         .and('contain', 'Schedule')
         .and('contain', 'Preheat');
 
       // Show scheduler-5 information.
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#scheduler-table-body > :nth-child(2) > :nth-child(2) > .MuiTypography-root')
         .should('be.visible')
         .and('contain', 'scheduler-5');
 
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(2) > :nth-child(3) > .show_ipContainer__pzOmv',
-      )
+      cy.get('#scheduler-table-body > :nth-child(2) > :nth-child(3)')
         .should('be.visible')
         .and('contain', '20.14.28.202');
 
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#scheduler-table-body > :nth-child(5) > :nth-child(2)')
         .scrollIntoView()
         .should('be.visible')
         .and('contain', 'scheduler-10');
@@ -141,9 +131,7 @@ describe('Schedulers', () => {
     });
 
     it('there should be a message indicating that there is no scheduler', () => {
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > .MuiTableCell-root',
-      )
+      cy.get('#scheduler-table-body > .MuiTableRow-root > .MuiTableCell-root')
         .should('be.visible')
         .and('contain', `You don't have scheduler cluster.`);
     });
@@ -180,9 +168,7 @@ describe('Schedulers', () => {
     });
 
     it('there should be a message indicating that there is no scheduler', () => {
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > .MuiTableCell-root',
-      )
+      cy.get('#scheduler-table-body > .MuiTableRow-root > .MuiTableCell-root')
         .should('be.visible')
         .and('contain', `You don't have scheduler cluster.`);
     });
@@ -204,19 +190,14 @@ describe('Schedulers', () => {
         .and('have.text', 'scheduler-7');
 
       // Go to next page.
-      cy.get(':nth-child(7) > .MuiPagination-root > .MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
-
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableHead-root > .MuiTableRow-root > :nth-child(2)',
-      ).scrollIntoView();
+      cy.get('#scheduler-pagination > .MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
       // Check the current page number.
       cy.get('#scheduler-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
       // Show scheduler information.
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(2)')
+        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'scheduler-11');
 
@@ -230,9 +211,7 @@ describe('Schedulers', () => {
       // Check the current page number.
       cy.get('#scheduler-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
 
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#scheduler-table-body > .MuiTableRow-root > :nth-child(2)')
         .should('be.visible')
         .and('contain', 'scheduler-2');
     });
@@ -244,9 +223,7 @@ describe('Schedulers', () => {
       // Check the current page number.
       cy.get('#scheduler-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
 
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#scheduler-table-body > .MuiTableRow-root > .MuiTableCell-root')
         .should('be.visible')
         .and('contain', 'scheduler-2');
 
@@ -270,9 +247,7 @@ describe('Schedulers', () => {
       // Check the current page number.
       cy.get('#scheduler-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
 
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#scheduler-table-body > .MuiTableRow-root > .MuiTableCell-root')
         .should('be.visible')
         .and('contain', 'scheduler-2');
 
@@ -288,9 +263,7 @@ describe('Schedulers', () => {
       // Check the current page number.
       cy.get('#scheduler-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
 
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#scheduler-table-body > .MuiTableRow-root > .MuiTableCell-root')
         .should('be.visible')
         .and('contain', 'scheduler-2');
     });
@@ -313,9 +286,7 @@ describe('Schedulers', () => {
 
       cy.get('#scheduler-table-body').children().should('have.length', 5);
 
-      cy.get(
-        ':nth-child(6) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
-      ).type('scheduler-8{enter}');
+      cy.get('#free-solo-demo').type('scheduler-8{enter}');
 
       cy.get('#scheduler-table-body').children().should('have.length', 1);
 
@@ -323,9 +294,7 @@ describe('Schedulers', () => {
       cy.get('#scheduler-pagination > .MuiPagination-ul').should('not.exist');
 
       // Clear search box.
-      cy.get(
-        ':nth-child(6) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
-      ).clear();
+      cy.get('#free-solo-demo').clear();
 
       // If the search is empty, all schedulers will be displayed.
       cy.get('#scheduler-button').click();
@@ -348,14 +317,10 @@ describe('Schedulers', () => {
         },
       );
 
-      cy.get(
-        ':nth-child(6) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
-      ).type('scheduler-12{enter}');
+      cy.get('#free-solo-demo').type('scheduler-12{enter}');
 
       // No scheduler.
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > .MuiTableCell-root',
-      )
+      cy.get('#scheduler-table-body > .MuiTableRow-root > .MuiTableCell-root')
         .should('be.visible')
         .and('contain', `You don't have scheduler cluster.`);
 
@@ -376,9 +341,7 @@ describe('Schedulers', () => {
         },
       );
 
-      cy.get(
-        ':nth-child(6) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
-      ).type('scheduler-12{enter}');
+      cy.get('#free-solo-demo').type('scheduler-12{enter}');
 
       // Show error message.
       cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch');
@@ -446,9 +409,7 @@ describe('Schedulers', () => {
       // Go to next page.
       cy.get('#scheduler-pagination > .MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
       cy.get('#scheduler-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#scheduler-table-body > :nth-child(5) > :nth-child(2)')
         .should('be.visible')
         .and('contain', 'scheduler-4');
       cy.get('#scheduler-4').click();
@@ -515,9 +476,7 @@ describe('Schedulers', () => {
         },
       ).as('delete');
 
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(2)')
         .should('be.visible')
         .and('contain', 'scheduler-7');
 
@@ -542,9 +501,7 @@ describe('Schedulers', () => {
         },
       ).as('delete');
 
-      cy.get(
-        ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(2)')
         .should('be.visible')
         .and('contain', 'scheduler-7');
 

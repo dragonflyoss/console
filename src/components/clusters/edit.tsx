@@ -12,6 +12,7 @@ import {
   Tooltip,
   Typography,
   Paper,
+  Skeleton,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import styles from './edit.module.css';
@@ -21,11 +22,14 @@ import { getCluster, updateCluster, getClusterResponse } from '../../lib/api';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate, useParams } from 'react-router-dom';
+import LoadingBackdrop from '../loading-backdrop';
 
 export default function EditCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
+  const [pageLoding, setPageLoding] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [bioError, setBioError] = useState(false);
   const [seedPeerLoadLimitError, setSeedPeerLoadLimitError] = useState(false);
   const [peerLoadLimitError, setPeerLoadLimitError] = useState(false);
@@ -82,12 +86,19 @@ export default function EditCluster() {
   useEffect(() => {
     (async function () {
       try {
+        setPageLoding(true);
+        setIsLoading(true);
+
         if (typeof params.id === 'string') {
           const cluster = await getCluster(params.id);
           setCluster(cluster);
+          setPageLoding(false);
+          setIsLoading(false);
         }
       } catch (error) {
         if (error instanceof Error) {
+          setPageLoding(false);
+          setIsLoading(false);
           setErrorMessage(true);
           setErrorMessageText(error.message);
         }
@@ -584,11 +595,11 @@ export default function EditCluster() {
 
     const canSubmit = Boolean(
       !informationForm.filter((item) => item.syncError).length &&
-      !scopesForm.filter((item) => item.syncError).length &&
-      !configForm.filter((item) => item.syncError).length &&
-      Boolean(!idcText) &&
-      Boolean(!cidrsText) &&
-      Boolean(!hostnamesText),
+        !scopesForm.filter((item) => item.syncError).length &&
+        !configForm.filter((item) => item.syncError).length &&
+        Boolean(!idcText) &&
+        Boolean(!cidrsText) &&
+        Boolean(!hostnamesText),
     );
 
     const formdata = {
@@ -632,6 +643,7 @@ export default function EditCluster() {
 
   return (
     <Grid>
+      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -659,12 +671,30 @@ export default function EditCluster() {
       <Paper variant="outlined" sx={{ display: 'inline-flex', alignItems: 'center', mb: '1rem', p: '1rem' }}>
         <Box component="img" src="/icons/cluster/cluster.svg" sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }} />
         <Box>
-          <Typography component="div" variant="body1" fontFamily="mabry-bold">
-            ID:&nbsp;&nbsp;{cluster.id}
-          </Typography>
-          <Typography component="div" variant="body1" fontFamily="mabry-bold">
-            Name:&nbsp;&nbsp;{cluster.name}
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography component="span" variant="body1" fontFamily="mabry-bold">
+              ID:&nbsp;&nbsp;
+            </Typography>
+            {isLoading ? (
+              <Skeleton sx={{ width: '2rem' }} />
+            ) : (
+              <Typography component="div" variant="body1" fontFamily="mabry-bold">
+                {cluster.id}
+              </Typography>
+            )}
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography component="span" variant="body1" fontFamily="mabry-bold">
+              Name:&nbsp;&nbsp;
+            </Typography>
+            {isLoading ? (
+              <Skeleton sx={{ width: '4rem' }} />
+            ) : (
+              <Typography component="div" variant="body1" fontFamily="mabry-bold">
+                {cluster.name}
+              </Typography>
+            )}
+          </Box>
         </Box>
       </Paper>
       <Grid component="form" noValidate onSubmit={handleSubmit}>

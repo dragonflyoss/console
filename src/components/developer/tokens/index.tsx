@@ -28,6 +28,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
+import LoadingBackdrop from '../../loading-backdrop';
 
 const theme = createTheme({
   palette: {
@@ -44,6 +45,7 @@ export default function PersonalAccessTokens() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
+  const [pageLoding, setPageLoding] = useState(false);
   const [openDeletToken, setOpenDeletToken] = useState(false);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [tokenSelectedID, setTokenSelectedID] = useState('');
@@ -62,7 +64,6 @@ export default function PersonalAccessTokens() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-
     setTokensPage(page);
 
     if (token) {
@@ -74,11 +75,15 @@ export default function PersonalAccessTokens() {
 
     (async function () {
       try {
+        setPageLoding(true);
+
         const token = await getTokens({ page: 1, per_page: MAX_PAGE_SIZE });
 
         setToken(token);
+        setPageLoding(false);
       } catch (error) {
         if (error instanceof Error) {
+          setPageLoding(false);
           setErrorMessage(true);
           setErrorMessageText(error.message);
         }
@@ -104,8 +109,6 @@ export default function PersonalAccessTokens() {
       setAllTokens([]);
     }
   }, [token, tokensPage]);
-
-  console.log(token, allTokens);
 
   const handleDeleteClose = async (row: any) => {
     setOpenDeletToken(true);
@@ -153,6 +156,7 @@ export default function PersonalAccessTokens() {
 
   return (
     <ThemeProvider theme={theme}>
+      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}

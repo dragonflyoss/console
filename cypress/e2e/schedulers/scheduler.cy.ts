@@ -63,13 +63,12 @@ describe('Scheduler', () => {
   it('click the hostname', () => {
     cy.visit('/clusters/1');
 
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-    ).should('have.text', 'scheduler-7');
+    cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(2) > .MuiTypography-root').should(
+      'have.text',
+      'scheduler-7',
+    );
 
-    cy.get(
-      ':nth-child(6) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-    ).click();
+    cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(2) > .MuiTypography-root').click();
 
     // Then I see that the current page is the clusters/1/schedulers/7!
     cy.url().should('include', '/clusters/1/schedulers/7');

@@ -63,39 +63,27 @@ describe('Seed peers', () => {
 
     it('can display seed peers table', () => {
       // Show hostname.
-      cy.get(
-        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(2)')
         .scrollIntoView()
         .should('be.visible')
         .and('contain', 'seed-peer-10');
 
       // Show ip.
-      cy.get(
-        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(3) > .show_ipContainer__pzOmv',
-      )
+      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(3)')
         .should('be.visible')
         .and('contain', '192.168.255.255');
 
       // Show port.
-      cy.get(':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(4)')
-        .should('be.visible')
-        .and('contain', '65006');
+      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(4)').should('be.visible').and('contain', '65006');
 
       // Show download port.
-      cy.get(':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(5)')
-        .should('be.visible')
-        .and('contain', '65002');
+      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(5)').should('be.visible').and('contain', '65002');
 
       // Show object storage port.
-      cy.get(':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(6)')
-        .should('be.visible')
-        .and('contain', '443');
+      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(6)').should('be.visible').and('contain', '443');
 
       // Show type.
-      cy.get(':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(7)')
-        .should('be.visible')
-        .and('contain', 'Super');
+      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(7)').should('be.visible').and('contain', 'Super');
 
       // Show state.
       cy.get(':nth-child(1) > :nth-child(8) > .MuiChip-root')
@@ -132,9 +120,7 @@ describe('Seed peers', () => {
     });
 
     it('there should be a message indicating that there is no seed peer', () => {
-      cy.get(
-        ':nth-child(8) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > .MuiTableCell-root',
-      )
+      cy.get('#seed-peer-table-body > .MuiTableRow-root > .MuiTableCell-root')
         .scrollIntoView()
         .should('be.visible')
         .and('contain', `You don't have seed peer cluster.`);
@@ -172,9 +158,7 @@ describe('Seed peers', () => {
     });
 
     it('there should be a message indicating that there is no seed peer', () => {
-      cy.get(
-        ':nth-child(8) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > .MuiTableCell-root',
-      )
+      cy.get('#seed-peer-table-body > .MuiTableRow-root > .MuiTableCell-root')
         .scrollIntoView()
         .should('be.visible')
         .and('contain', `You don't have seed peer cluster.`);
@@ -201,9 +185,7 @@ describe('Seed peers', () => {
       cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').scrollIntoView().should('have.text', '2');
 
       // Show seed peer information.
-      cy.get(
-        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(4) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#seed-peer-table-body > :nth-child(4) > :nth-child(2)')
         .should('be.visible')
         .and('contain', 'seed-peer-11');
 
@@ -218,9 +200,7 @@ describe('Seed peers', () => {
       // Check the current page number.
       cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').scrollIntoView().should('have.text', '3');
 
-      cy.get(
-        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#seed-peer-table-body > .MuiTableRow-root > :nth-child(2)')
         .should('be.visible')
         .and('contain', 'seed-peer-3');
 
@@ -239,9 +219,7 @@ describe('Seed peers', () => {
       cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
 
       // show hostname.
-      cy.get(
-        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#seed-peer-table-body > .MuiTableRow-root > :nth-child(2)')
         .should('be.visible')
         .and('contain', 'seed-peer-3');
 
@@ -266,9 +244,7 @@ describe('Seed peers', () => {
       cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
 
       // show hostname.
-      cy.get(
-        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#seed-peer-table-body > .MuiTableRow-root > :nth-child(2)')
         .should('be.visible')
         .and('contain', 'seed-peer-3');
 
@@ -281,16 +257,12 @@ describe('Seed peers', () => {
       // Go back to the last page。
       cy.go('back');
 
+      cy.get('.css-1o0u1hg-MuiPaper-root > .MuiChip-root > .MuiChip-label').scrollIntoView();
+
       // Check the current page number.
       cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
 
-      // show hostname.
-      cy.get(
-        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
-      )
-        .scrollIntoView()
-        .should('be.visible')
-        .and('contain', 'seed-peer-3');
+      cy.get('#seed-peer-table-body > .MuiTableRow-root > :nth-child(1)').should('have.text', 3);
     });
   });
 
@@ -311,9 +283,7 @@ describe('Seed peers', () => {
 
       cy.get('#seed-peer-table-body').children().should('have.length', 5);
 
-      cy.get(
-        ':nth-child(9) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
-      ).type('seed-peer-4{enter}');
+      cy.get('#seedPeerSearch').type('seed-peer-4{enter}');
 
       cy.get('#seed-peer-table-body').children().should('have.length', 1);
 
@@ -344,14 +314,10 @@ describe('Seed peers', () => {
         },
       );
 
-      cy.get(
-        ':nth-child(9) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
-      ).type('seed-peer-12{enter}');
+      cy.get('#seedPeerSearch').type('seed-peer-12{enter}');
 
       // No seed peer.
-      cy.get(
-        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > .MuiTableCell-root',
-      )
+      cy.get('#seed-peer-table-body > .MuiTableRow-root > .MuiTableCell-root')
         .should('be.visible')
         .and('contain', `You don't have seed peer cluster.`);
 
@@ -372,9 +338,7 @@ describe('Seed peers', () => {
         },
       );
 
-      cy.get(
-        ':nth-child(9) > .show_searchContainer__6kD-7 > .MuiStack-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root',
-      ).type('seed-peer-3{enter}');
+      cy.get('#seedPeerSearch').type('seed-peer-3{enter}');
 
       // Show error message.
       cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch').should('be.visible');
@@ -394,9 +358,7 @@ describe('Seed peers', () => {
       // Check the current page number.
       cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
 
-      cy.get(
-        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > .MuiTableRow-root > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#seed-peer-table-body > .MuiTableRow-root > :nth-child(2)')
         .should('be.visible')
         .and('contain', 'seed-peer-3');
 
@@ -441,9 +403,7 @@ describe('Seed peers', () => {
       // Check if the total number of pages is 4.
       cy.get('#seed-peer-pagination > .MuiPagination-ul').children().should('have.length', 4);
 
-      cy.get(
-        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#seed-peer-table-body > :nth-child(5) > :nth-child(2)')
         .scrollIntoView()
         .should('be.visible')
         .and('contain', 'seed-peer-9');
@@ -459,9 +419,7 @@ describe('Seed peers', () => {
       // Check if the total number of pages is 5.
       cy.get('#seed-peer-pagination > .MuiPagination-ul').children().should('have.length', 5);
 
-      cy.get(
-        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#seed-peer-table-body > :nth-child(5) > :nth-child(2)')
         .scrollIntoView()
         .should('be.visible')
         .and('contain', 'seed-peer-9');
@@ -511,9 +469,7 @@ describe('Seed peers', () => {
     it('try to delete seed peer using guest user', () => {
       cy.guestSignin();
 
-      cy.get(
-        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(2)')
         .scrollIntoView()
         .should('be.visible')
         .and('contain', 'seed-peer-10');
@@ -539,9 +495,7 @@ describe('Seed peers', () => {
     });
 
     it('should handle API error response', () => {
-      cy.get(
-        ':nth-child(9) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(2)')
         .scrollIntoView()
         .should('be.visible')
         .and('contain', 'seed-peer-10');

@@ -265,14 +265,12 @@ describe('Seed peers', () => {
       // Go back to the last page。
       cy.go('back');
 
+      cy.get('.css-1o0u1hg-MuiPaper-root > .MuiChip-root > .MuiChip-label').scrollIntoView();
+
       // Check the current page number.
       cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
-      cy.get('.css-1p7sslo > :nth-child(11)').scrollIntoView()
 
-      // show hostname.
-      cy.get('#seed-peer-table-body > .MuiTableRow-root > :nth-child(2)')
-        .should('be.visible')
-        .and('contain', 'seed-peer-3');
+      cy.get('#seed-peer-table-body > .MuiTableRow-root > :nth-child(1)').should('have.text', 3)
     });
   });
 

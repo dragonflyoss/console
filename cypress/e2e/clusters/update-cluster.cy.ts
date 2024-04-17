@@ -110,7 +110,7 @@ describe('Update cluster', () => {
             },
             "created_at": "2023-03-08T02:39:03Z",
             "updated_at": "2023-03-08T02:39:03Z",
-            "is_default": true
+            "is_default": false
           },
         });
       },

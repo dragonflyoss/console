@@ -28,6 +28,7 @@ import styles from './index.module.css';
 import { getDatetime } from '../../lib/utils';
 import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../menu/index';
+import LoadingBackdrop from '../loading-backdrop';
 
 export default function Profile() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -67,7 +68,7 @@ export default function Profile() {
     new_password: '',
   });
 
-  const { user, handleUserUpdate } = useContext(MyContext);
+  const { user, handleUserUpdate, pageLoding } = useContext(MyContext);
 
   const navigate = useNavigate();
 
@@ -508,6 +509,7 @@ export default function Profile() {
 
   return (
     <Box>
+      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}

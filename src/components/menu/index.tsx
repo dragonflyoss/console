@@ -29,6 +29,7 @@ import { ROLE_ROOT, ROLE_GUEST } from '../../lib/constants';
 interface MyContextType {
   user: getUserResponse;
   role: string;
+  pageLoding: boolean;
   handleUserUpdate: (newUser: getUserResponse) => void;
 }
 
@@ -47,6 +48,7 @@ export const MyContext = createContext<MyContextType>({
     bio: '',
   },
   role: '',
+  pageLoding: false,
   handleUserUpdate: () => {
     return;
   },
@@ -94,26 +96,31 @@ export default function Layout(props: any) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setPageLoding(true);
-    const payload = getJwtPayload();
-    setPageTitle(location.pathname);
+
 
     (async function () {
       try {
+        setPageLoding(true);
+        const payload = getJwtPayload();
+        setPageTitle(location.pathname);
+
         if (payload?.id) {
           const [user, userRoles] = await Promise.all([getUser(payload?.id), getUserRoles(payload?.id)]);
           setUser(user);
           setRole(userRoles.includes(ROLE_ROOT) ? ROLE_ROOT : ROLE_GUEST);
+          setPageLoding(false);
         } else {
+          setPageLoding(false);
           navigate('/signin');
         }
       } catch (error) {
         if (error instanceof Error) {
+          setPageLoding(false);
           setErrorMessage(true);
           setErrorMessageText(error.message);
         }
       }
-      setPageLoding(false);
+
     })();
 
     if (location.state?.firstLogin) {
@@ -239,16 +246,7 @@ export default function Layout(props: any) {
   };
 
   return (
-    <MyContext.Provider value={{ user, role, handleUserUpdate }}>
-      <Backdrop
-        open={pageLoding}
-        sx={{
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          backgroundColor: 'rgba(0,0,0,0.3)',
-        }}
-      >
-        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
-      </Backdrop>
+    <MyContext.Provider value={{ user, role, handleUserUpdate, pageLoding }}>
       <Snackbar
         open={firstLogin}
         autoHideDuration={60000}

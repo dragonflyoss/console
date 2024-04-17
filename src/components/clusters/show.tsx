@@ -52,11 +52,13 @@ import {
   DEFAULT_SEED_PEER_TABLE_PAGE_SIZE,
 } from '../../lib/constants';
 import { getPaginatedList, useQuery } from '../../lib/utils';
+import LoadingBackdrop from '../loading-backdrop';
 
 export default function ShowCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
+  const [pageLoding, setPageLoding] = useState(false);
   const [informationIsLoading, setInformationIsLoading] = useState(true);
   const [schedulerTableIsLoading, setSchedulerTableIsLoading] = useState(true);
   const [seedPeerTableIsLoading, setSeedPeerTableIsLoading] = useState(true);
@@ -130,6 +132,7 @@ export default function ShowCluster() {
   useEffect(() => {
     (async function () {
       try {
+        setPageLoding(true);
         setInformationIsLoading(true);
         setSeedPeerTableIsLoading(true);
         setSchedulerTableIsLoading(true);
@@ -162,7 +165,7 @@ export default function ShowCluster() {
             setScheduler(scheduler);
             setSchedulerCount(scheduler);
           }
-
+          setPageLoding(false);
           setSchedulerTableIsLoading(false);
           setSeedPeerTableIsLoading(false);
           setInformationIsLoading(false);
@@ -171,6 +174,7 @@ export default function ShowCluster() {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
+          setPageLoding(false);
           setInformationIsLoading(false);
         }
       }
@@ -430,6 +434,7 @@ export default function ShowCluster() {
 
   return (
     <ThemeProvider theme={theme}>
+      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}

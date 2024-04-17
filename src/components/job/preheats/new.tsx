@@ -34,10 +34,12 @@ import { createJob, getClusters } from '../../../lib/api';
 import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './new.module.css';
 import AddIcon from '@mui/icons-material/Add';
+import LoadingBackdrop from '../../loading-backdrop';
 
 export default function NewPreheat() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
+  const [pageLoding, setPageLoding] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [bioError, setBioError] = useState(false);
   const [urlError, setURLError] = useState(false);
@@ -64,8 +66,19 @@ export default function NewPreheat() {
 
   useEffect(() => {
     (async function () {
-      const cluster = await getClusters({ page: 1, per_page: MAX_PAGE_SIZE });
-      setCluster(cluster);
+
+      try {
+        setPageLoding(true);
+        const cluster = await getClusters({ page: 1, per_page: MAX_PAGE_SIZE });
+        setCluster(cluster);
+        setPageLoding(false);
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(true);
+          setErrorMessageText(error.message);
+          setPageLoding(false);
+        }
+      }
     })();
   }, []);
 
@@ -200,8 +213,8 @@ export default function NewPreheat() {
 
       formProps: {
         id: 'filteredQueryParams',
-      name: 'filteredQueryParams',
-      label: 'Filter Query Params',
+        name: 'filteredQueryParams',
+        label: 'Filter Query Params',
         placeholder: 'Press the Enter key to confirm the entered value',
         error: filterError,
         helperText: filterError ? filterHelperText : '',
@@ -304,10 +317,10 @@ export default function NewPreheat() {
 
     const canSubmit = Boolean(
       !informationForm.filter((item) => item.syncError).length &&
-        !argsForm.filter((item) => item.syncError).length &&
-        clusterIDValidate &&
-        headerValidate &&
-        Boolean(!filterText),
+      !argsForm.filter((item) => item.syncError).length &&
+      clusterIDValidate &&
+      headerValidate &&
+      Boolean(!filterText),
     );
 
     const formDate = {
@@ -351,6 +364,7 @@ export default function NewPreheat() {
 
   return (
     <ThemeProvider theme={theme}>
+      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}

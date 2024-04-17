@@ -369,16 +369,16 @@ export default function ShowCluster() {
 
       const schedulers = searchSchedulers
         ? await getSchedulers({
-          scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-          page: 1,
-          per_page: MAX_PAGE_SIZE,
-          host_name: searchSchedulers,
-        })
+            scheduler_cluster_id: String(cluster.scheduler_cluster_id),
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+            host_name: searchSchedulers,
+          })
         : await getSchedulers({
-          scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-          page: 1,
-          per_page: MAX_PAGE_SIZE,
-        });
+            scheduler_cluster_id: String(cluster.scheduler_cluster_id),
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+          });
 
       if (schedulers.length > 0) {
         setScheduler(schedulers);
@@ -403,16 +403,16 @@ export default function ShowCluster() {
       setSeedPeerTableIsLoading(true);
       const seedPeers = searchSeedPeers
         ? await getSeedPeers({
-          seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
-          page: 1,
-          per_page: MAX_PAGE_SIZE,
-          host_name: searchSeedPeers,
-        })
+            seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+            host_name: searchSeedPeers,
+          })
         : await getSeedPeers({
-          seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
-          page: 1,
-          per_page: MAX_PAGE_SIZE,
-        });
+            seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+          });
 
       if (seedPeers.length > 0) {
         setSeedPeer(seedPeers);
@@ -901,7 +901,8 @@ export default function ShowCluster() {
             onChange={(_event: any, newPage: number) => {
               setSchedulerPage(newPage);
               navigate(
-                `/clusters/${params.id}${newPage > 1 ? `?schedulerPage=${newPage}` : ''}${seedPeerPage > 1 ? `${newPage > 1 ? '&' : '?'}seedPeerPage=${seedPeerPage}` : ''
+                `/clusters/${params.id}${newPage > 1 ? `?schedulerPage=${newPage}` : ''}${
+                  seedPeerPage > 1 ? `${newPage > 1 ? '&' : '?'}seedPeerPage=${seedPeerPage}` : ''
                 }`,
               );
             }}
@@ -1187,7 +1188,8 @@ export default function ShowCluster() {
             onChange={(_event: any, newPage: number) => {
               setSeedPeerPage(newPage);
               navigate(
-                `/clusters/${params.id}${schedulerPage > 1 ? `?schedulerPage=${schedulerPage}` : ''}${newPage > 1 ? `${schedulerPage > 1 ? '&' : '?'}seedPeerPage=${newPage}` : ''
+                `/clusters/${params.id}${schedulerPage > 1 ? `?schedulerPage=${schedulerPage}` : ''}${
+                  newPage > 1 ? `${schedulerPage > 1 ? '&' : '?'}seedPeerPage=${newPage}` : ''
                 }`,
               );
             }}

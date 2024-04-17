@@ -96,8 +96,6 @@ export default function Layout(props: any) {
   const navigate = useNavigate();
 
   useEffect(() => {
-
-
     (async function () {
       try {
         setPageLoding(true);
@@ -120,7 +118,6 @@ export default function Layout(props: any) {
           setErrorMessageText(error.message);
         }
       }
-
     })();
 
     if (location.state?.firstLogin) {

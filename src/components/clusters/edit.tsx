@@ -595,11 +595,11 @@ export default function EditCluster() {
 
     const canSubmit = Boolean(
       !informationForm.filter((item) => item.syncError).length &&
-      !scopesForm.filter((item) => item.syncError).length &&
-      !configForm.filter((item) => item.syncError).length &&
-      Boolean(!idcText) &&
-      Boolean(!cidrsText) &&
-      Boolean(!hostnamesText),
+        !scopesForm.filter((item) => item.syncError).length &&
+        !configForm.filter((item) => item.syncError).length &&
+        Boolean(!idcText) &&
+        Boolean(!cidrsText) &&
+        Boolean(!hostnamesText),
     );
 
     const formdata = {
@@ -675,19 +675,25 @@ export default function EditCluster() {
             <Typography component="span" variant="body1" fontFamily="mabry-bold">
               ID:&nbsp;&nbsp;
             </Typography>
-            {isLoading ? <Skeleton sx={{ width: '2rem' }} /> :
+            {isLoading ? (
+              <Skeleton sx={{ width: '2rem' }} />
+            ) : (
               <Typography component="div" variant="body1" fontFamily="mabry-bold">
                 {cluster.id}
-              </Typography>}
+              </Typography>
+            )}
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography component="span" variant="body1" fontFamily="mabry-bold">
               Name:&nbsp;&nbsp;
             </Typography>
-            {isLoading ? <Skeleton sx={{ width: '4rem' }} /> :
+            {isLoading ? (
+              <Skeleton sx={{ width: '4rem' }} />
+            ) : (
               <Typography component="div" variant="body1" fontFamily="mabry-bold">
                 {cluster.name}
-              </Typography>}
+              </Typography>
+            )}
           </Box>
         </Box>
       </Paper>

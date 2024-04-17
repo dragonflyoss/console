@@ -202,8 +202,8 @@ export default function ShowPreheat() {
                         preheat.result.State === 'SUCCESS'
                           ? '#228B22'
                           : preheat.result.State === 'FAILURE'
-                            ? '#D42536'
-                            : '#DBAB0A',
+                          ? '#D42536'
+                          : '#DBAB0A',
                     }}
                     id="status"
                   >

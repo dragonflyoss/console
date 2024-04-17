@@ -63,7 +63,10 @@ describe('Scheduler', () => {
   it('click the hostname', () => {
     cy.visit('/clusters/1');
 
-    cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(2) > .MuiTypography-root').should('have.text', 'scheduler-7');
+    cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(2) > .MuiTypography-root').should(
+      'have.text',
+      'scheduler-7',
+    );
 
     cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(2) > .MuiTypography-root').click();
 

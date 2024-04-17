@@ -409,7 +409,9 @@ describe('Schedulers', () => {
       // Go to next page.
       cy.get('#scheduler-pagination > .MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
       cy.get('#scheduler-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
-      cy.get('#scheduler-table-body > :nth-child(5) > :nth-child(2)').should('be.visible').and('contain', 'scheduler-4');
+      cy.get('#scheduler-table-body > :nth-child(5) > :nth-child(2)')
+        .should('be.visible')
+        .and('contain', 'scheduler-4');
       cy.get('#scheduler-4').click();
 
       // Check if the total number of pages is 5.

@@ -10,7 +10,6 @@ import _ from 'lodash';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import LoadingBackdrop from '../loading-backdrop';
 
-
 export default function SeedPeer() {
   const [isLoading, setIsLoading] = useState(false);
   const [pageLoding, setPageLoding] = useState(false);

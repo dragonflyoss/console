@@ -74,24 +74,16 @@ describe('Seed peers', () => {
         .and('contain', '192.168.255.255');
 
       // Show port.
-      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(4)')
-        .should('be.visible')
-        .and('contain', '65006');
+      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(4)').should('be.visible').and('contain', '65006');
 
       // Show download port.
-      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(5)')
-        .should('be.visible')
-        .and('contain', '65002');
+      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(5)').should('be.visible').and('contain', '65002');
 
       // Show object storage port.
-      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(6)')
-        .should('be.visible')
-        .and('contain', '443');
+      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(6)').should('be.visible').and('contain', '443');
 
       // Show type.
-      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(7)')
-        .should('be.visible')
-        .and('contain', 'Super');
+      cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(7)').should('be.visible').and('contain', 'Super');
 
       // Show state.
       cy.get(':nth-child(1) > :nth-child(8) > .MuiChip-root')
@@ -270,7 +262,7 @@ describe('Seed peers', () => {
       // Check the current page number.
       cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
 
-      cy.get('#seed-peer-table-body > .MuiTableRow-root > :nth-child(1)').should('have.text', 3)
+      cy.get('#seed-peer-table-body > .MuiTableRow-root > :nth-child(1)').should('have.text', 3);
     });
   });
 

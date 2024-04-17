@@ -36,7 +36,6 @@ import { useNavigate } from 'react-router-dom';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../lib/constants';
 import LoadingBackdrop from '../loading-backdrop';
 
-
 const theme = createTheme({
   breakpoints: {
     values: {

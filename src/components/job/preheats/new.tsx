@@ -66,7 +66,6 @@ export default function NewPreheat() {
 
   useEffect(() => {
     (async function () {
-
       try {
         setPageLoding(true);
         const cluster = await getClusters({ page: 1, per_page: MAX_PAGE_SIZE });
@@ -317,10 +316,10 @@ export default function NewPreheat() {
 
     const canSubmit = Boolean(
       !informationForm.filter((item) => item.syncError).length &&
-      !argsForm.filter((item) => item.syncError).length &&
-      clusterIDValidate &&
-      headerValidate &&
-      Boolean(!filterText),
+        !argsForm.filter((item) => item.syncError).length &&
+        clusterIDValidate &&
+        headerValidate &&
+        Boolean(!filterText),
     );
 
     const formDate = {

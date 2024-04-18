@@ -672,6 +672,7 @@ export interface JobsResponse {
     tag: string;
     type: string;
     url: string;
+    pieceLength: number;
   };
   result: {
     CreatedAt: string;
@@ -725,6 +726,7 @@ export interface getJobResponse {
     tag: string;
     type: string;
     url: string;
+    pieceLength: number;
   };
   result: {
     CreatedAt: string;
@@ -764,6 +766,7 @@ interface createJobRequest {
     url: string;
     tag: string;
     filteredQueryParams: string;
+    pieceLength: number;
     headers?: { [key: string]: string } | null;
   };
   scheduler_cluster_ids: Array<number>;
@@ -784,6 +787,7 @@ interface cerateJobResponse {
     tag: string;
     type: string;
     url: string;
+    pieceLength: number;
   };
   result: string;
 }

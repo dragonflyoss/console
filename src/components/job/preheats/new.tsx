@@ -22,6 +22,7 @@ import {
   Snackbar,
   Alert,
   Paper,
+  InputAdornment,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import HelpIcon from '@mui/icons-material/Help';
@@ -44,6 +45,7 @@ export default function NewPreheat() {
   const [bioError, setBioError] = useState(false);
   const [urlError, setURLError] = useState(false);
   const [tagError, setTagError] = useState(false);
+  const [pieceLengthError, setPieceLengthError] = useState(false);
   const [filterError, setFilterError] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const [headers, setheaders] = useState<Array<{ key: string; value: string }>>([]);
@@ -120,22 +122,32 @@ export default function NewPreheat() {
   const argsForm = [
     {
       formProps: {
-        id: 'url',
-        label: 'URL',
-        name: 'url',
+        id: 'pieceLength',
+        label: 'Piece Length',
+        name: 'pieceLength',
+        type: 'number',
         required: true,
+        defaultValue: 4,
         autoComplete: 'family-name',
-        placeholder: 'Enter your URL',
-        helperText: urlError ? 'Fill in the characters, the length is 1-1000.' : '',
-        error: urlError,
+        placeholder: 'Enter your piece length',
+        helperText: pieceLengthError ? 'Fill in the number, the length is 4-1024 MiB.' : '',
+        error: pieceLengthError,
         InputProps: {
           endAdornment: (
-            <Tooltip title={'URL address used to specify the resource to be preheat.'} placement="top">
-              <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
-              />
-            </Tooltip>
+            <>
+              <InputAdornment position="start">MiB</InputAdornment>
+              <Tooltip
+                title={
+                  'By setting the pieceLength parameter, you can specify the size of the piece to be downloaded during preheat. The default minimum value is 4MiB and the maximum value is 1024MiB.'
+                }
+                placement="top"
+              >
+                <HelpIcon
+                  color="disabled"
+                  sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                />
+              </Tooltip>
+            </>
           ),
         },
         onChange: (e: any) => {
@@ -143,9 +155,10 @@ export default function NewPreheat() {
         },
       },
       syncError: false,
-      setError: setURLError,
+      setError: setPieceLengthError,
+
       validate: (value: string) => {
-        const reg = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s].{1,1000}$/;
+        const reg = /^(?:[4-9]|[1-9]\d{1,2}|10[0-1]\d|102[0-4])$/;
         return reg.test(value);
       },
     },
@@ -188,6 +201,38 @@ export default function NewPreheat() {
       },
     },
     {
+      formProps: {
+        id: 'url',
+        label: 'URL',
+        name: 'url',
+        required: true,
+        autoComplete: 'family-name',
+        placeholder: 'Enter your URL',
+        helperText: urlError ? 'Fill in the characters, the length is 1-1000.' : '',
+        error: urlError,
+        InputProps: {
+          endAdornment: (
+            <Tooltip title={'URL address used to specify the resource to be preheat.'} placement="top">
+              <HelpIcon
+                color="disabled"
+                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+              />
+            </Tooltip>
+          ),
+        },
+        onChange: (e: any) => {
+          changeValidate(e.target.value, argsForm[2]);
+        },
+      },
+      syncError: false,
+      setError: setURLError,
+      validate: (value: string) => {
+        const reg = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s].{1,1000}$/;
+        return reg.test(value);
+      },
+    },
+
+    {
       id: 'filteredQueryParams',
       name: 'filteredQueryParams',
       label: 'Filter Query Params',
@@ -195,13 +240,13 @@ export default function NewPreheat() {
         value: filter,
         options: [],
         onChange: (_e: any, newValue: any) => {
-          if (!argsForm[2].formProps.error) {
+          if (!argsForm[3].formProps.error) {
             setFilter(newValue);
           }
         },
         onInputChange: (e: any) => {
           setFilterHelperText('Fill in the characters, the length is 0-100.');
-          changeValidate(e.target.value, argsForm[2]);
+          changeValidate(e.target.value, argsForm[3]);
         },
 
         renderTags: (value: any, getTagProps: any) =>
@@ -266,6 +311,7 @@ export default function NewPreheat() {
     const bio = event.currentTarget.elements.description.value;
     const url = event.currentTarget.elements.url.value;
     const tag = event.currentTarget.elements.tag.value;
+    const pieceLength = event.currentTarget.elements.pieceLength.value;
     const filterText = event.currentTarget.elements.filteredQueryParams.value;
     const filters = filter.join('&');
 
@@ -329,6 +375,7 @@ export default function NewPreheat() {
         type: 'file',
         url: url,
         tag: tag,
+        pieceLength: pieceLength * 1024 * 1024,
         filteredQueryParams: filters,
         headers: headerList,
       },
@@ -426,7 +473,7 @@ export default function NewPreheat() {
               </Tooltip>
             </Box>
             <FormControl
-              sx={{ width: '20rem' }}
+              className={styles.textField}
               margin="normal"
               required
               size="small"
@@ -479,64 +526,84 @@ export default function NewPreheat() {
                 />
               </Tooltip>
             </Box>
-            {argsForm.map((item) => {
-              return (
-                <Box key={item.formProps.name}>
-                  {item.id === 'filteredQueryParams' ? (
-                    <Autocomplete
-                      freeSolo
-                      multiple
-                      disableClearable
-                      {...item.filterFormProps}
-                      size="small"
-                      className={styles.filterInput}
-                      renderInput={(params) => (
-                        <TextField
-                          margin="normal"
-                          {...params}
-                          InputProps={{
-                            ...params.InputProps,
-                            endAdornment: (
-                              <>
-                                {params.InputProps.endAdornment}
-                                <Tooltip
-                                  title={
-                                    'By setting the filter parameter, you can specify the file type of the resource that needs to be preheated. The filter is used to generate a unique preheat task and filter unnecessary query parameters in the URL, separated by & characters.'
-                                  }
-                                  placement="top"
-                                >
-                                  <HelpIcon
-                                    color="disabled"
-                                    sx={{
-                                      width: '0.8rem',
-                                      height: '0.8rem',
-                                      mr: '0.3rem',
-                                      ':hover': { color: 'var(--description-color)' },
-                                    }}
-                                  />
-                                </Tooltip>
-                              </>
-                            ),
-                          }}
-                          color="success"
-                          {...item.formProps}
-                        />
-                      )}
-                    />
-                  ) : (
-                    <TextField
-                      color="success"
-                      margin="normal"
-                      size="small"
-                      {...item.formProps}
-                      className={styles.filterInput}
-                    />
-                  )}
-                </Box>
-              );
-            })}
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              {argsForm.map((item) => {
+                return (
+                  <Box key={item.formProps.id} className={styles.argsWrapper}>
+                    {item.id === 'filteredQueryParams' ? (
+                      <Autocomplete
+                        freeSolo
+                        multiple
+                        disableClearable
+                        {...item.filterFormProps}
+                        size="small"
+                        className={styles.filterInput}
+                        renderInput={(params) => (
+                          <TextField
+                            margin="normal"
+                            {...params}
+                            InputProps={{
+                              ...params.InputProps,
+                              endAdornment: (
+                                <>
+                                  {params.InputProps.endAdornment}
+                                  <Tooltip
+                                    title={
+                                      'By setting the filter parameter, you can specify the file type of the resource that needs to be preheated. The filter is used to generate a unique preheat task and filter unnecessary query parameters in the URL, separated by & characters.'
+                                    }
+                                    placement="top"
+                                  >
+                                    <HelpIcon
+                                      color="disabled"
+                                      sx={{
+                                        width: '0.8rem',
+                                        height: '0.8rem',
+                                        mr: '0.3rem',
+                                        ':hover': { color: 'var(--description-color)' },
+                                      }}
+                                    />
+                                  </Tooltip>
+                                </>
+                              ),
+                            }}
+                            color="success"
+                            {...item.formProps}
+                          />
+                        )}
+                      />
+                    ) : item.formProps.id === 'pieceLength' ? (
+                      <TextField
+                        color="success"
+                        margin="normal"
+                        size="small"
+                        {...item.formProps}
+                        sx={{ width: '9rem', mr: '1rem' }}
+                        className={styles.textField}
+                      />
+                    ) : item.formProps.id === 'tag' ? (
+                      <TextField
+                        color="success"
+                        margin="normal"
+                        size="small"
+                        {...item.formProps}
+                        sx={{ width: '26rem' }}
+                        className={styles.textField}
+                      />
+                    ) : (
+                      <TextField
+                        color="success"
+                        margin="normal"
+                        size="small"
+                        {...item.formProps}
+                        className={styles.filterInput}
+                      />
+                    )}
+                  </Box>
+                );
+              })}
+            </Box>
             {headers.length > 0 ? (
-              <Paper id="header" variant="outlined" sx={{ p: '1rem', width: '40rem', mt: '1rem' }}>
+              <Paper id="header" variant="outlined" sx={{ p: '1rem', width: '36rem', mt: '1rem' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography variant="body1" fontFamily="mabry-bold" mr="0.4rem">
                     Headers

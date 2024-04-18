@@ -12,9 +12,13 @@
     "headers": {
       "Connection": "keep-alive"
     },
+    "password": "",
+    "pieceLength": 4194304,
+    "platform": "",
     "tag": "prheat tag",
     "type": "file",
-    "url": "http://dock.io/preheat/test"
+    "url": "http://dock.io/preheat/test",
+    "username": ""
   },
   "result": {
     "CreatedAt": "2023-12-13T11:58:53.535716295Z",

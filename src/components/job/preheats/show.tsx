@@ -284,6 +284,28 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/piece-length.svg" />
+              <Typography
+                variant="body1"
+                fontFamily="mabry-bold"
+                component="div"
+                className={styles.informationTitleText}
+              >
+                Piece Length
+              </Typography>
+            </Box>
+            <Typography variant="body1" className={styles.informationContent}>
+              {isLoading ? (
+                <Skeleton sx={{ width: '4rem' }} />
+              ) : (
+                `${
+                  Number(preheat?.args?.pieceLength) >= 4194304 ? Number(preheat?.args?.pieceLength) / 1024 / 1024 : '0'
+                } MiB` || '0 MiB'
+              )}
+            </Typography>
+          </Box>
+          <Box className={styles.informationContainer}>
+            <Box className={styles.informationTitle}>
               <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/filter.svg" />
               <Typography
                 variant="body1"

@@ -1,20 +1,29 @@
 .textField {
-  width: 20rem;
+  width: 18rem;
 }
 
 .filterInput {
-  width: 40rem;
+  width: 36rem !important;
 }
 
 .headersKeyInput {
-  width: 20rem;
+  width: 18rem;
   margin-right: 0.6rem !important;
 }
 
 .headersValueInput {
-  width: 20rem;
+  width: 18rem;
 }
 
 .title {
   margin-bottom: 0.5rem;
+}
+
+.informationTitleIcon {
+  width: 1.4rem !important;
+  height: 1.4rem !important;
+}
+
+.argsWrapper:nth-child(n + 3) {
+  width: 100%;
 }

@@ -81,7 +81,7 @@ describe('Preheat', () => {
       cy.get(':nth-child(1) > .show_informationContent__wKGxa').should('have.text', 10);
 
       // Show preheat description.
-      cy.get(':nth-child(2) > .show_informationContent__wKGxa').should(
+      cy.get('.css-1k5mnne-MuiPaper-root > :nth-child(2) > .show_informationContent__wKGxa').should(
         'have.text',
         'This is a preheat task with status failure',
       );
@@ -95,19 +95,22 @@ describe('Preheat', () => {
 
       cy.get(':nth-child(4) > .show_informationContent__wKGxa').should('have.text', 'http://dock.io/preheat/test');
 
-      // Show preheat filter.
-      cy.get(':nth-child(5) > .show_informationContent__wKGxa').children().should('have.length', 2);
+      // Show preheat Piece Length.
+      cy.get(':nth-child(5) > .show_informationContent__wKGxa').should('have.text', '1002 MiB');
 
-      cy.get(':nth-child(5) > .show_informationContent__wKGxa > :nth-child(1) > .MuiChip-label').should(
+      // Show preheat filter.
+      cy.get(':nth-child(6) > .show_informationContent__wKGxa').children().should('have.length', 2);
+
+      cy.get(':nth-child(6) > .show_informationContent__wKGxa > :nth-child(1) > .MuiChip-label').should(
         'have.text',
         'Expires',
       );
 
       // Show preheat tag.
-      cy.get(':nth-child(6) > .show_informationContent__wKGxa > .MuiChip-root').should('have.text', 'prheat tag');
+      cy.get(':nth-child(7) > .show_informationContent__wKGxa').should('have.text', 'prheat tag');
 
       // Show preheat hearder.
-      cy.get(':nth-child(7) > .MuiPaper-root').children().should('have.length', 1);
+      cy.get(':nth-child(8) > .MuiPaper-root').children().should('have.length', 1);
 
       cy.get('.css-172ywp3').should('have.text', 'Connection');
       cy.get('.css-ft9ciy').should('have.text', 'keep-alive');
@@ -116,7 +119,7 @@ describe('Preheat', () => {
       cy.get('.show_schedulerClustersID__iQd1s').should('have.text', 1);
 
       // Show preheat Created At.
-      cy.get(':nth-child(9) > .MuiChip-root').should('have.text', '2023-12-13 11:58:53');
+      cy.get(':nth-child(10) > .MuiChip-root').should('have.text', '2023-12-13 11:58:53');
 
       // Click the show error log button.
       cy.get('#status > .MuiButtonBase-root').click();
@@ -139,6 +142,9 @@ describe('Preheat', () => {
       // Show preheat id.
       cy.get(':nth-child(1) > .show_informationContent__wKGxa').should('have.text', 8);
 
+      // Show piece lenght.
+      cy.get(':nth-child(5) > .show_informationContent__wKGxa').should('have.text', '4 MiB');
+
       // Show preheat status.
       cy.get('#status')
         .should('have.text', 'SUCCESS')
@@ -147,7 +153,7 @@ describe('Preheat', () => {
         .and('not.exist');
 
       // Show preheat hearder.
-      cy.get(':nth-child(7) > .MuiPaper-root').children().should('have.length', 2);
+      cy.get(':nth-child(8) > .MuiPaper-root').children().should('have.length', 2);
     });
 
     it('should display detailed preheat pending information', () => {
@@ -186,7 +192,7 @@ describe('Preheat', () => {
         .and('not.exist');
 
       // Show preheat hearder.
-      cy.get(':nth-child(7) > .MuiPaper-root').children().should('have.length', 1);
+      cy.get(':nth-child(8) > .MuiPaper-root').children().should('have.length', 1);
 
       cy.wait(6000);
 
@@ -262,6 +268,9 @@ describe('Preheat', () => {
 
       cy.get('.css-2imjyh > .MuiTypography-root').should('have.text', '-');
 
+      // Show preheat piece lenght.
+      cy.get(':nth-child(5) > .show_informationContent__wKGxa').should('have.text', '0 MiB');
+
       // Show preheat tag.
       cy.get(':nth-child(6) > .show_informationContent__wKGxa.MuiBox-root > .MuiTypography-root').should(
         'have.text',
@@ -275,7 +284,7 @@ describe('Preheat', () => {
       cy.get('.show_schedulerClustersID__iQd1s').should('have.text', '-');
 
       // Show preheat Created At.
-      cy.get(':nth-child(9) > .show_informationContent__wKGxa').should('have.text', '-');
+      cy.get(':nth-child(10) > .show_informationContent__wKGxa').should('have.text', '-');
     });
   });
 
@@ -341,7 +350,7 @@ describe('Preheat', () => {
       cy.get('.show_schedulerClustersID__iQd1s').should('have.text', '-');
 
       // Show preheat Created At.
-      cy.get(':nth-child(9) > .show_informationContent__wKGxa').should('have.text', '-');
+      cy.get(':nth-child(10) > .show_informationContent__wKGxa').should('have.text', '-');
     });
 
     it('when the status is pending, preheat API error response', () => {
@@ -380,7 +389,7 @@ describe('Preheat', () => {
         .and('not.exist');
 
       // Show preheat hearder.
-      cy.get(':nth-child(7) > .MuiPaper-root').children().should('have.length', 1);
+      cy.get(':nth-child(8) > .MuiPaper-root').children().should('have.length', 1);
 
       cy.wait(6000);
 

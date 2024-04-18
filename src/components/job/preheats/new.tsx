@@ -526,11 +526,10 @@ export default function NewPreheat() {
                 />
               </Tooltip>
             </Box>
-            <></>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {argsForm.map((item) => {
                 return (
-                  <>
+                  <Box key={item.formProps.id} className={styles.argsWrapper}>
                     {item.id === 'filteredQueryParams' ? (
                       <Autocomplete
                         freeSolo
@@ -591,17 +590,15 @@ export default function NewPreheat() {
                         className={styles.textField}
                       />
                     ) : (
-                      <Box sx={{ width: '100%' }}>
-                        <TextField
-                          color="success"
-                          margin="normal"
-                          size="small"
-                          {...item.formProps}
-                          className={styles.filterInput}
-                        />
-                      </Box>
+                      <TextField
+                        color="success"
+                        margin="normal"
+                        size="small"
+                        {...item.formProps}
+                        className={styles.filterInput}
+                      />
                     )}
-                  </>
+                  </Box>
                 );
               })}
             </Box>

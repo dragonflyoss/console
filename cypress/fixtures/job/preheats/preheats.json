@@ -13,9 +13,13 @@
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
+      "password": "",
+      "pieceLength": 1050673152,
+      "platform": "",
       "tag": "",
       "type": "file",
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "username": ""
     },
     "result": {
       "CreatedAt": "2023-03-23T08:29:18.204923418Z",
@@ -65,9 +69,13 @@
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
+      "password": "",
+      "pieceLength": 1050673152,
+      "platform": "",
       "tag": "",
       "type": "file",
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "username": ""
     },
     "result": {
       "CreatedAt": "2023-03-23T07:55:35.492980831Z",
@@ -117,9 +125,13 @@
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
+      "password": "",
+      "pieceLength": 1050673152,
+      "platform": "",
       "tag": "",
       "type": "file",
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "username": ""
     },
     "result": {
       "CreatedAt": "2023-03-23T08:29:18.204923418Z",
@@ -169,9 +181,13 @@
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
+      "password": "",
+      "pieceLength": 1050673152,
+      "platform": "",
       "tag": "",
       "type": "file",
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "username": ""
     },
     "result": {
       "CreatedAt": "2023-03-23T07:55:35.492980831Z",
@@ -221,9 +237,13 @@
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
+      "password": "",
+      "pieceLength": 1050673152,
+      "platform": "",
       "tag": "",
       "type": "file",
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "username": ""
     },
     "result": {
       "CreatedAt": "2023-03-23T08:29:18.204923418Z",
@@ -273,9 +293,13 @@
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
+      "password": "",
+      "pieceLength": 1050673152,
+      "platform": "",
       "tag": "",
       "type": "file",
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "username": ""
     },
     "result": {
       "CreatedAt": "2023-03-23T07:55:35.492980831Z",
@@ -325,9 +349,13 @@
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
+      "password": "",
+      "pieceLength": 1050673152,
+      "platform": "",
       "tag": "",
       "type": "file",
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "username": ""
     },
     "result": {
       "CreatedAt": "2023-03-23T08:29:18.204923418Z",
@@ -377,9 +405,13 @@
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
+      "password": "",
+      "pieceLength": 1050673152,
+      "platform": "",
       "tag": "",
       "type": "file",
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "username": ""
     },
     "result": {
       "CreatedAt": "2023-03-23T07:55:35.492980831Z",
@@ -429,9 +461,13 @@
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
+      "password": "",
+      "pieceLength": 1050673152,
+      "platform": "",
       "tag": "",
       "type": "file",
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "username": ""
     },
     "result": {
       "CreatedAt": "2023-03-23T08:29:18.204923418Z",
@@ -481,9 +517,13 @@
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
+      "password": "",
+      "pieceLength": 1050673152,
+      "platform": "",
       "tag": "",
       "type": "file",
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "username": ""
     },
     "result": {
       "CreatedAt": "2023-03-23T07:55:35.492980831Z",

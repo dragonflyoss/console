@@ -593,9 +593,8 @@ describe('Schedulers', () => {
       // Display the total number of seed peer.
       cy.get('#seedPeerTotal').should('have.text', '3 inactive');
       cy.get('#next-button').click();
-      cy.get('#change-password').click();
+      cy.get('#save-delete').click();
       cy.get('#deleteAllInactive-helper-text').should('have.text', 'Please enter "DELETE"');
-      cy.get('.css-19pnsli-MuiTypography-root').should('be.visible');
 
       cy.intercept(
         {
@@ -621,7 +620,12 @@ describe('Schedulers', () => {
           });
         },
       );
-      cy.get('#deleteAllInactive').type('DELETE{enter}');
+
+      cy.get('#deleteAllInactive').type('DELETE');
+
+      cy.get('#deleteAllInactive-helper-text').should('not.exist');
+
+      cy.get('#save-delete').click();
 
       // Show delete loading page.
       cy.get('.MuiLinearProgress-root').should('be.visible');
@@ -631,8 +635,8 @@ describe('Schedulers', () => {
       cy.get('#cancel-button').should('not.exist');
       cy.get('body').click('topLeft');
       cy.get('.css-xmqx0h').should('be.visible');
-      cy.wait(2000);
 
+      cy.get('#failure').should('not.exist');
       // Show number of deleted schedulers.
       cy.get('.show_logHeaderWrapper__8-k3K > :nth-child(1) > :nth-child(1) > .MuiTypography-h6').should(
         'have.text',
@@ -673,9 +677,8 @@ describe('Schedulers', () => {
       // Display the total number of seed peer.
       cy.get('#seedPeerTotal').should('have.text', '3 inactive');
       cy.get('#next-button').click();
-      cy.get('#change-password').click();
+      cy.get('#save-delete').click();
       cy.get('#deleteAllInactive-helper-text').should('have.text', 'Please enter "DELETE"');
-      cy.get('.css-19pnsli-MuiTypography-root').should('be.visible');
 
       cy.intercept(
         {
@@ -727,9 +730,8 @@ describe('Schedulers', () => {
       // Display the total number of seed peer.
       cy.get('#seedPeerTotal').should('have.text', '3 inactive');
       cy.get('#next-button').click();
-      cy.get('#change-password').click();
+      cy.get('#save-delete').click();
       cy.get('#deleteAllInactive-helper-text').should('have.text', 'Please enter "DELETE"');
-      cy.get('.css-19pnsli-MuiTypography-root').should('be.visible');
 
       cy.intercept(
         {
@@ -785,9 +787,8 @@ describe('Schedulers', () => {
       // Display the total number of seed peer.
       cy.get('#seedPeerTotal').should('have.text', '3 inactive');
       cy.get('#next-button').click();
-      cy.get('#change-password').click();
+      cy.get('#save-delete').click();
       cy.get('#deleteAllInactive-helper-text').should('have.text', 'Please enter "DELETE"');
-      cy.get('.css-19pnsli-MuiTypography-root').should('be.visible');
 
       cy.intercept(
         {

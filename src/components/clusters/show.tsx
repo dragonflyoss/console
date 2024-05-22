@@ -568,11 +568,11 @@ export default function ShowCluster() {
   };
 
   const handleConfirmDelete = async (event: any) => {
+    setProgressLoading(true);
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
     const idcText = event.currentTarget.elements.deleteAllInactive.value;
-
-    setProgressLoading(true);
 
     if (idcText !== 'DELETE') {
       setAllInactiveError(true);
@@ -628,7 +628,7 @@ export default function ShowCluster() {
         }
       };
 
-      const performDeletion = async (schedulersIds: any, seedPeersIds: any) => {
+      const executeDelete = async (schedulersIds: any, seedPeersIds: any) => {
         if (schedulerID !== false && seedPeerID !== false) {
           const totalApiCalls = schedulerID.length + seedPeerID.length;
 
@@ -639,7 +639,6 @@ export default function ShowCluster() {
 
           try {
             await deleteSelectedSchedulers(schedulersIds, onDeleteSuccess);
-
             await deleteSelectedSeedPeers(seedPeersIds, onDeleteSuccess);
 
             setProgressLoading(false);
@@ -676,6 +675,7 @@ export default function ShowCluster() {
                 setScheduler(scheduler);
                 setSchedulerCount(scheduler);
               }
+
               if (cluster.seed_peer_cluster_id !== 0) {
                 const seedPeer = await getSeedPeers({
                   seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
@@ -689,15 +689,13 @@ export default function ShowCluster() {
               if (error instanceof Error) {
                 setErrorMessage(true);
                 setErrorMessageText(error.message);
-                setPageLoding(false);
-                setInformationIsLoading(false);
               }
             }
           }
         }
       };
 
-      performDeletion(schedulerID, seedPeerID);
+      executeDelete(schedulerID, seedPeerID);
     }
   };
 
@@ -708,29 +706,6 @@ export default function ShowCluster() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
-  const QontoConnector = styled(StepConnector)(({ theme }) => ({
-    [`&.${stepConnectorClasses.alternativeLabel}`]: {
-      top: 10,
-      left: 'calc(-50% + 16px)',
-      right: 'calc(50% + 16px)',
-    },
-    [`&.${stepConnectorClasses.active}`]: {
-      [`& .${stepConnectorClasses.line}`]: {
-        borderColor: 'var(--description-color)',
-      },
-    },
-    [`&.${stepConnectorClasses.completed}`]: {
-      [`& .${stepConnectorClasses.line}`]: {
-        borderColor: 'var(--description-color)',
-      },
-    },
-    [`& .${stepConnectorClasses.line}`]: {
-      borderColor: theme.palette.mode === 'dark' ? theme.palette.grey[800] : '#eaeaf0',
-      borderTopWidth: 3,
-      borderRadius: 1,
-    },
-  }));
 
   const handleReset = () => {
     setActiveStep(0);
@@ -1176,7 +1151,7 @@ export default function ShowCluster() {
                   <Paper variant="outlined">
                     <Box className={styles.schedulerInactiveCountWrapper}>
                       <Typography fontFamily="mabry-bold" variant="subtitle1" component="div">
-                        Inactive schedulers
+                        Schedulers
                       </Typography>
                       <Box
                         sx={{
@@ -1239,8 +1214,8 @@ export default function ShowCluster() {
                         >
                           {Array.isArray(schedulerInactive) &&
                             schedulerInactive.map((item) => (
-                              <>
-                                <ListItem key={item.id} className={styles.schedulerInactiveList}>
+                              <Box key={item.id}>
+                                <ListItem className={styles.schedulerInactiveList}>
                                   <MuiTooltip title={item.id || '-'} placement="top">
                                     <Typography variant="body2" component="div" className={styles.schedulerInactiveID}>
                                       {item.id}
@@ -1262,7 +1237,7 @@ export default function ShowCluster() {
                                   </MuiTooltip>
                                 </ListItem>
                                 <Divider />
-                              </>
+                              </Box>
                             ))}
                         </List>
                       ) : (
@@ -1276,7 +1251,7 @@ export default function ShowCluster() {
                   <Paper variant="outlined">
                     <Box className={styles.schedulerInactiveCountWrapper}>
                       <Typography fontFamily="mabry-bold" variant="subtitle1" component="div">
-                        Inactive seed peers
+                        Seed peers
                       </Typography>
                       <Box
                         sx={{
@@ -1339,8 +1314,8 @@ export default function ShowCluster() {
                         >
                           {Array.isArray(seedPeerInactive) &&
                             seedPeerInactive.map((item) => (
-                              <>
-                                <ListItem key={item.id} className={styles.schedulerInactiveList}>
+                              <Box key={item.id}>
+                                <ListItem className={styles.schedulerInactiveList}>
                                   <MuiTooltip title={item.id || '-'} placement="top">
                                     <Typography variant="body2" component="div" className={styles.schedulerInactiveID}>
                                       {item.id}
@@ -1362,7 +1337,7 @@ export default function ShowCluster() {
                                   </MuiTooltip>
                                 </ListItem>
                                 <Divider />
-                              </>
+                              </Box>
                             ))}
                         </List>
                       ) : (
@@ -1381,11 +1356,10 @@ export default function ShowCluster() {
                         sx={{ width: '1.4rem', height: '1.4rem', pr: '0.2rem' }}
                       />
                       <Box>
-                        <Typography variant="body1" fontFamily="mabry-bold" component="span" sx={{ color: '#FF385D' }}>
+                        <Typography variant="body1" fontFamily="mabry-bold" component="span" sx={{ color: '#D81E06' }}>
                           WARNING:&nbsp;
                         </Typography>
-
-                        <Typography variant="body1" component="span" sx={{ color: '#FF385D' }}>
+                        <Typography variant="body1" component="span" sx={{ color: '#D81E06' }}>
                           This action CANNOT be undone.
                         </Typography>
                       </Box>
@@ -1440,7 +1414,7 @@ export default function ShowCluster() {
                       size="small"
                       variant="contained"
                       type="submit"
-                      id="change-password"
+                      id="save-delete"
                       sx={{
                         '&.MuiLoadingButton-root': {
                           backgroundColor: 'var(--save-color)',

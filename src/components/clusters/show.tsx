@@ -586,14 +586,14 @@ export default function ShowCluster() {
       const deleteSelectedSchedulers = async (ids: any, onDeleteSuccess: any) => {
         for (let i = 0; i < ids.length; i++) {
           try {
-            const result = await (async function (id) {
+            await (async function (id) {
               return deleteScheduler(id);
             })(ids[i]);
 
+            onDeleteSuccess();
             setDeleteInactiveSchedulerSuccessful(
               (deleteInactiveSchedulerSuccessful) => deleteInactiveSchedulerSuccessful + 1,
             );
-            onDeleteSuccess();
           } catch (error) {
             if (error instanceof Error) {
               setDeleteAllInactiveErrorMessage((prevMessages) => [
@@ -612,6 +612,7 @@ export default function ShowCluster() {
             await (async function (id) {
               return deleteSeedPeer(id);
             })(ids[i]);
+
             onDeleteSuccess();
             setDeleteInactiveSeedPeerSuccessful(
               (deleteInactiveSeedPeerSuccessful) => deleteInactiveSeedPeerSuccessful + 1,

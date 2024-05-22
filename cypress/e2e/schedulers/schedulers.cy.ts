@@ -4,6 +4,10 @@ import scheduler from '../../fixtures/clusters/cluster/scheduler.json';
 import deleteScheduler from '../../fixtures/schedulers/delete-scheduler.json';
 import schedulerDeleteAfter from '../../fixtures/schedulers/scheduler-delete-after.json';
 import searchScheduler from '../../fixtures/schedulers/search-scheduler.json';
+import deletedInactiveScheduler from '../../fixtures/clusters/cluster/deleted-inactive-scheduler.json';
+import deletedInactiveSeedPeer from '../../fixtures/clusters/cluster/deleted-inactive-seed-peer.json';
+import schedulerActive from '../../fixtures/schedulers/scheduler-active.json';
+import seedPeerActive from '../../fixtures/seed-peers/seed-peer-active.json';
 
 describe('Schedulers', () => {
   beforeEach(() => {
@@ -85,6 +89,7 @@ describe('Schedulers', () => {
 
       // Show scheduler-5 information.
       cy.get('#scheduler-table-body > :nth-child(2) > :nth-child(2) > .MuiTypography-root')
+        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'scheduler-5');
 
@@ -453,9 +458,8 @@ describe('Schedulers', () => {
       // Check if the total number of pages is 4.
       cy.get('#scheduler-pagination > .MuiPagination-ul').children().should('have.length', 4);
 
-      cy.get(
-        ':nth-child(7) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#scheduler-table-body > :nth-child(5) > :nth-child(2)')
+        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'scheduler-2');
     });
@@ -512,6 +516,313 @@ describe('Schedulers', () => {
 
       // Show error message.
       cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch');
+    });
+  });
+
+  describe('delete inactive schedulers and inactive seed peers', () => {
+    it('There are no inactive scheduler and inactive seed peers that can be deleted', () => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/seed-peers?page=1&per_page=10000000&seed_peer_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: seedPeerActive,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: schedulerActive,
+          });
+        },
+      );
+
+      cy.get('#delete-all-inactive-instances').click();
+      cy.get('.css-pbbh6n > .css-70qvj9 > .MuiTypography-root').should(
+        'have.text',
+        'Delete inactive schedulers and inactive seed peers',
+      );
+      cy.get('#schedulerTotal').should('have.text', '0 inactive');
+      cy.get('#back-button').should('be.disabled');
+
+      // Check next button.
+      cy.get('#next-button').should('be.disabled');
+    });
+
+    it('can delete inactive schedulers and inactive seed peers', () => {
+      const seedPeer = [10, 11, 9, 3];
+      const schedulers = [10, 11, 9, 8, 6, 4, 2];
+
+      for (let i = 0; i < seedPeer.length; i++) {
+        cy.intercept('DELETE', `/api/v1/seed-peers/${seedPeer[i]}`, (req) => {
+          req.reply({
+            statusCode: 200,
+            delayMs: 400,
+          });
+        });
+      }
+
+      for (let i = 0; i < schedulers.length; i++) {
+        cy.intercept('DELETE', `/api/v1/schedulers/${schedulers[i]}`, (req) => {
+          req.reply({
+            statusCode: 200,
+            delayMs: 400,
+          });
+        });
+      }
+
+      cy.get('#delete-all-inactive-instances').click();
+      cy.get('.css-pbbh6n > .css-70qvj9 > .MuiTypography-root').should(
+        'have.text',
+        'Delete inactive schedulers and inactive seed peers',
+      );
+      cy.get('#schedulerTotal').should('have.text', '7 inactive');
+      cy.get('#back-button').should('be.disabled');
+      cy.get('#next-button').should('not.be.disabled');
+      cy.get('#next-button').click();
+
+      // Display the total number of seed peer.
+      cy.get('#seedPeerTotal').should('have.text', '3 inactive');
+      cy.get('#next-button').click();
+      cy.get('#save-delete').click();
+      cy.get('#deleteAllInactive-helper-text').should('have.text', 'Please enter "DELETE"');
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: deletedInactiveScheduler,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/seed-peers?page=1&per_page=10000000&seed_peer_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: deletedInactiveSeedPeer,
+          });
+        },
+      );
+
+      cy.get('#deleteAllInactive').type('DELETE');
+
+      cy.get('#deleteAllInactive-helper-text').should('not.exist');
+
+      cy.get('#save-delete').click();
+
+      // Show delete loading page.
+      cy.get('.MuiLinearProgress-root').should('be.visible');
+
+      // Unable to display delete cancel button and delete cancel icon button.
+      cy.get('#close-delete-icon').should('not.exist');
+      cy.get('#cancel-button').should('not.exist');
+      cy.get('body').click('topLeft');
+      cy.get('.css-xmqx0h').should('be.visible');
+
+      cy.get('#failure').should('not.exist');
+      // Show number of deleted schedulers.
+      cy.get('.show_logHeaderWrapper__8-k3K > :nth-child(1) > :nth-child(1) > .MuiTypography-h6').should(
+        'have.text',
+        7,
+      );
+
+      // Show number of deleted seed peers.
+      cy.get(':nth-child(2) > :nth-child(1) > .MuiTypography-h6').should('have.text', 3);
+
+      // Show successfully deleted message.
+      cy.get('.MuiAlert-message').should(
+        'have.text',
+        'You have successfully removed all inactive schedulers and inactive seed peers!',
+      );
+      cy.get('#cancel-button').click();
+
+      // Check the total number of schedulers.
+      cy.get('.css-ms744u-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('have.text', 'Total: 4');
+
+      // Check the total number of seed peers.
+      cy.get('.css-1o0u1hg-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('have.text', 'Total: 8');
+    });
+
+    it('cannot delete inactive schedulers and inactive seed peers', () => {
+      cy.intercept('DELETE', `/api/v1/schedulers/10`, (req) => {
+        req.reply({
+          statusCode: 404,
+          delayMs: 100,
+          body: { message: 'Not Found' },
+        });
+      });
+
+      cy.get('#delete-all-inactive-instances').click();
+      cy.get('#back-button').should('be.disabled');
+      cy.get('#next-button').should('not.be.disabled');
+      cy.get('#next-button').click();
+
+      // Display the total number of seed peer.
+      cy.get('#seedPeerTotal').should('have.text', '3 inactive');
+      cy.get('#next-button').click();
+      cy.get('#save-delete').click();
+      cy.get('#deleteAllInactive-helper-text').should('have.text', 'Please enter "DELETE"');
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: deletedInactiveScheduler,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/seed-peers?page=1&per_page=10000000&seed_peer_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: deletedInactiveSeedPeer,
+          });
+        },
+      );
+
+      cy.get('#deleteAllInactive').type('DELETE{enter}');
+      cy.get('#failure').should('exist');
+      cy.get('#inactive-header').click();
+
+      // Show error message.
+      cy.get('.MuiAccordionDetails-root > .MuiTypography-root')
+        .should('be.visible')
+        .and('have.text', 'Deletion of scheduler with ID 10 failed! Error : Not Found.');
+    });
+
+    it('should handle API error response', () => {
+      cy.intercept('DELETE', `/api/v1/schedulers/10`, (req) => {
+        req.reply({
+          forceNetworkError: true,
+        });
+      });
+
+      cy.get('#delete-all-inactive-instances').click();
+      cy.get('#back-button').should('be.disabled');
+      cy.get('#next-button').should('not.be.disabled');
+      cy.get('#next-button').click();
+
+      // Display the total number of seed peer.
+      cy.get('#seedPeerTotal').should('have.text', '3 inactive');
+      cy.get('#next-button').click();
+      cy.get('#save-delete').click();
+      cy.get('#deleteAllInactive-helper-text').should('have.text', 'Please enter "DELETE"');
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            forceNetworkError: true,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/seed-peers?page=1&per_page=10000000&seed_peer_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            forceNetworkError: true,
+          });
+        },
+      );
+
+      cy.get('#deleteAllInactive').type('DELETE{enter}');
+      cy.get('#failure').should('exist');
+      cy.get('#inactive-header').click();
+
+      // Show error message.
+      cy.get('.MuiAccordionDetails-root > .MuiTypography-root')
+        .should('be.visible')
+        .and('have.text', 'Deletion of scheduler with ID 10 failed! Error : Failed to fetch.');
+
+      // Show error message.
+      cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch');
+    });
+
+    it('try to delete inactive scheduler and inactive seed peer using guest user', () => {
+      cy.guestSignin();
+
+      cy.intercept('DELETE', `/api/v1/schedulers/10`, (req) => {
+        req.reply({
+          statusCode: 401,
+          body: { message: 'permission deny' },
+        });
+      });
+
+      cy.get('#delete-all-inactive-instances').click();
+      cy.get('#back-button').should('be.disabled');
+      cy.get('#next-button').should('not.be.disabled');
+      cy.get('#next-button').click();
+
+      // Display the total number of seed peer.
+      cy.get('#seedPeerTotal').should('have.text', '3 inactive');
+      cy.get('#next-button').click();
+      cy.get('#save-delete').click();
+      cy.get('#deleteAllInactive-helper-text').should('have.text', 'Please enter "DELETE"');
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: deletedInactiveScheduler,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/seed-peers?page=1&per_page=10000000&seed_peer_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: deletedInactiveSeedPeer,
+          });
+        },
+      );
+
+      cy.get('#deleteAllInactive').type('DELETE{enter}');
+      cy.get('#failure').should('exist');
+      cy.get('#inactive-header').click();
+
+      // Show error message.
+      cy.get('.MuiAccordionDetails-root > .MuiTypography-root')
+        .should('be.visible')
+        .and('have.text', 'Deletion of scheduler with ID 10 failed! Error : permission deny.');
     });
   });
 });

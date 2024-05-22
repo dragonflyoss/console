@@ -1,6 +1,7 @@
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Information from './information';
+import { styled } from '@mui/material/styles';
 import {
   Alert,
   Box,
@@ -26,8 +27,33 @@ import {
   TextField,
   Stack,
   Divider,
+  Stepper,
+  List,
+  ListItem,
+  Tooltip as MuiTooltip,
+  ListSubheader,
+  StepIconProps,
+  stepConnectorClasses,
+  StepConnector,
+  LinearProgressProps,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  LinearProgress,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Chart,
+} from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
 import {
   getSchedulers,
   getSeedPeers,
@@ -41,6 +67,10 @@ import {
 } from '../../lib/api';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloseIcon from '@mui/icons-material/Close';
 import { LoadingButton } from '@mui/lab';
 import styles from './show.module.css';
 import SearchIcon from '@mui/icons-material/Search';
@@ -53,6 +83,45 @@ import {
 } from '../../lib/constants';
 import { getPaginatedList, useQuery } from '../../lib/utils';
 import LoadingBackdrop from '../loading-backdrop';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import DeleteAnimation from '../delete-animation';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1C293A',
+    },
+    secondary: {
+      main: '#2E8F79',
+    },
+  },
+  typography: {
+    fontFamily: 'mabry-light,sans-serif',
+  },
+});
+
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
+Chart.defaults.font.family = 'mabry-light';
+
+function CircularProgressWithLabel(props: LinearProgressProps & { value: number }) {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center', width: '70%', pt: '0.4rem' }}>
+      <Box sx={{ width: '100%', mr: 1 }}>
+        <LinearProgress
+          color="error"
+          sx={{ height: '0.6rem', borderRadius: '0.2rem' }}
+          variant="determinate"
+          {...props}
+        />
+      </Box>
+      <Box sx={{ minWidth: 35 }}>
+        <Typography variant="body2" fontFamily="mabry-bold" color="text.secondary">{`${Math.round(
+          props.value,
+        )}%`}</Typography>
+      </Box>
+    </Box>
+  );
+}
 
 export default function ShowCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -64,6 +133,7 @@ export default function ShowCluster() {
   const [seedPeerTableIsLoading, setSeedPeerTableIsLoading] = useState(true);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [openDeleteCluster, setOpenDeleteCluster] = useState(false);
+  const [openDeleteInactive, setOpenDeleteInactive] = useState(false);
   const [openDeleteScheduler, setOpenDeleteScheduler] = useState(false);
   const [openDeleteSeedPeer, setOpenDeleteSeedPeer] = useState(false);
   const [schedulerSelectedRow, setSchedulerSelectedRow] = useState(null);
@@ -108,26 +178,20 @@ export default function ShowCluster() {
   });
   const [allSchedulers, setAllSchedlers] = useState<getSchedulersResponse[]>([]);
   const [allseedPeers, setAllSeedPeers] = useState<getSeedPeersResponse[]>([]);
+  const [allInactiveError, setAllInactiveError] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+  const [deleteAllInactiveErrorMessage, setDeleteAllInactiveErrorMessage] = useState<string[]>([]);
+  const [deleteInactiveSchedulerSuccessful, setDeleteInactiveSchedulerSuccessful] = useState(0);
+  const [deleteInactiveSeedPeerSuccessful, setDeleteInactiveSeedPeerSuccessful] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [progressLoading, setProgressLoading] = useState(false);
 
+  const steps = ['Schedulers', 'Seed peers', 'Confirm delete'];
   const params = useParams();
   const navigate = useNavigate();
   const query = useQuery();
   const schedulerCurrentPage = query.get('schedulerPage') ? parseInt(query.get('schedulerPage') as string, 10) || 1 : 1;
   const seedPeerCurrentPage = query.get('seedPeerPage') ? parseInt(query.get('seedPeerPage') as string, 10) || 1 : 1;
-
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#1C293A',
-      },
-      secondary: {
-        main: '#2E8F79',
-      },
-    },
-    typography: {
-      fontFamily: 'mabry-light,sans-serif',
-    },
-  });
 
   useEffect(() => {
     (async function () {
@@ -175,6 +239,8 @@ export default function ShowCluster() {
           setErrorMessage(true);
           setErrorMessageText(error.message);
           setPageLoding(false);
+          setSchedulerTableIsLoading(false);
+          setSeedPeerTableIsLoading(false);
           setInformationIsLoading(false);
         }
       }
@@ -238,8 +304,20 @@ export default function ShowCluster() {
   const numberOfActiveSchedulers =
     Array.isArray(schedulerCount) && schedulerCount?.filter((item: any) => item?.state === 'active').length;
 
+  const numberOfInactiveSchedulers =
+    Array.isArray(schedulerCount) && schedulerCount?.filter((item: any) => item?.state === 'inactive').length;
+
   const numberOfActiveSeedPeers =
     Array.isArray(seedPeerCount) && seedPeerCount?.filter((item: any) => item?.state === 'active').length;
+
+  const numberOfInactiveSeedPeers =
+    Array.isArray(seedPeerCount) && seedPeerCount?.filter((item: any) => item?.state === 'inactive').length;
+
+  const schedulerInactive =
+    Array.isArray(schedulerCount) && schedulerCount?.filter((item: any) => item?.state === 'inactive');
+
+  const seedPeerInactive =
+    Array.isArray(seedPeerCount) && seedPeerCount?.filter((item: any) => item?.state === 'inactive');
 
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
@@ -248,6 +326,56 @@ export default function ShowCluster() {
 
     setErrorMessage(false);
     setSuccessMessage(false);
+  };
+
+  const schedulerDoughnutOptions = {
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: allSchedulers.length !== 0,
+      },
+    },
+    cutout: '60%',
+  };
+
+  const schedulerDoughnut = {
+    labels: [allSchedulers.length === 0 ? '' : 'Active', 'Inactive'],
+    datasets: [
+      {
+        data: [allSchedulers.length === 0 ? [1] : numberOfActiveSchedulers, numberOfInactiveSchedulers],
+        backgroundColor: [allSchedulers.length === 0 ? '#cdcdcd' : '#2e8f79', '#1c293a'],
+        borderWidth: 1,
+        offset: 2,
+        hoverOffset: 5,
+      },
+    ],
+  };
+
+  const seedPeerDoughnutOptions = {
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: allseedPeers.length !== 0,
+      },
+    },
+    cutout: '60%',
+  };
+
+  const seedPeerDoughnut = {
+    labels: [allseedPeers.length === 0 ? '' : 'Active', 'Inactive'],
+    datasets: [
+      {
+        data: [allseedPeers.length === 0 ? [1] : numberOfActiveSeedPeers, numberOfInactiveSeedPeers],
+        backgroundColor: [allseedPeers.length === 0 ? '#cdcdcd' : '#2e8f79', '#1c293a'],
+        borderWidth: 1,
+        offset: 2,
+        hoverOffset: 5,
+      },
+    ],
   };
 
   const handleDeleteClose = (_event: any, reason?: string) => {
@@ -259,6 +387,13 @@ export default function ShowCluster() {
     setSchedulerSelectedRow(null);
     setOpenDeleteSeedPeer(false);
     setSeedPeerSelectedRow(null);
+    if (!progressLoading) {
+      setOpenDeleteInactive(false);
+      setDeleteAllInactiveErrorMessage([]);
+      setDeleteInactiveSchedulerSuccessful(0);
+      setDeleteInactiveSeedPeerSuccessful(0);
+      setActiveStep(0);
+    }
   };
 
   const handleDeleteCluster = async () => {
@@ -432,6 +567,155 @@ export default function ShowCluster() {
     }
   };
 
+  const handleConfirmDelete = async (event: any) => {
+    setProgressLoading(true);
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+    const idcText = event.currentTarget.elements.deleteAllInactive.value;
+
+    if (idcText !== 'DELETE') {
+      setAllInactiveError(true);
+    } else if (idcText === 'DELETE') {
+      handleNext();
+
+      const schedulerID = Array.isArray(schedulerInactive) && schedulerInactive.map((item: any) => item.id);
+
+      const seedPeerID = Array.isArray(seedPeerInactive) && seedPeerInactive.map((item: any) => item.id);
+
+      const deleteSelectedSchedulers = async (ids: any, onDeleteSuccess: any) => {
+        for (let i = 0; i < ids.length; i++) {
+          try {
+            await (async function (id) {
+              return deleteScheduler(id);
+            })(ids[i]);
+
+            onDeleteSuccess();
+            setDeleteInactiveSchedulerSuccessful(
+              (deleteInactiveSchedulerSuccessful) => deleteInactiveSchedulerSuccessful + 1,
+            );
+          } catch (error) {
+            if (error instanceof Error) {
+              setDeleteAllInactiveErrorMessage((prevMessages) => [
+                ...prevMessages,
+                `Deletion of scheduler with ID ${ids[i]} failed! Error : ${error.message}.`,
+              ]);
+            }
+            throw error;
+          }
+        }
+      };
+
+      const deleteSelectedSeedPeers = async (ids: any, onDeleteSuccess: any) => {
+        for (let i = 0; i < ids.length; i++) {
+          try {
+            await (async function (id) {
+              return deleteSeedPeer(id);
+            })(ids[i]);
+
+            onDeleteSuccess();
+            setDeleteInactiveSeedPeerSuccessful(
+              (deleteInactiveSeedPeerSuccessful) => deleteInactiveSeedPeerSuccessful + 1,
+            );
+          } catch (error) {
+            if (error instanceof Error) {
+              setDeleteAllInactiveErrorMessage((prevMessages) => [
+                ...prevMessages,
+                `Deletion of seed peer with ID ${ids[i]} failed!, error:${error.message}`,
+              ]);
+            }
+            throw error;
+          }
+        }
+      };
+
+      const executeDelete = async (schedulersIds: any, seedPeersIds: any) => {
+        if (schedulerID !== false && seedPeerID !== false) {
+          const totalApiCalls = schedulerID.length + seedPeerID.length;
+
+          const increment = 100 / totalApiCalls;
+          const onDeleteSuccess = () => {
+            setProgress((prevProgress) => prevProgress + increment);
+          };
+
+          try {
+            await deleteSelectedSchedulers(schedulersIds, onDeleteSuccess);
+            await deleteSelectedSeedPeers(seedPeersIds, onDeleteSuccess);
+
+            setProgressLoading(false);
+
+            if (cluster.scheduler_cluster_id !== 0) {
+              const scheduler = await getSchedulers({
+                scheduler_cluster_id: String(cluster.scheduler_cluster_id),
+                page: 1,
+                per_page: MAX_PAGE_SIZE,
+              });
+              setScheduler(scheduler);
+              setSchedulerCount(scheduler);
+            }
+
+            if (cluster.seed_peer_cluster_id !== 0) {
+              const seedPeer = await getSeedPeers({
+                seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
+                page: 1,
+                per_page: MAX_PAGE_SIZE,
+              });
+              setSeedPeer(seedPeer);
+              setSeedPeerCount(seedPeer);
+            }
+          } catch (error) {
+            setProgressLoading(false);
+
+            try {
+              if (cluster.scheduler_cluster_id !== 0) {
+                const scheduler = await getSchedulers({
+                  scheduler_cluster_id: String(cluster.scheduler_cluster_id),
+                  page: 1,
+                  per_page: MAX_PAGE_SIZE,
+                });
+                setScheduler(scheduler);
+                setSchedulerCount(scheduler);
+              }
+
+              if (cluster.seed_peer_cluster_id !== 0) {
+                const seedPeer = await getSeedPeers({
+                  seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
+                  page: 1,
+                  per_page: MAX_PAGE_SIZE,
+                });
+                setSeedPeer(seedPeer);
+                setSeedPeerCount(seedPeer);
+              }
+            } catch (error) {
+              if (error instanceof Error) {
+                setErrorMessage(true);
+                setErrorMessageText(error.message);
+              }
+            }
+          }
+        }
+      };
+
+      executeDelete(schedulerID, seedPeerID);
+    }
+  };
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+    setOpenDeleteInactive(false);
+    setDeleteAllInactiveErrorMessage([]);
+    setDeleteInactiveSchedulerSuccessful(0);
+    setDeleteInactiveSeedPeerSuccessful(0);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <LoadingBackdrop open={pageLoding} />
@@ -486,6 +770,7 @@ export default function ShowCluster() {
           <Button
             variant="contained"
             size="small"
+            id="delete-cluster"
             onClick={() => {
               setOpenDeleteCluster(true);
             }}
@@ -577,21 +862,630 @@ export default function ShowCluster() {
         </Dialog>
       </Box>
       <Information cluster={cluster} isLoading={informationIsLoading} />
+      <Box className={styles.openDeleteInactiveDialog}>
+        <Typography variant="h6" fontFamily="mabry-bold">
+          Scheduler And Seed Peer
+        </Typography>
+        <MuiTooltip title="Delete inactive schedulers and inactive seed peers." placement="top">
+          <Button
+            variant="contained"
+            size="small"
+            id="delete-all-inactive-instances"
+            onClick={() => {
+              setOpenDeleteInactive(true);
+            }}
+            className={styles.deleteButton}
+            sx={{
+              '&.MuiButton-root': {
+                backgroundColor: 'var(--button-color)',
+                borderRadius: 0,
+                color: '#fff',
+              },
+            }}
+          >
+            <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
+            DELETE ALL INACTIVE INSTANCES
+          </Button>
+        </MuiTooltip>
+      </Box>
+      <Dialog
+        open={openDeleteInactive}
+        onClose={handleDeleteClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{
+          '& .MuiDialog-paper': {
+            minWidth: '48rem',
+          },
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            p: '1rem',
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <Box
+              component="img"
+              src="/icons/cluster/delete.svg"
+              sx={{ width: '1.8rem', height: '1.8rem', mr: '0.4rem' }}
+            />
+            <Typography variant="h6" component="div" fontFamily="mabry-bold">
+              Delete inactive schedulers and inactive seed peers
+            </Typography>
+          </Box>
+          {!progressLoading ? (
+            <IconButton
+              aria-label="close"
+              id="close-delete-icon"
+              onClick={handleReset}
+              sx={{
+                color: (theme) => theme.palette.grey[500],
+                p: 0,
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          ) : (
+            <></>
+          )}
+        </Box>
+        <Divider />
+        <DialogContent sx={{ p: '1.4rem' }}>
+          <Box sx={{ width: '100%' }} onSubmit={handleConfirmDelete} component="form">
+            {activeStep === steps.length ? (
+              <Fragment>
+                {progressLoading ? (
+                  <Box className={styles.circularProgressWrapper}>
+                    <DeleteAnimation />
+                    <Typography variant="subtitle1" component="div" fontFamily="mabry-bold">
+                      LOADING...
+                    </Typography>
+                    <CircularProgressWithLabel value={progress} />
+                  </Box>
+                ) : (
+                  <Box>
+                    {deleteAllInactiveErrorMessage.length > 0 ? (
+                      <>
+                        <Box className={styles.logHeaderWrapper}>
+                          <Paper variant="outlined" className={styles.headerContainer}>
+                            <Box>
+                              <Box className={styles.headerContent}>
+                                <Typography fontFamily="mabry-bold" variant="subtitle2" component="div">
+                                  Schedulers
+                                </Typography>
+                              </Box>
+                              <Typography component="div" variant="h6" fontFamily="mabry-bold">
+                                {deleteInactiveSchedulerSuccessful || '0'}
+                              </Typography>
+                              <Typography color="#8a8a8a" fontSize="0.8rem" component="div" variant="subtitle2">
+                                number of deleted schedulers
+                              </Typography>
+                            </Box>
+                            <Box
+                              component="img"
+                              className={styles.headerErrorIcon}
+                              src="/icons/cluster/delete-inactive.svg"
+                            />
+                          </Paper>
+                          <Paper variant="outlined" className={styles.headerContainer}>
+                            <Box>
+                              <Box className={styles.headerContent}>
+                                <Typography fontFamily="mabry-bold" variant="subtitle2" component="div">
+                                  Seed Peers
+                                </Typography>
+                              </Box>
+                              <Typography component="div" variant="h6" fontFamily="mabry-bold">
+                                {deleteInactiveSeedPeerSuccessful || '0'}
+                              </Typography>
+                              <Typography color="#8a8a8a" fontSize="0.8rem" component="div" variant="subtitle2">
+                                number of deleted seed peers
+                              </Typography>
+                            </Box>
+                            <Box
+                              component="img"
+                              className={styles.headerErrorIcon}
+                              src="/icons/cluster/delete-inactive.svg"
+                            />
+                          </Paper>
+                          <Paper variant="outlined" className={styles.headerContainer}>
+                            <Box>
+                              <Box className={styles.headerContent}>
+                                <Typography fontFamily="mabry-bold" variant="subtitle2" component="div" id="failure">
+                                  Failure
+                                </Typography>
+                              </Box>
+                              <Typography component="div" variant="h6" fontFamily="mabry-bold">
+                                {deleteAllInactiveErrorMessage.length || '0'}
+                              </Typography>
+                              <Typography color="#8a8a8a" fontSize="0.8rem" component="div" variant="subtitle2">
+                                number of delete error
+                              </Typography>
+                            </Box>
+                            <Box
+                              component="img"
+                              className={styles.headerErrorIcon}
+                              src="/icons/cluster/delete-inactive-error.svg"
+                            />
+                          </Paper>
+                        </Box>
+                        <Paper variant="outlined" className={styles.deleteInactiveWrapper}>
+                          <Typography variant="inherit" fontFamily="mabry-bold" pb="1rem">
+                            Logs
+                          </Typography>
+                          <Accordion
+                            disableGutters
+                            square
+                            variant="outlined"
+                            sx={{
+                              '&:not(:last-child)': {
+                                borderBottom: 0,
+                              },
+                              '&:before': {
+                                display: 'none',
+                              },
+                            }}
+                          >
+                            <AccordionSummary
+                              expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+                              sx={{
+                                flexDirection: 'row-reverse',
+                                '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+                                  transform: 'rotate(90deg)',
+                                },
+                                '& .MuiAccordionSummary-content': {
+                                  marginLeft: '1rem',
+                                },
+                                height: '2rem',
+                              }}
+                              aria-controls="panel1d-content"
+                              id="inactive-header"
+                            >
+                              <Box display="flex" alignItems="center">
+                                <Box
+                                  component="img"
+                                  sx={{ width: '1.2rem', height: '1.2rem', mr: '0.4rem' }}
+                                  src="/icons/job/preheat/failure.svg"
+                                />
+                                <Typography variant="body2" fontFamily="mabry-bold">
+                                  Error log
+                                </Typography>
+                              </Box>
+                            </AccordionSummary>
+                            <AccordionDetails
+                              sx={{
+                                padding: '1rem',
+                                borderTop: '1px solid rgba(0, 0, 0, .125)',
+                                backgroundColor: '#24292f',
+                              }}
+                            >
+                              <Typography sx={{ color: '#d0d7de' }}>{deleteAllInactiveErrorMessage}</Typography>
+                            </AccordionDetails>
+                          </Accordion>
+                        </Paper>
+                      </>
+                    ) : (
+                      <>
+                        <Box className={styles.logHeaderWrapper}>
+                          <Paper variant="outlined" className={styles.successHeaderContainer}>
+                            <Box>
+                              <Box className={styles.headerContent}>
+                                <Typography fontFamily="mabry-bold" variant="subtitle2" component="div">
+                                  Schedulers
+                                </Typography>
+                              </Box>
+                              <Typography component="div" variant="h6" fontFamily="mabry-bold">
+                                {deleteInactiveSchedulerSuccessful || '0'}
+                              </Typography>
+                              <Typography color="#8a8a8a" component="div" variant="subtitle2">
+                                number of deleted schedulers
+                              </Typography>
+                            </Box>
+                            <Box
+                              component="img"
+                              className={styles.headerIcon}
+                              src="/icons/cluster/delete-inactive.svg"
+                            />
+                          </Paper>
+                          <Paper variant="outlined" className={styles.successHeaderContainer}>
+                            <Box>
+                              <Box className={styles.headerContent}>
+                                <Typography fontFamily="mabry-bold" variant="subtitle2" component="div">
+                                  Seed peers
+                                </Typography>
+                              </Box>
+                              <Typography component="div" variant="h6" fontFamily="mabry-bold">
+                                {deleteInactiveSeedPeerSuccessful || '0'}
+                              </Typography>
+                              <Typography color="#8a8a8a" component="div" variant="subtitle2">
+                                number of deleted seed peers
+                              </Typography>
+                            </Box>
+                            <Box
+                              component="img"
+                              className={styles.headerIcon}
+                              src="/icons/cluster/delete-inactive.svg"
+                            />
+                          </Paper>
+                        </Box>
+                        <Alert variant="outlined" severity="success">
+                          You have successfully removed all inactive schedulers and inactive seed peers!
+                        </Alert>
+                      </>
+                    )}
+                  </Box>
+                )}
+                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                  <Box sx={{ flex: '1 1 auto' }} />
+                  {!progressLoading ? (
+                    <Button
+                      variant="contained"
+                      id="cancel-button"
+                      size="small"
+                      onClick={handleReset}
+                      sx={{
+                        '&.MuiButton-root': {
+                          backgroundColor: 'var(--button-color)',
+                          borderRadius: 0,
+                          color: '#fff',
+                        },
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  ) : (
+                    <></>
+                  )}
+                </Box>
+              </Fragment>
+            ) : (
+              <Fragment>
+                {activeStep === 0 ? (
+                  <Paper variant="outlined">
+                    <Box className={styles.schedulerInactiveCountWrapper}>
+                      <Typography fontFamily="mabry-bold" variant="subtitle1" component="div">
+                        Schedulers
+                      </Typography>
+                      <Box
+                        sx={{
+                          ml: '0.6rem',
+                          border: '1px solid #d5d2d2',
+                          p: '0.1rem 0.3rem',
+                          borderRadius: '0.4rem',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Box
+                          component="img"
+                          sx={{ width: '0.6rem', height: '0.6rem' }}
+                          src="/icons/cluster/inactive-total.svg"
+                        />
+                        <Typography
+                          id="schedulerTotal"
+                          variant="caption"
+                          fontFamily="mabry-bold"
+                          component="div"
+                          pl="0.3rem"
+                          lineHeight="1rem"
+                        >
+                          {(Array.isArray(schedulerInactive) && schedulerInactive.length) || '0'} inactive
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Box>
+                      <Divider />
+                      <ListSubheader color="inherit" className={styles.schedulerInactiveListTitle}>
+                        <Box className={styles.schedulerInactiveHeaderID}>
+                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                            ID
+                          </Typography>
+                        </Box>
+                        <Box className={styles.schedulerInactiveHeaderHostname}>
+                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                            Hostname
+                          </Typography>
+                        </Box>
+                        <Box className={styles.schedulerInactiveHeaderIP}>
+                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                            IP
+                          </Typography>
+                        </Box>
+                      </ListSubheader>
+                      <Divider />
+                      {Array.isArray(schedulerInactive) && schedulerInactive.length !== 0 ? (
+                        <List
+                          sx={{
+                            width: '100%',
+                            bgcolor: 'background.paper',
+                            position: 'relative',
+                            overflow: 'auto',
+                            maxHeight: 300,
+                            padding: '0',
+                          }}
+                          subheader={<li />}
+                        >
+                          {Array.isArray(schedulerInactive) &&
+                            schedulerInactive.map((item) => (
+                              <Box key={item.id}>
+                                <ListItem className={styles.schedulerInactiveList}>
+                                  <MuiTooltip title={item.id || '-'} placement="top">
+                                    <Typography variant="body2" component="div" className={styles.schedulerInactiveID}>
+                                      {item.id}
+                                    </Typography>
+                                  </MuiTooltip>
+                                  <MuiTooltip title={item.host_name || '-'} placement="top">
+                                    <Typography
+                                      variant="body2"
+                                      component="div"
+                                      className={styles.schedulerInactiveHostname}
+                                    >
+                                      {item.host_name}
+                                    </Typography>
+                                  </MuiTooltip>
+                                  <MuiTooltip title={item.ip || '-'} placement="top">
+                                    <Typography variant="body2" component="div" className={styles.schedulerInactiveIP}>
+                                      {item.ip}
+                                    </Typography>
+                                  </MuiTooltip>
+                                </ListItem>
+                                <Divider />
+                              </Box>
+                            ))}
+                        </List>
+                      ) : (
+                        <Typography variant="subtitle2" component="div" className={styles.noInactiveScheduler}>
+                          You don't have any inactive scheduler.
+                        </Typography>
+                      )}
+                    </Box>
+                  </Paper>
+                ) : activeStep === 1 ? (
+                  <Paper variant="outlined">
+                    <Box className={styles.schedulerInactiveCountWrapper}>
+                      <Typography fontFamily="mabry-bold" variant="subtitle1" component="div">
+                        Seed peers
+                      </Typography>
+                      <Box
+                        sx={{
+                          ml: '0.6rem',
+                          border: '1px solid #d5d2d2',
+                          p: '0.1rem 0.3rem',
+                          borderRadius: '0.4rem',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Box
+                          component="img"
+                          sx={{ width: '0.6rem', height: '0.6rem' }}
+                          src="/icons/cluster/inactive-total.svg"
+                        />
+                        <Typography
+                          id="seedPeerTotal"
+                          variant="caption"
+                          fontFamily="mabry-bold"
+                          component="div"
+                          pl="0.3rem"
+                          lineHeight="1rem"
+                        >
+                          {(Array.isArray(seedPeerInactive) && seedPeerInactive.length) || '0'} inactive
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Box>
+                      <Divider />
+                      <ListSubheader color="inherit" className={styles.schedulerInactiveListTitle}>
+                        <Box className={styles.schedulerInactiveHeaderID}>
+                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                            ID
+                          </Typography>
+                        </Box>
+                        <Box className={styles.schedulerInactiveHeaderHostname}>
+                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                            Hostname
+                          </Typography>
+                        </Box>
+                        <Box className={styles.schedulerInactiveHeaderIP}>
+                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                            IP
+                          </Typography>
+                        </Box>
+                      </ListSubheader>
+                      <Divider />
+                      {Array.isArray(seedPeerInactive) && seedPeerInactive.length !== 0 ? (
+                        <List
+                          sx={{
+                            width: '100%',
+                            bgcolor: 'background.paper',
+                            position: 'relative',
+                            overflow: 'auto',
+                            maxHeight: 300,
+                            padding: '0',
+                          }}
+                          subheader={<li />}
+                        >
+                          {Array.isArray(seedPeerInactive) &&
+                            seedPeerInactive.map((item) => (
+                              <Box key={item.id}>
+                                <ListItem className={styles.schedulerInactiveList}>
+                                  <MuiTooltip title={item.id || '-'} placement="top">
+                                    <Typography variant="body2" component="div" className={styles.schedulerInactiveID}>
+                                      {item.id}
+                                    </Typography>
+                                  </MuiTooltip>
+                                  <MuiTooltip title={item.host_name || '-'} placement="top">
+                                    <Typography
+                                      variant="body2"
+                                      component="div"
+                                      className={styles.schedulerInactiveHostname}
+                                    >
+                                      {item.host_name}
+                                    </Typography>
+                                  </MuiTooltip>
+                                  <MuiTooltip title={item.ip || '-'} placement="top">
+                                    <Typography variant="body2" component="div" className={styles.schedulerInactiveIP}>
+                                      {item.ip}
+                                    </Typography>
+                                  </MuiTooltip>
+                                </ListItem>
+                                <Divider />
+                              </Box>
+                            ))}
+                        </List>
+                      ) : (
+                        <Typography variant="subtitle2" component="div" className={styles.noInactiveScheduler}>
+                          You don't have any inactive seed peer.
+                        </Typography>
+                      )}
+                    </Box>
+                  </Paper>
+                ) : activeStep === 2 ? (
+                  <Box>
+                    <Box display="flex" alignItems="flex-start" pb="1rem">
+                      <Box
+                        component="img"
+                        src="/icons/cluster/delete-warning.svg"
+                        sx={{ width: '1.4rem', height: '1.4rem', pr: '0.2rem' }}
+                      />
+                      <Box>
+                        <Typography variant="body1" fontFamily="mabry-bold" component="span" sx={{ color: '#D81E06' }}>
+                          WARNING:&nbsp;
+                        </Typography>
+                        <Typography variant="body1" component="span" sx={{ color: '#D81E06' }}>
+                          This action CANNOT be undone.
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Typography variant="body1" component="div">
+                      Inactive schedulers and inactive seed peers will be permanently delete.
+                    </Typography>
+                    <TextField
+                      error={allInactiveError}
+                      sx={{ pt: '1rem', width: '14rem' }}
+                      id="deleteAllInactive"
+                      name="deleteAllInactive"
+                      color="success"
+                      size="small"
+                      placeholder={`Type 'DELETE' to proceed`}
+                      autoComplete="family-name"
+                      helperText={allInactiveError ? `Please enter "DELETE"` : ''}
+                      onChange={(event) => {
+                        if (event.target.value === 'DELETE') {
+                          setAllInactiveError(false);
+                        } else {
+                          setAllInactiveError(true);
+                        }
+                      }}
+                    />
+                  </Box>
+                ) : (
+                  <></>
+                )}
+                <Box sx={{ display: 'flex', flexDirection: 'row', pt: '2rem' }}>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    id="back-button"
+                    endIcon={<ArrowBackIcon />}
+                    disabled={activeStep === 0}
+                    onClick={handleBack}
+                    sx={{
+                      '&.MuiButton-root': {
+                        backgroundColor: activeStep === 0 ? '' : 'var(--button-color)',
+                        borderRadius: 0,
+                        color: '#fff',
+                      },
+                    }}
+                  >
+                    Back
+                  </Button>
+                  <Box sx={{ flex: '1 1 auto' }} />
+                  {activeStep === steps.length - 1 ? (
+                    <LoadingButton
+                      endIcon={<DeleteIcon />}
+                      size="small"
+                      variant="contained"
+                      type="submit"
+                      id="save-delete"
+                      sx={{
+                        '&.MuiLoadingButton-root': {
+                          backgroundColor: 'var(--save-color)',
+                          borderRadius: 0,
+                          color: '#fff',
+                          borderColor: 'var(--save-color)',
+                        },
+                      }}
+                    >
+                      Save
+                    </LoadingButton>
+                  ) : (
+                    <Button
+                      disabled={
+                        Array.isArray(schedulerInactive) &&
+                        Array.isArray(seedPeerInactive) &&
+                        schedulerInactive.length + seedPeerInactive.length === 0
+                      }
+                      variant="contained"
+                      endIcon={<ArrowForwardIcon />}
+                      size="small"
+                      id="next-button"
+                      onClick={handleNext}
+                      sx={{
+                        '&.MuiButton-root': {
+                          backgroundColor:
+                            Array.isArray(schedulerInactive) &&
+                            Array.isArray(seedPeerInactive) &&
+                            schedulerInactive.length + seedPeerInactive.length === 0
+                              ? ''
+                              : 'var(--button-color)',
+                          borderRadius: 0,
+                          color: '#fff',
+                        },
+                      }}
+                    >
+                      next
+                    </Button>
+                  )}
+                </Box>
+              </Fragment>
+            )}
+          </Box>
+        </DialogContent>
+      </Dialog>
       <Box sx={{ display: 'flex' }}>
         <Paper
           variant="outlined"
           sx={{ width: '50%', mr: '0.5rem', p: '1.2rem', display: 'flex', justifyContent: 'space-between' }}
         >
           <Box sx={{ display: 'flex', width: '70%' }}>
-            <Box component="img" src="/icons/cluster/scheduler-statistics.svg" sx={{ width: '6rem', height: '6rem' }} />
+            <Box className={styles.doughnut}>
+              {schedulerTableIsLoading ? (
+                <Skeleton variant="circular" width="100%" height="100%" />
+              ) : (
+                <Doughnut data={schedulerDoughnut} options={schedulerDoughnutOptions} />
+              )}
+            </Box>
             <Box sx={{ ml: '1rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <Typography variant="h6" fontFamily="mabry-bold">
                 Scheduler
               </Typography>
               <Box>
-                <Typography variant="h5" fontFamily="mabry-bold">
-                  {numberOfActiveSchedulers}
-                </Typography>
+                {schedulerTableIsLoading ? (
+                  <Skeleton width="2rem" />
+                ) : (
+                  <Typography variant="h5" fontFamily="mabry-bold">
+                    {numberOfActiveSchedulers}
+                  </Typography>
+                )}
                 <div>number of active schdulers</div>
               </Box>
             </Box>
@@ -607,15 +1501,25 @@ export default function ShowCluster() {
           sx={{ width: '50%', ml: '0.5rem', p: '1.2rem', display: 'flex', justifyContent: 'space-between' }}
         >
           <Box sx={{ display: 'flex', width: '70%' }}>
-            <Box component="img" src="/icons/cluster/scheduler-statistics.svg" sx={{ width: '6rem', height: '6rem' }} />
+            <Box className={styles.doughnut}>
+              {seedPeerTableIsLoading ? (
+                <Skeleton variant="circular" width="100%" height="100%" />
+              ) : (
+                <Doughnut data={seedPeerDoughnut} options={seedPeerDoughnutOptions} />
+              )}
+            </Box>
             <Box sx={{ ml: '1rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <Typography variant="h6" fontFamily="mabry-bold">
                 Seed Peer
               </Typography>
               <Box>
-                <Typography variant="h5" fontFamily="mabry-bold">
-                  {numberOfActiveSeedPeers}
-                </Typography>
+                {seedPeerTableIsLoading ? (
+                  <Skeleton width="2rem" />
+                ) : (
+                  <Typography variant="h5" fontFamily="mabry-bold">
+                    {numberOfActiveSeedPeers}
+                  </Typography>
+                )}
                 <div>number of active seed peers</div>
               </Box>
             </Box>

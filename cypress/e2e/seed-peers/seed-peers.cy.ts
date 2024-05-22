@@ -459,9 +459,7 @@ describe('Seed peers', () => {
       // Check if the total number of pages is 4.
       cy.get('#seed-peer-pagination > .MuiPagination-ul').scrollIntoView().children().should('have.length', 4);
 
-      cy.get(
-        ':nth-child(10) > .css-8atqhb > .MuiTable-root > .MuiTableBody-root > :nth-child(5) > :nth-child(2) > .MuiTypography-root',
-      )
+      cy.get('#seed-peer-table-body > :nth-child(5) > :nth-child(2)')
         .should('be.visible')
         .and('contain', 'seed-peer-3');
     });

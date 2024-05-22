@@ -623,11 +623,11 @@ describe('Cluster', () => {
         },
       );
 
-      cy.get('.css-1rqacr6-MuiButtonBase-root-MuiButton-root').click();
+      cy.get('#delete-cluster').click();
 
       cy.get('#cancelDeleteCluster').click();
 
-      cy.get('.css-1rqacr6-MuiButtonBase-root-MuiButton-root').click();
+      cy.get('#delete-cluster').click();
 
       // Confirm delete.
       cy.get('#deleteCluster').click();
@@ -684,7 +684,7 @@ describe('Cluster', () => {
         },
       );
 
-      cy.get('.css-1rqacr6-MuiButtonBase-root-MuiButton-root').click();
+      cy.get('#delete-cluster').click();
 
       cy.get('#deleteCluster').click();
 
@@ -756,7 +756,7 @@ describe('Cluster', () => {
         },
       );
 
-      cy.get('.css-1rqacr6-MuiButtonBase-root-MuiButton-root').click();
+      cy.get('#delete-cluster').click();
 
       // Confirm delete.
       cy.get('#deleteCluster').click();
@@ -807,7 +807,7 @@ describe('Cluster', () => {
         },
       );
 
-      cy.get('.css-1rqacr6-MuiButtonBase-root-MuiButton-root').click();
+      cy.get('#delete-cluster').click();
 
       // Confirm delete
       cy.get('#deleteCluster').click();

@@ -6,8 +6,8 @@ const Style = {
   width: '100%',
 };
 
-const Delete = () => {
+const DeleteAnimation = () => {
   return <Lottie animationData={deleteAnimation} style={Style}></Lottie>;
 };
 
-export default Delete;
+export default DeleteAnimation;

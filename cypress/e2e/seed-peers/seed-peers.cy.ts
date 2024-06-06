@@ -47,7 +47,7 @@ describe('Seed peers', () => {
     );
 
     cy.visit('clusters/1');
-    cy.viewport(1440, 1080);
+    cy.viewport(1440, 2080);
   });
 
   describe('when data is loaded', () => {
@@ -64,7 +64,6 @@ describe('Seed peers', () => {
     it('can display seed peers table', () => {
       // Show hostname.
       cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(2)')
-        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'seed-peer-10');
 
@@ -121,7 +120,6 @@ describe('Seed peers', () => {
 
     it('there should be a message indicating that there is no seed peer', () => {
       cy.get('#seed-peer-table-body > .MuiTableRow-root > .MuiTableCell-root')
-        .scrollIntoView()
         .should('be.visible')
         .and('contain', `You don't have seed peer cluster.`);
     });
@@ -159,7 +157,6 @@ describe('Seed peers', () => {
 
     it('there should be a message indicating that there is no seed peer', () => {
       cy.get('#seed-peer-table-body > .MuiTableRow-root > .MuiTableCell-root')
-        .scrollIntoView()
         .should('be.visible')
         .and('contain', `You don't have seed peer cluster.`);
     });
@@ -468,7 +465,6 @@ describe('Seed peers', () => {
       cy.guestSignin();
 
       cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(2)')
-        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'seed-peer-10');
 
@@ -494,7 +490,6 @@ describe('Seed peers', () => {
 
     it('should handle API error response', () => {
       cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(2)')
-        .scrollIntoView()
         .should('be.visible')
         .and('contain', 'seed-peer-10');
 

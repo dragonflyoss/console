@@ -24,7 +24,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getJobs, JobsResponse } from '../../../lib/api';
 import { DEFAULT_PAGE_SIZE } from '../../../lib/constants';
-import { getDatetime, useQuery } from '../../../lib/utils';
+import { getPreheatDatetime, useQuery } from '../../../lib/utils';
 import LoadingBackdrop from '../../loading-backdrop';
 
 export default function Preheats() {
@@ -290,7 +290,7 @@ export default function Preheats() {
                       <Box width="30%">
                         <Chip
                           avatar={<MoreTimeIcon />}
-                          label={getDatetime(item.created_at) || '-'}
+                          label={getPreheatDatetime(item.created_at) || '-'}
                           variant="outlined"
                           size="small"
                         />
@@ -347,7 +347,7 @@ export default function Preheats() {
                     <Box width="30%">
                       <Chip
                         avatar={<MoreTimeIcon />}
-                        label={getDatetime(item.created_at) || '-'}
+                        label={getPreheatDatetime(item.created_at) || '-'}
                         variant="outlined"
                         size="small"
                       />

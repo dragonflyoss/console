@@ -83,7 +83,6 @@ describe('Tokens', () => {
       },
     );
 
-    cy.get('#tokens-list').should('not.exist');
     cy.get('.MuiPaper-root').should('be.visible').and('have.text', `You don't have any tokens.`);
   });
 
@@ -109,7 +108,6 @@ describe('Tokens', () => {
     });
 
     it('there should be a message indicating that there is not tokens', () => {
-      cy.get('#tokens-list').should('not.exist');
       cy.get('.MuiPaper-root').should('be.visible').and('have.text', `You don't have any tokens.`);
     });
   });

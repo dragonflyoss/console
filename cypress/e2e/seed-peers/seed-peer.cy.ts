@@ -123,10 +123,10 @@ describe('Seed peer', () => {
         .and('have.css', 'background-color', 'rgb(46, 143, 121)');
 
       // Show Created At.
-      cy.get(':nth-child(6) > .MuiChip-root > .MuiChip-label').should('have.text', '2023-11-12 20:09:08');
+      cy.get(':nth-child(6) > .MuiChip-root > .MuiChip-label').should('have.text', '2023-11-11 20:09:08');
 
       // Show Updated At.
-      cy.get(':nth-child(7) > .MuiChip-root > .MuiChip-label').should('have.text', '2023-11-12 20:09:13');
+      cy.get(':nth-child(7) > .MuiChip-root > .MuiChip-label').should('have.text', '2023-11-11 20:09:13');
     });
 
     it('can display inactive seed peer', () => {

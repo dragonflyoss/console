@@ -85,7 +85,7 @@ describe('Preheats', () => {
       // The preheating status is displayed as PENDING.
       cy.get('#list-11 > .css-1mlhis1').should('exist').find('#PENDING-11').should('exist');
       cy.get('#list-11 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body1').should('have.text', 11);
-      cy.get('#list-11 > .css-1mlhis1 > .css-18467a > .MuiChip-root').should('contain', '2023-03-23 08:29:18');
+      cy.get('#list-11 > .css-1mlhis1 > .css-18467a > .MuiChip-root').should('have.text', '2023-03-23 08:29:18');
       cy.get('#list-11 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body2').should(
         'have.text',
         'This is a preheat task with status pending',

@@ -297,7 +297,41 @@ export default function Users() {
             </TableRow>
           </TableHead>
           <TableBody id="user-table-body">
-            {Array.isArray(allUsers) &&
+            {isLoading ? (
+              <TableRow id="user-table-row">
+                <TableCell align="center">
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Skeleton variant="circular" component="div" width={40} height={40} />
+                  </Box>
+                </TableCell>
+                <TableCell align="center">
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Skeleton width="2rem" />
+                  </Box>
+                </TableCell>
+                <TableCell align="center">
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Skeleton width="4rem" />
+                  </Box>
+                </TableCell>
+                <TableCell align="center">
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Skeleton width="2rem" />
+                  </Box>
+                </TableCell>
+                <TableCell align="center">
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Skeleton width="3.8rem" height="2.8rem" />
+                  </Box>
+                </TableCell>
+                <TableCell align="center">
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Skeleton variant="circular" component="div" width={40} height={40} />
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ) : (
+              Array.isArray(allUsers) &&
               allUsers.map((item) => (
                 <TableRow
                   id="user-table-row"
@@ -428,7 +462,8 @@ export default function Users() {
                     )}
                   </TableCell>
                 </TableRow>
-              ))}
+              ))
+            )}
           </TableBody>
         </Table>
       </Paper>

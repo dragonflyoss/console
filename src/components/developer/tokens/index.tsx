@@ -253,7 +253,25 @@ export default function PersonalAccessTokens() {
       ) : (
         <></>
       )}
-      {allTokens.length === 0 ? (
+      {pageLoding ? (
+        <Paper variant="outlined" id="tokens-list">
+          <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
+                <Skeleton sx={{ fontSize: '0.8rem' }} width="6rem" />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body2" component="span">
+                  <Skeleton width="8rem" />
+                </Typography>
+              </Box>
+            </Box>
+            <Box>
+              <Skeleton width="4.5rem" height="3.2rem" />
+            </Box>
+          </Box>
+        </Paper>
+      ) : allTokens.length === 0 ? (
         <Paper
           variant="outlined"
           sx={{ height: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}

@@ -26,9 +26,27 @@
     "JobStates": [
       {
         "CreatedAt": "2023-12-13T11:58:53.535716295Z",
+        "Error": "",
+        "Results": null,
+        "State": "STARTED",
+        "TTL": 0,
+        "TaskName": "preheat",
+        "TaskUUID": "task_8cd497e9-4748-45c3-acc4-db32aebe44ed3"
+      },
+      {
+        "CreatedAt": "2023-12-13T11:58:53.535716295Z",
         "Error": "rpc error: code = Aborted desc = source response 401/401 Unauthorized is not valid",
         "Results": null,
         "State": "FAILURE",
+        "TTL": 0,
+        "TaskName": "preheat",
+        "TaskUUID": "task_8cd497e9-4748-45c3-acc4-db32aebe44ed3"
+      },
+      {
+        "CreatedAt": "2023-12-13T11:58:53.535716295Z",
+        "Error": "",
+        "Results": [],
+        "State": "SUCCESS",
         "TTL": 0,
         "TaskName": "preheat",
         "TaskUUID": "task_8cd497e9-4748-45c3-acc4-db32aebe44ed3"

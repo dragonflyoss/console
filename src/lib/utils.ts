@@ -11,6 +11,8 @@ export function useQuery(): URLSearchParams {
 export const getDatetime = (time: string) => {
   const date = new Date(time);
 
+  date.setHours(date.getUTCHours() + 8);
+
   const year = date.getUTCFullYear().toString();
   const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
   const day = date.getUTCDate().toString().padStart(2, '0');

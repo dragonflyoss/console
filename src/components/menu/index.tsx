@@ -25,11 +25,11 @@ import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { getJwtPayload, setPageTitle } from '../../lib/utils';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import { ROLE_ROOT, ROLE_GUEST } from '../../lib/constants';
+import LoadingBackdrop from '../loading-backdrop';
 
 interface MyContextType {
   user: getUserResponse;
   role: string;
-  pageLoding: boolean;
   handleUserUpdate: (newUser: getUserResponse) => void;
 }
 
@@ -48,7 +48,6 @@ export const MyContext = createContext<MyContextType>({
     bio: '',
   },
   role: '',
-  pageLoding: false,
   handleUserUpdate: () => {
     return;
   },
@@ -97,8 +96,8 @@ export default function Layout(props: any) {
 
   useEffect(() => {
     (async function () {
+      setPageLoding(true);
       try {
-        setPageLoding(true);
         const payload = getJwtPayload();
         setPageTitle(location.pathname);
 
@@ -243,7 +242,8 @@ export default function Layout(props: any) {
   };
 
   return (
-    <MyContext.Provider value={{ user, role, handleUserUpdate, pageLoding }}>
+    <MyContext.Provider value={{ user, role, handleUserUpdate }}>
+      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={firstLogin}
         autoHideDuration={60000}

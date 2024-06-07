@@ -45,7 +45,6 @@ import styles from './index.module.css';
 import _ from 'lodash';
 import { ROLE_ROOT, ROLE_GUEST, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../lib/constants';
 import { useNavigate } from 'react-router-dom';
-import LoadingBackdrop from '../loading-backdrop';
 
 const useStyles = makeStyles((theme: any) => ({
   tableRow: {
@@ -84,7 +83,6 @@ const theme = createTheme({
 
 export default function Users() {
   const [isLoading, setIsLoading] = useState(true);
-  const [pageLoding, setPageLoding] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
@@ -120,19 +118,16 @@ export default function Users() {
     (async function () {
       try {
         setUserPage(page);
-        setPageLoding(true);
         setIsLoading(true);
 
         const user = await getUsers({ page: 1, per_page: MAX_PAGE_SIZE });
 
         setUsers(user);
-        setPageLoding(false);
         setIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
-          setPageLoding(false);
           setIsLoading(false);
         }
       }
@@ -248,7 +243,6 @@ export default function Users() {
 
   return (
     <ThemeProvider theme={theme}>
-      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}

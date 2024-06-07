@@ -44,7 +44,7 @@ export default function PersonalAccessTokens() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [isLoding, setIsLoding] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [openDeletToken, setOpenDeletToken] = useState(false);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [tokenSelectedID, setTokenSelectedID] = useState('');
@@ -74,17 +74,17 @@ export default function PersonalAccessTokens() {
 
     (async function () {
       try {
-        setIsLoding(true);
+        setIsLoading(true);
 
         const token = await getTokens({ page: 1, per_page: MAX_PAGE_SIZE });
 
         setToken(token);
-        setIsLoding(false);
+        setIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
-          setIsLoding(false);
           setErrorMessage(true);
           setErrorMessageText(error.message);
+          setIsLoading(false);
         }
       }
     })();
@@ -251,8 +251,8 @@ export default function PersonalAccessTokens() {
       ) : (
         <></>
       )}
-      {isLoding ? (
-        <Paper variant="outlined" id="tokens-list">
+      {isLoading ? (
+        <Paper variant="outlined">
           <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>

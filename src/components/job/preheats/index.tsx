@@ -24,7 +24,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getJobs, JobsResponse } from '../../../lib/api';
 import { DEFAULT_PAGE_SIZE } from '../../../lib/constants';
-import { getPreheatDatetime, useQuery } from '../../../lib/utils';
+import { getBJTDatetime, useQuery } from '../../../lib/utils';
 
 export default function Preheats() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -284,7 +284,7 @@ export default function Preheats() {
                       <Box width="30%">
                         <Chip
                           avatar={<MoreTimeIcon />}
-                          label={getPreheatDatetime(item.created_at) || '-'}
+                          label={getBJTDatetime(item.created_at) || '-'}
                           variant="outlined"
                           size="small"
                         />
@@ -341,7 +341,7 @@ export default function Preheats() {
                     <Box width="30%">
                       <Chip
                         avatar={<MoreTimeIcon />}
-                        label={getPreheatDatetime(item.created_at) || '-'}
+                        label={getBJTDatetime(item.created_at) || '-'}
                         variant="outlined"
                         size="small"
                       />

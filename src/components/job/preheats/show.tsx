@@ -22,7 +22,7 @@ import { useEffect, useState } from 'react';
 import { getJob, getJobResponse } from '../../../lib/api';
 import { useParams, Link } from 'react-router-dom';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import { getPreheatDatetime } from '../../../lib/utils';
+import { getBJTDatetime } from '../../../lib/utils';
 import styles from './show.module.css';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 
@@ -451,7 +451,7 @@ export default function ShowPreheat() {
             ) : preheat?.created_at ? (
               <Chip
                 avatar={<MoreTimeIcon />}
-                label={getPreheatDatetime(preheat.created_at)}
+                label={getBJTDatetime(preheat.created_at)}
                 variant="outlined"
                 size="small"
               />

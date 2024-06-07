@@ -21,7 +21,7 @@ export const getDatetime = (time: string) => {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
-export const getPreheatDatetime = (time: string) => {
+export const getBJTDatetime = (time: string) => {
   const date = new Date(time);
 
   date.setHours(date.getUTCHours() + 8);

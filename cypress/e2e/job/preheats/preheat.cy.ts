@@ -119,7 +119,7 @@ describe('Preheat', () => {
       cy.get('.show_schedulerClustersID__iQd1s').should('have.text', 1);
 
       // Show preheat Created At.
-      cy.get(':nth-child(10) > .MuiChip-root').should('have.text', '2023-12-13 11:58:53');
+      cy.get(':nth-child(10) > .MuiChip-root').should('have.text', '2023-12-13 19:58:53');
 
       // Click the show error log button.
       cy.get('#status > .MuiButtonBase-root').click();

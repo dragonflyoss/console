@@ -83,35 +83,35 @@ describe('Tokens', () => {
       },
     );
 
-    cy.get('#tokens-list').should('not.exist');
     cy.get('.MuiPaper-root').should('be.visible').and('have.text', `You don't have any tokens.`);
   });
 
-  describe('should handle API error response', () => {
-    beforeEach(() => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/personal-access-tokens?page=1&per_page=10000000',
-        },
-        (req) => {
-          req.reply({
-            forceNetworkError: true,
-          });
-        },
-      );
-    });
+  it('should handle API error response', () => {
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/personal-access-tokens?page=1&per_page=10000000',
+      },
+      (req) => {
+        req.reply({
+          forceNetworkError: true,
+        });
+      },
+    );
 
-    it('show error message', () => {
-      // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('have.text', 'Failed to fetch');
-      cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    });
+    // Show error message.
+    cy.get('.MuiAlert-message').should('be.visible').and('have.text', 'Failed to fetch');
+    cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
 
-    it('there should be a message indicating that there is not tokens', () => {
-      cy.get('#tokens-list').should('not.exist');
-      cy.get('.MuiPaper-root').should('be.visible').and('have.text', `You don't have any tokens.`);
-    });
+    // Close error message.
+    cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+    cy.get('.MuiAlert-message').should('not.exist');
+
+    // No tokens list exists.
+    cy.get('#tokens-list').should('not.exist');
+
+    // Show You don't have any preheat tokens.
+    cy.get('.MuiPaper-root').should('be.visible').and('have.text', `You don't have any tokens.`);
   });
 
   describe('pagination', () => {

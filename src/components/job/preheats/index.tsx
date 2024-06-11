@@ -24,13 +24,11 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getJobs, JobsResponse } from '../../../lib/api';
 import { DEFAULT_PAGE_SIZE } from '../../../lib/constants';
-import { getDatetime, useQuery } from '../../../lib/utils';
-import LoadingBackdrop from '../../loading-backdrop';
+import { getBJTDatetime, useQuery } from '../../../lib/utils';
 
 export default function Preheats() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [pageLoding, setPageLoding] = useState(false);
   const [preheatPage, setPreheatPage] = useState(1);
   const [preheatTotalPages, setPreheatTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +55,6 @@ export default function Preheats() {
   useEffect(() => {
     (async function () {
       try {
-        setPageLoding(true);
         setIsLoading(true);
         setPreheatPage(page);
 
@@ -77,12 +74,10 @@ export default function Preheats() {
         states === 0 ? setShouldPoll(false) : setShouldPoll(true);
 
         setIsLoading(false);
-        setPageLoding(false);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
-          setPageLoding(false);
           setIsLoading(false);
         }
       }
@@ -148,7 +143,6 @@ export default function Preheats() {
 
   return (
     <ThemeProvider theme={theme}>
-      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
@@ -224,7 +218,26 @@ export default function Preheats() {
           </FormControl>
         </Box>
         <Divider />
-        {allPreheats.length === 0 ? (
+        {isLoading ? (
+          <Box>
+            <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
+                <Skeleton variant="circular" width="1.4rem" height="1.4rem" />
+                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }} ml="0.6rem">
+                  <Skeleton width="3rem" />
+                  <Skeleton width="6rem" />
+                </Box>
+              </Box>
+              <Box width="30%">
+                <Skeleton width="40%" />
+              </Box>
+              <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Skeleton variant="circular" width="2em" height="2em" />
+              </Box>
+            </Box>
+            <Divider />
+          </Box>
+        ) : allPreheats.length === 0 ? (
           <Box sx={{ height: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             You don't have any preheat tasks.
           </Box>
@@ -236,9 +249,7 @@ export default function Preheats() {
                   <Box key={item.id} id={`list-${item.id}`}>
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
-                        {isLoading ? (
-                          <Skeleton variant="circular" width="1.4rem" height="1.4rem" />
-                        ) : item.result.State === 'SUCCESS' ? (
+                        {item.result.State === 'SUCCESS' ? (
                           <Box
                             id={`SUCCESS-${item.id}`}
                             component="img"
@@ -264,47 +275,30 @@ export default function Preheats() {
                           sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
                           ml="0.6rem"
                         >
-                          {isLoading ? (
-                            <Skeleton width="3rem" />
-                          ) : (
-                            <Typography variant="body1" fontFamily="mabry-bold">
-                              {item.id}
-                            </Typography>
-                          )}
-
-                          {isLoading ? (
-                            <Skeleton width="6rem" />
-                          ) : (
-                            <Typography variant="body2">{item.bio || '-'}</Typography>
-                          )}
+                          <Typography variant="body1" fontFamily="mabry-bold">
+                            {item.id}
+                          </Typography>
+                          <Typography variant="body2">{item.bio || '-'}</Typography>
                         </Box>
                       </Box>
                       <Box width="30%">
-                        {isLoading ? (
-                          <Skeleton width="40%" />
-                        ) : (
-                          <Chip
-                            avatar={<MoreTimeIcon />}
-                            label={getDatetime(item.created_at) || '-'}
-                            variant="outlined"
-                            size="small"
-                          />
-                        )}
+                        <Chip
+                          avatar={<MoreTimeIcon />}
+                          label={getBJTDatetime(item.created_at) || '-'}
+                          variant="outlined"
+                          size="small"
+                        />
                       </Box>
                       <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
-                        {isLoading ? (
-                          <Skeleton variant="circular" width="2em" height="2em" />
-                        ) : (
-                          <RouterLink
-                            component={Link}
-                            id={`preheat-${item?.id}`}
-                            to={`/jobs/preheats/${item?.id}`}
-                            underline="hover"
-                            sx={{ color: 'var(--description-color)' }}
-                          >
-                            <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/detail.svg" />
-                          </RouterLink>
-                        )}
+                        <RouterLink
+                          component={Link}
+                          id={`preheat-${item?.id}`}
+                          to={`/jobs/preheats/${item?.id}`}
+                          underline="hover"
+                          sx={{ color: 'var(--description-color)' }}
+                        >
+                          <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/detail.svg" />
+                        </RouterLink>
                       </Box>
                     </Box>
                     <Divider />
@@ -312,9 +306,7 @@ export default function Preheats() {
                 ) : (
                   <Box key={item.id} id={`list-${item.id}`} sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                     <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
-                      {isLoading ? (
-                        <Skeleton variant="circular" width="1.4rem" height="1.4rem" />
-                      ) : item.result.State === 'SUCCESS' ? (
+                      {item.result.State === 'SUCCESS' ? (
                         <Box
                           id={`SUCCESS-${item.id}`}
                           component="img"
@@ -340,47 +332,30 @@ export default function Preheats() {
                         sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
                         ml="0.6rem"
                       >
-                        {isLoading ? (
-                          <Skeleton width="3rem" />
-                        ) : (
-                          <Typography variant="body1" fontFamily="mabry-bold">
-                            {item.id}
-                          </Typography>
-                        )}
-
-                        {isLoading ? (
-                          <Skeleton width="6rem" />
-                        ) : (
-                          <Typography variant="body2">{item.bio || '-'}</Typography>
-                        )}
+                        <Typography variant="body1" fontFamily="mabry-bold">
+                          {item.id}
+                        </Typography>
+                        <Typography variant="body2">{item.bio || '-'}</Typography>
                       </Box>
                     </Box>
                     <Box width="30%">
-                      {isLoading ? (
-                        <Skeleton width="40%" />
-                      ) : (
-                        <Chip
-                          avatar={<MoreTimeIcon />}
-                          label={getDatetime(item.created_at) || '-'}
-                          variant="outlined"
-                          size="small"
-                        />
-                      )}
+                      <Chip
+                        avatar={<MoreTimeIcon />}
+                        label={getBJTDatetime(item.created_at) || '-'}
+                        variant="outlined"
+                        size="small"
+                      />
                     </Box>
                     <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
-                      {isLoading ? (
-                        <Skeleton variant="circular" width="2em" height="2em" />
-                      ) : (
-                        <RouterLink
-                          component={Link}
-                          id={`preheat-${item?.id}`}
-                          to={`/jobs/preheats/${item?.id}`}
-                          underline="hover"
-                          sx={{ color: 'var(--description-color)' }}
-                        >
-                          <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/detail.svg" />
-                        </RouterLink>
-                      )}
+                      <RouterLink
+                        component={Link}
+                        id={`preheat-${item?.id}`}
+                        to={`/jobs/preheats/${item?.id}`}
+                        underline="hover"
+                        sx={{ color: 'var(--description-color)' }}
+                      >
+                        <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/detail.svg" />
+                      </RouterLink>
                     </Box>
                   </Box>
                 );

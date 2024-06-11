@@ -50,7 +50,7 @@ describe('Schedulers', () => {
 
     cy.signin();
     cy.visit('clusters/1');
-    cy.viewport(1440, 1080);
+    cy.viewport(1440, 2080);
   });
 
   describe('when data is loaded', () => {
@@ -201,8 +201,7 @@ describe('Schedulers', () => {
       cy.get('#scheduler-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
       // Show scheduler information.
-      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(2)')
-        .scrollIntoView()
+      cy.get('#scheduler-table > .MuiTableBody-root > :nth-child(1) > :nth-child(2) > .MuiTypography-root')
         .should('be.visible')
         .and('contain', 'scheduler-11');
 

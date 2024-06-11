@@ -28,7 +28,6 @@ import AddIcon from '@mui/icons-material/Add';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
-import LoadingBackdrop from '../../loading-backdrop';
 
 const theme = createTheme({
   palette: {
@@ -45,7 +44,7 @@ export default function PersonalAccessTokens() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [pageLoding, setPageLoding] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [openDeletToken, setOpenDeletToken] = useState(false);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [tokenSelectedID, setTokenSelectedID] = useState('');
@@ -75,17 +74,17 @@ export default function PersonalAccessTokens() {
 
     (async function () {
       try {
-        setPageLoding(true);
+        setIsLoading(true);
 
         const token = await getTokens({ page: 1, per_page: MAX_PAGE_SIZE });
 
         setToken(token);
-        setPageLoding(false);
+        setIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
-          setPageLoding(false);
           setErrorMessage(true);
           setErrorMessageText(error.message);
+          setIsLoading(false);
         }
       }
     })();
@@ -156,7 +155,6 @@ export default function PersonalAccessTokens() {
 
   return (
     <ThemeProvider theme={theme}>
-      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -253,7 +251,25 @@ export default function PersonalAccessTokens() {
       ) : (
         <></>
       )}
-      {allTokens.length === 0 ? (
+      {isLoading ? (
+        <Paper variant="outlined">
+          <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
+                <Skeleton sx={{ fontSize: '0.8rem' }} width="6rem" />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body2" component="span">
+                  <Skeleton width="8rem" />
+                </Typography>
+              </Box>
+            </Box>
+            <Box>
+              <Skeleton width="4.5rem" height="3.2rem" />
+            </Box>
+          </Box>
+        </Paper>
+      ) : allTokens.length === 0 ? (
         <Paper
           variant="outlined"
           sx={{ height: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}

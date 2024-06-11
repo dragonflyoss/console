@@ -69,7 +69,6 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import { LoadingButton } from '@mui/lab';
 import styles from './show.module.css';
@@ -82,7 +81,6 @@ import {
   DEFAULT_SEED_PEER_TABLE_PAGE_SIZE,
 } from '../../lib/constants';
 import { getPaginatedList, useQuery } from '../../lib/utils';
-import LoadingBackdrop from '../loading-backdrop';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import DeleteAnimation from '../delete-animation';
 
@@ -127,7 +125,6 @@ export default function ShowCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [pageLoding, setPageLoding] = useState(false);
   const [informationIsLoading, setInformationIsLoading] = useState(true);
   const [schedulerTableIsLoading, setSchedulerTableIsLoading] = useState(true);
   const [seedPeerTableIsLoading, setSeedPeerTableIsLoading] = useState(true);
@@ -196,7 +193,6 @@ export default function ShowCluster() {
   useEffect(() => {
     (async function () {
       try {
-        setPageLoding(true);
         setInformationIsLoading(true);
         setSeedPeerTableIsLoading(true);
         setSchedulerTableIsLoading(true);
@@ -229,7 +225,6 @@ export default function ShowCluster() {
             setScheduler(scheduler);
             setSchedulerCount(scheduler);
           }
-          setPageLoding(false);
           setSchedulerTableIsLoading(false);
           setSeedPeerTableIsLoading(false);
           setInformationIsLoading(false);
@@ -238,7 +233,6 @@ export default function ShowCluster() {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
-          setPageLoding(false);
           setSchedulerTableIsLoading(false);
           setSeedPeerTableIsLoading(false);
           setInformationIsLoading(false);
@@ -522,6 +516,7 @@ export default function ShowCluster() {
       } else {
         setSchedulerTotalPages(1);
         setAllSchedlers([]);
+        setSchedulerTableIsLoading(false);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -556,6 +551,7 @@ export default function ShowCluster() {
       } else {
         setSeedPeerTotalPages(1);
         setAllSeedPeers([]);
+        setSeedPeerTableIsLoading(false);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -718,7 +714,6 @@ export default function ShowCluster() {
 
   return (
     <ThemeProvider theme={theme}>
-      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -1605,7 +1600,44 @@ export default function ShowCluster() {
               </TableRow>
             </TableHead>
             <TableBody id="scheduler-table-body">
-              {allSchedulers.length === 0 ? (
+              {schedulerTableIsLoading ? (
+                <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell align="center">
+                    <Skeleton />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton width="4rem" />
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
+                      <Skeleton width="4rem" />
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton width="2rem" />
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton width="3.5rem" height="2.6rem" />
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton width="3.8rem" height="2.8rem" />
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton width="2.5rem" height="2.5rem" />
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ) : allSchedulers.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={9} align="center" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     You don't have scheduler cluster.
@@ -1621,76 +1653,58 @@ export default function ShowCluster() {
                           selected={schedulerSelectedRow === item}
                           sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                          <TableCell align="center">{schedulerTableIsLoading ? <Skeleton /> : item?.id}</TableCell>
+                          <TableCell align="center">{item?.id}</TableCell>
                           <TableCell align="center">
-                            {schedulerTableIsLoading ? (
-                              <Skeleton />
-                            ) : (
-                              <RouterLink
-                                component={Link}
-                                to={`/clusters/${params.id}/schedulers/${item?.id}`}
-                                underline="hover"
-                                sx={{ color: 'var(--description-color)' }}
-                              >
-                                {item?.host_name}
-                              </RouterLink>
-                            )}
+                            <RouterLink
+                              component={Link}
+                              to={`/clusters/${params.id}/schedulers/${item?.id}`}
+                              underline="hover"
+                              sx={{ color: 'var(--description-color)' }}
+                            >
+                              {item?.host_name}
+                            </RouterLink>
                           </TableCell>
                           <TableCell align="center">
-                            {schedulerTableIsLoading ? (
-                              <Skeleton />
-                            ) : (
-                              <Box className={styles.ipContainer}>
-                                <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
-                                {item?.ip}
-                              </Box>
-                            )}
+                            <Box className={styles.ipContainer}>
+                              <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
+                              {item?.ip}
+                            </Box>
                           </TableCell>
-                          <TableCell align="center">{schedulerTableIsLoading ? <Skeleton /> : item?.port}</TableCell>
+                          <TableCell align="center">{item?.port}</TableCell>
                           <TableCell align="center">
-                            {schedulerTableIsLoading ? (
-                              <Skeleton />
-                            ) : (
-                              <Chip
-                                label={_.upperFirst(item?.state) || ''}
-                                size="small"
-                                variant="outlined"
-                                sx={{
-                                  borderRadius: '0%',
-                                  backgroundColor:
-                                    item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                                  color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
-                                  borderColor:
-                                    item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                                  fontWeight: 'bold',
-                                }}
-                              />
-                            )}
+                            <Chip
+                              label={_.upperFirst(item?.state) || ''}
+                              size="small"
+                              variant="outlined"
+                              sx={{
+                                borderRadius: '0%',
+                                backgroundColor:
+                                  item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                                color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
+                                borderColor:
+                                  item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                                fontWeight: 'bold',
+                              }}
+                            />
                           </TableCell>
                           <TableCell align="center">
-                            {schedulerTableIsLoading ? (
-                              <Skeleton />
-                            ) : (
-                              <>
-                                {Array.isArray(item.features) &&
-                                  item.features.map((item: string, id: any) => (
-                                    <Chip
-                                      key={id}
-                                      label={_.upperFirst(item) || ''}
-                                      size="small"
-                                      variant="outlined"
-                                      sx={{
-                                        borderRadius: '0%',
-                                        background: 'var(--button-color)',
-                                        color: '#FFFFFF',
-                                        m: '0.4rem',
-                                        borderColor: 'var(--button-color)',
-                                        fontWeight: 'bold',
-                                      }}
-                                    />
-                                  ))}
-                              </>
-                            )}
+                            {Array.isArray(item.features) &&
+                              item.features.map((item: string, id: any) => (
+                                <Chip
+                                  key={id}
+                                  label={_.upperFirst(item) || ''}
+                                  size="small"
+                                  variant="outlined"
+                                  sx={{
+                                    borderRadius: '0%',
+                                    background: 'var(--button-color)',
+                                    color: '#FFFFFF',
+                                    m: '0.4rem',
+                                    borderColor: 'var(--button-color)',
+                                    fontWeight: 'bold',
+                                  }}
+                                />
+                              ))}
                           </TableCell>
                           <TableCell align="center">
                             <IconButton
@@ -1902,7 +1916,54 @@ export default function ShowCluster() {
               </TableRow>
             </TableHead>
             <TableBody id="seed-peer-table-body">
-              {allseedPeers.length === 0 ? (
+              {seedPeerTableIsLoading ? (
+                <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell align="center">
+                    <Skeleton />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton width="4rem" />
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
+                      <Skeleton width="4rem" />
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton width="2rem" />
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton width="2rem" />
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton width="2rem" />
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton width="2rem" />
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton width="3.5rem" height="2.6rem" />
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton width="2.5rem" height="2.5rem" />
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ) : allseedPeers.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={9} align="center" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     You don't have seed peer cluster.
@@ -1918,66 +1979,44 @@ export default function ShowCluster() {
                           selected={seedPeerSelectedRow === item}
                           sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                          <TableCell align="center">{seedPeerTableIsLoading ? <Skeleton /> : item?.id}</TableCell>
+                          <TableCell align="center">{item?.id}</TableCell>
                           <TableCell align="center">
-                            {seedPeerTableIsLoading ? (
-                              <Skeleton />
-                            ) : (
-                              <RouterLink
-                                component={Link}
-                                to={`/clusters/${params.id}/seed-peers/${item?.id}`}
-                                underline="hover"
-                                sx={{ color: 'var(--description-color)' }}
-                              >
-                                {item?.host_name}
-                              </RouterLink>
-                            )}
+                            <RouterLink
+                              component={Link}
+                              to={`/clusters/${params.id}/seed-peers/${item?.id}`}
+                              underline="hover"
+                              sx={{ color: 'var(--description-color)' }}
+                            >
+                              {item?.host_name}
+                            </RouterLink>
                           </TableCell>
                           <TableCell align="center">
-                            {seedPeerTableIsLoading ? (
-                              <Skeleton />
-                            ) : (
-                              <Box className={styles.ipContainer}>
-                                <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
-                                {item?.ip}
-                              </Box>
-                            )}
+                            <Box className={styles.ipContainer}>
+                              <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
+                              {item?.ip}
+                            </Box>
                           </TableCell>
-                          <TableCell align="center">{seedPeerTableIsLoading ? <Skeleton /> : item?.port}</TableCell>
+                          <TableCell align="center">{item?.port}</TableCell>
+                          <TableCell align="center">{item?.download_port}</TableCell>
                           <TableCell align="center">
-                            {seedPeerTableIsLoading ? <Skeleton /> : item?.download_port}
+                            {item?.object_storage_port === 0 ? '-' : item?.object_storage_port}
                           </TableCell>
+                          <TableCell align="center">{_.upperFirst(item?.type) || ''}</TableCell>
                           <TableCell align="center">
-                            {seedPeerTableIsLoading ? (
-                              <Skeleton />
-                            ) : item?.object_storage_port === 0 ? (
-                              '-'
-                            ) : (
-                              item?.object_storage_port
-                            )}
-                          </TableCell>
-                          <TableCell align="center">
-                            {seedPeerTableIsLoading ? <Skeleton /> : _.upperFirst(item?.type) || ''}
-                          </TableCell>
-                          <TableCell align="center">
-                            {seedPeerTableIsLoading ? (
-                              <Skeleton />
-                            ) : (
-                              <Chip
-                                label={_.upperFirst(item?.state) || ''}
-                                size="small"
-                                variant="outlined"
-                                sx={{
-                                  borderRadius: '0%',
-                                  backgroundColor:
-                                    item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                                  color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
-                                  borderColor:
-                                    item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                                  fontWeight: 'bold',
-                                }}
-                              />
-                            )}
+                            <Chip
+                              label={_.upperFirst(item?.state) || ''}
+                              size="small"
+                              variant="outlined"
+                              sx={{
+                                borderRadius: '0%',
+                                backgroundColor:
+                                  item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                                color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
+                                borderColor:
+                                  item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                                fontWeight: 'bold',
+                              }}
+                            />
                           </TableCell>
                           <TableCell align="center">
                             <IconButton

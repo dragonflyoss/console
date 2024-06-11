@@ -28,7 +28,6 @@ import { getToken, updateTokens } from '../../../lib/api';
 import HelpIcon from '@mui/icons-material/Help';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import LoadingBackdrop from '../../loading-backdrop';
 
 const theme = createTheme({
   palette: {
@@ -42,7 +41,6 @@ export default function UpdateTokens() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [pageLoding, setPageLoding] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bioError, setBioError] = useState(false);
   const [selectedTime, setSelectedTime] = useState('');
@@ -100,7 +98,6 @@ export default function UpdateTokens() {
   useEffect(() => {
     (async function () {
       try {
-        setPageLoding(true);
         setIsLoading(true);
 
         if (params?.id) {
@@ -110,12 +107,10 @@ export default function UpdateTokens() {
           setPreheat(tokens.scopes.includes('preheat'));
           setJob(tokens.scopes.includes('job'));
           setCluster(tokens.scopes.includes('cluster'));
-          setPageLoding(false);
           setIsLoading(false);
         }
       } catch (error) {
         if (error instanceof Error) {
-          setPageLoding(false);
           setIsLoading(false);
           setErrorMessage(true);
           setErrorMessageText(error.message);
@@ -195,7 +190,6 @@ export default function UpdateTokens() {
 
   return (
     <Box>
-      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}

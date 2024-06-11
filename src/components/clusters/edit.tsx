@@ -22,13 +22,11 @@ import { getCluster, updateCluster, getClusterResponse } from '../../lib/api';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate, useParams } from 'react-router-dom';
-import LoadingBackdrop from '../loading-backdrop';
 
 export default function EditCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [pageLoding, setPageLoding] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [bioError, setBioError] = useState(false);
   const [seedPeerLoadLimitError, setSeedPeerLoadLimitError] = useState(false);
@@ -86,18 +84,15 @@ export default function EditCluster() {
   useEffect(() => {
     (async function () {
       try {
-        setPageLoding(true);
         setIsLoading(true);
 
         if (typeof params.id === 'string') {
           const cluster = await getCluster(params.id);
           setCluster(cluster);
-          setPageLoding(false);
           setIsLoading(false);
         }
       } catch (error) {
         if (error instanceof Error) {
-          setPageLoding(false);
           setIsLoading(false);
           setErrorMessage(true);
           setErrorMessageText(error.message);
@@ -643,7 +638,6 @@ export default function EditCluster() {
 
   return (
     <Grid>
-      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}

@@ -152,12 +152,13 @@ describe('Seed peer', () => {
 
   describe('when no data is loaded', () => {
     beforeEach(() => {
-      cy.intercept({ method: 'GET', url: '/api/v1/seed-peers/10' }, (req) => {
+      cy.intercept({ method: 'GET', url: '/api/v1/seed-peers/9' }, (req) => {
         req.reply({
           statusCode: 200,
           body: [],
         });
       });
+      cy.visit('/clusters/1/seed-peers/9');
     });
 
     it('unable to display breadcrumb', () => {

@@ -43,7 +43,6 @@ import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './inde.module.css';
 import { LoadingButton } from '@mui/lab';
 import { exportCSVFile } from '../../../lib/utils';
-import LoadingBackdrop from '../../loading-backdrop';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 Chart.defaults.font.family = 'mabry-light';
@@ -71,7 +70,6 @@ const theme = createTheme({
 export default function Peer() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [pageLoding, setPageLoding] = useState(false);
   const [peer, setPeer] = useState<getPeersResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [openExport, setOpenExport] = useState(false);
@@ -102,7 +100,6 @@ export default function Peer() {
     (async function () {
       try {
         setIsLoading(true);
-        setPageLoding(true);
 
         const peer = await getPeers({ page: 1, per_page: MAX_PAGE_SIZE });
         const clusterNames = Array.from(new Set(peer.map((item) => item.scheduler_cluster.name)));
@@ -161,13 +158,11 @@ export default function Peer() {
         const active = (peer.filter((item) => item.state === 'active').length / peer.length) * 100;
 
         setClusterActive(Number(active.toFixed(2)));
-        setPageLoding(false);
         setIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
-          setPageLoding(false);
           setIsLoading(false);
         }
       }
@@ -556,7 +551,6 @@ export default function Peer() {
 
   return (
     <Box>
-      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}

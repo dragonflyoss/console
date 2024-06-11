@@ -22,10 +22,9 @@ import { useEffect, useState } from 'react';
 import { getJob, getJobResponse } from '../../../lib/api';
 import { useParams, Link } from 'react-router-dom';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import { getDatetime } from '../../../lib/utils';
+import { getBJTDatetime } from '../../../lib/utils';
 import styles from './show.module.css';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
-import LoadingBackdrop from '../../loading-backdrop';
 
 export default function ShowPreheat() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -51,14 +50,12 @@ export default function ShowPreheat() {
 
   useEffect(() => {
     setIsLoading(true);
-    setPageLoding(true);
     (async function () {
       try {
         if (typeof params.id === 'string') {
           const job = await getJob(params.id);
           setPreheat(job);
           setIsLoading(false);
-          setPageLoding(false);
           if (job.result.State !== 'SUCCESS' && job.result.State !== 'FAILURE') {
             setShouldPoll(true);
           }
@@ -68,7 +65,6 @@ export default function ShowPreheat() {
           setErrorMessage(true);
           setErrorMessageText(error.message);
           setIsLoading(false);
-          setPageLoding(false);
         }
       }
     })();
@@ -116,7 +112,6 @@ export default function ShowPreheat() {
 
   return (
     <ThemeProvider theme={theme}>
-      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
@@ -454,7 +449,12 @@ export default function ShowPreheat() {
             {isLoading ? (
               <Skeleton sx={{ width: '4rem' }} />
             ) : preheat?.created_at ? (
-              <Chip avatar={<MoreTimeIcon />} label={getDatetime(preheat.created_at)} variant="outlined" size="small" />
+              <Chip
+                avatar={<MoreTimeIcon />}
+                label={getBJTDatetime(preheat.created_at)}
+                variant="outlined"
+                size="small"
+              />
             ) : (
               <Typography variant="body1" className={styles.informationContent}>
                 -
@@ -464,66 +464,70 @@ export default function ShowPreheat() {
         </Paper>
         <Drawer anchor="right" open={errorLog} onClose={handleClose}>
           <Box role="presentation" sx={{ width: '28rem' }}>
-            {preheat?.result?.JobStates.map((item) => (
-              <Box key={item.Error} sx={{ height: '100vh', backgroundColor: '#24292f' }}>
-                <Typography variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#fff' }}>
-                  Error log
-                </Typography>
-                <Divider sx={{ backgroundColor: '#6c6e6f' }} />
-                <Box sx={{ p: '1rem' }}>
-                  <Accordion
-                    disableGutters
-                    elevation={0}
-                    square
-                    sx={{
-                      '&:not(:last-child)': {
-                        borderBottom: 0,
-                      },
-                      '&:before': {
-                        display: 'none',
-                      },
-                    }}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem', color: '#d0d7de' }} />}
+            {preheat?.result?.JobStates.map((item) =>
+              item.State === 'FAILURE' && item.Error !== '' ? (
+                <Box key={item.Error} sx={{ height: '100vh', backgroundColor: '#24292f' }}>
+                  <Typography variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#fff' }}>
+                    Error log
+                  </Typography>
+                  <Divider sx={{ backgroundColor: '#6c6e6f' }} />
+                  <Box sx={{ p: '1rem' }}>
+                    <Accordion
+                      disableGutters
+                      elevation={0}
+                      square
                       sx={{
-                        backgroundColor: '#32383f',
-                        flexDirection: 'row-reverse',
-                        '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
-                          transform: 'rotate(90deg)',
+                        '&:not(:last-child)': {
+                          borderBottom: 0,
                         },
-                        '& .MuiAccordionSummary-content': {
-                          marginLeft: '1rem',
+                        '&:before': {
+                          display: 'none',
                         },
-                        height: '2rem',
-                      }}
-                      aria-controls="panel1d-content"
-                      id="panel1d-header"
-                    >
-                      <Box display="flex">
-                        <Box
-                          component="img"
-                          sx={{ width: '1.4rem', height: '1.4rem', mr: '0.6rem' }}
-                          src="/icons/job/preheat/failure.svg"
-                        />
-                        <Typography variant="body2" fontFamily="mabry-bold" sx={{ color: '#d0d7de' }}>
-                          Preheat
-                        </Typography>
-                      </Box>
-                    </AccordionSummary>
-                    <AccordionDetails
-                      sx={{
-                        padding: '1rem',
-                        borderTop: '1px solid rgba(0, 0, 0, .125)',
-                        backgroundColor: '#24292f',
                       }}
                     >
-                      <Typography sx={{ color: '#d0d7de' }}>{item.Error}</Typography>
-                    </AccordionDetails>
-                  </Accordion>
+                      <AccordionSummary
+                        expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem', color: '#d0d7de' }} />}
+                        sx={{
+                          backgroundColor: '#32383f',
+                          flexDirection: 'row-reverse',
+                          '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+                            transform: 'rotate(90deg)',
+                          },
+                          '& .MuiAccordionSummary-content': {
+                            marginLeft: '1rem',
+                          },
+                          height: '2rem',
+                        }}
+                        aria-controls="panel1d-content"
+                        id="panel1d-header"
+                      >
+                        <Box display="flex">
+                          <Box
+                            component="img"
+                            sx={{ width: '1.4rem', height: '1.4rem', mr: '0.6rem' }}
+                            src="/icons/job/preheat/failure.svg"
+                          />
+                          <Typography variant="body2" fontFamily="mabry-bold" sx={{ color: '#d0d7de' }}>
+                            Preheat
+                          </Typography>
+                        </Box>
+                      </AccordionSummary>
+                      <AccordionDetails
+                        sx={{
+                          padding: '1rem',
+                          borderTop: '1px solid rgba(0, 0, 0, .125)',
+                          backgroundColor: '#24292f',
+                        }}
+                      >
+                        <Typography sx={{ color: '#d0d7de' }}>{item.Error}</Typography>
+                      </AccordionDetails>
+                    </Accordion>
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              ) : (
+                ''
+              ),
+            )}
           </Box>
         </Drawer>
       </Box>

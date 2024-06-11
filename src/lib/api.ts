@@ -711,6 +711,16 @@ export async function getJobs(params?: getJobsParams): Promise<getJobsResponse> 
   return responses;
 }
 
+interface JobStates {
+  CreatedAt: string;
+  Error: string;
+  Results: Array<string> | null;
+  State: string;
+  TTL: number;
+  TaskName: string;
+  TaskUUID: string;
+}
+
 export interface getJobResponse {
   id: number;
   created_at: string;
@@ -727,27 +737,39 @@ export interface getJobResponse {
     type: string;
     url: string;
     pieceLength: number;
+    password: string;
+    platform: string;
+    username: string;
   };
   result: {
     CreatedAt: string;
     GroupUUID: string;
-    JobStates: [
-      {
-        CreatedAt: string;
-        Error: string;
-        Results: Array<string>;
-        State: string;
-        TTL: number;
-        TaskName: string;
-        TaskUUID: string;
-      },
-    ];
+    JobStates: JobStates[];
     State: string;
   };
   user_id: number;
   scheduler_clusters: [
     {
       id: number;
+      created_at: string;
+      updated_at: string;
+      is_del: number;
+      name: string;
+      bio: string;
+      config: {
+        candidate_parent_limit: number;
+        filter_parent_limit: number;
+      };
+      client_config: {
+        concurrent_piece_count: number;
+        load_limit: number;
+      };
+      scopes: {};
+      is_default: true;
+      seed_peer_clusters: null;
+      schedulers: null;
+      peers: null;
+      jobs: null;
     },
   ];
 }

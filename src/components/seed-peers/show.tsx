@@ -8,11 +8,9 @@ import HistoryIcon from '@mui/icons-material/History';
 import styles from './show.module.css';
 import _ from 'lodash';
 import { useParams, Link, useLocation } from 'react-router-dom';
-import LoadingBackdrop from '../loading-backdrop';
 
 export default function SeedPeer() {
   const [isLoading, setIsLoading] = useState(false);
-  const [pageLoding, setPageLoding] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [seedPeer, setSeedPeer] = useState<getSeedPeerResponse>();
@@ -57,20 +55,17 @@ export default function SeedPeer() {
   useEffect(() => {
     (async function () {
       try {
-        setPageLoding(true);
         setIsLoading(true);
 
         if (typeof params.id === 'string') {
           const seedPeer = await getSeedPeer(params.id);
           setSeedPeer(seedPeer);
-          setPageLoding(false);
           setIsLoading(false);
         }
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
-          setPageLoding(false);
           setIsLoading(false);
         }
       }
@@ -87,7 +82,6 @@ export default function SeedPeer() {
 
   return (
     <Box>
-      <LoadingBackdrop open={pageLoding} />
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}

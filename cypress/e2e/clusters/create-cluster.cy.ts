@@ -347,10 +347,11 @@ describe('Create cluster', () => {
       cy.get('#name').type('cluster-12');
 
       // Should display seed peer load limit the validation error message.
-      cy.get('#seedPeerLoadLimit').type('5000');
+      cy.get('#seedPeerLoadLimit').clear();
+      cy.get('#seedPeerLoadLimit').type('50001');
       cy.get('#seedPeerLoadLimit-helper-text')
         .should('be.visible')
-        .and('contain', `Fill in the number, the length is 0-5000.`);
+        .and('contain', `Fill in the number, the length is 0-50000.`);
       cy.get('#save').click();
       cy.url().should('include', '/clusters/new');
       cy.get('#seedPeerLoadLimit').clear();

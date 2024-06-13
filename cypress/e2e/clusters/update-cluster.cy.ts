@@ -390,12 +390,13 @@ describe('Update cluster', () => {
 
     it('try to verify config', () => {
       // Should display seed peer load limit the validation error message.
-      cy.get('#seedPeerLoadLimit').type('5000');
+      cy.get('#seedPeerLoadLimit').clear();
+      cy.get('#seedPeerLoadLimit').type('50001');
 
       // Show verification error message.
       cy.get('#seedPeerLoadLimit-helper-text')
         .should('be.visible')
-        .and('contain', `Fill in the number, the length is 0-5000.`);
+        .and('contain', `Fill in the number, the length is 0-50000.`);
 
       // Submit form when validation fails.
       cy.get('#save').click();

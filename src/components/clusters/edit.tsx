@@ -368,7 +368,7 @@ export default function EditCluster() {
         autoComplete: 'family-name',
         placeholder: 'Please enter Seed Peer load limit',
         value: seed_peer_cluster_config?.load_limit,
-        helperText: seedPeerLoadLimitError ? 'Fill in the number, the length is 0-5000.' : '',
+        helperText: seedPeerLoadLimitError ? 'Fill in the number, the length is 0-50000.' : '',
         error: seedPeerLoadLimitError,
 
         onChange: (e: any) => {
@@ -393,7 +393,7 @@ export default function EditCluster() {
       setError: setSeedPeerLoadLimitError,
 
       validate: (value: string) => {
-        const reg = /^\+?(\d|[1-4]\d{1,3}|[5-9]\d{1,2}|5000)(\.\d*)?$/;
+        const reg = /^(?:[0-9]|[1-9][0-9]{1,3}|[1-4][0-9]{4}|50000)$/;
         return reg.test(value);
       },
     },

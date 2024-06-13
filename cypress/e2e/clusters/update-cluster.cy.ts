@@ -305,88 +305,88 @@ describe('Update cluster', () => {
   });
 
   describe('cannot update cluster with invalid attributes', () => {
-    // it('try to verify information', () => {
-    //   const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    //   const description = _.times(1001, () => _.sample(characters)).join('');
+    it('try to verify information', () => {
+      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const description = _.times(1001, () => _.sample(characters)).join('');
 
-    //   cy.get('#description').clear();
-    //   cy.get('#description').type(description);
+      cy.get('#description').clear();
+      cy.get('#description').type(description);
 
-    //   // Show verification error message.
-    //   cy.get('#description-helper-text')
-    //     .should('be.visible')
-    //     .and('contain', 'Fill in the characters, the length is 0-1000.');
+      // Show verification error message.
+      cy.get('#description-helper-text')
+        .should('be.visible')
+        .and('contain', 'Fill in the characters, the length is 0-1000.');
 
-    //   // Submit form when validation fails.
-    //   cy.get('#save').click();
-    //   cy.url().should('include', '/clusters/1/edit');
-    //   cy.get('#description').clear();
+      // Submit form when validation fails.
+      cy.get('#save').click();
+      cy.url().should('include', '/clusters/1/edit');
+      cy.get('#description').clear();
 
-    //   // Verification passed.
-    //   cy.get('#description').type('cluster description');
-    // });
+      // Verification passed.
+      cy.get('#description').type('cluster description');
+    });
 
-    // it('try to verify scopes', () => {
-    //   const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    //   const location = _.times(101, () => _.sample(characters)).join('');
+    it('try to verify scopes', () => {
+      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const location = _.times(101, () => _.sample(characters)).join('');
 
-    //   // Should display location the validation error message.
-    //   cy.get('#location').type(location);
+      // Should display location the validation error message.
+      cy.get('#location').type(location);
 
-    //   // Show verification error message.
-    //   cy.get('#location-helper-text')
-    //     .should('be.visible')
-    //     .and('contain', 'Fill in the characters, the length is 0-100.');
+      // Show verification error message.
+      cy.get('#location-helper-text')
+        .should('be.visible')
+        .and('contain', 'Fill in the characters, the length is 0-100.');
 
-    //   // Submit form when validation fails.
-    //   cy.get('#save').click();
-    //   cy.url().should('include', '/clusters/1/edit');
-    //   cy.get('#location').clear();
+      // Submit form when validation fails.
+      cy.get('#save').click();
+      cy.url().should('include', '/clusters/1/edit');
+      cy.get('#location').clear();
 
-    //   // Verification passed.
-    //   cy.get('#location').type('Beijing');
-    //   cy.get('#location-helper-text').should('not.exist');
+      // Verification passed.
+      cy.get('#location').type('Beijing');
+      cy.get('#location-helper-text').should('not.exist');
 
-    //   // Should display idc the validation error message.
-    //   cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('hz');
-    //   cy.get('#save').click();
-    //   cy.url().should('include', '/clusters/1/edit');
-    //   cy.get('#idc-helper-text').should('be.visible').and('contain', `Please press ENTER to end the IDC creation.`);
+      // Should display idc the validation error message.
+      cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('hz');
+      cy.get('#save').click();
+      cy.url().should('include', '/clusters/1/edit');
+      cy.get('#idc-helper-text').should('be.visible').and('contain', `Please press ENTER to end the IDC creation.`);
 
-    //   // Verification passed.
-    //   cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('hz{enter}');
-    //   cy.get('#idc-helper-text').should('not.exist');
+      // Verification passed.
+      cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('hz{enter}');
+      cy.get('#idc-helper-text').should('not.exist');
 
-    //   // Should display cidrs the validation error message.
-    //   cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
-    //     '192.168.40.0/24',
-    //   );
-    //   cy.get('#save').click();
-    //   cy.url().should('include', '/clusters/1/edit');
-    //   // Show verification error message.
-    //   cy.get('#cidrs-helper-text').should('be.visible').and('contain', `Please press ENTER to end the CIDRs creation.`);
+      // Should display cidrs the validation error message.
+      cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
+        '192.168.40.0/24',
+      );
+      cy.get('#save').click();
+      cy.url().should('include', '/clusters/1/edit');
+      // Show verification error message.
+      cy.get('#cidrs-helper-text').should('be.visible').and('contain', `Please press ENTER to end the CIDRs creation.`);
 
-    //   cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
-    //     '192.168.40.0/24{enter}',
-    //   );
-    //   cy.get('#cidrs-helper-text').should('not.exist');
+      cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
+        '192.168.40.0/24{enter}',
+      );
+      cy.get('#cidrs-helper-text').should('not.exist');
 
-    //   // Should display hostnames the validation error message.
-    //   cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('cluster-2');
+      // Should display hostnames the validation error message.
+      cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('cluster-2');
 
-    //   cy.get('#save').click();
-    //   cy.url().should('include', '/clusters/1/edit');
+      cy.get('#save').click();
+      cy.url().should('include', '/clusters/1/edit');
 
-    //   // Show verification error message.
-    //   cy.get('#hostnames-helper-text')
-    //     .should('be.visible')
-    //     .and('contain', `Please press ENTER to end the Hostnames creation.`);
+      // Show verification error message.
+      cy.get('#hostnames-helper-text')
+        .should('be.visible')
+        .and('contain', `Please press ENTER to end the Hostnames creation.`);
 
-    //   cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
-    //     'cluster-1{enter}',
-    //   );
-    //   cy.get('#hostnames-helper-text').should('not.exist');
-    // });
+      cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
+        'cluster-1{enter}',
+      );
+      cy.get('#hostnames-helper-text').should('not.exist');
+    });
 
     it('try to verify config', () => {
       // Should display seed peer load limit the validation error message.

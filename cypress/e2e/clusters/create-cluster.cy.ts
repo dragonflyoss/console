@@ -347,6 +347,7 @@ describe('Create cluster', () => {
       cy.get('#name').type('cluster-12');
 
       // Should display seed peer load limit the validation error message.
+      cy.get('#seedPeerLoadLimit').invoke('val').should('eq', '2000');
       cy.get('#seedPeerLoadLimit').clear();
       cy.get('#seedPeerLoadLimit').type('50001');
       cy.get('#seedPeerLoadLimit-helper-text')
@@ -361,6 +362,7 @@ describe('Create cluster', () => {
       cy.get('#seedPeerLoadLimit-helper-text').should('not.exist');
 
       // Should display peer load limit the validation error message.
+      cy.get('#peerLoadLimit').invoke('val').should('eq', '200');
       cy.get('#peerLoadLimit').clear();
       cy.get('#peerLoadLimit').type('2001');
       cy.get('#peerLoadLimit-helper-text')
@@ -375,6 +377,7 @@ describe('Create cluster', () => {
       cy.get('#peerLoadLimit-helper-text').should('not.exist');
 
       // Should display candidate parent limit the validation error message.
+      cy.get('#candidateParentLimit').invoke('val').should('eq', '4');
       cy.get('#candidateParentLimit').clear();
       cy.get('#candidateParentLimit').type('21');
       cy.get('#candidateParentLimit-helper-text')
@@ -387,6 +390,7 @@ describe('Create cluster', () => {
       cy.get('#candidateParentLimit-helper-text').should('not.exist');
 
       // Should display filter parent limit the validation error message.
+      cy.get('#filterParentLimit').invoke('val').should('eq', '40');
       cy.get('#filterParentLimit').clear();
 
       // Minimum validation range not reached.

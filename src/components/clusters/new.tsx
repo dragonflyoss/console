@@ -336,7 +336,7 @@ export default function NewCluster() {
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Seed Peer load limit',
-        defaultValue: 300,
+        defaultValue: 2000,
         helperText: seedPeerLoadLimitError ? 'Fill in the number, the length is 0-50000.' : '',
         error: seedPeerLoadLimitError,
 
@@ -371,7 +371,7 @@ export default function NewCluster() {
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Peer load limit',
-        defaultValue: 50,
+        defaultValue: 200,
         helperText: peerLoadLimitError ? 'Fill in the number, the length is 0-2000.' : '',
         error: peerLoadLimitError,
 

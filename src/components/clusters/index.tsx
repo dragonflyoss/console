@@ -339,24 +339,7 @@ export default function Clusters() {
             <></>
           ) : (
             allClusters.map((item) => (
-              <Box
-                key={item.id}
-                id="clusters"
-                sx={{
-                  maxWidth: '28rem',
-                  width: '33.333%',
-                  pr: '1rem',
-                  pb: '1rem',
-                  ':nth-of-type(3n)': {
-                    pr: '0rem ',
-                  },
-                  [theme.breakpoints.up('xl')]: {
-                    ':nth-of-type(3n)': {
-                      pr: '1rem !important',
-                    },
-                  },
-                }}
-              >
+              <Box key={item.id} id="clusters" className={styles.clusterCard}>
                 <Paper variant="outlined">
                   <Box className={styles.clusterListContent}>
                     <Box display="flex">

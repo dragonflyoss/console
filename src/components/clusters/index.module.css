@@ -128,3 +128,102 @@
 .buttonContent {
   padding: 0;
 }
+
+.clusterCard {
+  width: 20%;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+}
+
+.clusterCard:nth-of-type(5n) {
+  padding-right: 0;
+}
+
+@media screen and (max-width: 2560px) {
+  .clusterCard {
+    width: 20%;
+  }
+
+  .clusterCard:nth-of-type(3n) {
+    padding-right: 1rem;
+  }
+
+  .clusterCard:nth-of-type(4n) {
+    padding-right: 1rem;
+  }
+
+  .clusterCard:nth-of-type(5n) {
+    padding-right: 0;
+  }
+}
+
+@media screen and (max-width: 2048px) {
+  .clusterCard {
+    width: 25%;
+  }
+
+  .clusterCard:nth-of-type(3n) {
+    padding-right: 1rem;
+  }
+
+  .clusterCard:nth-of-type(4n) {
+    padding-right: 0;
+  }
+
+  .clusterCard:nth-of-type(5n) {
+    padding-right: 1rem;
+  }
+}
+
+@media screen and (max-width: 1920px) {
+  .clusterCard {
+    width: 25%;
+  }
+
+  .clusterCard:nth-of-type(3n) {
+    padding-right: 1rem;
+  }
+
+  .clusterCard:nth-of-type(4n) {
+    padding-right: 0;
+  }
+
+  .clusterCard:nth-of-type(5n) {
+    padding-right: 1rem;
+  }
+}
+
+@media screen and (max-width: 1600px) {
+  .clusterCard {
+    width: 33.3333%;
+  }
+
+  .clusterCard:nth-of-type(3n) {
+    padding-right: 0;
+  }
+
+  .clusterCard:nth-of-type(4n) {
+    padding-right: 1rem;
+  }
+  .clusterCard:nth-of-type(5n) {
+    padding-right: 1rem;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .clusterCard {
+    width: 33.3333%;
+  }
+
+  .clusterCard:nth-of-type(3n) {
+    padding-right: 0;
+  }
+
+  .clusterCard:nth-of-type(4n) {
+    padding-right: 1rem;
+  }
+
+  .clusterCard:nth-of-type(5n) {
+    padding-right: 1rem;
+  }
+}

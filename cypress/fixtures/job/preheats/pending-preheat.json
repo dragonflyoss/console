@@ -13,7 +13,6 @@
       "Connection": "keep-alive"
     },
     "password": "",
-    "pieceLength": 4194304,
     "platform": "",
     "tag": "prheat tag",
     "type": "file",

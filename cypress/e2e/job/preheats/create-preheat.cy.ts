@@ -269,35 +269,6 @@ describe('Create preheat', () => {
       cy.get('#url').clear();
       cy.get('#url').type('https://docs');
 
-      // Should display message pieceLength the validation error.
-      cy.get('#pieceLength').clear();
-
-      cy.get('#save').click();
-      cy.get('#pieceLength-helper-text')
-        .should('be.visible')
-        .and('have.text', 'Fill in the number, the length is 4-1024 MiB.');
-
-      cy.get('#pieceLength').type('3');
-
-      cy.get('#save').click();
-
-      // Show verification error message.
-      cy.get('#pieceLength-helper-text')
-        .should('be.visible')
-        .and('have.text', 'Fill in the number, the length is 4-1024 MiB.');
-
-      cy.get('#pieceLength').clear();
-      cy.get('#pieceLength').type('1025');
-      // Show verification error message.
-      cy.get('#pieceLength-helper-text')
-        .should('be.visible')
-        .and('have.text', 'Fill in the number, the length is 4-1024 MiB.');
-
-      cy.get('#pieceLength').clear();
-      cy.get('#pieceLength').type('10');
-
-      cy.get('#pieceLength-helper-text').should('not.exist');
-
       // Should display message tag the validation error.
       cy.get('#tag').type(url);
 

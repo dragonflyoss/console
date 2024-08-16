@@ -43,7 +43,6 @@ export default function NewPreheat() {
   const [bioError, setBioError] = useState(false);
   const [urlError, setURLError] = useState(false);
   const [tagError, setTagError] = useState(false);
-  const [pieceLengthError, setPieceLengthError] = useState(false);
   const [filterError, setFilterError] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const [headers, setheaders] = useState<Array<{ key: string; value: string }>>([]);
@@ -117,48 +116,6 @@ export default function NewPreheat() {
   const argsForm = [
     {
       formProps: {
-        id: 'pieceLength',
-        label: 'Piece Length',
-        name: 'pieceLength',
-        type: 'number',
-        required: true,
-        defaultValue: 4,
-        autoComplete: 'family-name',
-        placeholder: 'Enter your piece length',
-        helperText: pieceLengthError ? 'Fill in the number, the length is 4-1024 MiB.' : '',
-        error: pieceLengthError,
-        InputProps: {
-          endAdornment: (
-            <>
-              <InputAdornment position="start">MiB</InputAdornment>
-              <Tooltip
-                title={
-                  'By setting the pieceLength parameter, you can specify the size of the piece to be downloaded during preheat. The default minimum value is 4MiB and the maximum value is 1024MiB.'
-                }
-                placement="top"
-              >
-                <HelpIcon
-                  color="disabled"
-                  sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
-                />
-              </Tooltip>
-            </>
-          ),
-        },
-        onChange: (e: any) => {
-          changeValidate(e.target.value, argsForm[0]);
-        },
-      },
-      syncError: false,
-      setError: setPieceLengthError,
-
-      validate: (value: string) => {
-        const reg = /^(?:[4-9]|[1-9]\d{1,2}|10[0-1]\d|102[0-4])$/;
-        return reg.test(value);
-      },
-    },
-    {
-      formProps: {
         id: 'tag',
         label: 'Tag',
         name: 'tag',
@@ -184,7 +141,7 @@ export default function NewPreheat() {
           ),
         },
         onChange: (e: any) => {
-          changeValidate(e.target.value, argsForm[1]);
+          changeValidate(e.target.value, argsForm[0]);
         },
       },
       syncError: false,
@@ -216,7 +173,7 @@ export default function NewPreheat() {
           ),
         },
         onChange: (e: any) => {
-          changeValidate(e.target.value, argsForm[2]);
+          changeValidate(e.target.value, argsForm[1]);
         },
       },
       syncError: false,
@@ -235,13 +192,13 @@ export default function NewPreheat() {
         value: filter,
         options: [],
         onChange: (_e: any, newValue: any) => {
-          if (!argsForm[3].formProps.error) {
+          if (!argsForm[2].formProps.error) {
             setFilter(newValue);
           }
         },
         onInputChange: (e: any) => {
           setFilterHelperText('Fill in the characters, the length is 0-100.');
-          changeValidate(e.target.value, argsForm[3]);
+          changeValidate(e.target.value, argsForm[2]);
         },
 
         renderTags: (value: any, getTagProps: any) =>
@@ -306,7 +263,6 @@ export default function NewPreheat() {
     const bio = event.currentTarget.elements.description.value;
     const url = event.currentTarget.elements.url.value;
     const tag = event.currentTarget.elements.tag.value;
-    const pieceLength = event.currentTarget.elements.pieceLength.value;
     const filterText = event.currentTarget.elements.filteredQueryParams.value;
     const filters = filter.join('&');
 
@@ -370,7 +326,6 @@ export default function NewPreheat() {
         type: 'file',
         url: url,
         tag: tag,
-        pieceLength: pieceLength * 1024 * 1024,
         filteredQueryParams: filters,
         headers: headerList,
       },
@@ -520,7 +475,7 @@ export default function NewPreheat() {
                 />
               </Tooltip>
             </Box>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
               {argsForm.map((item) => {
                 return (
                   <Box key={item.formProps.id} className={styles.argsWrapper}>
@@ -564,15 +519,6 @@ export default function NewPreheat() {
                             {...item.formProps}
                           />
                         )}
-                      />
-                    ) : item.formProps.id === 'pieceLength' ? (
-                      <TextField
-                        color="success"
-                        margin="normal"
-                        size="small"
-                        {...item.formProps}
-                        sx={{ width: '9rem', mr: '1rem' }}
-                        className={styles.textField}
                       />
                     ) : item.formProps.id === 'tag' ? (
                       <TextField

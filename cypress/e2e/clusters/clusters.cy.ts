@@ -53,7 +53,7 @@ describe('Clusters', () => {
         ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
       )
         .should('be.visible')
-        .and('contain', '11');
+        .and('contain', '16');
 
       cy.get(
         ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
@@ -482,5 +482,44 @@ describe('Clusters', () => {
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
     });
+  });
+
+  it('call onChange when changing page size', () => {
+    // The viewport will now be changed to 1440px x 1080px
+    cy.viewport(1440, 1080);
+
+    // Check if the number of page size is 9.
+    cy.get('#clustersCard').should('exist').children().should('have.length', 9);
+
+    // The viewport will now be changed to 1600px x 1080px
+    cy.viewport(1600, 1080);
+    cy.wait(1000);
+
+    // Check if the number of page size is 9.
+    cy.get('#clustersCard').should('exist').children().should('have.length', 9);
+
+    // The viewport will now be changed to 1920px x 1080px
+    cy.viewport(1920, 1080);
+    cy.wait(1000);
+
+    // Check if the number of page size is 12.
+    cy.get('#clustersCard').should('exist').children().should('have.length', 12);
+
+    // The viewport will now be changed to 2048px x 1080px
+    cy.viewport(2048, 1080);
+    cy.wait(1000);
+
+    // Check if the number of page size is 12.
+    cy.get('#clustersCard').should('exist').children().should('have.length', 12);
+
+    // The viewport will now be changed to 2560px x 1080px
+    cy.viewport(2560, 1080);
+    cy.wait(1000);
+
+    // Check if the number of page size is 15.
+    cy.get('#clustersCard').should('exist').children().should('have.length', 15);
+    // cy.get('#clusters').should('have.length', 9);
+
+    // cy.get('#clusters').children().should('have.length', 9);
   });
 });

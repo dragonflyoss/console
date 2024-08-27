@@ -353,7 +353,7 @@ export default function Clusters() {
             <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
           </IconButton>
         </Box>
-        <Box className={styles.clusterListContainer}>
+        <Box id="clustersCard" className={styles.clusterListContainer}>
           {allClusters.length === 0 ? (
             <></>
           ) : (

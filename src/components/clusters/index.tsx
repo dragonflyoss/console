@@ -33,7 +33,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import { useNavigate } from 'react-router-dom';
-import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../lib/constants';
+import { MAX_PAGE_SIZE } from '../../lib/constants';
 
 const theme = createTheme({
   breakpoints: {
@@ -62,6 +62,7 @@ export default function Clusters() {
   const [clusterIsLoading, setClusterIsLoading] = useState(true);
   const [clusterPage, setClusterPage] = useState(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
   const [searchClusters, setSearchClusters] = useState('');
   const [clusterCount, setClusterCount] = useState<getClustersResponse[]>([]);
   const [cluster, setCluster] = useState<getClustersResponse[]>([]);
@@ -115,9 +116,23 @@ export default function Clusters() {
         }
       });
 
-      const totalPage = Math.ceil(cluster.length / DEFAULT_PAGE_SIZE);
+      const updatePageSize = () => {
+        if (window.matchMedia('(max-width: 1440px)').matches) {
+          setPageSize(9);
+        } else if (window.matchMedia('(max-width: 1600px)').matches) {
+          setPageSize(9);
+        } else if (window.matchMedia('(max-width: 1920px)').matches) {
+          setPageSize(12);
+        } else if (window.matchMedia('(max-width: 2560px)').matches) {
+          setPageSize(20);
+        }
+      };
 
-      const currentPageData = getPaginatedList(cluster, clusterPage, DEFAULT_PAGE_SIZE);
+      window.addEventListener('resize', updatePageSize);
+
+      const totalPage = Math.ceil(cluster.length / pageSize);
+
+      const currentPageData = getPaginatedList(cluster, clusterPage, pageSize);
 
       setTotalPages(totalPage);
       setAllClusters(currentPageData);
@@ -126,7 +141,7 @@ export default function Clusters() {
       setTotalPages(1);
       setAllClusters([]);
     }
-  }, [cluster, clusterPage]);
+  }, [cluster, clusterPage, pageSize]);
 
   const numberOfDefaultClusters =
     Array.isArray(clusterCount) && clusterCount?.filter((item: any) => item?.is_default === true).length;

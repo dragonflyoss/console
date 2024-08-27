@@ -577,7 +577,7 @@ describe('Cluster', () => {
         ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
       )
         .should('be.visible')
-        .and('contain', 11);
+        .and('contain', 16);
       cy.get(
         ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
       )
@@ -647,7 +647,7 @@ describe('Cluster', () => {
         ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
       )
         .should('be.visible')
-        .and('contain', 10);
+        .and('contain', 15);
 
       // Display the default number after deletion.
       cy.get(

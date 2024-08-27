@@ -56,7 +56,7 @@ describe('Create cluster', () => {
       ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
     )
       .should('be.visible')
-      .and('contain', '11');
+      .and('contain', '16');
 
     // Show number of cluster default.
     cy.get(
@@ -72,7 +72,7 @@ describe('Create cluster', () => {
 
     // Add Information.
     cy.get('.PrivateSwitchBase-input').click();
-    cy.get('#name').type('cluster-12');
+    cy.get('#name').type('cluster-17');
     cy.get('#description').type('Add new cluster case');
     cy.get('#location').type('China|Hang|Zhou');
 
@@ -127,14 +127,14 @@ describe('Create cluster', () => {
     // Displays successfully added clusters.
     cy.get(':nth-child(8) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
       .should('be.visible')
-      .and('contain', 'cluster-12');
+      .and('contain', 'cluster-17');
 
     // The number of clusters has been increased.
     cy.get(
       ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
     )
       .should('be.visible')
-      .and('contain', '12');
+      .and('contain', '17');
 
     // The default number of clusters has been increased.
     cy.get(
@@ -210,7 +210,7 @@ describe('Create cluster', () => {
         });
     });
 
-    cy.get('#name').type('cluster-12{enter}');
+    cy.get('#name').type('cluster-17{enter}');
 
     // Show error message.
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'permission deny');
@@ -231,7 +231,7 @@ describe('Create cluster', () => {
         });
     });
 
-    cy.get('#name').type('cluster-12');
+    cy.get('#name').type('cluster-17');
     cy.get('#save').click();
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
   });

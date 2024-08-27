@@ -62,7 +62,7 @@ export default function Clusters() {
   const [clusterIsLoading, setClusterIsLoading] = useState(true);
   const [clusterPage, setClusterPage] = useState(1);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageSize, setPageSize] = useState<number>(9);
   const [searchClusters, setSearchClusters] = useState('');
   const [clusterCount, setClusterCount] = useState<getClustersResponse[]>([]);
   const [cluster, setCluster] = useState<getClustersResponse[]>([]);
@@ -123,10 +123,14 @@ export default function Clusters() {
           setPageSize(9);
         } else if (window.matchMedia('(max-width: 1920px)').matches) {
           setPageSize(12);
+        } else if (window.matchMedia('(max-width: 2048px)').matches) {
+          setPageSize(12);
         } else if (window.matchMedia('(max-width: 2560px)').matches) {
-          setPageSize(20);
+          setPageSize(15);
         }
       };
+
+      updatePageSize();
 
       window.addEventListener('resize', updatePageSize);
 

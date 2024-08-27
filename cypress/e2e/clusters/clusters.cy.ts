@@ -290,12 +290,14 @@ describe('Clusters', () => {
       // Go to last page.
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
-      cy.get('.clusters_clusterListContent__UwWjF > .MuiTypography-h6')
+      cy.get(':nth-child(2) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
         .should('be.visible')
         .and('contain', 'cluster-8');
 
       // Go to show cluster page.
-      cy.get('.clusters_creatTimeContainer__k6XfL > .MuiButtonBase-root').click();
+      cy.get(
+        ':nth-child(2) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .clusters_creatTimeContainer__k6XfL > .MuiButtonBase-root',
+      ).click();
 
       // Then I see that the current page is the show cluster.
       cy.url().should('include', '/clusters/8');
@@ -306,7 +308,7 @@ describe('Clusters', () => {
       // Check the current page number.
       cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
-      cy.get('.clusters_clusterListContent__UwWjF > .MuiTypography-h6')
+      cy.get(':nth-child(2) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
         .should('be.visible')
         .and('contain', 'cluster-8');
     });

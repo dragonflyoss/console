@@ -7,7 +7,7 @@
       "idc": "Hangzhou|Shanghai|Beijing",
       "location": "China|Hang|Zhou",
       "cidrs": ["10.0.0.0/8", "192.168.0.0/16", "172.16.0.0/12"],
-      "hostnames": ["cluster-1"]
+      "hostnames": null
     },
     "scheduler_cluster_id": 1,
     "seed_peer_cluster_id": 1,
@@ -53,7 +53,7 @@
   {
     "id": 3,
     "name": "cluster-3",
-    "bio": "Cluster-3 is a high-performance computing cluster located in Korea, specifically in Seoul data centers. ",
+    "bio": "Cluster-3 is a high-performance computing cluster located in Korea, specifically in Seoul data centers.",
     "scopes": {
       "idc": "Korea",
       "location": "Seoul|Korea",
@@ -78,7 +78,7 @@
   {
     "id": 4,
     "name": "cluster-4",
-    "bio": "Cluster-4 is a high-performance computing cluster located in China, specifically in Hangzhou data centers. ",
+    "bio": "Cluster-4 is a high-performance computing cluster located in China, specifically in Hangzhou data centers.",
     "scopes": {
       "idc": "hz|dl",
       "location": "China|Hang|Zhou",
@@ -103,7 +103,7 @@
   {
     "id": 5,
     "name": "cluster-5",
-    "bio": "Cluster-5 is a high-performance computing cluster located in China, specifically in Chongqing data centers. ",
+    "bio": "Cluster-5 is a high-performance computing cluster located in China, specifically in Chongqing data centers.",
     "scopes": {
       "idc": "cq|cd",
       "location": "China|Chong|Qing",
@@ -128,7 +128,7 @@
   {
     "id": 6,
     "name": "cluster-6",
-    "bio": "Cluster-6 is a high-performance computing cluster located in China, specifically in Chongdu data centers. ",
+    "bio": "Cluster-6 is a high-performance computing cluster located in China, specifically in Chongdu data centers.",
     "scopes": {
       "idc": "cq|cd",
       "location": "China|Chong|Du",
@@ -153,7 +153,7 @@
   {
     "id": 7,
     "name": "cluster-7",
-    "bio": "Cluster-7 is a high-performance computing cluster located in China, specifically in Chongdu data centers. ",
+    "bio": "Cluster-7 is a high-performance computing cluster located in China, specifically in Chongdu data centers.",
     "scopes": {
       "idc": "cd",
       "location": "China|Cheng|Du",
@@ -178,7 +178,7 @@
   {
     "id": 8,
     "name": "cluster-8",
-    "bio": "Cluster-8 is a high-performance computing cluster located in China, specifically in Jiangsu data centers. ",
+    "bio": "Cluster-8 is a high-performance computing cluster located in China, specifically in Jiangsu data centers.",
     "scopes": {
       "idc": "js",
       "location": "China|Jiang|Su",
@@ -203,7 +203,7 @@
   {
     "id": 9,
     "name": "cluster-9",
-    "bio": "Cluster-9 is a high-performance computing cluster located in China, specifically in Hangzhou data centers. ",
+    "bio": "Cluster-9 is a high-performance computing cluster located in China, specifically in Hangzhou data centers.",
     "scopes": {
       "idc": "hz|hf",
       "location": "China|Hang|Zhou",
@@ -248,6 +248,131 @@
     },
     "created_at": "2023-11-01T10:19:36Z",
     "updated_at": "2023-11-01T10:19:36Z",
+    "is_default": false
+  },
+  {
+    "id": 12,
+    "name": "cluster-12",
+    "bio": "Cluster-12 is a high-performance computing cluster located in France, specifically in Paris data centers.",
+    "scopes": {
+      "idc": "Paris",
+      "location": "Paris|France",
+      "cidrs": ["192.168.0.0", "10.0.0.0"]
+    },
+    "scheduler_cluster_id": 12,
+    "seed_peer_cluster_id": 12,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50
+    },
+    "created_at": "2023-12-01T10:19:36Z",
+    "updated_at": "2023-12-01T10:19:36Z",
+    "is_default": false
+  },
+  {
+    "id": 13,
+    "name": "cluster-13",
+    "bio": "Cluster-13 is a high-performance computing cluster located in France, specifically in Paris data centers.",
+    "scopes": {
+      "idc": "Paris",
+      "location": "Paris|France",
+      "cidrs": ["192.168.0.0", "10.0.0.0"]
+    },
+    "scheduler_cluster_id": 13,
+    "seed_peer_cluster_id": 13,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50
+    },
+    "created_at": "2023-12-03T10:19:36Z",
+    "updated_at": "2023-12-03T10:19:36Z",
+    "is_default": false
+  },
+  {
+    "id": 14,
+    "name": "cluster-14",
+    "bio": "Cluster-14 is a high-performance computing cluster located in France, specifically in Paris data centers.",
+    "scopes": {
+      "idc": "Paris",
+      "location": "Paris|France",
+      "cidrs": ["192.168.0.0", "10.0.0.0"]
+    },
+    "scheduler_cluster_id": 14,
+    "seed_peer_cluster_id": 14,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50
+    },
+    "created_at": "2023-12-04T10:19:36Z",
+    "updated_at": "2023-12-04T10:19:36Z",
+    "is_default": false
+  },
+  {
+    "id": 15,
+    "name": "cluster-15",
+    "bio": "Cluster-15 is a high-performance computing cluster located in France, specifically in Paris data centers.",
+    "scopes": {
+      "idc": "Paris",
+      "location": "Paris|France",
+      "cidrs": ["192.168.0.0", "10.0.0.0"]
+    },
+    "scheduler_cluster_id": 15,
+    "seed_peer_cluster_id": 15,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50
+    },
+    "created_at": "2023-12-05T10:19:36Z",
+    "updated_at": "2023-12-05T10:19:36Z",
+    "is_default": false
+  },
+  {
+    "id": 16,
+    "name": "cluster-16",
+    "bio": "Cluster-10 is a high-performance computing cluster located in France, specifically in Paris data centers.",
+    "scopes": {
+      "idc": "Paris",
+      "location": "Paris|France",
+      "cidrs": ["192.168.0.0", "10.0.0.0"]
+    },
+    "scheduler_cluster_id": 16,
+    "seed_peer_cluster_id": 16,
+    "scheduler_cluster_config": {
+      "candidate_parent_limit": 4,
+      "filter_parent_limit": 40
+    },
+    "seed_peer_cluster_config": {
+      "load_limit": 300
+    },
+    "peer_cluster_config": {
+      "load_limit": 50
+    },
+    "created_at": "2023-12-06T10:19:36Z",
+    "updated_at": "2023-12-06T10:19:36Z",
     "is_default": false
   }
 ]

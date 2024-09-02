@@ -126,23 +126,15 @@ export const exportCSVFile = (headers: Header[], items: getPeersResponse[], file
 };
 
 export const fuzzySearch = (keyword: string, data: getClustersResponse[]) => {
-  try {
-    if (!data || !Array.isArray(data)) return [];
+  if (!data || !Array.isArray(data)) return [];
 
-    return data.filter((item) => item.name && typeof item.name === 'string' && item.name.includes(keyword));
-  } catch (error) {
-    throw new Error('Search failed');
-  }
+  return data.filter((item) => item.name && typeof item.name === 'string' && item.name.includes(keyword));
 };
 
 export const fuzzySearchScheduler = (keyword: string, data: any[]) => {
-  try {
-    if (!data || !Array.isArray(data)) return [];
+  if (!data || !Array.isArray(data)) return [];
 
-    return data.filter(
-      (item) => item.host_name && typeof item.host_name === 'string' && item.host_name.includes(keyword),
-    );
-  } catch (error) {
-    throw new Error('Search failed');
-  }
+  return data.filter(
+    (item) => item.host_name && typeof item.host_name === 'string' && item.host_name.includes(keyword),
+  );
 };

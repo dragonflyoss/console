@@ -3,7 +3,6 @@ import seedPeer from '../../fixtures/clusters/cluster/seed-peer.json';
 import scheduler from '../../fixtures/clusters/cluster/scheduler.json';
 import deleteSeedPeer from '../../fixtures/seed-peers/delete-seed-peer.json';
 import seedPeerDeleteAfter from '../../fixtures/seed-peers/seed-peer-delete-after.json';
-import searchSeedPeer from '../../fixtures/seed-peers/search-seed-peer.json';
 
 describe('Seed peers', () => {
   beforeEach(() => {
@@ -265,22 +264,11 @@ describe('Seed peers', () => {
 
   describe('search', () => {
     it('should search seed peer hostname', () => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/seed-peers?host_name=seed-peer-4&page=1&per_page=10000000&seed_peer_cluster_id=1',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: searchSeedPeer,
-          });
-        },
-      );
-
       cy.get('#seed-peer-table-body').children().should('have.length', 5);
+      cy.get('#seedPeerSearch').type('seed-peer-4');
 
-      cy.get('#seedPeerSearch').type('seed-peer-4{enter}');
+      // Then I see that the current page is the clusters/1?seedPeerSearch=seed-peer-4!
+      cy.url().should('include', '/clusters/1?seedPeerSearch=seed-peer-4');
 
       cy.get('#seed-peer-table-body').children().should('have.length', 1);
 
@@ -290,28 +278,15 @@ describe('Seed peers', () => {
       // Clear search box.
       cy.get('.MuiAutocomplete-endAdornment').click();
 
-      // If the search is empty, all seed peers will be displayed
-      cy.get('#seedPeer-button').click();
-
       // Check number of pagination.
       cy.get('#seed-peer-table-body').children().should('have.length', 5);
     });
 
     it('should search seed peer hostname and show no results', () => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/seed-peers?host_name=seed-peer-12&page=1&per_page=10000000&seed_peer_cluster_id=1',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: [],
-          });
-        },
-      );
+      cy.get('#seedPeerSearch').type('seed-peer-12');
 
-      cy.get('#seedPeerSearch').type('seed-peer-12{enter}');
+      // Then I see that the current page is the /clusters/1?seedPeerSearch=seed-peer-12!
+      cy.url().should('include', '/clusters/1?seedPeerSearch=seed-peer-12');
 
       // No seed peer.
       cy.get('#seed-peer-table-body > .MuiTableRow-root > .MuiTableCell-root')
@@ -322,23 +297,20 @@ describe('Seed peers', () => {
       cy.get('#seed-peer-pagination > .MuiPagination-ul').should('not.exist');
     });
 
-    it('should search seed peer hostname, show no results, and show error', () => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/seed-peers?host_name=seed-peer-3&page=1&per_page=10000000&seed_peer_cluster_id=1',
-        },
-        (req) => {
-          req.reply({
-            forceNetworkError: true,
-          });
-        },
-      );
+    it('should be queried based on the query string', () => {
+      cy.visit('/clusters/1?schedulerSearch=scheduler-8&seedPeerSearch=seed-peer-10');
 
-      cy.get('#seedPeerSearch').type('seed-peer-3{enter}');
+      // The content of the input box is displayed as scheduler-8.
+      cy.get('#free-solo-demo').should('have.value', 'scheduler-8');
 
-      // Show error message.
-      cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch').should('be.visible');
+      // The content of the input box is displayed as seed-peer-10.
+      cy.get('#seedPeerSearch').should('have.value', 'seed-peer-10');
+
+      // Clear search box.
+      cy.get('#seedPeerSearch').clear();
+
+      // Then I see that the current page is the clusters/1?schedulerSearch=scheduler-8!
+      cy.url().should('include', '/clusters/1?schedulerSearch=scheduler-8');
     });
   });
 

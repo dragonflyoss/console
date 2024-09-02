@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { decode, JwtPayload } from 'jsonwebtoken';
-import { getPeersResponse } from './api';
+import { getPeersResponse, getClustersResponse, getSchedulersResponse } from './api';
 import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
 
@@ -122,5 +122,27 @@ export const exportCSVFile = (headers: Header[], items: getPeersResponse[], file
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+};
+
+export const fuzzySearch = (keyword: string, data: getClustersResponse[]) => {
+  try {
+    if (!data || !Array.isArray(data)) return [];
+
+    return data.filter((item) => item.name && typeof item.name === 'string' && item.name.includes(keyword));
+  } catch (error) {
+    throw new Error('Search failed');
+  }
+};
+
+export const fuzzySearchScheduler = (keyword: string, data: any[]) => {
+  try {
+    if (!data || !Array.isArray(data)) return [];
+
+    return data.filter(
+      (item) => item.host_name && typeof item.host_name === 'string' && item.host_name.includes(keyword),
+    );
+  } catch (error) {
+    throw new Error('Search failed');
   }
 };

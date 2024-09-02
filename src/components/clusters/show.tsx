@@ -40,8 +40,11 @@ import {
   AccordionSummary,
   AccordionDetails,
   LinearProgress,
+  debounce,
 } from '@mui/material';
-import { Fragment, useEffect, useState } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
+
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -72,17 +75,17 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
 import { LoadingButton } from '@mui/lab';
 import styles from './show.module.css';
-import SearchIcon from '@mui/icons-material/Search';
 import _ from 'lodash';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import {
   MAX_PAGE_SIZE,
   DEFAULT_SCHEDULER_TABLE_PAGE_SIZE,
   DEFAULT_SEED_PEER_TABLE_PAGE_SIZE,
 } from '../../lib/constants';
-import { getPaginatedList, useQuery } from '../../lib/utils';
+import { fuzzySearchScheduler, getPaginatedList, useQuery } from '../../lib/utils';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import DeleteAnimation from '../delete-animation';
+import SearchCircularProgress from '../circular-progress';
 
 const theme = createTheme({
   palette: {
@@ -147,6 +150,18 @@ export default function ShowCluster() {
   const [schedulerCount, setSchedulerCount] = useState<getSchedulersResponse[]>([]);
   const [seedPeerCount, setSeedPeerCount] = useState<getSeedPeersResponse[]>([]);
   const [seedPeer, setSeedPeer] = useState<getSeedPeersResponse[]>([]);
+  const [allSchedulers, setAllSchedlers] = useState<getSchedulersResponse[]>([]);
+  const [allseedPeers, setAllSeedPeers] = useState<getSeedPeersResponse[]>([]);
+  const [allInactiveError, setAllInactiveError] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+  const [deleteAllInactiveErrorMessage, setDeleteAllInactiveErrorMessage] = useState<string[]>([]);
+  const [deleteInactiveSchedulerSuccessful, setDeleteInactiveSchedulerSuccessful] = useState(0);
+  const [deleteInactiveSeedPeerSuccessful, setDeleteInactiveSeedPeerSuccessful] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [progressLoading, setProgressLoading] = useState(false);
+  const [searchSeedPeerIconISLodaing, setSearchSeedPeerIconISLodaing] = useState(false);
+  const [searchSchedulerIconISLodaing, setSearchSchedulerIconISLodaing] = useState(false);
+
   const [cluster, setCluster] = useState<getClusterResponse>({
     id: 0,
     name: '',
@@ -173,22 +188,16 @@ export default function ShowCluster() {
     updated_at: '',
     is_default: false,
   });
-  const [allSchedulers, setAllSchedlers] = useState<getSchedulersResponse[]>([]);
-  const [allseedPeers, setAllSeedPeers] = useState<getSeedPeersResponse[]>([]);
-  const [allInactiveError, setAllInactiveError] = useState(false);
-  const [activeStep, setActiveStep] = useState(0);
-  const [deleteAllInactiveErrorMessage, setDeleteAllInactiveErrorMessage] = useState<string[]>([]);
-  const [deleteInactiveSchedulerSuccessful, setDeleteInactiveSchedulerSuccessful] = useState(0);
-  const [deleteInactiveSeedPeerSuccessful, setDeleteInactiveSeedPeerSuccessful] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [progressLoading, setProgressLoading] = useState(false);
 
   const steps = ['Schedulers', 'Seed peers', 'Confirm delete'];
   const params = useParams();
   const navigate = useNavigate();
   const query = useQuery();
+  const location = useLocation();
   const schedulerCurrentPage = query.get('schedulerPage') ? parseInt(query.get('schedulerPage') as string, 10) || 1 : 1;
   const seedPeerCurrentPage = query.get('seedPeerPage') ? parseInt(query.get('seedPeerPage') as string, 10) || 1 : 1;
+  const schedulerSearch = query.get('schedulerSearch') ? (query.get('schedulerSearch') as string) : '';
+  const seedPeerSearch = query.get('seedPeerSearch') ? (query.get('seedPeerSearch') as string) : '';
 
   useEffect(() => {
     (async function () {
@@ -328,18 +337,18 @@ export default function ShowCluster() {
         display: false,
       },
       tooltip: {
-        enabled: allSchedulers.length !== 0,
+        enabled: schedulerCount.length !== 0,
       },
     },
     cutout: '60%',
   };
 
   const schedulerDoughnut = {
-    labels: [allSchedulers.length === 0 ? '' : 'Active', 'Inactive'],
+    labels: [schedulerCount.length === 0 ? '' : 'Active', 'Inactive'],
     datasets: [
       {
-        data: [allSchedulers.length === 0 ? [1] : numberOfActiveSchedulers, numberOfInactiveSchedulers],
-        backgroundColor: [allSchedulers.length === 0 ? '#cdcdcd' : '#2e8f79', '#1c293a'],
+        data: [schedulerCount.length === 0 ? [1] : numberOfActiveSchedulers, numberOfInactiveSchedulers],
+        backgroundColor: [schedulerCount.length === 0 ? '#cdcdcd' : '#2e8f79', '#1c293a'],
         borderWidth: 1,
         offset: 2,
         hoverOffset: 5,
@@ -353,18 +362,18 @@ export default function ShowCluster() {
         display: false,
       },
       tooltip: {
-        enabled: allseedPeers.length !== 0,
+        enabled: seedPeerCount.length !== 0,
       },
     },
     cutout: '60%',
   };
 
   const seedPeerDoughnut = {
-    labels: [allseedPeers.length === 0 ? '' : 'Active', 'Inactive'],
+    labels: [seedPeerCount.length === 0 ? '' : 'Active', 'Inactive'],
     datasets: [
       {
-        data: [allseedPeers.length === 0 ? [1] : numberOfActiveSeedPeers, numberOfInactiveSeedPeers],
-        backgroundColor: [allseedPeers.length === 0 ? '#cdcdcd' : '#2e8f79', '#1c293a'],
+        data: [seedPeerCount.length === 0 ? [1] : numberOfActiveSeedPeers, numberOfInactiveSeedPeers],
+        backgroundColor: [seedPeerCount.length === 0 ? '#cdcdcd' : '#2e8f79', '#1c293a'],
         borderWidth: 1,
         offset: 2,
         hoverOffset: 5,
@@ -476,92 +485,77 @@ export default function ShowCluster() {
     }
   };
 
-  const searchSchedulerKeyDown = (event: any) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      const submitButton = document.getElementById('scheduler-button');
-      submitButton?.click();
+  const debouncedScheduler = useMemo(
+    () =>
+      debounce(async (currentSearch) => {
+        if (currentSearch && schedulerCount.length > 0) {
+          const schedulers = fuzzySearchScheduler(currentSearch, schedulerCount);
+
+          setScheduler(schedulers);
+          setSearchSchedulerIconISLodaing(false);
+        } else if (currentSearch === '' && schedulerCount.length > 0) {
+          setScheduler(schedulerCount);
+          setSearchSchedulerIconISLodaing(false);
+        }
+      }, 500),
+    [schedulerCount],
+  );
+
+  const handlesearchScheduler = useCallback(
+    (newSearch: any) => {
+      setSearchSchedulers(newSearch);
+      setSearchSchedulerIconISLodaing(true);
+      debouncedScheduler(newSearch);
+
+      const schedulerQueryString = newSearch ? `?schedulerSearch=${newSearch}` : '';
+      const seedpeerQueryString = searchSeedPeers ? `${newSearch ? '&' : '?'}seedPeerSearch=${searchSeedPeers}` : '';
+
+      navigate(`${location.pathname}${schedulerQueryString}${seedpeerQueryString}`);
+    },
+    [debouncedScheduler, location.pathname, navigate, searchSeedPeers],
+  );
+
+  const debouncedSeedPeer = useMemo(
+    () =>
+      debounce(async (currentSearch) => {
+        if (currentSearch && seedPeerCount.length > 0) {
+          const schedulers = fuzzySearchScheduler(currentSearch, seedPeerCount);
+
+          setSeedPeer(schedulers);
+          setSearchSeedPeerIconISLodaing(false);
+        } else if (currentSearch === '' && seedPeerCount.length > 0) {
+          setSeedPeer(seedPeerCount);
+          setSearchSeedPeerIconISLodaing(false);
+        }
+      }, 500),
+    [seedPeerCount],
+  );
+
+  const handleSearchSeedPeer = useCallback(
+    (newSearch: any) => {
+      setSearchSeedPeer(newSearch);
+      setSearchSeedPeerIconISLodaing(true);
+      debouncedSeedPeer(newSearch);
+
+      const schedulerQueryString = searchSchedulers ? `?schedulerSearch=${searchSchedulers}` : '';
+      const seedPeerQueryString = newSearch ? `seedPeerSearch=${newSearch}` : '';
+
+      navigate(`${location.pathname}${schedulerQueryString}${`${searchSchedulers ? '&' : '?'}${seedPeerQueryString}`}`);
+    },
+    [debouncedSeedPeer, location.pathname, navigate, searchSchedulers],
+  );
+
+  useEffect(() => {
+    if (schedulerSearch) {
+      setSearchSchedulers(schedulerSearch);
+      debouncedScheduler(schedulerSearch);
     }
-  };
 
-  const searchSeedPeerKeyDown = (event: any) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      const submitButton = document.getElementById('seedPeer-button');
-      submitButton?.click();
+    if (seedPeerSearch) {
+      setSearchSeedPeer(seedPeerSearch);
+      debouncedSeedPeer(seedPeerSearch);
     }
-  };
-
-  const searchScheduler = async () => {
-    try {
-      setSchedulerTableIsLoading(true);
-
-      const schedulers = searchSchedulers
-        ? await getSchedulers({
-            scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-            page: 1,
-            per_page: MAX_PAGE_SIZE,
-            host_name: searchSchedulers,
-          })
-        : await getSchedulers({
-            scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-            page: 1,
-            per_page: MAX_PAGE_SIZE,
-          });
-
-      if (schedulers.length > 0) {
-        setScheduler(schedulers);
-        setSchedulerPage(1);
-        setSchedulerTableIsLoading(false);
-      } else {
-        setSchedulerTotalPages(1);
-        setAllSchedlers([]);
-        setSchedulerTableIsLoading(false);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        setErrorMessage(true);
-        setErrorMessageText(error.message);
-        setDeleteLoadingButton(false);
-        setSchedulerTableIsLoading(false);
-      }
-    }
-  };
-
-  const searchSeedPeer = async () => {
-    try {
-      setSeedPeerTableIsLoading(true);
-      const seedPeers = searchSeedPeers
-        ? await getSeedPeers({
-            seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
-            page: 1,
-            per_page: MAX_PAGE_SIZE,
-            host_name: searchSeedPeers,
-          })
-        : await getSeedPeers({
-            seed_peer_cluster_id: String(cluster.seed_peer_cluster_id),
-            page: 1,
-            per_page: MAX_PAGE_SIZE,
-          });
-
-      if (seedPeers.length > 0) {
-        setSeedPeer(seedPeers);
-        setSeedPeerPage(1);
-        setSeedPeerTableIsLoading(false);
-      } else {
-        setSeedPeerTotalPages(1);
-        setAllSeedPeers([]);
-        setSeedPeerTableIsLoading(false);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        setErrorMessage(true);
-        setErrorMessageText(error.message);
-        setDeleteLoadingButton(false);
-        setSeedPeerTableIsLoading(false);
-      }
-    }
-  };
+  }, [schedulerSearch, seedPeerSearch, debouncedScheduler, debouncedSeedPeer]);
 
   const handleConfirmDelete = async (event: any) => {
     setProgressLoading(true);
@@ -1537,25 +1531,23 @@ export default function ShowCluster() {
               color="secondary"
               id="free-solo-demo"
               freeSolo
-              onKeyDown={searchSchedulerKeyDown}
               inputValue={searchSchedulers}
               onInputChange={(_event, newInputValue) => {
-                setSearchSchedulers(newInputValue);
+                handlesearchScheduler(newInputValue);
               }}
               options={schedulerCount.map((option) => option?.host_name)}
-              renderInput={(params) => <TextField {...params} label="Search" />}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Search"
+                  InputProps={{
+                    ...params.InputProps,
+                    startAdornment: searchSchedulerIconISLodaing ? <SearchCircularProgress /> : <SearchIcon />,
+                  }}
+                />
+              )}
             />
           </Stack>
-          <IconButton
-            type="button"
-            aria-label="search"
-            id="scheduler-button"
-            size="small"
-            onClick={searchScheduler}
-            sx={{ width: '3rem' }}
-          >
-            <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
-          </IconButton>
         </Box>
         <Box width="100%">
           <Divider />
@@ -1843,25 +1835,23 @@ export default function ShowCluster() {
               color="secondary"
               id="seedPeerSearch"
               freeSolo
-              onKeyDown={searchSeedPeerKeyDown}
               inputValue={searchSeedPeers}
               onInputChange={(_event, newInputValue) => {
-                setSearchSeedPeer(newInputValue);
+                handleSearchSeedPeer(newInputValue);
               }}
               options={seedPeerCount.map((option) => option.host_name)}
-              renderInput={(params) => <TextField {...params} label="Search" />}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Search"
+                  InputProps={{
+                    ...params.InputProps,
+                    startAdornment: searchSeedPeerIconISLodaing ? <SearchCircularProgress /> : <SearchIcon />,
+                  }}
+                />
+              )}
             />
           </Stack>
-          <IconButton
-            type="button"
-            aria-label="search"
-            id="seedPeer-button"
-            size="small"
-            onClick={searchSeedPeer}
-            sx={{ width: '3rem' }}
-          >
-            <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
-          </IconButton>
         </Box>
         <Box width="100%">
           <Divider />

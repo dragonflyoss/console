@@ -27,13 +27,15 @@ import {
   getSeedPeersResponse,
 } from '../../lib/api';
 import styles from './index.module.css';
-import { useEffect, useState } from 'react';
-import { getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { fuzzySearch, getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MAX_PAGE_SIZE } from '../../lib/constants';
+import debounce from 'lodash/debounce';
+import SearchCircularProgress from '../circular-progress';
 
 const theme = createTheme({
   breakpoints: {
@@ -64,6 +66,7 @@ export default function Clusters() {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(9);
   const [searchClusters, setSearchClusters] = useState('');
+  const [searchIconISLodaing, setSearchIconISLodaing] = useState(false);
   const [clusterCount, setClusterCount] = useState<getClustersResponse[]>([]);
   const [cluster, setCluster] = useState<getClustersResponse[]>([]);
   const [scheduler, setScheduler] = useState<getSchedulersResponse[]>([]);
@@ -72,6 +75,8 @@ export default function Clusters() {
   const navigate = useNavigate();
   const query = useQuery();
   const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
+  const search = query.get('search') ? (query.get('search') as string) : '';
+  const location = useLocation();
 
   useEffect(() => {
     (async function () {
@@ -140,8 +145,7 @@ export default function Clusters() {
 
       setTotalPages(totalPage);
       setAllClusters(currentPageData);
-    }
-    if (cluster === null) {
+    } else if (cluster === null || cluster) {
       setTotalPages(1);
       setAllClusters([]);
     }
@@ -156,32 +160,40 @@ export default function Clusters() {
   const numberOfActiveSeedPeers =
     Array.isArray(seedPeer) && seedPeer?.filter((item: any) => item?.state === 'active').length;
 
-  const searchCluster = async () => {
-    try {
-      setClusterIsLoading(true);
-      const cluster = searchClusters
-        ? await getClusters({ page: 1, per_page: MAX_PAGE_SIZE, name: searchClusters })
-        : await getClusters({ page: 1, per_page: MAX_PAGE_SIZE });
+  const debounced = useMemo(
+    () =>
+      debounce(async (currentSearch) => {
+        if (currentSearch && clusterCount.length > 0) {
+          const clusters = fuzzySearch(currentSearch, clusterCount);
 
-      setCluster(cluster);
-      setClusterPage(1);
-      setClusterIsLoading(false);
-    } catch (error) {
-      if (error instanceof Error) {
-        setClusterIsLoading(false);
-        setErrorMessage(true);
-        setErrorMessageText(error.message);
-      }
-    }
-  };
+          setCluster(clusters);
+          setSearchIconISLodaing(false);
+        } else if (currentSearch === '' && clusterCount.length > 0) {
+          setCluster(clusterCount);
+          setSearchIconISLodaing(false);
+        }
+      }, 500),
+    [clusterCount],
+  );
 
-  const searchClusterKeyDown = (event: any) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      const submitButton = document.getElementById('submit-button');
-      submitButton?.click();
+  const handleInputChange = useCallback(
+    (newSearch: any) => {
+      setSearchClusters(newSearch);
+      setSearchIconISLodaing(true);
+      debounced(newSearch);
+
+      const queryString = newSearch ? `?search=${newSearch}` : '';
+      navigate(`${location.pathname}${queryString}`);
+    },
+    [debounced, location.pathname, navigate],
+  );
+
+  useEffect(() => {
+    if (search) {
+      setSearchClusters(search);
+      debounced(search);
     }
-  };
+  }, [search, debounced]);
 
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
@@ -333,30 +345,39 @@ export default function Clusters() {
               color="secondary"
               id="free-solo-demo"
               freeSolo
-              onKeyDown={searchClusterKeyDown}
               inputValue={searchClusters}
               onInputChange={(_event, newInputValue) => {
-                setSearchClusters(newInputValue);
+                handleInputChange(newInputValue);
               }}
               options={(Array.isArray(clusterCount) && clusterCount.map((option) => option?.name)) || ['']}
-              renderInput={(params) => <TextField {...params} label="Search" />}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Search"
+                  InputProps={{
+                    ...params.InputProps,
+                    startAdornment: searchIconISLodaing ? <SearchCircularProgress /> : <SearchIcon />,
+                  }}
+                />
+              )}
             />
           </Stack>
-          <IconButton
-            type="button"
-            aria-label="search"
-            id="submit-button"
-            size="small"
-            onClick={searchCluster}
-            sx={{ width: '3rem' }}
-          >
-            <SearchIcon sx={{ color: 'rgba(0,0,0,0.6)' }} />
-          </IconButton>
         </Box>
         <Box id="clustersCard" className={styles.clusterListContainer}>
-          {allClusters.length === 0 ? (
+          {Array.isArray(clusterCount) && clusterCount.length === 0 ? (
             <></>
+          ) : Array.isArray(allClusters) && allClusters.length === 0 ? (
+            <Box id="no-clusters" className={styles.noClusterContainer}>
+              <Box component="img" className={styles.noClusterIcon} src="/icons/cluster/no-cluster.svg" />
+              <Box fontSize="1.2rem">
+                No results for&nbsp;
+                <Typography variant="h6" component="span">
+                  "{searchClusters || ''}"
+                </Typography>
+              </Box>
+            </Box>
           ) : (
+            Array.isArray(allClusters) &&
             allClusters.map((item) => (
               <Box key={item.id} id="clusters" className={styles.clusterCard}>
                 <Paper variant="outlined">

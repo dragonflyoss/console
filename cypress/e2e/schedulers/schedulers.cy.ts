@@ -3,7 +3,6 @@ import seedPeer from '../../fixtures/clusters/cluster/seed-peer.json';
 import scheduler from '../../fixtures/clusters/cluster/scheduler.json';
 import deleteScheduler from '../../fixtures/schedulers/delete-scheduler.json';
 import schedulerDeleteAfter from '../../fixtures/schedulers/scheduler-delete-after.json';
-import searchScheduler from '../../fixtures/schedulers/search-scheduler.json';
 import deletedInactiveScheduler from '../../fixtures/clusters/cluster/deleted-inactive-scheduler.json';
 import deletedInactiveSeedPeer from '../../fixtures/clusters/cluster/deleted-inactive-seed-peer.json';
 import schedulerActive from '../../fixtures/schedulers/scheduler-active.json';
@@ -275,80 +274,50 @@ describe('Schedulers', () => {
 
   describe('search', () => {
     it('should search scheduler hostname', () => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/schedulers?host_name=scheduler-8&page=1&per_page=10000000&scheduler_cluster_id=1',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: searchScheduler,
-          });
-        },
-      );
-
       cy.get('#scheduler-table-body').children().should('have.length', 5);
+      cy.get('#free-solo-demo').type('scheduler-8');
 
-      cy.get('#free-solo-demo').type('scheduler-8{enter}');
-
+      // Then I see that the current page is the clusters/1?schedulerSearch=scheduler-8!
+      cy.url().should('include', '/clusters/1?schedulerSearch=scheduler-8');
       cy.get('#scheduler-table-body').children().should('have.length', 1);
 
       // Pagination has been hidden.
       cy.get('#scheduler-pagination > .MuiPagination-ul').should('not.exist');
+      cy.get('#scheduler-table-body').should('exist').children().should('have.length', 1);
+
+      // Show scheduler-8 information.
+      cy.get('#scheduler-table-body').should('be.visible', 'scheduler-8');
 
       // Clear search box.
       cy.get('#free-solo-demo').clear();
-
-      // If the search is empty, all schedulers will be displayed.
-      cy.get('#scheduler-button').click();
 
       // Check number of pagination.
       cy.get('#scheduler-table-body').children().should('have.length', 5);
     });
 
     it('should search scheduler hostname and show no results', () => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/schedulers?host_name=scheduler-12&page=1&per_page=10000000&scheduler_cluster_id=1',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: [],
-          });
-        },
-      );
-
-      cy.get('#free-solo-demo').type('scheduler-12{enter}');
-
+      cy.get('#free-solo-demo').type('scheduler-12');
       // No scheduler.
       cy.get('#scheduler-table-body > .MuiTableRow-root > .MuiTableCell-root')
         .should('be.visible')
         .and('contain', `You don't have scheduler cluster.`);
-
       // Pagination has been hidden.
       cy.get('#scheduler-pagination > .MuiPagination-ul').should('not.exist');
     });
 
-    it('should search scheduler hostname, show no results, and show error', () => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/schedulers?host_name=scheduler-12&page=1&per_page=10000000&scheduler_cluster_id=1',
-        },
-        (req) => {
-          req.reply({
-            forceNetworkError: true,
-          });
-        },
-      );
+    it('should be queried based on the query string', () => {
+      cy.visit('/clusters/1?schedulerSearch=scheduler-8&seedPeerSearch=seed-peer-10');
 
-      cy.get('#free-solo-demo').type('scheduler-12{enter}');
+      // The content of the input box is displayed as scheduler-8.
+      cy.get('#free-solo-demo').should('have.value', 'scheduler-8');
 
-      // Show error message.
-      cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch');
+      cy.get('#scheduler-table-body').children().should('have.length', 1);
+
+      // Clear search box.
+      cy.get('#free-solo-demo').clear();
+
+      // Then I see that the current page is the clusters!
+      cy.url().should('include', '/clusters/1?seedPeerSearch=seed-peer-10');
     });
   });
 

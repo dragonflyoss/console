@@ -406,20 +406,13 @@ describe('Clusters', () => {
 
   describe('search', () => {
     it('should search cluster name', () => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/clusters?name=cluster-1&page=1&per_page=10000000',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: searchCluster,
-          });
-        },
-      );
-      cy.get('#free-solo-demo').type('cluster-1{enter}');
+      cy.get('#free-solo-demo').type('cluster-10');
+
+      // Then I see that the current page is the /clusters/1?search=cluster-10!
+      cy.url().should('include', '/clusters?search=cluster-10');
       cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');
+      cy.get('#clustersCard').should('exist').children().should('have.length', 1);
+      cy.get('.clusters_clusterListContent__UwWjF > .MuiTypography-h6').should('have.text', 'cluster-10');
 
       // Clear search box.
       cy.get('#free-solo-demo').clear();
@@ -430,57 +423,35 @@ describe('Clusters', () => {
 
       // Check number of pagination.
       cy.get('#clusterPagination > .MuiPagination-ul').children().should('have.length', 4);
-
       cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
         .should('be.visible')
         .and('contain', 'cluster-1');
-
       cy.get(':nth-child(8) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
         .should('be.visible')
         .and('contain', 'cluster-2');
     });
 
     it('should search cluster name and show no results', () => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/clusters?name=cluster-16&page=1&per_page=10000000',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: null,
-          });
-        },
-      );
-
-      cy.get('#free-solo-demo').type('cluster-16{enter}');
+      cy.get('#free-solo-demo').type('cluster-17');
 
       // No clusters card.
       cy.get('#clusters').should('not.exist');
 
       // Pagination has been hidden.
       cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');
+
+      cy.get('#no-clusters').should('be.visible');
+
+      cy.get('.css-khvsip > .MuiTypography-root').should('have.text', '"cluster-17"');
     });
 
-    it('should search cluster name , show no results, and show error', () => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/clusters?name=cluster-1&page=1&per_page=10000000',
-        },
-        (req) => {
-          req.reply({
-            forceNetworkError: true,
-          });
-        },
-      );
+    it('should be queried based on the query string', () => {
+      cy.visit('/clusters/?search=cluster-2');
 
-      cy.get('#free-solo-demo').clear();
-      cy.get('#free-solo-demo').type('cluster-1{enter}');
+      // The content of the input box is displayed as cluster-2.
+      cy.get('#free-solo-demo').should('have.value', 'cluster-2');
 
-      // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('#clustersCard').should('exist').children().should('have.length', 1);
     });
   });
 
@@ -518,8 +489,5 @@ describe('Clusters', () => {
 
     // Check if the number of page size is 15.
     cy.get('#clustersCard').should('exist').children().should('have.length', 15);
-    // cy.get('#clusters').should('have.length', 9);
-
-    // cy.get('#clusters').children().should('have.length', 9);
   });
 });

@@ -227,3 +227,15 @@
     padding-right: 1rem;
   }
 }
+
+.noClusterContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.noClusterIcon {
+  width: 10rem;
+  padding-bottom: 1rem;
+}

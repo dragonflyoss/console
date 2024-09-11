@@ -129,8 +129,7 @@ export default function Preheats() {
 
   const changeStatus = (event: any) => {
     setStatus(event.target.value);
-    setShouldPoll(true);
-    setPreheatPage(1);
+    navigate(`/jobs/preheats`);
   };
 
   const handleClose = (_event: any, reason?: string) => {

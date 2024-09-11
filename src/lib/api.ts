@@ -698,8 +698,8 @@ interface getJobsResponse {
 
 export async function getJobs(params?: getJobsParams): Promise<getJobsResponse> {
   const url = params
-    ? new URL(`/api/v1/jobs?${queryString.stringify(params)}`, API_URL)
-    : new URL('/api/v1/jobs', API_URL);
+    ? new URL(`/api/v1/jobs?${queryString.stringify(params)}&type=preheat`, API_URL)
+    : new URL('/api/v1/jobs?type=preheat', API_URL);
 
   const response = await get(url);
   const data = await response.json();

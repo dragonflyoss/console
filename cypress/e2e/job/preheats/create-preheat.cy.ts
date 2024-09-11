@@ -21,7 +21,7 @@ describe('Create preheat', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/jobs?page=1&per_page=10',
+        url: '/api/v1/jobs?page=1&per_page=10&type=preheat',
       },
       (req) => {
         req.reply((res: any) => {
@@ -77,7 +77,7 @@ describe('Create preheat', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/jobs?page=1&per_page=10',
+        url: '/api/v1/jobs?page=1&per_page=10&type=preheat',
       },
       (req) => {
         req.reply((res: any) => {
@@ -171,7 +171,7 @@ describe('Create preheat', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/jobs?page=1&per_page=10',
+        url: '/api/v1/jobs?page=1&per_page=10&type=preheat',
       },
       (req) => {
         req.reply((res: any) => {

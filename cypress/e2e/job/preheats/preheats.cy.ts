@@ -13,7 +13,7 @@ describe('Preheats', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/jobs?page=1&per_page=10',
+        url: '/api/v1/jobs?page=1&per_page=10&type=preheat',
       },
       (req) => {
         req.reply((res: any) => {
@@ -28,7 +28,7 @@ describe('Preheats', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/jobs?page=2&per_page=10',
+        url: '/api/v1/jobs?page=2&per_page=10&type=preheat',
       },
       (req) => {
         req.reply((res: any) => {
@@ -52,7 +52,7 @@ describe('Preheats', () => {
       cy.intercept(
         {
           method: 'GET',
-          url: '/api/v1/jobs?page=1&per_page=10',
+          url: '/api/v1/jobs?page=1&per_page=10&type=preheat',
         },
         (req) => {
           req.reply((res: any) => {
@@ -110,7 +110,7 @@ describe('Preheats', () => {
       cy.intercept(
         {
           method: 'GET',
-          url: '/api/v1/jobs?page=1&per_page=10&state=SUCCESS',
+          url: '/api/v1/jobs?page=1&per_page=10&state=SUCCESS&type=preheat',
         },
         (req) => {
           req.reply((res: any) => {
@@ -136,7 +136,7 @@ describe('Preheats', () => {
       cy.intercept(
         {
           method: 'GET',
-          url: '/api/v1/jobs?page=1&per_page=10&state=FAILURE',
+          url: '/api/v1/jobs?page=1&per_page=10&state=FAILURE&type=preheat',
         },
         (req) => {
           req.reply((res: any) => {
@@ -162,7 +162,7 @@ describe('Preheats', () => {
       cy.intercept(
         {
           method: 'GET',
-          url: '/api/v1/jobs?page=1&per_page=10&state=PENDING',
+          url: '/api/v1/jobs?page=1&per_page=10&state=PENDING&type=preheat',
         },
         (req) => {
           req.reply((res: any) => {
@@ -194,7 +194,7 @@ describe('Preheats', () => {
       cy.intercept(
         {
           method: 'GET',
-          url: '/api/v1/jobs?page=1&per_page=10&state=PENDING',
+          url: '/api/v1/jobs?page=1&per_page=10&state=PENDING&type=preheat',
         },
         (req) => {
           req.reply({
@@ -215,7 +215,7 @@ describe('Preheats', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/jobs?page=1&per_page=10',
+        url: '/api/v1/jobs?page=1&per_page=10&type=preheat',
       },
       (req) => {
         req.reply((res: any) => {
@@ -240,7 +240,7 @@ describe('Preheats', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/jobs?page=1&per_page=10',
+        url: '/api/v1/jobs?page=1&per_page=10&type=preheat',
       },
       (req) => {
         req.reply({

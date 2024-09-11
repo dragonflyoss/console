@@ -368,11 +368,10 @@ describe('Seed peers', () => {
             body: deleteSeedPeer,
           });
         },
-      ).as('delete');
+      );
 
       // Confirm delete.
       cy.get('#deleteSeedPeer').click();
-      cy.wait('@delete');
 
       // Delete success message.
       cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
@@ -414,7 +413,8 @@ describe('Seed peers', () => {
         .should('be.visible')
         .and('contain', 'Inactive');
 
-      // cy.get(':nth-child(5) > :nth-child(9) > .MuiButtonBase-root').click();
+      cy.get('#operate-seed-peer-9').click();
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #delete-seed-peer-9').click();
 
       cy.intercept({ method: 'DELETE', url: '/api/v1/seed-peers/9' }, (req) => {
         req.reply({
@@ -432,12 +432,9 @@ describe('Seed peers', () => {
             body: seedPeerDeleteAfter,
           });
         },
-      ).as('delete');
+      );
 
-      cy.get('#operate-seed-peer-9').click();
-      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #delete-seed-peer-9').click();
       cy.get('#deleteSeedPeer').click();
-      cy.wait('@delete');
 
       // Delete success message.
       cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');

@@ -577,7 +577,7 @@ export default function Profile() {
               </Box>
             ))}
             <Box mt="2rem">
-              <CancelLoadingButton id="cancel" loading={passwordLoadingButton} onClick={cancelChangePassword} />
+              <CancelLoadingButton id="cancel-change-password" loading={passwordLoadingButton} onClick={cancelChangePassword} />
               <SavelLoadingButton
                 loading={passwordLoadingButton}
                 endIcon={<CheckCircleIcon />}
@@ -674,7 +674,7 @@ export default function Profile() {
               ))}
               <Box mt="2rem">
                 <CancelLoadingButton
-                  id="cancel-change-password"
+                  id="cancel"
                   loading={personalLoadingButton}
                   onClick={cancelHandlePersonalInformation}
                 />

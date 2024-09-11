@@ -11,7 +11,6 @@ import {
   Breadcrumbs,
   Dialog,
   DialogContent,
-  DialogActions,
   DialogTitle,
   LinearProgress,
   createTheme,
@@ -32,7 +31,6 @@ import {
   Title,
   Chart,
 } from 'chart.js';
-import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Bar, Pie } from 'react-chartjs-2';
 import { getPeers, getPeersResponse } from '../../../lib/api';
@@ -41,8 +39,8 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { useEffect, useState } from 'react';
 import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './inde.module.css';
-import { LoadingButton } from '@mui/lab';
 import { exportCSVFile } from '../../../lib/utils';
+import { CancelLoadingButton, SavelLoadingButton } from '../../loding-button';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 Chart.defaults.font.family = 'mabry-light';
@@ -942,6 +940,7 @@ export default function Peer() {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">Export</DialogTitle>
+          <Divider/>
           <DialogContent>
             <Box
               noValidate
@@ -1017,70 +1016,26 @@ export default function Peer() {
                 </FormControl>
               </Box>
             </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
+              <CancelLoadingButton
+                id="cancel"
+                loading={loadingButton}
+                onClick={() => {
+                  setOpenExport(false);
+                  setExportSelectedCluster('All');
+                  setExportSelectedVersion('All');
+                  setExportSelectedCommit('All');
+                }}
+              />
+              <SavelLoadingButton
+                loading={loadingButton}
+                endIcon={<CheckCircleIcon />}
+                id="save"
+                text="Save"
+                onClick={ExportCSV}
+              />
+            </Box>
           </DialogContent>
-          <DialogActions sx={{ display: 'flex', justifyContent: 'space-evenly', pb: '1.2rem' }}>
-            <LoadingButton
-              loading={loadingButton}
-              endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
-              size="small"
-              variant="outlined"
-              loadingPosition="end"
-              id="cancel"
-              sx={{
-                '&.MuiLoadingButton-root': {
-                  color: 'var(--calcel-size-color)',
-                  borderRadius: 0,
-                  borderColor: 'var(--calcel-color)',
-                },
-                ':hover': {
-                  backgroundColor: 'var( --calcel-hover-corlor)',
-                  borderColor: 'var( --calcel-hover-corlor)',
-                },
-                '&.MuiLoadingButton-loading': {
-                  backgroundColor: 'var(--button-loading-color)',
-                  color: 'var(--button-loading-size-color)',
-                  borderColor: 'var(--button-loading-color)',
-                },
-                mr: '1rem',
-                width: '8rem',
-              }}
-              onClick={() => {
-                setOpenExport(false);
-                setExportSelectedCluster('All');
-                setExportSelectedVersion('All');
-                setExportSelectedCommit('All');
-              }}
-            >
-              Cancel
-            </LoadingButton>
-            <LoadingButton
-              loading={loadingButton}
-              endIcon={<CheckCircleIcon />}
-              size="small"
-              variant="outlined"
-              type="submit"
-              loadingPosition="end"
-              id="save"
-              sx={{
-                '&.MuiLoadingButton-root': {
-                  backgroundColor: 'var(--save-color)',
-                  borderRadius: 0,
-                  color: 'var(--save-size-color)',
-                  borderColor: 'var(--save-color)',
-                },
-                ':hover': { backgroundColor: 'var(--save-hover-corlor)', borderColor: 'var(--save-hover-corlor)' },
-                '&.MuiLoadingButton-loading': {
-                  backgroundColor: 'var(--button-loading-color)',
-                  color: 'var(--button-loading-size-color)',
-                  borderColor: 'var(--button-loading-color)',
-                },
-                width: '8rem',
-              }}
-              onClick={ExportCSV}
-            >
-              Save
-            </LoadingButton>
-          </DialogActions>
         </Dialog>
       </ThemeProvider>
     </Box>

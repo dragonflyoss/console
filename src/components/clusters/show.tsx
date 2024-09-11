@@ -1,7 +1,6 @@
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Information from './information';
-import { styled } from '@mui/material/styles';
 import {
   Alert,
   Box,
@@ -9,7 +8,6 @@ import {
   Button,
   Chip,
   Dialog,
-  DialogActions,
   DialogContent,
   Grid,
   IconButton,
@@ -27,23 +25,23 @@ import {
   TextField,
   Stack,
   Divider,
-  Stepper,
   List,
   ListItem,
   Tooltip as MuiTooltip,
   ListSubheader,
-  StepIconProps,
-  stepConnectorClasses,
-  StepConnector,
   LinearProgressProps,
   Accordion,
   AccordionSummary,
   AccordionDetails,
   LinearProgress,
   debounce,
+  Checkbox,
+  DialogTitle,
+  Menu,
+  MenuItem,
+  ListItemIcon,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Chart as ChartJS,
@@ -67,9 +65,11 @@ import {
   getClusterResponse,
   getSchedulersResponse,
   getSeedPeersResponse,
+  getSchedulerFeatrues,
+  updateSchedulerFeatrues,
 } from '../../lib/api';
-import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
@@ -86,6 +86,9 @@ import { fuzzySearchScheduler, getPaginatedList, useQuery } from '../../lib/util
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import DeleteAnimation from '../delete-animation';
 import SearchCircularProgress from '../circular-progress';
+import { CancelLoadingButton, SavelLoadingButton } from '../loding-button';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const theme = createTheme({
   palette: {
@@ -135,10 +138,14 @@ export default function ShowCluster() {
   const [openDeleteCluster, setOpenDeleteCluster] = useState(false);
   const [openDeleteInactive, setOpenDeleteInactive] = useState(false);
   const [openDeleteScheduler, setOpenDeleteScheduler] = useState(false);
+  const [schedulerFeatures, setSchedulerFeatures] = useState<Array<string>>([]);
+  const [openSchedulerEditFeatures, setOpenSchedulerEditFeatures] = useState(false);
+  const [featuresScheduler, setFeaturesScheduler] = useState(false);
+  const [featuresPreheat, setFeaturesPreheat] = useState(false);
   const [openDeleteSeedPeer, setOpenDeleteSeedPeer] = useState(false);
-  const [schedulerSelectedRow, setSchedulerSelectedRow] = useState(null);
+  const [schedulerSelectedRow, setSchedulerSelectedRow] = useState<getSchedulersResponse | null>(null);
   const [schedulerSelectedID, setSchedulerSelectedID] = useState('');
-  const [seedPeerSelectedRow, setSeedPeerSelectedRow] = useState(null);
+  const [seedPeerSelectedRow, setSeedPeerSelectedRow] = useState<getSeedPeersResponse | null>(null);
   const [seedPeerSelectedID, setSeedPeerSelectedID] = useState('');
   const [schedulerPage, setSchedulerPage] = useState(1);
   const [schedulerTotalPages, setSchedulerTotalPages] = useState<number>(1);
@@ -161,7 +168,8 @@ export default function ShowCluster() {
   const [progressLoading, setProgressLoading] = useState(false);
   const [searchSeedPeerIconISLodaing, setSearchSeedPeerIconISLodaing] = useState(false);
   const [searchSchedulerIconISLodaing, setSearchSchedulerIconISLodaing] = useState(false);
-
+  const [schedulerAnchorElement, setSchedulerAnchorElement] = useState(null);
+  const [seedPeerAnchorElement, setSeedPeerAnchorElement] = useState(null);
   const [cluster, setCluster] = useState<getClusterResponse>({
     id: 0,
     name: '',
@@ -199,6 +207,18 @@ export default function ShowCluster() {
   const schedulerSearch = query.get('schedulerSearch') ? (query.get('schedulerSearch') as string) : '';
   const seedPeerSearch = query.get('seedPeerSearch') ? (query.get('seedPeerSearch') as string) : '';
 
+  const schedulers = useCallback(async () => {
+    if (cluster.scheduler_cluster_id !== 0) {
+      const scheduler = await getSchedulers({
+        scheduler_cluster_id: String(cluster.scheduler_cluster_id),
+        page: 1,
+        per_page: MAX_PAGE_SIZE,
+      });
+      setScheduler(scheduler);
+      setSchedulerCount(scheduler);
+    }
+  }, [cluster.scheduler_cluster_id]);
+
   useEffect(() => {
     (async function () {
       try {
@@ -223,17 +243,10 @@ export default function ShowCluster() {
             setSeedPeer(seedPeer);
             setSeedPeerCount(seedPeer);
           }
+          await schedulers();
+          const features = await getSchedulerFeatrues();
+          setSchedulerFeatures(features);
 
-          if (cluster.scheduler_cluster_id !== 0) {
-            const scheduler = await getSchedulers({
-              scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-              page: 1,
-              per_page: MAX_PAGE_SIZE,
-            });
-
-            setScheduler(scheduler);
-            setSchedulerCount(scheduler);
-          }
           setSchedulerTableIsLoading(false);
           setSeedPeerTableIsLoading(false);
           setInformationIsLoading(false);
@@ -248,7 +261,7 @@ export default function ShowCluster() {
         }
       }
     })();
-  }, [params.id, schedulerCurrentPage, seedPeerCurrentPage]);
+  }, [params.id, schedulerCurrentPage, seedPeerCurrentPage, schedulers]);
 
   useEffect(() => {
     if (Array.isArray(scheduler) && scheduler.length >= 1) {
@@ -390,6 +403,7 @@ export default function ShowCluster() {
     setSchedulerSelectedRow(null);
     setOpenDeleteSeedPeer(false);
     setSeedPeerSelectedRow(null);
+    setOpenSchedulerEditFeatures(false);
     if (!progressLoading) {
       setOpenDeleteInactive(false);
       setDeleteAllInactiveErrorMessage([]);
@@ -430,19 +444,11 @@ export default function ShowCluster() {
 
     try {
       await deleteScheduler(schedulerSelectedID);
+      await schedulers();
 
-      if (cluster.scheduler_cluster_id !== 0) {
-        const scheduler = await getSchedulers({
-          scheduler_cluster_id: String(cluster.scheduler_cluster_id),
-          page: 1,
-          per_page: MAX_PAGE_SIZE,
-        });
-        setSuccessMessage(true);
-        setOpenDeleteScheduler(false);
-        setScheduler(scheduler);
-        setSchedulerCount(scheduler);
-        setDeleteLoadingButton(false);
-      }
+      setSuccessMessage(true);
+      setOpenDeleteScheduler(false);
+      setDeleteLoadingButton(false);
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(true);
@@ -706,6 +712,37 @@ export default function ShowCluster() {
     setDeleteInactiveSeedPeerSuccessful(0);
   };
 
+  const handleEditFeatures = async () => {
+    setDeleteLoadingButton(true);
+    const features = [featuresScheduler ? 'schedule' : '', featuresPreheat ? 'preheat' : ''];
+    const filteredFeatures = features.filter((item) => item !== '');
+
+    const formData = {
+      features: filteredFeatures,
+    };
+    if (schedulerSelectedID) {
+      try {
+        await updateSchedulerFeatrues(schedulerSelectedID, { ...formData });
+        await schedulers();
+
+        setOpenSchedulerEditFeatures(false);
+        setDeleteLoadingButton(false);
+        setSuccessMessage(true);
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(true);
+          setErrorMessageText(error.message);
+          setDeleteLoadingButton(false);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    setFeaturesScheduler(schedulerSelectedRow?.features.includes('schedule') || false);
+    setFeaturesPreheat(schedulerSelectedRow?.features.includes('preheat') || false);
+  }, [schedulerSelectedRow]);
+
   return (
     <ThemeProvider theme={theme}>
       <Snackbar
@@ -789,65 +826,21 @@ export default function ShowCluster() {
                 Are you sure you want to delet this cluster?
               </Typography>
             </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
+              <CancelLoadingButton
+                id="cancelDeleteCluster"
+                loading={deleteLoadingButton}
+                onClick={handleDeleteClose}
+              />
+              <SavelLoadingButton
+                loading={deleteLoadingButton}
+                endIcon={<DeleteIcon />}
+                id="deleteCluster"
+                onClick={handleDeleteCluster}
+                text="Delete"
+              />
+            </Box>
           </DialogContent>
-          <DialogActions sx={{ display: 'flex', justifyContent: 'space-evenly', pb: '1.2rem' }}>
-            <LoadingButton
-              loading={deleteLoadingButton}
-              endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
-              size="small"
-              variant="outlined"
-              loadingPosition="end"
-              id="cancelDeleteCluster"
-              sx={{
-                '&.MuiLoadingButton-root': {
-                  color: 'var(--calcel-size-color)',
-                  borderRadius: 0,
-                  borderColor: 'var(--calcel-color)',
-                },
-                ':hover': {
-                  backgroundColor: 'var( --calcel-hover-corlor)',
-                  borderColor: 'var( --calcel-hover-corlor)',
-                },
-                '&.MuiLoadingButton-loading': {
-                  backgroundColor: 'var(--button-loading-color)',
-                  color: 'var(--button-loading-size-color)',
-                  borderColor: 'var(--button-loading-color)',
-                },
-                mr: '1rem',
-                width: '8rem',
-              }}
-              onClick={handleDeleteClose}
-            >
-              Cancel
-            </LoadingButton>
-            <LoadingButton
-              loading={deleteLoadingButton}
-              endIcon={<DeleteIcon />}
-              size="small"
-              variant="outlined"
-              type="submit"
-              loadingPosition="end"
-              id="deleteCluster"
-              sx={{
-                '&.MuiLoadingButton-root': {
-                  backgroundColor: 'var(--save-color)',
-                  borderRadius: 0,
-                  color: 'var(--save-size-color)',
-                  borderColor: 'var(--save-color)',
-                },
-                ':hover': { backgroundColor: 'var(--save-hover-corlor)', borderColor: 'var(--save-hover-corlor)' },
-                '&.MuiLoadingButton-loading': {
-                  backgroundColor: 'var(--button-loading-color)',
-                  color: 'var(--button-loading-size-color)',
-                  borderColor: 'var(--button-loading-color)',
-                },
-                width: '8rem',
-              }}
-              onClick={handleDeleteCluster}
-            >
-              Delete
-            </LoadingButton>
-          </DialogActions>
         </Dialog>
       </Box>
       <Information cluster={cluster} isLoading={informationIsLoading} />
@@ -1691,7 +1684,7 @@ export default function ShowCluster() {
                                     borderRadius: '0%',
                                     background: 'var(--button-color)',
                                     color: '#FFFFFF',
-                                    m: '0.4rem',
+                                    m: '0 0.4rem',
                                     borderColor: 'var(--button-color)',
                                     fontWeight: 'bold',
                                   }}
@@ -1700,23 +1693,69 @@ export default function ShowCluster() {
                           </TableCell>
                           <TableCell align="center">
                             <IconButton
+                              onClick={(event: any) => {
+                                setSchedulerAnchorElement(event.currentTarget);
+                                setSchedulerSelectedRow(item);
+                                setSchedulerSelectedID(item.id);
+                              }}
+                              size="small"
                               id={item?.host_name}
+                              aria-controls={Boolean(schedulerAnchorElement) ? item?.host_name : undefined}
+                              aria-haspopup="true"
+                              aria-expanded={Boolean(schedulerAnchorElement) ? 'true' : undefined}
+                              sx={{ position: 'relative', padding: '0' }}
+                            >
+                              <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                            </IconButton>
+                            <Menu
+                              anchorEl={schedulerAnchorElement}
+                              id={schedulerSelectedRow?.host_name}
+                              open={Boolean(schedulerAnchorElement)}
+                              onClose={() => {
+                                setSchedulerAnchorElement(null);
+                              }}
                               sx={{
-                                '&.MuiButton-root': {
-                                  backgroundColor: 'var(--button-color)',
-                                  borderRadius: 0,
-                                  color: '#fff',
+                                position: 'absolute',
+                                left: '-2.8rem',
+                                '& .MuiMenu-paper': {
+                                  boxShadow:
+                                    '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
                                 },
                               }}
-                              onClick={() => {
-                                openHandleScheduler(item);
-                              }}
                             >
-                              <DeleteIcon
-                                fontSize="large"
-                                sx={{ color: 'var(--button-color)', width: '2rem', height: '2rem' }}
-                              />
-                            </IconButton>
+                              {schedulerFeatures && schedulerFeatures.length > 0 ? (
+                                <MenuItem
+                                  id={`edit-${schedulerSelectedRow?.host_name}`}
+                                  onClick={() => {
+                                    setOpenSchedulerEditFeatures(true);
+                                    setSchedulerAnchorElement(null);
+                                  }}
+                                >
+                                  <ListItemIcon>
+                                    <Box
+                                      component="img"
+                                      sx={{ width: '1.5rem', height: '1.5rem' }}
+                                      src="/icons/user/user-edit.svg"
+                                    />
+                                  </ListItemIcon>
+                                  Edit features
+                                </MenuItem>
+                              ) : (
+                                ''
+                              )}
+                              <MenuItem
+                                id={`delete-${schedulerSelectedRow?.host_name}`}
+                                onClick={() => {
+                                  openHandleScheduler(schedulerSelectedRow);
+                                  setSchedulerAnchorElement(null);
+                                }}
+                              >
+                                <ListItemIcon>
+                                  <DeleteOutlineIcon sx={{ color: 'var(--button-color)' }} />
+                                </ListItemIcon>
+                                Delete Scheduler
+                              </MenuItem>
+                            </Menu>
                           </TableCell>
                         </TableRow>
                       );
@@ -1740,68 +1779,150 @@ export default function ShowCluster() {
               Are you sure you want to delet this scheduler?
             </Typography>
           </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
+            <CancelLoadingButton
+              id="cancelDeleteScheduler"
+              loading={deleteLoadingButton}
+              onClick={() => {
+                setOpenDeleteScheduler(false);
+                setSchedulerSelectedRow(null);
+              }}
+            />
+            <SavelLoadingButton
+              loading={deleteLoadingButton}
+              endIcon={<DeleteIcon />}
+              id="deleteScheduler"
+              onClick={handleDeleteScheduler}
+              text="Delete"
+            />
+          </Box>
         </DialogContent>
-        <DialogActions sx={{ display: 'flex', justifyContent: 'space-evenly', pb: '1.2rem' }}>
-          <LoadingButton
-            loading={deleteLoadingButton}
-            endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
-            size="small"
-            variant="outlined"
-            loadingPosition="end"
-            id="cancelDeleteScheduler"
-            sx={{
-              '&.MuiLoadingButton-root': {
-                color: 'var(--calcel-size-color)',
-                borderRadius: 0,
-                borderColor: 'var(--calcel-color)',
-              },
-              ':hover': {
-                backgroundColor: 'var( --calcel-hover-corlor)',
-                borderColor: 'var( --calcel-hover-corlor)',
-              },
-              '&.MuiLoadingButton-loading': {
-                backgroundColor: 'var(--button-loading-color)',
-                color: 'var(--button-loading-size-color)',
-                borderColor: 'var(--button-loading-color)',
-              },
-              mr: '1rem',
-              width: '8rem',
-            }}
+      </Dialog>
+      <Dialog
+        open={openSchedulerEditFeatures}
+        onClose={handleDeleteClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{
+          '& .MuiDialog-paper': {
+            minWidth: '38rem',
+          },
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '1rem' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box component="img" sx={{ width: '1.8rem' }} src="/icons/cluster/features.svg" />
+            <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
+              Featrues
+            </Typography>
+          </Box>
+          <IconButton
+            aria-label="close"
+            id="close-delete-icon"
             onClick={() => {
-              setOpenDeleteScheduler(false);
+              setOpenSchedulerEditFeatures(false);
               setSchedulerSelectedRow(null);
             }}
-          >
-            Cancel
-          </LoadingButton>
-          <LoadingButton
-            loading={deleteLoadingButton}
-            endIcon={<DeleteIcon />}
-            size="small"
-            variant="outlined"
-            type="submit"
-            loadingPosition="end"
-            id="deleteScheduler"
             sx={{
-              '&.MuiLoadingButton-root': {
-                backgroundColor: 'var(--save-color)',
-                borderRadius: 0,
-                color: 'var(--save-size-color)',
-                borderColor: 'var(--save-color)',
-              },
-              ':hover': { backgroundColor: 'var(--save-hover-corlor)', borderColor: 'var(--save-hover-corlor)' },
-              '&.MuiLoadingButton-loading': {
-                backgroundColor: 'var(--button-loading-color)',
-                color: 'var(--button-loading-size-color)',
-                borderColor: 'var(--button-loading-color)',
-              },
-              width: '8rem',
+              color: (theme) => theme.palette.grey[500],
+              p: 0,
             }}
-            onClick={handleDeleteScheduler}
           >
-            Delete
-          </LoadingButton>
-        </DialogActions>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Divider />
+        <DialogContent>
+          <Box className={styles.featuresWrapper}>
+            <Paper
+              variant="outlined"
+              sx={{
+                p: '0.2rem 0.4rem',
+                m: '0.6rem 0',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box className={styles.featuresIconWrapper}>
+                  <Box className={styles.featuresIconContainer}>
+                    <Box component="img" className={styles.featuresIcon} src="/icons/cluster/scheduler.svg" />
+                  </Box>
+                </Box>
+                <Box>
+                  <Typography variant="subtitle1" fontFamily="mabry-bold">
+                    Schedule
+                  </Typography>
+                  <Typography variant="subtitle2" color="rgb(82 82 82 / 87%)">
+                    If schedule feature is enabled, the scheduler can schedule download tasks.
+                  </Typography>
+                </Box>
+              </Box>
+              <Checkbox
+                size="small"
+                id="Schedule-Checkbox"
+                checked={featuresScheduler}
+                onChange={(e) => {
+                  setFeaturesScheduler(e.target.checked);
+                }}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+            </Paper>
+            <Paper
+              variant="outlined"
+              sx={{
+                p: '0.2rem 0.4rem',
+                m: '0.6rem 0',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box className={styles.featuresIconWrapper}>
+                  <Box className={styles.featuresIconContainer}>
+                    <Box component="img" className={styles.featuresIcon} src="/icons/cluster/preheat.svg" />
+                  </Box>
+                </Box>
+                <Box>
+                  <Typography variant="subtitle1" fontFamily="mabry-bold">
+                    Preheat
+                  </Typography>
+                  <Typography variant="subtitle2" color="rgb(82 82 82 / 87%)">
+                    If preheat feature is enabled, the scheduler can execute preheating job.
+                  </Typography>
+                </Box>
+              </Box>
+              <Checkbox
+                size="small"
+                id="Preheat-Checkbox"
+                checked={featuresPreheat}
+                onChange={(e) => {
+                  setFeaturesPreheat(e.target.checked);
+                }}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+            </Paper>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
+            <CancelLoadingButton
+              id="cancelEditFeatures"
+              loading={deleteLoadingButton}
+              onClick={() => {
+                setOpenSchedulerEditFeatures(false);
+                setSchedulerSelectedRow(null);
+              }}
+            />
+            <SavelLoadingButton
+              loading={deleteLoadingButton}
+              endIcon={<CheckCircleIcon />}
+              id="editFeatures"
+              onClick={handleEditFeatures}
+              text="Save"
+            />
+          </Box>
+        </DialogContent>
       </Dialog>
       {schedulerTotalPages > 1 ? (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
@@ -2010,23 +2131,49 @@ export default function ShowCluster() {
                           </TableCell>
                           <TableCell align="center">
                             <IconButton
-                              id={item?.host_name}
+                              onClick={(event: any) => {
+                                setSeedPeerAnchorElement(event.currentTarget);
+                                setSeedPeerSelectedRow(item);
+                                setSeedPeerSelectedID(item.id);
+                              }}
+                              size="small"
+                              id={`operate-${item?.host_name}`}
+                              aria-controls={Boolean(seedPeerAnchorElement) ? item?.host_name : undefined}
+                              aria-haspopup="true"
+                              aria-expanded={Boolean(seedPeerAnchorElement) ? 'true' : undefined}
+                              sx={{ position: 'relative', padding: '0' }}
+                            >
+                              <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                            </IconButton>
+                            <Menu
+                              anchorEl={seedPeerAnchorElement}
+                              id={seedPeerSelectedRow?.host_name}
+                              open={Boolean(seedPeerAnchorElement)}
+                              onClose={() => {
+                                setSeedPeerAnchorElement(null);
+                              }}
                               sx={{
-                                '&.MuiButton-root': {
-                                  backgroundColor: 'var(--button-color)',
-                                  borderRadius: 0,
-                                  color: '#fff',
+                                position: 'absolute',
+                                left: '-3.5rem',
+                                '& .MuiMenu-paper': {
+                                  boxShadow:
+                                    '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
                                 },
                               }}
-                              onClick={() => {
-                                openHandleSeedPeer(item);
-                              }}
                             >
-                              <DeleteIcon
-                                fontSize="large"
-                                sx={{ color: 'var(--button-color)', width: '2rem', height: '2rem' }}
-                              />
-                            </IconButton>
+                              <MenuItem
+                                id={`delete-${seedPeerSelectedRow?.host_name}`}
+                                onClick={() => {
+                                  openHandleSeedPeer(seedPeerSelectedRow);
+                                  setSeedPeerAnchorElement(null);
+                                }}
+                              >
+                                <ListItemIcon>
+                                  <DeleteOutlineIcon sx={{ color: 'var(--button-color)' }} />
+                                </ListItemIcon>
+                                Delete Seed Peer
+                              </MenuItem>
+                            </Menu>
                           </TableCell>
                         </TableRow>
                       );
@@ -2050,68 +2197,24 @@ export default function ShowCluster() {
               Are you sure you want to delet this seed peer?
             </Typography>
           </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
+            <CancelLoadingButton
+              id="cancelDeleteSeedPeer"
+              loading={deleteLoadingButton}
+              onClick={() => {
+                setOpenDeleteSeedPeer(false);
+                setSeedPeerSelectedRow(null);
+              }}
+            />
+            <SavelLoadingButton
+              loading={deleteLoadingButton}
+              endIcon={<DeleteIcon />}
+              id="deleteSeedPeer"
+              onClick={handleDeleteSeedPeer}
+              text="Delete"
+            />
+          </Box>
         </DialogContent>
-        <DialogActions sx={{ display: 'flex', justifyContent: 'space-evenly', pb: '1.2rem' }}>
-          <LoadingButton
-            loading={deleteLoadingButton}
-            endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
-            size="small"
-            variant="outlined"
-            loadingPosition="end"
-            id="cancelDeleteSeedPeer"
-            sx={{
-              '&.MuiLoadingButton-root': {
-                color: 'var(--calcel-size-color)',
-                borderRadius: 0,
-                borderColor: 'var(--calcel-color)',
-              },
-              ':hover': {
-                backgroundColor: 'var( --calcel-hover-corlor)',
-                borderColor: 'var( --calcel-hover-corlor)',
-              },
-              '&.MuiLoadingButton-loading': {
-                backgroundColor: 'var(--button-loading-color)',
-                color: 'var(--button-loading-size-color)',
-                borderColor: 'var(--button-loading-color)',
-              },
-              mr: '1rem',
-              width: '8rem',
-            }}
-            onClick={() => {
-              setOpenDeleteSeedPeer(false);
-              setSeedPeerSelectedRow(null);
-            }}
-          >
-            Cancel
-          </LoadingButton>
-          <LoadingButton
-            loading={deleteLoadingButton}
-            endIcon={<DeleteIcon />}
-            size="small"
-            variant="outlined"
-            type="submit"
-            loadingPosition="end"
-            id="deleteSeedPeer"
-            sx={{
-              '&.MuiLoadingButton-root': {
-                backgroundColor: 'var(--save-color)',
-                borderRadius: 0,
-                color: 'var(--save-size-color)',
-                borderColor: 'var(--save-color)',
-              },
-              ':hover': { backgroundColor: 'var(--save-hover-corlor)', borderColor: 'var(--save-hover-corlor)' },
-              '&.MuiLoadingButton-loading': {
-                backgroundColor: 'var(--button-loading-color)',
-                color: 'var(--button-loading-size-color)',
-                borderColor: 'var(--button-loading-color)',
-              },
-              width: '8rem',
-            }}
-            onClick={handleDeleteSeedPeer}
-          >
-            Delete
-          </LoadingButton>
-        </DialogActions>
       </Dialog>
       {seedPeerTotalPages > 1 ? (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>

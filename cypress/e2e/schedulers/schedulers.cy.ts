@@ -2,6 +2,7 @@ import cluster from '../../fixtures/clusters/cluster/cluster.json';
 import seedPeer from '../../fixtures/clusters/cluster/seed-peer.json';
 import scheduler from '../../fixtures/clusters/cluster/scheduler.json';
 import deleteScheduler from '../../fixtures/schedulers/delete-scheduler.json';
+import updateSchedulerFeature from '../../fixtures/schedulers/update-scheduler-feature.json';
 import schedulerDeleteAfter from '../../fixtures/schedulers/scheduler-delete-after.json';
 import deletedInactiveScheduler from '../../fixtures/clusters/cluster/deleted-inactive-scheduler.json';
 import deletedInactiveSeedPeer from '../../fixtures/clusters/cluster/deleted-inactive-seed-peer.json';
@@ -46,6 +47,18 @@ describe('Schedulers', () => {
         });
       },
     );
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/scheduler-features',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: ['schedule', 'preheat'],
+        });
+      },
+    );
 
     cy.signin();
     cy.visit('clusters/1');
@@ -81,10 +94,7 @@ describe('Schedulers', () => {
         .and('have.css', 'background-color', 'rgb(46, 143, 121)');
 
       // Show features.
-      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)')
-        .should('be.visible')
-        .and('contain', 'Schedule')
-        .and('contain', 'Preheat');
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)').should('be.visible').and('contain', 'Schedule');
 
       // Show scheduler-5 information.
       cy.get('#scheduler-table-body > :nth-child(2) > :nth-child(2) > .MuiTypography-root')
@@ -335,6 +345,7 @@ describe('Schedulers', () => {
       cy.get('#scheduler-pagination > .MuiPagination-ul').children().should('have.length', 5);
 
       cy.get('#scheduler-2').click();
+      cy.get('#delete-scheduler-2').click();
       cy.get('#cancelDeleteScheduler').click();
       cy.get('#scheduler-2').click();
 
@@ -362,6 +373,7 @@ describe('Schedulers', () => {
         },
       );
 
+      cy.get('#delete-scheduler-2').click();
       // Confirm delete.
       cy.get('#deleteScheduler').click();
 
@@ -414,6 +426,7 @@ describe('Schedulers', () => {
         },
       );
 
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #delete-scheduler-4').click();
       cy.get('#deleteScheduler').click();
       cy.wait('@delete');
 
@@ -453,6 +466,7 @@ describe('Schedulers', () => {
         .and('contain', 'scheduler-7');
 
       cy.get('#scheduler-7').click();
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #delete-scheduler-7').click();
       cy.get('#deleteScheduler').click();
       cy.wait('@delete');
 
@@ -478,6 +492,7 @@ describe('Schedulers', () => {
         .and('contain', 'scheduler-7');
 
       cy.get('#scheduler-7').click();
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #delete-scheduler-7').click();
 
       cy.get('#deleteScheduler').click();
       cy.wait('@delete');
@@ -791,6 +806,139 @@ describe('Schedulers', () => {
       cy.get('.MuiAccordionDetails-root > .MuiTypography-root')
         .should('be.visible')
         .and('have.text', 'Deletion of scheduler with ID 10 failed! Error : permission deny.');
+    });
+  });
+
+  describe('change scheduler features', () => {
+    it('can update features', () => {
+      // Show scheduler-7 no Preheat
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)')
+        .should('be.visible')
+        .and('contain', 'Schedule')
+        .and('not.contain', 'Preheat');
+      cy.get('#scheduler-7').click();
+
+      // Display the edit features dialog.
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #edit-scheduler-7').click();
+
+      // Check that the Schedule checkbox.
+      cy.get('#Schedule-Checkbox').should('have.prop', 'checked', true);
+
+      //  Check that the Preheat checkbox.
+      cy.get('#Preheat-Checkbox').should('have.prop', 'checked', false);
+
+      // Check all checkboxes.
+      cy.get('[type="checkbox"]').check();
+      cy.intercept({ method: 'PATCH', url: '/api/v1/schedulers/7' }, (req) => {
+        (req.body = ''),
+          req.reply({
+            statusCode: 200,
+            body: {},
+          });
+      });
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: updateSchedulerFeature,
+          });
+        },
+      );
+      cy.get('#editFeatures').click();
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)')
+        .should('be.visible')
+        .and('contain', 'Schedule')
+        .and('contain', 'Preheat');
+    });
+    it('try to update features with guest user', () => {
+      cy.guestSignin();
+
+      // Show scheduler-7 no Preheat.
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)')
+        .should('be.visible')
+        .and('contain', 'Schedule')
+        .and('not.contain', 'Preheat');
+      cy.get('#scheduler-7').click();
+
+      // Display the edit features dialog.
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #edit-scheduler-7').click();
+
+      // Check that the Schedule checkbox.
+      cy.get('#Schedule-Checkbox').should('have.prop', 'checked', true);
+
+      //  Check that the Preheat checkbox.
+      cy.get('#Preheat-Checkbox').should('have.prop', 'checked', false);
+
+      // Check all checkboxes.
+      cy.get('[type="checkbox"]').check();
+      cy.intercept({ method: 'PATCH', url: '/api/v1/schedulers/7' }, (req) => {
+        (req.body = ''),
+          req.reply({
+            statusCode: 401,
+            body: { message: 'permission deny' },
+          });
+      });
+
+      cy.get('#editFeatures').click();
+
+      // Show error message.
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'permission deny');
+      cy.get('#cancelEditFeatures').click();
+    });
+    it('get cluster API error response', () => {
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)')
+        .should('be.visible')
+        .and('contain', 'Schedule')
+        .and('not.contain', 'Preheat');
+      cy.get('#scheduler-7').click();
+
+      // Display the edit features dialog.
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #edit-scheduler-7').click();
+
+      // Check that the Schedule checkbox.
+      cy.get('#Schedule-Checkbox').should('have.prop', 'checked', true);
+
+      //  Check that the Preheat checkbox.
+      cy.get('#Preheat-Checkbox').should('have.prop', 'checked', false);
+
+      // Check all checkboxes.
+      cy.get('[type="checkbox"]').check();
+      cy.intercept({ method: 'PATCH', url: '/api/v1/schedulers/7' }, (req) => {
+        (req.body = ''),
+          req.reply({
+            forceNetworkError: true,
+          });
+      });
+      cy.get('#editFeatures').click();
+
+      // Show error message.
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+    });
+
+    it('get scheduler features API error response', () => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/scheduler-features',
+        },
+        (req) => {
+          req.reply({
+            forceNetworkError: true,
+          });
+        },
+      );
+
+      // Show error message.
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+
+      cy.get('#scheduler-7').click();
+
+      // No change features button.
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #delete-scheduler-7').should('not.be.visible');
     });
   });
 });

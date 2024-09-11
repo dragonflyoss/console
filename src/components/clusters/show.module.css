@@ -188,3 +188,45 @@
   width: 6rem;
   height: 6rem;
 }
+
+.hostnameText {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.featuresIconWrapper {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  background-color: #fbfbfb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.6rem;
+}
+
+.featuresIconContainer {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background-color: #efefef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featuresIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.featuresWrapper {
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  /* padding: 1rem 0; */
+}
+
+.featuresContent {
+}

@@ -21,13 +21,12 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import LockIcon from '@mui/icons-material/Lock';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import LoadingButton from '@mui/lab/LoadingButton';
 import styles from './index.module.css';
 import { getDatetime } from '../../lib/utils';
 import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../menu/index';
+import { CancelLoadingButton, SavelLoadingButton } from '../loding-button';
 
 export default function Profile() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -578,64 +577,14 @@ export default function Profile() {
               </Box>
             ))}
             <Box mt="2rem">
-              <LoadingButton
-                loading={passwordLoadingButton}
-                endIcon={<CancelIcon sx={{ color: 'var(--save-color)' }} />}
-                size="small"
-                variant="outlined"
-                loadingPosition="end"
-                id="cancel-change-password"
-                sx={{
-                  '&.MuiLoadingButton-root': {
-                    color: 'var(--calcel-size-color)',
-                    borderRadius: 0,
-                    borderColor: 'var(--calcel-color)',
-                  },
-                  ':hover': {
-                    backgroundColor: 'var( --calcel-hover-corlor)',
-                    borderColor: 'var( --calcel-hover-corlor)',
-                  },
-                  '&.MuiLoadingButton-loading': {
-                    backgroundColor: 'var(--button-loading-color)',
-                    color: 'var(--button-loading-size-color)',
-                    borderColor: 'var(--button-loading-color)',
-                  },
-                  mr: '1rem',
-                  width: '7rem',
-                }}
-                onClick={cancelChangePassword}
-              >
-                cancel
-              </LoadingButton>
-              <LoadingButton
+              <CancelLoadingButton id="cancel" loading={passwordLoadingButton} onClick={cancelChangePassword} />
+
+              <SavelLoadingButton
                 loading={passwordLoadingButton}
                 endIcon={<CheckCircleIcon />}
-                size="small"
-                variant="outlined"
-                type="submit"
-                loadingPosition="end"
                 id="change-password"
-                sx={{
-                  '&.MuiLoadingButton-root': {
-                    backgroundColor: 'var(--save-color)',
-                    borderRadius: 0,
-                    color: 'var(--save-size-color)',
-                    borderColor: 'var(--save-color)',
-                  },
-                  ':hover': {
-                    backgroundColor: 'var(--save-hover-corlor)',
-                    borderColor: 'var(--save-hover-corlor)',
-                  },
-                  '&.MuiLoadingButton-loading': {
-                    backgroundColor: 'var(--button-loading-color)',
-                    color: 'var(--button-loading-size-color)',
-                    borderColor: 'var(--button-loading-color)',
-                  },
-                  width: '7rem',
-                }}
-              >
-                Save
-              </LoadingButton>
+                text="Save"
+              />
             </Box>
           </Grid>
         )}
@@ -725,64 +674,17 @@ export default function Profile() {
                 </Box>
               ))}
               <Box mt="2rem">
-                <LoadingButton
-                  loading={personalLoadingButton}
-                  endIcon={<CancelIcon sx={{ color: 'var(--save-color)' }} />}
-                  size="small"
-                  variant="outlined"
-                  loadingPosition="end"
+                <CancelLoadingButton
                   id="cancel"
-                  sx={{
-                    '&.MuiLoadingButton-root': {
-                      color: 'var(--calcel-size-color)',
-                      borderRadius: 0,
-                      borderColor: 'var(--calcel-color)',
-                    },
-                    ':hover': {
-                      backgroundColor: 'var( --calcel-hover-corlor)',
-                      borderColor: 'var( --calcel-hover-corlor)',
-                    },
-                    '&.MuiLoadingButton-loading': {
-                      backgroundColor: 'var(--button-loading-color)',
-                      color: 'var(--button-loading-size-color)',
-                      borderColor: 'var(--button-loading-color)',
-                    },
-                    mr: '1rem',
-                    width: '7rem',
-                  }}
+                  loading={personalLoadingButton}
                   onClick={cancelHandlePersonalInformation}
-                >
-                  cancel
-                </LoadingButton>
-                <LoadingButton
+                />
+                <SavelLoadingButton
                   loading={personalLoadingButton}
                   endIcon={<CheckCircleIcon />}
-                  size="small"
-                  variant="outlined"
-                  type="submit"
-                  loadingPosition="end"
                   id="save"
-                  sx={{
-                    '&.MuiLoadingButton-root': {
-                      backgroundColor: 'var(--save-color)',
-                      borderRadius: 0,
-                      color: 'var(--save-size-color)',
-                      borderColor: 'var(--save-color)',
-                    },
-                    ':hover': {
-                      backgroundColor: 'var(--save-hover-corlor)',
-                      borderColor: 'var(--save-hover-corlor)',
-                    },
-                    '&.MuiLoadingButton-loading': {
-                      backgroundColor: 'var(--button-loading-color)',
-                      color: 'var(--button-loading-size-color)',
-                      borderColor: 'var(--button-loading-color)',
-                    },
-                    width: '7rem',
-                  }}
-                >
-                  Save
-                </LoadingButton>
+                  text="Save"
+                />
               </Box>
             </Box>
           </Box>

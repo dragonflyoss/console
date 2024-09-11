@@ -297,7 +297,11 @@ export default function Preheats() {
                           underline="hover"
                           sx={{ color: 'var(--description-color)' }}
                         >
-                          <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/detail.svg" />
+                          <Box
+                            component="img"
+                            sx={{ width: '2rem', height: '2rem' }}
+                            src="/icons/job/preheat/detail.svg"
+                          />
                         </RouterLink>
                       </Box>
                     </Box>
@@ -354,7 +358,11 @@ export default function Preheats() {
                         underline="hover"
                         sx={{ color: 'var(--description-color)' }}
                       >
-                        <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/detail.svg" />
+                        <Box
+                          component="img"
+                          sx={{ width: '2rem', height: '2rem' }}
+                          src="/icons/job/preheat/detail.svg"
+                        />
                       </RouterLink>
                     </Box>
                   </Box>

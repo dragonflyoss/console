@@ -22,12 +22,11 @@ import { useState, useEffect } from 'react';
 import { getTokens, deleteTokens, getTokensResponse } from '../../../lib/api';
 import { formatDate, getPaginatedList, useQuery } from '../../../lib/utils';
 import { useCopyToClipboard } from 'react-use';
-import { LoadingButton } from '@mui/lab';
 import { Link, useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
-import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
+import { CancelLoadingButton, SavelLoadingButton } from '../../loding-button';
 
 const theme = createTheme({
   palette: {
@@ -409,67 +408,23 @@ export default function PersonalAccessTokens() {
               Are you sure you want to delete this token?
             </Typography>
           </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
+            <CancelLoadingButton
+              id="cancel"
+              loading={deleteLoadingButton}
+              onClick={() => {
+                setOpenDeletToken(false);
+              }}
+            />
+            <SavelLoadingButton
+              loading={deleteLoadingButton}
+              endIcon={<DeleteIcon />}
+              id="delete"
+              text="Delete"
+              onClick={handleDeleteToken}
+            />
+          </Box>
         </DialogContent>
-        <DialogActions sx={{ display: 'flex', justifyContent: 'space-evenly', pb: '1.2rem' }}>
-          <LoadingButton
-            loading={deleteLoadingButton}
-            endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
-            size="small"
-            variant="outlined"
-            loadingPosition="end"
-            id="cancel"
-            sx={{
-              '&.MuiLoadingButton-root': {
-                color: 'var(--calcel-size-color)',
-                borderRadius: 0,
-                borderColor: 'var(--calcel-color)',
-              },
-              ':hover': {
-                backgroundColor: 'var( --calcel-hover-corlor)',
-                borderColor: 'var( --calcel-hover-corlor)',
-              },
-              '&.MuiLoadingButton-loading': {
-                backgroundColor: 'var(--button-loading-color)',
-                color: 'var(--button-loading-size-color)',
-                borderColor: 'var(--button-loading-color)',
-              },
-              mr: '1rem',
-              width: '8rem',
-            }}
-            onClick={() => {
-              setOpenDeletToken(false);
-            }}
-          >
-            Cancel
-          </LoadingButton>
-          <LoadingButton
-            loading={deleteLoadingButton}
-            endIcon={<DeleteIcon />}
-            size="small"
-            variant="outlined"
-            type="submit"
-            loadingPosition="end"
-            id="delete"
-            sx={{
-              '&.MuiLoadingButton-root': {
-                backgroundColor: 'var(--save-color)',
-                borderRadius: 0,
-                color: 'var(--save-size-color)',
-                borderColor: 'var(--save-color)',
-              },
-              ':hover': { backgroundColor: 'var(--save-hover-corlor)', borderColor: 'var(--save-hover-corlor)' },
-              '&.MuiLoadingButton-loading': {
-                backgroundColor: 'var(--button-loading-color)',
-                color: 'var(--button-loading-size-color)',
-                borderColor: 'var(--button-loading-color)',
-              },
-              width: '8rem',
-            }}
-            onClick={handleDeleteToken}
-          >
-            Delete
-          </LoadingButton>
-        </DialogActions>
       </Dialog>
     </ThemeProvider>
   );

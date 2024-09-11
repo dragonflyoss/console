@@ -14,14 +14,13 @@ import {
   Paper,
   Skeleton,
 } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
 import styles from './edit.module.css';
 import HelpIcon from '@mui/icons-material/Help';
 import { useEffect, useState } from 'react';
 import { getCluster, updateCluster, getClusterResponse } from '../../lib/api';
-import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate, useParams } from 'react-router-dom';
+import { CancelLoadingButton, SavelLoadingButton } from '../loding-button';
 
 export default function EditCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -798,64 +797,15 @@ export default function EditCluster() {
         </Box>
         <Divider sx={{ mt: '1rem', mb: '2rem' }} />
         <Box>
-          <LoadingButton
-            loading={loadingButton}
-            endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
-            size="small"
-            variant="outlined"
-            loadingPosition="end"
+          <CancelLoadingButton
             id="cancel"
-            sx={{
-              '&.MuiLoadingButton-root': {
-                color: 'var(--calcel-size-color)',
-                borderRadius: 0,
-                borderColor: 'var(--calcel-color)',
-              },
-              ':hover': {
-                backgroundColor: 'var( --calcel-hover-corlor)',
-                borderColor: 'var( --calcel-hover-corlor)',
-              },
-              '&.MuiLoadingButton-loading': {
-                backgroundColor: 'var(--button-loading-color)',
-                color: 'var(--button-loading-size-color)',
-                borderColor: 'var(--button-loading-color)',
-              },
-              mr: '1rem',
-              width: '8rem',
-            }}
+            loading={loadingButton}
             onClick={() => {
               setLoadingButton(true);
               navigate(`/clusters/${id}`);
             }}
-          >
-            Cancel
-          </LoadingButton>
-          <LoadingButton
-            loading={loadingButton}
-            endIcon={<CheckCircleIcon />}
-            size="small"
-            variant="outlined"
-            type="submit"
-            loadingPosition="end"
-            id="save"
-            sx={{
-              '&.MuiLoadingButton-root': {
-                backgroundColor: 'var(--save-color)',
-                borderRadius: 0,
-                color: 'var(--save-size-color)',
-                borderColor: 'var(--save-color)',
-              },
-              ':hover': { backgroundColor: 'var(--save-hover-corlor)', borderColor: 'var(--save-hover-corlor)' },
-              '&.MuiLoadingButton-loading': {
-                backgroundColor: 'var(--button-loading-color)',
-                color: 'var(--button-loading-size-color)',
-                borderColor: 'var(--button-loading-color)',
-              },
-              width: '8rem',
-            }}
-          >
-            Save
-          </LoadingButton>
+          />
+          <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />
         </Box>
       </Grid>
     </Grid>

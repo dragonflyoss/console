@@ -33,18 +33,21 @@ import {
   Pagination,
   ThemeProvider,
   createTheme,
+  MenuItem,
+  Menu,
+  ListItemIcon,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole, getUsersResponse } from '../../lib/api';
 import { makeStyles } from '@mui/styles';
 import { getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
-import { LoadingButton } from '@mui/lab';
-import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import styles from './index.module.css';
 import _ from 'lodash';
 import { ROLE_ROOT, ROLE_GUEST, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../lib/constants';
 import { useNavigate } from 'react-router-dom';
+import { CancelLoadingButton, SavelLoadingButton } from '../loding-button';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const useStyles = makeStyles((theme: any) => ({
   tableRow: {
@@ -108,6 +111,8 @@ export default function Users() {
   const [role, setRole] = useState(['']);
   const [detailRole, setDetailRole] = useState('');
   const [updateRole, setUpdatelRole] = useState('');
+  const [userSelectedRow, setUserSelectedRow] = useState<getUsersResponse>();
+  const [anchorElement, setAnchorElement] = useState(null);
 
   const classes = useStyles();
   const navigate = useNavigate();
@@ -240,6 +245,8 @@ export default function Users() {
     setSuccessMessage(false);
     setErrorMessage(false);
   };
+
+  console.log(userSelectedRow);
 
   return (
     <ThemeProvider theme={theme}>
@@ -401,7 +408,72 @@ export default function Users() {
                     )}
                   </TableCell>
                   <TableCell align="center">
-                    {item?.name === 'root' ? (
+                    <IconButton
+                      onClick={(event: any) => {
+                        setAnchorElement(event.currentTarget);
+                        setUserSelectedRow(item);
+                      }}
+                      id={`action-${item?.name}`}
+                      aria-haspopup="true"
+                      sx={{ position: 'relative', padding: '0' }}
+                    >
+                      <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorElement}
+                      id="account-menu"
+                      open={Boolean(anchorElement)}
+                      onClose={() => {
+                        setAnchorElement(null);
+                      }}
+                      sx={{
+                        position: 'absolute',
+                        left: '-6rem',
+                        width: '16rem',
+                        '& .MuiMenu-paper': {
+                          boxShadow:
+                            '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
+                        },
+                      }}
+                    >
+                      <MenuItem
+                        id={`detail-${userSelectedRow?.name}`}
+                        onClick={() => {
+                          handleChange(userSelectedRow);
+                          setAnchorElement(null);
+                        }}
+                      >
+                        <ListItemIcon>
+                          <Box
+                            component="img"
+                            sx={{ width: '1.5rem', height: '1.5rem' }}
+                            src="/icons/user/detail.svg"
+                          />
+                        </ListItemIcon>
+                        Viem User
+                      </MenuItem>
+                      {userSelectedRow?.name === 'root' ? (
+                        <></>
+                      ) : (
+                        <MenuItem
+                          id={`edit-${userSelectedRow?.name}`}
+                          onClick={() => {
+                            openSwitchUser(userSelectedRow);
+                            setAnchorElement(null);
+                          }}
+                        >
+                          <ListItemIcon>
+                            <Box
+                              component="img"
+                              sx={{ width: '1.5rem', height: '1.5rem' }}
+                              src="/icons/user/user-edit.svg"
+                            />
+                          </ListItemIcon>
+                          Switch User
+                        </MenuItem>
+                      )}
+                    </Menu>
+                    {/* {item?.name === 'root' ? (
                       <IconButton
                         className={`${classes.tableCell} ${selectedRow === item ? classes.selectedButton : ''}`}
                         sx={{
@@ -453,7 +525,7 @@ export default function Users() {
                           <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/detail.svg" />
                         </IconButton>
                       </>
-                    )}
+                    )} */}
                   </TableCell>
                 </TableRow>
               ))
@@ -531,68 +603,17 @@ export default function Users() {
               </RadioGroup>
             </FormControl>
           </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
+            <CancelLoadingButton id="cancel" loading={loadingButton} onClick={closeAllPopups} />
+            <SavelLoadingButton
+              loading={loadingButton}
+              endIcon={<CheckCircleIcon />}
+              id="save"
+              text="Save"
+              onClick={handleSubmit}
+            />
+          </Box>
         </DialogContent>
-        <DialogActions className={styles.roleButtonContainer}>
-          <LoadingButton
-            loading={loadingButton}
-            endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
-            size="small"
-            variant="outlined"
-            loadingPosition="end"
-            id="cancel"
-            sx={{
-              '&.MuiLoadingButton-root': {
-                color: 'var(--calcel-size-color)',
-                borderRadius: 0,
-                borderColor: 'var(--calcel-color)',
-              },
-              ':hover': {
-                backgroundColor: 'var( --calcel-hover-corlor)',
-                borderColor: 'var( --calcel-hover-corlor)',
-              },
-              '&.MuiLoadingButton-loading': {
-                backgroundColor: 'var(--button-loading-color)',
-                color: 'var(--button-loading-size-color)',
-                borderColor: 'var(--button-loading-color)',
-              },
-              mr: '1rem',
-              width: '8rem',
-            }}
-            onClick={closeAllPopups}
-          >
-            Cancel
-          </LoadingButton>
-          <LoadingButton
-            loading={loadingButton}
-            endIcon={<CheckCircleIcon />}
-            size="small"
-            variant="outlined"
-            type="submit"
-            loadingPosition="end"
-            id="save"
-            sx={{
-              '&.MuiLoadingButton-root': {
-                backgroundColor: 'var(--save-color)',
-                borderRadius: 0,
-                color: 'var(--save-size-color)',
-                borderColor: 'var(--save-color)',
-              },
-              ':hover': {
-                backgroundColor: 'var(--save-hover-corlor)',
-                borderColor: 'var(--save-hover-corlor)',
-              },
-              '&.MuiLoadingButton-loading': {
-                backgroundColor: 'var(--button-loading-color)',
-                color: 'var(--button-loading-size-color)',
-                borderColor: 'var(--button-loading-color)',
-              },
-              width: '8rem',
-            }}
-            onClick={handleSubmit}
-          >
-            Save
-          </LoadingButton>
-        </DialogActions>
       </Dialog>
       <Drawer anchor="right" open={userDetail} onClose={closeAllPopups}>
         <Box role="presentation" sx={{ width: 350 }}>

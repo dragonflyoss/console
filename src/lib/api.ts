@@ -383,6 +383,22 @@ export async function getScheduler(id: string): Promise<getSchedulerResponse> {
   return await response.json();
 }
 
+export async function getSchedulerFeatrues(): Promise<Array<string>> {
+  const url = new URL(`/api/v1/scheduler-features`, API_URL);
+  const response = await get(url);
+  return await response.json();
+}
+
+interface updateSchedulerFeatruesRequset {
+  features: Array<string>;
+}
+
+export async function updateSchedulerFeatrues(id: string,request: updateSchedulerFeatruesRequset,): Promise<getSchedulerResponse> {
+  const url = new URL(`/api/v1/schedulers/${id}`, API_URL);
+  const response = await patch(url, request);
+  return await response.json();
+}
+
 export async function deleteScheduler(id: string) {
   const url = new URL(`/api/v1/schedulers/${id}`, API_URL);
   return await destroy(url);
@@ -698,7 +714,7 @@ interface getJobsResponse {
 
 export async function getJobs(params?: getJobsParams): Promise<getJobsResponse> {
   const url = params
-    ? new URL(`/api/v1/jobs?${queryString.stringify(params)}`, API_URL)
+    ? new URL(`/api/v1/jobs?${queryString.stringify(params)}&type=preheat`, API_URL)
     : new URL('/api/v1/jobs', API_URL);
 
   const response = await get(url);

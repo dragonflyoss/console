@@ -26,7 +26,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getToken, updateTokens } from '../../../lib/api';
 import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { CancelLoadingButton, SavelLoadingButton } from '../../loding-button';
+import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
 
 const theme = createTheme({
   palette: {

@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 import { getCluster, updateCluster, getClusterResponse } from '../../lib/api';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CancelLoadingButton, SavelLoadingButton } from '../loding-button';
+import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 
 export default function EditCluster() {
   const [successMessage, setSuccessMessage] = useState(false);

@@ -26,7 +26,7 @@ import styles from './index.module.css';
 import { getDatetime } from '../../lib/utils';
 import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../menu/index';
-import { CancelLoadingButton, SavelLoadingButton } from '../loding-button';
+import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 
 export default function Profile() {
   const [successMessage, setSuccessMessage] = useState(false);

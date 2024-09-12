@@ -40,7 +40,7 @@ import { useEffect, useState } from 'react';
 import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './inde.module.css';
 import { exportCSVFile } from '../../../lib/utils';
-import { CancelLoadingButton, SavelLoadingButton } from '../../loding-button';
+import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 Chart.defaults.font.family = 'mabry-light';

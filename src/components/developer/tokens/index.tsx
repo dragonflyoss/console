@@ -26,7 +26,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
-import { CancelLoadingButton, SavelLoadingButton } from '../../loding-button';
+import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
 
 const theme = createTheme({
   palette: {

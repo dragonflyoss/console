@@ -33,7 +33,7 @@ import { createJob, getClusters } from '../../../lib/api';
 import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './new.module.css';
 import AddIcon from '@mui/icons-material/Add';
-import { CancelLoadingButton, SavelLoadingButton } from '../../loding-button';
+import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
 
 export default function NewPreheat() {
   const [successMessage, setSuccessMessage] = useState(false);

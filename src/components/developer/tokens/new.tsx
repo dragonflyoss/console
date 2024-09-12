@@ -24,7 +24,7 @@ import { createTokens } from '../../../lib/api';
 import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { MyContext } from '../../menu';
-import {CancelLoadingButton, SavelLoadingButton} from '../../loding-button';
+import {CancelLoadingButton, SavelLoadingButton} from '../../loading-button';
 
 const theme = createTheme({
   palette: {

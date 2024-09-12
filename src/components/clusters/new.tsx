@@ -18,7 +18,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate } from 'react-router-dom';
 import { createCluster } from '../../lib/api';
-import { CancelLoadingButton, SavelLoadingButton } from '../loding-button';
+import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 
 export default function NewCluster() {
   const [successMessage, setSuccessMessage] = useState(false);

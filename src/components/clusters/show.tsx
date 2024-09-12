@@ -85,7 +85,7 @@ import { fuzzySearchScheduler, getPaginatedList, useQuery } from '../../lib/util
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import DeleteAnimation from '../delete-animation';
 import SearchCircularProgress from '../circular-progress';
-import { CancelLoadingButton, SavelLoadingButton } from '../loding-button';
+import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';

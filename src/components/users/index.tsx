@@ -45,7 +45,7 @@ import styles from './index.module.css';
 import _ from 'lodash';
 import { ROLE_ROOT, ROLE_GUEST, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../lib/constants';
 import { useNavigate } from 'react-router-dom';
-import { CancelLoadingButton, SavelLoadingButton } from '../loding-button';
+import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';

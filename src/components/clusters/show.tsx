@@ -1738,6 +1738,7 @@ export default function ShowCluster() {
                                 },
                                 '& .MuiMenu-list': {
                                   p: 0,
+                                  width: '10rem',
                                 },
                               }}
                             >
@@ -2173,6 +2174,7 @@ export default function ShowCluster() {
                                 },
                                 '& .MuiMenu-list': {
                                   p: 0,
+                                  width: '10rem',
                                 },
                               }}
                             >

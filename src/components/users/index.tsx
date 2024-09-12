@@ -400,6 +400,7 @@ export default function Users() {
                         },
                         '& .MuiMenu-list': {
                           p: 0,
+                          width: '10rem',
                         },
                       }}
                     >

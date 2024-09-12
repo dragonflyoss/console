@@ -49,7 +49,7 @@
 }
 
 .menuItemIcon {
-  color: var(--save-size-color);
+  color: var(--button-color);
 }
 
 .menuItem:hover .menuItemIcon {

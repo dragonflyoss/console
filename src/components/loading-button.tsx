@@ -1,15 +1,15 @@
 import React from 'react';
-import { LoadingButton } from '@mui/lab'; 
+import { LoadingButton } from '@mui/lab';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { ButtonProps } from '@mui/material/Button';
 
-interface CancelLoadingButtonComponentProps extends ButtonProps {
+interface cancelLoadingButtonProps extends ButtonProps {
   loading: boolean;
   onClick: any;
   id: string;
 }
 
-export const CancelLoadingButton: React.FC<CancelLoadingButtonComponentProps> = ({ loading, onClick, id, ...rest }) => (
+export const CancelLoadingButton: React.FC<cancelLoadingButtonProps> = ({ loading, onClick, id, ...rest }) => (
   <LoadingButton
     loading={loading}
     endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
@@ -42,7 +42,7 @@ export const CancelLoadingButton: React.FC<CancelLoadingButtonComponentProps> = 
   </LoadingButton>
 );
 
-interface LoadingButtonComponentProps {
+interface saveLoadingButtonProps {
   loading: boolean;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   id: string;
@@ -50,7 +50,7 @@ interface LoadingButtonComponentProps {
   text: string;
 }
 
-export const SavelLoadingButton: React.FC<LoadingButtonComponentProps> = ({
+export const SavelLoadingButton: React.FC<saveLoadingButtonProps> = ({
   loading,
   onClick,
   id,

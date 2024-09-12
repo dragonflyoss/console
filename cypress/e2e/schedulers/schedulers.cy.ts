@@ -385,7 +385,7 @@ describe('Schedulers', () => {
       // Delete success message.
       cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
 
-      cy.get('[data-testid="scheduler-loading"]').should('no.exist');
+      cy.get('[data-testid="scheduler-loading"]').should('not.exist');
 
       // The total number of schedulers will be reduced by one.
       cy.get('.css-ms744u-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');

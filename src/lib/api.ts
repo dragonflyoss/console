@@ -393,7 +393,10 @@ interface updateSchedulerFeatruesRequset {
   features: Array<string>;
 }
 
-export async function updateSchedulerFeatrues(id: string,request: updateSchedulerFeatruesRequset,): Promise<getSchedulerResponse> {
+export async function updateSchedulerFeatrues(
+  id: string,
+  request: updateSchedulerFeatruesRequset,
+): Promise<getSchedulerResponse> {
   const url = new URL(`/api/v1/schedulers/${id}`, API_URL);
   const response = await patch(url, request);
   return await response.json();
@@ -712,10 +715,8 @@ interface getJobsResponse {
   total_page?: number;
 }
 
-export async function getJobs(params?: getJobsParams): Promise<getJobsResponse> {
-  const url = params
-    ? new URL(`/api/v1/jobs?${queryString.stringify(params)}`, API_URL)
-    : new URL('/api/v1/jobs', API_URL);
+export async function getJobs(params: getJobsParams): Promise<getJobsResponse> {
+  const url = new URL(`/api/v1/jobs?${queryString.stringify(params)}&type=preheat`, API_URL);
 
   const response = await get(url);
   const data = await response.json();

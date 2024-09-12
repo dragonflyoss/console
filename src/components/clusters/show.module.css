@@ -221,12 +221,15 @@
   height: 1.2rem;
 }
 
-.featuresWrapper {
-  /* display: flex;
-  align-items: center;
-  justify-content: center; */
-  /* padding: 1rem 0; */
+.menuItem:hover {
+  background-color: var(--button-color) !important;
+  color: var(--save-size-color);
 }
 
-.featuresContent {
+.menuItemIcon {
+  color: var(--button-color);
+}
+
+.menuItem:hover .menuItemIcon {
+  color: var(--save-size-color);
 }

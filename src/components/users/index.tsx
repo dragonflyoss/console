@@ -47,6 +47,8 @@ import { ROLE_ROOT, ROLE_GUEST, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../l
 import { useNavigate } from 'react-router-dom';
 import { CancelLoadingButton, SavelLoadingButton } from '../loding-button';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 
 const useStyles = makeStyles((theme: any) => ({
   tableRow: {
@@ -92,7 +94,7 @@ export default function Users() {
   const [userDetail, setUserDetail] = useState(false);
   const [switchUser, setSwitchUser] = useState(false);
   const [userID, setUserID] = useState('');
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedRow, setSelectedRow] = useState<getUsersResponse | null>(null);
   const [loadingButton, setLoadingButton] = useState(false);
   const [userPage, setUserPage] = useState(1);
   const [userTotalPages, setUserTotalPages] = useState<number>(1);
@@ -110,7 +112,6 @@ export default function Users() {
   const [role, setRole] = useState(['']);
   const [detailRole, setDetailRole] = useState('');
   const [updateRole, setUpdatelRole] = useState('');
-  const [userSelectedRow, setUserSelectedRow] = useState<getUsersResponse>();
   const [anchorElement, setAnchorElement] = useState(null);
 
   const classes = useStyles();
@@ -150,7 +151,6 @@ export default function Users() {
     try {
       setUserDetail(true);
       setDetailIsLoading(true);
-      setSelectedRow(row);
 
       const user = await getUser(row.id);
       const role = await getUserRoles(row.id);
@@ -170,7 +170,6 @@ export default function Users() {
 
   const openSwitchUser = async (row: any) => {
     try {
-      setSelectedRow(row);
       setUserID(row.id);
 
       const role = await getUserRoles(row.id);
@@ -191,6 +190,7 @@ export default function Users() {
     setUserDetail(false);
     setSwitchUser(false);
     setSelectedRow(null);
+    setAnchorElement(null);
   };
 
   const handleSubmit = async () => {
@@ -244,8 +244,6 @@ export default function Users() {
     setSuccessMessage(false);
     setErrorMessage(false);
   };
-
-  console.log(userSelectedRow);
 
   return (
     <ThemeProvider theme={theme}>
@@ -335,59 +333,28 @@ export default function Users() {
               allUsers.map((item) => (
                 <TableRow
                   id="user-table-row"
-                  sx={{
-                    '&.MuiTableRow-root': {
-                      ':hover': {
-                        background: selectedRow === item ? 'var(--button-color)' : '',
-                      },
-                    },
-                  }}
                   key={item?.name}
                   selected={selectedRow === item}
-                  className={`${classes.tableRow} ${selectedRow === item ? classes.selected : ''}`}
-                  classes={{ selected: classes.selected }}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell align="center">
-                    {isLoading ? (
-                      <Skeleton />
-                    ) : (
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Avatar
-                          alt="Remy Sharp"
-                          sx={{
-                            '&.MuiAvatar-root': {
-                              background: 'var(--button-color)',
-                              color: '#fff',
-                            },
-                          }}
-                          className={`${classes.tableCell} ${selectedRow === item ? classes.selectedTableAvatar : ''}`}
-                          src={item?.avatar}
-                        />
-                      </Box>
-                    )}
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Avatar
+                        alt="Remy Sharp"
+                        sx={{
+                          '&.MuiAvatar-root': {
+                            background: 'var(--button-color)',
+                            color: '#fff',
+                          },
+                        }}
+                        src={item?.avatar}
+                      />
+                    </Box>
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    className={`${classes.tableCell} ${selectedRow === item ? classes.selectedTableCell : ''}`}
-                  >
-                    {item?.name || '-'}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={`${classes.tableCell} ${selectedRow === item ? classes.selectedTableCell : ''}`}
-                  >
-                    {item?.email || '-'}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={`${classes.tableCell} ${selectedRow === item ? classes.selectedTableCell : ''}`}
-                  >
-                    {item?.location || '-'}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={`${classes.tableCell} ${selectedRow === item ? classes.selectedTableCell : ''}`}
-                  >
+                  <TableCell align="center">{item?.name || '-'}</TableCell>
+                  <TableCell align="center">{item?.email || '-'}</TableCell>
+                  <TableCell align="center">{item?.location || '-'}</TableCell>
+                  <TableCell align="center">
                     {isLoading ? (
                       <Skeleton />
                     ) : (
@@ -410,11 +377,11 @@ export default function Users() {
                     <IconButton
                       onClick={(event: any) => {
                         setAnchorElement(event.currentTarget);
-                        setUserSelectedRow(item);
+                        setSelectedRow(item);
                       }}
                       id={`action-${item?.name}`}
                       aria-haspopup="true"
-                      sx={{ position: 'relative', padding: '0' }}
+                      sx={{ position: 'relative' }}
                     >
                       <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
                     </IconButton>
@@ -422,9 +389,7 @@ export default function Users() {
                       anchorEl={anchorElement}
                       id="account-menu"
                       open={Boolean(anchorElement)}
-                      onClose={() => {
-                        setAnchorElement(null);
-                      }}
+                      onClose={closeAllPopups}
                       sx={{
                         position: 'absolute',
                         left: '-5rem',
@@ -433,50 +398,37 @@ export default function Users() {
                           boxShadow:
                             '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
                         },
+                        '& .MuiMenu-list': {
+                          p: 0,
+                        },
                       }}
                     >
                       <MenuItem
-                        id={`detail-${userSelectedRow?.name}`}
+                        className={styles.menuItem}
+                        id={`detail-${selectedRow?.name}`}
                         onClick={() => {
-                          handleChange(userSelectedRow);
+                          handleChange(selectedRow);
                           setAnchorElement(null);
-                        }}
-                        sx={{
-                          '&:hover': {
-                            backgroundColor: '#D9D9D9',
-                          },
                         }}
                       >
                         <ListItemIcon>
-                          <Box
-                            component="img"
-                            sx={{ width: '1.5rem', height: '1.5rem' }}
-                            src="/icons/user/detail.svg"
-                          />
+                          <PersonOutlineOutlinedIcon className={styles.menuItemIcon} />
                         </ListItemIcon>
                         Detail
                       </MenuItem>
-                      {userSelectedRow?.name === 'root' ? (
+                      {selectedRow?.name === 'root' ? (
                         <></>
                       ) : (
                         <MenuItem
-                          sx={{
-                            '&:hover': {
-                              backgroundColor: '#D9D9D9',
-                            },
-                          }}
-                          id={`edit-${userSelectedRow?.name}`}
+                          className={styles.menuItem}
+                          id={`edit-${selectedRow?.name}`}
                           onClick={() => {
-                            openSwitchUser(userSelectedRow);
+                            openSwitchUser(selectedRow);
                             setAnchorElement(null);
                           }}
                         >
                           <ListItemIcon>
-                            <Box
-                              component="img"
-                              sx={{ width: '1.5rem', height: '1.5rem' }}
-                              src="/icons/user/user-edit.svg"
-                            />
+                            <DriveFileRenameOutlineOutlinedIcon className={styles.menuItemIcon} />
                           </ListItemIcon>
                           Edit Role
                         </MenuItem>

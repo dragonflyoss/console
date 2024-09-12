@@ -88,6 +88,7 @@ import SearchCircularProgress from '../circular-progress';
 import { CancelLoadingButton, SavelLoadingButton } from '../loding-button';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 
 const theme = createTheme({
   palette: {
@@ -1735,15 +1736,14 @@ export default function ShowCluster() {
                                   boxShadow:
                                     '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
                                 },
+                                '& .MuiMenu-list': {
+                                  p: 0,
+                                },
                               }}
                             >
                               {schedulerFeatures && schedulerFeatures.length > 0 ? (
                                 <MenuItem
-                                  sx={{
-                                    '&:hover': {
-                                      backgroundColor: '#D9D9D9',
-                                    },
-                                  }}
+                                  className={styles.menuItem}
                                   id={`edit-${schedulerSelectedRow?.host_name}`}
                                   onClick={() => {
                                     setOpenSchedulerEditFeatures(true);
@@ -1751,11 +1751,7 @@ export default function ShowCluster() {
                                   }}
                                 >
                                   <ListItemIcon>
-                                    <Box
-                                      component="img"
-                                      sx={{ width: '1.5rem', height: '1.5rem' }}
-                                      src="/icons/user/user-edit.svg"
-                                    />
+                                    <DriveFileRenameOutlineOutlinedIcon className={styles.menuItemIcon} />
                                   </ListItemIcon>
                                   Edit Features
                                 </MenuItem>
@@ -1763,11 +1759,7 @@ export default function ShowCluster() {
                                 ''
                               )}
                               <MenuItem
-                                sx={{
-                                  '&:hover': {
-                                    backgroundColor: '#D9D9D9',
-                                  },
-                                }}
+                                className={styles.menuItem}
                                 id={`delete-${schedulerSelectedRow?.host_name}`}
                                 onClick={() => {
                                   openHandleScheduler(schedulerSelectedRow);
@@ -1775,7 +1767,7 @@ export default function ShowCluster() {
                                 }}
                               >
                                 <ListItemIcon>
-                                  <DeleteOutlineIcon sx={{ color: 'var(--button-color)' }} />
+                                  <DeleteOutlineIcon className={styles.menuItemIcon} />
                                 </ListItemIcon>
                                 Delete
                               </MenuItem>
@@ -1857,78 +1849,76 @@ export default function ShowCluster() {
         </Box>
         <Divider />
         <DialogContent>
-          <Box className={styles.featuresWrapper}>
-            <Paper
-              variant="outlined"
-              sx={{
-                p: '0.2rem 0.4rem',
-                m: '0.6rem 0',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box className={styles.featuresIconWrapper}>
-                  <Box className={styles.featuresIconContainer}>
-                    <Box component="img" className={styles.featuresIcon} src="/icons/cluster/scheduler.svg" />
-                  </Box>
-                </Box>
-                <Box>
-                  <Typography variant="subtitle1" fontFamily="mabry-bold">
-                    Schedule
-                  </Typography>
-                  <Typography variant="subtitle2" color="rgb(82 82 82 / 87%)">
-                    If schedule feature is enabled, the scheduler can schedule download tasks.
-                  </Typography>
+          <Paper
+            variant="outlined"
+            sx={{
+              p: '0.2rem 0.4rem',
+              m: '0.6rem 0',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box className={styles.featuresIconWrapper}>
+                <Box className={styles.featuresIconContainer}>
+                  <Box component="img" className={styles.featuresIcon} src="/icons/cluster/scheduler.svg" />
                 </Box>
               </Box>
-              <Checkbox
-                size="small"
-                id="Schedule-Checkbox"
-                checked={featuresScheduler}
-                onChange={(e) => {
-                  setFeaturesScheduler(e.target.checked);
-                }}
-                inputProps={{ 'aria-label': 'controlled' }}
-              />
-            </Paper>
-            <Paper
-              variant="outlined"
-              sx={{
-                p: '0.2rem 0.4rem',
-                m: '0.6rem 0',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+              <Box>
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
+                  Schedule
+                </Typography>
+                <Typography variant="subtitle2" color="rgb(82 82 82 / 87%)">
+                  If schedule feature is enabled, the scheduler can schedule download tasks.
+                </Typography>
+              </Box>
+            </Box>
+            <Checkbox
+              size="small"
+              id="Schedule-Checkbox"
+              checked={featuresScheduler}
+              onChange={(e) => {
+                setFeaturesScheduler(e.target.checked);
               }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box className={styles.featuresIconWrapper}>
-                  <Box className={styles.featuresIconContainer}>
-                    <Box component="img" className={styles.featuresIcon} src="/icons/cluster/preheat.svg" />
-                  </Box>
-                </Box>
-                <Box>
-                  <Typography variant="subtitle1" fontFamily="mabry-bold">
-                    Preheat
-                  </Typography>
-                  <Typography variant="subtitle2" color="rgb(82 82 82 / 87%)">
-                    If preheat feature is enabled, the scheduler can execute preheating job.
-                  </Typography>
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </Paper>
+          <Paper
+            variant="outlined"
+            sx={{
+              p: '0.2rem 0.4rem',
+              m: '0.6rem 0',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box className={styles.featuresIconWrapper}>
+                <Box className={styles.featuresIconContainer}>
+                  <Box component="img" className={styles.featuresIcon} src="/icons/cluster/preheat.svg" />
                 </Box>
               </Box>
-              <Checkbox
-                size="small"
-                id="Preheat-Checkbox"
-                checked={featuresPreheat}
-                onChange={(e) => {
-                  setFeaturesPreheat(e.target.checked);
-                }}
-                inputProps={{ 'aria-label': 'controlled' }}
-              />
-            </Paper>
-          </Box>
+              <Box>
+                <Typography variant="subtitle1" fontFamily="mabry-bold">
+                  Preheat
+                </Typography>
+                <Typography variant="subtitle2" color="rgb(82 82 82 / 87%)">
+                  If preheat feature is enabled, the scheduler can execute preheating job.
+                </Typography>
+              </Box>
+            </Box>
+            <Checkbox
+              size="small"
+              id="Preheat-Checkbox"
+              checked={featuresPreheat}
+              onChange={(e) => {
+                setFeaturesPreheat(e.target.checked);
+              }}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </Paper>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
             <CancelLoadingButton
               id="cancelEditFeatures"
@@ -2181,14 +2171,13 @@ export default function ShowCluster() {
                                   boxShadow:
                                     '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
                                 },
+                                '& .MuiMenu-list': {
+                                  p: 0,
+                                },
                               }}
                             >
                               <MenuItem
-                                sx={{
-                                  '&:hover': {
-                                    backgroundColor: '#D9D9D9',
-                                  },
-                                }}
+                                className={styles.menuItem}
                                 id={`delete-${seedPeerSelectedRow?.host_name}`}
                                 onClick={() => {
                                   openHandleSeedPeer(seedPeerSelectedRow);
@@ -2196,7 +2185,10 @@ export default function ShowCluster() {
                                 }}
                               >
                                 <ListItemIcon>
-                                  <DeleteOutlineIcon sx={{ color: 'var(--button-color)' }} />
+                                  <DeleteOutlineIcon
+                                    sx={{ color: 'var(--button-color)' }}
+                                    className={styles.menuItemIcon}
+                                  />
                                 </ListItemIcon>
                                 Delete
                               </MenuItem>

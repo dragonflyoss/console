@@ -42,6 +42,8 @@ describe('Preheat', () => {
   });
 
   it('click the breadcrumb', () => {
+    cy.get('[data-testid="isloading"]').should('be.exist');
+
     cy.get(':nth-child(6) > .css-1mlhis1 > .css-1ozvesn > .MuiTypography-root > .MuiBox-root').click();
 
     cy.url().should('include', '/jobs/preheats/6');
@@ -51,27 +53,34 @@ describe('Preheat', () => {
 
     cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root').click();
 
+    cy.get('[data-testid="isloading"]').should('not.exist');
+
     // Then I see that the current page is the preheats page!
     cy.url().should('include', '/jobs/preheats');
   });
 
   describe('when data is loaded', () => {
     it('should display detailed preheat failure information', () => {
+      // Click the preheat details button.
+
       cy.intercept(
         {
           method: 'GET',
           url: '/api/v1/jobs/10',
         },
         (req) => {
-          req.reply({
-            statusCode: 200,
-            body: failurePreheat,
+          req.reply((res) => {
+            res.setDelay(1000);
+            res.send({
+              statusCode: 200,
+              body: failurePreheat,
+            });
           });
         },
       );
-
-      // Click the preheat details button.
       cy.get('#preheat-10').click();
+
+      cy.get('[data-testid="preheat-isloading"]').should('be.exist');
 
       // Check for breadcrumb.
       cy.get('.MuiBreadcrumbs-ol').should('exist');
@@ -85,6 +94,8 @@ describe('Preheat', () => {
         'have.text',
         'This is a preheat task with status failure',
       );
+
+      cy.get('[data-testid="preheat-isloading"]').should('not.exist');
 
       // Show preheat status.
       cy.get('#status')

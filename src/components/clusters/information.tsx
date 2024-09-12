@@ -1,5 +1,16 @@
 import Divider from '@mui/material/Divider';
-import { Box, Grid, Tooltip, Typography, Paper, DialogTitle, DialogContent, IconButton, Skeleton, Chip } from '@mui/material';
+import {
+  Box,
+  Grid,
+  Tooltip,
+  Typography,
+  Paper,
+  DialogTitle,
+  DialogContent,
+  IconButton,
+  Skeleton,
+  Chip,
+} from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import styles from './information.module.css';
@@ -83,7 +94,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                   textAlign: 'center',
                 }}
               >
-                {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.bio || '-'}
+                {isLoading ? <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} /> : cluster?.bio || '-'}
               </Typography>
             </Tooltip>
           </Box>
@@ -101,7 +112,13 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
               </Tooltip>
             </Box>
             <Typography variant="subtitle1" component="div" fontFamily="mabry-bold">
-              {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster.is_default ? 'Yes' : 'No'}
+              {isLoading ? (
+                <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
+              ) : cluster.is_default ? (
+                'Yes'
+              ) : (
+                'No'
+              )}
             </Typography>
           </Box>
           <Divider orientation="vertical" flexItem />
@@ -119,7 +136,11 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="subtitle1" component="div" fontFamily="mabry-bold" mr="0.4rem">
-                {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.scheduler_cluster_id || 0}
+                {isLoading ? (
+                  <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
+                ) : (
+                  cluster?.scheduler_cluster_id || 0
+                )}
               </Typography>
               {isLoading ? (
                 <></>
@@ -176,7 +197,11 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="subtitle1" component="div" fontFamily="mabry-bold" mr="0.4rem">
-                {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.seed_peer_cluster_id || 0}
+                {isLoading ? (
+                  <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
+                ) : (
+                  cluster?.seed_peer_cluster_id || 0
+                )}
               </Typography>
               {isLoading ? (
                 <></>
@@ -257,7 +282,11 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                   <Box className={styles.locationTextContainer}>
                     <Tooltip title={cluster?.scopes?.location || '-'} placement="top">
                       <Typography variant="subtitle1" component="div" className={styles.locationContent}>
-                        {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster?.scopes?.location || '-'}
+                        {isLoading ? (
+                          <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
+                        ) : (
+                          cluster?.scopes?.location || '-'
+                        )}
                       </Typography>
                     </Tooltip>
                   </Box>
@@ -279,10 +308,9 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                     </Box>
                     <Chip
                       size="small"
-                      icon={
-                        <Box component="img" className={styles.scopesIcon} src="/icons/cluster/idc.svg" />
-                      }
-                      label={`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`} />
+                      icon={<Box component="img" className={styles.scopesIcon} src="/icons/cluster/idc.svg" />}
+                      label={`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`}
+                    />
                   </Box>
                   <Box className={styles.cidrsTags}>
                     {cluster?.scopes?.idc ? (
@@ -292,7 +320,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                             <Tooltip title={cluster?.scopes?.idc.split('|')[0] || '-'} placement="top">
                               <Typography variant="body2" component="div" className={styles.cidrsText}>
                                 {isLoading ? (
-                                  <Skeleton sx={{ width: '8rem' }} />
+                                  <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
                                 ) : (
                                   cluster?.scopes?.idc.split('|')[0] || '-'
                                 )}
@@ -304,49 +332,46 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                               <Tooltip title={cluster?.scopes?.idc.split('|')[1] || ''} placement="top">
                                 <Typography variant="body2" component="div" className={styles.cidrsText}>
                                   {isLoading ? (
-                                    <Skeleton sx={{ width: '8rem' }} />
+                                    <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
                                   ) : (
                                     cluster?.scopes?.idc.split('|')[1] || ''
                                   )}
                                 </Typography>
                               </Tooltip>
                             </Paper>
-                          )
-                            : (
-                              <></>
-                            )}
+                          ) : (
+                            <></>
+                          )}
                           {cluster?.scopes?.idc.split('|').length > 2 ? (
                             <Paper variant="outlined" className={styles.cidrsContent}>
                               <Tooltip title={cluster?.scopes?.idc.split('|')[2] || ''} placement="top">
                                 <Typography variant="body2" component="div" className={styles.cidrsText}>
                                   {isLoading ? (
-                                    <Skeleton sx={{ width: '8rem' }} />
+                                    <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
                                   ) : (
                                     cluster?.scopes?.idc.split('|')[2] || ''
                                   )}
                                 </Typography>
                               </Tooltip>
                             </Paper>
-                          )
-                            : (
-                              <></>
-                            )}
+                          ) : (
+                            <></>
+                          )}
                           {cluster?.scopes?.idc.split('|').length > 3 ? (
                             <Paper variant="outlined" className={styles.cidrsContent}>
                               <Tooltip title={cluster?.scopes?.idc.split('|')[3] || ''} placement="top">
                                 <Typography variant="body2" component="div" className={styles.cidrsText}>
                                   {isLoading ? (
-                                    <Skeleton sx={{ width: '8rem' }} />
+                                    <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
                                   ) : (
                                     cluster?.scopes?.idc.split('|')[3] || ''
                                   )}
                                 </Typography>
                               </Tooltip>
                             </Paper>
-                          )
-                            : (
-                              <></>
-                            )}
+                          ) : (
+                            <></>
+                          )}
                         </Box>
                         {cluster?.scopes?.idc.split('|').length > 2 ? (
                           <IconButton
@@ -408,13 +433,12 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                     </Box>
                     <Chip
                       size="small"
-                      icon={
-                        <Box component="img" className={styles.scopesIcon} src="/icons/cluster/cidrs.svg" />
-                      }
-                      label={`Total: ${cluster?.scopes?.cidrs?.length ? cluster?.scopes?.cidrs?.length : 0}`} />
+                      icon={<Box component="img" className={styles.scopesIcon} src="/icons/cluster/cidrs.svg" />}
+                      label={`Total: ${cluster?.scopes?.cidrs?.length ? cluster?.scopes?.cidrs?.length : 0}`}
+                    />
                   </Box>
                   {isLoading ? (
-                    <Skeleton sx={{ width: '10rem' }} />
+                    <Skeleton data-testid="cluster-loading" sx={{ width: '10rem' }} />
                   ) : (
                     <Box className={styles.cidrsTags}>
                       {cluster?.scopes?.cidrs?.length > 0 ? (
@@ -524,13 +548,12 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                     </Box>
                     <Chip
                       size="small"
-                      icon={
-                        <Box component="img" className={styles.scopesIcon} src="/icons/cluster/hostnames.svg" />
-                      }
-                      label={`Total: ${cluster?.scopes?.hostnames?.length ? cluster?.scopes?.hostnames?.length : 0}`} />
+                      icon={<Box component="img" className={styles.scopesIcon} src="/icons/cluster/hostnames.svg" />}
+                      label={`Total: ${cluster?.scopes?.hostnames?.length ? cluster?.scopes?.hostnames?.length : 0}`}
+                    />
                   </Box>
                   {isLoading ? (
-                    <Skeleton sx={{ width: '10rem' }} />
+                    <Skeleton data-testid="cluster-loading" sx={{ width: '10rem' }} />
                   ) : (
                     <Box className={styles.cidrsTags}>
                       {cluster?.scopes?.hostnames?.length > 0 ? (
@@ -650,7 +673,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                 </Box>
                 {isLoading ? (
                   <Box sx={{ width: '20%' }}>
-                    <Skeleton />
+                    <Skeleton data-testid="cluster-loading" />
                   </Box>
                 ) : (
                   <Typography component="div">{cluster?.seed_peer_cluster_config?.load_limit || 0}</Typography>
@@ -671,7 +694,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                 </Box>
                 {isLoading ? (
                   <Box sx={{ width: '20%' }}>
-                    <Skeleton />
+                    <Skeleton data-testid="cluster-loading" />
                   </Box>
                 ) : (
                   <Typography component="div">{cluster?.peer_cluster_config?.load_limit || 0}</Typography>
@@ -692,7 +715,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                 </Box>
                 {isLoading ? (
                   <Box sx={{ width: '20%' }}>
-                    <Skeleton />
+                    <Skeleton data-testid="cluster-loading" />
                   </Box>
                 ) : (
                   <Typography component="div">
@@ -715,7 +738,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                 </Box>
                 {isLoading ? (
                   <Box sx={{ width: '20%' }}>
-                    <Skeleton />
+                    <Skeleton data-testid="cluster-loading" />
                   </Box>
                 ) : (
                   <Typography component="div">{cluster?.scheduler_cluster_config?.filter_parent_limit || 0}</Typography>

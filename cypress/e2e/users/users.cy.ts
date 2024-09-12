@@ -42,18 +42,6 @@ describe('Users', () => {
       cy.intercept(
         {
           method: 'GET',
-          url: '/api/v1/users/3',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: guestUser,
-          });
-        },
-      );
-      cy.intercept(
-        {
-          method: 'GET',
           url: '/api/v1/users/2/roles',
         },
         (req) => {
@@ -78,6 +66,9 @@ describe('Users', () => {
     });
 
     it('can display users table', () => {
+      // Show isloading.
+      cy.get('[data-testid="isloading"]').should('be.exist');
+
       // Show root user information.
       cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').and('have.text', 'root');
 
@@ -95,8 +86,13 @@ describe('Users', () => {
       // The update role button for the root user is not displayed.
       cy.get('#edit-root > .MuiBox-root').should('not.exist');
 
+      // Does not show isloading.
+      cy.get('[data-testid="isloading"]').should('not.exist');
+
+      cy.get('#action-root').click();
+
       // Show root user detail button.
-      cy.get('#detail-root > .MuiBox-root').should('exist');
+      cy.get('#detail-root').should('exist');
 
       // Show lucy user information.
       cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(2)').should('be.visible').and('have.text', 'lucy');
@@ -108,9 +104,12 @@ describe('Users', () => {
       cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(4)').should('be.visible').and('have.text', 'Hangzhou');
 
       cy.get('.MuiTableBody-root > :nth-child(2) > :nth-child(5)').should('be.visible').and('have.text', 'Enable');
+      cy.get('body').click('topLeft');
 
-      cy.get('#edit-lucy > .MuiBox-root').should('exist');
-      cy.get('#detail-lucy > .MuiBox-root').should('exist');
+      cy.get('#action-lucy').click();
+
+      cy.get('#edit-lucy').should('exist');
+      cy.get('#detail-lucy').should('exist');
 
       // Show jack user information.
       cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(2)').should('be.visible').and('have.text', 'jack');
@@ -123,13 +122,18 @@ describe('Users', () => {
 
       cy.get('.MuiTableBody-root > :nth-child(3) > :nth-child(5)').should('be.visible').and('have.text', 'Enable');
 
-      cy.get('#edit-jack > .MuiBox-root').should('exist');
-      cy.get('#detail-jack > .MuiBox-root').should('exist');
+      // Close menu.
+      cy.get('body').click('topLeft');
+      cy.get('#action-jack').click();
+      cy.get('#edit-jack').should('exist');
+      cy.get('#detail-jack').should('exist');
     });
 
     it('can display user detail', () => {
       // Click detail button.
-      cy.get('#detail-root > .MuiBox-root').click();
+      cy.get('#action-root').click();
+
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #detail-root').click();
 
       // Display user lucy details.
       cy.get('.MuiDrawer-root > .MuiPaper-root').should('be.visible');
@@ -145,7 +149,27 @@ describe('Users', () => {
       // closure user details.
       cy.get('.MuiListSubheader-root > .MuiButtonBase-root').click();
 
-      cy.get('#detail-jack').click();
+      cy.get('#action-jack').click();
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/users/3',
+        },
+        (req) => {
+          req.reply((res) => {
+            res.setDelay(1000);
+            res.send({
+              statusCode: 200,
+              body: guestUser,
+            });
+          });
+        },
+      );
+
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #detail-jack').click();
+
+      cy.get('[data-testid="detail-isloading"]').should('be.exist');
 
       // Display user jack details.
       cy.get('.MuiDrawer-root > .MuiPaper-root').should('be.visible');
@@ -157,18 +181,22 @@ describe('Users', () => {
       cy.get('.users_emailContent__jraG8 > .MuiTypography-root').should('have.text', 'Shanghai');
       cy.get('.MuiList-root > :nth-child(15)').should('contain', '2023-11-07 06:09:04');
       cy.get('.MuiList-root > :nth-child(17)').should('contain', '2023-11-07 06:09:04');
+
+      cy.get('[data-testid="detail-isloading"]').should('not.exist');
     });
 
     it('can display update user', () => {
       // Click update user button.
-      cy.get('#edit-lucy > .MuiBox-root').click();
+      cy.get('#action-lucy').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-lucy').click();
 
       // Check role.
       cy.get('#role-root').should('be.checked').check({ force: true });
       cy.get('#role-guest');
       cy.get('body').click('topLeft');
 
-      cy.get('#edit-jack > .MuiBox-root').click();
+      cy.get('#action-jack').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-jack').click();
 
       cy.get('#role-root').should('not.be.checked');
       cy.get('#role-guest').should('be.checked').check({ force: true });
@@ -272,7 +300,8 @@ describe('Users', () => {
         },
       );
 
-      cy.get('#detail-jack').click();
+      cy.get('#action-jack').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #detail-jack').click();
 
       // Display user jack details.
       cy.get(':nth-child(3) > .css-e784if-MuiTypography-root').should('have.text', 0);
@@ -401,7 +430,8 @@ describe('Users', () => {
         },
       );
 
-      cy.get('#edit-lucy > .MuiBox-root').click();
+      cy.get('#action-lucy').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-lucy').click();
 
       cy.get('#role-root').should('be.checked').check({ force: true });
       cy.get('#role-guest').should('not.be.checked');
@@ -424,7 +454,8 @@ describe('Users', () => {
         },
       );
 
-      cy.get('#edit-lucy > .MuiBox-root').click();
+      cy.get('#action-lucy').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-lucy').click();
 
       // Change success message.
       cy.get('.MuiAlert-message').should('be.visible').and('have.text', 'Submission successful!');
@@ -472,7 +503,8 @@ describe('Users', () => {
         },
       );
 
-      cy.get('#edit-jack > .MuiBox-root').click();
+      cy.get('#action-jack').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-jack').click();
 
       // Check if role is guest.
       cy.get('#role-root').should('not.be.checked');
@@ -496,7 +528,8 @@ describe('Users', () => {
         },
       );
 
-      cy.get('#edit-jack > .MuiBox-root').click();
+      cy.get('#action-jack').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-jack').click();
 
       // Check if role is root.
       cy.get('#role-root').should('be.checked').check({ force: true });
@@ -557,7 +590,8 @@ describe('Users', () => {
       );
 
       // Click edit button.
-      cy.get('#edit-lucy > .MuiBox-root').click();
+      cy.get('#action-lucy').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-lucy').click();
 
       cy.get('#role-root').should('be.checked').check({ force: true });
       cy.get('#role-guest').should('not.be.checked');
@@ -582,7 +616,8 @@ describe('Users', () => {
         },
       );
 
-      cy.get('#edit-lucy > .MuiBox-root').click();
+      cy.get('#action-lucy').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-lucy').click();
 
       // Check role.
       cy.get('#role-root').should('not.be.checked');
@@ -633,7 +668,8 @@ describe('Users', () => {
         },
       );
 
-      cy.get('#edit-lucy > .MuiBox-root').click();
+      cy.get('#action-lucy').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-lucy').click();
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('have.text', 'Failed to fetch');
@@ -679,7 +715,8 @@ describe('Users', () => {
         },
       );
 
-      cy.get('#edit-lucy > .MuiBox-root').click();
+      cy.get('#action-lucy').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-lucy').click();
 
       // Check if role is root.
       cy.get('#role-root').should('be.checked').check({ force: true });

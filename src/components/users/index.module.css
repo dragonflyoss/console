@@ -42,3 +42,16 @@
   width: 1.6rem;
   height: 1.6rem;
 }
+
+.menuItem:hover {
+  background-color: var(--button-color) !important;
+  color: var(--save-size-color);
+}
+
+.menuItemIcon {
+  color: var(--button-color);
+}
+
+.menuItem:hover .menuItemIcon {
+  color: var(--save-size-color);
+}

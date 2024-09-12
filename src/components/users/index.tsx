@@ -7,7 +7,6 @@ import {
   Breadcrumbs,
   Chip,
   Dialog,
-  DialogActions,
   DialogContent,
   Drawer,
   FormControl,
@@ -33,18 +32,23 @@ import {
   Pagination,
   ThemeProvider,
   createTheme,
+  MenuItem,
+  Menu,
+  ListItemIcon,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole, getUsersResponse } from '../../lib/api';
 import { makeStyles } from '@mui/styles';
 import { getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
-import { LoadingButton } from '@mui/lab';
-import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import styles from './index.module.css';
 import _ from 'lodash';
 import { ROLE_ROOT, ROLE_GUEST, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../lib/constants';
 import { useNavigate } from 'react-router-dom';
+import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 
 const useStyles = makeStyles((theme: any) => ({
   tableRow: {
@@ -90,7 +94,7 @@ export default function Users() {
   const [userDetail, setUserDetail] = useState(false);
   const [switchUser, setSwitchUser] = useState(false);
   const [userID, setUserID] = useState('');
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedRow, setSelectedRow] = useState<getUsersResponse | null>(null);
   const [loadingButton, setLoadingButton] = useState(false);
   const [userPage, setUserPage] = useState(1);
   const [userTotalPages, setUserTotalPages] = useState<number>(1);
@@ -108,6 +112,7 @@ export default function Users() {
   const [role, setRole] = useState(['']);
   const [detailRole, setDetailRole] = useState('');
   const [updateRole, setUpdatelRole] = useState('');
+  const [anchorElement, setAnchorElement] = useState(null);
 
   const classes = useStyles();
   const navigate = useNavigate();
@@ -146,7 +151,6 @@ export default function Users() {
     try {
       setUserDetail(true);
       setDetailIsLoading(true);
-      setSelectedRow(row);
 
       const user = await getUser(row.id);
       const role = await getUserRoles(row.id);
@@ -166,7 +170,6 @@ export default function Users() {
 
   const openSwitchUser = async (row: any) => {
     try {
-      setSelectedRow(row);
       setUserID(row.id);
 
       const role = await getUserRoles(row.id);
@@ -187,6 +190,7 @@ export default function Users() {
     setUserDetail(false);
     setSwitchUser(false);
     setSelectedRow(null);
+    setAnchorElement(null);
   };
 
   const handleSubmit = async () => {
@@ -295,32 +299,32 @@ export default function Users() {
               <TableRow id="user-table-row">
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Skeleton variant="circular" component="div" width={40} height={40} />
+                    <Skeleton data-testid="isloading" variant="circular" component="div" width={40} height={40} />
                   </Box>
                 </TableCell>
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Skeleton width="2rem" />
+                    <Skeleton data-testid="isloading" width="2rem" />
                   </Box>
                 </TableCell>
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Skeleton width="4rem" />
+                    <Skeleton data-testid="isloading" width="4rem" />
                   </Box>
                 </TableCell>
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Skeleton width="2rem" />
+                    <Skeleton data-testid="isloading" width="2rem" />
                   </Box>
                 </TableCell>
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Skeleton width="3.8rem" height="2.8rem" />
+                    <Skeleton data-testid="isloading" width="3.8rem" height="2.8rem" />
                   </Box>
                 </TableCell>
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Skeleton variant="circular" component="div" width={40} height={40} />
+                    <Skeleton data-testid="isloading" variant="circular" component="div" width={40} height={40} />
                   </Box>
                 </TableCell>
               </TableRow>
@@ -329,59 +333,28 @@ export default function Users() {
               allUsers.map((item) => (
                 <TableRow
                   id="user-table-row"
-                  sx={{
-                    '&.MuiTableRow-root': {
-                      ':hover': {
-                        background: selectedRow === item ? 'var(--button-color)' : '',
-                      },
-                    },
-                  }}
                   key={item?.name}
                   selected={selectedRow === item}
-                  className={`${classes.tableRow} ${selectedRow === item ? classes.selected : ''}`}
-                  classes={{ selected: classes.selected }}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell align="center">
-                    {isLoading ? (
-                      <Skeleton />
-                    ) : (
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Avatar
-                          alt="Remy Sharp"
-                          sx={{
-                            '&.MuiAvatar-root': {
-                              background: 'var(--button-color)',
-                              color: '#fff',
-                            },
-                          }}
-                          className={`${classes.tableCell} ${selectedRow === item ? classes.selectedTableAvatar : ''}`}
-                          src={item?.avatar}
-                        />
-                      </Box>
-                    )}
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Avatar
+                        alt="Remy Sharp"
+                        sx={{
+                          '&.MuiAvatar-root': {
+                            background: 'var(--button-color)',
+                            color: '#fff',
+                          },
+                        }}
+                        src={item?.avatar}
+                      />
+                    </Box>
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    className={`${classes.tableCell} ${selectedRow === item ? classes.selectedTableCell : ''}`}
-                  >
-                    {isLoading ? <Skeleton /> : item?.name || '-'}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={`${classes.tableCell} ${selectedRow === item ? classes.selectedTableCell : ''}`}
-                  >
-                    {isLoading ? <Skeleton /> : item?.email || '-'}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={`${classes.tableCell} ${selectedRow === item ? classes.selectedTableCell : ''}`}
-                  >
-                    {isLoading ? <Skeleton /> : item?.location || '-'}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={`${classes.tableCell} ${selectedRow === item ? classes.selectedTableCell : ''}`}
-                  >
+                  <TableCell align="center">{item?.name || '-'}</TableCell>
+                  <TableCell align="center">{item?.email || '-'}</TableCell>
+                  <TableCell align="center">{item?.location || '-'}</TableCell>
+                  <TableCell align="center">
                     {isLoading ? (
                       <Skeleton />
                     ) : (
@@ -401,59 +374,67 @@ export default function Users() {
                     )}
                   </TableCell>
                   <TableCell align="center">
-                    {item?.name === 'root' ? (
-                      <IconButton
-                        className={`${classes.tableCell} ${selectedRow === item ? classes.selectedButton : ''}`}
-                        sx={{
-                          '&.MuiButton-root': {
-                            backgroundColor: 'var(--button-color)',
-                            borderRadius: 0,
-                            color: '#fff',
-                          },
-                        }}
-                        id={`detail-${item.name}`}
+                    <IconButton
+                      onClick={(event: any) => {
+                        setAnchorElement(event.currentTarget);
+                        setSelectedRow(item);
+                      }}
+                      id={`action-${item?.name}`}
+                      aria-haspopup="true"
+                      sx={{ position: 'relative' }}
+                    >
+                      <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorElement}
+                      id="account-menu"
+                      open={Boolean(anchorElement)}
+                      onClose={closeAllPopups}
+                      sx={{
+                        position: 'absolute',
+                        left: '-5rem',
+                        width: '16rem',
+                        '& .MuiMenu-paper': {
+                          boxShadow:
+                            '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
+                        },
+                        '& .MuiMenu-list': {
+                          p: 0,
+                          width: '10rem',
+                        },
+                      }}
+                    >
+                      <MenuItem
+                        className={styles.menuItem}
+                        id={`detail-${selectedRow?.name}`}
                         onClick={() => {
-                          handleChange(item);
+                          handleChange(selectedRow);
+                          setAnchorElement(null);
                         }}
                       >
-                        <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/detail.svg" />
-                      </IconButton>
-                    ) : (
-                      <>
-                        <IconButton
-                          className={`${classes.tableCell} ${selectedRow === item ? classes.selectedButton : ''}`}
-                          sx={{
-                            '&.MuiButton-root': {
-                              backgroundColor: 'var(--button-color)',
-                              borderRadius: 0,
-                              color: '#fff',
-                            },
-                          }}
-                          id={`edit-${item.name}`}
+                        <ListItemIcon>
+                          <PersonOutlineOutlinedIcon className={styles.menuItemIcon} />
+                        </ListItemIcon>
+                        Detail
+                      </MenuItem>
+                      {selectedRow?.name === 'root' ? (
+                        <></>
+                      ) : (
+                        <MenuItem
+                          className={styles.menuItem}
+                          id={`edit-${selectedRow?.name}`}
                           onClick={() => {
-                            openSwitchUser(item);
+                            openSwitchUser(selectedRow);
+                            setAnchorElement(null);
                           }}
                         >
-                          <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/user-edit.svg" />
-                        </IconButton>
-                        <IconButton
-                          className={`${classes.tableCell} ${selectedRow === item ? classes.selectedButton : ''}`}
-                          sx={{
-                            '&.MuiButton-root': {
-                              backgroundColor: 'var(--button-color)',
-                              borderRadius: 0,
-                              color: '#fff',
-                            },
-                          }}
-                          id={`detail-${item.name}`}
-                          onClick={() => {
-                            handleChange(item);
-                          }}
-                        >
-                          <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/detail.svg" />
-                        </IconButton>
-                      </>
-                    )}
+                          <ListItemIcon>
+                            <DriveFileRenameOutlineOutlinedIcon className={styles.menuItemIcon} />
+                          </ListItemIcon>
+                          Edit Role
+                        </MenuItem>
+                      )}
+                    </Menu>
                   </TableCell>
                 </TableRow>
               ))
@@ -531,68 +512,17 @@ export default function Users() {
               </RadioGroup>
             </FormControl>
           </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
+            <CancelLoadingButton id="cancel" loading={loadingButton} onClick={closeAllPopups} />
+            <SavelLoadingButton
+              loading={loadingButton}
+              endIcon={<CheckCircleIcon />}
+              id="save"
+              text="Save"
+              onClick={handleSubmit}
+            />
+          </Box>
         </DialogContent>
-        <DialogActions className={styles.roleButtonContainer}>
-          <LoadingButton
-            loading={loadingButton}
-            endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
-            size="small"
-            variant="outlined"
-            loadingPosition="end"
-            id="cancel"
-            sx={{
-              '&.MuiLoadingButton-root': {
-                color: 'var(--calcel-size-color)',
-                borderRadius: 0,
-                borderColor: 'var(--calcel-color)',
-              },
-              ':hover': {
-                backgroundColor: 'var( --calcel-hover-corlor)',
-                borderColor: 'var( --calcel-hover-corlor)',
-              },
-              '&.MuiLoadingButton-loading': {
-                backgroundColor: 'var(--button-loading-color)',
-                color: 'var(--button-loading-size-color)',
-                borderColor: 'var(--button-loading-color)',
-              },
-              mr: '1rem',
-              width: '8rem',
-            }}
-            onClick={closeAllPopups}
-          >
-            Cancel
-          </LoadingButton>
-          <LoadingButton
-            loading={loadingButton}
-            endIcon={<CheckCircleIcon />}
-            size="small"
-            variant="outlined"
-            type="submit"
-            loadingPosition="end"
-            id="save"
-            sx={{
-              '&.MuiLoadingButton-root': {
-                backgroundColor: 'var(--save-color)',
-                borderRadius: 0,
-                color: 'var(--save-size-color)',
-                borderColor: 'var(--save-color)',
-              },
-              ':hover': {
-                backgroundColor: 'var(--save-hover-corlor)',
-                borderColor: 'var(--save-hover-corlor)',
-              },
-              '&.MuiLoadingButton-loading': {
-                backgroundColor: 'var(--button-loading-color)',
-                color: 'var(--button-loading-size-color)',
-                borderColor: 'var(--button-loading-color)',
-              },
-              width: '8rem',
-            }}
-            onClick={handleSubmit}
-          >
-            Save
-          </LoadingButton>
-        </DialogActions>
       </Dialog>
       <Drawer anchor="right" open={userDetail} onClose={closeAllPopups}>
         <Box role="presentation" sx={{ width: 350 }}>
@@ -621,7 +551,7 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2">
-                {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.id}
+                {detailIsLoading ? <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} /> : user?.id}
               </Typography>
             </ListItem>
             <Divider />
@@ -633,7 +563,11 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2">
-                {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.name || '-'}
+                {detailIsLoading ? (
+                  <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
+                ) : (
+                  user?.name || '-'
+                )}
               </Typography>
             </ListItem>
             <Divider />
@@ -646,7 +580,7 @@ export default function Users() {
               </ListItemAvatar>
               <Typography variant="body2" component="div">
                 {detailIsLoading ? (
-                  <Skeleton sx={{ width: '8rem' }} />
+                  <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                 ) : detailRole ? (
                   <Chip
                     label={detailRole}
@@ -676,7 +610,11 @@ export default function Users() {
               </ListItemAvatar>
               <Tooltip title={user?.email || '-'} placement="top">
                 <Typography variant="body2" className={styles.emailContent}>
-                  {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.email || '-'}
+                  {detailIsLoading ? (
+                    <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
+                  ) : (
+                    user?.email || '-'
+                  )}
                 </Typography>
               </Tooltip>
             </ListItem>
@@ -689,7 +627,11 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2">
-                {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user.phone || '-'}
+                {detailIsLoading ? (
+                  <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
+                ) : (
+                  user.phone || '-'
+                )}
               </Typography>
             </ListItem>
             <Divider />
@@ -703,7 +645,11 @@ export default function Users() {
               <Tooltip title={user.location || '-'} placement="top">
                 <Box className={styles.emailContent}>
                   <Typography variant="body2">
-                    {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user.location || '-'}
+                    {detailIsLoading ? (
+                      <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
+                    ) : (
+                      user.location || '-'
+                    )}
                   </Typography>
                 </Box>
               </Tooltip>
@@ -717,7 +663,7 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               {detailIsLoading ? (
-                <Skeleton sx={{ width: '8rem' }} />
+                <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
               ) : user.created_at ? (
                 <Chip
                   avatar={<Box component="img" src="/icons/user/created-at.svg" />}
@@ -738,7 +684,7 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               {detailIsLoading ? (
-                <Skeleton sx={{ width: '8rem' }} />
+                <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
               ) : user.updated_at ? (
                 <Chip
                   avatar={<Box component="img" src="/icons/user/updated-at.svg" />}

@@ -49,6 +49,8 @@ describe('Clusters', () => {
 
   describe('when data is loaded', () => {
     it('display the total number of clusters and the default number', () => {
+      cy.get('[data-testid="isloading"]').should('be.exist');
+
       cy.get(
         ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
       )
@@ -60,6 +62,8 @@ describe('Clusters', () => {
       )
         .should('be.visible')
         .and('contain', '7');
+
+      cy.get('[data-testid="isloading"]').should('not.exist');
     });
 
     it('display the total number of schedulers and the active number', () => {

@@ -19,13 +19,12 @@ import {
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { formatDate, getExpiredTime } from '../../../lib/utils';
-import { LoadingButton } from '@mui/lab';
 import { useNavigate } from 'react-router-dom';
 import { createTokens } from '../../../lib/api';
 import HelpIcon from '@mui/icons-material/Help';
-import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { MyContext } from '../../menu';
+import {CancelLoadingButton, SavelLoadingButton} from '../../loading-button';
 
 const theme = createTheme({
   palette: {
@@ -357,38 +356,20 @@ export default function CreateTokens() {
             </Box>
             <Divider sx={{ mt: '1.5rem', mb: '2rem' }} />
             <Box>
-              <LoadingButton
-                loading={loadingButton}
-                endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
-                size="small"
-                variant="outlined"
-                loadingPosition="end"
+              <CancelLoadingButton
                 id="cancel"
-                sx={{
-                  '&.MuiLoadingButton-root': {
-                    color: 'var(--calcel-size-color)',
-                    borderRadius: 0,
-                    borderColor: 'var(--calcel-color)',
-                  },
-                  ':hover': {
-                    backgroundColor: 'var( --calcel-hover-corlor)',
-                    borderColor: 'var( --calcel-hover-corlor)',
-                  },
-                  '&.MuiLoadingButton-loading': {
-                    backgroundColor: 'var(--button-loading-color)',
-                    color: 'var(--button-loading-size-color)',
-                    borderColor: 'var(--button-loading-color)',
-                  },
-                  mr: '1rem',
-                  width: '8rem',
-                }}
+                loading={loadingButton}
                 onClick={() => {
                   navigate('/developer/personal-access-tokens');
                 }}
-              >
-                Cancel
-              </LoadingButton>
-              <LoadingButton
+              />
+               <SavelLoadingButton
+                loading={loadingButton}
+                endIcon={<CheckCircleIcon />}
+                id="save"
+                text="Save"
+              />
+              {/* <LoadingButton
                 loading={loadingButton}
                 endIcon={<CheckCircleIcon />}
                 size="small"
@@ -416,7 +397,7 @@ export default function CreateTokens() {
                 }}
               >
                 Save
-              </LoadingButton>
+              </LoadingButton> */}
             </Box>
           </FormControl>
         </Box>

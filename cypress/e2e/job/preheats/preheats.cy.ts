@@ -56,6 +56,7 @@ describe('Preheats', () => {
         },
         (req) => {
           req.reply((res: any) => {
+            res.setDelay(2000);
             const responseHeaders = {
               ...res.headers,
               Link: '</api/v1/jobs?page=1&per_page=10>;rel=prev,</api/v1/jobs?page=2&per_page=10>;rel=next,</api/v1/jobs?page=1&per_page=10>;rel=first,</api/v1/jobs?page=2&per_page=10>;rel=last',
@@ -66,6 +67,8 @@ describe('Preheats', () => {
         },
       ).as('preheats');
 
+      cy.get('[data-testid="isloading"]').should('be.exist');
+
       cy.wait(6000);
 
       // Executed every 3 seconds, it should be executed 2 times after 6 seconds.
@@ -73,6 +76,8 @@ describe('Preheats', () => {
         expect(interceptCount).to.be.greaterThan(0);
         expect(interceptCount).to.be.closeTo(2, 1);
       });
+
+      cy.get('[data-testid="isloading"]').should('not.exist');
 
       cy.get(':nth-child(3) > .css-ibh903-MuiButtonBase-root-MuiListItemButton-root').click();
 

@@ -26,8 +26,6 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import HelpIcon from '@mui/icons-material/Help';
-import { LoadingButton } from '@mui/lab';
-import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useNavigate } from 'react-router-dom';
@@ -35,6 +33,7 @@ import { createJob, getClusters } from '../../../lib/api';
 import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './new.module.css';
 import AddIcon from '@mui/icons-material/Add';
+import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
 
 export default function NewPreheat() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -653,66 +652,14 @@ export default function NewPreheat() {
           </Box>
           <Divider sx={{ mt: '1rem', mb: '1.5rem' }} />
           <Box>
-            <LoadingButton
+            <CancelLoadingButton
+              id="cancel"
               loading={loadingButton}
-              endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
-              size="small"
-              variant="outlined"
-              loadingPosition="end"
-              sx={{
-                '&.MuiLoadingButton-root': {
-                  color: 'var(--calcel-size-color)',
-                  borderRadius: 0,
-                  borderColor: 'var(--calcel-color)',
-                },
-                ':hover': {
-                  backgroundColor: 'var( --calcel-hover-corlor)',
-                  borderColor: 'var( --calcel-hover-corlor)',
-                },
-                '&.MuiLoadingButton-loading': {
-                  backgroundColor: 'var(--button-loading-color)',
-                  color: 'var(--button-loading-size-color)',
-                  borderColor: 'var(--button-loading-color)',
-                },
-                mr: '1rem',
-                width: '8rem',
-              }}
               onClick={() => {
                 navigate('/jobs/preheats');
               }}
-              id="cancel"
-            >
-              Cancel
-            </LoadingButton>
-            <LoadingButton
-              loading={loadingButton}
-              endIcon={<CheckCircleIcon />}
-              size="small"
-              variant="outlined"
-              type="submit"
-              loadingPosition="end"
-              sx={{
-                '&.MuiLoadingButton-root': {
-                  backgroundColor: 'var(--save-color)',
-                  borderRadius: 0,
-                  color: 'var(--save-size-color)',
-                  borderColor: 'var(--save-color)',
-                },
-                ':hover': {
-                  backgroundColor: 'var(--save-hover-corlor)',
-                  borderColor: 'var(--save-hover-corlor)',
-                },
-                '&.MuiLoadingButton-loading': {
-                  backgroundColor: 'var(--button-loading-color)',
-                  color: 'var(--button-loading-size-color)',
-                  borderColor: 'var(--button-loading-color)',
-                },
-                width: '8rem',
-              }}
-              id="save"
-            >
-              Save
-            </LoadingButton>
+            />
+            <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />
           </Box>
         </FormControl>
       </Box>

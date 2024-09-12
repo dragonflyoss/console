@@ -30,7 +30,6 @@ export default function ShowPreheat() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [pageLoding, setPageLoding] = useState(false);
   const [shouldPoll, setShouldPoll] = useState(false);
   const [errorLog, setErrorLog] = useState(false);
   const [preheat, setPreheat] = useState<getJobResponse>();
@@ -149,7 +148,7 @@ export default function ShowPreheat() {
               </Typography>
             </Box>
             <Typography variant="body1" className={styles.informationContent}>
-              {isLoading ? <Skeleton sx={{ width: '2rem' }} /> : preheat?.id || 0}
+              {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '2rem' }} /> : preheat?.id || 0}
             </Typography>
           </Box>
           <Box className={styles.informationContainer}>
@@ -165,7 +164,7 @@ export default function ShowPreheat() {
               </Typography>
             </Box>
             <Typography variant="body1" className={styles.informationContent}>
-              {isLoading ? <Skeleton sx={{ width: '2rem' }} /> : preheat?.bio || '-'}
+              {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '2rem' }} /> : preheat?.bio || '-'}
             </Typography>
           </Box>
           <Box className={styles.informationContainer}>
@@ -182,7 +181,7 @@ export default function ShowPreheat() {
             </Box>
             <Box className={styles.statusContent}>
               {isLoading ? (
-                <Skeleton sx={{ width: '4rem' }} />
+                <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
               ) : preheat?.result?.State ? (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Box
@@ -274,7 +273,7 @@ export default function ShowPreheat() {
               </Typography>
             </Box>
             <Typography variant="body1" className={styles.informationContent}>
-              {isLoading ? <Skeleton sx={{ width: '4rem' }} /> : preheat?.args?.url || '-'}
+              {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} /> : preheat?.args?.url || '-'}
             </Typography>
           </Box>
           <Box className={styles.informationContainer}>
@@ -291,7 +290,7 @@ export default function ShowPreheat() {
             </Box>
             <Box className={styles.informationContent} sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {isLoading ? (
-                <Skeleton sx={{ width: '4rem' }} />
+                <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
               ) : preheat?.args?.filteredQueryParams ? (
                 preheat?.args?.filteredQueryParams.split('&').map((item) => (
                   <Chip
@@ -331,7 +330,7 @@ export default function ShowPreheat() {
             </Box>
             <Box className={styles.informationContent}>
               {isLoading ? (
-                <Skeleton sx={{ width: '4rem' }} />
+                <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
               ) : preheat?.args?.tag ? (
                 <Chip
                   label={preheat.args.tag}
@@ -366,7 +365,7 @@ export default function ShowPreheat() {
               </Typography>
             </Box>
             {isLoading ? (
-              <Skeleton sx={{ width: '4rem' }} />
+              <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
             ) : preheat?.args?.headers && preheat?.args?.headers !== null ? (
               Object.keys(preheat?.args?.headers).length > 0 ? (
                 <Paper variant="outlined" className={styles.headersContent}>
@@ -406,7 +405,7 @@ export default function ShowPreheat() {
               {preheat?.scheduler_clusters?.map((item, index) => {
                 return (
                   <Typography key={index} variant="body1" sx={{ mr: '2rem' }}>
-                    {isLoading ? <Skeleton sx={{ width: '4rem' }} /> : item.id || '-'}
+                    {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} /> : item.id || '-'}
                   </Typography>
                 );
               }) || '-'}
@@ -425,7 +424,7 @@ export default function ShowPreheat() {
               </Typography>
             </Box>
             {isLoading ? (
-              <Skeleton sx={{ width: '4rem' }} />
+              <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
             ) : preheat?.created_at ? (
               <Chip
                 avatar={<MoreTimeIcon />}

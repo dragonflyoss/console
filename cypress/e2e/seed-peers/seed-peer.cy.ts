@@ -80,6 +80,8 @@ describe('Seed peer', () => {
 
   describe('when data is loaded', () => {
     it('can display breadcrumb', () => {
+      // Show isloading.
+      cy.get('[data-testid="isloading"]').should('be.exist');
       cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
         .should('be.visible')
         .and('contain', 'seed-peer-cluster-1');
@@ -87,6 +89,8 @@ describe('Seed peer', () => {
       cy.get('.MuiBreadcrumbs-ol > :nth-child(7) > .MuiTypography-root')
         .should('be.visible')
         .and('contain', 'seed-peer-10');
+
+      cy.get('[data-testid="isloading"]').should('not.exist');
     });
 
     it('can display active seed peer', () => {

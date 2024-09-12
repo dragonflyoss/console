@@ -84,11 +84,16 @@ describe('Cluster', () => {
     );
 
     cy.visit('clusters/1');
-    cy.viewport(1440, 1080);
+    cy.viewport(1440, 2080);
   });
 
   describe('when data is loaded', () => {
     it('can display breadcrumb', () => {
+      // Show isloading.
+      cy.get('[data-testid="cluster-loading"]').should('be.exist');
+      cy.get('[data-testid="scheduler-loading"]').should('be.exist');
+      cy.get('[data-testid="seed-peer-loading"]').should('be.exist');
+
       cy.url().should('include', '/clusters/1');
 
       cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
@@ -96,6 +101,11 @@ describe('Cluster', () => {
         .and('contain', 'cluster-1');
 
       cy.get('.MuiBreadcrumbs-ol > :nth-child(1) > .MuiTypography-root').click();
+
+      // Does not show isloading.
+      cy.get('[data-testid="cluster-loading"]').should('not.exist');
+      cy.get('[data-testid="scheduler-loading"]').should('not.exist');
+      cy.get('[data-testid="seed-peer-loading"]').should('not.exist');
 
       cy.url().should('include', '/clusters');
     });

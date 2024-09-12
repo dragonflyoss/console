@@ -2,6 +2,7 @@ import cluster from '../../fixtures/clusters/cluster/cluster.json';
 import seedPeer from '../../fixtures/clusters/cluster/seed-peer.json';
 import scheduler from '../../fixtures/clusters/cluster/scheduler.json';
 import deleteScheduler from '../../fixtures/schedulers/delete-scheduler.json';
+import updateSchedulerFeature from '../../fixtures/schedulers/update-scheduler-feature.json';
 import schedulerDeleteAfter from '../../fixtures/schedulers/scheduler-delete-after.json';
 import deletedInactiveScheduler from '../../fixtures/clusters/cluster/deleted-inactive-scheduler.json';
 import deletedInactiveSeedPeer from '../../fixtures/clusters/cluster/deleted-inactive-seed-peer.json';
@@ -46,6 +47,18 @@ describe('Schedulers', () => {
         });
       },
     );
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/scheduler-features',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: ['schedule', 'preheat'],
+        });
+      },
+    );
 
     cy.signin();
     cy.visit('clusters/1');
@@ -81,10 +94,7 @@ describe('Schedulers', () => {
         .and('have.css', 'background-color', 'rgb(46, 143, 121)');
 
       // Show features.
-      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)')
-        .should('be.visible')
-        .and('contain', 'Schedule')
-        .and('contain', 'Preheat');
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)').should('be.visible').and('contain', 'Schedule');
 
       // Show scheduler-5 information.
       cy.get('#scheduler-table-body > :nth-child(2) > :nth-child(2) > .MuiTypography-root')
@@ -335,8 +345,10 @@ describe('Schedulers', () => {
       cy.get('#scheduler-pagination > .MuiPagination-ul').children().should('have.length', 5);
 
       cy.get('#scheduler-2').click();
+      cy.get('#delete-scheduler-2').click();
       cy.get('#cancelDeleteScheduler').click();
       cy.get('#scheduler-2').click();
+      cy.get('#delete-scheduler-2').click();
 
       cy.intercept(
         {
@@ -355,9 +367,12 @@ describe('Schedulers', () => {
           url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
         },
         (req) => {
-          req.reply({
-            statusCode: 200,
-            body: deleteScheduler,
+          req.reply((res) => {
+            res.setDelay(1000);
+            res.send({
+              statusCode: 200,
+              body: deleteScheduler,
+            });
           });
         },
       );
@@ -365,8 +380,12 @@ describe('Schedulers', () => {
       // Confirm delete.
       cy.get('#deleteScheduler').click();
 
+      cy.get('[data-testid="scheduler-loading"]').should('be.exist');
+
       // Delete success message.
       cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
+
+      cy.get('[data-testid="scheduler-loading"]').should('not.exist');
 
       // The total number of schedulers will be reduced by one.
       cy.get('.css-ms744u-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
@@ -414,6 +433,7 @@ describe('Schedulers', () => {
         },
       );
 
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #delete-scheduler-4').click();
       cy.get('#deleteScheduler').click();
       cy.wait('@delete');
 
@@ -453,6 +473,7 @@ describe('Schedulers', () => {
         .and('contain', 'scheduler-7');
 
       cy.get('#scheduler-7').click();
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #delete-scheduler-7').click();
       cy.get('#deleteScheduler').click();
       cy.wait('@delete');
 
@@ -478,6 +499,7 @@ describe('Schedulers', () => {
         .and('contain', 'scheduler-7');
 
       cy.get('#scheduler-7').click();
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #delete-scheduler-7').click();
 
       cy.get('#deleteScheduler').click();
       cy.wait('@delete');
@@ -683,7 +705,7 @@ describe('Schedulers', () => {
         .and('have.text', 'Deletion of scheduler with ID 10 failed! Error : Not Found.');
     });
 
-    it('should handle API error response', () => {
+    it('should handle delete scheduler API error response', () => {
       cy.intercept('DELETE', `/api/v1/schedulers/10`, (req) => {
         req.reply({
           forceNetworkError: true,
@@ -732,6 +754,72 @@ describe('Schedulers', () => {
       cy.get('.MuiAccordionDetails-root > .MuiTypography-root')
         .should('be.visible')
         .and('have.text', 'Deletion of scheduler with ID 10 failed! Error : Failed to fetch.');
+
+      // Show error message.
+      cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch');
+    });
+
+    it('should handle delete seed peer API error response', () => {
+      cy.get('#delete-all-inactive-instances').click();
+      cy.get('#back-button').should('be.disabled');
+      cy.get('#next-button').should('not.be.disabled');
+      cy.get('#next-button').click();
+
+      // Display the total number of seed peer.
+      cy.get('#seedPeerTotal').should('have.text', '3 inactive');
+      cy.get('#next-button').click();
+      cy.get('#save-delete').click();
+      cy.get('#deleteAllInactive-helper-text').should('have.text', 'Please enter "DELETE"');
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: deletedInactiveScheduler,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/seed-peers?page=1&per_page=10000000&seed_peer_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: deletedInactiveSeedPeer,
+          });
+        },
+      );
+
+      const schedulers = [10, 11, 9, 8, 6, 4, 2];
+
+      for (let i = 0; i < schedulers.length; i++) {
+        cy.intercept('DELETE', `/api/v1/schedulers/${schedulers[i]}`, (req) => {
+          req.reply({
+            statusCode: 200,
+            delayMs: 400,
+          });
+        });
+      }
+      cy.intercept('DELETE', `/api/v1/seed-peers/11`, (req) => {
+        req.reply({
+          forceNetworkError: true,
+        });
+      });
+
+      cy.get('#deleteAllInactive').type('DELETE{enter}');
+      cy.get('#failure').should('exist');
+      cy.get('#inactive-header').click();
+
+      // Show error message.
+      cy.get('.MuiAccordionDetails-root > .MuiTypography-root')
+        .should('be.visible')
+        .and('have.text', 'Deletion of seed peer with ID 11 failed!, error:Failed to fetch.');
 
       // Show error message.
       cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch');
@@ -791,6 +879,165 @@ describe('Schedulers', () => {
       cy.get('.MuiAccordionDetails-root > .MuiTypography-root')
         .should('be.visible')
         .and('have.text', 'Deletion of scheduler with ID 10 failed! Error : permission deny.');
+    });
+  });
+
+  describe('change scheduler features', () => {
+    it('can update features', () => {
+      // Show scheduler-7 no Preheat
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)')
+        .should('be.visible')
+        .and('contain', 'Schedule')
+        .and('not.contain', 'Preheat');
+
+      cy.get('#scheduler-7').click();
+
+      cy.get('body').click('topLeft');
+
+      cy.get('#scheduler-7').click();
+
+      // Display the edit features dialog.
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #edit-scheduler-7').click();
+
+      cy.get('#close-delete-icon').click();
+      cy.get('#scheduler-7').click();
+
+      // Display the edit features dialog.
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #edit-scheduler-7').click();
+
+      // Check that the Schedule checkbox.
+      cy.get('#Schedule-Checkbox').should('have.prop', 'checked', true);
+
+      // Check that the Preheat checkbox.
+      cy.get('#Preheat-Checkbox').should('have.prop', 'checked', false);
+
+      // // Check all checkboxes.
+      // cy.get('[type="checkbox"]').check();
+
+      cy.get('#Schedule-Checkbox').click();
+
+      cy.get('#Preheat-Checkbox').click();
+
+      cy.intercept({ method: 'PATCH', url: '/api/v1/schedulers/7' }, (req) => {
+        (req.body = ''),
+          req.reply({
+            statusCode: 200,
+            body: {},
+          });
+      });
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply((res) => {
+            res.setDelay(2000);
+            res.send({
+              statusCode: 200,
+              body: updateSchedulerFeature,
+            });
+          });
+        },
+      );
+
+      cy.get('#editFeatures').click();
+
+      cy.get('[data-testid="scheduler-loading"]').should('be.exist');
+
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)')
+        .should('be.visible')
+        .and('not.contain', 'Schedule')
+        .and('contain', 'Preheat');
+    });
+
+    it('try to update features with guest user', () => {
+      cy.guestSignin();
+
+      // Show scheduler-7 no Preheat.
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)')
+        .should('be.visible')
+        .and('contain', 'Schedule')
+        .and('not.contain', 'Preheat');
+      cy.get('#scheduler-7').click();
+
+      // Display the edit features dialog.
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #edit-scheduler-7').click();
+
+      // Check that the Schedule checkbox.
+      cy.get('#Schedule-Checkbox').should('have.prop', 'checked', true);
+
+      //  Check that the Preheat checkbox.
+      cy.get('#Preheat-Checkbox').should('have.prop', 'checked', false);
+
+      // Check all checkboxes.
+      cy.get('[type="checkbox"]').check();
+      cy.intercept({ method: 'PATCH', url: '/api/v1/schedulers/7' }, (req) => {
+        (req.body = ''),
+          req.reply({
+            statusCode: 401,
+            body: { message: 'permission deny' },
+          });
+      });
+
+      cy.get('#editFeatures').click();
+
+      // Show error message.
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'permission deny');
+      cy.get('#cancelEditFeatures').click();
+    });
+
+    it('update scheduler features API error response', () => {
+      cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)')
+        .should('be.visible')
+        .and('contain', 'Schedule')
+        .and('not.contain', 'Preheat');
+      cy.get('#scheduler-7').click();
+
+      // Display the edit features dialog.
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #edit-scheduler-7').click();
+
+      // Check that the Schedule checkbox.
+      cy.get('#Schedule-Checkbox').should('have.prop', 'checked', true);
+
+      //  Check that the Preheat checkbox.
+      cy.get('#Preheat-Checkbox').should('have.prop', 'checked', false);
+
+      // Check all checkboxes.
+      cy.get('[type="checkbox"]').check();
+      cy.intercept({ method: 'PATCH', url: '/api/v1/schedulers/7' }, (req) => {
+        (req.body = ''),
+          req.reply({
+            forceNetworkError: true,
+          });
+      });
+      cy.get('#editFeatures').click();
+
+      // Show error message.
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+    });
+
+    it('get scheduler features API error response', () => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/scheduler-features',
+        },
+        (req) => {
+          req.reply({
+            forceNetworkError: true,
+          });
+        },
+      );
+
+      // Show error message.
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+
+      cy.get('#scheduler-7').click();
+
+      // No change features button.
+      cy.get(':nth-child(7) > .MuiPaper-root > .MuiList-root > #delete-scheduler-7').should('not.be.visible');
     });
   });
 });

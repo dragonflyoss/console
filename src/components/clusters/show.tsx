@@ -213,7 +213,7 @@ export default function ShowCluster() {
         page: 1,
         per_page: MAX_PAGE_SIZE,
       });
-      
+
       setScheduler(scheduler);
       setSchedulerCount(scheduler);
     }
@@ -630,7 +630,7 @@ export default function ShowCluster() {
             if (error instanceof Error) {
               setDeleteAllInactiveErrorMessage((prevMessages) => [
                 ...prevMessages,
-                `Deletion of seed peer with ID ${ids[i]} failed!, error:${error.message}`,
+                `Deletion of seed peer with ID ${ids[i]} failed!, error:${error.message}.`,
               ]);
             }
             throw error;
@@ -674,7 +674,10 @@ export default function ShowCluster() {
             }
           } catch (error) {
             setProgressLoading(false);
-
+            if (error instanceof Error) {
+              setErrorMessage(true);
+              setErrorMessageText(error.message);
+            }
             try {
               if (cluster.scheduler_cluster_id !== 0) {
                 const scheduler = await getSchedulers({

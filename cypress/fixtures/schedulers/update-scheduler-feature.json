@@ -196,7 +196,7 @@
     "ip": "30.44.98.202",
     "port": 8002,
     "state": "active",
-    "features": ["schedule", "preheat"],
+    "features": ["preheat"],
     "scheduler_cluster_id": 1,
     "scheduler_cluster": {
       "id": 1,

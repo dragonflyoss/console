@@ -115,18 +115,22 @@ export default function PersonalAccessTokens() {
 
   const handleDeleteToken = async () => {
     setDeleteLoadingButton(true);
+    setIsLoading(true);
 
     try {
       await deleteTokens(tokenSelectedID);
       setDeleteLoadingButton(false);
-      setSuccessMessage(true);
-      setOpenDeletToken(false);
 
       const token = await getTokens({ page: 1, per_page: MAX_PAGE_SIZE });
 
       setToken(token);
+      setIsLoading(false);
+
+      setSuccessMessage(true);
+      setOpenDeletToken(false);
     } catch (error) {
       if (error instanceof Error) {
+        setIsLoading(false);
         setDeleteLoadingButton(false);
         setErrorMessage(true);
         setErrorMessageText(error.message);
@@ -255,16 +259,16 @@ export default function PersonalAccessTokens() {
           <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
-                <Skeleton sx={{ fontSize: '0.8rem' }} width="6rem" />
+                <Skeleton data-testid="isloading" sx={{ fontSize: '0.8rem' }} width="6rem" />
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography variant="body2" component="span">
-                  <Skeleton width="8rem" />
+                  <Skeleton data-testid="isloading" width="8rem" />
                 </Typography>
               </Box>
             </Box>
             <Box>
-              <Skeleton width="4.5rem" height="3.2rem" />
+              <Skeleton data-testid="isloading" width="4.5rem" height="3.2rem" />
             </Box>
           </Box>
         </Paper>

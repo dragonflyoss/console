@@ -348,6 +348,7 @@ describe('Schedulers', () => {
       cy.get('#delete-scheduler-2').click();
       cy.get('#cancelDeleteScheduler').click();
       cy.get('#scheduler-2').click();
+      cy.get('#delete-scheduler-2').click();
 
       cy.intercept(
         {
@@ -366,19 +367,25 @@ describe('Schedulers', () => {
           url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
         },
         (req) => {
-          req.reply({
-            statusCode: 200,
-            body: deleteScheduler,
+          req.reply((res) => {
+            res.setDelay(1000);
+            res.send({
+              statusCode: 200,
+              body: deleteScheduler,
+            });
           });
         },
       );
 
-      cy.get('#delete-scheduler-2').click();
       // Confirm delete.
       cy.get('#deleteScheduler').click();
 
+      cy.get('[data-testid="scheduler-loading"]').should('be.exist');
+
       // Delete success message.
       cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
+
+      cy.get('[data-testid="scheduler-loading"]').should('no.exist');
 
       // The total number of schedulers will be reduced by one.
       cy.get('.css-ms744u-MuiPaper-root > .MuiChip-root > .MuiChip-label').should('exist').and('contain', 'Total: 10');
@@ -836,24 +843,33 @@ describe('Schedulers', () => {
             body: {},
           });
       });
+
       cy.intercept(
         {
           method: 'GET',
           url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
         },
         (req) => {
-          req.reply({
-            statusCode: 200,
-            body: updateSchedulerFeature,
+          req.reply((res) => {
+            res.setDelay(2000);
+            res.send({
+              statusCode: 200,
+              body: updateSchedulerFeature,
+            });
           });
         },
       );
+
       cy.get('#editFeatures').click();
+
+      cy.get('[data-testid="scheduler-loading"]').should('be.exist');
+
       cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)')
         .should('be.visible')
         .and('contain', 'Schedule')
         .and('contain', 'Preheat');
     });
+
     it('try to update features with guest user', () => {
       cy.guestSignin();
 
@@ -889,7 +905,8 @@ describe('Schedulers', () => {
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'permission deny');
       cy.get('#cancelEditFeatures').click();
     });
-    it('get cluster API error response', () => {
+
+    it('update scheduler features API error response', () => {
       cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(6)')
         .should('be.visible')
         .and('contain', 'Schedule')

@@ -88,11 +88,16 @@ describe('Scheduler', () => {
 
   describe('when data is loaded', () => {
     it('can display breadcrumb', () => {
+      // Show isloading.
+      cy.get('[data-testid="isloading"]').should('be.exist');
+
       cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
         .should('be.visible')
         .and('contain', 'scheduler-cluster-1');
 
       cy.get(':nth-child(7) > .MuiTypography-root').should('be.visible').and('contain', 'scheduler-7');
+
+      cy.get('[data-testid="isloading"]').should('not.exist');
     });
 
     it('can display active scheduler', () => {

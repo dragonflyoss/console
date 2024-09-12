@@ -7,7 +7,6 @@ import {
   Breadcrumbs,
   Chip,
   Dialog,
-  DialogActions,
   DialogContent,
   Drawer,
   FormControl,
@@ -302,32 +301,32 @@ export default function Users() {
               <TableRow id="user-table-row">
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Skeleton variant="circular" component="div" width={40} height={40} />
+                    <Skeleton data-testid="isloading" variant="circular" component="div" width={40} height={40} />
                   </Box>
                 </TableCell>
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Skeleton width="2rem" />
+                    <Skeleton data-testid="isloading" width="2rem" />
                   </Box>
                 </TableCell>
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Skeleton width="4rem" />
+                    <Skeleton data-testid="isloading" width="4rem" />
                   </Box>
                 </TableCell>
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Skeleton width="2rem" />
+                    <Skeleton data-testid="isloading" width="2rem" />
                   </Box>
                 </TableCell>
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Skeleton width="3.8rem" height="2.8rem" />
+                    <Skeleton data-testid="isloading" width="3.8rem" height="2.8rem" />
                   </Box>
                 </TableCell>
                 <TableCell align="center">
                   <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Skeleton variant="circular" component="div" width={40} height={40} />
+                    <Skeleton data-testid="isloading" variant="circular" component="div" width={40} height={40} />
                   </Box>
                 </TableCell>
               </TableRow>
@@ -371,19 +370,19 @@ export default function Users() {
                     align="center"
                     className={`${classes.tableCell} ${selectedRow === item ? classes.selectedTableCell : ''}`}
                   >
-                    {isLoading ? <Skeleton /> : item?.name || '-'}
+                    {item?.name || '-'}
                   </TableCell>
                   <TableCell
                     align="center"
                     className={`${classes.tableCell} ${selectedRow === item ? classes.selectedTableCell : ''}`}
                   >
-                    {isLoading ? <Skeleton /> : item?.email || '-'}
+                    {item?.email || '-'}
                   </TableCell>
                   <TableCell
                     align="center"
                     className={`${classes.tableCell} ${selectedRow === item ? classes.selectedTableCell : ''}`}
                   >
-                    {isLoading ? <Skeleton /> : item?.location || '-'}
+                    {item?.location || '-'}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -428,7 +427,7 @@ export default function Users() {
                       }}
                       sx={{
                         position: 'absolute',
-                        left: '-6rem',
+                        left: '-5rem',
                         width: '16rem',
                         '& .MuiMenu-paper': {
                           boxShadow:
@@ -442,6 +441,11 @@ export default function Users() {
                           handleChange(userSelectedRow);
                           setAnchorElement(null);
                         }}
+                        sx={{
+                          '&:hover': {
+                            backgroundColor: '#D9D9D9',
+                          },
+                        }}
                       >
                         <ListItemIcon>
                           <Box
@@ -450,12 +454,17 @@ export default function Users() {
                             src="/icons/user/detail.svg"
                           />
                         </ListItemIcon>
-                        Viem User
+                        Detail
                       </MenuItem>
                       {userSelectedRow?.name === 'root' ? (
                         <></>
                       ) : (
                         <MenuItem
+                          sx={{
+                            '&:hover': {
+                              backgroundColor: '#D9D9D9',
+                            },
+                          }}
                           id={`edit-${userSelectedRow?.name}`}
                           onClick={() => {
                             openSwitchUser(userSelectedRow);
@@ -469,63 +478,10 @@ export default function Users() {
                               src="/icons/user/user-edit.svg"
                             />
                           </ListItemIcon>
-                          Switch User
+                          Edit Role
                         </MenuItem>
                       )}
                     </Menu>
-                    {/* {item?.name === 'root' ? (
-                      <IconButton
-                        className={`${classes.tableCell} ${selectedRow === item ? classes.selectedButton : ''}`}
-                        sx={{
-                          '&.MuiButton-root': {
-                            backgroundColor: 'var(--button-color)',
-                            borderRadius: 0,
-                            color: '#fff',
-                          },
-                        }}
-                        id={`detail-${item.name}`}
-                        onClick={() => {
-                          handleChange(item);
-                        }}
-                      >
-                        <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/detail.svg" />
-                      </IconButton>
-                    ) : (
-                      <>
-                        <IconButton
-                          className={`${classes.tableCell} ${selectedRow === item ? classes.selectedButton : ''}`}
-                          sx={{
-                            '&.MuiButton-root': {
-                              backgroundColor: 'var(--button-color)',
-                              borderRadius: 0,
-                              color: '#fff',
-                            },
-                          }}
-                          id={`edit-${item.name}`}
-                          onClick={() => {
-                            openSwitchUser(item);
-                          }}
-                        >
-                          <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/user-edit.svg" />
-                        </IconButton>
-                        <IconButton
-                          className={`${classes.tableCell} ${selectedRow === item ? classes.selectedButton : ''}`}
-                          sx={{
-                            '&.MuiButton-root': {
-                              backgroundColor: 'var(--button-color)',
-                              borderRadius: 0,
-                              color: '#fff',
-                            },
-                          }}
-                          id={`detail-${item.name}`}
-                          onClick={() => {
-                            handleChange(item);
-                          }}
-                        >
-                          <Box component="img" sx={{ width: '2rem', height: '2rem' }} src="/icons/user/detail.svg" />
-                        </IconButton>
-                      </>
-                    )} */}
                   </TableCell>
                 </TableRow>
               ))
@@ -642,7 +598,7 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2">
-                {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.id}
+                {detailIsLoading ? <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} /> : user?.id}
               </Typography>
             </ListItem>
             <Divider />
@@ -654,7 +610,11 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2">
-                {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.name || '-'}
+                {detailIsLoading ? (
+                  <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
+                ) : (
+                  user?.name || '-'
+                )}
               </Typography>
             </ListItem>
             <Divider />
@@ -667,7 +627,7 @@ export default function Users() {
               </ListItemAvatar>
               <Typography variant="body2" component="div">
                 {detailIsLoading ? (
-                  <Skeleton sx={{ width: '8rem' }} />
+                  <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                 ) : detailRole ? (
                   <Chip
                     label={detailRole}
@@ -697,7 +657,11 @@ export default function Users() {
               </ListItemAvatar>
               <Tooltip title={user?.email || '-'} placement="top">
                 <Typography variant="body2" className={styles.emailContent}>
-                  {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user?.email || '-'}
+                  {detailIsLoading ? (
+                    <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
+                  ) : (
+                    user?.email || '-'
+                  )}
                 </Typography>
               </Tooltip>
             </ListItem>
@@ -710,7 +674,11 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               <Typography variant="body2">
-                {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user.phone || '-'}
+                {detailIsLoading ? (
+                  <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
+                ) : (
+                  user.phone || '-'
+                )}
               </Typography>
             </ListItem>
             <Divider />
@@ -724,7 +692,11 @@ export default function Users() {
               <Tooltip title={user.location || '-'} placement="top">
                 <Box className={styles.emailContent}>
                   <Typography variant="body2">
-                    {detailIsLoading ? <Skeleton sx={{ width: '8rem' }} /> : user.location || '-'}
+                    {detailIsLoading ? (
+                      <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
+                    ) : (
+                      user.location || '-'
+                    )}
                   </Typography>
                 </Box>
               </Tooltip>
@@ -738,7 +710,7 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               {detailIsLoading ? (
-                <Skeleton sx={{ width: '8rem' }} />
+                <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
               ) : user.created_at ? (
                 <Chip
                   avatar={<Box component="img" src="/icons/user/created-at.svg" />}
@@ -759,7 +731,7 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               {detailIsLoading ? (
-                <Skeleton sx={{ width: '8rem' }} />
+                <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
               ) : user.updated_at ? (
                 <Chip
                   avatar={<Box component="img" src="/icons/user/updated-at.svg" />}

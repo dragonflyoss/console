@@ -24,6 +24,7 @@ describe('Tokens', () => {
   });
 
   it('when data is loaded', () => {
+    cy.get('[data-testid="isloading"]').should('be.exist');
     cy.get('.css-1qdyvok > .MuiTypography-root').should('have.text', 'Personal access tokens');
 
     cy.get('.MuiList-root > :nth-child(2) > .MuiButtonBase-root > .MuiTypography-root').click();
@@ -212,19 +213,26 @@ describe('Tokens', () => {
           url: '/api/v1/personal-access-tokens?page=1&per_page=10000000',
         },
         (req) => {
-          req.reply({
-            statusCode: 200,
-            body: deleteToken,
+          req.reply((res) => {
+            res.setDelay(1000);
+            res.send({
+              statusCode: 200,
+              body: deleteToken,
+            });
           });
         },
-      ).as('delete');
+      );
 
       // Confirm delete.
       cy.get('#delete').click();
-      cy.wait('@delete');
+
+      // Show isloading.
+      cy.get('[data-testid="isloading"]').should('be.exist');
 
       // Delete success message.
       cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
+
+      cy.get('[data-testid="isloading"]').should('not.exist');
 
       // Check if the token exists.
       cy.get('#root-1').should('not.exist');

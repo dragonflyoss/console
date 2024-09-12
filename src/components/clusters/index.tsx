@@ -251,7 +251,11 @@ export default function Clusters() {
                 <Box marginLeft="0.6rem">
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : clusterCount?.length || 0}
+                      {isLoading ? (
+                        <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
+                      ) : (
+                        clusterCount?.length || 0
+                      )}
                     </Typography>
                     <span>number of clusters</span>
                   </Box>
@@ -259,7 +263,11 @@ export default function Clusters() {
                     <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/default.svg" />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span className={styles.clusterBottomContent}>
-                        {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : numberOfDefaultClusters || 0}
+                        {isLoading ? (
+                          <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
+                        ) : (
+                          numberOfDefaultClusters || 0
+                        )}
                       </span>
                       <span className={styles.clusterBottomContentMsg}>default</span>
                     </Box>
@@ -285,7 +293,7 @@ export default function Clusters() {
                 <Box sx={{ ml: '0.6rem' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : scheduler?.length || 0}
+                      {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '1rem' }} /> : scheduler?.length || 0}
                     </Typography>
                     <span>number of schedulers</span>
                   </Box>
@@ -293,7 +301,11 @@ export default function Clusters() {
                     <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/active.svg" />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span className={styles.clusterBottomContent}>
-                        {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : numberOfActiveSchedulers || 0}
+                        {isLoading ? (
+                          <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
+                        ) : (
+                          numberOfActiveSchedulers || 0
+                        )}
                       </span>
                       <span className={styles.clusterBottomContentMsg}>active</span>
                     </Box>
@@ -319,7 +331,7 @@ export default function Clusters() {
                 <Box sx={{ ml: '0.6rem' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : seedPeer.length || 0}
+                      {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '1rem' }} /> : seedPeer.length || 0}
                     </Typography>
                     <span>number of seed peers</span>
                   </Box>
@@ -327,7 +339,11 @@ export default function Clusters() {
                     <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/active.svg" />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span className={styles.clusterBottomContent}>
-                        {isLoading ? <Skeleton sx={{ width: '1rem' }} /> : numberOfActiveSeedPeers || 0}
+                        {isLoading ? (
+                          <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
+                        ) : (
+                          numberOfActiveSeedPeers || 0
+                        )}
                       </span>
                       <span className={styles.clusterBottomContentMsg}>active</span>
                     </Box>
@@ -385,13 +401,16 @@ export default function Clusters() {
                     <Box display="flex">
                       <span className={styles.idText}>ID&nbsp;:&nbsp;</span>
                       {clusterIsLoading ? (
-                        <Skeleton sx={{ width: '1rem' }} />
+                        <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
                       ) : (
                         <span className={styles.idText}>{item.id}</span>
                       )}
                     </Box>
                     {clusterIsLoading ? (
-                      <Skeleton sx={{ width: '4rem', height: '1.4rem', mt: '0.8rem', mb: '0.8rem' }} />
+                      <Skeleton
+                        data-testid="isloading"
+                        sx={{ width: '4rem', height: '1.4rem', mt: '0.8rem', mb: '0.8rem' }}
+                      />
                     ) : (
                       <Box
                         display="flex"
@@ -413,19 +432,29 @@ export default function Clusters() {
                       </Box>
                     )}
                     <Typography variant="h6">
-                      {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.name}
+                      {clusterIsLoading ? <Skeleton data-testid="isloading" sx={{ width: '6rem' }} /> : item.name}
                     </Typography>
                     <Box display="flex" mt="0.4rem">
                       <Tooltip title={item.bio || '-'} placement="top">
                         <Typography variant="body2" className={styles.descriptionText}>
-                          {clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : item.bio || '-'}
+                          {clusterIsLoading ? (
+                            <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
+                          ) : (
+                            item.bio || '-'
+                          )}
                         </Typography>
                       </Tooltip>
                     </Box>
                     <Box className={styles.creatTimeContainer}>
                       <Chip
                         avatar={<MoreTimeIcon />}
-                        label={clusterIsLoading ? <Skeleton sx={{ width: '6rem' }} /> : getDatetime(item.created_at)}
+                        label={
+                          clusterIsLoading ? (
+                            <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
+                          ) : (
+                            getDatetime(item.created_at)
+                          )
+                        }
                         variant="outlined"
                         size="small"
                       />

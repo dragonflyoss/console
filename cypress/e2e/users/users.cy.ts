@@ -42,18 +42,6 @@ describe('Users', () => {
       cy.intercept(
         {
           method: 'GET',
-          url: '/api/v1/users/3',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: guestUser,
-          });
-        },
-      );
-      cy.intercept(
-        {
-          method: 'GET',
           url: '/api/v1/users/2/roles',
         },
         (req) => {
@@ -78,6 +66,9 @@ describe('Users', () => {
     });
 
     it('can display users table', () => {
+      // Show isloading.
+      cy.get('[data-testid="isloading"]').should('be.exist');
+
       // Show root user information.
       cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(2)').should('be.visible').and('have.text', 'root');
 
@@ -94,6 +85,9 @@ describe('Users', () => {
 
       // The update role button for the root user is not displayed.
       cy.get('#edit-root > .MuiBox-root').should('not.exist');
+
+      // Does not show isloading.
+      cy.get('[data-testid="isloading"]').should('not.exist');
 
       cy.get('#action-root').click();
 
@@ -156,7 +150,26 @@ describe('Users', () => {
       cy.get('.MuiListSubheader-root > .MuiButtonBase-root').click();
 
       cy.get('#action-jack').click();
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/users/3',
+        },
+        (req) => {
+          req.reply((res) => {
+            res.setDelay(1000);
+            res.send({
+              statusCode: 200,
+              body: guestUser,
+            });
+          });
+        },
+      );
+
       cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #detail-jack').click();
+
+      cy.get('[data-testid="detail-isloading"]').should('be.exist');
 
       // Display user jack details.
       cy.get('.MuiDrawer-root > .MuiPaper-root').should('be.visible');
@@ -168,6 +181,8 @@ describe('Users', () => {
       cy.get('.users_emailContent__jraG8 > .MuiTypography-root').should('have.text', 'Shanghai');
       cy.get('.MuiList-root > :nth-child(15)').should('contain', '2023-11-07 06:09:04');
       cy.get('.MuiList-root > :nth-child(17)').should('contain', '2023-11-07 06:09:04');
+
+      cy.get('[data-testid="detail-isloading"]').should('not.exist');
     });
 
     it('can display update user', () => {

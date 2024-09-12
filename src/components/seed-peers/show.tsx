@@ -114,7 +114,7 @@ export default function SeedPeer() {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.id || '-'}
+            {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : seedPeer?.id || '-'}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.headerContainer}>
@@ -125,7 +125,7 @@ export default function SeedPeer() {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.host_name || '-'}
+            {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : seedPeer?.host_name || '-'}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.headerContainer}>
@@ -136,7 +136,7 @@ export default function SeedPeer() {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.ip || '-'}
+            {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : seedPeer?.ip || '-'}
           </Typography>
         </Paper>
         <Paper variant="outlined" className={styles.clusterIDContaine}>
@@ -147,7 +147,11 @@ export default function SeedPeer() {
             </Typography>
           </Box>
           <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : seedPeer?.seed_peer_cluster_id || '-'}
+            {isLoading ? (
+              <Skeleton data-testid="isloading" sx={{ width: '8rem' }} />
+            ) : (
+              seedPeer?.seed_peer_cluster_id || '-'
+            )}
           </Typography>
         </Paper>
       </Box>
@@ -159,7 +163,7 @@ export default function SeedPeer() {
                 {item.label}
               </Typography>
               {isLoading ? (
-                <Skeleton sx={{ width: '80%' }} />
+                <Skeleton data-testid="isloading" sx={{ width: '80%' }} />
               ) : (
                 <>
                   {item.name === 'created_at' ? (

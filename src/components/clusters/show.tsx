@@ -36,7 +36,6 @@ import {
   LinearProgress,
   debounce,
   Checkbox,
-  DialogTitle,
   Menu,
   MenuItem,
   ListItemIcon,
@@ -214,6 +213,7 @@ export default function ShowCluster() {
         page: 1,
         per_page: MAX_PAGE_SIZE,
       });
+      
       setScheduler(scheduler);
       setSchedulerCount(scheduler);
     }
@@ -243,10 +243,11 @@ export default function ShowCluster() {
             setSeedPeer(seedPeer);
             setSeedPeerCount(seedPeer);
           }
+
           await schedulers();
           const features = await getSchedulerFeatrues();
-          setSchedulerFeatures(features);
 
+          setSchedulerFeatures(features);
           setSchedulerTableIsLoading(false);
           setSeedPeerTableIsLoading(false);
           setInformationIsLoading(false);
@@ -404,6 +405,8 @@ export default function ShowCluster() {
     setOpenDeleteSeedPeer(false);
     setSeedPeerSelectedRow(null);
     setOpenSchedulerEditFeatures(false);
+    setSchedulerAnchorElement(null);
+    setSeedPeerAnchorElement(null);
     if (!progressLoading) {
       setOpenDeleteInactive(false);
       setDeleteAllInactiveErrorMessage([]);
@@ -440,17 +443,21 @@ export default function ShowCluster() {
   };
 
   const handleDeleteScheduler = async () => {
+    setSchedulerTableIsLoading(true);
     setDeleteLoadingButton(true);
 
     try {
       await deleteScheduler(schedulerSelectedID);
-      await schedulers();
-
-      setSuccessMessage(true);
       setOpenDeleteScheduler(false);
       setDeleteLoadingButton(false);
+
+      await schedulers();
+      setSchedulerTableIsLoading(false);
+      setSuccessMessage(true);
     } catch (error) {
       if (error instanceof Error) {
+        setSchedulerTableIsLoading(false);
+
         setErrorMessage(true);
         setErrorMessageText(error.message);
         setDeleteLoadingButton(false);
@@ -466,9 +473,13 @@ export default function ShowCluster() {
 
   const handleDeleteSeedPeer = async () => {
     setDeleteLoadingButton(true);
+    setSeedPeerTableIsLoading(true);
 
     try {
       await deleteSeedPeer(seedPeerSelectedID);
+
+      setDeleteLoadingButton(false);
+      setOpenDeleteSeedPeer(false);
 
       if (cluster.seed_peer_cluster_id !== 0) {
         const seedPeer = await getSeedPeers({
@@ -476,17 +487,19 @@ export default function ShowCluster() {
           page: 1,
           per_page: MAX_PAGE_SIZE,
         });
-        setSuccessMessage(true);
-        setOpenDeleteSeedPeer(false);
+
+        setSeedPeerTableIsLoading(false);
+
         setSeedPeer(seedPeer);
         setSeedPeerCount(seedPeer);
-        setDeleteLoadingButton(false);
+        setSuccessMessage(true);
       }
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(true);
         setErrorMessageText(error.message);
         setDeleteLoadingButton(false);
+        setSeedPeerTableIsLoading(false);
       }
     }
   };
@@ -714,6 +727,8 @@ export default function ShowCluster() {
 
   const handleEditFeatures = async () => {
     setDeleteLoadingButton(true);
+    setSchedulerTableIsLoading(true);
+
     const features = [featuresScheduler ? 'schedule' : '', featuresPreheat ? 'preheat' : ''];
     const filteredFeatures = features.filter((item) => item !== '');
 
@@ -723,14 +738,16 @@ export default function ShowCluster() {
     if (schedulerSelectedID) {
       try {
         await updateSchedulerFeatrues(schedulerSelectedID, { ...formData });
-        await schedulers();
-
-        setOpenSchedulerEditFeatures(false);
         setDeleteLoadingButton(false);
+        setOpenSchedulerEditFeatures(false);
+
+        await schedulers();
+        setSchedulerTableIsLoading(false);
         setSuccessMessage(true);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
+          setSchedulerTableIsLoading(false);
           setErrorMessageText(error.message);
           setDeleteLoadingButton(false);
         }
@@ -827,11 +844,7 @@ export default function ShowCluster() {
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
-              <CancelLoadingButton
-                id="cancelDeleteCluster"
-                loading={deleteLoadingButton}
-                onClick={handleDeleteClose}
-              />
+              <CancelLoadingButton id="cancelDeleteCluster" loading={deleteLoadingButton} onClick={handleDeleteClose} />
               <SavelLoadingButton
                 loading={deleteLoadingButton}
                 endIcon={<DeleteIcon />}
@@ -1451,7 +1464,7 @@ export default function ShowCluster() {
           <Box sx={{ display: 'flex', width: '70%' }}>
             <Box className={styles.doughnut}>
               {schedulerTableIsLoading ? (
-                <Skeleton variant="circular" width="100%" height="100%" />
+                <Skeleton data-testid="cluster-loading" variant="circular" width="100%" height="100%" />
               ) : (
                 <Doughnut data={schedulerDoughnut} options={schedulerDoughnutOptions} />
               )}
@@ -1462,7 +1475,7 @@ export default function ShowCluster() {
               </Typography>
               <Box>
                 {schedulerTableIsLoading ? (
-                  <Skeleton width="2rem" />
+                  <Skeleton data-testid="cluster-loading" width="2rem" />
                 ) : (
                   <Typography variant="h5" fontFamily="mabry-bold">
                     {numberOfActiveSchedulers}
@@ -1485,7 +1498,7 @@ export default function ShowCluster() {
           <Box sx={{ display: 'flex', width: '70%' }}>
             <Box className={styles.doughnut}>
               {seedPeerTableIsLoading ? (
-                <Skeleton variant="circular" width="100%" height="100%" />
+                <Skeleton data-testid="cluster-loading" variant="circular" width="100%" height="100%" />
               ) : (
                 <Doughnut data={seedPeerDoughnut} options={seedPeerDoughnutOptions} />
               )}
@@ -1496,7 +1509,7 @@ export default function ShowCluster() {
               </Typography>
               <Box>
                 {seedPeerTableIsLoading ? (
-                  <Skeleton width="2rem" />
+                  <Skeleton data-testid="cluster-loading" width="2rem" />
                 ) : (
                   <Typography variant="h5" fontFamily="mabry-bold">
                     {numberOfActiveSeedPeers}
@@ -1588,37 +1601,37 @@ export default function ShowCluster() {
               {schedulerTableIsLoading ? (
                 <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell align="center">
-                    <Skeleton />
+                    <Skeleton data-testid="scheduler-loading" />
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton width="4rem" />
+                      <Skeleton data-testid="scheduler-loading" width="4rem" />
                     </Box>
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                       <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
-                      <Skeleton width="4rem" />
+                      <Skeleton data-testid="scheduler-loading" width="4rem" />
                     </Box>
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton width="2rem" />
+                      <Skeleton data-testid="scheduler-loading" width="2rem" />
                     </Box>
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton width="3.5rem" height="2.6rem" />
+                      <Skeleton data-testid="scheduler-loading" width="3.5rem" height="2.6rem" />
                     </Box>
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton width="3.8rem" height="2.8rem" />
+                      <Skeleton data-testid="scheduler-loading" width="3.8rem" height="2.8rem" />
                     </Box>
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton width="2.5rem" height="2.5rem" />
+                      <Skeleton data-testid="scheduler-loading" width="2.5rem" height="2.5rem" />
                     </Box>
                   </TableCell>
                 </TableRow>
@@ -1711,12 +1724,10 @@ export default function ShowCluster() {
                               anchorEl={schedulerAnchorElement}
                               id={schedulerSelectedRow?.host_name}
                               open={Boolean(schedulerAnchorElement)}
-                              onClose={() => {
-                                setSchedulerAnchorElement(null);
-                              }}
+                              onClose={handleDeleteClose}
                               sx={{
                                 position: 'absolute',
-                                left: '-2.8rem',
+                                left: '-3rem',
                                 '& .MuiMenu-paper': {
                                   boxShadow:
                                     '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
@@ -1725,6 +1736,11 @@ export default function ShowCluster() {
                             >
                               {schedulerFeatures && schedulerFeatures.length > 0 ? (
                                 <MenuItem
+                                  sx={{
+                                    '&:hover': {
+                                      backgroundColor: '#D9D9D9',
+                                    },
+                                  }}
                                   id={`edit-${schedulerSelectedRow?.host_name}`}
                                   onClick={() => {
                                     setOpenSchedulerEditFeatures(true);
@@ -1738,12 +1754,17 @@ export default function ShowCluster() {
                                       src="/icons/user/user-edit.svg"
                                     />
                                   </ListItemIcon>
-                                  Edit features
+                                  Edit Features
                                 </MenuItem>
                               ) : (
                                 ''
                               )}
                               <MenuItem
+                                sx={{
+                                  '&:hover': {
+                                    backgroundColor: '#D9D9D9',
+                                  },
+                                }}
                                 id={`delete-${schedulerSelectedRow?.host_name}`}
                                 onClick={() => {
                                   openHandleScheduler(schedulerSelectedRow);
@@ -1753,7 +1774,7 @@ export default function ShowCluster() {
                                 <ListItemIcon>
                                   <DeleteOutlineIcon sx={{ color: 'var(--button-color)' }} />
                                 </ListItemIcon>
-                                Delete Scheduler
+                                Delete
                               </MenuItem>
                             </Menu>
                           </TableCell>
@@ -2030,47 +2051,47 @@ export default function ShowCluster() {
               {seedPeerTableIsLoading ? (
                 <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell align="center">
-                    <Skeleton />
+                    <Skeleton data-testid="seed-peer-loading" />
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton width="4rem" />
+                      <Skeleton data-testid="seed-peer-loading" width="4rem" />
                     </Box>
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                       <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
-                      <Skeleton width="4rem" />
+                      <Skeleton data-testid="seed-peer-loading" width="4rem" />
                     </Box>
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton width="2rem" />
+                      <Skeleton data-testid="seed-peer-loading" width="2rem" />
                     </Box>
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton width="2rem" />
+                      <Skeleton data-testid="seed-peer-loading" width="2rem" />
                     </Box>
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton width="2rem" />
+                      <Skeleton data-testid="seed-peer-loading" width="2rem" />
                     </Box>
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton width="2rem" />
+                      <Skeleton data-testid="seed-peer-loading" width="2rem" />
                     </Box>
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton width="3.5rem" height="2.6rem" />
+                      <Skeleton data-testid="seed-peer-loading" width="3.5rem" height="2.6rem" />
                     </Box>
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton width="2.5rem" height="2.5rem" />
+                      <Skeleton data-testid="seed-peer-loading" width="2.5rem" height="2.5rem" />
                     </Box>
                   </TableCell>
                 </TableRow>
@@ -2149,12 +2170,10 @@ export default function ShowCluster() {
                               anchorEl={seedPeerAnchorElement}
                               id={seedPeerSelectedRow?.host_name}
                               open={Boolean(seedPeerAnchorElement)}
-                              onClose={() => {
-                                setSeedPeerAnchorElement(null);
-                              }}
+                              onClose={handleDeleteClose}
                               sx={{
                                 position: 'absolute',
-                                left: '-3.5rem',
+                                left: '-3rem',
                                 '& .MuiMenu-paper': {
                                   boxShadow:
                                     '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
@@ -2162,6 +2181,11 @@ export default function ShowCluster() {
                               }}
                             >
                               <MenuItem
+                                sx={{
+                                  '&:hover': {
+                                    backgroundColor: '#D9D9D9',
+                                  },
+                                }}
                                 id={`delete-${seedPeerSelectedRow?.host_name}`}
                                 onClick={() => {
                                   openHandleSeedPeer(seedPeerSelectedRow);
@@ -2171,7 +2195,7 @@ export default function ShowCluster() {
                                 <ListItemIcon>
                                   <DeleteOutlineIcon sx={{ color: 'var(--button-color)' }} />
                                 </ListItemIcon>
-                                Delete Seed Peer
+                                Delete
                               </MenuItem>
                             </Menu>
                           </TableCell>

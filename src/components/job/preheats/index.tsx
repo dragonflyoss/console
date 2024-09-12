@@ -222,17 +222,17 @@ export default function Preheats() {
           <Box>
             <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
               <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
-                <Skeleton variant="circular" width="1.4rem" height="1.4rem" />
+                <Skeleton data-testid="isloading" variant="circular" width="1.4rem" height="1.4rem" />
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }} ml="0.6rem">
-                  <Skeleton width="3rem" />
-                  <Skeleton width="6rem" />
+                  <Skeleton data-testid="isloading" width="3rem" />
+                  <Skeleton data-testid="isloading" width="6rem" />
                 </Box>
               </Box>
               <Box width="30%">
-                <Skeleton width="40%" />
+                <Skeleton data-testid="isloading" width="40%" />
               </Box>
               <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Skeleton variant="circular" width="2em" height="2em" />
+                <Skeleton data-testid="isloading" variant="circular" width="2em" height="2em" />
               </Box>
             </Box>
             <Divider />

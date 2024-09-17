@@ -850,7 +850,7 @@ interface cerateJobResponse {
   type: string;
   state: string;
   args: {
-    filteredQueryParams: string;
+    filtered_query_params: string;
     headers: { [key: string]: string };
     tag: string;
     type: string;

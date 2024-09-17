@@ -1,57 +1,61 @@
 {
   "id": 10,
   "created_at": "2023-12-13T11:58:53Z",
-  "updated_at": "2023-12-13T11:59:02Z",
+  "updated_at": "2023-12-13T11:58:53Z",
   "is_del": 0,
-  "task_id": "group_f60c3730-b718-45c7-98a5-014052c1c02a",
+  "task_id": "group_01f9f92f-02c7-477e-8360-a387407b73dd",
   "bio": "This is a preheat task with status failure",
   "type": "preheat",
   "state": "FAILURE",
   "args": {
-    "filteredQueryParams": "Expires&Signature",
+    "concurrent_count": 50,
+    "filtered_query_params": "Expires&Signature",
     "headers": {
       "Connection": "keep-alive"
     },
     "password": "",
     "platform": "",
+    "scope": "single_peer",
     "tag": "prheat tag",
+    "timeout": 1800000000000,
     "type": "file",
     "url": "http://dock.io/preheat/test",
     "username": ""
   },
   "result": {
-    "CreatedAt": "2023-12-13T11:58:53.535716295Z",
-    "GroupUUID": "group_f60c3730-b718-45c7-98a5-014052c1c02a",
-    "JobStates": [
+    "created_at": "2023-03-23T08:29:18.204923418Z",
+    "group_uuid": "group_7d8fec4c-6b8f-4240-9f56-71845d21d6a7",
+    "job_states": [
       {
-        "CreatedAt": "2023-12-13T11:58:53.535716295Z",
-        "Error": "",
-        "Results": null,
-        "State": "STARTED",
-        "TTL": 0,
-        "TaskName": "preheat",
-        "TaskUUID": "task_8cd497e9-4748-45c3-acc4-db32aebe44ed3"
+        "created_at": "2023-03-23T08:29:18.204923418Z",
+        "error": "",
+        "results": null,
+        "state": "FAILURE",
+        "task_name": "preheat",
+        "task_uuid": "task_d44f42d9-5b01-4f4a-a8dd-34331eefa84a",
+        "ttl": 0
       },
       {
-        "CreatedAt": "2023-12-13T11:58:53.535716295Z",
-        "Error": "rpc error: code = Aborted desc = source response 401/401 Unauthorized is not valid",
-        "Results": null,
-        "State": "FAILURE",
-        "TTL": 0,
-        "TaskName": "preheat",
-        "TaskUUID": "task_8cd497e9-4748-45c3-acc4-db32aebe44ed3"
+        "created_at": "2023-03-23T08:29:18.204923418Z",
+        "error": "rpc error: code = Aborted desc = source response 401/401 Unauthorized is not valid",
+        "results": null,
+        "state": "FAILURE",
+        "task_name": "preheat",
+        "task_uuid": "task_d44f42d9-5b01-4f4a-a8dd-34331eefa84a",
+        "ttl": 0
       },
       {
-        "CreatedAt": "2023-12-13T11:58:53.535716295Z",
-        "Error": "",
-        "Results": [],
-        "State": "SUCCESS",
-        "TTL": 0,
-        "TaskName": "preheat",
-        "TaskUUID": "task_8cd497e9-4748-45c3-acc4-db32aebe44ed3"
+        "created_at": "2023-03-23T08:29:18.204923418Z",
+        "error": "",
+        "results": null,
+        "state": "SUCCESS",
+        "task_name": "preheat",
+        "task_uuid": "task_d44f42d9-5b01-4f4a-a8dd-34331eefa84a",
+        "ttl": 0
       }
     ],
-    "State": "FAILURE"
+    "state": "FAILURE",
+    "updated_at": "2024-09-14T10:39:16.549159043Z"
   },
   "user_id": 0,
   "user": {
@@ -68,7 +72,7 @@
     "bio": "",
     "configs": null
   },
-  "seed_peer_clusters": [],
+  "seed_peer_clusters": null,
   "scheduler_clusters": [
     {
       "id": 1,

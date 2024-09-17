@@ -53,9 +53,10 @@ export default function ShowPreheat() {
       try {
         if (typeof params.id === 'string') {
           const job = await getJob(params.id);
+
           setPreheat(job);
           setIsLoading(false);
-          if (job.result.State !== 'SUCCESS' && job.result.State !== 'FAILURE') {
+          if (job.result.state !== 'SUCCESS' && job.result.state !== 'FAILURE') {
             setShouldPoll(true);
           }
         }
@@ -78,7 +79,7 @@ export default function ShowPreheat() {
               const job = await getJob(params.id);
               setPreheat(job);
 
-              if ((job?.result?.State && job?.result?.State === 'SUCCESS') || job?.result?.State === 'FAILURE') {
+              if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {
                 setShouldPoll(false);
               }
             }
@@ -182,7 +183,7 @@ export default function ShowPreheat() {
             <Box className={styles.statusContent}>
               {isLoading ? (
                 <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
-              ) : preheat?.result?.State ? (
+              ) : preheat?.result?.state ? (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Box
                     sx={{
@@ -191,19 +192,19 @@ export default function ShowPreheat() {
                       height: '2rem',
                       borderRadius: '0.3rem',
                       p: '0.4rem 0.6rem',
-                      pr: preheat.result.State === 'FAILURE' ? '0' : '',
+                      pr: preheat.result.state === 'FAILURE' ? '0' : '',
                       backgroundColor:
-                        preheat.result.State === 'SUCCESS'
+                        preheat.result.state === 'SUCCESS'
                           ? '#228B22'
-                          : preheat.result.State === 'FAILURE'
+                          : preheat.result.state === 'FAILURE'
                           ? '#D42536'
                           : '#DBAB0A',
                     }}
                     id="status"
                   >
-                    {preheat.result.State === 'SUCCESS' ? (
+                    {preheat.result.state === 'SUCCESS' ? (
                       <></>
-                    ) : preheat.result.State === 'FAILURE' ? (
+                    ) : preheat.result.state === 'FAILURE' ? (
                       <></>
                     ) : (
                       <Box
@@ -220,9 +221,9 @@ export default function ShowPreheat() {
                         color: '#FFF',
                       }}
                     >
-                      {preheat.result.State || ''}
+                      {preheat.result.state || ''}
                     </Typography>
-                    {preheat?.result.State === 'FAILURE' ? (
+                    {preheat?.result.state === 'FAILURE' ? (
                       <>
                         <Box
                           sx={{ ml: '0.4rem', mr: '0.2rem', backgroundColor: '#fff', height: '1rem', width: '0.08rem' }}
@@ -273,7 +274,11 @@ export default function ShowPreheat() {
               </Typography>
             </Box>
             <Typography variant="body1" className={styles.informationContent}>
-              {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} /> : preheat?.args?.url || '-'}
+              {isLoading ? (
+                <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+              ) : (
+                preheat?.args?.url || '-'
+              )}
             </Typography>
           </Box>
           <Box className={styles.informationContainer}>
@@ -291,8 +296,8 @@ export default function ShowPreheat() {
             <Box className={styles.informationContent} sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {isLoading ? (
                 <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
-              ) : preheat?.args?.filteredQueryParams ? (
-                preheat?.args?.filteredQueryParams.split('&').map((item) => (
+              ) : preheat?.args?.filtered_query_params ? (
+                preheat?.args?.filtered_query_params.split('&').map((item) => (
                   <Chip
                     key={item}
                     label={item}
@@ -441,9 +446,9 @@ export default function ShowPreheat() {
         </Paper>
         <Drawer anchor="right" open={errorLog} onClose={handleClose}>
           <Box role="presentation" sx={{ width: '28rem' }}>
-            {preheat?.result?.JobStates.map((item) =>
-              item.State === 'FAILURE' && item.Error !== '' ? (
-                <Box key={item.Error} sx={{ height: '100vh', backgroundColor: '#24292f' }}>
+            {preheat?.result?.job_states.map((item) =>
+              item.state === 'FAILURE' && item.error !== '' ? (
+                <Box key={item.error} sx={{ height: '100vh', backgroundColor: '#24292f' }}>
                   <Typography variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#fff' }}>
                     Error log
                   </Typography>
@@ -496,7 +501,7 @@ export default function ShowPreheat() {
                           backgroundColor: '#24292f',
                         }}
                       >
-                        <Typography sx={{ color: '#d0d7de' }}>{item.Error}</Typography>
+                        <Typography sx={{ color: '#d0d7de' }}>{item.error}</Typography>
                       </AccordionDetails>
                     </Accordion>
                   </Box>

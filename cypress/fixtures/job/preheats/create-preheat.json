@@ -5,7 +5,7 @@
     "updated_at": "2023-03-23T16:29:18+08:00",
     "is_del": 0,
     "task_id": "group_7d8fec4c-6b8f-4240-9f56-71845d21d6a7",
-    "bio": "This is a preheat task with status pending",
+    "bio": "create preheat",
     "type": "preheat",
     "state": "PENDING",
     "args": {

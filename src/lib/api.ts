@@ -676,6 +676,39 @@ interface getJobsParams {
   state?: string;
 }
 
+interface JobStates {
+  created_at: string;
+  error: string;
+  results: Array<string> | null;
+  state: string;
+  task_name: string;
+  task_uuid: string;
+  ttl: number;
+}
+
+interface scheduler_clusters {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  name: string;
+  bio: string;
+  config: {
+    candidate_parent_limit: number;
+    filter_parent_limit: number;
+  };
+  client_config: {
+    concurrent_piece_count: number;
+    load_limit: number;
+  };
+  scopes: {};
+  is_default: true;
+  seed_peer_clusters: null;
+  schedulers: null;
+  peers: null;
+  jobs: null;
+}
+
 export interface JobsResponse {
   id: number;
   created_at: string;
@@ -686,28 +719,41 @@ export interface JobsResponse {
   type: string;
   state: string;
   args: {
-    filteredQueryParams: string;
-    headers: { [key: string]: string };
+    concurrent_count: number;
+    headers: { [key: string]: string } | null;
+    password: string;
+    platform: string;
+    scope: string;
     tag: string;
+    timeout: number;
     type: string;
     url: string;
+    username: string;
   };
   result: {
-    CreatedAt: string;
-    GroupUUID: string;
-    JobStates: [
-      {
-        CreatedAt: string;
-        Error: string;
-        Results: Array<string>;
-        State: string;
-        TTL: number;
-        TaskName: string;
-        TaskUUID: string;
-      },
-    ];
-    State: string;
+    created_at: string;
+    group_uuid: string;
+    job_states: Array<JobStates>;
+    state: string;
+    updated_at: string;
   };
+  user_id: number;
+  user: {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    is_del: number;
+    email: string;
+    name: string;
+    avatar: string;
+    phone: string;
+    state: string;
+    location: string;
+    bio: string;
+    configs: null | any;
+  };
+  seed_peer_clusters: any[];
+  scheduler_clusters: scheduler_clusters;
 }
 
 interface getJobsResponse {
@@ -727,16 +773,6 @@ export async function getJobs(params: getJobsParams): Promise<getJobsResponse> {
   return responses;
 }
 
-interface JobStates {
-  CreatedAt: string;
-  Error: string;
-  Results: Array<string> | null;
-  State: string;
-  TTL: number;
-  TaskName: string;
-  TaskUUID: string;
-}
-
 export interface getJobResponse {
   id: number;
   created_at: string;
@@ -747,46 +783,42 @@ export interface getJobResponse {
   type: string;
   state: string;
   args: {
-    filteredQueryParams: string;
+    concurrent_count: number;
+    filtered_query_params: string;
     headers: { [key: string]: string } | null;
-    tag: string;
-    type: string;
-    url: string;
     password: string;
     platform: string;
+    scope: string;
+    tag: string;
+    timeout: number;
+    type: string;
+    url: string;
     username: string;
   };
   result: {
-    CreatedAt: string;
-    GroupUUID: string;
-    JobStates: JobStates[];
-    State: string;
+    created_at: string;
+    group_uuid: string;
+    job_states: Array<JobStates>;
+    state: string;
+    updated_at: string;
   };
   user_id: number;
-  scheduler_clusters: [
-    {
-      id: number;
-      created_at: string;
-      updated_at: string;
-      is_del: number;
-      name: string;
-      bio: string;
-      config: {
-        candidate_parent_limit: number;
-        filter_parent_limit: number;
-      };
-      client_config: {
-        concurrent_piece_count: number;
-        load_limit: number;
-      };
-      scopes: {};
-      is_default: true;
-      seed_peer_clusters: null;
-      schedulers: null;
-      peers: null;
-      jobs: null;
-    },
-  ];
+  user: {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    is_del: number;
+    email: string;
+    name: string;
+    avatar: string;
+    phone: string;
+    state: string;
+    location: string;
+    bio: string;
+    configs: null;
+  };
+  seed_peer_clusters: [];
+  scheduler_clusters: Array<scheduler_clusters>;
 }
 
 export async function getJob(id: string): Promise<getJobResponse> {
@@ -802,7 +834,7 @@ interface createJobRequest {
     type: string;
     url: string;
     tag: string;
-    filteredQueryParams: string;
+    filtered_query_params: string;
     headers?: { [key: string]: string } | null;
   };
   scheduler_cluster_ids: Array<number>;
@@ -818,7 +850,7 @@ interface cerateJobResponse {
   type: string;
   state: string;
   args: {
-    filteredQueryParams: string;
+    filtered_query_params: string;
     headers: { [key: string]: string };
     tag: string;
     type: string;

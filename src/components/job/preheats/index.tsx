@@ -68,7 +68,7 @@ export default function Preheats() {
         setPreheatTotalPages(jobs.total_page || 1);
 
         const states = jobs.data.filter(
-          (obj) => obj.result.State !== 'SUCCESS' && obj.result.State !== 'FAILURE',
+          (obj) => obj.result.state !== 'SUCCESS' && obj.result.state !== 'FAILURE',
         ).length;
 
         states === 0 ? setShouldPoll(false) : setShouldPoll(true);
@@ -99,7 +99,7 @@ export default function Preheats() {
             setPreheatTotalPages(jobs.total_page || 1);
 
             const states = jobs.data.filter(
-              (obj) => obj.result.State !== 'SUCCESS' && obj.result.State !== 'FAILURE',
+              (obj) => obj.result.state !== 'SUCCESS' && obj.result.state !== 'FAILURE',
             ).length;
 
             states === 0 ? setShouldPoll(false) : setShouldPoll(true);
@@ -248,14 +248,14 @@ export default function Preheats() {
                   <Box key={item.id} id={`list-${item.id}`}>
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
-                        {item.result.State === 'SUCCESS' ? (
+                        {item.result.state === 'SUCCESS' ? (
                           <Box
                             id={`SUCCESS-${item.id}`}
                             component="img"
                             sx={{ width: '1.3rem', height: '1.3rem' }}
                             src="/icons/job/preheat/success.svg"
                           />
-                        ) : item.result.State === 'FAILURE' ? (
+                        ) : item.result.state === 'FAILURE' ? (
                           <Box
                             id={`FAILURE-${item.id}`}
                             component="img"
@@ -309,14 +309,14 @@ export default function Preheats() {
                 ) : (
                   <Box key={item.id} id={`list-${item.id}`} sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                     <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
-                      {item.result.State === 'SUCCESS' ? (
+                      {item.result.state === 'SUCCESS' ? (
                         <Box
                           id={`SUCCESS-${item.id}`}
                           component="img"
                           sx={{ width: '1.3rem', height: '1.3rem' }}
                           src="/icons/job/preheat/success.svg"
                         />
-                      ) : item.result.State === 'FAILURE' ? (
+                      ) : item.result.state === 'FAILURE' ? (
                         <Box
                           id={`FAILURE-${item.id}`}
                           component="img"

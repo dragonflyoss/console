@@ -1,40 +1,44 @@
 [
   {
     "id": 8,
-    "created_at": "2023-03-23T15:55:41+08:00",
-    "updated_at": "2023-03-23T15:55:41+08:00",
+    "created_at": "2023-03-23T16:29:18+08:00",
+    "updated_at": "2023-03-23T16:29:18+08:00",
     "is_del": 0,
-    "task_id": "group_f60c3730-b718-45c7-98a5-014052c1c02a",
+    "task_id": "group_7d8fec4c-6b8f-4240-9f56-71845d21d6a7",
     "bio": "This is a preheat task with status success",
     "type": "preheat",
     "state": "SUCCESS",
     "args": {
-      "filteredQueryParams": "",
+      "concurrent_count": 50,
+      "filtered_query_params": "",
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
       "password": "",
       "platform": "",
+      "scope": "single_peer",
       "tag": "",
+      "timeout": 1800000000000,
       "type": "file",
       "url": "https://example.com/path/to/file",
       "username": ""
     },
     "result": {
-      "CreatedAt": "2023-03-23T07:55:35.492980831Z",
-      "GroupUUID": "group_f60c3730-b718-45c7-98a5-014052c1c02a",
-      "JobStates": [
+      "created_at": "2023-03-23T08:29:18.204923418Z",
+      "group_uuid": "group_7d8fec4c-6b8f-4240-9f56-71845d21d6a7",
+      "job_states": [
         {
-          "CreatedAt": "2023-12-12T06:16:10.243413422Z",
-          "Error": "",
-          "Results": [],
-          "State": "SUCCESS",
-          "TTL": 0,
-          "TaskName": "preheat",
-          "TaskUUID": "task_8cd497e9-4748-45c3-acc4-db32aebe44ed"
+          "created_at": "2023-03-23T08:29:18.204923418Z",
+          "error": "",
+          "results": null,
+          "state": "SUCCESS",
+          "task_name": "preheat",
+          "task_uuid": "task_d44f42d9-5b01-4f4a-a8dd-34331eefa84a",
+          "ttl": 0
         }
       ],
-      "State": "SUCCESS"
+      "state": "SUCCESS",
+      "updated_at": "2024-09-14T10:39:16.549159043Z"
     },
     "user_id": 0,
     "user": {
@@ -59,37 +63,41 @@
     "created_at": "2023-03-23T15:55:41+08:00",
     "updated_at": "2023-03-23T15:55:41+08:00",
     "is_del": 0,
-    "task_id": "group_f60c3730-b718-45c7-98a5-014052c1c02a",
+    "task_id": "group_7d8fec4c-6b8f-4240-9f56-71845d21d6a7",
     "bio": "This is a preheat task with status success",
     "type": "preheat",
     "state": "SUCCESS",
     "args": {
-      "filteredQueryParams": "",
+      "concurrent_count": 50,
+      "filtered_query_params": "",
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
       "password": "",
       "platform": "",
+      "scope": "single_peer",
       "tag": "",
+      "timeout": 1800000000000,
       "type": "file",
       "url": "https://example.com/path/to/file",
       "username": ""
     },
     "result": {
-      "CreatedAt": "2023-03-23T07:55:35.492980831Z",
-      "GroupUUID": "group_f60c3730-b718-45c7-98a5-014052c1c02a",
-      "JobStates": [
+      "created_at": "2023-03-23T08:29:18.204923418Z",
+      "group_uuid": "group_7d8fec4c-6b8f-4240-9f56-71845d21d6a7",
+      "job_states": [
         {
-          "CreatedAt": "2023-12-12T06:16:10.243413422Z",
-          "Error": "",
-          "Results": [],
-          "State": "SUCCESS",
-          "TTL": 0,
-          "TaskName": "preheat",
-          "TaskUUID": "task_8cd497e9-4748-45c3-acc4-db32aebe44ed"
+          "created_at": "2023-03-23T08:29:18.204923418Z",
+          "error": "",
+          "results": null,
+          "state": "SUCCESS",
+          "task_name": "preheat",
+          "task_uuid": "task_d44f42d9-5b01-4f4a-a8dd-34331eefa84a",
+          "ttl": 0
         }
       ],
-      "State": "SUCCESS"
+      "state": "SUCCESS",
+      "updated_at": "2024-09-14T10:39:16.549159043Z"
     },
     "user_id": 0,
     "user": {
@@ -114,37 +122,41 @@
     "created_at": "2023-03-23T16:29:18+08:00",
     "updated_at": "2023-03-23T16:29:18+08:00",
     "is_del": 0,
-    "task_id": "group_2e5c8b9f-96be-4ef6-9bf4-23d25675dfac",
+    "task_id": "group_7d8fec4c-6b8f-4240-9f56-71845d21d6a7",
     "bio": "This is a preheat task with status success",
     "type": "preheat",
     "state": "SUCCESS",
     "args": {
-      "filteredQueryParams": "",
+      "concurrent_count": 50,
+      "filtered_query_params": "",
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
       "password": "",
       "platform": "",
+      "scope": "single_peer",
       "tag": "",
+      "timeout": 1800000000000,
       "type": "file",
       "url": "https://example.com/path/to/file",
       "username": ""
     },
     "result": {
-      "CreatedAt": "2023-03-23T08:29:18.204923418Z",
-      "GroupUUID": "group_2e5c8b9f-96be-4ef6-9bf4-23d25675dfac",
-      "JobStates": [
+      "created_at": "2023-03-23T08:29:18.204923418Z",
+      "group_uuid": "group_7d8fec4c-6b8f-4240-9f56-71845d21d6a7",
+      "job_states": [
         {
-          "CreatedAt": "2023-12-12T06:16:10.243413422Z",
-          "Error": "",
-          "Results": [],
-          "State": "SUCCESS",
-          "TTL": 0,
-          "TaskName": "preheat",
-          "TaskUUID": "task_8cd497e9-4748-45c3-acc4-db32aebe44ed"
+          "created_at": "2023-03-23T08:29:18.204923418Z",
+          "error": "",
+          "results": null,
+          "state": "SUCCESS",
+          "task_name": "preheat",
+          "task_uuid": "task_d44f42d9-5b01-4f4a-a8dd-34331eefa84a",
+          "ttl": 0
         }
       ],
-      "State": "SUCCESS"
+      "state": "SUCCESS",
+      "updated_at": "2024-09-14T10:39:16.549159043Z"
     },
     "user_id": 0,
     "user": {
@@ -166,40 +178,44 @@
   },
   {
     "id": 4,
-    "created_at": "2023-03-23T15:55:41+08:00",
-    "updated_at": "2023-03-23T15:55:41+08:00",
+    "created_at": "2023-03-23T16:29:18+08:00",
+    "updated_at": "2023-03-23T16:29:18+08:00",
     "is_del": 0,
-    "task_id": "group_f60c3730-b718-45c7-98a5-014052c1c02a",
+    "task_id": "group_7d8fec4c-6b8f-4240-9f56-71845d21d6a7",
     "bio": "This is a preheat task with status success",
     "type": "preheat",
     "state": "SUCCESS",
     "args": {
-      "filteredQueryParams": "",
+      "concurrent_count": 50,
+      "filtered_query_params": "",
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
       "password": "",
       "platform": "",
+      "scope": "single_peer",
       "tag": "",
+      "timeout": 1800000000000,
       "type": "file",
       "url": "https://example.com/path/to/file",
       "username": ""
     },
     "result": {
-      "CreatedAt": "2023-03-23T07:55:35.492980831Z",
-      "GroupUUID": "group_f60c3730-b718-45c7-98a5-014052c1c02a",
-      "JobStates": [
+      "created_at": "2023-03-23T08:29:18.204923418Z",
+      "group_uuid": "group_7d8fec4c-6b8f-4240-9f56-71845d21d6a7",
+      "job_states": [
         {
-          "CreatedAt": "2023-12-12T06:16:10.243413422Z",
-          "Error": "",
-          "Results": [],
-          "State": "SUCCESS",
-          "TTL": 0,
-          "TaskName": "preheat",
-          "TaskUUID": "task_8cd497e9-4748-45c3-acc4-db32aebe44ed"
+          "created_at": "2023-03-23T08:29:18.204923418Z",
+          "error": "",
+          "results": null,
+          "state": "SUCCESS",
+          "task_name": "preheat",
+          "task_uuid": "task_d44f42d9-5b01-4f4a-a8dd-34331eefa84a",
+          "ttl": 0
         }
       ],
-      "State": "SUCCESS"
+      "state": "SUCCESS",
+      "updated_at": "2024-09-14T10:39:16.549159043Z"
     },
     "user_id": 0,
     "user": {
@@ -221,40 +237,44 @@
   },
   {
     "id": 2,
-    "created_at": "2023-03-23T15:55:41+08:00",
-    "updated_at": "2023-03-23T15:55:41+08:00",
+    "created_at": "2023-03-23T16:29:18+08:00",
+    "updated_at": "2023-03-23T16:29:18+08:00",
     "is_del": 0,
-    "task_id": "group_f60c3730-b718-45c7-98a5-014052c1c02a",
+    "task_id": "group_7d8fec4c-6b8f-4240-9f56-71845d21d6a7",
     "bio": "This is a preheat task with status success",
     "type": "preheat",
     "state": "SUCCESS",
     "args": {
-      "filteredQueryParams": "",
+      "concurrent_count": 50,
+      "filtered_query_params": "",
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
       "password": "",
       "platform": "",
+      "scope": "single_peer",
       "tag": "",
+      "timeout": 1800000000000,
       "type": "file",
       "url": "https://example.com/path/to/file",
       "username": ""
     },
     "result": {
-      "CreatedAt": "2023-03-23T07:55:35.492980831Z",
-      "GroupUUID": "group_f60c3730-b718-45c7-98a5-014052c1c02a",
-      "JobStates": [
+      "created_at": "2023-03-23T08:29:18.204923418Z",
+      "group_uuid": "group_7d8fec4c-6b8f-4240-9f56-71845d21d6a7",
+      "job_states": [
         {
-          "CreatedAt": "2023-12-12T06:16:10.243413422Z",
-          "Error": "",
-          "Results": [],
-          "State": "SUCCESS",
-          "TTL": 0,
-          "TaskName": "preheat",
-          "TaskUUID": "task_8cd497e9-4748-45c3-acc4-db32aebe44ed"
+          "created_at": "2023-03-23T08:29:18.204923418Z",
+          "error": "",
+          "results": null,
+          "state": "SUCCESS",
+          "task_name": "preheat",
+          "task_uuid": "task_d44f42d9-5b01-4f4a-a8dd-34331eefa84a",
+          "ttl": 0
         }
       ],
-      "State": "SUCCESS"
+      "state": "SUCCESS",
+      "updated_at": "2024-09-14T10:39:16.549159043Z"
     },
     "user_id": 0,
     "user": {
@@ -279,37 +299,41 @@
     "created_at": "2023-03-23T16:29:18+08:00",
     "updated_at": "2023-03-23T16:29:18+08:00",
     "is_del": 0,
-    "task_id": "group_2e5c8b9f-96be-4ef6-9bf4-23d25675dfac",
+    "task_id": "group_7d8fec4c-6b8f-4240-9f56-71845d21d6a7",
     "bio": "This is a preheat task with status success",
     "type": "preheat",
     "state": "SUCCESS",
     "args": {
-      "filteredQueryParams": "",
+      "concurrent_count": 50,
+      "filtered_query_params": "",
       "headers": {
         "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
       },
       "password": "",
       "platform": "",
+      "scope": "single_peer",
       "tag": "",
+      "timeout": 1800000000000,
       "type": "file",
       "url": "https://example.com/path/to/file",
       "username": ""
     },
     "result": {
-      "CreatedAt": "2023-03-23T08:29:18.204923418Z",
-      "GroupUUID": "group_2e5c8b9f-96be-4ef6-9bf4-23d25675dfac",
-      "JobStates": [
+      "created_at": "2023-03-23T08:29:18.204923418Z",
+      "group_uuid": "group_7d8fec4c-6b8f-4240-9f56-71845d21d6a7",
+      "job_states": [
         {
-          "CreatedAt": "2023-12-12T06:16:10.243413422Z",
-          "Error": "",
-          "Results": [],
-          "State": "SUCCESS",
-          "TTL": 0,
-          "TaskName": "preheat",
-          "TaskUUID": "task_8cd497e9-4748-45c3-acc4-db32aebe44ed"
+          "created_at": "2023-03-23T08:29:18.204923418Z",
+          "error": "",
+          "results": null,
+          "state": "SUCCESS",
+          "task_name": "preheat",
+          "task_uuid": "task_d44f42d9-5b01-4f4a-a8dd-34331eefa84a",
+          "ttl": 0
         }
       ],
-      "State": "SUCCESS"
+      "state": "SUCCESS",
+      "updated_at": "2024-09-14T10:39:16.549159043Z"
     },
     "user_id": 0,
     "user": {

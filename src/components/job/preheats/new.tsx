@@ -325,7 +325,7 @@ export default function NewPreheat() {
         type: 'file',
         url: url,
         tag: tag,
-        filteredQueryParams: filters,
+        filtered_query_params: filters,
         headers: headerList,
       },
       scheduler_cluster_ids: clusterID,

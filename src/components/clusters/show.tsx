@@ -1485,7 +1485,7 @@ export default function ShowCluster() {
                     {numberOfActiveSchedulers}
                   </Typography>
                 )}
-                <div>number of active schdulers</div>
+                <div>number of active schedulers</div>
               </Box>
             </Box>
           </Box>

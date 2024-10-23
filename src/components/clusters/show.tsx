@@ -1424,7 +1424,7 @@ export default function ShowCluster() {
                         },
                       }}
                     >
-                      Save
+                      Delete
                     </LoadingButton>
                   ) : (
                     <Button

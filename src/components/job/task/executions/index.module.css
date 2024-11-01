@@ -1,0 +1,22 @@
+.container {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.containerTitle {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.status {
+  width: 2rem;
+  height: 2rem;
+}
+
+.taskID {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

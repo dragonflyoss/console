@@ -171,7 +171,7 @@ export default function EditCluster() {
       label: 'IDC',
       enterMultiple: true,
       scopesFormProps: {
-        value: idc?.split('|') || [],
+        value: (idc && idc?.split('|')) || [],
         options: [],
 
         onChange: (_e: any, newValue: any) => {

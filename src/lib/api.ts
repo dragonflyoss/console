@@ -698,11 +698,10 @@ interface scheduler_clusters {
     filter_parent_limit: number;
   };
   client_config: {
-    concurrent_piece_count: number;
     load_limit: number;
   };
   scopes: {};
-  is_default: true;
+  is_default: boolean;
   seed_peer_clusters: null;
   schedulers: null;
   peers: null;
@@ -897,7 +896,7 @@ export interface getPeersResponse {
     id: number;
     created_at: string;
     updated_at: string;
-    is_del: 0;
+    is_del: number;
     name: string;
     bio: string;
     config: {
@@ -909,8 +908,8 @@ export interface getPeersResponse {
     };
     scopes: {
       cidrs: Array<string>;
-      idc: '';
-      location: '';
+      idc: string;
+      location: string;
     };
     is_default: boolean;
     seed_peer_clusters: number;
@@ -927,4 +926,175 @@ export async function getPeers(params?: getpeerParams): Promise<getPeersResponse
 
   const response = await get(url);
   return await response.json();
+}
+
+interface user {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  email: string;
+  name: string;
+  avatar: string;
+  phone: string;
+  state: string;
+  location: string;
+  bio: string;
+  configs: null;
+}
+
+interface taskIDResquest {
+  args: {
+    task_id?: string;
+    url?: string;
+    tag?: string;
+    application?: string;
+    filtered_query_params?: string;
+  };
+  scheduler_cluster_ids?: Array<number>;
+  type: string;
+}
+
+export interface createGetTaskJobResponse {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  task_id: string;
+  bio: string;
+  type: string;
+  state: string;
+  args: {
+    task_id: string;
+  };
+  result: null;
+  user_id: number;
+  user: user;
+  seed_peer_clusters: Array<string> | null;
+  scheduler_clusters: Array<scheduler_clusters>;
+}
+
+export async function createTaskJob(request: taskIDResquest): Promise<createGetTaskJobResponse> {
+  const url = new URL(`/api/v1/jobs`, API_URL);
+  const response = await post(url, request);
+  return await response.json();
+}
+
+interface taskResquest {
+  args: {
+    url: string;
+    tag: string;
+    application: string;
+    filtered_query_params: string;
+  };
+  scheduler_cluster_ids?: Array<number>;
+  type: string;
+}
+
+export async function taskJob(request: taskResquest): Promise<createGetTaskJobResponse> {
+  const url = new URL(`/api/v1/jobs`, API_URL);
+  const response = await post(url, request);
+  return await response.json();
+}
+
+interface peers {
+  created_at: string;
+  host_type: string;
+  hostname: string;
+  id: string;
+  ip: string;
+  updated_at: string;
+}
+
+export interface jobStates {
+  created_at: string;
+  error: string;
+  results: [{ peers: Array<peers> | null; scheduler_cluster_id: number }];
+  state: string;
+  task_name: string;
+  task_uuid: string;
+  ttl: number;
+}
+
+interface failureTasks {
+  description: string;
+  host_type: string;
+  hostname: string;
+  ip: string;
+}
+
+interface successTasks {
+  host_type: string;
+  hostname: string;
+  ip: string;
+}
+
+interface deleteJobStates {
+  created_at: string;
+  error: string;
+  results: [
+    {
+      failure_tasks: Array<failureTasks> | null;
+      scheduler_cluster_id: 1;
+      success_tasks: Array<successTasks> | null;
+    },
+  ];
+  state: string;
+  task_name: string;
+  task_uuid: string;
+  ttl: 0;
+}
+
+export interface deleteTaskResponse {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  task_id: string;
+  bio: string;
+  type: string;
+  state: string;
+  args: {
+    application?: string;
+    filtered_query_params?: string;
+    tag?: string;
+    task_id: string;
+    timeout?: number;
+    url?: string;
+  };
+  result: {
+    created_at: string;
+    group_uuid: string;
+    job_states: deleteJobStates[] | jobStates[];
+    state: string;
+    updated_at: string;
+  };
+  user_id: number;
+  user: user;
+  seed_peer_clusters: [];
+  scheduler_clusters: Array<scheduler_clusters>;
+}
+
+export async function getTaskJob(id: any): Promise<deleteTaskResponse> {
+  const url = new URL(`/api/v1/jobs/${id}`, API_URL);
+  const response = await get(url);
+
+  return await response.json();
+}
+
+interface getDeleteTaskResponse {
+  data: deleteTaskResponse[];
+  total_page?: number;
+}
+
+export async function getDeleteTask(params: getJobsParams): Promise<getDeleteTaskResponse> {
+  const url = new URL(`/api/v1/jobs?${queryString.stringify(params)}&type=delete_task`, API_URL);
+
+  const response = await get(url);
+  const data = await response.json();
+  const linkHeader = response.headers.get('link');
+  const links = parseLinkHeader(linkHeader || null);
+  const totalPage = Number(links?.last?.page);
+  const responses = { data: data, total_page: totalPage };
+  return responses;
 }

@@ -1,0 +1,201 @@
+.title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.clusterTitle {
+  display: flex;
+  align-items: center;
+}
+
+.clusterWrapper {
+  margin-top: 2rem;
+  display: flex;
+}
+
+.peerContainer {
+  padding: 1rem;
+}
+
+.clusterContainer {
+  padding-right: 1rem;
+  width: 25%;
+}
+
+.clusterContext {
+  padding: 1rem;
+}
+
+.clusterName {
+  font-family: mabry-bold !important;
+}
+
+.statusIcon {
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-right: 0.4rem;
+}
+
+.deleteClusterIcon {
+  width: 6rem;
+  height: 6rem;
+}
+
+.schedulerInactiveList {
+  display: flex;
+  padding: 0.8rem 1rem !important;
+}
+
+.schedulerInactiveListTitle {
+  display: flex;
+  padding: 0.6rem 1rem;
+  background-color: #f7f7f7 !important;
+}
+
+.schedulerInactiveHeaderIP {
+  width: 35%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+}
+
+.schedulerInactiveID {
+  display: flex;
+  align-items: center;
+  width: 30%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.schedulerInactiveHostname {
+  width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 1rem;
+}
+
+.ipWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.ipContainer {
+  display: flex;
+  align-items: center;
+}
+
+.ipIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-right: 0.6rem;
+}
+
+.locationContent {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 90%;
+}
+
+.clusterIconContainer {
+  display: flex;
+  position: relative;
+}
+
+.clusterSmallCircleIcon {
+  width: 0.4rem;
+  height: 0.4rem;
+}
+
+.clusterBigCircleIcon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.clusterIcon {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.hostname {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.toggleButtonIcon {
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-right: 0.3rem;
+}
+
+.hostnameTitle {
+  color: #515155;
+}
+
+.schedulerClustersIDContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2e8f791c;
+  border-radius: 15%;
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+/* .filterInput {
+  padding: 1.4rem 1.4rem 0 1.4rem !important;
+  width: 50%;
+} */
+.filterInput {
+  display: flex;
+  align-items: center;
+  /* padding: 1rem 0; */
+}
+
+.textField {
+  width: 70%;
+}
+
+.filterInput:nth-child(1) {
+  width: 100%;
+}
+
+.filterInput:nth-child(2) {
+  width: 100%;
+}
+
+.filterInput:nth-child(3) {
+  width: 100%;
+}
+
+.filterContainer {
+  display: flex;
+  flex-wrap: wrap;
+
+  width: 100%;
+}
+
+.inputContent {
+  display: flex;
+  align-items: center;
+}
+
+.filterButtonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1rem;
+}
+
+.filterTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+  background-color: #f9f9f9;
+}

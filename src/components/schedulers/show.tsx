@@ -150,7 +150,7 @@ export default function Schedulers() {
       <Paper variant="outlined" className={styles.schedulerContainer}>
         {schedulerLabel.map((item) => {
           return (
-            <Box key={item.label} className={styles.lschedulerContent}>
+            <Box key={item.label} className={styles.schedulerContent}>
               <Typography variant="subtitle1" component="div" mb="1rem">
                 {item.label}
               </Typography>

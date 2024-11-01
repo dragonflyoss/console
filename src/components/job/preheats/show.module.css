@@ -28,7 +28,7 @@
 
 .informationContent {
   width: 70%;
-  overflow-wrap: break-word;
+  word-break: break-all;
   font-family: 'mabry-bold' !important;
 }
 

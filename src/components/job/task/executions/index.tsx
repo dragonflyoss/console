@@ -194,55 +194,32 @@ export default function LabTabs() {
         <Divider />
         {isLoading ? (
           <Box>
-            <Box sx={{ display: 'flex', p: '1rem', alignItems: 'center' }}>
-              <Box width="10%" sx={{ display: 'flex', alignItems: 'center' }}>
-                <Skeleton data-testid="isloading" width="3rem" />
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', width: '50%' }}>
-                <Box
-                  component="img"
-                  sx={{ width: '1.4rem', height: '1.4rem', mr: '0.5rem' }}
-                  src="/icons/job/task/task-id.svg"
-                />
-                <Skeleton data-testid="isloading" width="16rem" />
-              </Box>
-              <Box width="15%" sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
                 <Skeleton data-testid="isloading" variant="circular" width="1.4rem" height="1.4rem" />
-                <Skeleton data-testid="isloading" width="5rem" height="2rem" sx={{ ml: '0.6rem' }} />
+                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }} ml="0.6rem">
+                  <Skeleton data-testid="isloading" width="3rem" />
+                  <Skeleton data-testid="isloading" width="6rem" />
+                </Box>
               </Box>
-              <Box width="20%" sx={{ display: 'flex' }}>
-                <Skeleton data-testid="isloading" width="9rem" />
+              <Box width="30%">
+                <Skeleton data-testid="isloading" width="40%" />
               </Box>
-              <Box width="5%">
-                <Skeleton data-testid="isloading" variant="circular" width="2rem" height="2rem" />
+              <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Skeleton data-testid="isloading" variant="circular" width="2em" height="2em" />
               </Box>
             </Box>
-            {/* <Divider /> */}
+            <Divider />
           </Box>
         ) : allDeleteTask && allDeleteTask.length === 0 ? (
-          <Box sx={{ height: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Box
+            id="no-executions"
+            sx={{ height: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
             You don't have any executions.
           </Box>
         ) : (
-          <>
-            {/* <Box className={styles.containerTitle}>
-              <Typography width="10%" variant="body1" component="div" fontFamily="mabry-bold">
-                ID
-              </Typography>
-              <Typography width="50%" variant="body1" component="div" fontFamily="mabry-bold">
-                Task ID
-              </Typography>
-              <Typography width="15%" variant="body1" component="div" fontFamily="mabry-bold">
-                Status
-              </Typography>
-              <Typography width="20%" variant="body1" component="div" fontFamily="mabry-bold">
-                Created At
-              </Typography>
-              <Typography width="5%" variant="body1" component="div" fontFamily="mabry-bold">
-                Detail
-              </Typography>
-            </Box> */}
-
+          <Box id="executions-list">
             {allDeleteTask &&
               allDeleteTask.map((item, index) => {
                 return index !== allDeleteTask.length - 1 ? (
@@ -367,104 +344,8 @@ export default function LabTabs() {
                     </Box>
                   </Box>
                 );
-
-                // return (
-                //   <Box>
-                //     <Box className={styles.container} key={item.id}>
-                //       <Box width="5%" sx={{ display: 'flex', alignItems: 'center' }}>
-                //         <Typography fontFamily="mabry-bold" variant="body1" component="div">
-                //           {item?.id || '-'}
-                //         </Typography>
-                //       </Box>
-                //       <Box sx={{ display: 'flex', alignItems: 'center', width: '55%' }}>
-                //         <Box
-                //           component="img"
-                //           sx={{ width: '1.4rem', height: '1.4rem', mr: '0.2rem' }}
-                //           src="/icons/job/task/task-id.svg"
-                //         />
-
-                //         <Tooltip title={item?.args?.task_id || '-'} placement="top">
-                //           <Typography variant="body2" className={styles.taskID}>
-                //             {item?.args?.task_id || '-'}
-                //           </Typography>
-                //         </Tooltip>
-                //       </Box>
-                //       <Box width="15%" display="flex" alignItems="flex-end">
-                //         {/* <Box
-                //           // variant="outlined"
-                //           sx={{
-                //             display: 'inline-flex',
-                //             alignItems: 'center',
-                //             // borderColor:
-                //             //   item?.state === 'FAILURE' ? '#D81E06' : item?.state === 'SUCCESS' ? '#027D14' : '',
-                //             // background:
-                //             //   item?.state === 'FAILURE' ? '#FFF0EF' : item?.state === 'SUCCESS' ? '#DFF1E5' : '',
-
-                //             // p: '0.2rem 0.4rem',
-                //           }}
-                //         ></Box> */}
-                //         {item?.state === 'SUCCESS' ? (
-                //           <Box
-                //             component="img"
-                //             sx={{ width: '1.3rem', height: '1.3rem' }}
-                //             src="/icons/job/preheat/success.svg"
-                //           />
-                //         ) : item?.state === 'FAILURE' ? (
-                //           <Box
-                //             component="img"
-                //             sx={{ width: '1.3rem', height: '1.3rem' }}
-                //             src="/icons/job/preheat/failure.svg"
-                //           />
-                //         ) : item?.state === 'FAILURE' ? (
-                //           <Box
-                //             component="img"
-                //             sx={{ width: '1.3rem', height: '1.3rem' }}
-                //             src="/icons/job/task/success.svg"
-                //           />
-                //         ) : (
-                //           <></>
-                //         )}
-                //         <Typography
-                //           variant="body2"
-                //           component="div"
-                //           pl="0.2rem"
-                //           fontFamily="mabry-bold"
-                //           sx={{
-                //             color: item?.state === 'FAILURE' ? '#D81E06' : item?.state === 'SUCCESS' ? '#027D14' : '',
-                //           }}
-                //         >
-                //           {item?.result?.state || '-'}
-                //         </Typography>
-                //       </Box>
-                //       <Box width="15%" display="flex" alignItems="flex-end">
-                //         <Chip
-                //           avatar={<MoreTimeIcon />}
-                //           label={getBJTDatetime(item.created_at) || '-'}
-                //           variant="outlined"
-                //           size="small"
-                //         />
-                //       </Box>
-                //       <Box width="10%" display="flex" alignItems="flex-end" justifyContent="center">
-                //         <RouterLink
-                //           component={Link}
-                //           id={`preheat-${item?.id}`}
-                //           to={`/jobs/task/executions/${item?.id}`}
-                //           underline="hover"
-                //           sx={{ color: 'var(--description-color)' }}
-                //         >
-                //           <Box
-                //             component="img"
-                //             sx={{ width: '2rem', height: '2rem' }}
-                //             src="/icons/job/preheat/detail.svg"
-                //           />
-                //         </RouterLink>
-                //       </Box>
-                //     </Box>
-                //     <Divider />
-                //   </Box>
-                // );
               })}
-          </>
+          </Box>
         )}
       </Paper>
       {totalPages > 1 ? (
@@ -479,7 +360,7 @@ export default function LabTabs() {
             boundaryCount={1}
             color="primary"
             size="small"
-            id="preheat-pagination"
+            id="executions-pagination"
           />
         </Box>
       ) : (

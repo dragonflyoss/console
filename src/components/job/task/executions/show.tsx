@@ -36,11 +36,11 @@ import styles from './show.module.css';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { getBJTDatetime, getDatetime } from '../../../../lib/utils';
 import { is } from 'cypress/types/bluebird';
+import _ from 'lodash';
 
 export default function ShowTask() {
   const [deleteTask, setDeleteTask] = useState<deleteTaskResponse>();
   const [shouldPoll, setShouldPoll] = useState(false);
-  const [openDeleteBackdrop, setOpenDeleteBackdrop] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -68,21 +68,20 @@ export default function ShowTask() {
   });
 
   useEffect(() => {
+    setIsLoading(true);
     (async function () {
       try {
         if (params.id) {
           const job = await getTaskJob(params.id);
 
           setDeleteTask(job);
+          setIsLoading(false);
 
           if (job.type === 'delete_task') {
             if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {
               setDeleteTask(job);
-              setOpenDeleteBackdrop(false);
             } else {
               setShouldPoll(true);
-
-              setOpenDeleteBackdrop(true);
             }
           }
         }
@@ -108,7 +107,6 @@ export default function ShowTask() {
             if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {
               setShouldPoll(false);
               setIsLoading(false);
-              setOpenDeleteBackdrop(false);
             }
           } catch (error) {
             if (error instanceof Error) {
@@ -130,10 +128,18 @@ export default function ShowTask() {
   }, [shouldPoll, params.id]);
 
   const result = deleteTask?.result?.job_states.map((item: any) => {
-    return item?.results;
+    return [item?.results];
   });
 
-  // console.log();
+  const job = Array.isArray(result) && result.flat(2);
+
+  const arr =
+    Array.isArray(job) &&
+    job.map((item) => {
+      return [item.failure_tasks];
+    });
+
+  const failureTasks = Array.isArray(arr) && arr.flat(2).filter((item) => item !== null);
 
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
@@ -223,50 +229,6 @@ export default function ShowTask() {
           </Box>
         </Box>
       </Drawer>
-      {/* <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
-        <Typography>jobs</Typography>
-        <Typography>task</Typography>
-        <RouterLink component={Link} underline="hover" color="inherit" to={`/jobs/task/excutions`}>
-          excutions
-        </RouterLink>
-        <Typography color="text.primary" fontFamily="mabry-bold">
-          {deleteTask?.id || '-'}
-        </Typography>
-      </Breadcrumbs> */}
-      {/* <Typography variant="h5" mb="2rem">
-        Executions
-      </Typography> */}
-      {/* <Paper variant="outlined" className={styles.schedulerContainer}>
-        {excutionsList.map((item) => {
-          return (
-            <Paper variant="outlined" key={item.label} className={styles.schedulerContent}>
-              <Typography variant="subtitle1" component="div" mb="1rem">
-                {item.label}
-              </Typography>
-              {isLoading ? (
-                <Skeleton data-testid="isloading" sx={{ width: '80%' }} />
-              ) : (
-                <>
-                  {item.name === 'created_at' ? (
-                    deleteTask?.[item?.name] ? (
-                      <Chip
-                        avatar={<MoreTimeIcon />}
-                        label={getDatetime(deleteTask?.[item?.name])}
-                        variant="outlined"
-                        size="small"
-                      />
-                    ) : (
-                      '-'
-                    )
-                  ) : (
-                    <></>
-                  )}
-                </>
-              )}
-            </Paper>
-          );
-        })}
-      </Paper> */}
       <Paper variant="outlined" sx={{ p: '1rem 2rem' }}>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
@@ -497,95 +459,119 @@ export default function ShowTask() {
           </Typography>
         </Box>
       </Paper>
-      {/* <Typography variant="h5" m="2rem 0">
-        Task
-      </Typography>
-      <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
-        <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
-          <TableRow>
-            <TableCell align="center">
-              <Typography variant="subtitle1" fontFamily="mabry-bold">
-                task_uuid
-              </Typography>
-            </TableCell>
-            <TableCell align="center">
-              <Typography variant="subtitle1" fontFamily="mabry-bold">
-                task_name
-              </Typography>
-            </TableCell>
-            <TableCell align="center">
-              <Typography variant="subtitle1" fontFamily="mabry-bold">
-                state
-              </Typography>
-            </TableCell>
-            <TableCell align="center">
-              <Typography variant="subtitle1" fontFamily="mabry-bold">
-                created_at
-              </Typography>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody id="scheduler-table-body">
-          {isLoading ? (
-            <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-              <TableCell align="center">
-                <Skeleton data-testid="scheduler-loading" />
-              </TableCell>
-              <TableCell align="center">
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Skeleton data-testid="scheduler-loading" width="4rem" />
-                </Box>
-              </TableCell>
-              <TableCell align="center">
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
-                  <Skeleton data-testid="scheduler-loading" width="4rem" />
-                </Box>
-              </TableCell>
-              <TableCell align="center">
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Skeleton data-testid="scheduler-loading" width="2rem" />
-                </Box>
-              </TableCell>
-              <TableCell align="center">
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Skeleton data-testid="scheduler-loading" width="3.5rem" height="2.6rem" />
-                </Box>
-              </TableCell>
-              <TableCell align="center">
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Skeleton data-testid="scheduler-loading" width="3.8rem" height="2.8rem" />
-                </Box>
-              </TableCell>
-              <TableCell align="center">
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Skeleton data-testid="scheduler-loading" width="2.5rem" height="2.5rem" />
-                </Box>
-              </TableCell>
-            </TableRow>
-          ) : deleteTask?.result?.job_states.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={9} align="center" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                You don't have scheduler cluster.
-              </TableCell>
-            </TableRow>
-          ) : (
-            <>
-              {Array.isArray(deleteTask?.result?.job_states) &&
-                deleteTask?.result?.job_states.map((item: any) => {
-                  return (
-                    <TableRow key={item?.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                      <TableCell align="center">{item?.task_uuid}</TableCell>
-                      <TableCell align="center">{item?.task_name}</TableCell>
-                      <TableCell align="center">{item?.state}</TableCell>
-                      <TableCell align="center">{item?.created_at}</TableCell>
-                    </TableRow>
-                  );
-                })}
-            </>
-          )}
-        </TableBody>
-      </Table> */}
+
+      {Array.isArray(failureTasks) && failureTasks.length === 0 ? (
+        <></>
+      ) : (
+        <Box>
+          <Typography variant="subtitle1" fontFamily="mabry-bold" m="2rem 0 1rem 0">
+            Failure tasks
+          </Typography>
+          <Paper variant="outlined">
+            <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
+              <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
+                <TableRow>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" fontFamily="mabry-bold">
+                      Hostname
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" fontFamily="mabry-bold">
+                      IP
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" fontFamily="mabry-bold">
+                      Host Type
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" fontFamily="mabry-bold">
+                      Description
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody id="scheduler-table-body">
+                {isLoading ? (
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell align="center">
+                      <Skeleton data-testid="scheduler-loading" />
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="scheduler-loading" width="4rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
+                        <Skeleton data-testid="scheduler-loading" width="4rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="scheduler-loading" width="2rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="scheduler-loading" width="3.5rem" height="2.6rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="scheduler-loading" width="3.8rem" height="2.8rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="scheduler-loading" width="2.5rem" height="2.5rem" />
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  <>
+                    {Array.isArray(failureTasks) &&
+                      failureTasks.map((item: any) => {
+                        return (
+                          <TableRow key={item?.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                            <TableCell align="center">{item?.hostname}</TableCell>
+                            <TableCell align="center">{item?.ip}</TableCell>
+                            <TableCell align="center">
+                              <Chip
+                                label={_.upperFirst(item?.host_type) || ''}
+                                size="small"
+                                variant="outlined"
+                                sx={{
+                                  borderRadius: '0%',
+                                  backgroundColor:
+                                    item?.host_type === 'super' ? 'var( --description-color)' : 'var(--button-color)',
+                                  color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
+                                  borderColor:
+                                    item?.host_type === 'super' ? 'var( --description-color)' : 'var(--button-color)',
+                                  fontWeight: 'bold',
+                                }}
+                              />
+                            </TableCell>
+                            <TableCell align="center" width="50%">
+                              <CustomWidthTooltip title={item?.description || '-'} placement="bottom">
+                                <Typography variant="body2" component="div" className={styles.description}>
+                                  {item?.description || '-'}
+                                </Typography>
+                              </CustomWidthTooltip>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                  </>
+                )}
+              </TableBody>
+            </Table>
+          </Paper>
+        </Box>
+      )}
     </ThemeProvider>
   );
 }

@@ -72,3 +72,10 @@
   height: 2rem;
   margin-right: 1.5rem;
 }
+
+.description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 40rem;
+}

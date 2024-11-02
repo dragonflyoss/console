@@ -87,6 +87,7 @@ export default function ShowPreheat() {
             if (error instanceof Error) {
               setErrorMessage(true);
               setErrorMessageText(error.message);
+              setShouldPoll(false);
               setIsLoading(false);
             }
           }

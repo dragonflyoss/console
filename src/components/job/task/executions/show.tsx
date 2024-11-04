@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { deleteTaskResponse, getTaskJob } from '../../../../lib/api';
 import {
-  Breadcrumbs,
   Typography,
   Box,
   IconButton,
@@ -15,12 +14,10 @@ import {
   AccordionSummary,
   AccordionDetails,
   Accordion,
-  FormControlLabel,
   Divider,
   Drawer,
   createTheme,
   ThemeProvider,
-  Link as RouterLink,
   TableHead,
   TableCell,
   TableRow,
@@ -30,13 +27,15 @@ import {
   tooltipClasses,
   styled,
   TooltipProps,
+  Pagination,
 } from '@mui/material';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import styles from './show.module.css';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import { getBJTDatetime, getDatetime } from '../../../../lib/utils';
+import { getBJTDatetime, getDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
 import { is } from 'cypress/types/bluebird';
 import _ from 'lodash';
+import { DEFAULT_SCHEDULER_TABLE_PAGE_SIZE } from '../../../../lib/constants';
 
 export default function ShowTask() {
   const [deleteTask, setDeleteTask] = useState<deleteTaskResponse>();
@@ -45,6 +44,12 @@ export default function ShowTask() {
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorLog, setErrorLog] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+  const [failure, setFailure] = useState({});
+  const [errorLogText, setErrorLogText] = useState('');
+  const navigate = useNavigate();
+  const query = useQuery();
+  const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
 
   const params = useParams();
 
@@ -87,6 +92,8 @@ export default function ShowTask() {
         }
       } catch (error) {
         if (error instanceof Error) {
+          console.log(error);
+
           setErrorMessage(true);
           setErrorMessageText(error.message);
           setShouldPoll(false);
@@ -119,7 +126,7 @@ export default function ShowTask() {
         };
 
         pollPreheat();
-      }, 30000);
+      }, 3000);
 
       return () => {
         clearInterval(pollingInterval);
@@ -127,19 +134,27 @@ export default function ShowTask() {
     }
   }, [shouldPoll, params.id]);
 
-  const result = deleteTask?.result?.job_states.map((item: any) => {
-    return [item?.results];
-  });
+  useEffect(() => {
+    const result =
+      deleteTask?.result?.job_states?.map((item: any) => {
+        return item.results ? item.results.map((resultItem: any) => resultItem) : [];
+      }) ?? [];
 
-  const job = Array.isArray(result) && result.flat(2);
+    const jobStates = Array.isArray(result) ? result.flat(2) : [];
 
-  const arr =
-    Array.isArray(job) &&
-    job.map((item) => {
-      return [item.failure_tasks];
-    });
+    const results = jobStates.map((item: any) => item?.failure_tasks ?? []);
 
-  const failureTasks = Array.isArray(arr) && arr.flat(2).filter((item) => item !== null);
+    const failureTasks = results.flat(2).filter((item) => item?.failure_tasks !== null);
+
+    const totalPage =
+      (Array.isArray(failureTasks) && Math.ceil(failureTasks.length / DEFAULT_SCHEDULER_TABLE_PAGE_SIZE)) || 1;
+    const currentPageData =
+      Array.isArray(failureTasks) && getPaginatedList(failureTasks, page, DEFAULT_SCHEDULER_TABLE_PAGE_SIZE);
+
+    setTotalPages(totalPage);
+
+    setFailure(currentPageData);
+  }, [deleteTask?.result?.job_states, page]);
 
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
@@ -215,20 +230,31 @@ export default function ShowTask() {
                   backgroundColor: '#24292f',
                 }}
               >
-                {deleteTask?.result &&
+                {/* {deleteTask?.result &&
                   deleteTask?.state !== 'PENDING' &&
                   deleteTask?.result.job_states.map((job: any) => (
                     <>
-                      <Typography variant="body2" fontFamily="mabry-bold" color="#d0d7de" mb="1rem">
-                        {job.error}
-                      </Typography>
+                      
                     </>
-                  ))}
+                  ))} */}
+                <Typography
+                  variant="body2"
+                  component="div"
+                  fontFamily="mabry-bold"
+                  color="#d0d7de"
+                  mb="1rem"
+                  className={styles.errorLog}
+                >
+                  {errorLogText}
+                </Typography>
               </AccordionDetails>
             </Accordion>
           </Box>
         </Box>
       </Drawer>
+      {/* <Typography variant="h5" mb="1.5rem" fontFamily="mabry-bold">
+        Executions
+      </Typography> */}
       <Paper variant="outlined" sx={{ p: '1rem 2rem' }}>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
@@ -238,7 +264,7 @@ export default function ShowTask() {
             </Typography>
           </Box>
           <Typography variant="body1" className={styles.informationContent}>
-            {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '2rem' }} /> : deleteTask?.id || 0}
+            {isLoading ? <Skeleton data-testid="execution-isloading" sx={{ width: '2rem' }} /> : deleteTask?.id || 0}
           </Typography>
         </Box>
         <Box className={styles.informationContainer}>
@@ -340,7 +366,7 @@ export default function ShowTask() {
           </Box>
           <Typography variant="body1" className={styles.informationContent}>
             {isLoading ? (
-              <Skeleton data-testid="preheat-isloading" sx={{ width: '2rem' }} />
+              <Skeleton data-testid="execution-isloading" sx={{ width: '2rem' }} />
             ) : (
               deleteTask?.args?.task_id || '-'
             )}
@@ -354,7 +380,7 @@ export default function ShowTask() {
             </Typography>
           </Box>
           {isLoading ? (
-            <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+            <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
           ) : (
             <CustomWidthTooltip title={deleteTask?.args?.url || '-'} placement="bottom">
               <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.URLContent}>
@@ -372,14 +398,14 @@ export default function ShowTask() {
           </Box>
           <Box className={styles.informationContent}>
             {isLoading ? (
-              <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+              <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
             ) : deleteTask?.args?.tag ? (
               <Chip
                 label={deleteTask?.args?.tag}
                 size="small"
                 variant="outlined"
                 sx={{
-                  borderRadius: '0%',
+                  borderRadius: '0.3rem',
                   background: 'var(--button-color)',
                   color: '#FFFFFF',
                   mr: '0.4rem',
@@ -404,7 +430,7 @@ export default function ShowTask() {
           <Box className={styles.informationContent} sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Typography variant="body1" className={styles.informationContent}>
               {isLoading ? (
-                <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
               ) : (
                 deleteTask?.args?.application || '-'
               )}
@@ -421,19 +447,17 @@ export default function ShowTask() {
           <Box className={styles.schedulerClustersID}>
             {deleteTask?.scheduler_clusters?.map((item, index) => {
               return (
-                <>
-                  {isLoading ? (
-                    <Skeleton data-testid="preheat-isloading" sx={{ width: '2rem' }} />
-                  ) : (
-                    <Box className={styles.schedulerClustersIDWrapper}>
-                      <Box className={styles.schedulerClustersIDContent}>
-                        <Typography key={index} variant="body2" fontFamily="mabry-bold" color="var(--save-size-color)">
-                          {item.id}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  )}
-                </>
+                <Box sx={{ display: 'flex', alignItems: 'center', p: '0.4rem', mr: '1rem' }}>
+                  <Box className={styles.schedulerClustersIDContent}>
+                    <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
+                      {isLoading ? (
+                        <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
+                      ) : (
+                        item.id || '-'
+                      )}
+                    </Typography>
+                  </Box>
+                </Box>
               );
             }) || '-'}
           </Box>
@@ -447,26 +471,61 @@ export default function ShowTask() {
           </Box>
           <Typography variant="body1" className={styles.informationContent}>
             {isLoading ? (
-              <Skeleton data-testid="preheat-isloading" sx={{ width: '2rem' }} />
-            ) : (
+              <Skeleton data-testid="execution-isloading" sx={{ width: '2rem' }} />
+            ) : deleteTask?.created_at ? (
               <Chip
                 avatar={<MoreTimeIcon />}
                 label={getBJTDatetime(deleteTask?.created_at || '0')}
                 variant="outlined"
                 size="small"
               />
+            ) : (
+              <Typography variant="body1" className={styles.informationContent}>
+                -
+              </Typography>
             )}
           </Typography>
         </Box>
       </Paper>
-
-      {Array.isArray(failureTasks) && failureTasks.length === 0 ? (
-        <></>
-      ) : (
-        <Box>
-          <Typography variant="subtitle1" fontFamily="mabry-bold" m="2rem 0 1rem 0">
-            Failure tasks
-          </Typography>
+      {failure && Array.isArray(failure) && failure.length !== 0 ? (
+        <Box id="failure-tasks">
+          <Box m="2.5rem 0 1.5rem 0" sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box
+              sx={{
+                width: '0.8rem',
+                height: '0.8rem',
+                backgroundColor: '#D42536',
+                borderRadius: '0.2rem',
+                mr: '0.6rem',
+                mb: '0.1rem',
+              }}
+            />
+            <Typography variant="h6" fontFamily="mabry-bold">
+              Failure
+            </Typography>
+            {/* <Box
+              sx={{
+                ml: '0.6rem',
+                border: '1px solid #d5d2d2',
+                p: '0.2rem 0.3rem',
+                borderRadius: '0.3rem',
+                display: 'inline-flex',
+                alignItems: 'center',
+              }}
+            >
+              <Box component="img" sx={{ width: '0.8rem', height: '0.8rem' }} src="/icons/cluster/inactive-total.svg" />
+              <Typography
+                id="schedulerTotal"
+                variant="caption"
+                fontFamily="mabry-bold"
+                component="div"
+                pl="0.3rem"
+                lineHeight="1rem"
+              >
+                {(Array.isArray(failure) && failure.length) || '0'} Total
+              </Typography>
+            </Box> */}
+          </Box>
           <Paper variant="outlined">
             <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
               <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
@@ -493,7 +552,7 @@ export default function ShowTask() {
                   </TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody id="scheduler-table-body">
+              <TableBody id="failure-tasks-list">
                 {isLoading ? (
                   <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell align="center">
@@ -533,12 +592,29 @@ export default function ShowTask() {
                   </TableRow>
                 ) : (
                   <>
-                    {Array.isArray(failureTasks) &&
-                      failureTasks.map((item: any) => {
+                    {failure &&
+                      Array.isArray(failure) &&
+                      failure.map((item: any) => {
                         return (
                           <TableRow key={item?.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                            <TableCell align="center">{item?.hostname}</TableCell>
-                            <TableCell align="center">{item?.ip}</TableCell>
+                            <TableCell align="center">
+                              <Typography variant="body2" component="div" fontFamily="mabry-bold">
+                                {item?.hostname}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="center">
+                              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Box
+                                  component="img"
+                                  sx={{ width: '1.5rem', mr: '0.4rem' }}
+                                  src="/icons/job/task/ip.svg"
+                                />
+
+                                <Typography variant="body2" component="div">
+                                  {item?.ip}
+                                </Typography>
+                              </Box>
+                            </TableCell>
                             <TableCell align="center">
                               <Chip
                                 label={_.upperFirst(item?.host_type) || ''}
@@ -555,12 +631,20 @@ export default function ShowTask() {
                                 }}
                               />
                             </TableCell>
-                            <TableCell align="center" width="50%">
-                              <CustomWidthTooltip title={item?.description || '-'} placement="bottom">
-                                <Typography variant="body2" component="div" className={styles.description}>
-                                  {item?.description || '-'}
-                                </Typography>
-                              </CustomWidthTooltip>
+                            <TableCell align="center">
+                              <IconButton
+                                onClick={() => {
+                                  setErrorLogText(item?.description || '-');
+                                  setErrorLog(true);
+                                }}
+                              >
+                                <Box
+                                  id="error-log-icon"
+                                  component="img"
+                                  sx={{ width: '1.8rem', height: '1.8rem' }}
+                                  src="/icons/job/task/error-log.svg"
+                                />
+                              </IconButton>
                             </TableCell>
                           </TableRow>
                         );
@@ -570,7 +654,81 @@ export default function ShowTask() {
               </TableBody>
             </Table>
           </Paper>
+          {/* <Paper variant="outlined">
+            {failure &&
+              Array.isArray(failure) &&
+              failure.map((item: any) => {
+                return (
+                  <>
+                    <Box sx={{ display: 'flex', alignItems: 'center', p: '1rem' }}>
+                      <Box sx={{ width: '60%', display: 'flex', alignItems: ' flex-start' }}>
+                        <Box component="img" sx={{ width: '1.5rem', mr: '0.4rem' }} src="/icons/job/task/ip.svg" />
+                        <Box>
+                          <Typography variant="body2" component="div" fontFamily="mabry-bold" mb="0.4rem">
+                            {item?.ip}
+                          </Typography>
+                          <Typography variant="body2" component="div">
+                            {item?.hostname}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <Box width="30%">
+                        <Chip
+                          label={_.upperFirst(item?.host_type) || ''}
+                          size="small"
+                          variant="outlined"
+                          sx={{
+                            borderRadius: '0%',
+                            backgroundColor:
+                              item?.host_type === 'super' ? 'var( --description-color)' : 'var(--button-color)',
+                            color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
+                            borderColor:
+                              item?.host_type === 'super' ? 'var( --description-color)' : 'var(--button-color)',
+                            fontWeight: 'bold',
+                          }}
+                        />
+                      </Box>
+                      <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <IconButton
+                          onClick={() => {
+                            setErrorLogText(item?.description || '-');
+                            setErrorLog(true);
+                          }}
+                        >
+                          <Box
+                            id="error-log-icon"
+                            component="img"
+                            sx={{ width: '1.7rem', height: '1.7rem' }}
+                            src="/icons/job/task/error-log.svg"
+                          />
+                        </IconButton>
+                      </Box>
+                    </Box>
+                    <Divider />
+                  </>
+                );
+              })}
+          </Paper> */}
+          {totalPages > 1 ? (
+            <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={(_event: any, newPage: number) => {
+                  navigate(`/jobs/task/executions/${params.id}${newPage > 1 ? `?page=${newPage}` : ''}`);
+                }}
+                boundaryCount={1}
+                color="primary"
+                size="small"
+                id="failure-tasks-pagination"
+              />
+            </Box>
+          ) : (
+            <></>
+          )}
         </Box>
+      ) : (
+        <></>
       )}
     </ThemeProvider>
   );

@@ -38,7 +38,15 @@ import { LoadingButton, TabContext, TabList, TabPanel } from '@mui/lab';
 import CloseIcon from '@mui/icons-material/Close';
 import CancelIcon from '@mui/icons-material/Cancel';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import { deleteTaskResponse, createTaskJob, createGetTaskJobResponse, getTaskJob, taskJob } from '../../../../lib/api';
+import {
+  deleteTaskResponse,
+  createTaskJob,
+  createGetTaskJobResponse,
+  getTaskJob,
+  taskJob,
+  jobStates,
+  peers,
+} from '../../../../lib/api';
 import { getBJTDatetime, getDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
 import _, { values } from 'lodash';
 import SearchTaskAnimation from '../../../search-task-animation';
@@ -121,6 +129,7 @@ export default function Task() {
   const [schedulerClusterID, setSchedulerClusterID] = useState(0);
   const [noTask, setNOTask] = useState('');
   const [urlError, setUrlError] = useState(false);
+  const [taskIDError, setTaskIDError] = useState(false);
   const [applicationError, setApplicationError] = useState(false);
   const [tagError, setTagError] = useState(false);
   const [filterError, setFilterError] = useState(false);
@@ -148,315 +157,10 @@ export default function Task() {
   });
 
   useEffect(() => {
-    (async function () {
+    const fetchJob = async () => {
       try {
         if (searchID) {
-          // const job = await getTaskJob(searchID);
-          const job = {
-            id: 1,
-            created_at: '2024-11-02T10:39:33Z',
-            updated_at: '2024-11-02T10:39:33Z',
-            is_del: 0,
-            task_id: 'group_bf122e8c-97af-41c1-937a-1fc390c074d6',
-            bio: '',
-            type: 'get_task',
-            state: 'SUCCESS',
-            args: {
-              application: '',
-              filtered_query_params:
-                'X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns',
-              tag: '',
-              task_id: '',
-              url: 'https://image.baidu.com/front/aigc?atn=aigc\u0026fr=home\u0026imgcontent=%7B%22aigcQuery%22%3A%22%22%2C%22imageAigcId%22%3A%224199096378%22%7D\u0026isImmersive=1\u0026pd=image_content\u0026quality=1\u0026ratio=1%3A1\u0026sa=searchpromo_shijian_photohp_inspire\u0026tn=aigc\u0026top=%7B%22sfhs%22%3A1%7D\u0026word=%E8%BF%90%E5%8A%A8%E7%8E%B0%E5%9C%BA%EF%BC%8C%E5%81%A5%E8%BA%AB%E6%95%99%E7%BB%83%EF%BC%8C%E7%BE%8E%E5%A5%B3%EF%BC%8C%E8%82%8C%E8%82%89%E6%98%8E%E6%98%BE%EF%BC%8C%E5%81%A5%E8%BA%AB%E6%88%BF%EF%BC%8C4K%E8%B6%85%E6%B8%85%EF%BC%8C%E7%9C%9F%E5%AE%9E%E4%B8%BB%E4%B9%89%EF%BC%8C%E6%B4%BB%E5%8A%9B%E5%9B%9B%E5%B0%84%EF%BC%8C%E8%87%AA%E7%84%B6%E5%85%89%EF%BC%8C%E5%81%A5%E5%BA%B7%E5%85%89%E6%B3%BD%EF%BC%8C%E5%85%A8%E6%81%AF%E8%89%B2%EF%BC%8C%E7%A9%BA%E9%97%B4%EF%BC%8C%E7%B2%BE%E7%BE%8E%E7%BB%86%E8%8A%82',
-            },
-            result: {
-              created_at: '2024-11-02T10:39:33.32490896Z',
-              group_uuid: 'group_bf122e8c-97af-41c1-937a-1fc390c074d6',
-              job_states: [
-                {
-                  created_at: '2024-11-02T10:39:33.32490896Z',
-                  error: '',
-                  results: [
-                    {
-                      peers: null,
-                      scheduler_cluster_id: 1,
-                    },
-                  ],
-                  state: 'SUCCESS',
-                  task_name: 'get_task',
-                  task_uuid: 'task_755c2749-aade-4dcc-bffb-a75cbb225bdf',
-                  ttl: 0,
-                },
-                {
-                  created_at: '2024-11-02T10:39:33.32522671Z',
-                  error: '',
-                  results: [
-                    {
-                      peers: null,
-                      scheduler_cluster_id: 1,
-                    },
-                  ],
-                  state: 'SUCCESS',
-                  task_name: 'get_task',
-                  task_uuid: 'task_39e7e095-db06-45c6-a04b-c8b4950221a4',
-                  ttl: 0,
-                },
-                {
-                  created_at: '2024-11-02T10:39:33.32540646Z',
-                  error: '',
-                  results: [
-                    {
-                      peers: [
-                        {
-                          created_at: '2024-11-02T10:39:24.68466522Z',
-                          host_type: 'normal',
-                          hostname: 'kind-worker2',
-                          id: '172.18.0.2-kind-worker2-3de3df03-a97d-4784-b608-f9b04b3085f3',
-                          ip: '172.18.0.2',
-                          updated_at: '2024-11-02T10:39:25.41550097Z',
-                        },
-                        {
-                          created_at: '2024-11-02T10:39:24.88036297Z',
-                          host_type: 'super',
-                          hostname: 'dragonfly-seed-client-0',
-                          id: '10.144.2.5-dragonfly-seed-client-0-174887a9-8975-4c1f-9bfa-a1982950240e-seed',
-                          ip: '10.144.2.5',
-                          updated_at: '2024-11-02T10:39:25.415384054Z',
-                        },
-                        {
-                          created_at: '2024-11-02T10:39:24.68466522Z',
-                          host_type: 'normal',
-                          hostname: 'kind-worker1',
-                          id: '172.18.0.2-kind-worker2-3de3df03-a97d-4784-b608-f9b04b3085f3',
-                          ip: '172.18.0.2',
-                          updated_at: '2024-11-02T10:39:25.41550097Z',
-                        },
-                        {
-                          created_at: '2024-11-02T10:39:24.88036297Z',
-                          host_type: 'super',
-                          hostname: 'dragonfly-seed-client-1',
-                          id: '10.144.2.5-dragonfly-seed-client-0-174887a9-8975-4c1f-9bfa-a1982950240e-seed',
-                          ip: '10.144.2.5',
-                          updated_at: '2024-11-02T10:39:25.415384054Z',
-                        },
-                        {
-                          created_at: '2024-11-02T10:39:24.68466522Z',
-                          host_type: 'normal',
-                          hostname: 'kind-worker1',
-                          id: '172.18.0.2-kind-worker2-3de3df03-a97d-4784-b608-f9b04b3085f3',
-                          ip: '172.18.0.2',
-                          updated_at: '2024-11-02T10:39:25.41550097Z',
-                        },
-                        {
-                          created_at: '2024-11-02T10:39:24.88036297Z',
-                          host_type: 'super',
-                          hostname: 'dragonfly-seed-client-1',
-                          id: '10.144.2.5-dragonfly-seed-client-0-174887a9-8975-4c1f-9bfa-a1982950240e-seed',
-                          ip: '10.144.2.5',
-                          updated_at: '2024-11-02T10:39:25.415384054Z',
-                        },
-                      ],
-                      scheduler_cluster_id: 1,
-                    },
-                  ],
-                  state: 'SUCCESS',
-                  task_name: 'get_task',
-                  task_uuid: 'task_fc30bfaa-ac06-4eca-9388-fc61996e01b1',
-                  ttl: 0,
-                },
-                {
-                  created_at: '2024-11-02T10:39:33.32540646Z',
-                  error: '',
-                  results: [
-                    {
-                      peers: [
-                        {
-                          created_at: '2024-11-02T10:39:24.88036297Z',
-                          host_type: 'super',
-                          hostname: 'dragonfly-seed-client-1',
-                          id: '10.144.2.5-dragonfly-seed-client-0-174887a9-8975-4c1f-9bfa-a1982950240e-seed',
-                          ip: '10.144.2.5',
-                          updated_at: '2024-11-02T10:39:25.415384054Z',
-                        },
-                      ],
-                      scheduler_cluster_id: 3,
-                    },
-                  ],
-                  state: 'SUCCESS',
-                  task_name: 'get_task',
-                  task_uuid: 'task_fc30bfaa-ac06-4eca-9388-fc61996e01b1',
-                  ttl: 0,
-                },
-                {
-                  created_at: '2024-11-02T10:39:33.325636543Z',
-                  error: '',
-                  results: [
-                    {
-                      peers: null,
-                      scheduler_cluster_id: 1,
-                    },
-                  ],
-                  state: 'SUCCESS',
-                  task_name: 'get_task',
-                  task_uuid: 'task_1b0efbad-a71d-473f-85d7-646800765dc0',
-                  ttl: 0,
-                },
-                {
-                  created_at: '2024-11-02T10:39:33.325832835Z',
-                  error: '',
-                  results: [
-                    {
-                      peers: null,
-                      scheduler_cluster_id: 1,
-                    },
-                  ],
-                  state: 'SUCCESS',
-                  task_name: 'get_task',
-                  task_uuid: 'task_93fd135c-1938-4282-8982-30bc3bfc5c52',
-                  ttl: 0,
-                },
-                {
-                  created_at: '2024-11-02T10:39:33.32603696Z',
-                  error: '',
-                  results: [
-                    {
-                      peers: null,
-                      scheduler_cluster_id: 1,
-                    },
-                  ],
-                  state: 'SUCCESS',
-                  task_name: 'get_task',
-                  task_uuid: 'task_8128ca20-a6fb-49f4-9c51-7781bae1823a',
-                  ttl: 0,
-                },
-                {
-                  created_at: '2024-11-02T10:39:33.326261168Z',
-                  error: '',
-                  results: [
-                    {
-                      peers: [
-                        {
-                          created_at: '2024-11-02T10:39:24.68466522Z',
-                          host_type: 'normal',
-                          hostname: 'kind-worker3',
-                          id: '172.18.0.2-kind-worker3-3de3df03-a97d-4784-b608-f9b04b3085f3',
-                          ip: '172.18.0.2',
-                          updated_at: '2024-11-02T10:39:25.41550097Z',
-                        },
-                        {
-                          created_at: '2024-11-02T10:39:24.88036297Z',
-                          host_type: 'super',
-                          hostname: 'dragonfly-seed-client-1',
-                          id: '10.244.1.4-dragonfly-seed-client-0-174887a9-8975-4c1f-9bfa-a1982950240e-seed',
-                          ip: '10.244.1.4',
-                          updated_at: '2024-11-02T10:39:25.415384054Z',
-                        },
-                        {
-                          created_at: '2024-11-02T10:39:24.68466522Z',
-                          host_type: 'normal',
-                          hostname: 'kind-worker2',
-                          id: '172.18.0.2-kind-worker3-3de3df03-a97d-4784-b608-f9b04b3085f3',
-                          ip: '172.18.0.2',
-                          updated_at: '2024-11-02T10:39:25.41550097Z',
-                        },
-                        {
-                          created_at: '2024-11-02T10:39:24.88036297Z',
-                          host_type: 'super',
-                          hostname: 'dragonfly-seed-client-2',
-                          id: '10.244.1.4-dragonfly-seed-client-2-174887a9-8975-4c1f-9bfa-a1982950240e-seed',
-                          ip: '10.244.1.4',
-                          updated_at: '2024-11-02T10:39:25.415384054Z',
-                        },
-                        {
-                          created_at: '2024-11-02T10:39:24.68466522Z',
-                          host_type: 'normal',
-                          hostname: 'kind-worker4',
-                          id: '172.18.0.2-kind-worker4-3de3df03-a97d-4784-b608-f9b04b3085f3',
-                          ip: '172.18.0.2',
-                          updated_at: '2024-11-02T10:39:25.41550097Z',
-                        },
-                        {
-                          created_at: '2024-11-02T10:39:24.88036297Z',
-                          host_type: 'super',
-                          hostname: 'dragonfly-seed-client-4',
-                          id: '10.244.1.4-dragonfly-seed-client-4-174887a9-8975-4c1f-9bfa-a1982950240e-seed',
-                          ip: '10.244.1.4',
-                          updated_at: '2024-11-02T10:39:25.415384054Z',
-                        },
-                      ],
-                      scheduler_cluster_id: 2,
-                    },
-                  ],
-                  state: 'SUCCESS',
-                  task_name: 'get_task',
-                  task_uuid: 'task_8fdd8f51-3830-4242-8b17-6e23b882dc64',
-                  ttl: 0,
-                },
-              ],
-              state: 'SUCCESS',
-              updated_at: '2024-11-02T10:39:33.334817876Z',
-            },
-            user_id: 0,
-            user: {
-              id: 0,
-              created_at: '0001-01-01T00:00:00Z',
-              updated_at: '0001-01-01T00:00:00Z',
-              is_del: 0,
-              email: '',
-              name: '',
-              avatar: '',
-              phone: '',
-              state: '',
-              location: '',
-              bio: '',
-              configs: null,
-            },
-            seed_peer_clusters: [],
-            scheduler_clusters: [
-              {
-                id: 1,
-                created_at: '2024-11-01T05:42:02Z',
-                updated_at: '2024-11-01T05:42:02Z',
-                is_del: 0,
-                name: 'cluster-1',
-                bio: '',
-                config: {
-                  candidate_parent_limit: 4,
-                  filter_parent_limit: 15,
-                },
-                client_config: {
-                  load_limit: 200,
-                },
-                scopes: {},
-                is_default: true,
-                seed_peer_clusters: null,
-                schedulers: null,
-                peers: null,
-                jobs: null,
-              },
-              {
-                id: 2,
-                created_at: '2024-11-01T05:42:02Z',
-                updated_at: '2024-11-01T05:42:02Z',
-                is_del: 0,
-                name: 'cluster-2',
-                bio: '',
-                config: {
-                  candidate_parent_limit: 4,
-                  filter_parent_limit: 15,
-                },
-                client_config: {
-                  load_limit: 200,
-                },
-                scopes: {},
-                is_default: true,
-                seed_peer_clusters: null,
-                schedulers: null,
-                peers: null,
-                jobs: null,
-              },
-            ],
-          };
+          const job = await getTaskJob(searchID);
 
           if (job.type === 'get_task') {
             if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {
@@ -469,8 +173,15 @@ export default function Task() {
             }
           }
         }
-      } catch (error) {}
-    })();
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(true);
+          setErrorMessageText(error.message);
+          setIsLoading(false);
+        }
+      }
+    };
+    fetchJob();
   }, [searchID]);
 
   useEffect(() => {
@@ -497,43 +208,13 @@ export default function Task() {
         };
 
         pollPreheat();
-      }, 30000);
+      }, 3000);
 
       return () => {
         clearInterval(pollingInterval);
       };
     }
   }, [shouldPoll, searchID]);
-
-  const searchTaskJob = async () => {
-    try {
-      if (searchTask !== '') {
-        setIsLoading(true);
-        setNOTask(searchTask);
-        const data = {
-          args: {
-            task_id: searchTask,
-          },
-          type: 'get_task',
-        };
-        const task = await createTaskJob(data);
-        // navigate(`/jobs/task/clear${task?.id ? `?id=${task?.id}` : ''}`);
-
-        setSearchID(task?.id);
-      } else {
-        navigate('/jobs/task/clear');
-        setTask(null);
-        setDeleteTask(null);
-        setIsLoading(false);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        setErrorMessage(true);
-        setErrorMessageText(error.message);
-        setIsLoading(false);
-      }
-    }
-  };
 
   const urlData = {
     formProps: {
@@ -572,7 +253,7 @@ export default function Task() {
     setError: setUrlError,
 
     validate: (value: string) => {
-      const reg = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s].{1,10000}$/;
+      const reg = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s].{1,1000}$/;
       return reg.test(value);
     },
   };
@@ -698,14 +379,64 @@ export default function Task() {
     },
   ];
 
-  const filteredResults =
-    task && task.result.job_states.flatMap((job: any) => job.results).filter((result: { peers: any }) => result.peers);
+  const taskIDData = {
+    formProps: {
+      id: 'task-id',
+      label: 'Task ID',
+      name: 'task-id',
+      required: true,
+      value: searchTask,
+      autoComplete: 'family-name',
+      placeholder: 'Enter your URL',
+      helperText: taskIDError ? 'Fill in the characters, the length is 0-1000.' : '',
+      error: taskIDError,
+      InputProps: {
+        startAdornment: isLoading ? <SearchCircularProgress /> : <SearchIcon sx={{ color: '#9BA0A6' }} />,
+        endAdornment: searchTask ? (
+          <IconButton
+            type="button"
+            aria-label="search"
+            onClick={() => {
+              setSearchTask('');
+            }}
+          >
+            <ClearIcon />
+          </IconButton>
+        ) : (
+          <></>
+        ),
+      },
 
-  // console.log(filteredResults);
+      onChange: (e: any) => {
+        changeValidate(e.target.value, taskIDData);
+        setSearchTask(e.target.value);
+      },
+    },
+    syncError: false,
+    setError: setTaskIDError,
+
+    validate: (value: string) => {
+      const reg = /^.{0,1000}$/;
+      return reg.test(value);
+    },
+  };
+
+  const result =
+    task?.result?.job_states?.map((item: any) => {
+      return item.results ? item.results.map((resultItem: any) => resultItem) : [];
+    }) ?? [];
+
+  const jobStates = Array.isArray(result) ? result.flat(2) : [];
+
+  const results = Array.isArray(jobStates) ? jobStates.flat(2).filter((item) => item.peers !== null) : [];
+
+  const peers = Array.isArray(results)
+    ? Array.from(new Set(results.map((item) => JSON.stringify(item)))).map((str) => JSON.parse(str))
+    : [];
 
   const handleClearCache = async () => {
     try {
-      if (schedulerClusterID) {
+      if (schedulerClusterID && !deleteError) {
         if (task?.args?.url !== '') {
           const formList = {
             args: {
@@ -760,8 +491,43 @@ export default function Task() {
     setError(!validate(value));
   };
 
+  const searchTaskJob = async (event: any) => {
+    try {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+
+      const taskIDValue = data.get(taskIDData.formProps.name);
+      taskIDData.setError(!taskIDData.validate(taskIDValue as string));
+      taskIDData.syncError = !taskIDData.validate(taskIDValue as string);
+
+      if (searchTask !== '' && !taskIDData.syncError) {
+        setIsLoading(true);
+        setNOTask(searchTask);
+        const data = {
+          args: {
+            task_id: searchTask,
+          },
+          type: 'get_task',
+        };
+        const task = await createTaskJob(data);
+
+        setSearchID(task?.id);
+      } else {
+        navigate('/jobs/task/clear');
+        setTask(null);
+        setDeleteTask(null);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(true);
+        setErrorMessageText(error.message);
+        setIsLoading(false);
+      }
+    }
+  };
+
   const handleSubmit = async (event: any) => {
-    setInput(false);
     setLoadingButton(true);
     setIsLoading(true);
     event.preventDefault();
@@ -811,6 +577,7 @@ export default function Task() {
     };
 
     if (canSubmit) {
+      setInput(false);
       try {
         const task = await taskJob({ ...formDate });
         setLoadingButton(false);
@@ -826,15 +593,6 @@ export default function Task() {
     } else {
       setIsLoading(false);
       setLoadingButton(false);
-    }
-  };
-
-  const searchTaskKeyDown = (event: any) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      const submitButton = document.getElementById('submit-button');
-      // submitButton?.click();
-      searchTaskJob();
     }
   };
 
@@ -894,6 +652,7 @@ export default function Task() {
       >
         <StyledToggleButtonGroup size="small" value={search} exclusive onChange={handleChange} aria-label="Platform">
           <ToggleButton
+            id="serach-url"
             value="url"
             size="small"
             sx={{
@@ -917,6 +676,7 @@ export default function Task() {
             Search by URL
           </ToggleButton>
           <ToggleButton
+            id="serach-task-id"
             value="task-id"
             size="small"
             sx={{
@@ -947,42 +707,7 @@ export default function Task() {
       </Paper>
       {search === 'task-id' ? (
         <Box component="form" onSubmit={searchTaskJob} sx={{ width: '38rem', height: '3rem' }}>
-          <TextField
-            fullWidth
-            id="task-id"
-            name="task-id"
-            label="Task ID"
-            size="small"
-            required
-            sx={{ pr: 0 }}
-            placeholder="Please enter task id"
-            InputProps={{
-              startAdornment: isLoading ? <SearchCircularProgress /> : <SearchIcon sx={{ color: '#9BA0A6' }} />,
-              endAdornment: searchTask ? (
-                <IconButton
-                  type="button"
-                  aria-label="search"
-                  onClick={() => {
-                    setSearchTask('');
-                  }}
-                >
-                  <ClearIcon />
-                </IconButton>
-              ) : (
-                <></>
-              ),
-            }}
-            value={searchTask}
-            onKeyDown={searchTaskKeyDown}
-            inputProps={{ 'aria-label': 'Please enter URL' }}
-            // onFocus={(e) => {
-            //   setInput(true);
-            //   // setAnchorEl(e.currentTarget);
-            // }}
-            onChange={(event) => {
-              setSearchTask(event.target.value);
-            }}
-          />
+          <TextField fullWidth size="small" {...taskIDData.formProps} />
         </Box>
       ) : (
         <>
@@ -1014,64 +739,11 @@ export default function Task() {
                 // // sx={{ '&.MuiTextField-root': { p: '1rem' } }}
                 // placeholder="Please enter URL"
                 // value={searchTask}
-                // onKeyDown={searchTaskKeyDown}
                 onFocus={(e) => {
                   setInput(true);
                 }}
-                // onChange={(event) => {
-                //   setSearchTask(event.target.value);
-                // }}
               />
 
-              {/* <Paper
-                variant="outlined"
-                sx={{
-                  p: '2px 4px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  // borderColor: input ? 'var(--button-color)' : '',
-                }}
-              >
-                {isLoading ? (
-                  <Box sx={{ m: '0.5rem' }}>
-                    <SearchCircularProgress />
-                  </Box>
-                ) : (
-                  <SearchIcon sx={{ m: '0.5rem', color: '#9BA0A6' }} />
-                )}
-                <InputBase
-                  onFocus={(e) => {
-                    setInput(true);
-                    // setAnchorEl(e.currentTarget);
-                    console.log(input);
-                  }}
-                  // onClick={handleClick}
-                  size="small"
-                  sx={{ flex: 1, mr: '1rem', '& .MuiInputBase-input': { p: '0' } }}
-                  placeholder="Please enter URL"
-                  value={searchTask}
-                  onKeyDown={searchTaskKeyDown}
-                  inputProps={{ 'aria-label': 'Please enter URL' }}
-                  onChange={(event) => {
-                    setSearchTask(event.target.value);
-                  }}
-                />
-                {searchTask ? (
-                  <>
-                    <IconButton
-                      type="button"
-                      aria-label="search"
-                      onClick={() => {
-                        setSearchTask('');
-                      }}
-                    >
-                      <ClearIcon />
-                    </IconButton>
-                  </>
-                ) : (
-                  <></>
-                )}
-              </Paper> */}
               {input ? (
                 <>
                   {/* <Divider sx={{ m: '1rem 0' }} /> */}
@@ -1167,85 +839,84 @@ export default function Task() {
         </>
       )}
       {isLoading ? (
-        <Box sx={{ mt: '4rem' }}>
+        <Box id='isLoading' sx={{ mt: '4rem' }}>
           <SearchTaskAnimation />
         </Box>
       ) : task && task?.type === 'get_task' ? (
         <Box sx={{ width: '100%', typography: 'body1', mt: '2rem' }}>
-          {filteredResults && filteredResults?.length > 0 ? (
+          {peers && peers?.length > 0 ? (
             <>
               <Typography variant="h6" m="1rem 0" fontFamily="mabry-bold">
                 Cache
               </Typography>
-              {filteredResults.map((peer: any) => {
-                const peerId = peer.scheduler_cluster_id;
-                const totalPage = Math.ceil(peer?.peers.length / 5);
-                const cachePage = cachePages[peerId] || 1;
-                const currentPageData = getPaginatedList(peer?.peers, cachePage, 5);
-
-                return (
-                  <Box mb="2rem">
-                    <Paper variant="outlined">
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          // width: '100%',
-                          p: '1rem',
-                        }}
-                      >
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          {/* <Box component="img" className={styles.clusterIcon} src="/icons/cluster/cluster.svg" /> */}
-                          <Typography variant="subtitle1" mr="0.6rem" fontFamily="mabry-bold">
-                            Scheduler Cluster
-                          </Typography>
-                          {isLoading ? (
-                            <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
-                          ) : (
-                            <Box
-                              sx={{
-                                border: '1px solid #d5d2d2',
-                                p: '0.2rem 0.3rem',
-                                borderRadius: '0.4rem',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                              }}
-                            >
-                              <Box
-                                component="img"
-                                sx={{ width: '0.6rem', height: '0.6rem' }}
-                                src="/icons/job/task/scheduler-cluster.svg"
-                              />
-                              <Typography
-                                id="schedulerTotal"
-                                variant="subtitle2"
-                                fontFamily="mabry-bold"
-                                component="div"
-                                pl="0.3rem"
-                                lineHeight="1rem"
-                              >
-                                ID&nbsp;:&nbsp; {peer?.scheduler_cluster_id || '0'}
-                              </Typography>
-                            </Box>
-                          )}
-                        </Box>
-                        <Button
-                          size="small"
-                          sx={{ background: 'var(--button-color)', borderRadius: '0' }}
-                          variant="contained"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            setSchedulerClusterID(peer?.scheduler_cluster_id);
-                            setOpenClearClear(true);
+              <Box id="cache">
+                {peers.map((peer: any, index: any) => {
+                  const peerId = peer.scheduler_cluster_id;
+                  const totalPage = Math.ceil(peer?.peers.length / 5);
+                  const cachePage = cachePages[peerId] || 1;
+                  const currentPageData = getPaginatedList(peer?.peers, cachePage, 5);
+                  return (
+                    <Box mb="2rem" key={index}>
+                      <Paper variant="outlined">
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            // width: '100%',
+                            p: '1rem',
                           }}
                         >
-                          <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-                          delete
-                        </Button>
-                      </Box>
-                      <Divider />
-                      <Box>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            {/* <Box component="img" className={styles.clusterIcon} src="/icons/cluster/cluster.svg" /> */}
+                            <Typography variant="subtitle1" mr="0.6rem" fontFamily="mabry-bold">
+                              Scheduler Cluster
+                            </Typography>
+                            {isLoading ? (
+                              <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                            ) : (
+                              <Box
+                                sx={{
+                                  border: '1px solid #d5d2d2',
+                                  p: '0.2rem 0.3rem',
+                                  borderRadius: '0.4rem',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                <Box
+                                  component="img"
+                                  sx={{ width: '0.6rem', height: '0.6rem' }}
+                                  src="/icons/job/task/scheduler-cluster.svg"
+                                />
+                                <Typography
+                                  id="schedulerTotal"
+                                  variant="subtitle2"
+                                  fontFamily="mabry-bold"
+                                  component="div"
+                                  pl="0.3rem"
+                                  lineHeight="1rem"
+                                >
+                                  ID&nbsp;:&nbsp; {peer?.scheduler_cluster_id || '0'}
+                                </Typography>
+                              </Box>
+                            )}
+                          </Box>
+                          <Button
+                            size="small"
+                            sx={{ background: 'var(--button-color)', borderRadius: '0' }}
+                            variant="contained"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              setSchedulerClusterID(peer?.scheduler_cluster_id);
+                              setOpenClearClear(true);
+                            }}
+                          >
+                            <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
+                            delete
+                          </Button>
+                        </Box>
+                        <Divider />
                         <Box
                           sx={{ p: '1rem 0.8rem', display: 'flex', alignItems: 'center', backgroundColor: '#f6f6f6' }}
                         >
@@ -1281,9 +952,80 @@ export default function Task() {
                           </Box>
                         </Box>
                         <Divider />
-                        {currentPageData?.map((item: any, index: number) => {
-                          return index !== currentPageData.length - 1 ? (
-                            <>
+                        <Box id={`cache-${index}`}>
+                          {currentPageData?.map((item: any, index: number) => {
+                            return index !== currentPageData.length - 1 ? (
+                              <>
+                                <Box sx={{ p: '1rem', display: 'flex', alignItems: 'center' }}>
+                                  <Box width="20%" sx={{ display: 'flex', alignItems: 'center', pb: '0.4rem' }}>
+                                    <Box>
+                                      {isLoading ? (
+                                        <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                                      ) : (
+                                        <Tooltip title={item?.hostname || '-'} placement="top">
+                                          <Typography variant="body1">{item?.hostname}</Typography>
+                                        </Tooltip>
+                                      )}
+                                    </Box>
+                                  </Box>
+                                  <Box width="35%">
+                                    {isLoading ? (
+                                      <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                                    ) : (
+                                      <Tooltip title={item?.id || '-'} placement="top">
+                                        <Typography variant="body2" component="div" className={styles.locationContent}>
+                                          {item?.id || '-'}
+                                        </Typography>
+                                      </Tooltip>
+                                    )}
+                                  </Box>
+                                  <Box width="15%">
+                                    <Box className={styles.ipContainer}>
+                                      {isLoading ? (
+                                        <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                                      ) : (
+                                        <Typography variant="subtitle2" component="div">
+                                          {item?.ip || '-'}
+                                        </Typography>
+                                      )}
+                                    </Box>
+                                  </Box>
+                                  <Box width="15%">
+                                    {isLoading ? (
+                                      <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                                    ) : (
+                                      <Chip
+                                        label={_.upperFirst(item?.host_type) || ''}
+                                        size="small"
+                                        variant="outlined"
+                                        sx={{
+                                          borderRadius: '0%',
+                                          backgroundColor:
+                                            item?.host_type === 'super'
+                                              ? 'var( --description-color)'
+                                              : 'var(--button-color)',
+                                          color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
+                                          borderColor:
+                                            item?.host_type === 'super'
+                                              ? 'var( --description-color)'
+                                              : 'var(--button-color)',
+                                          fontWeight: 'bold',
+                                        }}
+                                      />
+                                    )}
+                                  </Box>
+                                  <Box width="15%">
+                                    <Chip
+                                      avatar={<MoreTimeIcon />}
+                                      label={getBJTDatetime(item?.created_at || '')}
+                                      variant="outlined"
+                                      size="small"
+                                    />
+                                  </Box>
+                                  <Divider />
+                                </Box>
+                              </>
+                            ) : (
                               <Box sx={{ p: '1rem', display: 'flex', alignItems: 'center' }}>
                                 <Box width="20%" sx={{ display: 'flex', alignItems: 'center', pb: '0.4rem' }}>
                                   <Box>
@@ -1291,7 +1033,9 @@ export default function Task() {
                                       <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
                                     ) : (
                                       <Tooltip title={item?.hostname || '-'} placement="top">
-                                        <Typography variant="body1">{item?.hostname}</Typography>
+                                        <Typography variant="body1" mr="1rem">
+                                          {item?.hostname}
+                                        </Typography>
                                       </Tooltip>
                                     )}
                                   </Box>
@@ -1351,99 +1095,28 @@ export default function Task() {
                                   />
                                 </Box>
                               </Box>
-                              <Divider />
-                            </>
-                          ) : (
-                            <Box sx={{ p: '1rem', display: 'flex', alignItems: 'center' }}>
-                              <Box width="20%" sx={{ display: 'flex', alignItems: 'center', pb: '0.4rem' }}>
-                                <Box>
-                                  {isLoading ? (
-                                    <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
-                                  ) : (
-                                    <Tooltip title={item?.hostname || '-'} placement="top">
-                                      <Typography variant="body1" mr="1rem">
-                                        {item?.hostname}
-                                      </Typography>
-                                    </Tooltip>
-                                  )}
-                                </Box>
-                              </Box>
-                              <Box width="35%">
-                                {isLoading ? (
-                                  <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
-                                ) : (
-                                  <Tooltip title={item?.id || '-'} placement="top">
-                                    <Typography variant="body2" component="div" className={styles.locationContent}>
-                                      {item?.id || '-'}
-                                    </Typography>
-                                  </Tooltip>
-                                )}
-                              </Box>
-                              <Box width="15%">
-                                <Box className={styles.ipContainer}>
-                                  {isLoading ? (
-                                    <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
-                                  ) : (
-                                    <Typography variant="subtitle2" component="div">
-                                      {item?.ip || '-'}
-                                    </Typography>
-                                  )}
-                                </Box>
-                              </Box>
-                              <Box width="15%">
-                                {isLoading ? (
-                                  <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
-                                ) : (
-                                  <Chip
-                                    label={_.upperFirst(item?.host_type) || ''}
-                                    size="small"
-                                    variant="outlined"
-                                    sx={{
-                                      borderRadius: '0%',
-                                      backgroundColor:
-                                        item?.host_type === 'super'
-                                          ? 'var( --description-color)'
-                                          : 'var(--button-color)',
-                                      color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
-                                      borderColor:
-                                        item?.host_type === 'super'
-                                          ? 'var( --description-color)'
-                                          : 'var(--button-color)',
-                                      fontWeight: 'bold',
-                                    }}
-                                  />
-                                )}
-                              </Box>
-                              <Box width="15%">
-                                <Chip
-                                  avatar={<MoreTimeIcon />}
-                                  label={getBJTDatetime(item?.created_at || '')}
-                                  variant="outlined"
-                                  size="small"
-                                />
-                              </Box>
-                            </Box>
-                          );
-                        })}
-                      </Box>
-                    </Paper>
-                    {totalPage > 1 ? (
-                      <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
-                        <Pagination
-                          id="tokens-pagination"
-                          count={totalPage}
-                          page={cachePage}
-                          onChange={(_event, newPage) => handlePageChange(peerId, newPage)}
-                          color="primary"
-                          size="small"
-                        />
-                      </Box>
-                    ) : (
-                      <></>
-                    )}
-                  </Box>
-                );
-              })}
+                            );
+                          })}
+                        </Box>
+                      </Paper>
+                      {totalPage > 1 ? (
+                        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+                          <Pagination
+                            id={`pagination-${index}`}
+                            count={totalPage}
+                            page={cachePage}
+                            onChange={(_event, newPage) => handlePageChange(peerId, newPage)}
+                            color="primary"
+                            size="small"
+                          />
+                        </Box>
+                      ) : (
+                        <></>
+                      )}
+                    </Box>
+                  );
+                })}
+              </Box>
             </>
           ) : (
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '6rem' }}>
@@ -1541,8 +1214,8 @@ export default function Task() {
             <TextField
               error={deleteError}
               sx={{ pt: '1rem', width: '14rem' }}
-              id="deleteAllInactive"
-              name="deleteAllInactive"
+              id="deletCache"
+              name="deletCache"
               color="success"
               size="small"
               placeholder={`Type 'DELETE' to proceed`}

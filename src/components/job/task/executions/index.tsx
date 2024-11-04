@@ -45,9 +45,10 @@ export default function LabTabs() {
       try {
         setIsLoading(true);
         setPreheatPage(page);
+        console.log(preheatPage);
 
         const jobs = await getDeleteTask({
-          page: preheatPage,
+          page: page,
           per_page: DEFAULT_PAGE_SIZE,
           state: status === 'ALL' ? undefined : status,
         });
@@ -100,7 +101,7 @@ export default function LabTabs() {
         };
 
         pollPreheat();
-      }, 60000);
+      }, 3000);
 
       return () => {
         clearInterval(pollingInterval);
@@ -269,7 +270,7 @@ export default function LabTabs() {
                       <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
                         <RouterLink
                           component={Link}
-                          id={`executions-${item?.id}`}
+                          id={`execution-${item?.id}`}
                           to={`/jobs/task/executions/${item?.id}`}
                           underline="hover"
                           sx={{ color: 'var(--description-color)' }}
@@ -330,7 +331,7 @@ export default function LabTabs() {
                     <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
                       <RouterLink
                         component={Link}
-                        id={`executions-${item?.id}`}
+                        id={`execution-${item?.id}`}
                         to={`/jobs/task/executions/${item?.id}`}
                         underline="hover"
                         sx={{ color: 'var(--description-color)' }}

@@ -1,0 +1,92 @@
+{
+  "id": 1,
+  "created_at": "2024-11-02T10:39:33Z",
+  "updated_at": "2024-11-02T10:39:33Z",
+  "is_del": 0,
+  "task_id": "group_bf122e8c-97af-41c1-937a-1fc390c074d6",
+  "bio": "",
+  "type": "get_task",
+  "state": "PENDING",
+  "args": {
+    "application": "",
+    "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
+    "tag": "",
+    "task_id": "",
+    "url": "https://image.baidu.com/front/aigc?atn=aigc\u0026fr=home\u0026imgcontent=%7B%22aigcQuery%22%3A%22%22%2C%22imageAigcId%22%3A%224199096378%22%7D\u0026isImmersive=1\u0026pd=image_content\u0026quality=1\u0026ratio=1%3A1\u0026sa=searchpromo_shijian_photohp_inspire\u0026tn=aigc\u0026top=%7B%22sfhs%22%3A1%7D\u0026word=%E8%BF%90%E5%8A%A8%E7%8E%B0%E5%9C%BA%EF%BC%8C%E5%81%A5%E8%BA%AB%E6%95%99%E7%BB%83%EF%BC%8C%E7%BE%8E%E5%A5%B3%EF%BC%8C%E8%82%8C%E8%82%89%E6%98%8E%E6%98%BE%EF%BC%8C%E5%81%A5%E8%BA%AB%E6%88%BF%EF%BC%8C4K%E8%B6%85%E6%B8%85%EF%BC%8C%E7%9C%9F%E5%AE%9E%E4%B8%BB%E4%B9%89%EF%BC%8C%E6%B4%BB%E5%8A%9B%E5%9B%9B%E5%B0%84%EF%BC%8C%E8%87%AA%E7%84%B6%E5%85%89%EF%BC%8C%E5%81%A5%E5%BA%B7%E5%85%89%E6%B3%BD%EF%BC%8C%E5%85%A8%E6%81%AF%E8%89%B2%EF%BC%8C%E7%A9%BA%E9%97%B4%EF%BC%8C%E7%B2%BE%E7%BE%8E%E7%BB%86%E8%8A%82"
+  },
+  "result": {
+    "created_at": "2024-11-02T10:39:33.32490896Z",
+    "group_uuid": "group_bf122e8c-97af-41c1-937a-1fc390c074d6",
+    "job_states": [
+      {
+        "created_at": "2024-11-02T10:39:33.32490896Z",
+        "error": "",
+        "results": [
+          {
+            "peers": null,
+            "scheduler_cluster_id": 1
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "get_task",
+        "task_uuid": "task_755c2749-aade-4dcc-bffb-a75cbb225bdf",
+        "ttl": 0
+      },
+      {
+        "created_at": "2024-11-02T10:39:33.32522671Z",
+        "error": "",
+        "results": [
+          {
+            "peers": null,
+            "scheduler_cluster_id": 1
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "get_task",
+        "task_uuid": "task_39e7e095-db06-45c6-a04b-c8b4950221a4",
+        "ttl": 0
+      }
+    ],
+    "state": "PENDING",
+    "updated_at": "2024-11-02T10:39:33.334817876Z"
+  },
+  "user_id": 0,
+  "user": {
+    "id": 0,
+    "created_at": "0001-01-01T00:00:00Z",
+    "updated_at": "0001-01-01T00:00:00Z",
+    "is_del": 0,
+    "email": "",
+    "name": "",
+    "avatar": "",
+    "phone": "",
+    "state": "",
+    "location": "",
+    "bio": "",
+    "configs": null
+  },
+  "seed_peer_clusters": [],
+  "scheduler_clusters": [
+    {
+      "id": 1,
+      "created_at": "2024-11-01T05:42:02Z",
+      "updated_at": "2024-11-01T05:42:02Z",
+      "is_del": 0,
+      "name": "cluster-1",
+      "bio": "",
+      "config": {
+        "candidate_parent_limit": 4,
+        "filter_parent_limit": 15
+      },
+      "client_config": {
+        "load_limit": 200
+      },
+      "scopes": {},
+      "is_default": true,
+      "seed_peer_clusters": null,
+      "schedulers": null,
+      "peers": null,
+      "jobs": null
+    }
+  ]
+}

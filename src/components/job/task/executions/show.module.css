@@ -1,6 +1,6 @@
 .informationContainer {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   padding: 1rem 0rem;
 }
 
@@ -51,26 +51,21 @@
   margin-right: 0.2rem;
 }
 
+.schedulerClustersID {
+  display: flex;
+  align-items: center;
+}
+
 .schedulerClustersIDContent {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #228b22;
-  border-radius: 50%;
-  width: 1.5rem;
-  height: 1.5rem;
-  /* margin-right: 1.5rem; */
-}
-
-.schedulerClustersIDWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #dedede;
-  border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
-  margin-right: 1.5rem;
+  background-color: var(--button-color);
+  color: var(--save-size-color);
+  border-radius: 0.4rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-right: 0.5rem;
 }
 
 .description {
@@ -78,4 +73,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 40rem;
+}
+
+.errorLog {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: normal;
+  overflow: hidden;
 }

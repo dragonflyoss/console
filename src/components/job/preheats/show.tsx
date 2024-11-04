@@ -303,11 +303,11 @@ export default function ShowPreheat() {
                   size="small"
                   variant="outlined"
                   sx={{
-                    borderRadius: '0%',
-                    background: 'var(--button-color)',
+                    borderRadius: '0.3rem',
+                    background: 'var(--description-color)',
                     color: '#FFFFFF',
                     mr: '0.4rem',
-                    borderColor: 'var(--button-color)',
+                    borderColor: 'var(--description-color)',
                     fontWeight: 'bold',
                   }}
                 />
@@ -370,9 +370,17 @@ export default function ShowPreheat() {
             <Box className={styles.schedulerClustersID}>
               {preheat?.scheduler_clusters?.map((item, index) => {
                 return (
-                  <Typography key={index} variant="body1" sx={{ mr: '2rem' }}>
-                    {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} /> : item.id || '-'}
-                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', p: '0.4rem', mr: '1rem' }}>
+                    <Box className={styles.schedulerClustersIDContent}>
+                      <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
+                        {isLoading ? (
+                          <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
+                        ) : (
+                          item.id || '-'
+                        )}
+                      </Typography>
+                    </Box>
+                  </Box>
                 );
               }) || '-'}
             </Box>

@@ -997,7 +997,7 @@ export async function taskJob(request: taskResquest): Promise<createGetTaskJobRe
   return await response.json();
 }
 
-interface peers {
+export interface peers {
   created_at: string;
   host_type: string;
   hostname: string;

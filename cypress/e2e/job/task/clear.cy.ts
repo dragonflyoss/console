@@ -637,5 +637,17 @@ describe('Clear', () => {
         .should('be.visible')
         .and('have.text', 'Fill in the characters, the length is 0-1000.');
     });
+
+    it('try to verify task id', () => {
+      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const taskID = _.times(1001, () => _.sample(characters)).join('');
+
+      cy.get('#serach-task-id').click();
+
+      cy.get('#task-id').type(`${taskID}{enter}`);
+      cy.get('#task-id-helper-text')
+        .should('be.visible')
+        .and('have.text', 'Fill in the characters, the length is 0-1000.');
+    });
   });
 });

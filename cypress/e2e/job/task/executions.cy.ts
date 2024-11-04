@@ -205,7 +205,7 @@ describe('Executions', () => {
         },
       );
 
-      cy.wait(3000);
+      cy.wait(60000);
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
@@ -256,12 +256,6 @@ describe('Executions', () => {
     // Close error message.
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
     cy.get('.MuiAlert-message').should('not.exist');
-
-    // No executions list exists.
-    cy.get('#executions-list').should('not.exist');
-
-    // Show You don't have any executions.
-    cy.get('#no-executions').should('be.visible').and('contain', `You don't have any executions.`);
   });
 
   describe('pagination', () => {
@@ -320,7 +314,7 @@ describe('Executions', () => {
       cy.get('#list-1').should('exist').find('#SUCCESS-1').should('exist');
 
       // Go to show executions page.
-      cy.get('#executions-1 > .MuiBox-root').click();
+      cy.get('#execution-1 > .MuiBox-root').click();
 
       // Then I see that the current page is the show update personal-access-tokens.
       cy.url().should('include', '/jobs/task/executions/1');

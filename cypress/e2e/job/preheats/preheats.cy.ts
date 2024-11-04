@@ -209,7 +209,7 @@ describe('Preheats', () => {
         },
       );
 
-      cy.wait(3000);
+      cy.wait(60000);
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');

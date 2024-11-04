@@ -36,15 +36,22 @@ describe('Menu', () => {
       cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').should('have.class', 'Mui-selected');
     });
 
-    it('should navigate to the preheats page', () => {
+    it('should navigate to the preheats page and task page', () => {
       cy.get('.MuiList-root > :nth-child(3) > .MuiButtonBase-root').click();
-      cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').click();
+      cy.get('[href="/jobs/preheats"]').click();
 
       // Then I see that the current page is the preheats!
       cy.url().should('include', '/jobs/preheats');
 
       // The selected menu is preheats.
-      cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').should('have.class', 'Mui-selected');
+      cy.get('[href="/jobs/preheats"]').should('have.class', 'Mui-selected');
+
+      cy.get('[href="/jobs/task/clear"]').click();
+
+      // Then I see that the current page is the task!
+      cy.url().should('include', '/jobs/task/clear');
+
+      cy.get('[href="/jobs/task/clear"]').should('have.class', 'Mui-selected');
     });
 
     it('should navigate to the peers page', () => {
@@ -85,15 +92,23 @@ describe('Menu', () => {
       cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').should('have.class', 'Mui-selected');
     });
 
-    it('should navigate to the preheats page', () => {
+    it('should navigate to the preheats page and task page', () => {
       cy.get('.MuiList-root > :nth-child(3) > .MuiButtonBase-root').click();
-      cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').click();
+      cy.get('[href="/jobs/preheats"]').click();
 
       // Then I see that the current page is the preheats!
       cy.url().should('include', '/jobs/preheats');
 
       // The selected menu is preheats.
-      cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').should('have.class', 'Mui-selected');
+      cy.get('[href="/jobs/preheats"]').should('have.class', 'Mui-selected');
+
+      cy.get('[href="/jobs/task/clear"]').click();
+
+      // Then I see that the current page is the task!
+      cy.url().should('include', '/jobs/task/clear');
+
+      // The selected menu is task.
+      cy.get('[href="/jobs/task/clear"]').should('have.class', 'Mui-selected');
     });
 
     it('should navigate to the peers page', () => {

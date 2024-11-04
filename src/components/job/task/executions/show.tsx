@@ -35,6 +35,25 @@ import { getBJTDatetime, getPaginatedList, useQuery } from '../../../../lib/util
 import _ from 'lodash';
 import { DEFAULT_SCHEDULER_TABLE_PAGE_SIZE } from '../../../../lib/constants';
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1C293A',
+    },
+  },
+  typography: {
+    fontFamily: 'mabry-light,sans-serif',
+  },
+});
+
+const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))({
+  [`& .${tooltipClasses.tooltip}`]: {
+    maxWidth: '40rem',
+  },
+});
+
 export default function ShowExecutions() {
   const [executions, setExecutions] = useState<getCacheJobResponse>();
   const [shouldPoll, setShouldPoll] = useState(false);
@@ -50,25 +69,6 @@ export default function ShowExecutions() {
   const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
 
   const params = useParams();
-
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#1C293A',
-      },
-    },
-    typography: {
-      fontFamily: 'mabry-light,sans-serif',
-    },
-  });
-
-  const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
-    <Tooltip {...props} classes={{ popper: className }} />
-  ))({
-    [`& .${tooltipClasses.tooltip}`]: {
-      maxWidth: '40rem',
-    },
-  });
 
   useEffect(() => {
     setIsLoading(true);

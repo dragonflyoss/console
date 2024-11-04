@@ -46,6 +46,16 @@ describe('Executions', () => {
 
   describe('when data is loaded', () => {
     it('should display executions all list', () => {
+      cy.get('#tab-clear').click();
+
+      // Then I see that the current page is the clear page!
+      cy.url().should('include', '/jobs/task/clear');
+
+      cy.get('#tab-executions').click();
+
+      // Then I see that the current page is the executions page!
+      cy.url().should('include', '/jobs/task/executions');
+
       let interceptCount = 0;
 
       cy.intercept(

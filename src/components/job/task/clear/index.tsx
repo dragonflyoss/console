@@ -366,7 +366,7 @@ export default function Clear() {
     try {
       setDeleteLoadingButton(true);
       if (schedulerClusterID && !deleteError) {
-        if (cache?.args?.url !== '') {
+        if (cache?.args?.url && cache?.args?.url !== '') {
           const formList = {
             args: {
               url: cache?.args?.url,
@@ -385,7 +385,7 @@ export default function Clear() {
             navigate(`/jobs/task/executions/${tasks?.id}`);
             setOpenDeleteCache(false);
           }
-        } else {
+        } else if (cache?.args?.task_id) {
           const formList = {
             args: {
               task_id: cache?.args?.task_id,

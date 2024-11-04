@@ -445,15 +445,19 @@ export default function ShowExecutions() {
             </Typography>
           </Box>
           <Box className={styles.schedulerClustersID}>
-            {executions?.scheduler_clusters?.map((item: any, index: number) => {
-              return (
-                <Box className={styles.schedulerClustersIDContent}>
-                  <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
-                    {isLoading ? <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} /> : item.id || '-'}
-                  </Typography>
-                </Box>
-              );
-            }) || '-'}
+            {isLoading ? (
+              <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
+            ) : (
+              executions?.scheduler_clusters?.map((item: any, index: number) => {
+                return (
+                  <Box className={styles.schedulerClustersIDContent}>
+                    <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
+                      {item.id || '-'}
+                    </Typography>
+                  </Box>
+                );
+              }) || '-'
+            )}
           </Box>
         </Box>
         <Box className={styles.informationContainer}>

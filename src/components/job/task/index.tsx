@@ -95,6 +95,7 @@ export default function NavTabs() {
           component={Link}
           to="/jobs/task/clear"
           sx={{ textTransform: 'none' }}
+          id="tab-clear"
         />
         <AntTab
           icon={<Box component="img" sx={{ width: '1.5rem' }} src="/icons/job/task/executions.svg" />}
@@ -102,6 +103,7 @@ export default function NavTabs() {
           label="Executions"
           component={Link}
           to="/jobs/task/executions"
+          id="tab-executions"
         />
       </AntTabs>
       <Outlet />

@@ -277,7 +277,7 @@ describe('Executions', () => {
       cy.get(':nth-child(3) > .show_informationContent__KJR0m').should('have.text', '-');
 
       // Show execution url.
-      cy.get('.show_URLContent__NMrif').should('have.text', '-');
+      cy.get('.show_urlContent__GX54w').should('have.text', '-');
 
       // Show execution tag.
       cy.get(':nth-child(5) > .show_informationContent__KJR0m.MuiBox-root > .MuiTypography-root').should(
@@ -330,7 +330,7 @@ describe('Executions', () => {
       // Show execution task id.
       cy.get(':nth-child(3) > .show_informationContent__KJR0m').should('have.text', '-');
       // Show execution url.
-      cy.get('.show_URLContent__NMrif').should('have.text', '-');
+      cy.get('.show_urlContent__GX54w').should('have.text', '-');
       // Show execution tag.
       cy.get(':nth-child(5) > .show_informationContent__KJR0m.MuiBox-root > .MuiTypography-root').should(
         'have.text',

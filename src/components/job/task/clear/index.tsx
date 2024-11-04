@@ -5,7 +5,6 @@ import {
   Paper,
   Button,
   Chip,
-  Skeleton,
   Dialog,
   DialogContent,
   Snackbar,
@@ -397,7 +396,6 @@ export default function Clear() {
           const tasks = await createCacheJob(formList);
           if (tasks?.id) {
             setDeleteLoadingButton(false);
-            setCache(null);
             navigate(`/jobs/task/executions/${tasks?.id}`);
             setOpenDeleteCache(false);
           }

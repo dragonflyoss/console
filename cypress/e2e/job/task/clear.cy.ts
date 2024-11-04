@@ -1,7 +1,7 @@
-import createGetTaskJob from '../../../fixtures/job/task/create-get-task-job.json';
+import createGetCacheJob from '../../../fixtures/job/task/create-cache-job.json';
 import cache from '../../../fixtures/job/task/cache.json';
 import pendingCache from '../../../fixtures/job/task/pending-cache.json';
-
+import taskIDCache from '../../../fixtures/job/task/task-id-cache.json';
 import _ from 'lodash';
 
 describe('Clear', () => {
@@ -50,7 +50,7 @@ describe('Clear', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: createGetTaskJob,
+            body: createGetCacheJob,
           });
         },
       );
@@ -93,6 +93,8 @@ describe('Clear', () => {
         },
       );
 
+      cy.wait(60000);
+
       cy.get('#url').click();
 
       // Show url.
@@ -115,7 +117,7 @@ describe('Clear', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: createGetTaskJob,
+            body: createGetCacheJob,
           });
         },
       );
@@ -224,7 +226,7 @@ describe('Clear', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: createGetTaskJob,
+            body: createGetCacheJob,
           });
         },
       );
@@ -293,7 +295,7 @@ describe('Clear', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: createGetTaskJob,
+            body: createGetCacheJob,
           });
         },
       );
@@ -338,7 +340,7 @@ describe('Clear', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: createGetTaskJob,
+            body: createGetCacheJob,
           });
         },
       );
@@ -389,7 +391,7 @@ describe('Clear', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: createGetTaskJob,
+            body: createGetCacheJob,
           });
         },
       );
@@ -401,7 +403,7 @@ describe('Clear', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: cache,
+            body: taskIDCache,
           });
         },
       );
@@ -443,7 +445,7 @@ describe('Clear', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: createGetTaskJob,
+            body: createGetCacheJob,
           });
         },
       );
@@ -508,7 +510,7 @@ describe('Clear', () => {
         (req) => {
           req.reply({
             statusCode: 200,
-            body: createGetTaskJob,
+            body: createGetCacheJob,
           });
         },
       );

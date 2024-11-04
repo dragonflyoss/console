@@ -90,8 +90,6 @@ export default function ShowExecutions() {
         }
       } catch (error) {
         if (error instanceof Error) {
-          console.log(error);
-
           setErrorMessage(true);
           setErrorMessageText(error.message);
           setShouldPoll(false);

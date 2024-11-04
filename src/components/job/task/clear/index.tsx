@@ -762,35 +762,31 @@ export default function Clear() {
                             <Typography variant="subtitle1" mr="0.6rem" fontFamily="mabry-bold">
                               Scheduler Cluster
                             </Typography>
-                            {isLoading ? (
-                              <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
-                            ) : (
+                            <Box
+                              sx={{
+                                border: '1px solid #d5d2d2',
+                                p: '0.2rem 0.3rem',
+                                borderRadius: '0.4rem',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                              }}
+                            >
                               <Box
-                                sx={{
-                                  border: '1px solid #d5d2d2',
-                                  p: '0.2rem 0.3rem',
-                                  borderRadius: '0.4rem',
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                }}
+                                component="img"
+                                sx={{ width: '0.6rem', height: '0.6rem' }}
+                                src="/icons/job/task/scheduler-cluster.svg"
+                              />
+                              <Typography
+                                id="schedulerTotal"
+                                variant="subtitle2"
+                                fontFamily="mabry-bold"
+                                component="div"
+                                pl="0.3rem"
+                                lineHeight="1rem"
                               >
-                                <Box
-                                  component="img"
-                                  sx={{ width: '0.6rem', height: '0.6rem' }}
-                                  src="/icons/job/task/scheduler-cluster.svg"
-                                />
-                                <Typography
-                                  id="schedulerTotal"
-                                  variant="subtitle2"
-                                  fontFamily="mabry-bold"
-                                  component="div"
-                                  pl="0.3rem"
-                                  lineHeight="1rem"
-                                >
-                                  ID&nbsp;:&nbsp; {peer?.scheduler_cluster_id || '0'}
-                                </Typography>
-                              </Box>
-                            )}
+                                ID&nbsp;:&nbsp; {peer?.scheduler_cluster_id || '0'}
+                              </Typography>
+                            </Box>
                           </Box>
                           <Button
                             size="small"
@@ -844,113 +840,26 @@ export default function Clear() {
                                 <Box sx={{ p: '1rem', display: 'flex', alignItems: 'center' }}>
                                   <Box width="20%" sx={{ display: 'flex', alignItems: 'center', pb: '0.4rem' }}>
                                     <Box>
-                                      {isLoading ? (
-                                        <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
-                                      ) : (
-                                        <Tooltip title={item?.hostname || '-'} placement="top">
-                                          <Typography variant="body1">{item?.hostname}</Typography>
-                                        </Tooltip>
-                                      )}
+                                      <Tooltip title={item?.hostname || '-'} placement="top">
+                                        <Typography variant="body1">{item?.hostname}</Typography>
+                                      </Tooltip>
                                     </Box>
                                   </Box>
                                   <Box width="35%">
-                                    {isLoading ? (
-                                      <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
-                                    ) : (
-                                      <Tooltip title={item?.id || '-'} placement="top">
-                                        <Typography variant="body2" component="div" className={styles.text}>
-                                          {item?.id || '-'}
-                                        </Typography>
-                                      </Tooltip>
-                                    )}
-                                  </Box>
-                                  <Box width="15%">
-                                    <Box className={styles.ipContainer}>
-                                      {isLoading ? (
-                                        <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
-                                      ) : (
-                                        <Typography variant="subtitle2" component="div">
-                                          {item?.ip || '-'}
-                                        </Typography>
-                                      )}
-                                    </Box>
-                                  </Box>
-                                  <Box width="15%">
-                                    {isLoading ? (
-                                      <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
-                                    ) : (
-                                      <Chip
-                                        label={_.upperFirst(item?.host_type) || ''}
-                                        size="small"
-                                        variant="outlined"
-                                        sx={{
-                                          borderRadius: '0%',
-                                          backgroundColor:
-                                            item?.host_type === 'super'
-                                              ? 'var( --description-color)'
-                                              : 'var(--button-color)',
-                                          color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
-                                          borderColor:
-                                            item?.host_type === 'super'
-                                              ? 'var( --description-color)'
-                                              : 'var(--button-color)',
-                                          fontWeight: 'bold',
-                                        }}
-                                      />
-                                    )}
-                                  </Box>
-                                  <Box width="15%">
-                                    <Chip
-                                      avatar={<MoreTimeIcon />}
-                                      label={getBJTDatetime(item?.created_at || '')}
-                                      variant="outlined"
-                                      size="small"
-                                    />
-                                  </Box>
-                                  <Divider />
-                                </Box>
-                              </>
-                            ) : (
-                              <Box sx={{ p: '1rem', display: 'flex', alignItems: 'center' }}>
-                                <Box width="20%" sx={{ display: 'flex', alignItems: 'center', pb: '0.4rem' }}>
-                                  <Box>
-                                    {isLoading ? (
-                                      <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
-                                    ) : (
-                                      <Tooltip title={item?.hostname || '-'} placement="top">
-                                        <Typography variant="body1" mr="1rem">
-                                          {item?.hostname}
-                                        </Typography>
-                                      </Tooltip>
-                                    )}
-                                  </Box>
-                                </Box>
-                                <Box width="35%">
-                                  {isLoading ? (
-                                    <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
-                                  ) : (
                                     <Tooltip title={item?.id || '-'} placement="top">
                                       <Typography variant="body2" component="div" className={styles.text}>
                                         {item?.id || '-'}
                                       </Typography>
                                     </Tooltip>
-                                  )}
-                                </Box>
-                                <Box width="15%">
-                                  <Box className={styles.ipContainer}>
-                                    {isLoading ? (
-                                      <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
-                                    ) : (
+                                  </Box>
+                                  <Box width="15%">
+                                    <Box className={styles.ipContainer}>
                                       <Typography variant="subtitle2" component="div">
                                         {item?.ip || '-'}
                                       </Typography>
-                                    )}
+                                    </Box>
                                   </Box>
-                                </Box>
-                                <Box width="15%">
-                                  {isLoading ? (
-                                    <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
-                                  ) : (
+                                  <Box width="15%">
                                     <Chip
                                       label={_.upperFirst(item?.host_type) || ''}
                                       size="small"
@@ -969,7 +878,62 @@ export default function Clear() {
                                         fontWeight: 'bold',
                                       }}
                                     />
-                                  )}
+                                  </Box>
+                                  <Box width="15%">
+                                    <Chip
+                                      avatar={<MoreTimeIcon />}
+                                      label={getBJTDatetime(item?.created_at || '')}
+                                      variant="outlined"
+                                      size="small"
+                                    />
+                                  </Box>
+                                  <Divider />
+                                </Box>
+                              </>
+                            ) : (
+                              <Box sx={{ p: '1rem', display: 'flex', alignItems: 'center' }}>
+                                <Box width="20%" sx={{ display: 'flex', alignItems: 'center', pb: '0.4rem' }}>
+                                  <Box>
+                                    <Tooltip title={item?.hostname || '-'} placement="top">
+                                      <Typography variant="body1" mr="1rem">
+                                        {item?.hostname}
+                                      </Typography>
+                                    </Tooltip>
+                                  </Box>
+                                </Box>
+                                <Box width="35%">
+                                  <Tooltip title={item?.id || '-'} placement="top">
+                                    <Typography variant="body2" component="div" className={styles.text}>
+                                      {item?.id || '-'}
+                                    </Typography>
+                                  </Tooltip>
+                                </Box>
+                                <Box width="15%">
+                                  <Box className={styles.ipContainer}>
+                                    <Typography variant="subtitle2" component="div">
+                                      {item?.ip || '-'}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                                <Box width="15%">
+                                  <Chip
+                                    label={_.upperFirst(item?.host_type) || ''}
+                                    size="small"
+                                    variant="outlined"
+                                    sx={{
+                                      borderRadius: '0%',
+                                      backgroundColor:
+                                        item?.host_type === 'super'
+                                          ? 'var( --description-color)'
+                                          : 'var(--button-color)',
+                                      color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
+                                      borderColor:
+                                        item?.host_type === 'super'
+                                          ? 'var( --description-color)'
+                                          : 'var(--button-color)',
+                                      fontWeight: 'bold',
+                                    }}
+                                  />
                                 </Box>
                                 <Box width="15%">
                                   <Chip

@@ -15,9 +15,11 @@ describe('Clear', () => {
   describe('when data is loaded', () => {
     it('click the `CANCEL button', () => {
       cy.get('#url').click();
+
       // Show tag input.
       cy.get('#tag').should('exist');
       cy.get('#cancelSearchByURL').click();
+
       // not show tag input.
       cy.get('#tag').should('not.exist');
     });
@@ -26,15 +28,20 @@ describe('Clear', () => {
       let interceptCount = 0;
 
       cy.get('#url').click();
+
       // Add url.
       cy.get('#url').type('https://example.com/path/to/file');
+
       // Show tag input.
       cy.get('#tag').type('tag');
+
       // Show tag input.
       cy.get('#application').type('application');
+
       // Show tag input.
       cy.get('.MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('filteredQueryParams{enter}');
       cy.get('.MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('X-Amz-Algorithm{enter}');
+
       cy.intercept(
         {
           method: 'post',
@@ -47,7 +54,6 @@ describe('Clear', () => {
           });
         },
       );
-
       cy.intercept(
         {
           method: 'GET',
@@ -66,7 +72,7 @@ describe('Clear', () => {
 
       cy.get('#isLoading').should('be.exist');
 
-      cy.wait(6000);
+      cy.wait(120000);
 
       // Executed every 3 seconds, it should be executed 2 times after 6 seconds.
       cy.get('@cache').then(() => {
@@ -88,7 +94,8 @@ describe('Clear', () => {
       );
 
       cy.get('#url').click();
-      // Show URL.
+
+      // Show url.
       cy.get('#url').should('have.value', 'https://example.com/path/to/file');
       cy.get('#tag').should('have.value', 'tag');
       cy.get('#application').should('have.value', 'application');
@@ -99,6 +106,7 @@ describe('Clear', () => {
 
     it('can search by task id', () => {
       cy.get('#serach-task-id').click();
+
       cy.intercept(
         {
           method: 'post',
@@ -123,12 +131,15 @@ describe('Clear', () => {
           });
         },
       );
+
       cy.get('.MuiInputBase-root > #task-id').type(
         'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916{enter}',
       );
       cy.get('#cache').children().should('have.length', 3);
+
       // Go to next page.
       cy.get('#pagination-0 > .MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
+
       // Check the current page number.
       cy.get('#pagination-0 > .MuiPagination-ul .Mui-selected').should('have.text', '2');
       cy.get('#cache-0 > :nth-child(1) > .css-tzff0k > .MuiBox-root > .MuiTypography-root').should(
@@ -136,8 +147,10 @@ describe('Clear', () => {
         'dragonfly-seed-client-5',
       );
       cy.get('#cache-0').children().should('have.length', 2);
+
       // Pagination should not be displayed.
       cy.get('#pagination-1').should('exist');
+
       // Pagination should be shown.
       cy.get('#pagination-2').should('not.exist');
       cy.get('#cache-1 > :nth-child(1)')
@@ -146,8 +159,10 @@ describe('Clear', () => {
         .and('contain', 'Normal');
       cy.get('#pagination-1 > .MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
       cy.get('#cache-1').children().should('have.length', 1);
+
       // Go back to the last page.
       cy.get('#pagination-0 > .MuiPagination-ul > :nth-child(1) > .MuiButtonBase-root').click();
+
       // Check the current data list.
       cy.get('#cache-0').children().should('have.length', 5);
       cy.get('.MuiInputBase-root > .MuiButtonBase-root').click();
@@ -198,7 +213,9 @@ describe('Clear', () => {
       cy.get('.MuiAlert-message').should('not.exist');
     });
 
-    it('query cache API error', () => {
+    it('when the status is pending, delete cache API error response', () => {
+      let interceptCount = 0;
+
       cy.intercept(
         {
           method: 'post',
@@ -218,10 +235,12 @@ describe('Clear', () => {
         },
         (req) => {
           req.reply({
-            forceNetworkError: true,
+            statusCode: 200,
+            body: pendingCache,
           });
+          interceptCount++;
         },
-      );
+      ).as('cache');
 
       // Search by URL.
       cy.get('#url').click();
@@ -229,22 +248,74 @@ describe('Clear', () => {
 
       cy.get('#searchByURL').click();
 
+      cy.get('#isLoading').should('be.exist');
+
+      cy.wait(120000);
+
+      // Executed every 1 minute and once after 1 minute.
+      cy.get('@cache').then(() => {
+        expect(interceptCount).to.be.greaterThan(0);
+        expect(interceptCount).to.be.closeTo(2, 1);
+      });
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 401,
+            body: { message: 'Unauthorized' },
+          });
+        },
+      );
+
+      // Preheat API error response after three seconds.
+      cy.wait(60000);
+
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
       cy.get('.MuiAlert-message').should('not.exist');
+    });
 
+    it('Delete cache API error response', () => {
       // Search by task id.
       cy.get('#serach-task-id').click();
+      cy.intercept(
+        {
+          method: 'post',
+          url: '/api/v1/jobs',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: createGetTaskJob,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 401,
+            body: { message: 'Unauthorized' },
+          });
+        },
+      );
 
       cy.get('.MuiInputBase-root > #task-id').type(
         'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916{enter}',
       );
 
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
@@ -253,8 +324,9 @@ describe('Clear', () => {
   });
 
   describe('delete', () => {
-    it('can delete cache for search by task id', () => {
+    it('can delete cache searched by URL', () => {
       cy.get('#url').click();
+
       // Add url.
       cy.get('#url').type('https://example.com/path/to/file');
 
@@ -282,7 +354,61 @@ describe('Clear', () => {
           });
         },
       );
+
       cy.get('#searchByURL').click();
+
+      cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .MuiButtonBase-root').click();
+
+      cy.get('#deletCache').type('e');
+
+      // Should display message delete cache the validation error.
+      cy.get('#deletCache-helper-text').should('have.text', 'Please enter "DELETE"');
+
+      cy.get('#deletCache').clear();
+
+      cy.get('#deletCache').type('DELETE');
+
+      cy.get('#deletCache-helper-text').should('not.exist');
+
+      // Click delete cache button.
+      cy.get('#deleteTask').click();
+
+      // Then I see that the current page is the executions id.
+      cy.url().should('include', '/jobs/task/executions/1');
+    });
+
+    it('Can delete cache searched by task id', () => {
+      // Search by task id.
+      cy.get('#serach-task-id').click();
+
+      cy.intercept(
+        {
+          method: 'post',
+          url: '/api/v1/jobs',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: createGetTaskJob,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: cache,
+          });
+        },
+      );
+
+      cy.get('.MuiInputBase-root > #task-id').type(
+        'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916{enter}',
+      );
 
       cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .MuiButtonBase-root').click();
 
@@ -371,58 +497,6 @@ describe('Clear', () => {
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
-    });
-    it('can delete cache for search by URL', () => {
-      // Search by task id.
-      cy.get('#serach-task-id').click();
-
-      cy.intercept(
-        {
-          method: 'post',
-          url: '/api/v1/jobs',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: createGetTaskJob,
-          });
-        },
-      );
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/jobs/1',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: cache,
-          });
-        },
-      );
-
-      cy.get('.MuiInputBase-root > #task-id').type(
-        'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916{enter}',
-      );
-
-      cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .MuiButtonBase-root').click();
-
-      cy.get('#deletCache').type('e');
-
-      // Should display message delete cache the validation error.
-      cy.get('#deletCache-helper-text').should('have.text', 'Please enter "DELETE"');
-
-      cy.get('#deletCache').clear();
-
-      cy.get('#deletCache').type('DELETE');
-
-      cy.get('#deletCache-helper-text').should('not.exist');
-
-      // Click delete cache button.
-      cy.get('#deleteTask').click();
-
-      // Then I see that the current page is the executions id.
-      cy.url().should('include', '/jobs/task/executions/1');
     });
 
     it('search by URL API error response should be handled', () => {

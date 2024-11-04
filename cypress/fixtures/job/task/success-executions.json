@@ -14,7 +14,7 @@
       "tag": "",
       "task_id": "aea9af454bc33e61dd24647b0dd6d023195360a6b67c7c3e0feda4713819cc38",
       "timeout": 1800000000000,
-      "url": "https://image.baidu.com/front/aigc?atn=aigc\u0026fr=home\u0026imgcontent=%7B%22aigcQuery%22%3A%22%22%2C%22imageAigcId%22%3A%224199096378%22%7D\u0026isImmersive=1\u0026pd=image_content\u0026quality=1\u0026ratio=1%3A1\u0026sa=searchpromo_shijian_photohp_inspire\u0026tn=aigc\u0026top=%7B%22sfhs%22%3A1%7D\u0026word=%E4%B8%80%E4%B8%B2%E6%A8%B1%E6%A1%83%E6%8C%82%E5%9C%A8%E6%9E%9D%E5%A4%B4%EF%BC%8C%E7%BA%A2%E5%BD%A4%E5%BD%A4%E7%9A%84%E6%9E%9C%E5%AE%9E%E5%9C%86%E6%B6%A6%E5%8F%AF%E7%88%B1%EF%BC%8C%E5%85%89%E6%B3%BD%E9%80%8F%E4%BA%AE%EF%BC%8C%E4%BB%BF%E4%BD%9B%E6%AF%8F%E4%B8%80%E9%A2%97%E9%83%BD%E8%95%B4%E5%90%AB%E7%9D%80%E6%97%A0%E9%99%90%E7%9A%84%E7%94%9C%E8%9C%9C%E5%92%8C%E6%B4%BB%E5%8A%9B%E3%80%82"
+      "url": "https://example.com/path/to/file"
     },
     "result": {
       "created_at": "2024-11-01T10:02:44.836338419Z",
@@ -123,7 +123,7 @@
       "tag": "",
       "task_id": "",
       "timeout": 1800000000000,
-      "url": "https://image.baidu.com/front/aigc?atn=aigc\u0026fr=home\u0026imgcontent=%7B%22aigcQuery%22%3A%22%22%2C%22imageAigcId%22%3A%224199096378%22%7D\u0026isImmersive=1\u0026pd=image_content\u0026quality=1\u0026ratio=3%3A4\u0026sa=searchpromo_shijian_photohp_inspire\u0026tn=aigc\u0026top=%7B%22sfhs%22%3A1%7D\u0026word=%E5%8F%A4%E5%85%B8%E7%BB%98%E7%94%BB%EF%BC%8C%E5%B7%A5%E7%AC%94%E7%94%BB%EF%BC%8C%E5%AB%A6%E5%A8%A5%E5%A5%94%E6%9C%88%EF%BC%8C%E5%88%98%E4%BA%A6%E8%8F%B2%EF%BC%8C%E4%BB%99%E5%A5%B3%E5%BD%A2%E8%B1%A1%EF%BC%8C%E5%B9%BF%E5%AF%92%E5%AE%AB%EF%BC%8C%E9%AB%98%E6%B8%85%EF%BC%8C%E5%B7%A5%E7%AC%94%E7%94%BB%E9%A3%8E%E6%A0%BC%EF%BC%8C%E7%B2%BE%E7%BB%86%EF%BC%8C%E6%9F%94%E5%92%8C%E6%9C%88%E5%85%89%EF%BC%8C%E4%B8%9D%E7%BB%B8%E8%88%AC%E9%A1%BA%E6%BB%91"
+      "url": "https://example.com/path/to/file"
     },
     "result": {
       "created_at": "2024-11-01T09:59:49.07231163Z",
@@ -232,7 +232,7 @@
       "tag": "",
       "task_id": "",
       "timeout": 1800000000000,
-      "url": "https://image.baidu.com/front/aigc?atn=aigc\u0026fr=home\u0026imgcontent=%7B%22aigcQuery%22%3A%22%22%2C%22imageAigcId%22%3A%224199096378%22%7D\u0026isImmersive=1\u0026pd=image_content\u0026quality=1\u0026ratio=3%3A4\u0026sa=searchpromo_shijian_photohp_inspire\u0026tn=aigc\u0026top=%7B%22sfhs%22%3A1%7D\u0026word=%E5%B7%B4%E5%8E%98%E5%B2%9B%E6%B0%9B%E5%9B%B4%E9%98%B3%E5%85%89%E5%AF%86%E5%B8%83%E7%9A%84%E4%B8%9B%E6%9E%97"
+      "url": "https://example.com/path/to/file"
     },
     "result": {
       "created_at": "2024-11-01T09:56:31.537420427Z",
@@ -341,7 +341,7 @@
       "tag": "",
       "task_id": "",
       "timeout": 1800000000000,
-      "url": "https://image.baidu.com/front/aigc?atn=aigc\u0026fr=home\u0026imgcontent=%7B%22aigcQuery%22%3A%22%22%2C%22imageAigcId%22%3A%224199096378%22%7D\u0026isImmersive=1\u0026pd=image_content\u0026quality=1\u0026ratio=3%3A4\u0026sa=searchpromo_shijian_photohp_inspire\u0026tn=aigc\u0026top=%7B%22sfhs%22%3A1%7D\u0026word=%E5%B7%B4%E5%8E%98%E5%B2%9B%E6%B0%9B%E5%9B%B4%E9%98%B3%E5%85%89%E5%AF%86%E5%B8%83%E7%9A%84%E4%B8%9B%E6%9E%97"
+      "url": "https://example.com/path/to/file"
     },
     "result": {
       "created_at": "2024-11-01T09:54:04.883390304Z",
@@ -444,7 +444,7 @@
       "tag": "",
       "task_id": "",
       "timeout": 1800000000000,
-      "url": "https://image.baidu.com/front/aigc?atn=aigc\u0026fr=home\u0026imgcontent=%7B%22aigcQuery%22%3A%22%22%2C%22imageAigcId%22%3A%224199096378%22%7D\u0026isImmersive=1\u0026pd=image_content\u0026quality=1\u0026ratio=4%3A3\u0026sa=searchpromo_shijian_photohp_inspire\u0026tn=aigc\u0026top=%7B%22sfhs%22%3A1%7D\u0026word=%E4%B8%80%E5%90%8D%E5%AE%87%E8%88%AA%E5%91%98%E7%AB%99%E5%9C%A8%E7%81%AB%E7%AE%AD%E6%97%81%2C%E4%BB%96%E7%A9%BF%E7%9D%80%E9%97%AA%E4%BA%AE%E7%9A%84%E7%99%BD%E8%89%B2%E5%A4%AA%E7%A9%BA%E6%9C%8D%2C%E5%A4%B4%E7%9B%94%E4%B8%8B%E7%9A%84%E9%9D%A2%E5%AD%94%E5%85%85%E6%BB%A1%E5%86%B3%E5%BF%83%E3%80%82%E7%81%AB%E7%AE%AD%E9%AB%98%E5%A4%A7%E8%80%8C%E5%A4%8D%E6%9D%82%2C%E5%9C%A8%E5%A4%9C%E6%99%9A%E7%9A%84%E6%98%9F%E7%A9%BA%E4%B8%8B%E9%97%AA%E9%97%AA%E5%8F%91%E5%85%89%E3%80%82%E5%91%A8%E5%9B%B4%E6%98%AF%E5%90%84%E7%A7%8D%E5%A4%8D%E6%9D%82%E7%9A%84%E6%8E%A7%E5%88%B6%E9%9D%A2%E6%9D%BF%E5%92%8C%E4%BB%AA%E5%99%A8%2C%E6%98%BE%E7%A4%BA%E7%9D%80%E5%8D%B3%E5%B0%86%E5%8F%91%E5%B0%84%E7%9A%84%E5%87%86%E5%A4%87%E6%83%85%E5%86%B5%E3%80%82%E5%9C%A8%E8%BF%9C%E5%A4%84%2C%E5%9C%B0%E5%B9%B3%E7%BA%BF%E4%B8%8A%E7%9A%84%E5%A4%95%E9%98%B3%E5%B0%86%E5%A4%A9%E7%A9%BA%E6%9F%93%E6%88%90%E6%B7%A1%E6%B7%A1%E7%9A%84%E6%A9%99%E8%89%B2%E3%80%82"
+      "url": "https://example.com/path/to/file"
     },
     "result": {
       "created_at": "2024-11-01T09:34:14.312378294Z",
@@ -547,7 +547,7 @@
       "tag": "",
       "task_id": "",
       "timeout": 1800000000000,
-      "url": "https://image.baidu.com/front/aigc?atn=aigc\u0026fr=home\u0026imgcontent=%7B%22aigcQuery%22%3A%22%22%2C%22imageAigcId%22%3A%224199096378%22%7D\u0026isImmersive=1\u0026pd=image_content\u0026quality=1\u0026ratio=3%3A4\u0026sa=searchpromo_shijian_photohp_inspire\u0026tn=aigc\u0026top=%7B%22sfhs%22%3A1%7D\u0026word=%E7%94%9F%E6%B4%BB%E5%9C%A8%E6%B5%B7%E6%BB%A9%E4%B8%8A%EF%BC%8C%E4%B8%8E%E5%B0%8F%E9%B3%84%E6%A2%A8%E6%92%92%E5%9C%A8%E6%B5%B7%E6%BB%A9%E4%B8%8A%E6%9B%B4%E7%BE%8E%E5%A5%BD"
+      "url": "https://example.com/path/to/file"
     },
     "result": {
       "created_at": "2024-11-01T09:32:30.001617594Z",
@@ -648,7 +648,7 @@
       "application": "",
       "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
       "tag": "",
-      "task_id": "sdfdsps",
+      "task_id": "8c3dbd38fc7f4b3637d4e8ad8490ce107ac4cf2df81d45e7d33224f29ab4cf3d",
       "timeout": 1800000000000,
       "url": ""
     },
@@ -751,7 +751,7 @@
       "application": "",
       "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
       "tag": "",
-      "task_id": "sdfdsss",
+      "task_id": "8c3dbd38fc7f4b3637d4e8ad8490ce107ac4cf2df81d45e7d33224f29ab4cf3d",
       "timeout": 1800000000000,
       "url": ""
     },
@@ -854,7 +854,7 @@
       "application": "",
       "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
       "tag": "",
-      "task_id": "sdfdsss",
+      "task_id": "8c3dbd38fc7f4b3637d4e8ad8490ce107ac4cf2df81d45e7d33224f29ab4cf3d",
       "timeout": 1800000000000,
       "url": ""
     },

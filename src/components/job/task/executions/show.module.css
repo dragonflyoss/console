@@ -22,7 +22,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-style: italic;
-  /* font-family: 'mabry-bold' !important; */
 }
 
 .informationTitleIcon {
@@ -35,25 +34,8 @@
   color: #515151;
 }
 
-.schedulerContainer {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 1rem;
-  margin-top: 2rem;
-}
-
-.schedulerContent {
-  width: 25%;
-  padding: 1rem;
-}
-
 .statusIcon {
   margin-right: 0.2rem;
-}
-
-.schedulerClustersID {
-  display: flex;
-  align-items: center;
 }
 
 .schedulerClustersIDContent {

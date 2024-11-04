@@ -40,6 +40,7 @@ describe('Executions', () => {
   });
 
   it('click the breadcrumb', () => {
+    // Show isloading.
     cy.get('[data-testid="isloading"]').should('be.exist');
 
     cy.get('#execution-9 > .MuiBox-root').click();
@@ -57,7 +58,7 @@ describe('Executions', () => {
     cy.url().should('include', '/jobs/task/executions');
   });
 
-  describe('when no data is loaded', () => {
+  describe('when data is loaded', () => {
     it('should display detailed execution failure information', () => {
       // Click the execution details button.
 
@@ -76,6 +77,7 @@ describe('Executions', () => {
           });
         },
       );
+
       cy.get('#execution-10').click();
 
       cy.get('[data-testid="execution-isloading"]').should('be.exist');
@@ -115,7 +117,7 @@ describe('Executions', () => {
       cy.get('#panel1d-header').click();
 
       // Check error log.
-      cy.get('.MuiAccordionDetails-root')
+      cy.get('.MuiAccordionDetails-root > .MuiTypography-root')
         .should('be.visible')
         .and('have.text', 'rpc error: code = Aborted desc = source response 401/401 Unauthorized is not valid');
     });
@@ -144,10 +146,7 @@ describe('Executions', () => {
       // Show failure task.
       cy.get('#failure-tasks').should('exist');
 
-      cy.get(':nth-child(1) > [width="50%"] > .MuiTypography-root').should(
-        'contain',
-        'task a1e21fcec1ba95d4407a83b3fc767da6de2a2fe35736c2ba3b95473229de1894 failed: rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 172.18.0.3:4000: connect: connection refused"',
-      );
+      cy.get('#failure-tasks-list > :nth-child(1) > :nth-child(1)').should('contain', 'kind-worker');
 
       // Go to next page.
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
@@ -170,6 +169,16 @@ describe('Executions', () => {
       cy.get('#failure-tasks-list').children().should('have.length', 1);
 
       cy.get('#failure-tasks-list > .MuiTableRow-root > :nth-child(1)').should('have.text', 'dragonfly-seed-client-5');
+
+      // Show error log.
+      cy.get('#error-log-icon').click();
+
+      cy.get('#panel1d-header').click();
+
+      cy.get('.MuiAccordionDetails-root').should(
+        'contain',
+        'task a1e21fceseba95d4407a83b3fc767da6de2a2fe35736c2ba3b95473229de1894 failed: rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 172.18.0.3:4000: connect: connection refused"',
+      );
     });
 
     it('should display detailed execution pending information', () => {
@@ -206,7 +215,7 @@ describe('Executions', () => {
         .find('#error-log-icon')
         .and('not.exist');
 
-      cy.wait(6000);
+      cy.wait(120000);
 
       // Check how many times the API should be executed after six seconds.
       cy.get('@execution').then(() => {
@@ -228,7 +237,7 @@ describe('Executions', () => {
       );
 
       // Execution fails after three seconds.
-      cy.wait(3000);
+      cy.wait(60000);
 
       // Show execution status.
       cy.get('#status')
@@ -376,12 +385,7 @@ describe('Executions', () => {
 
       cy.get('#failure-tasks-list > :nth-child(1) > :nth-child(2)').should('have.text', '172.18.0.3');
 
-      cy.get(':nth-child(1) > [width="50%"] > .MuiTypography-root').should(
-        'have.text',
-        'task a1e21fcec1ba95d4407a83b3fc767da6de2a2fe35736c2ba3b95473229de1894 failed: rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 172.18.0.3:4000: connect: connection refused"',
-      );
-
-      cy.wait(6000);
+      cy.wait(120000);
 
       // Check how many times the API should be executed after six seconds.
       cy.get('@execution').then(() => {
@@ -403,7 +407,7 @@ describe('Executions', () => {
       );
 
       // Execution API error response after three seconds.
-      cy.wait(3000);
+      cy.wait(60000);
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');

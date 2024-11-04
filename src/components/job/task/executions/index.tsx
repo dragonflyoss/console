@@ -101,7 +101,7 @@ export default function LabTabs() {
         };
 
         pollPreheat();
-      }, 3000);
+      }, 60000);
 
       return () => {
         clearInterval(pollingInterval);
@@ -118,7 +118,6 @@ export default function LabTabs() {
 
   const changeStatus = (event: any) => {
     setStatus(event.target.value);
-    // navigate(`/jobs/preheats`);
   };
 
   const theme = createTheme({

@@ -70,9 +70,9 @@ describe('Executions', () => {
 
       cy.get('.MuiTabs-flexContainer > .Mui-selected').should('be.visible').and('have.text', 'Executions');
 
-      cy.wait(6000);
+      cy.wait(120000);
 
-      // Executed every 3 seconds, it should be executed 2 times after 6 seconds.
+      //Executed every 1 minute and once after 1 minute.
       cy.get('@executions').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
         expect(interceptCount).to.be.closeTo(2, 1);
@@ -184,7 +184,7 @@ describe('Executions', () => {
       // Check how many executions are in pending failure.
       cy.get('#executions-list').children().should('have.length', 1);
 
-      cy.wait(6000);
+      cy.wait(120000);
 
       // The API should poll.
       cy.get('@executions').then(() => {

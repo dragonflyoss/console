@@ -1,5 +1,4 @@
 import {
-  Breadcrumbs,
   Typography,
   Box,
   IconButton,
@@ -13,8 +12,6 @@ import {
   Alert,
   Tooltip,
   Divider,
-  ListSubheader,
-  Drawer,
   createTheme,
   ThemeProvider,
   TextField,
@@ -22,79 +19,26 @@ import {
   Autocomplete,
   ToggleButtonGroup,
   ToggleButton,
-  Menu,
-  InputAdornment,
   toggleButtonGroupClasses,
   Pagination,
 } from '@mui/material';
 import styles from './index.module.css';
-import { MouseEvent, SetStateAction, useEffect, useRef, useState } from 'react';
-import InputBase from '@mui/material/InputBase';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useEffect, useState } from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
-import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { LoadingButton, TabContext, TabList, TabPanel } from '@mui/lab';
 import CloseIcon from '@mui/icons-material/Close';
-import CancelIcon from '@mui/icons-material/Cancel';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import {
-  deleteTaskResponse,
-  createTaskJob,
-  createGetTaskJobResponse,
-  getTaskJob,
-  taskJob,
-  jobStates,
-  peers,
-} from '../../../../lib/api';
+import { deleteTaskResponse, createTaskJob, getTaskJob, taskJob, jobStates, peers } from '../../../../lib/api';
 import { getBJTDatetime, getDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
-import _, { values } from 'lodash';
+import _ from 'lodash';
 import SearchTaskAnimation from '../../../search-task-animation';
 import { useNavigate } from 'react-router-dom';
 import { CancelLoadingButton, SavelLoadingButton } from '../../../loading-button';
-import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
-import MuiAccordionSummary, { AccordionSummaryProps } from '@mui/material/AccordionSummary';
-import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import HelpIcon from '@mui/icons-material/Help';
 import SearchIcon from '@mui/icons-material/Search';
 import SearchCircularProgress from '../../../circular-progress';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import LinkOutlinedIcon from '@mui/icons-material/LinkOutlined';
-import { DEFAULT_PAGE_SIZE } from '../../../../lib/constants';
-
-const Accordion = styled((props: AccordionProps) => <MuiAccordion defaultExpanded disableGutters square {...props} />)(
-  ({ theme }) => ({
-    border: `1px solid ${theme.palette.divider}`,
-    '&:not(:last-child)': {
-      borderBottom: 0,
-    },
-    '&::before': {
-      display: 'none',
-    },
-    marginBottom: '1rem',
-  }),
-);
-
-const AccordionSummary = styled((props: AccordionSummaryProps) => (
-  <MuiAccordionSummary expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />} {...props} />
-))(({ theme }) => ({
-  backgroundColor: '#F8F8FB',
-  flexDirection: 'row-reverse',
-  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
-    transform: 'rotate(90deg)',
-  },
-  '& .MuiAccordionSummary-content': {
-    marginLeft: theme.spacing(1),
-  },
-  ...theme.applyStyles('dark', {
-    backgroundColor: 'rgba(255, 255, 255, .05)',
-  }),
-}));
-
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-  padding: 0,
-  borderTop: '1px solid rgba(0, 0, 0, .125)',
-}));
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
@@ -111,23 +55,19 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   },
 }));
 
-export default function Task() {
+export default function Clear() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [openClearAllClear, setOpenClearAllClear] = useState(false);
   const [openClearClear, setOpenClearClear] = useState(false);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [searchTask, setSearchTask] = useState('');
   const [task, setTask] = useState<deleteTaskResponse | any>();
-  const [openDeleteBackdrop, setOpenDeleteBackdrop] = useState(false);
   const [input, setInput] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
-  const [deleteTask, setDeleteTask] = useState<deleteTaskResponse | null>();
   const [shouldPoll, setShouldPoll] = useState(false);
   const [schedulerClusterID, setSchedulerClusterID] = useState(0);
-  const [noTask, setNOTask] = useState('');
   const [urlError, setUrlError] = useState(false);
   const [taskIDError, setTaskIDError] = useState(false);
   const [applicationError, setApplicationError] = useState(false);
@@ -136,10 +76,10 @@ export default function Task() {
   const [filterHelperText, setFilterHelperText] = useState('Fill in the characters, the length is 0-100.');
   const [search, setSearch] = useState<string | null>('url');
   const [searchID, setSearchID] = useState(0);
+  const [cachePages, setCachePages] = useState<any>({});
   const [searchData, setSearchDada] = useState({ url: '', tag: '', application: '', filtered_query_params: '' });
 
   const { url, tag, application, filtered_query_params } = searchData;
-
   const navigate = useNavigate();
 
   const theme = createTheme({
@@ -166,10 +106,8 @@ export default function Task() {
             if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {
               setIsLoading(false);
               setTask(job);
-              setOpenDeleteBackdrop(false);
             } else {
               setShouldPoll(true);
-              setOpenDeleteBackdrop(true);
             }
           }
         }
@@ -195,7 +133,6 @@ export default function Task() {
               setTask(job);
               setShouldPoll(false);
               setIsLoading(false);
-              setOpenDeleteBackdrop(false);
             }
           } catch (error) {
             if (error instanceof Error) {
@@ -208,7 +145,7 @@ export default function Task() {
         };
 
         pollPreheat();
-      }, 3000);
+      }, 60000);
 
       return () => {
         clearInterval(pollingInterval);
@@ -230,14 +167,7 @@ export default function Task() {
       InputProps: {
         startAdornment: <SearchIcon sx={{ color: '#9BA0A6' }} />,
         endAdornment: searchTask ? (
-          <IconButton
-            type="button"
-            sx={{ p: 0 }}
-            aria-label="search"
-            onClick={() => {
-              setSearchTask('');
-            }}
-          >
+          <IconButton type="button" sx={{ p: 0 }} aria-label="search">
             <ClearIcon />
           </IconButton>
         ) : (
@@ -285,7 +215,6 @@ export default function Task() {
 
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[0]);
-          // setTag(e.target.value);
           setSearchDada({ ...searchData, tag: e.target.value });
         },
       },
@@ -318,7 +247,6 @@ export default function Task() {
 
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[1]);
-          // setApplication(e.target.value);
           setSearchDada({ ...searchData, application: e.target.value });
         },
       },
@@ -339,7 +267,6 @@ export default function Task() {
         options: [],
         onChange: (_e: any, newValue: any) => {
           if (!formList[2].formProps.error) {
-            // setFilter(newValue);
             setSearchDada({ ...searchData, filtered_query_params: newValue.join('&') });
           }
         },
@@ -436,6 +363,7 @@ export default function Task() {
 
   const handleClearCache = async () => {
     try {
+      setDeleteLoadingButton(true);
       if (schedulerClusterID && !deleteError) {
         if (task?.args?.url !== '') {
           const formList = {
@@ -448,14 +376,13 @@ export default function Task() {
             scheduler_cluster_ids: [schedulerClusterID],
             type: 'delete_task',
           };
-          const deleteTak = await createTaskJob(formList);
-          if (deleteTak?.id) {
-            const delete_task = await getTaskJob(deleteTak?.id);
-            setDeleteTask(delete_task);
-            setTask(null);
-            navigate(`/jobs/task/executions/${delete_task?.id}`);
+
+          const tasks = await createTaskJob(formList);
+
+          if (tasks?.id) {
+            setDeleteLoadingButton(false);
+            navigate(`/jobs/task/executions/${tasks?.id}`);
             setOpenClearClear(false);
-            setOpenDeleteBackdrop(true);
           }
         } else {
           const formList = {
@@ -465,15 +392,13 @@ export default function Task() {
             scheduler_cluster_ids: [schedulerClusterID],
             type: 'delete_task',
           };
-          const deleteTak = await createTaskJob(formList);
 
-          if (deleteTak?.id) {
-            const delete_task = await getTaskJob(deleteTak?.id);
-            setDeleteTask(delete_task);
+          const tasks = await createTaskJob(formList);
+          if (tasks?.id) {
+            setDeleteLoadingButton(false);
             setTask(null);
-            navigate(`/jobs/task/executions/${delete_task?.id}`);
+            navigate(`/jobs/task/executions/${tasks?.id}`);
             setOpenClearClear(false);
-            setOpenDeleteBackdrop(true);
           }
         }
       }
@@ -481,6 +406,7 @@ export default function Task() {
       if (error instanceof Error) {
         setErrorMessage(true);
         setErrorMessageText(error.message);
+        setDeleteLoadingButton(false);
         setIsLoading(false);
       }
     }
@@ -502,7 +428,6 @@ export default function Task() {
 
       if (searchTask !== '' && !taskIDData.syncError) {
         setIsLoading(true);
-        setNOTask(searchTask);
         const data = {
           args: {
             task_id: searchTask,
@@ -515,7 +440,6 @@ export default function Task() {
       } else {
         navigate('/jobs/task/clear');
         setTask(null);
-        setDeleteTask(null);
         setIsLoading(false);
       }
     } catch (error) {
@@ -527,7 +451,7 @@ export default function Task() {
     }
   };
 
-  const handleSubmit = async (event: any) => {
+  const handleSearchByURL = async (event: any) => {
     setLoadingButton(true);
     setIsLoading(true);
     event.preventDefault();
@@ -600,7 +524,6 @@ export default function Task() {
     if (reason === 'clickaway') {
       return;
     }
-    setOpenClearAllClear(false);
     setOpenClearClear(false);
     setErrorMessage(false);
   };
@@ -610,7 +533,7 @@ export default function Task() {
     setSearchDada({ url: '', tag: '', application: '', filtered_query_params: '' });
   };
 
-  const handleChange = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
+  const handleChangeSearch = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
     if (newAlignment) {
       setSearch(newAlignment);
     }
@@ -618,11 +541,8 @@ export default function Task() {
     setSearchTask('');
     setSearchDada({ url: '', tag: '', application: '', filtered_query_params: '' });
   };
-  const [cachePages, setCachePages] = useState<any>({});
 
   const handlePageChange = (peerId: any, newPage: any) => {
-    console.log(peerId, newPage);
-
     setCachePages((prevPages: any) => ({
       ...prevPages,
       [peerId]: newPage,
@@ -650,13 +570,18 @@ export default function Task() {
           backgroundColor: '#EEEEEE',
         })}
       >
-        <StyledToggleButtonGroup size="small" value={search} exclusive onChange={handleChange} aria-label="Platform">
+        <StyledToggleButtonGroup
+          size="small"
+          value={search}
+          exclusive
+          onChange={handleChangeSearch}
+          aria-label="Platform"
+        >
           <ToggleButton
             id="serach-url"
             value="url"
             size="small"
             sx={{
-              // textTransform: 'none',
               '&.Mui-selected': {
                 backgroundColor: 'var(--button-color)',
                 color: 'var(--table-title-color)',
@@ -680,7 +605,6 @@ export default function Task() {
             value="task-id"
             size="small"
             sx={{
-              // textTransform: 'none',
               '&.Mui-selected': {
                 backgroundColor: 'var(--button-color)',
                 color: 'var(--table-title-color)',
@@ -694,10 +618,6 @@ export default function Task() {
               },
               p: '0.3rem 0.6rem',
               width: '11.5rem',
-              // ':hover': {
-              //   background: 'var(--button-color)',
-              //   color: '#FFF',
-              // },
             }}
           >
             <AssignmentOutlinedIcon fontSize="small" sx={{ mr: '0.4rem' }} />
@@ -714,31 +634,19 @@ export default function Task() {
           <Box sx={{ position: 'relative', height: '3rem' }}>
             <Paper
               component="form"
-              onSubmit={handleSubmit}
+              onSubmit={handleSearchByURL}
               elevation={input ? 3 : 0}
-              // variant={input ? 'outlined' : undefined}
               sx={{
                 p: input ? '1rem' : '',
-                // display: 'flex',
-                // alignItems: 'center',
                 borderRadius: '4px',
                 width: input ? '45rem' : '36rem',
-                // borderColor: input ? 'var(--button-color)' : '',
-                // ':hover': { borderColor: 'var(--button-color)' },
                 position: 'absolute',
-                // right: '0',
               }}
             >
               <TextField
                 {...urlData.formProps}
                 fullWidth
                 size="small"
-                // id="url"
-                // name="url"
-                // label="Search"
-                // // sx={{ '&.MuiTextField-root': { p: '1rem' } }}
-                // placeholder="Please enter URL"
-                // value={searchTask}
                 onFocus={(e) => {
                   setInput(true);
                 }}
@@ -746,13 +654,12 @@ export default function Task() {
 
               {input ? (
                 <>
-                  {/* <Divider sx={{ m: '1rem 0' }} /> */}
                   <Divider sx={{ m: '1rem 0' }} />
                   <Typography variant="subtitle1" fontFamily="mabry-bold" component="div">
                     Optional
                   </Typography>
                   <Paper elevation={0} sx={{ top: '2rem', backgroundColor: '#FFF' }}>
-                    <Box className={styles.filterContainer}>
+                    <Box className={styles.optionalContainer}>
                       {formList.map((item) => {
                         return (
                           <Box key={item.formProps.id} className={styles.filterInput}>
@@ -789,22 +696,11 @@ export default function Task() {
                                 {...item.filterFormProps}
                                 className={styles.textField}
                                 size="small"
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    // InputProps={{
-                                    //   ...params.InputProps,
-                                    //   endAdornment: <>{params.InputProps.endAdornment}</>,
-                                    // }}
-                                    margin="normal"
-                                    {...item.formProps}
-                                  />
-                                )}
+                                renderInput={(params) => <TextField {...params} margin="normal" {...item.formProps} />}
                               />
                             ) : (
                               <TextField
                                 margin="normal"
-                                // fullWidth
                                 size="small"
                                 {...item.formProps}
                                 className={styles.textField}
@@ -816,16 +712,11 @@ export default function Task() {
                     </Box>
                     <Divider sx={{ pb: '1rem' }} />
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1rem' }}>
-                      <CancelLoadingButton
-                        id="cancelSearchByURL"
-                        loading={deleteLoadingButton}
-                        onClick={handleCloseSearch}
-                      />
+                      <CancelLoadingButton id="cancelSearchByURL" loading={loadingButton} onClick={handleCloseSearch} />
                       <SavelLoadingButton
-                        loading={deleteLoadingButton}
+                        loading={loadingButton}
                         endIcon={<SearchIcon />}
                         id="searchByURL"
-                        // onClick={handleSubmit}
                         text="search"
                       />
                     </Box>
@@ -839,7 +730,7 @@ export default function Task() {
         </>
       )}
       {isLoading ? (
-        <Box id='isLoading' sx={{ mt: '4rem' }}>
+        <Box id="isLoading" sx={{ mt: '4rem' }}>
           <SearchTaskAnimation />
         </Box>
       ) : task && task?.type === 'get_task' ? (
@@ -863,12 +754,10 @@ export default function Task() {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            // width: '100%',
                             p: '1rem',
                           }}
                         >
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            {/* <Box component="img" className={styles.clusterIcon} src="/icons/cluster/cluster.svg" /> */}
                             <Typography variant="subtitle1" mr="0.6rem" fontFamily="mabry-bold">
                               Scheduler Cluster
                             </Typography>
@@ -921,31 +810,26 @@ export default function Task() {
                           sx={{ p: '1rem 0.8rem', display: 'flex', alignItems: 'center', backgroundColor: '#f6f6f6' }}
                         >
                           <Box width="20%" sx={{ display: 'flex', alignItems: 'center' }}>
-                            {/* <Box component="img" className={styles.hostname} src="/icons/job/task/hostname.svg" /> */}
                             <Typography variant="body2" fontFamily="mabry-bold" className={styles.hostnameTitle}>
                               Hostname
                             </Typography>
                           </Box>
                           <Box width="35%" sx={{ display: 'flex', alignItems: 'center' }}>
-                            {/* <Box component="img" className={styles.hostname} src="/icons/job/task/id.svg" /> */}
                             <Typography variant="body2" fontFamily="mabry-bold" className={styles.hostnameTitle}>
                               ID
                             </Typography>
                           </Box>
                           <Box width="15%" sx={{ display: 'flex', alignItems: 'center' }}>
-                            {/* <Box component="img" className={styles.hostname} src="/icons/job/task/ip.svg" /> */}
                             <Typography variant="body2" fontFamily="mabry-bold" className={styles.hostnameTitle}>
                               IP
                             </Typography>
                           </Box>
                           <Box width="15%" sx={{ display: 'flex', alignItems: 'center' }}>
-                            {/* <Box component="img" className={styles.hostname} src="/icons/job/task/host-type.svg" /> */}
                             <Typography variant="body2" fontFamily="mabry-bold" className={styles.hostnameTitle}>
                               Host type
                             </Typography>
                           </Box>
                           <Box width="15%" sx={{ display: 'flex', alignItems: 'center' }}>
-                            {/* <Box component="img" className={styles.hostname} src="/icons/job/task/created.svg" /> */}
                             <Typography variant="body2" fontFamily="mabry-bold" className={styles.hostnameTitle}>
                               Created at
                             </Typography>
@@ -973,7 +857,7 @@ export default function Task() {
                                       <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
                                     ) : (
                                       <Tooltip title={item?.id || '-'} placement="top">
-                                        <Typography variant="body2" component="div" className={styles.locationContent}>
+                                        <Typography variant="body2" component="div" className={styles.text}>
                                           {item?.id || '-'}
                                         </Typography>
                                       </Tooltip>
@@ -1045,7 +929,7 @@ export default function Task() {
                                     <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
                                   ) : (
                                     <Tooltip title={item?.id || '-'} placement="top">
-                                      <Typography variant="body2" component="div" className={styles.locationContent}>
+                                      <Typography variant="body2" component="div" className={styles.text}>
                                         {item?.id || '-'}
                                       </Typography>
                                     </Tooltip>
@@ -1125,9 +1009,6 @@ export default function Task() {
                 <Typography variant="h5" component="span">
                   You don't find any results!
                 </Typography>
-                {/* <Typography variant="h5" component="span" fontFamily="mabry-bold">
-                  "{noTask}"
-                </Typography> */}
               </Box>
             </Box>
           )}

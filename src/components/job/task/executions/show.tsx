@@ -34,7 +34,7 @@ import styles from './show.module.css';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { getBJTDatetime, getDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
 import { is } from 'cypress/types/bluebird';
-import _ from 'lodash';
+import _, { set } from 'lodash';
 import { DEFAULT_SCHEDULER_TABLE_PAGE_SIZE } from '../../../../lib/constants';
 
 export default function ShowTask() {
@@ -126,7 +126,7 @@ export default function ShowTask() {
         };
 
         pollPreheat();
-      }, 3000);
+      }, 60000);
 
       return () => {
         clearInterval(pollingInterval);
@@ -136,9 +136,11 @@ export default function ShowTask() {
 
   useEffect(() => {
     const result =
-      deleteTask?.result?.job_states?.map((item: any) => {
-        return item.results ? item.results.map((resultItem: any) => resultItem) : [];
-      }) ?? [];
+      (Array.isArray(deleteTask?.result?.job_states) &&
+        deleteTask?.result?.job_states?.map((item: any) => {
+          return item.results ? item.results.map((resultItem: any) => resultItem) : [];
+        })) ??
+      [];
 
     const jobStates = Array.isArray(result) ? result.flat(2) : [];
 
@@ -154,7 +156,7 @@ export default function ShowTask() {
     setTotalPages(totalPage);
 
     setFailure(currentPageData);
-  }, [deleteTask?.result?.job_states, page]);
+  }, [deleteTask, page]);
 
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
@@ -164,6 +166,15 @@ export default function ShowTask() {
     setErrorLog(false);
     setErrorMessage(false);
   };
+
+  const jobStates =
+    (Array.isArray(deleteTask?.result?.job_states) &&
+      deleteTask?.result?.job_states.map((job: any) => {
+        return job.error;
+      })) ||
+    [];
+
+  const errorlog = Array.from(new Set(jobStates.filter((items) => items !== '')));
 
   return (
     <ThemeProvider theme={theme}>
@@ -230,13 +241,6 @@ export default function ShowTask() {
                   backgroundColor: '#24292f',
                 }}
               >
-                {/* {deleteTask?.result &&
-                  deleteTask?.state !== 'PENDING' &&
-                  deleteTask?.result.job_states.map((job: any) => (
-                    <>
-                      
-                    </>
-                  ))} */}
                 <Typography
                   variant="body2"
                   component="div"
@@ -252,9 +256,6 @@ export default function ShowTask() {
           </Box>
         </Box>
       </Drawer>
-      {/* <Typography variant="h5" mb="1.5rem" fontFamily="mabry-bold">
-        Executions
-      </Typography> */}
       <Paper variant="outlined" sx={{ p: '1rem 2rem' }}>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
@@ -274,7 +275,7 @@ export default function ShowTask() {
               Status
             </Typography>
           </Box>
-          {deleteTask?.result && deleteTask?.result.job_states ? (
+          {deleteTask?.result && deleteTask?.result?.job_states ? (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box
                 sx={{
@@ -283,19 +284,19 @@ export default function ShowTask() {
                   height: '2rem',
                   borderRadius: '0.3rem',
                   p: '0.4rem 0.6rem',
-                  pr: deleteTask.result.state === 'FAILURE' ? '0' : '',
+                  pr: deleteTask?.result.state === 'FAILURE' ? '0' : '',
                   backgroundColor:
-                    deleteTask.result.state === 'SUCCESS'
+                    deleteTask?.result.state === 'SUCCESS'
                       ? '#228B22'
-                      : deleteTask.result.state === 'FAILURE'
+                      : deleteTask?.result.state === 'FAILURE'
                       ? '#D42536'
                       : '#DBAB0A',
                 }}
                 id="status"
               >
-                {deleteTask.result.state === 'SUCCESS' ? (
+                {deleteTask?.result?.state === 'SUCCESS' ? (
                   <></>
-                ) : deleteTask.result.state === 'FAILURE' ? (
+                ) : deleteTask?.result?.state === 'FAILURE' ? (
                   <></>
                 ) : (
                   <Box
@@ -337,6 +338,7 @@ export default function ShowTask() {
                         }}
                         onClick={() => {
                           setErrorLog(true);
+                          setErrorLogText(errorlog.toString() || '');
                         }}
                       >
                         <Box
@@ -503,28 +505,6 @@ export default function ShowTask() {
             <Typography variant="h6" fontFamily="mabry-bold">
               Failure
             </Typography>
-            {/* <Box
-              sx={{
-                ml: '0.6rem',
-                border: '1px solid #d5d2d2',
-                p: '0.2rem 0.3rem',
-                borderRadius: '0.3rem',
-                display: 'inline-flex',
-                alignItems: 'center',
-              }}
-            >
-              <Box component="img" sx={{ width: '0.8rem', height: '0.8rem' }} src="/icons/cluster/inactive-total.svg" />
-              <Typography
-                id="schedulerTotal"
-                variant="caption"
-                fontFamily="mabry-bold"
-                component="div"
-                pl="0.3rem"
-                lineHeight="1rem"
-              >
-                {(Array.isArray(failure) && failure.length) || '0'} Total
-              </Typography>
-            </Box> */}
           </Box>
           <Paper variant="outlined">
             <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
@@ -654,61 +634,6 @@ export default function ShowTask() {
               </TableBody>
             </Table>
           </Paper>
-          {/* <Paper variant="outlined">
-            {failure &&
-              Array.isArray(failure) &&
-              failure.map((item: any) => {
-                return (
-                  <>
-                    <Box sx={{ display: 'flex', alignItems: 'center', p: '1rem' }}>
-                      <Box sx={{ width: '60%', display: 'flex', alignItems: ' flex-start' }}>
-                        <Box component="img" sx={{ width: '1.5rem', mr: '0.4rem' }} src="/icons/job/task/ip.svg" />
-                        <Box>
-                          <Typography variant="body2" component="div" fontFamily="mabry-bold" mb="0.4rem">
-                            {item?.ip}
-                          </Typography>
-                          <Typography variant="body2" component="div">
-                            {item?.hostname}
-                          </Typography>
-                        </Box>
-                      </Box>
-                      <Box width="30%">
-                        <Chip
-                          label={_.upperFirst(item?.host_type) || ''}
-                          size="small"
-                          variant="outlined"
-                          sx={{
-                            borderRadius: '0%',
-                            backgroundColor:
-                              item?.host_type === 'super' ? 'var( --description-color)' : 'var(--button-color)',
-                            color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
-                            borderColor:
-                              item?.host_type === 'super' ? 'var( --description-color)' : 'var(--button-color)',
-                            fontWeight: 'bold',
-                          }}
-                        />
-                      </Box>
-                      <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <IconButton
-                          onClick={() => {
-                            setErrorLogText(item?.description || '-');
-                            setErrorLog(true);
-                          }}
-                        >
-                          <Box
-                            id="error-log-icon"
-                            component="img"
-                            sx={{ width: '1.7rem', height: '1.7rem' }}
-                            src="/icons/job/task/error-log.svg"
-                          />
-                        </IconButton>
-                      </Box>
-                    </Box>
-                    <Divider />
-                  </>
-                );
-              })}
-          </Paper> */}
           {totalPages > 1 ? (
             <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
               <Pagination

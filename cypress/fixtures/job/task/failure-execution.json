@@ -36,7 +36,7 @@
       },
       {
         "created_at": "2024-11-01T10:07:46.676642087Z",
-        "error": "",
+        "error": "rpc error: code = Aborted desc = source response 401/401 Unauthorized is not valid",
         "results": [
           {
             "failure_tasks": null,

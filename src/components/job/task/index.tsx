@@ -1,12 +1,9 @@
 import { Breadcrumbs, Button, createTheme, styled, ThemeProvider, Typography, Link as RouterLink } from '@mui/material';
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
-
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab, { TabProps } from '@mui/material/Tab';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import PendingActionsOutlinedIcon from '@mui/icons-material/PendingActionsOutlined';
 import { useEffect } from 'react';
 
 const theme = createTheme({
@@ -53,31 +50,14 @@ export default function NavTabs() {
     marginRight: theme.spacing(1),
     color: 'rgba(0, 0, 0, 0.85)',
     fontSize: '0.9rem',
-    // fontFamily: [
-    //   '-apple-system',
-    //   'BlinkMacSystemFont',
-    //   '"Segoe UI"',
-    //   'Roboto',
-    //   '"Helvetica Neue"',
-    //   'Arial',
-    //   'sans-serif',
-    //   '"Apple Color Emoji"',
-    //   '"Segoe UI Emoji"',
-    //   '"Segoe UI Symbol"',
-    // ].join(','),
     '&:hover': {
       color: 'primary',
       opacity: 1,
     },
     '&.Mui-selected': {
       color: '#000',
-      // fontWeight: theme.typography.fontWeightMedium,
       fontFamily: 'mabry-bold',
     },
-    // '&.Mui-focusVisible': {
-    //   backgroundColor: '#000',
-    // },
-    
   }));
 
   const AntTabs = styled(Tabs)({
@@ -101,17 +81,11 @@ export default function NavTabs() {
         )}
         {params?.id ? <Typography color="text.primary"> {params?.id}</Typography> : ''}
       </Breadcrumbs>
-      {/* <Typography variant="h5" p="1rem 0">
-        Task
-      </Typography> */}
       <AntTabs
         value={value}
         onChange={handleChange}
         aria-label="nav tabs example"
-        // role="navigation"
         sx={{ mb: '2rem' }}
-        // textColor="primary"
-        // indicatorColor="primary"
         scrollButtons="auto"
       >
         <AntTab

@@ -69,7 +69,7 @@ describe('Preheats', () => {
 
       cy.get('[data-testid="isloading"]').should('be.exist');
 
-      cy.wait(6000);
+      cy.wait(120000);
 
       // Executed every 3 seconds, it should be executed 2 times after 6 seconds.
       cy.get('@preheats').then(() => {
@@ -188,7 +188,7 @@ describe('Preheats', () => {
       // Check how many preheat tasks are in pending failure.
       cy.get('#preheats-list').children().should('have.length', 1);
 
-      cy.wait(6000);
+      cy.wait(120000);
 
       // The API should poll.
       cy.get('@preheats').then(() => {

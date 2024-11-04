@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import styles from './index.module.css';
-import { getDeleteTask, deleteTaskResponse } from '../../../../lib/api';
+import { getDeleteCacheJob, getCacheJobResponse } from '../../../../lib/api';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getBJTDatetime, useQuery } from '../../../../lib/utils';
@@ -21,11 +21,10 @@ import {
   Snackbar,
   Alert,
   Skeleton,
-  Tooltip,
 } from '@mui/material';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 
-export default function LabTabs() {
+export default function Executions() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [preheatPage, setPreheatPage] = useState(1);
@@ -34,7 +33,7 @@ export default function LabTabs() {
   const [status, setStatus] = useState<string>('ALL');
   const [shouldPoll, setShouldPoll] = useState(false);
   const [openStatusSelect, setOpenStatusSelect] = useState(false);
-  const [allDeleteTask, setAllDeleteTask] = useState<deleteTaskResponse[]>([]);
+  const [executions, setExecutions] = useState<getCacheJobResponse[]>([]);
 
   const navigate = useNavigate();
   const query = useQuery();
@@ -45,15 +44,14 @@ export default function LabTabs() {
       try {
         setIsLoading(true);
         setPreheatPage(page);
-        console.log(preheatPage);
 
-        const jobs = await getDeleteTask({
+        const jobs = await getDeleteCacheJob({
           page: page,
           per_page: DEFAULT_PAGE_SIZE,
           state: status === 'ALL' ? undefined : status,
         });
 
-        setAllDeleteTask(jobs.data);
+        setExecutions(jobs.data);
         setTotalPages(jobs.total_page || 1);
 
         const states = jobs.data.filter(
@@ -78,13 +76,13 @@ export default function LabTabs() {
       const pollingInterval = setInterval(() => {
         const pollPreheat = async () => {
           try {
-            const jobs = await getDeleteTask({
+            const jobs = await getDeleteCacheJob({
               page: preheatPage,
               per_page: DEFAULT_PAGE_SIZE,
               state: status === 'ALL' ? undefined : status,
             });
 
-            setAllDeleteTask(jobs.data);
+            setExecutions(jobs.data);
             setTotalPages(jobs.total_page || 1);
 
             const states = jobs.data.filter(
@@ -152,15 +150,7 @@ export default function LabTabs() {
         </Alert>
       </Snackbar>
       <Paper variant="outlined">
-        <Box
-          sx={{
-            p: '0.8rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            backgroundColor: '#f7f7f7',
-          }}
-        >
+        <Box className={styles.titleContainer}>
           <Typography variant="body1" fontFamily="mabry-bold">
             Workflow runs
           </Typography>
@@ -194,24 +184,23 @@ export default function LabTabs() {
         <Divider />
         {isLoading ? (
           <Box>
-            <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
-              <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
+            <Box className={styles.isLoadingWrapper}>
+              <Box className={styles.statusContainer}>
                 <Skeleton data-testid="isloading" variant="circular" width="1.4rem" height="1.4rem" />
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }} ml="0.6rem">
                   <Skeleton data-testid="isloading" width="3rem" />
                   <Skeleton data-testid="isloading" width="6rem" />
                 </Box>
               </Box>
-              <Box width="30%">
+              <Box className={styles.timeContainer}>
                 <Skeleton data-testid="isloading" width="40%" />
               </Box>
-              <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
+              <Box className={styles.iconButton}>
                 <Skeleton data-testid="isloading" variant="circular" width="2em" height="2em" />
               </Box>
             </Box>
-            <Divider />
           </Box>
-        ) : allDeleteTask && allDeleteTask.length === 0 ? (
+        ) : executions && executions.length === 0 ? (
           <Box
             id="no-executions"
             sx={{ height: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -220,9 +209,9 @@ export default function LabTabs() {
           </Box>
         ) : (
           <Box id="executions-list">
-            {allDeleteTask &&
-              allDeleteTask.map((item, index) => {
-                return index !== allDeleteTask.length - 1 ? (
+            {executions &&
+              executions.map((item, index) => {
+                return index !== executions.length - 1 ? (
                   <Box key={item.id} id={`list-${item.id}`}>
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
@@ -285,8 +274,8 @@ export default function LabTabs() {
                     <Divider />
                   </Box>
                 ) : (
-                  <Box key={item.id} id={`list-${item.id}`} sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
+                  <Box key={item.id} id={`list-${item.id}`} className={styles.listWrapper}>
+                    <Box className={styles.statusContainer}>
                       {item.result.state === 'SUCCESS' ? (
                         <Box
                           id={`SUCCESS-${item.id}`}
@@ -319,7 +308,7 @@ export default function LabTabs() {
                         <Typography variant="body2">{item.args?.task_id || '-'}</Typography>
                       </Box>
                     </Box>
-                    <Box width="30%">
+                    <Box className={styles.timeContainer}>
                       <Chip
                         avatar={<MoreTimeIcon />}
                         label={getBJTDatetime(item.created_at) || '-'}
@@ -327,7 +316,7 @@ export default function LabTabs() {
                         size="small"
                       />
                     </Box>
-                    <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Box className={styles.iconButton}>
                       <RouterLink
                         component={Link}
                         id={`execution-${item?.id}`}

@@ -17,6 +17,9 @@ import {
   Accordion,
   ThemeProvider,
   createTheme,
+  styled,
+  tooltipClasses,
+  TooltipProps,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getJob, getJobResponse } from '../../../lib/api';
@@ -25,6 +28,25 @@ import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { getBJTDatetime } from '../../../lib/utils';
 import styles from './show.module.css';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1C293A',
+    },
+  },
+  typography: {
+    fontFamily: 'mabry-light,sans-serif',
+  },
+});
+
+const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))({
+  [`& .${tooltipClasses.tooltip}`]: {
+    maxWidth: '40rem',
+  },
+});
 
 export default function ShowPreheat() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -35,17 +57,6 @@ export default function ShowPreheat() {
   const [preheat, setPreheat] = useState<getJobResponse>();
 
   const params = useParams();
-
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#1C293A',
-      },
-    },
-    typography: {
-      fontFamily: 'mabry-light,sans-serif',
-    },
-  });
 
   useEffect(() => {
     setIsLoading(true);
@@ -274,13 +285,17 @@ export default function ShowPreheat() {
                 URL
               </Typography>
             </Box>
-            <Typography variant="body1" className={styles.informationContent}>
-              {isLoading ? (
-                <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
-              ) : (
-                preheat?.args?.url || '-'
-              )}
-            </Typography>
+            <CustomWidthTooltip title={preheat?.args?.url || '-'} placement="bottom">
+              <Typography
+                id="url"
+                variant="body1"
+                fontFamily="mabry-bold"
+                component="div"
+                className={styles.urlContent}
+              >
+                {preheat?.args?.url || '-'}
+              </Typography>
+            </CustomWidthTooltip>
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
@@ -370,16 +385,14 @@ export default function ShowPreheat() {
             <Box className={styles.schedulerClustersID}>
               {preheat?.scheduler_clusters?.map((item, index) => {
                 return (
-                  <Box sx={{ display: 'flex', alignItems: 'center', p: '0.4rem', mr: '1rem' }}>
-                    <Box className={styles.schedulerClustersIDContent}>
-                      <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
-                        {isLoading ? (
-                          <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
-                        ) : (
-                          item.id || '-'
-                        )}
-                      </Typography>
-                    </Box>
+                  <Box className={styles.schedulerClustersIDContent}>
+                    <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
+                      {isLoading ? (
+                        <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
+                      ) : (
+                        item.id || '-'
+                      )}
+                    </Typography>
                   </Box>
                 );
               }) || '-'}

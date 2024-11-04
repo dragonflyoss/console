@@ -28,8 +28,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import { deleteTaskResponse, createTaskJob, getTaskJob, taskJob, jobStates, peers } from '../../../../lib/api';
-import { getBJTDatetime, getDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
+import { getCacheJobResponse, createCacheJob, getCacheJob } from '../../../../lib/api';
+import { getBJTDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
 import _ from 'lodash';
 import SearchTaskAnimation from '../../../search-task-animation';
 import { useNavigate } from 'react-router-dom';
@@ -55,14 +55,28 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   },
 }));
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1C293A',
+    },
+    success: {
+      main: '#2e8f79',
+    },
+  },
+  typography: {
+    fontFamily: 'mabry-light,sans-serif',
+  },
+});
+
 export default function Clear() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [openClearClear, setOpenClearClear] = useState(false);
+  const [openDeleteCache, setOpenDeleteCache] = useState(false);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [searchTask, setSearchTask] = useState('');
-  const [task, setTask] = useState<deleteTaskResponse | any>();
+  const [cache, setCache] = useState<getCacheJobResponse | any>();
   const [input, setInput] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
@@ -82,30 +96,16 @@ export default function Clear() {
   const { url, tag, application, filtered_query_params } = searchData;
   const navigate = useNavigate();
 
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#1C293A',
-      },
-      success: {
-        main: '#2e8f79',
-      },
-    },
-    typography: {
-      fontFamily: 'mabry-light,sans-serif',
-    },
-  });
-
   useEffect(() => {
     const fetchJob = async () => {
       try {
         if (searchID) {
-          const job = await getTaskJob(searchID);
+          const job = await getCacheJob(searchID);
 
           if (job.type === 'get_task') {
             if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {
               setIsLoading(false);
-              setTask(job);
+              setCache(job);
             } else {
               setShouldPoll(true);
             }
@@ -127,10 +127,10 @@ export default function Clear() {
       const pollingInterval = setInterval(() => {
         const pollPreheat = async () => {
           try {
-            const job = await getTaskJob(searchID);
+            const job = await getCacheJob(searchID);
 
             if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {
-              setTask(job);
+              setCache(job);
               setShouldPoll(false);
               setIsLoading(false);
             }
@@ -153,7 +153,7 @@ export default function Clear() {
     }
   }, [shouldPoll, searchID]);
 
-  const urlData = {
+  const urlList = {
     formProps: {
       id: 'url',
       label: 'URL',
@@ -174,8 +174,9 @@ export default function Clear() {
           <></>
         ),
       },
+
       onChange: (e: any) => {
-        changeValidate(e.target.value, urlData);
+        changeValidate(e.target.value, urlList);
         setSearchDada({ ...searchData, url: e.target.value });
       },
     },
@@ -265,11 +266,13 @@ export default function Clear() {
       filterFormProps: {
         value: (filtered_query_params && filtered_query_params.split('&')) || [],
         options: [],
+
         onChange: (_e: any, newValue: any) => {
           if (!formList[2].formProps.error) {
             setSearchDada({ ...searchData, filtered_query_params: newValue.join('&') });
           }
         },
+
         onInputChange: (e: any) => {
           setFilterHelperText('Fill in the characters, the length is 0-100.');
           changeValidate(e.target.value, formList[2]);
@@ -306,7 +309,7 @@ export default function Clear() {
     },
   ];
 
-  const taskIDData = {
+  const taskIDList = {
     formProps: {
       id: 'task-id',
       label: 'Task ID',
@@ -335,7 +338,7 @@ export default function Clear() {
       },
 
       onChange: (e: any) => {
-        changeValidate(e.target.value, taskIDData);
+        changeValidate(e.target.value, taskIDList);
         setSearchTask(e.target.value);
       },
     },
@@ -349,56 +352,54 @@ export default function Clear() {
   };
 
   const result =
-    task?.result?.job_states?.map((item: any) => {
+    cache?.result?.job_states?.map((item: any) => {
       return item.results ? item.results.map((resultItem: any) => resultItem) : [];
     }) ?? [];
 
   const jobStates = Array.isArray(result) ? result.flat(2) : [];
-
   const results = Array.isArray(jobStates) ? jobStates.flat(2).filter((item) => item.peers !== null) : [];
-
   const peers = Array.isArray(results)
     ? Array.from(new Set(results.map((item) => JSON.stringify(item)))).map((str) => JSON.parse(str))
     : [];
 
-  const handleClearCache = async () => {
+  const handleDeleteCache = async () => {
     try {
       setDeleteLoadingButton(true);
       if (schedulerClusterID && !deleteError) {
-        if (task?.args?.url !== '') {
+        if (cache?.args?.url !== '') {
           const formList = {
             args: {
-              url: task?.args?.url,
-              tag: task?.args?.tag,
-              application: task?.args?.application,
-              filtered_query_params: task?.args?.filtered_query_params,
+              url: cache?.args?.url,
+              tag: cache?.args?.tag,
+              application: cache?.args?.application,
+              filtered_query_params: cache?.args?.filtered_query_params,
             },
             scheduler_cluster_ids: [schedulerClusterID],
             type: 'delete_task',
           };
 
-          const tasks = await createTaskJob(formList);
+          const tasks = await createCacheJob(formList);
 
           if (tasks?.id) {
             setDeleteLoadingButton(false);
             navigate(`/jobs/task/executions/${tasks?.id}`);
-            setOpenClearClear(false);
+            setOpenDeleteCache(false);
           }
         } else {
           const formList = {
             args: {
-              task_id: task?.args?.task_id,
+              task_id: cache?.args?.task_id,
             },
             scheduler_cluster_ids: [schedulerClusterID],
             type: 'delete_task',
           };
 
-          const tasks = await createTaskJob(formList);
+          const tasks = await createCacheJob(formList);
           if (tasks?.id) {
             setDeleteLoadingButton(false);
-            setTask(null);
+            setCache(null);
             navigate(`/jobs/task/executions/${tasks?.id}`);
-            setOpenClearClear(false);
+            setOpenDeleteCache(false);
           }
         }
       }
@@ -417,16 +418,16 @@ export default function Clear() {
     setError(!validate(value));
   };
 
-  const searchTaskJob = async (event: any) => {
+  const handleSearchByTaskID = async (event: any) => {
     try {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
 
-      const taskIDValue = data.get(taskIDData.formProps.name);
-      taskIDData.setError(!taskIDData.validate(taskIDValue as string));
-      taskIDData.syncError = !taskIDData.validate(taskIDValue as string);
+      const taskIDValue = data.get(taskIDList.formProps.name);
+      taskIDList.setError(!taskIDList.validate(taskIDValue as string));
+      taskIDList.syncError = !taskIDList.validate(taskIDValue as string);
 
-      if (searchTask !== '' && !taskIDData.syncError) {
+      if (searchTask !== '' && !taskIDList.syncError) {
         setIsLoading(true);
         const data = {
           args: {
@@ -434,12 +435,12 @@ export default function Clear() {
           },
           type: 'get_task',
         };
-        const task = await createTaskJob(data);
 
+        const task = await createCacheJob(data);
         setSearchID(task?.id);
       } else {
         navigate('/jobs/task/clear');
-        setTask(null);
+        setCache(null);
         setIsLoading(false);
       }
     } catch (error) {
@@ -480,14 +481,14 @@ export default function Clear() {
       }
     });
 
-    const urlValue = data.get(urlData.formProps.name);
+    const urlValue = data.get(urlList.formProps.name);
 
-    urlData.setError(!urlData.validate(urlValue as string));
+    urlList.setError(!urlList.validate(urlValue as string));
 
-    urlData.syncError = !urlData.validate(urlValue as string);
+    urlList.syncError = !urlList.validate(urlValue as string);
 
     const canSubmit = Boolean(
-      !formList.filter((item) => item.syncError).length && Boolean(!filterText) && !urlData.syncError,
+      !formList.filter((item) => item.syncError).length && Boolean(!filterText) && !urlList.syncError,
     );
 
     const formDate = {
@@ -503,7 +504,7 @@ export default function Clear() {
     if (canSubmit) {
       setInput(false);
       try {
-        const task = await taskJob({ ...formDate });
+        const task = await createCacheJob({ ...formDate });
         setLoadingButton(false);
         setSearchID(task?.id);
       } catch (error) {
@@ -524,7 +525,7 @@ export default function Clear() {
     if (reason === 'clickaway') {
       return;
     }
-    setOpenClearClear(false);
+    setOpenDeleteCache(false);
     setErrorMessage(false);
   };
 
@@ -626,8 +627,8 @@ export default function Clear() {
         </StyledToggleButtonGroup>
       </Paper>
       {search === 'task-id' ? (
-        <Box component="form" onSubmit={searchTaskJob} sx={{ width: '38rem', height: '3rem' }}>
-          <TextField fullWidth size="small" {...taskIDData.formProps} />
+        <Box component="form" onSubmit={handleSearchByTaskID} sx={{ width: '38rem', height: '3rem' }}>
+          <TextField fullWidth size="small" {...taskIDList.formProps} />
         </Box>
       ) : (
         <>
@@ -644,7 +645,7 @@ export default function Clear() {
               }}
             >
               <TextField
-                {...urlData.formProps}
+                {...urlList.formProps}
                 fullWidth
                 size="small"
                 onFocus={(e) => {
@@ -733,7 +734,7 @@ export default function Clear() {
         <Box id="isLoading" sx={{ mt: '4rem' }}>
           <SearchTaskAnimation />
         </Box>
-      ) : task && task?.type === 'get_task' ? (
+      ) : cache && cache?.type === 'get_task' ? (
         <Box sx={{ width: '100%', typography: 'body1', mt: '2rem' }}>
           {peers && peers?.length > 0 ? (
             <>
@@ -798,7 +799,7 @@ export default function Clear() {
                             onClick={(event) => {
                               event.stopPropagation();
                               setSchedulerClusterID(peer?.scheduler_cluster_id);
-                              setOpenClearClear(true);
+                              setOpenDeleteCache(true);
                             }}
                           >
                             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
@@ -1026,7 +1027,7 @@ export default function Clear() {
         </Box>
       )}
       <Dialog
-        open={openClearClear}
+        open={openDeleteCache}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -1073,7 +1074,7 @@ export default function Clear() {
         </Box>
         <Divider />
         <DialogContent>
-          <Box onSubmit={handleClearCache}>
+          <Box onSubmit={handleDeleteCache}>
             <Box display="flex" alignItems="flex-start" pb="1rem">
               <Box
                 component="img"
@@ -1116,7 +1117,7 @@ export default function Clear() {
                 loading={deleteLoadingButton}
                 endIcon={<DeleteIcon />}
                 id="deleteTask"
-                onClick={handleClearCache}
+                onClick={handleDeleteCache}
                 text="Delete"
               />
             </Box>

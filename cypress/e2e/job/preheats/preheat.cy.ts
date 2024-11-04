@@ -104,7 +104,7 @@ describe('Preheat', () => {
         .find('#error-log-icon')
         .and('exist');
 
-      cy.get(':nth-child(4) > .show_informationContent__wKGxa').should('have.text', 'http://dock.io/preheat/test');
+      cy.get('#url').should('have.text', 'http://dock.io/preheat/test');
 
       // Show preheat tag.
       cy.get(':nth-child(5) > .show_informationContent__wKGxa').should('have.text', 'prheat tag');
@@ -259,7 +259,7 @@ describe('Preheat', () => {
       cy.get('#status').should('not.exist');
 
       // Show preheat url.
-      cy.get(':nth-child(4) > .show_informationContent__wKGxa').should('have.text', '-');
+      cy.get('#url').should('have.text', '-');
 
       // Show preheat tag.
       cy.get('.show_informationContent__wKGxa.MuiBox-root').should('have.text', '-');
@@ -318,7 +318,7 @@ describe('Preheat', () => {
       cy.get('#status').should('not.exist');
 
       // Show preheat url.
-      cy.get(':nth-child(4) > .show_informationContent__wKGxa').should('have.text', '-');
+      cy.get('#url').should('have.text', '-');
 
       // Show preheat tag.
       cy.get('.show_informationContent__wKGxa.MuiBox-root').should('have.text', '-').should('have.text', '-');

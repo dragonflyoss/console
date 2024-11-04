@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { deleteTaskResponse, getTaskJob } from '../../../../lib/api';
+import { getCacheJobResponse, getCacheJob } from '../../../../lib/api';
 import {
   Typography,
   Box,
   IconButton,
   Paper,
-  Button,
   Chip,
   Table,
   Skeleton,
@@ -32,13 +31,12 @@ import {
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import styles from './show.module.css';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import { getBJTDatetime, getDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
-import { is } from 'cypress/types/bluebird';
-import _, { set } from 'lodash';
+import { getBJTDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
+import _ from 'lodash';
 import { DEFAULT_SCHEDULER_TABLE_PAGE_SIZE } from '../../../../lib/constants';
 
-export default function ShowTask() {
-  const [deleteTask, setDeleteTask] = useState<deleteTaskResponse>();
+export default function ShowExecutions() {
+  const [executions, setExecutions] = useState<getCacheJobResponse>();
   const [shouldPoll, setShouldPoll] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
@@ -77,14 +75,14 @@ export default function ShowTask() {
     (async function () {
       try {
         if (params.id) {
-          const job = await getTaskJob(params.id);
+          const job = await getCacheJob(params.id);
 
-          setDeleteTask(job);
+          setExecutions(job);
           setIsLoading(false);
 
           if (job.type === 'delete_task') {
             if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {
-              setDeleteTask(job);
+              setExecutions(job);
             } else {
               setShouldPoll(true);
             }
@@ -108,8 +106,8 @@ export default function ShowTask() {
       const pollingInterval = setInterval(() => {
         const pollPreheat = async () => {
           try {
-            const job = await getTaskJob(params.id);
-            setDeleteTask(job);
+            const job = await getCacheJob(params.id);
+            setExecutions(job);
 
             if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {
               setShouldPoll(false);
@@ -136,8 +134,8 @@ export default function ShowTask() {
 
   useEffect(() => {
     const result =
-      (Array.isArray(deleteTask?.result?.job_states) &&
-        deleteTask?.result?.job_states?.map((item: any) => {
+      (Array.isArray(executions?.result?.job_states) &&
+        executions?.result?.job_states?.map((item: any) => {
           return item.results ? item.results.map((resultItem: any) => resultItem) : [];
         })) ??
       [];
@@ -156,7 +154,7 @@ export default function ShowTask() {
     setTotalPages(totalPage);
 
     setFailure(currentPageData);
-  }, [deleteTask, page]);
+  }, [executions, page]);
 
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
@@ -168,13 +166,13 @@ export default function ShowTask() {
   };
 
   const jobStates =
-    (Array.isArray(deleteTask?.result?.job_states) &&
-      deleteTask?.result?.job_states.map((job: any) => {
+    (Array.isArray(executions?.result?.job_states) &&
+      executions?.result?.job_states.map((job: any) => {
         return job.error;
       })) ||
     [];
 
-  const errorlog = Array.from(new Set(jobStates.filter((items) => items !== '')));
+  const errorlog = Array.from(new Set(jobStates.filter((items: string) => items !== '')));
 
   return (
     <ThemeProvider theme={theme}>
@@ -265,7 +263,7 @@ export default function ShowTask() {
             </Typography>
           </Box>
           <Typography variant="body1" className={styles.informationContent}>
-            {isLoading ? <Skeleton data-testid="execution-isloading" sx={{ width: '2rem' }} /> : deleteTask?.id || 0}
+            {isLoading ? <Skeleton data-testid="execution-isloading" sx={{ width: '2rem' }} /> : executions?.id || 0}
           </Typography>
         </Box>
         <Box className={styles.informationContainer}>
@@ -275,7 +273,7 @@ export default function ShowTask() {
               Status
             </Typography>
           </Box>
-          {deleteTask?.result && deleteTask?.result?.job_states ? (
+          {executions?.result && executions?.result?.job_states ? (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box
                 sx={{
@@ -284,19 +282,19 @@ export default function ShowTask() {
                   height: '2rem',
                   borderRadius: '0.3rem',
                   p: '0.4rem 0.6rem',
-                  pr: deleteTask?.result.state === 'FAILURE' ? '0' : '',
+                  pr: executions?.result.state === 'FAILURE' ? '0' : '',
                   backgroundColor:
-                    deleteTask?.result.state === 'SUCCESS'
+                    executions?.result.state === 'SUCCESS'
                       ? '#228B22'
-                      : deleteTask?.result.state === 'FAILURE'
+                      : executions?.result.state === 'FAILURE'
                       ? '#D42536'
                       : '#DBAB0A',
                 }}
                 id="status"
               >
-                {deleteTask?.result?.state === 'SUCCESS' ? (
+                {executions?.result?.state === 'SUCCESS' ? (
                   <></>
-                ) : deleteTask?.result?.state === 'FAILURE' ? (
+                ) : executions?.result?.state === 'FAILURE' ? (
                   <></>
                 ) : (
                   <Box
@@ -313,9 +311,9 @@ export default function ShowTask() {
                     color: '#FFF',
                   }}
                 >
-                  {deleteTask?.result?.state}
+                  {executions?.result?.state}
                 </Typography>
-                {deleteTask.result.state === 'FAILURE' ? (
+                {executions.result.state === 'FAILURE' ? (
                   <>
                     <Box
                       sx={{
@@ -370,7 +368,7 @@ export default function ShowTask() {
             {isLoading ? (
               <Skeleton data-testid="execution-isloading" sx={{ width: '2rem' }} />
             ) : (
-              deleteTask?.args?.task_id || '-'
+              executions?.args?.task_id || '-'
             )}
           </Typography>
         </Box>
@@ -384,9 +382,9 @@ export default function ShowTask() {
           {isLoading ? (
             <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
           ) : (
-            <CustomWidthTooltip title={deleteTask?.args?.url || '-'} placement="bottom">
-              <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.URLContent}>
-                {deleteTask?.args?.url || '-'}
+            <CustomWidthTooltip title={executions?.args?.url || '-'} placement="bottom">
+              <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.urlContent}>
+                {executions?.args?.url || '-'}
               </Typography>
             </CustomWidthTooltip>
           )}
@@ -401,9 +399,9 @@ export default function ShowTask() {
           <Box className={styles.informationContent}>
             {isLoading ? (
               <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
-            ) : deleteTask?.args?.tag ? (
+            ) : executions?.args?.tag ? (
               <Chip
-                label={deleteTask?.args?.tag}
+                label={executions?.args?.tag}
                 size="small"
                 variant="outlined"
                 sx={{
@@ -434,7 +432,7 @@ export default function ShowTask() {
               {isLoading ? (
                 <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
               ) : (
-                deleteTask?.args?.application || '-'
+                executions?.args?.application || '-'
               )}
             </Typography>
           </Box>
@@ -447,18 +445,12 @@ export default function ShowTask() {
             </Typography>
           </Box>
           <Box className={styles.schedulerClustersID}>
-            {deleteTask?.scheduler_clusters?.map((item, index) => {
+            {executions?.scheduler_clusters?.map((item: any, index: number) => {
               return (
-                <Box sx={{ display: 'flex', alignItems: 'center', p: '0.4rem', mr: '1rem' }}>
-                  <Box className={styles.schedulerClustersIDContent}>
-                    <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
-                      {isLoading ? (
-                        <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
-                      ) : (
-                        item.id || '-'
-                      )}
-                    </Typography>
-                  </Box>
+                <Box className={styles.schedulerClustersIDContent}>
+                  <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
+                    {isLoading ? <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} /> : item.id || '-'}
+                  </Typography>
                 </Box>
               );
             }) || '-'}
@@ -474,10 +466,10 @@ export default function ShowTask() {
           <Typography variant="body1" className={styles.informationContent}>
             {isLoading ? (
               <Skeleton data-testid="execution-isloading" sx={{ width: '2rem' }} />
-            ) : deleteTask?.created_at ? (
+            ) : executions?.created_at ? (
               <Chip
                 avatar={<MoreTimeIcon />}
-                label={getBJTDatetime(deleteTask?.created_at || '0')}
+                label={getBJTDatetime(executions?.created_at || '0')}
                 variant="outlined"
                 size="small"
               />

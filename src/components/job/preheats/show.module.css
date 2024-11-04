@@ -66,3 +66,11 @@
   height: 1.6rem;
   margin-right: 0.5rem;
 }
+
+.urlContent {
+  width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-style: italic;
+}

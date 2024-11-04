@@ -104,7 +104,7 @@ export default function ShowExecutions() {
   useEffect(() => {
     if (shouldPoll) {
       const pollingInterval = setInterval(() => {
-        const pollPreheat = async () => {
+        const pollExecutions = async () => {
           try {
             const job = await getCacheJob(params.id);
             setExecutions(job);
@@ -123,7 +123,7 @@ export default function ShowExecutions() {
           }
         };
 
-        pollPreheat();
+        pollExecutions();
       }, 60000);
 
       return () => {

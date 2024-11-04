@@ -125,7 +125,7 @@ export default function Clear() {
   useEffect(() => {
     if (shouldPoll) {
       const pollingInterval = setInterval(() => {
-        const pollPreheat = async () => {
+        const pollClear = async () => {
           try {
             const job = await getCacheJob(searchID);
 
@@ -144,7 +144,7 @@ export default function Clear() {
           }
         };
 
-        pollPreheat();
+        pollClear();
       }, 60000);
 
       return () => {
@@ -203,7 +203,7 @@ export default function Clear() {
         InputProps: (
           <Tooltip
             title={
-              'When the URL of the tasks are the same but the Tag are different, they will be distinguished based on the Tag and the generated preheat tasks will be different.'
+              'When the task URLs are the same but the tags are different, they are differentiated based on the tags and the query caches are also different.'
             }
             placement="top"
           >
@@ -671,7 +671,7 @@ export default function Clear() {
                               {item?.id === 'filteredQueryParams' ? (
                                 <Tooltip
                                   title={
-                                    'By setting the filter parameter, you can specify the file type of the resource that needs to be preheated. The filter is used to generate a unique preheat task and filter unnecessary query parameters in the URL, separated by & characters.'
+                                    'By setting the filter parameter, you can specify the file type of the resource that needs to be searched for cache. This filter is used to generate a unique cache and filter out unnecessary query parameters in the URL, separated by the & character.'
                                   }
                                   placement="top"
                                 >
@@ -763,7 +763,7 @@ export default function Clear() {
                               Scheduler Cluster
                             </Typography>
                             {isLoading ? (
-                              <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                              <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
                             ) : (
                               <Box
                                 sx={{
@@ -845,7 +845,7 @@ export default function Clear() {
                                   <Box width="20%" sx={{ display: 'flex', alignItems: 'center', pb: '0.4rem' }}>
                                     <Box>
                                       {isLoading ? (
-                                        <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                                        <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
                                       ) : (
                                         <Tooltip title={item?.hostname || '-'} placement="top">
                                           <Typography variant="body1">{item?.hostname}</Typography>
@@ -855,7 +855,7 @@ export default function Clear() {
                                   </Box>
                                   <Box width="35%">
                                     {isLoading ? (
-                                      <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                                      <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
                                     ) : (
                                       <Tooltip title={item?.id || '-'} placement="top">
                                         <Typography variant="body2" component="div" className={styles.text}>
@@ -867,7 +867,7 @@ export default function Clear() {
                                   <Box width="15%">
                                     <Box className={styles.ipContainer}>
                                       {isLoading ? (
-                                        <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                                        <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
                                       ) : (
                                         <Typography variant="subtitle2" component="div">
                                           {item?.ip || '-'}
@@ -877,7 +877,7 @@ export default function Clear() {
                                   </Box>
                                   <Box width="15%">
                                     {isLoading ? (
-                                      <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                                      <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
                                     ) : (
                                       <Chip
                                         label={_.upperFirst(item?.host_type) || ''}
@@ -915,7 +915,7 @@ export default function Clear() {
                                 <Box width="20%" sx={{ display: 'flex', alignItems: 'center', pb: '0.4rem' }}>
                                   <Box>
                                     {isLoading ? (
-                                      <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                                      <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
                                     ) : (
                                       <Tooltip title={item?.hostname || '-'} placement="top">
                                         <Typography variant="body1" mr="1rem">
@@ -927,7 +927,7 @@ export default function Clear() {
                                 </Box>
                                 <Box width="35%">
                                   {isLoading ? (
-                                    <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                                    <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
                                   ) : (
                                     <Tooltip title={item?.id || '-'} placement="top">
                                       <Typography variant="body2" component="div" className={styles.text}>
@@ -939,7 +939,7 @@ export default function Clear() {
                                 <Box width="15%">
                                   <Box className={styles.ipContainer}>
                                     {isLoading ? (
-                                      <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                                      <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
                                     ) : (
                                       <Typography variant="subtitle2" component="div">
                                         {item?.ip || '-'}
@@ -949,7 +949,7 @@ export default function Clear() {
                                 </Box>
                                 <Box width="15%">
                                   {isLoading ? (
-                                    <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
+                                    <Skeleton data-testid="clear-isloading" sx={{ width: '4rem' }} />
                                   ) : (
                                     <Chip
                                       label={_.upperFirst(item?.host_type) || ''}

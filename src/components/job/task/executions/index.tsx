@@ -27,7 +27,7 @@ import MoreTimeIcon from '@mui/icons-material/MoreTime';
 export default function Executions() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [preheatPage, setPreheatPage] = useState(1);
+  const [executionsPage, setExecutionsPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<string>('ALL');
@@ -43,7 +43,7 @@ export default function Executions() {
     (async function () {
       try {
         setIsLoading(true);
-        setPreheatPage(page);
+        setExecutionsPage(page);
 
         const jobs = await getDeleteCacheJob({
           page: page,
@@ -69,15 +69,15 @@ export default function Executions() {
         }
       }
     })();
-  }, [status, preheatPage, page]);
+  }, [status, executionsPage, page]);
 
   useEffect(() => {
     if (shouldPoll) {
       const pollingInterval = setInterval(() => {
-        const pollPreheat = async () => {
+        const pollExecutions = async () => {
           try {
             const jobs = await getDeleteCacheJob({
-              page: preheatPage,
+              page: executionsPage,
               per_page: DEFAULT_PAGE_SIZE,
               state: status === 'ALL' ? undefined : status,
             });
@@ -98,14 +98,14 @@ export default function Executions() {
           }
         };
 
-        pollPreheat();
+        pollExecutions();
       }, 60000);
 
       return () => {
         clearInterval(pollingInterval);
       };
     }
-  }, [status, shouldPoll, preheatPage]);
+  }, [status, shouldPoll, executionsPage]);
 
   const statusList = [
     { lable: 'Pending', name: 'PENDING' },
@@ -341,9 +341,9 @@ export default function Executions() {
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
           <Pagination
             count={totalPages}
-            page={preheatPage}
+            page={executionsPage}
             onChange={(_event: any, newPage: number) => {
-              setPreheatPage(newPage);
+              setExecutionsPage(newPage);
               navigate(`/jobs/task/executions${newPage > 1 ? `?page=${newPage}` : ''}`);
             }}
             boundaryCount={1}

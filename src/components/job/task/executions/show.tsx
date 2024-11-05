@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getCacheJobResponse, getCacheJob } from '../../../../lib/api';
+import { getTaskJobResponse, getTaskJob } from '../../../../lib/api';
 import {
   Typography,
   Box,
@@ -55,7 +55,7 @@ const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
 });
 
 export default function ShowExecutions() {
-  const [executions, setExecutions] = useState<getCacheJobResponse>();
+  const [executions, setExecutions] = useState<getTaskJobResponse>();
   const [shouldPoll, setShouldPoll] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
@@ -75,7 +75,7 @@ export default function ShowExecutions() {
     (async function () {
       try {
         if (params.id) {
-          const job = await getCacheJob(params.id);
+          const job = await getTaskJob(params.id);
 
           setExecutions(job);
           setIsLoading(false);
@@ -104,7 +104,7 @@ export default function ShowExecutions() {
       const pollingInterval = setInterval(() => {
         const pollExecutions = async () => {
           try {
-            const job = await getCacheJob(params.id);
+            const job = await getTaskJob(params.id);
             setExecutions(job);
 
             if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {

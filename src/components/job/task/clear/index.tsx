@@ -27,7 +27,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import { getCacheJobResponse, createCacheJob, getCacheJob } from '../../../../lib/api';
+import { getTaskJobResponse, createTaskJob, getTaskJob } from '../../../../lib/api';
 import { getBJTDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
 import _ from 'lodash';
 import SearchTaskAnimation from '../../../search-task-animation';
@@ -72,10 +72,10 @@ export default function Clear() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [openDeleteCache, setOpenDeleteCache] = useState(false);
+  const [openDeleteTask, setOpenDeleteTask] = useState(false);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [searchTask, setSearchTask] = useState('');
-  const [cache, setCache] = useState<getCacheJobResponse | any>();
+  const [task, setTask] = useState<getTaskJobResponse | any>();
   const [input, setInput] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
@@ -89,7 +89,7 @@ export default function Clear() {
   const [filterHelperText, setFilterHelperText] = useState('Fill in the characters, the length is 0-100.');
   const [search, setSearch] = useState<string | null>('url');
   const [searchID, setSearchID] = useState(0);
-  const [cachePages, setCachePages] = useState<any>({});
+  const [taskPages, setTaskPages] = useState<any>({});
   const [searchData, setSearchDada] = useState({ url: '', tag: '', application: '', filtered_query_params: '' });
 
   const { url, tag, application, filtered_query_params } = searchData;
@@ -99,12 +99,12 @@ export default function Clear() {
     const fetchJob = async () => {
       try {
         if (searchID) {
-          const job = await getCacheJob(searchID);
+          const job = await getTaskJob(searchID);
 
           if (job.type === 'get_task') {
             if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {
               setIsLoading(false);
-              setCache(job);
+              setTask(job);
             } else {
               setShouldPoll(true);
             }
@@ -126,10 +126,10 @@ export default function Clear() {
       const pollingInterval = setInterval(() => {
         const pollClear = async () => {
           try {
-            const job = await getCacheJob(searchID);
+            const job = await getTaskJob(searchID);
 
             if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {
-              setCache(job);
+              setTask(job);
               setShouldPoll(false);
               setIsLoading(false);
             }
@@ -351,7 +351,7 @@ export default function Clear() {
   };
 
   const result =
-    cache?.result?.job_states?.map((item: any) => {
+    task?.result?.job_states?.map((item: any) => {
       return item.results ? item.results.map((resultItem: any) => resultItem) : [];
     }) ?? [];
 
@@ -361,43 +361,43 @@ export default function Clear() {
     ? Array.from(new Set(results.map((item) => JSON.stringify(item)))).map((str) => JSON.parse(str))
     : [];
 
-  const handleDeleteCache = async () => {
+  const handleDeleteTask = async () => {
     try {
       setDeleteLoadingButton(true);
       if (schedulerClusterID && !deleteError) {
-        if (cache?.args?.url && cache?.args?.url !== '') {
+        if (task?.args?.url && task?.args?.url !== '') {
           const formList = {
             args: {
-              url: cache?.args?.url,
-              tag: cache?.args?.tag,
-              application: cache?.args?.application,
-              filtered_query_params: cache?.args?.filtered_query_params,
+              url: task?.args?.url,
+              tag: task?.args?.tag,
+              application: task?.args?.application,
+              filtered_query_params: task?.args?.filtered_query_params,
             },
             scheduler_cluster_ids: [schedulerClusterID],
             type: 'delete_task',
           };
 
-          const tasks = await createCacheJob(formList);
+          const tasks = await createTaskJob(formList);
 
           if (tasks?.id) {
             setDeleteLoadingButton(false);
             navigate(`/jobs/task/executions/${tasks?.id}`);
-            setOpenDeleteCache(false);
+            setOpenDeleteTask(false);
           }
-        } else if (cache?.args?.task_id) {
+        } else if (task?.args?.task_id) {
           const formList = {
             args: {
-              task_id: cache?.args?.task_id,
+              task_id: task?.args?.task_id,
             },
             scheduler_cluster_ids: [schedulerClusterID],
             type: 'delete_task',
           };
 
-          const tasks = await createCacheJob(formList);
+          const tasks = await createTaskJob(formList);
           if (tasks?.id) {
             setDeleteLoadingButton(false);
             navigate(`/jobs/task/executions/${tasks?.id}`);
-            setOpenDeleteCache(false);
+            setOpenDeleteTask(false);
           }
         }
       }
@@ -434,11 +434,11 @@ export default function Clear() {
           type: 'get_task',
         };
 
-        const task = await createCacheJob(data);
+        const task = await createTaskJob(data);
         setSearchID(task?.id);
       } else {
         navigate('/jobs/task/clear');
-        setCache(null);
+        setTask(null);
         setIsLoading(false);
       }
     } catch (error) {
@@ -502,7 +502,7 @@ export default function Clear() {
     if (canSubmit) {
       setInput(false);
       try {
-        const task = await createCacheJob({ ...formDate });
+        const task = await createTaskJob({ ...formDate });
         setLoadingButton(false);
         setSearchID(task?.id);
       } catch (error) {
@@ -523,7 +523,7 @@ export default function Clear() {
     if (reason === 'clickaway') {
       return;
     }
-    setOpenDeleteCache(false);
+    setOpenDeleteTask(false);
     setErrorMessage(false);
   };
 
@@ -542,7 +542,7 @@ export default function Clear() {
   };
 
   const handlePageChange = (peerId: any, newPage: any) => {
-    setCachePages((prevPages: any) => ({
+    setTaskPages((prevPages: any) => ({
       ...prevPages,
       [peerId]: newPage,
     }));
@@ -732,7 +732,7 @@ export default function Clear() {
         <Box id="isLoading" sx={{ mt: '4rem' }}>
           <SearchTaskAnimation />
         </Box>
-      ) : cache && cache?.type === 'get_task' ? (
+      ) : task && task?.type === 'get_task' ? (
         <Box sx={{ width: '100%', typography: 'body1', mt: '2rem' }}>
           {peers && peers?.length > 0 ? (
             <>
@@ -743,8 +743,8 @@ export default function Clear() {
                 {peers.map((peer: any, index: any) => {
                   const peerId = peer.scheduler_cluster_id;
                   const totalPage = Math.ceil(peer?.peers.length / 5);
-                  const cachePage = cachePages[peerId] || 1;
-                  const currentPageData = getPaginatedList(peer?.peers, cachePage, 5);
+                  const taskPage = taskPages[peerId] || 1;
+                  const currentPageData = getPaginatedList(peer?.peers, taskPage, 5);
                   return (
                     <Box mb="2rem" key={index}>
                       <Paper variant="outlined">
@@ -793,7 +793,7 @@ export default function Clear() {
                             onClick={(event) => {
                               event.stopPropagation();
                               setSchedulerClusterID(peer?.scheduler_cluster_id);
-                              setOpenDeleteCache(true);
+                              setOpenDeleteTask(true);
                             }}
                           >
                             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
@@ -951,7 +951,7 @@ export default function Clear() {
                           <Pagination
                             id={`pagination-${index}`}
                             count={totalPage}
-                            page={cachePage}
+                            page={taskPage}
                             onChange={(_event, newPage) => handlePageChange(peerId, newPage)}
                             color="primary"
                             size="small"
@@ -966,7 +966,7 @@ export default function Clear() {
               </Box>
             </>
           ) : (
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '6rem' }}>
+            <Box id='no-task' sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '6rem' }}>
               <Box component="img" sx={{ width: '4rem', mb: '3rem' }} src="/icons/job/task/no-search.svg" />
               <Box>
                 <Typography variant="h5" component="span">
@@ -989,7 +989,7 @@ export default function Clear() {
         </Box>
       )}
       <Dialog
-        open={openDeleteCache}
+        open={openDeleteTask}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -1036,7 +1036,7 @@ export default function Clear() {
         </Box>
         <Divider />
         <DialogContent>
-          <Box onSubmit={handleDeleteCache}>
+          <Box onSubmit={handleDeleteTask}>
             <Box display="flex" alignItems="flex-start" pb="1rem">
               <Box
                 component="img"
@@ -1079,7 +1079,7 @@ export default function Clear() {
                 loading={deleteLoadingButton}
                 endIcon={<DeleteIcon />}
                 id="deleteTask"
-                onClick={handleDeleteCache}
+                onClick={handleDeleteTask}
                 text="Delete"
               />
             </Box>

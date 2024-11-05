@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import styles from './index.module.css';
-import { getDeleteCacheJob, getCacheJobResponse } from '../../../../lib/api';
+import { getDeleteTaskJob, getTaskJobResponse } from '../../../../lib/api';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getBJTDatetime, useQuery } from '../../../../lib/utils';
@@ -33,7 +33,7 @@ export default function Executions() {
   const [status, setStatus] = useState<string>('ALL');
   const [shouldPoll, setShouldPoll] = useState(false);
   const [openStatusSelect, setOpenStatusSelect] = useState(false);
-  const [executions, setExecutions] = useState<getCacheJobResponse[]>([]);
+  const [executions, setExecutions] = useState<getTaskJobResponse[]>([]);
 
   const navigate = useNavigate();
   const query = useQuery();
@@ -45,7 +45,7 @@ export default function Executions() {
         setIsLoading(true);
         setExecutionsPage(page);
 
-        const jobs = await getDeleteCacheJob({
+        const jobs = await getDeleteTaskJob({
           page: page,
           per_page: DEFAULT_PAGE_SIZE,
           state: status === 'ALL' ? undefined : status,
@@ -76,7 +76,7 @@ export default function Executions() {
       const pollingInterval = setInterval(() => {
         const pollExecutions = async () => {
           try {
-            const jobs = await getDeleteCacheJob({
+            const jobs = await getDeleteTaskJob({
               page: executionsPage,
               per_page: DEFAULT_PAGE_SIZE,
               state: status === 'ALL' ? undefined : status,

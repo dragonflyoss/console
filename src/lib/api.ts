@@ -943,7 +943,7 @@ interface user {
   configs: null;
 }
 
-interface createCacheJobResquest {
+interface createTaskJobResquest {
   args: {
     task_id?: string;
     url?: string;
@@ -955,7 +955,7 @@ interface createCacheJobResquest {
   type: string;
 }
 
-export interface createCacheJobResponse {
+export interface createTaskJobResponse {
   id: number;
   created_at: string;
   updated_at: string;
@@ -974,7 +974,7 @@ export interface createCacheJobResponse {
   scheduler_clusters: Array<scheduler_clusters>;
 }
 
-export async function createCacheJob(request: createCacheJobResquest): Promise<createCacheJobResponse> {
+export async function createTaskJob(request: createTaskJobResquest): Promise<createTaskJobResponse> {
   const url = new URL(`/api/v1/jobs`, API_URL);
   const response = await post(url, request);
   return await response.json();
@@ -1028,7 +1028,7 @@ interface deleteJobStates {
   ttl: 0;
 }
 
-export interface getCacheJobResponse {
+export interface getTaskJobResponse {
   id: number;
   created_at: string;
   updated_at: string;
@@ -1058,19 +1058,19 @@ export interface getCacheJobResponse {
   scheduler_clusters: Array<scheduler_clusters>;
 }
 
-export async function getCacheJob(id: any): Promise<getCacheJobResponse> {
+export async function getTaskJob(id: any): Promise<getTaskJobResponse> {
   const url = new URL(`/api/v1/jobs/${id}`, API_URL);
   const response = await get(url);
 
   return await response.json();
 }
 
-interface getDeleteCacheJobResponse {
-  data: getCacheJobResponse[];
+interface getDeleteTaskJobResponse {
+  data: getTaskJobResponse[];
   total_page?: number;
 }
 
-export async function getDeleteCacheJob(params: getJobsParams): Promise<getDeleteCacheJobResponse> {
+export async function getDeleteTaskJob(params: getJobsParams): Promise<getDeleteTaskJobResponse> {
   const url = new URL(`/api/v1/jobs?${queryString.stringify(params)}&type=delete_task`, API_URL);
 
   const response = await get(url);

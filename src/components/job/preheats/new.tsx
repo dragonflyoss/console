@@ -182,7 +182,6 @@ export default function NewPreheat() {
         return reg.test(value);
       },
     },
-
     {
       id: 'filteredQueryParams',
       name: 'filteredQueryParams',

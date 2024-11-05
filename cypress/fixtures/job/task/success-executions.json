@@ -1,0 +1,947 @@
+[
+  {
+    "id": 9,
+    "created_at": "2024-11-01T10:02:44Z",
+    "updated_at": "2024-11-01T10:03:19Z",
+    "is_del": 0,
+    "task_id": "group_2803b402-0348-4039-8fb1-b62cbebf7a7d",
+    "bio": "",
+    "type": "delete_task",
+    "state": "SUCCESS",
+    "args": {
+      "application": "",
+      "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
+      "tag": "",
+      "task_id": "aea9af454bc33e61dd24647b0dd6d023195360a6b67c7c3e0feda4713819cc38",
+      "timeout": 1800000000000,
+      "url": "https://example.com/path/to/file"
+    },
+    "result": {
+      "created_at": "2024-11-01T10:02:44.836338419Z",
+      "group_uuid": "group_2803b402-0348-4039-8fb1-b62cbebf7a7d",
+      "job_states": [
+        {
+          "created_at": "2024-11-01T10:02:44.836338419Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_5b0498de-2336-4980-9aff-9a03158951b2",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T10:02:44.836845086Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_14a43448-47c1-4d8c-8d7f-af74ae9380ff",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T10:02:44.836982461Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": [],
+              "scheduler_cluster_id": 1,
+              "success_tasks": [
+                {
+                  "host_type": "super",
+                  "hostname": "dragonfly-seed-client-2",
+                  "ip": "10.244.1.24"
+                }
+              ]
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_56bdc326-d08d-41b2-8124-6eb79546ae76",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T10:02:44.837099669Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_9862c330-927c-4f34-975b-d9aa9e81b638",
+          "ttl": 0
+        }
+      ],
+      "state": "SUCCESS",
+      "updated_at": "2024-11-01T10:03:18.70472913Z"
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 8,
+    "created_at": "2024-11-01T09:59:49Z",
+    "updated_at": "2024-11-01T10:00:19Z",
+    "is_del": 0,
+    "task_id": "group_ba382c88-b890-496d-8cee-e9fc2e689f3d",
+    "bio": "",
+    "type": "delete_task",
+    "state": "SUCCESS",
+    "args": {
+      "application": "",
+      "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
+      "tag": "",
+      "task_id": "",
+      "timeout": 1800000000000,
+      "url": "https://example.com/path/to/file"
+    },
+    "result": {
+      "created_at": "2024-11-01T09:59:49.07231163Z",
+      "group_uuid": "group_ba382c88-b890-496d-8cee-e9fc2e689f3d",
+      "job_states": [
+        {
+          "created_at": "2024-11-01T09:59:49.07231163Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_509524a6-0352-4215-972f-f408b958ef31",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:59:49.072495713Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_61c19fe5-ef3f-4cc0-bf1b-321f3074edc7",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:59:49.072595088Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": [],
+              "scheduler_cluster_id": 1,
+              "success_tasks": [
+                {
+                  "host_type": "super",
+                  "hostname": "dragonfly-seed-client-1",
+                  "ip": "10.244.2.22"
+                }
+              ]
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_0a76d86c-ab9a-4d6b-95cd-6327aa60df92",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:59:49.072690005Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_39bf1704-5ae6-4000-8959-fa3511c6632d",
+          "ttl": 0
+        }
+      ],
+      "state": "SUCCESS",
+      "updated_at": "2024-11-01T10:00:19.091528713Z"
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 7,
+    "created_at": "2024-11-01T09:56:31Z",
+    "updated_at": "2024-11-01T09:57:02Z",
+    "is_del": 0,
+    "task_id": "group_4981bbfd-84e7-42cc-bf15-2f08a45cd2a0",
+    "bio": "",
+    "type": "delete_task",
+    "state": "SUCCESS",
+    "args": {
+      "application": "",
+      "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
+      "tag": "",
+      "task_id": "",
+      "timeout": 1800000000000,
+      "url": "https://example.com/path/to/file"
+    },
+    "result": {
+      "created_at": "2024-11-01T09:56:31.537420427Z",
+      "group_uuid": "group_4981bbfd-84e7-42cc-bf15-2f08a45cd2a0",
+      "job_states": [
+        {
+          "created_at": "2024-11-01T09:56:31.537420427Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_a09a50d2-60bb-49e4-a00e-c3954f3a2ea2",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:56:31.537710011Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": [],
+              "scheduler_cluster_id": 1,
+              "success_tasks": [
+                {
+                  "host_type": "super",
+                  "hostname": "dragonfly-seed-client-0",
+                  "ip": "10.244.1.26"
+                }
+              ]
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_22aa3380-ee50-404f-9580-aa42811d264a",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:56:31.538062011Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_2459ee96-8d0a-4657-9658-ee082dfad605",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:56:31.538519219Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_b9a4ef50-1432-445f-9c7a-d9c2896ed8ac",
+          "ttl": 0
+        }
+      ],
+      "state": "SUCCESS",
+      "updated_at": "2024-11-01T09:57:01.559297719Z"
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 6,
+    "created_at": "2024-11-01T09:54:04Z",
+    "updated_at": "2024-11-01T09:54:05Z",
+    "is_del": 0,
+    "task_id": "group_04350d4a-cf51-4e22-b922-bf205e66dfdc",
+    "bio": "",
+    "type": "delete_task",
+    "state": "SUCCESS",
+    "args": {
+      "application": "",
+      "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
+      "tag": "",
+      "task_id": "",
+      "timeout": 1800000000000,
+      "url": "https://example.com/path/to/file"
+    },
+    "result": {
+      "created_at": "2024-11-01T09:54:04.883390304Z",
+      "group_uuid": "group_04350d4a-cf51-4e22-b922-bf205e66dfdc",
+      "job_states": [
+        {
+          "created_at": "2024-11-01T09:54:04.883390304Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_5a72a069-1ece-44b1-bad1-4f59256e5dd2",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:54:04.883557971Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": [],
+              "scheduler_cluster_id": 1,
+              "success_tasks": []
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_c0114ad0-a8e8-4a12-870f-632bba987a92",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:54:04.883668346Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_09b26568-8f29-41c9-80cb-a4b24fc04d14",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:54:04.883761096Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_5d594ecb-2ba3-4257-87fe-a939eb974cb5",
+          "ttl": 0
+        }
+      ],
+      "state": "SUCCESS",
+      "updated_at": "2024-11-01T09:54:04.895802304Z"
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 5,
+    "created_at": "2024-11-01T09:34:14Z",
+    "updated_at": "2024-11-01T09:34:14Z",
+    "is_del": 0,
+    "task_id": "group_e278de40-2617-406b-9815-e0f423a482e3",
+    "bio": "",
+    "type": "delete_task",
+    "state": "SUCCESS",
+    "args": {
+      "application": "",
+      "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
+      "tag": "",
+      "task_id": "",
+      "timeout": 1800000000000,
+      "url": "https://example.com/path/to/file"
+    },
+    "result": {
+      "created_at": "2024-11-01T09:34:14.312378294Z",
+      "group_uuid": "group_e278de40-2617-406b-9815-e0f423a482e3",
+      "job_states": [
+        {
+          "created_at": "2024-11-01T09:34:14.312378294Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_30ee8609-9c28-4411-bb2b-d6a9c7ab15e9",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:34:14.312598711Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_cb88ce77-09cf-4d83-9720-12e05f356dff",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:34:14.312772211Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": [],
+              "scheduler_cluster_id": 1,
+              "success_tasks": []
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_398d1ff1-d57b-42e4-a4e1-3b9f3ee780f1",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:34:14.312926294Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_5529227b-3d76-4f9c-8359-1765590e38d1",
+          "ttl": 0
+        }
+      ],
+      "state": "SUCCESS",
+      "updated_at": "2024-11-01T09:34:14.319862503Z"
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 4,
+    "created_at": "2024-11-01T09:32:30Z",
+    "updated_at": "2024-11-01T09:32:30Z",
+    "is_del": 0,
+    "task_id": "group_11d7e8f0-f278-4f2a-b2b9-d3e731999e25",
+    "bio": "",
+    "type": "delete_task",
+    "state": "SUCCESS",
+    "args": {
+      "application": "",
+      "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
+      "tag": "",
+      "task_id": "",
+      "timeout": 1800000000000,
+      "url": "https://example.com/path/to/file"
+    },
+    "result": {
+      "created_at": "2024-11-01T09:32:30.001617594Z",
+      "group_uuid": "group_11d7e8f0-f278-4f2a-b2b9-d3e731999e25",
+      "job_states": [
+        {
+          "created_at": "2024-11-01T09:32:30.001617594Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_dfe115d9-f390-4762-9d3f-fd77f2bb701b",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:32:30.001825219Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_6429df22-4c56-4fd7-a661-d24ac3ca0799",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:32:30.001933969Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": [],
+              "scheduler_cluster_id": 1,
+              "success_tasks": []
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_7f77d628-b08a-4742-9e71-b339256c3b26",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:32:30.002039177Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_3bd16a73-5c67-48d7-b8f1-6e272be554e3",
+          "ttl": 0
+        }
+      ],
+      "state": "SUCCESS",
+      "updated_at": "2024-11-01T09:32:30.011738344Z"
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 3,
+    "created_at": "2024-11-01T09:28:11Z",
+    "updated_at": "2024-11-01T09:28:12Z",
+    "is_del": 0,
+    "task_id": "group_f4eef3fd-2b68-43c3-9a4b-3c2abae80425",
+    "bio": "",
+    "type": "delete_task",
+    "state": "SUCCESS",
+    "args": {
+      "application": "",
+      "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
+      "tag": "",
+      "task_id": "8c3dbd38fc7f4b3637d4e8ad8490ce107ac4cf2df81d45e7d33224f29ab4cf3d",
+      "timeout": 1800000000000,
+      "url": ""
+    },
+    "result": {
+      "created_at": "2024-11-01T09:28:11.774771335Z",
+      "group_uuid": "group_f4eef3fd-2b68-43c3-9a4b-3c2abae80425",
+      "job_states": [
+        {
+          "created_at": "2024-11-01T09:28:11.774771335Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_94f08374-3f23-440e-8cf0-88c994565319",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:28:11.775160668Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_72a665ea-3959-4e12-a6c0-af00ce3a74ff",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:28:11.775705877Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_a0268a7a-f5fa-46ef-823d-6029d1fad7e6",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:28:11.776120002Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_3bce71dd-0d38-41eb-a24a-5d867c1bf22a",
+          "ttl": 0
+        }
+      ],
+      "state": "SUCCESS",
+      "updated_at": "2024-11-01T09:28:11.790449835Z"
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 2,
+    "created_at": "2024-11-01T09:25:05Z",
+    "updated_at": "2024-11-01T09:25:05Z",
+    "is_del": 0,
+    "task_id": "group_d9b8c7d2-f8ba-496b-99da-7d1e262a59ee",
+    "bio": "",
+    "type": "delete_task",
+    "state": "SUCCESS",
+    "args": {
+      "application": "",
+      "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
+      "tag": "",
+      "task_id": "8c3dbd38fc7f4b3637d4e8ad8490ce107ac4cf2df81d45e7d33224f29ab4cf3d",
+      "timeout": 1800000000000,
+      "url": ""
+    },
+    "result": {
+      "created_at": "2024-11-01T09:25:05.260432054Z",
+      "group_uuid": "group_d9b8c7d2-f8ba-496b-99da-7d1e262a59ee",
+      "job_states": [
+        {
+          "created_at": "2024-11-01T09:25:05.260432054Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_000928e7-7d0d-4177-991b-2c4564a38e98",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:25:05.260758429Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_73c03072-4db3-468a-b22b-16631cfa48fe",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:25:05.261007846Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_bc777067-f466-4cda-9046-1a1c131e2d8d",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:25:05.261192054Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_22032823-5c3e-4a7a-b1c2-341ee423d76c",
+          "ttl": 0
+        }
+      ],
+      "state": "SUCCESS",
+      "updated_at": "2024-11-01T09:25:05.268218346Z"
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 1,
+    "created_at": "2024-11-01T09:25:05Z",
+    "updated_at": "2024-11-01T09:25:05Z",
+    "is_del": 0,
+    "task_id": "group_d9b8c7d2-f8ba-496b-99da-7d1e262a59ee",
+    "bio": "",
+    "type": "delete_task",
+    "state": "SUCCESS",
+    "args": {
+      "application": "",
+      "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
+      "tag": "",
+      "task_id": "8c3dbd38fc7f4b3637d4e8ad8490ce107ac4cf2df81d45e7d33224f29ab4cf3d",
+      "timeout": 1800000000000,
+      "url": ""
+    },
+    "result": {
+      "created_at": "2024-11-01T09:25:05.260432054Z",
+      "group_uuid": "group_d9b8c7d2-f8ba-496b-99da-7d1e262a59ee",
+      "job_states": [
+        {
+          "created_at": "2024-11-01T09:25:05.260432054Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_000928e7-7d0d-4177-991b-2c4564a38e98",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:25:05.260758429Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_73c03072-4db3-468a-b22b-16631cfa48fe",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:25:05.261007846Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_bc777067-f466-4cda-9046-1a1c131e2d8d",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:25:05.261192054Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_22032823-5c3e-4a7a-b1c2-341ee423d76c",
+          "ttl": 0
+        }
+      ],
+      "state": "SUCCESS",
+      "updated_at": "2024-11-01T09:25:05.268218346Z"
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  }
+]

@@ -1,0 +1,117 @@
+{
+  "id": 11,
+  "created_at": "2024-11-01T10:07:46Z",
+  "updated_at": "2024-11-01T10:08:17Z",
+  "is_del": 0,
+  "task_id": "group_b0d76d25-a800-4a74-b577-35690b8fb75d",
+  "bio": "",
+  "type": "delete_task",
+  "state": "PENDING",
+  "args": {
+    "application": "",
+    "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
+    "tag": "",
+    "task_id": "fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916",
+    "timeout": 1800000000000,
+    "url": ""
+  },
+  "result": {
+    "created_at": "2024-11-01T10:07:46.676343295Z",
+    "group_uuid": "group_b0d76d25-a800-4a74-b577-35690b8fb75d",
+    "job_states": [
+      {
+        "created_at": "2024-11-01T10:07:46.676343295Z",
+        "error": "",
+        "results": [
+          {
+            "failure_tasks": [
+              {
+                "description": "task a1e21fcec1ba95d4407a83b3fc767da6de2a2fe35736c2ba3b95473229de1894 failed: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 172.18.0.3:4000: connect: connection refused\"",
+                "host_type": "normal",
+                "hostname": "kind-worker",
+                "ip": "172.18.0.3"
+              }
+            ],
+            "scheduler_cluster_id": 1,
+            "success_tasks": []
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "delete_task",
+        "task_uuid": "task_b3a2705f-ce57-4678-99d2-b19c0d799d01",
+        "ttl": 0
+      },
+      {
+        "created_at": "2024-11-01T10:07:46.676642087Z",
+        "error": "",
+        "results": [
+          {
+            "failure_tasks": null,
+            "scheduler_cluster_id": 1,
+            "success_tasks": null
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "delete_task",
+        "task_uuid": "task_9d8517d5-6dce-4b67-9733-6d184dea336d",
+        "ttl": 0
+      },
+      {
+        "created_at": "2024-11-01T10:07:46.67679192Z",
+        "error": "",
+        "results": [
+          {
+            "failure_tasks": null,
+            "scheduler_cluster_id": 1,
+            "success_tasks": null
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "delete_task",
+        "task_uuid": "task_48fe538a-1c71-4af8-b9cb-b0619f27417d",
+        "ttl": 0
+      },
+      {
+        "created_at": "2024-11-01T10:07:46.677193129Z",
+        "error": "",
+        "results": [
+          {
+            "failure_tasks": [
+              {
+                "description": "task a1e21fcec1ba95d4407a83b3fc767da6de2a2fe35736c2ba3b95473229de1894 failed: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 172.18.0.3:4000: connect: connection refused\"",
+                "host_type": "normal",
+                "hostname": "kind-worker",
+                "ip": "172.18.0.3"
+              }
+            ],
+            "scheduler_cluster_id": 1,
+            "success_tasks": []
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "delete_task",
+        "task_uuid": "task_c891f33e-513c-4131-9b4d-40f485b77cac",
+        "ttl": 0
+      }
+    ],
+    "state": "PENDING",
+    "updated_at": "2024-11-01T10:08:16.695602295Z"
+  },
+  "user_id": 0,
+  "user": {
+    "id": 0,
+    "created_at": "0001-01-01T00:00:00Z",
+    "updated_at": "0001-01-01T00:00:00Z",
+    "is_del": 0,
+    "email": "",
+    "name": "",
+    "avatar": "",
+    "phone": "",
+    "state": "",
+    "location": "",
+    "bio": "",
+    "configs": null
+  },
+  "seed_peer_clusters": null,
+  "scheduler_clusters": null
+}

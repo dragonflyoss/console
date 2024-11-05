@@ -15,6 +15,7 @@ export const CancelLoadingButton: React.FC<cancelLoadingButtonProps> = ({ loadin
     endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
     size="small"
     variant="outlined"
+    type='reset'
     loadingPosition="end"
     id={id}
     sx={{

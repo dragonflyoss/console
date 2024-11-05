@@ -1,71 +1,58 @@
+import Box from '@mui/material/Box';
+import styles from './index.module.css';
+import { getDeleteTaskJob, getTaskJobResponse } from '../../../../lib/api';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { getBJTDatetime, useQuery } from '../../../../lib/utils';
+import { DEFAULT_PAGE_SIZE } from '../../../../lib/constants';
 import {
-  Button,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   Typography,
-  Box,
+  Link as RouterLink,
+  Chip,
   Pagination,
   ThemeProvider,
   createTheme,
-  Chip,
-  Link as RouterLink,
-  Divider,
-  FormControl,
-  MenuItem,
-  Select,
-  InputLabel,
   Snackbar,
   Alert,
   Skeleton,
-  Breadcrumbs,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import { useNavigate, Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { getJobs, JobsResponse } from '../../../lib/api';
-import { DEFAULT_PAGE_SIZE } from '../../../lib/constants';
-import { getBJTDatetime, useQuery } from '../../../lib/utils';
 
-export default function Preheats() {
+export default function Executions() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [preheatPage, setPreheatPage] = useState(1);
-  const [preheatTotalPages, setPreheatTotalPages] = useState(1);
+  const [executionsPage, setExecutionsPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<string>('ALL');
   const [shouldPoll, setShouldPoll] = useState(false);
   const [openStatusSelect, setOpenStatusSelect] = useState(false);
-  const [allPreheats, setAllPreheats] = useState<JobsResponse[]>([]);
+  const [executions, setExecutions] = useState<getTaskJobResponse[]>([]);
 
   const navigate = useNavigate();
   const query = useQuery();
   const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
 
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#1C293A',
-      },
-    },
-    typography: {
-      fontFamily: 'mabry-light,sans-serif',
-    },
-  });
-
   useEffect(() => {
     (async function () {
       try {
         setIsLoading(true);
-        setPreheatPage(page);
+        setExecutionsPage(page);
 
-        const jobs = await getJobs({
-          page: preheatPage,
+        const jobs = await getDeleteTaskJob({
+          page: page,
           per_page: DEFAULT_PAGE_SIZE,
           state: status === 'ALL' ? undefined : status,
         });
 
-        setAllPreheats(jobs.data);
-        setPreheatTotalPages(jobs.total_page || 1);
+        setExecutions(jobs.data);
+        setTotalPages(jobs.total_page || 1);
 
         const states = jobs.data.filter(
           (obj) => obj.result.state !== 'SUCCESS' && obj.result.state !== 'FAILURE',
@@ -82,21 +69,21 @@ export default function Preheats() {
         }
       }
     })();
-  }, [status, preheatPage, page]);
+  }, [status, executionsPage, page]);
 
   useEffect(() => {
     if (shouldPoll) {
       const pollingInterval = setInterval(() => {
-        const pollPreheat = async () => {
+        const pollExecutions = async () => {
           try {
-            const jobs = await getJobs({
-              page: preheatPage,
+            const jobs = await getDeleteTaskJob({
+              page: executionsPage,
               per_page: DEFAULT_PAGE_SIZE,
               state: status === 'ALL' ? undefined : status,
             });
 
-            setAllPreheats(jobs.data);
-            setPreheatTotalPages(jobs.total_page || 1);
+            setExecutions(jobs.data);
+            setTotalPages(jobs.total_page || 1);
 
             const states = jobs.data.filter(
               (obj) => obj.result.state !== 'SUCCESS' && obj.result.state !== 'FAILURE',
@@ -111,14 +98,14 @@ export default function Preheats() {
           }
         };
 
-        pollPreheat();
+        pollExecutions();
       }, 60000);
 
       return () => {
         clearInterval(pollingInterval);
       };
     }
-  }, [status, shouldPoll, preheatPage]);
+  }, [status, shouldPoll, executionsPage]);
 
   const statusList = [
     { lable: 'Pending', name: 'PENDING' },
@@ -129,8 +116,18 @@ export default function Preheats() {
 
   const changeStatus = (event: any) => {
     setStatus(event.target.value);
-    navigate(`/jobs/preheats`);
   };
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#1C293A',
+      },
+    },
+    typography: {
+      fontFamily: 'mabry-light,sans-serif',
+    },
+  });
 
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
@@ -152,40 +149,8 @@ export default function Preheats() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
-        <Typography color="inherit">jobs</Typography>
-        <Typography color="text.primary">preheats</Typography>
-      </Breadcrumbs>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '2rem' }}>
-        <Typography variant="h5">Preheats</Typography>
-        <Button
-          size="small"
-          sx={{
-            '&.MuiButton-root': {
-              backgroundColor: 'var(--button-color)',
-              borderRadius: 0,
-              color: '#fff',
-            },
-          }}
-          startIcon={<AddIcon />}
-          variant="contained"
-          onClick={() => {
-            navigate('/jobs/preheats/new');
-          }}
-        >
-          add preheat
-        </Button>
-      </Box>
       <Paper variant="outlined">
-        <Box
-          sx={{
-            p: '0.8rem',
-            backgroundColor: 'var(--table-title-color)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
+        <Box className={styles.titleContainer}>
           <Typography variant="body1" fontFamily="mabry-bold">
             Workflow runs
           </Typography>
@@ -219,32 +184,34 @@ export default function Preheats() {
         <Divider />
         {isLoading ? (
           <Box>
-            <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
-              <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
+            <Box className={styles.isLoadingWrapper}>
+              <Box className={styles.statusContainer}>
                 <Skeleton data-testid="isloading" variant="circular" width="1.4rem" height="1.4rem" />
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }} ml="0.6rem">
                   <Skeleton data-testid="isloading" width="3rem" />
                   <Skeleton data-testid="isloading" width="6rem" />
                 </Box>
               </Box>
-              <Box width="30%">
+              <Box className={styles.timeContainer}>
                 <Skeleton data-testid="isloading" width="40%" />
               </Box>
-              <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
+              <Box className={styles.iconButton}>
                 <Skeleton data-testid="isloading" variant="circular" width="2em" height="2em" />
               </Box>
             </Box>
-            <Divider />
           </Box>
-        ) : allPreheats.length === 0 ? (
-          <Box sx={{ height: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            You don't have any preheat tasks.
+        ) : executions && executions.length === 0 ? (
+          <Box
+            id="no-executions"
+            sx={{ height: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            You don't have any executions.
           </Box>
         ) : (
-          <Box id="preheats-list">
-            {Array.isArray(allPreheats) &&
-              allPreheats.map((item, index) => {
-                return index !== allPreheats.length - 1 ? (
+          <Box id="executions-list">
+            {executions &&
+              executions.map((item, index) => {
+                return index !== executions.length - 1 ? (
                   <Box key={item.id} id={`list-${item.id}`}>
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
@@ -277,7 +244,7 @@ export default function Preheats() {
                           <Typography variant="body1" fontFamily="mabry-bold">
                             {item.id}
                           </Typography>
-                          <Typography variant="body2">{item.bio || '-'}</Typography>
+                          <Typography variant="body2">{item?.args?.task_id || '-'}</Typography>
                         </Box>
                       </Box>
                       <Box width="30%">
@@ -291,8 +258,8 @@ export default function Preheats() {
                       <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
                         <RouterLink
                           component={Link}
-                          id={`preheat-${item?.id}`}
-                          to={`/jobs/preheats/${item?.id}`}
+                          id={`execution-${item?.id}`}
+                          to={`/jobs/task/executions/${item?.id}`}
                           underline="hover"
                           sx={{ color: 'var(--description-color)' }}
                         >
@@ -307,8 +274,8 @@ export default function Preheats() {
                     <Divider />
                   </Box>
                 ) : (
-                  <Box key={item.id} id={`list-${item.id}`} sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
+                  <Box key={item.id} id={`list-${item.id}`} className={styles.listWrapper}>
+                    <Box className={styles.statusContainer}>
                       {item.result.state === 'SUCCESS' ? (
                         <Box
                           id={`SUCCESS-${item.id}`}
@@ -338,10 +305,10 @@ export default function Preheats() {
                         <Typography variant="body1" fontFamily="mabry-bold">
                           {item.id}
                         </Typography>
-                        <Typography variant="body2">{item.bio || '-'}</Typography>
+                        <Typography variant="body2">{item.args?.task_id || '-'}</Typography>
                       </Box>
                     </Box>
-                    <Box width="30%">
+                    <Box className={styles.timeContainer}>
                       <Chip
                         avatar={<MoreTimeIcon />}
                         label={getBJTDatetime(item.created_at) || '-'}
@@ -349,11 +316,11 @@ export default function Preheats() {
                         size="small"
                       />
                     </Box>
-                    <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Box className={styles.iconButton}>
                       <RouterLink
                         component={Link}
-                        id={`preheat-${item?.id}`}
-                        to={`/jobs/preheats/${item?.id}`}
+                        id={`execution-${item?.id}`}
+                        to={`/jobs/task/executions/${item?.id}`}
                         underline="hover"
                         sx={{ color: 'var(--description-color)' }}
                       >
@@ -370,19 +337,19 @@ export default function Preheats() {
           </Box>
         )}
       </Paper>
-      {preheatTotalPages > 1 ? (
+      {totalPages > 1 ? (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
           <Pagination
-            count={preheatTotalPages}
-            page={preheatPage}
+            count={totalPages}
+            page={executionsPage}
             onChange={(_event: any, newPage: number) => {
-              setPreheatPage(newPage);
-              navigate(`/jobs/preheats${newPage > 1 ? `?page=${newPage}` : ''}`);
+              setExecutionsPage(newPage);
+              navigate(`/jobs/task/executions${newPage > 1 ? `?page=${newPage}` : ''}`);
             }}
             boundaryCount={1}
             color="primary"
             size="small"
-            id="preheat-pagination"
+            id="executions-pagination"
           />
         </Box>
       ) : (

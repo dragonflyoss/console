@@ -1,0 +1,105 @@
+[
+  {
+    "id": 1,
+    "created_at": "2024-11-01T09:25:05Z",
+    "updated_at": "2024-11-01T09:25:05Z",
+    "is_del": 0,
+    "task_id": "group_d9b8c7d2-f8ba-496b-99da-7d1e262a59ee",
+    "bio": "",
+    "type": "delete_task",
+    "state": "SUCCESS",
+    "args": {
+      "application": "",
+      "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
+      "tag": "",
+      "task_id": "fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916",
+      "timeout": 1800000000000,
+      "url": ""
+    },
+    "result": {
+      "created_at": "2024-11-01T09:25:05.260432054Z",
+      "group_uuid": "group_d9b8c7d2-f8ba-496b-99da-7d1e262a59ee",
+      "job_states": [
+        {
+          "created_at": "2024-11-01T09:25:05.260432054Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_000928e7-7d0d-4177-991b-2c4564a38e98",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:25:05.260758429Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_73c03072-4db3-468a-b22b-16631cfa48fe",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:25:05.261007846Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_bc777067-f466-4cda-9046-1a1c131e2d8d",
+          "ttl": 0
+        },
+        {
+          "created_at": "2024-11-01T09:25:05.261192054Z",
+          "error": "",
+          "results": [
+            {
+              "failure_tasks": null,
+              "scheduler_cluster_id": 1,
+              "success_tasks": null
+            }
+          ],
+          "state": "SUCCESS",
+          "task_name": "delete_task",
+          "task_uuid": "task_22032823-5c3e-4a7a-b1c2-341ee423d76c",
+          "ttl": 0
+        }
+      ],
+      "state": "SUCCESS",
+      "updated_at": "2024-11-01T09:25:05.268218346Z"
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  }
+]

@@ -1,12 +1,6 @@
-.statusIcon {
-  width: 1.3rem !important;
-  height: 1.3rem !important;
-  margin-right: 0.4rem;
-}
-
 .informationContainer {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   padding: 1rem 0rem;
 }
 
@@ -14,6 +8,20 @@
   width: 30%;
   display: flex;
   align-items: center;
+}
+
+.informationContent {
+  width: 70%;
+  word-break: break-all;
+  font-family: 'mabry-bold' !important;
+}
+
+.urlContent {
+  width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-style: italic;
 }
 
 .informationTitleIcon {
@@ -26,27 +34,8 @@
   color: #515151;
 }
 
-.informationContent {
-  width: 70%;
-  word-break: break-all;
-  font-family: 'mabry-bold' !important;
-}
-
-.statusContent {
-  display: inline-flex;
-  align-items: center;
-}
-
-.headersContent {
-  width: 70%;
-  overflow-wrap: break-word;
-  padding-bottom: 1rem;
-  display: inline;
-}
-
-.headersText {
-  display: flex;
-  padding: 1rem 1rem 0 1rem;
+.statusIcon {
+  margin-right: 0.2rem;
 }
 
 .schedulerClustersID {
@@ -61,16 +50,23 @@
   justify-content: center;
   background-color: var(--button-color);
   color: var(--save-size-color);
-  border-radius: 0.3rem;
+  border-radius: 0.4rem;
   width: 1.6rem;
   height: 1.6rem;
   margin-right: 0.5rem;
 }
 
-.urlContent {
-  width: 70%;
+.description {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-style: italic;
+  max-width: 40rem;
+}
+
+.errorLog {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: normal;
+  overflow: hidden;
 }

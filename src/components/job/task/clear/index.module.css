@@ -1,0 +1,54 @@
+.title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.ipContainer {
+  display: flex;
+  align-items: center;
+}
+
+.ipIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-right: 0.6rem;
+}
+
+.text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 90%;
+}
+
+.hostnameTitle {
+  color: #515155;
+}
+
+.filterInput {
+  display: flex;
+  align-items: center;
+}
+
+.textField {
+  width: 70%;
+}
+
+.filterInput:nth-child(1) {
+  width: 100%;
+}
+
+.filterInput:nth-child(2) {
+  width: 100%;
+}
+
+.filterInput:nth-child(3) {
+  width: 100%;
+}
+
+.optionalContainer {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}

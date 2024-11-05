@@ -1,0 +1,204 @@
+{
+  "id": 258,
+  "created_at": "2024-11-05T03:10:31Z",
+  "updated_at": "2024-11-05T03:10:32Z",
+  "is_del": 0,
+  "task_id": "group_cbf67a5b-4141-46fc-b94b-ed154fb0f676",
+  "bio": "",
+  "type": "get_task",
+  "state": "SUCCESS",
+  "args": {
+    "application": "",
+    "filtered_query_params": "X-Amz-Algorithm&X-Amz-Credential&X-Amz-Date&X-Amz-Expires&X-Amz-SignedHeaders&X-Amz-Signature&X-Amz-Security-Token&X-Amz-User-Agent&X-Goog-Algorithm&X-Goog-Credential&X-Goog-Date&X-Goog-Expires&X-Goog-SignedHeaders&X-Goog-Signature&OSSAccessKeyId&Expires&Signature&SecurityToken&AccessKeyId&Signature&Expires&X-Obs-Date&X-Obs-Security-Token&q-sign-algorithm&q-ak&q-sign-time&q-key-time&q-header-list&q-url-param-list&q-signature&x-cos-security-token&ns",
+    "tag": "",
+    "task_id": "",
+    "url": "https://example.com/path/to/file"
+  },
+  "result": {
+    "created_at": "2024-11-05T03:10:31.965787257Z",
+    "group_uuid": "group_cbf67a5b-4141-46fc-b94b-ed154fb0f676",
+    "job_states": [
+      {
+        "created_at": "2024-11-05T03:10:31.965787257Z",
+        "error": "",
+        "results": [
+          {
+            "peers": null,
+            "scheduler_cluster_id": 1
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "get_task",
+        "task_uuid": "task_d0b96ebb-c25b-4ff8-9363-9bffcbdb8ca9",
+        "ttl": 0
+      },
+      {
+        "created_at": "2024-11-05T03:10:31.966022632Z",
+        "error": "",
+        "results": [
+          {
+            "peers": null,
+            "scheduler_cluster_id": 1
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "get_task",
+        "task_uuid": "task_dc64ed92-08ea-4148-98e2-2d0bfdcd8e6a",
+        "ttl": 0
+      },
+      {
+        "created_at": "2024-11-05T03:10:31.966127049Z",
+        "error": "",
+        "results": [
+          {
+            "peers": null,
+            "scheduler_cluster_id": 1
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "get_task",
+        "task_uuid": "task_22a82574-e396-41e3-b57c-203c92a88d01",
+        "ttl": 0
+      },
+      {
+        "created_at": "2024-11-05T03:10:31.966251507Z",
+        "error": "",
+        "results": [
+          {
+            "peers": null,
+            "scheduler_cluster_id": 1
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "get_task",
+        "task_uuid": "task_293ff626-a180-40d0-b51e-d00f292d5f1f",
+        "ttl": 0
+      },
+      {
+        "created_at": "2024-11-05T03:10:31.966357924Z",
+        "error": "",
+        "results": [
+          {
+            "peers": null,
+            "scheduler_cluster_id": 1
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "get_task",
+        "task_uuid": "task_c567d258-5b1c-488e-982f-977e790e50b8",
+        "ttl": 0
+      },
+      {
+        "created_at": "2024-11-05T03:10:31.966429341Z",
+        "error": "",
+        "results": [
+          {
+            "peers": null,
+            "scheduler_cluster_id": 1
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "get_task",
+        "task_uuid": "task_30c96d76-b40d-4b3a-8a67-b725bb61318b",
+        "ttl": 0
+      },
+      {
+        "created_at": "2024-11-05T03:10:31.966517049Z",
+        "error": "",
+        "results": [
+          {
+            "peers": null,
+            "scheduler_cluster_id": 1
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "get_task",
+        "task_uuid": "task_616bab68-6fa3-4071-af1a-d74baf5c9c07",
+        "ttl": 0
+      },
+      {
+        "created_at": "2024-11-05T03:10:31.966615966Z",
+        "error": "",
+        "results": [
+          {
+            "peers": null,
+            "scheduler_cluster_id": 1
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "get_task",
+        "task_uuid": "task_c444a3b3-1d7c-4734-9ce4-634a2f1f9bce",
+        "ttl": 0
+      },
+      {
+        "created_at": "2024-11-05T03:10:31.966701757Z",
+        "error": "",
+        "results": [
+          {
+            "peers": null,
+            "scheduler_cluster_id": 1
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "get_task",
+        "task_uuid": "task_7d5352d5-eb33-486f-b4a5-2543fb268f9d",
+        "ttl": 0
+      },
+      {
+        "created_at": "2024-11-05T03:10:31.966787924Z",
+        "error": "",
+        "results": [
+          {
+            "peers": null,
+            "scheduler_cluster_id": 1
+          }
+        ],
+        "state": "SUCCESS",
+        "task_name": "get_task",
+        "task_uuid": "task_aec3018e-e03c-46ed-851e-c347dbc16251",
+        "ttl": 0
+      }
+    ],
+    "state": "SUCCESS",
+    "updated_at": "2024-11-05T03:10:31.980092632Z"
+  },
+  "user_id": 0,
+  "user": {
+    "id": 0,
+    "created_at": "0001-01-01T00:00:00Z",
+    "updated_at": "0001-01-01T00:00:00Z",
+    "is_del": 0,
+    "email": "",
+    "name": "",
+    "avatar": "",
+    "phone": "",
+    "state": "",
+    "location": "",
+    "bio": "",
+    "configs": null
+  },
+  "seed_peer_clusters": [],
+  "scheduler_clusters": [
+    {
+      "id": 1,
+      "created_at": "2024-11-01T05:42:02Z",
+      "updated_at": "2024-11-01T05:42:02Z",
+      "is_del": 0,
+      "name": "cluster-1",
+      "bio": "",
+      "config": {
+        "candidate_parent_limit": 4,
+        "filter_parent_limit": 15
+      },
+      "client_config": {
+        "load_limit": 200
+      },
+      "scopes": {},
+      "is_default": true,
+      "seed_peer_clusters": null,
+      "schedulers": null,
+      "peers": null,
+      "jobs": null
+    }
+  ]
+}

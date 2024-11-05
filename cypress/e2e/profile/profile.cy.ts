@@ -100,8 +100,6 @@ describe('Profile', () => {
       },
     );
 
-    // Navigation menu is empty.
-    cy.get('.MuiList-root').should('be.empty');
     cy.get('.css-70qvj9 > .MuiBox-root > .MuiTypography-body1').should('be.visible').and('have.text', '-');
     cy.get('.MuiTypography-caption').should('be.visible').and('have.text', '-');
 
@@ -141,8 +139,6 @@ describe('Profile', () => {
 
     // Show error message.
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
-
-    cy.get('.MuiList-root').should('be.empty');
 
     // Check Update Personal Information form.
     cy.get('.MuiGrid-root > .MuiButtonBase-root').click();

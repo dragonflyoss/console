@@ -17,6 +17,9 @@ import {
   Accordion,
   ThemeProvider,
   createTheme,
+  styled,
+  tooltipClasses,
+  TooltipProps,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getJob, getJobResponse } from '../../../lib/api';
@@ -25,6 +28,25 @@ import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { getBJTDatetime } from '../../../lib/utils';
 import styles from './show.module.css';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1C293A',
+    },
+  },
+  typography: {
+    fontFamily: 'mabry-light,sans-serif',
+  },
+});
+
+const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))({
+  [`& .${tooltipClasses.tooltip}`]: {
+    maxWidth: '40rem',
+  },
+});
 
 export default function ShowPreheat() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -35,17 +57,6 @@ export default function ShowPreheat() {
   const [preheat, setPreheat] = useState<getJobResponse>();
 
   const params = useParams();
-
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#1C293A',
-      },
-    },
-    typography: {
-      fontFamily: 'mabry-light,sans-serif',
-    },
-  });
 
   useEffect(() => {
     setIsLoading(true);
@@ -87,13 +98,14 @@ export default function ShowPreheat() {
             if (error instanceof Error) {
               setErrorMessage(true);
               setErrorMessageText(error.message);
+              setShouldPoll(false);
               setIsLoading(false);
             }
           }
         };
 
         pollPreheat();
-      }, 3000);
+      }, 60000);
 
       return () => {
         clearInterval(pollingInterval);
@@ -273,53 +285,17 @@ export default function ShowPreheat() {
                 URL
               </Typography>
             </Box>
-            <Typography variant="body1" className={styles.informationContent}>
-              {isLoading ? (
-                <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
-              ) : (
-                preheat?.args?.url || '-'
-              )}
-            </Typography>
-          </Box>
-          <Box className={styles.informationContainer}>
-            <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/filter.svg" />
+            <CustomWidthTooltip title={preheat?.args?.url || '-'} placement="bottom">
               <Typography
+                id="url"
                 variant="body1"
                 fontFamily="mabry-bold"
                 component="div"
-                className={styles.informationTitleText}
+                className={styles.urlContent}
               >
-                Filtered Query Params
+                {preheat?.args?.url || '-'}
               </Typography>
-            </Box>
-            <Box className={styles.informationContent} sx={{ display: 'flex', flexWrap: 'wrap' }}>
-              {isLoading ? (
-                <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
-              ) : preheat?.args?.filtered_query_params ? (
-                preheat?.args?.filtered_query_params.split('&').map((item) => (
-                  <Chip
-                    key={item}
-                    label={item}
-                    size="small"
-                    variant="outlined"
-                    sx={{
-                      borderRadius: '0%',
-                      background: 'var(--description-color)',
-                      color: '#FFFFFF',
-                      mr: '0.4rem',
-                      mb: '0.4rem',
-                      borderColor: 'var(--description-color)',
-                      fontWeight: 'bold',
-                    }}
-                  />
-                ))
-              ) : (
-                <Typography variant="body1" className={styles.informationContent}>
-                  -
-                </Typography>
-              )}
-            </Box>
+            </CustomWidthTooltip>
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
@@ -342,11 +318,11 @@ export default function ShowPreheat() {
                   size="small"
                   variant="outlined"
                   sx={{
-                    borderRadius: '0%',
-                    background: 'var(--button-color)',
+                    borderRadius: '0.3rem',
+                    background: 'var(--description-color)',
                     color: '#FFFFFF',
                     mr: '0.4rem',
-                    borderColor: 'var(--button-color)',
+                    borderColor: 'var(--description-color)',
                     fontWeight: 'bold',
                   }}
                 />
@@ -403,15 +379,21 @@ export default function ShowPreheat() {
                 component="div"
                 className={styles.informationTitleText}
               >
-                Scheduler clusters ID
+                Scheduler Clusters ID
               </Typography>
             </Box>
             <Box className={styles.schedulerClustersID}>
               {preheat?.scheduler_clusters?.map((item, index) => {
                 return (
-                  <Typography key={index} variant="body1" sx={{ mr: '2rem' }}>
-                    {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} /> : item.id || '-'}
-                  </Typography>
+                  <Box className={styles.schedulerClustersIDContent}>
+                    <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
+                      {isLoading ? (
+                        <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
+                      ) : (
+                        item.id || '-'
+                      )}
+                    </Typography>
+                  </Box>
                 );
               }) || '-'}
             </Box>
@@ -446,70 +428,69 @@ export default function ShowPreheat() {
         </Paper>
         <Drawer anchor="right" open={errorLog} onClose={handleClose}>
           <Box role="presentation" sx={{ width: '28rem' }}>
-            {preheat?.result?.job_states.map((item) =>
-              item.state === 'FAILURE' && item.error !== '' ? (
-                <Box key={item.error} sx={{ height: '100vh', backgroundColor: '#24292f' }}>
-                  <Typography variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#fff' }}>
-                    Error log
-                  </Typography>
-                  <Divider sx={{ backgroundColor: '#6c6e6f' }} />
-                  <Box sx={{ p: '1rem' }}>
-                    <Accordion
-                      disableGutters
-                      elevation={0}
-                      square
-                      sx={{
-                        '&:not(:last-child)': {
-                          borderBottom: 0,
-                        },
-                        '&:before': {
-                          display: 'none',
-                        },
-                      }}
-                    >
-                      <AccordionSummary
-                        expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem', color: '#d0d7de' }} />}
-                        sx={{
-                          backgroundColor: '#32383f',
-                          flexDirection: 'row-reverse',
-                          '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
-                            transform: 'rotate(90deg)',
-                          },
-                          '& .MuiAccordionSummary-content': {
-                            marginLeft: '1rem',
-                          },
-                          height: '2rem',
-                        }}
-                        aria-controls="panel1d-content"
-                        id="panel1d-header"
-                      >
-                        <Box display="flex">
-                          <Box
-                            component="img"
-                            sx={{ width: '1.4rem', height: '1.4rem', mr: '0.6rem' }}
-                            src="/icons/job/preheat/failure.svg"
-                          />
-                          <Typography variant="body2" fontFamily="mabry-bold" sx={{ color: '#d0d7de' }}>
-                            Preheat
-                          </Typography>
-                        </Box>
-                      </AccordionSummary>
-                      <AccordionDetails
-                        sx={{
-                          padding: '1rem',
-                          borderTop: '1px solid rgba(0, 0, 0, .125)',
-                          backgroundColor: '#24292f',
-                        }}
-                      >
+            <Box sx={{ height: '100vh', backgroundColor: '#24292f' }}>
+              <Typography variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#fff' }}>
+                Error log
+              </Typography>
+              <Divider sx={{ backgroundColor: '#6c6e6f' }} />
+              <Box sx={{ p: '1rem' }}>
+                <Accordion
+                  disableGutters
+                  elevation={0}
+                  square
+                  sx={{
+                    '&:not(:last-child)': {
+                      borderBottom: 0,
+                    },
+                    '&:before': {
+                      display: 'none',
+                    },
+                  }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem', color: '#d0d7de' }} />}
+                    sx={{
+                      backgroundColor: '#32383f',
+                      flexDirection: 'row-reverse',
+                      '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+                        transform: 'rotate(90deg)',
+                      },
+                      '& .MuiAccordionSummary-content': {
+                        marginLeft: '1rem',
+                      },
+                      height: '2rem',
+                    }}
+                    aria-controls="panel1d-content"
+                    id="panel1d-header"
+                  >
+                    <Box display="flex">
+                      <Box
+                        component="img"
+                        sx={{ width: '1.4rem', height: '1.4rem', mr: '0.6rem' }}
+                        src="/icons/job/preheat/failure.svg"
+                      />
+                      <Typography variant="body2" fontFamily="mabry-bold" sx={{ color: '#d0d7de' }}>
+                        Preheat
+                      </Typography>
+                    </Box>
+                  </AccordionSummary>
+                  <AccordionDetails
+                    sx={{
+                      padding: '1rem',
+                      backgroundColor: '#24292f',
+                    }}
+                  >
+                    {preheat?.result?.job_states.map((item) =>
+                      item.state === 'FAILURE' && item.error !== '' ? (
                         <Typography sx={{ color: '#d0d7de' }}>{item.error}</Typography>
-                      </AccordionDetails>
-                    </Accordion>
-                  </Box>
-                </Box>
-              ) : (
-                ''
-              ),
-            )}
+                      ) : (
+                        ''
+                      ),
+                    )}
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+            </Box>
           </Box>
         </Drawer>
       </Box>

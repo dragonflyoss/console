@@ -1,58 +1,57 @@
-import preheats from '../../../fixtures/job/preheats/preheats.json';
-import paginationPreheats from '../../../fixtures/job/preheats/pagination-preheats.json';
-import successPreheats from '../../../fixtures/job/preheats/success-preheats.json';
-import failurePreheats from '../../../fixtures/job/preheats/failure-preheats.json';
-import pendingPreheats from '../../../fixtures/job/preheats/pending-preheats.json';
+import executions from '../../../fixtures/job/task/executions.json';
+import paginationExecutions from '../../../fixtures/job/task/pagination-executions.json';
+import successExecutions from '../../../fixtures/job/task/success-executions.json';
+import failureExecutions from '../../../fixtures/job/task/failure-executions.json';
+import pendingExecutions from '../../../fixtures/job/task/pending-executions.json';
 
-declare const expect: Chai.ExpectStatic;
-
-describe('Preheats', () => {
+describe('Executions', () => {
   beforeEach(() => {
     cy.signin();
 
+    cy.visit('/jobs/task/executions');
+    cy.viewport(1440, 1080);
+
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/jobs?page=1&per_page=10&type=preheat',
+        url: '/api/v1/jobs?page=1&per_page=10&type=delete_task',
       },
       (req) => {
         req.reply((res: any) => {
           const responseHeaders = {
             ...res.headers,
-            Link: '</api/v1/jobs?page=1&per_page=10>;rel=prev,</api/v1/jobs?page=2&per_page=10>;rel=next,</api/v1/jobs?page=1&per_page=10>;rel=first,</api/v1/jobs?page=2&per_page=10>;rel=last',
+            Link: '</api/v1/jobs?page=1&per_page=10&state=FAILURE>;rel=prev,</api/v1/jobs?page=2&per_page=10&state=FAILURE>;rel=next,</api/v1/jobs?page=1&per_page=10&state=FAILURE>;rel=first,</api/v1/jobs?page=2&per_page=10&state=FAILURE>;rel=last',
           };
-          res.send(200, preheats, responseHeaders);
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/jobs?page=2&per_page=10&type=preheat',
-      },
-      (req) => {
-        req.reply((res: any) => {
-          const responseHeaders = {
-            ...res.headers,
-            Link: '</api/v1/jobs?page=1&per_page=10>;rel=prev,</api/v1/jobs?page=2&per_page=10>;rel=next,</api/v1/jobs?page=1&per_page=10>;rel=first,</api/v1/jobs?page=2&per_page=10>;rel=last',
-          };
-          res.send(200, paginationPreheats, responseHeaders);
+          res.send(200, executions, responseHeaders);
         });
       },
     );
 
-    cy.visit('/jobs/preheats');
-    cy.viewport(1440, 1080);
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/jobs?page=2&per_page=10&type=delete_task',
+      },
+      (req) => {
+        req.reply((res: any) => {
+          const responseHeaders = {
+            ...res.headers,
+            Link: '</api/v1/jobs?page=1&per_page=10>;rel=prev,</api/v1/jobs?page=2&per_page=10>;rel=next,</api/v1/jobs?page=1&per_page=10>;rel=first,</api/v1/jobs?page=2&per_page=10>;rel=last',
+          };
+          res.send(200, paginationExecutions, responseHeaders);
+        });
+      },
+    );
   });
 
   describe('when data is loaded', () => {
-    it('should display preheat all list', () => {
+    it('should display executions all list', () => {
       let interceptCount = 0;
 
       cy.intercept(
         {
           method: 'GET',
-          url: '/api/v1/jobs?page=1&per_page=10&type=preheat',
+          url: '/api/v1/jobs?page=1&per_page=10&type=delete_task',
         },
         (req) => {
           req.reply((res: any) => {
@@ -61,61 +60,68 @@ describe('Preheats', () => {
               ...res.headers,
               Link: '</api/v1/jobs?page=1&per_page=10>;rel=prev,</api/v1/jobs?page=2&per_page=10>;rel=next,</api/v1/jobs?page=1&per_page=10>;rel=first,</api/v1/jobs?page=2&per_page=10>;rel=last',
             };
-            res.send(200, preheats, responseHeaders);
+            res.send(200, executions, responseHeaders);
           });
           interceptCount++;
         },
-      ).as('preheats');
+      ).as('executions');
 
       cy.get('[data-testid="isloading"]').should('be.exist');
 
+      cy.get('.MuiTabs-flexContainer > .Mui-selected').should('be.visible').and('have.text', 'Executions');
+
       cy.wait(120000);
 
-      // Executed every 3 seconds, it should be executed 2 times after 6 seconds.
-      cy.get('@preheats').then(() => {
+      //Executed every 1 minute and once after 1 minute.
+      cy.get('@executions').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
         expect(interceptCount).to.be.closeTo(2, 1);
       });
 
       cy.get('[data-testid="isloading"]').should('not.exist');
 
+      cy.get('#list-11 > .css-1mlhis1').should('exist').find('#PENDING-11').should('exist');
+
       cy.get(':nth-child(3) > .css-ibh903-MuiButtonBase-root-MuiListItemButton-root').click();
 
-      // Whether the style selected by menu is Preheat.
+      // Whether the style selected by menu is Task.
       cy.get(
         ':nth-child(3) > .MuiCollapse-root > .MuiCollapse-wrapper > .MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root',
       ).should('have.class', 'Mui-selected');
-      cy.get('.css-1g5t85q > .MuiTypography-root').should('be.visible').and('have.text', 'Preheats');
 
-      // The preheating status is displayed as PENDING.
+      cy.get('.MuiList-root > .Mui-selected').should('be.visible').and('have.text', 'Task');
+
+      // The executions status is displayed as PENDING.
       cy.get('#list-11 > .css-1mlhis1').should('exist').find('#PENDING-11').should('exist');
       cy.get('#list-11 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body1').should('have.text', 11);
-      cy.get('#list-11 > .css-1mlhis1 > .css-18467a > .MuiChip-root').should('have.text', '2023-03-23 16:29:18');
       cy.get('#list-11 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body2').should(
         'have.text',
-        'This is a preheat task with status pending',
+        'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916',
       );
 
-      // The preheating status is displayed as FAILURE.
+      // The executions status is displayed as FAILURE.
       cy.get('#list-10 > .css-1mlhis1').should('exist').find('#FAILURE-10').should('exist');
       cy.get('#list-10 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body2').should(
         'have.text',
-        'This is a preheat task with status failure',
+        'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916',
       );
 
-      // The preheating status is displayed as SUCCESS.
-      cy.get('#list-8 > .css-1mlhis1').should('exist').find('#SUCCESS-8').should('exist');
-      cy.get('#list-8 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body2').should(
-        'have.text',
-        'This is a preheat task with status success',
-      );
+      cy.get('#tab-clear').click();
+
+      // Then I see that the current page is the clear page!
+      cy.url().should('include', '/jobs/task/clear');
+
+      cy.get('#tab-executions').click();
+
+      // Then I see that the current page is the executions page!
+      cy.url().should('include', '/jobs/task/executions');
     });
 
-    it('should display preheat success list', () => {
+    it('should display executions success list', () => {
       cy.intercept(
         {
           method: 'GET',
-          url: '/api/v1/jobs?page=1&per_page=10&state=SUCCESS&type=preheat',
+          url: '/api/v1/jobs?page=1&per_page=10&state=SUCCESS&type=delete_task',
         },
         (req) => {
           req.reply((res: any) => {
@@ -123,7 +129,7 @@ describe('Preheats', () => {
               ...res.headers,
               Link: '</api/v1/jobs?page=1&per_page=10&state=SUCCESS>;rel=prev,</api/v1/jobs?page=1&per_page=10&state=SUCCESS>;rel=next,</api/v1/jobs?page=1&per_page=10&state=SUCCESS>;rel=first,</api/v1/jobs?page=1&per_page=10&state=SUCCESS>;rel=last',
             };
-            res.send(200, successPreheats, responseHeaders);
+            res.send(200, successExecutions, responseHeaders);
           });
         },
       );
@@ -131,17 +137,17 @@ describe('Preheats', () => {
       cy.get('.MuiInputBase-root > #states-select').click();
       cy.get('[data-value="SUCCESS"]').click();
 
-      // Check how many preheat tasks are in success status.
-      cy.get('#preheats-list').children().should('have.length', 6);
+      // Check how many executions are in success status.
+      cy.get('#executions-list').children().should('have.length', 9);
 
-      cy.get('#preheat-pagination').should('not.exist');
+      cy.get('#executions-pagination').should('not.exist');
     });
 
-    it('should display preheat failure list', () => {
+    it('should display executions failure list', () => {
       cy.intercept(
         {
           method: 'GET',
-          url: '/api/v1/jobs?page=1&per_page=10&state=FAILURE&type=preheat',
+          url: '/api/v1/jobs?page=1&per_page=10&state=FAILURE&type=delete_task',
         },
         (req) => {
           req.reply((res: any) => {
@@ -149,7 +155,7 @@ describe('Preheats', () => {
               ...res.headers,
               Link: '</api/v1/jobs?page=1&per_page=10&state=FAILURE>;rel=prev,</api/v1/jobs?page=1&per_page=10&state=SUCCESS>;rel=next,</api/v1/jobs?page=1&per_page=10&state=SUCCESS>;rel=first,</api/v1/jobs?page=1&per_page=10&state=SUCCESS>;rel=last',
             };
-            res.send(200, failurePreheats, responseHeaders);
+            res.send(200, failureExecutions, responseHeaders);
           });
         },
       );
@@ -157,17 +163,17 @@ describe('Preheats', () => {
       cy.get('.MuiInputBase-root > #states-select').click();
       cy.get('[data-value="FAILURE"]').click();
 
-      // Check how many preheat tasks are in success failure.
-      cy.get('#preheats-list').children().should('have.length', 4);
+      // Check how many executions are in success failure.
+      cy.get('#executions-list').children().should('have.length', 1);
     });
 
-    it('should display preheat pending list', () => {
+    it('should display executions pending list', () => {
       let interceptCount = 0;
 
       cy.intercept(
         {
           method: 'GET',
-          url: '/api/v1/jobs?page=1&per_page=10&state=PENDING&type=preheat',
+          url: '/api/v1/jobs?page=1&per_page=10&state=PENDING&type=delete_task',
         },
         (req) => {
           req.reply((res: any) => {
@@ -176,22 +182,22 @@ describe('Preheats', () => {
               Link: '</api/v1/jobs?page=1&per_page=10&state=PENDING>;rel=prev,</api/v1/jobs?page=2&per_page=10&state=PENDING>;rel=next,</api/v1/jobs?page=1&per_page=10&state=PENDING>;rel=first,</api/v1/jobs?page=0&per_page=10&state=PENDING>;rel=last',
             };
 
-            res.send(200, pendingPreheats, responseHeaders);
+            res.send(200, pendingExecutions, responseHeaders);
           }),
             interceptCount++;
         },
-      ).as('preheats');
+      ).as('executions');
 
       cy.get('.MuiInputBase-root > #states-select').click();
       cy.get('[data-value="PENDING"]').click();
 
-      // Check how many preheat tasks are in pending failure.
-      cy.get('#preheats-list').children().should('have.length', 1);
+      // Check how many executions are in pending failure.
+      cy.get('#executions-list').children().should('have.length', 1);
 
       cy.wait(120000);
 
       // The API should poll.
-      cy.get('@preheats').then(() => {
+      cy.get('@executions').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
         expect(interceptCount).to.be.closeTo(3, 1);
       });
@@ -199,7 +205,7 @@ describe('Preheats', () => {
       cy.intercept(
         {
           method: 'GET',
-          url: '/api/v1/jobs?page=1&per_page=10&state=PENDING&type=preheat',
+          url: '/api/v1/jobs?page=1&per_page=10&state=PENDING&type=delete_task',
         },
         (req) => {
           req.reply({
@@ -220,32 +226,32 @@ describe('Preheats', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/jobs?page=1&per_page=10&type=preheat',
+        url: '/api/v1/jobs?page=1&per_page=10&type=delete_task',
       },
       (req) => {
         req.reply((res: any) => {
           const responseHeaders = {
             ...res.headers,
             Link: `
-            </api/v1/jobs?page=1&per_page=10>;rel=prev,</api/v1/jobs?page=1&per_page=10>;rel=next,</api/v1/jobs?page=1&per_page=10>;rel=first,</api/v1/jobs?page=1&per_page=10>;rel=last`,
+                  </api/v1/jobs?page=1&per_page=10>;rel=prev,</api/v1/jobs?page=1&per_page=10>;rel=next,</api/v1/jobs?page=1&per_page=10>;rel=first,</api/v1/jobs?page=1&per_page=10>;rel=last`,
           };
           res.send(200, [], responseHeaders);
         });
       },
     );
 
-    // No preheats list exists.
-    cy.get('#preheats-list').should('not.exist');
+    // No executions list exists.
+    cy.get('#executions-list').should('not.exist');
 
-    // Show You don't have any preheat tasks.
-    cy.get('.css-e76tiu').should('be.visible').and('contain', `You don't have any preheat tasks.`);
+    // Show You don't have any executions tasks.
+    cy.get('#no-executions').should('be.visible').and('contain', `You don't have any executions.`);
   });
 
   it('should handle API error response', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/jobs?page=1&per_page=10&type=preheat',
+        url: '/api/v1/jobs?page=1&per_page=10&type=delete_task',
       },
       (req) => {
         req.reply({
@@ -260,22 +266,16 @@ describe('Preheats', () => {
     // Close error message.
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
     cy.get('.MuiAlert-message').should('not.exist');
-
-    // No preheats list exists.
-    cy.get('#preheats-list').should('not.exist');
-
-    // Show You don't have any preheat tasks.
-    cy.get('.css-e76tiu').should('be.visible').and('contain', `You don't have any preheat tasks.`);
   });
 
   describe('pagination', () => {
     it('pagination updates results and page number', () => {
       // Check number of pagination.
-      cy.get('#preheat-pagination > .MuiPagination-ul').children().should('have.length', 4);
+      cy.get('#executions-pagination > .MuiPagination-ul').children().should('have.length', 4);
 
-      cy.get('#preheat-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '1');
+      cy.get('#executions-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '1');
 
-      // The preheating status is displayed as PENDING.
+      // The executions status is displayed as PENDING.
       cy.get('#list-11 > .css-1mlhis1').should('exist').find('#PENDING-11').should('exist');
       cy.get('#list-11 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body1').should('have.text', 11);
     });
@@ -285,9 +285,9 @@ describe('Preheats', () => {
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
       // Check the current page number.
-      cy.get('#preheat-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+      cy.get('#executions-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
-      cy.get('#preheats-list').children().should('have.length', 1);
+      cy.get('#executions-list').children().should('have.length', 1);
 
       cy.get('#list-1').should('exist').find('#SUCCESS-1').should('exist');
       cy.get('.css-mu8687 > .MuiTypography-body1').should('have.text', 1);
@@ -295,10 +295,10 @@ describe('Preheats', () => {
 
     it('when you click refresh, the paginated results and page numbers remain unchanged.', () => {
       // Go to next page.
-      cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
+      cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
       // Check the current page number.
-      cy.get('#preheat-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+      cy.get('#executions-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
       cy.get('#list-1').should('exist').find('#SUCCESS-1').should('exist');
 
@@ -308,9 +308,9 @@ describe('Preheats', () => {
       });
 
       // Check the current page number.
-      cy.get('#preheat-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+      cy.get('#executions-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
-      // Show page 1 preheat task.
+      // Show page 1 executions task.
       cy.get('#list-1').should('exist').find('#SUCCESS-1').should('exist');
     });
 
@@ -319,21 +319,21 @@ describe('Preheats', () => {
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
       // Check the current page number.
-      cy.get('#preheat-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+      cy.get('#executions-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
       cy.get('#list-1').should('exist').find('#SUCCESS-1').should('exist');
 
-      // Go to show preheat page.
-      cy.get('#preheat-1 > .MuiBox-root').click();
+      // Go to show executions page.
+      cy.get('#execution-1 > .MuiBox-root').click();
 
       // Then I see that the current page is the show update personal-access-tokens.
-      cy.url().should('include', '/jobs/preheats/1');
+      cy.url().should('include', '/jobs/task/executions/1');
 
-      // Go back to the last page。
+      // Go back to the last page.
       cy.go('back');
 
       // Check the current page number.
-      cy.get('#preheat-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+      cy.get('#executions-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
       cy.get('#list-1').should('exist').find('#SUCCESS-1').should('exist');
     });

@@ -76,7 +76,7 @@ export default function Clear() {
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [searchTask, setSearchTask] = useState('');
   const [task, setTask] = useState<getTaskJobResponse | any>();
-  const [input, setInput] = useState(false);
+  const [optional, setOptional] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const [shouldPoll, setShouldPoll] = useState(false);
@@ -500,7 +500,7 @@ export default function Clear() {
     };
 
     if (canSubmit) {
-      setInput(false);
+      setOptional(false);
       try {
         const task = await createTaskJob({ ...formDate });
         setLoadingButton(false);
@@ -528,7 +528,7 @@ export default function Clear() {
   };
 
   const handleCloseSearch = () => {
-    setInput(false);
+    setOptional(false);
     setSearchDada({ url: '', tag: '', application: '', filtered_query_params: '' });
   };
 
@@ -536,7 +536,7 @@ export default function Clear() {
     if (newAlignment) {
       setSearch(newAlignment);
     }
-    setInput(false);
+    setOptional(false);
     setSearchTask('');
     setSearchDada({ url: '', tag: '', application: '', filtered_query_params: '' });
   };
@@ -634,11 +634,11 @@ export default function Clear() {
             <Paper
               component="form"
               onSubmit={handleSearchByURL}
-              elevation={input ? 3 : 0}
+              elevation={optional ? 3 : 0}
               sx={{
-                p: input ? '1rem' : '',
+                p: optional ? '1rem' : '',
                 borderRadius: '4px',
-                width: input ? '45rem' : '36rem',
+                width: optional ? '45rem' : '36rem',
                 position: 'absolute',
               }}
             >
@@ -647,11 +647,11 @@ export default function Clear() {
                 fullWidth
                 size="small"
                 onFocus={(e) => {
-                  setInput(true);
+                  setOptional(true);
                 }}
               />
 
-              {input ? (
+              {optional ? (
                 <>
                   <Divider sx={{ m: '1rem 0' }} />
                   <Typography variant="subtitle1" fontFamily="mabry-bold" component="div">

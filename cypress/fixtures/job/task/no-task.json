@@ -188,7 +188,8 @@
       "bio": "",
       "config": {
         "candidate_parent_limit": 4,
-        "filter_parent_limit": 15
+        "filter_parent_limit": 15,
+        "job_rate_limit": 10
       },
       "client_config": {
         "load_limit": 200

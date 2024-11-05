@@ -94,7 +94,8 @@
       "bio": "",
       "config": {
         "candidate_parent_limit": 4,
-        "filter_parent_limit": 40
+        "filter_parent_limit": 40,
+        "job_rate_limit": 10
       },
       "client_config": {
         "concurrent_piece_count": 4,

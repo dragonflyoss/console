@@ -75,6 +75,7 @@ describe('Update cluster', () => {
     cy.get('#peerLoadLimit').should('have.value', 51);
     cy.get('#candidateParentLimit').should('have.value', 4);
     cy.get('#filterParentLimit').should('have.value', 40);
+    cy.get('#jobRateLimit').should('have.value', 15);
   });
 
   it('when no data is loaded', () => {
@@ -150,6 +151,7 @@ describe('Update cluster', () => {
     cy.get('#peerLoadLimit').should('have.value', 0);
     cy.get('#candidateParentLimit').should('have.value', 0);
     cy.get('#filterParentLimit').should('have.value', 0);
+    cy.get('#jobRateLimit').should('have.value', 0);
   });
 
   it('can update cluster', () => {
@@ -199,6 +201,9 @@ describe('Update cluster', () => {
     cy.get('#filterParentLimit').clear();
     cy.get('#filterParentLimit').type('50');
 
+    cy.get('#jobRateLimit').clear();
+    cy.get('#jobRateLimit').type('20');
+
     // Click save button.
     cy.get('#save').click();
 
@@ -239,6 +244,8 @@ describe('Update cluster', () => {
       .scrollIntoView()
       .should('be.visible')
       .and('contain', '400');
+
+    cy.get('#filter-parent-limit').should('be.visible').and('contain', '20');
   });
 
   it('click the `CANCEL button', () => {
@@ -468,6 +475,32 @@ describe('Update cluster', () => {
 
       // Verification passed.
       cy.get('#filterParentLimit-helper-text').should('not.exist');
+
+      // Should display Job Rate Limit(requests per seconds) the validation error message.
+      cy.get('#jobRateLimit').invoke('val').should('eq', '15');
+      cy.get('#jobRateLimit').clear();
+
+      // Minimum validation range not reached.
+      cy.get('#jobRateLimit').type('0');
+      cy.get('#jobRateLimit-helper-text')
+        .should('be.visible')
+        .and('contain', `Fill in the number, the length is 1-10000.`);
+      cy.get('#save').click();
+      cy.url().should('include', '/clusters/1/edit');
+      cy.get('#jobRateLimit').clear();
+
+      // Maximum verification range exceeded.
+      cy.get('#jobRateLimit').type('10001');
+      cy.get('#jobRateLimit-helper-text')
+        .should('be.visible')
+        .and('contain', `Fill in the number, the length is 1-10000.`);
+      cy.get('#save').click();
+      cy.url().should('include', '/clusters/1/edit');
+      cy.get('#jobRateLimit').clear();
+      cy.get('#jobRateLimit').type('100');
+
+      // Verification passed.
+      cy.get('#jobRateLimit-helper-text').should('not.exist');
     });
   });
 });

@@ -368,6 +368,7 @@ describe('Cluster', () => {
       cy.get('.MuiPaper-root > :nth-child(3) > .MuiTypography-body1').should('be.visible').and('have.text', '51');
       cy.get(':nth-child(5) > .MuiTypography-body1').should('be.visible').and('have.text', '4');
       cy.get(':nth-child(7) > .MuiTypography-body1').should('be.visible').and('have.text', '40');
+      cy.get('#filter-parent-limit').should('be.visible').and('have.text', '10');
     });
 
     it('copies text to clipboard', () => {
@@ -433,6 +434,7 @@ describe('Cluster', () => {
               scheduler_cluster_config: {
                 candidate_parent_limit: 4,
                 filter_parent_limit: 15,
+                job_rate_limit: 100,
               },
               seed_peer_cluster_config: {
                 load_limit: 500,
@@ -513,6 +515,7 @@ describe('Cluster', () => {
       cy.get('.MuiPaper-root > :nth-child(3) > .MuiTypography-body1').should('have.text', 200);
       cy.get(':nth-child(5) > .MuiTypography-body1').should('have.text', 4);
       cy.get(':nth-child(7) > .MuiTypography-body1').should('have.text', 15);
+      cy.get('#filter-parent-limit').should('be.visible').and('have.text', 100);
     });
   });
 

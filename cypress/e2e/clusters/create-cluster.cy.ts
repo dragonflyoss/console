@@ -414,6 +414,32 @@ describe('Create cluster', () => {
 
       // Verification passed.
       cy.get('#filterParentLimit-helper-text').should('not.exist');
+
+      // Should display filter parent limit the validation error message.
+      cy.get('#jobRateLimit').invoke('val').should('eq', '10');
+      cy.get('#jobRateLimit').clear();
+
+      // Minimum validation range not reached.
+      cy.get('#jobRateLimit').type('0');
+      cy.get('#jobRateLimit-helper-text')
+        .should('be.visible')
+        .and('contain', `Fill in the number, the length is 1-10000.`);
+      cy.get('#save').click();
+      cy.url().should('include', '/clusters/new');
+      cy.get('#jobRateLimit').clear();
+
+      // Maximum verification range exceeded.
+      cy.get('#jobRateLimit').type('10001');
+      cy.get('#jobRateLimit-helper-text')
+        .should('be.visible')
+        .and('contain', `Fill in the number, the length is 1-10000.`);
+      cy.get('#save').click();
+      cy.url().should('include', '/clusters/new');
+      cy.get('#jobRateLimit').clear();
+      cy.get('#jobRateLimit').type('100');
+
+      // Verification passed.
+      cy.get('#jobRateLimit-helper-text').should('not.exist');
     });
   });
 });

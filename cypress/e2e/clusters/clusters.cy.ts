@@ -1,7 +1,6 @@
 import clusters from '../../fixtures/clusters/clusters.json';
 import seedPeers from '../../fixtures/seed-peers/seed-peers.json';
 import schedulers from '../../fixtures/schedulers/schedulers.json';
-import searchCluster from '../../fixtures/clusters/search-cluster.json';
 
 describe('Clusters', () => {
   beforeEach(() => {
@@ -49,6 +48,15 @@ describe('Clusters', () => {
 
   describe('when data is loaded', () => {
     it('display the total number of clusters and the default number', () => {
+      cy.get('#create-cluster').click();
+
+      // Then I see that the current page is the create clusters!
+      cy.url().should('include', '/clusters/new');
+
+      cy.get('#cancel').click();
+
+      // Then I see that the current page is the clusters!
+      cy.url().should('include', '/clusters');
       cy.get('[data-testid="isloading"]').should('be.exist');
 
       cy.get(

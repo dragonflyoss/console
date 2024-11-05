@@ -368,7 +368,7 @@ describe('Cluster', () => {
       cy.get('.MuiPaper-root > :nth-child(3) > .MuiTypography-body1').should('be.visible').and('have.text', '51');
       cy.get(':nth-child(5) > .MuiTypography-body1').should('be.visible').and('have.text', '4');
       cy.get(':nth-child(7) > .MuiTypography-body1').should('be.visible').and('have.text', '40');
-      cy.get('#filter-parent-limit').should('be.visible').and('have.text', '10');
+      cy.get('#filter-parent-limit').should('be.visible').and('have.text', '15');
     });
 
     it('copies text to clipboard', () => {

@@ -20,6 +20,7 @@ import List from '@mui/material/List';
 import { ListItemButton, ListItemIcon } from '@mui/material';
 import { createContext, useEffect, useState } from 'react';
 import { ExpandLess, ExpandMore, Logout, PersonAdd } from '@mui/icons-material';
+import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 import { getUserRoles, getUser, signOut, getUserResponse } from '../../lib/api';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { getJwtPayload, setPageTitle } from '../../lib/utils';
@@ -134,12 +135,14 @@ export default function Layout(props: any) {
       href: '/clusters',
       text: 'Cluster',
       icon: <Box component="img" className={styles.menuIcon} src="/icons/cluster/cluster.svg" />,
+      selectedIcon: <Box component="img" className={styles.menuIcon} src="/icons/cluster/selected-cluster.svg" />,
     },
     {
-      label: 'Developer',
+      label: 'developer',
       href: '/tokens',
       text: 'Developer',
       icon: <Box component="img" className={styles.menuIcon} src="/icons/tokens/developer.svg" />,
+      selectedIcon: <Box component="img" className={styles.menuIcon} src="/icons/tokens/selected-developer.svg" />,
       expand: expandDeveloper,
       setExpand: setExpandDeveloper,
       menuProps: [
@@ -151,10 +154,11 @@ export default function Layout(props: any) {
       ],
     },
     {
-      label: 'Job',
+      label: 'jobs',
       href: '/jobs',
       text: 'Job',
       icon: <Box component="img" className={styles.menuIcon} src="/icons/job/preheat/job.svg" />,
+      selectedIcon: <Box component="img" className={styles.menuIcon} src="/icons/job/preheat/selected-job.svg" />,
       expand: expandJob,
       setExpand: setExpandJob,
       menuProps: [
@@ -171,10 +175,11 @@ export default function Layout(props: any) {
       ],
     },
     {
-      label: 'Insight',
+      label: 'insight',
       href: '/insight',
       text: 'Insight',
       icon: <Box component="img" className={styles.menuIcon} src="/icons/insight/insight.svg" />,
+      selectedIcon: <Box component="img" className={styles.menuIcon} src="/icons/insight/selected-insight.svg" />,
       expand: expandInsight,
       setExpand: setExpandInsight,
       menuProps: [
@@ -192,7 +197,8 @@ export default function Layout(props: any) {
       label: 'users',
       href: '/users',
       text: 'User',
-      icon: <Box component="img" className={styles.menuIcon} src="/icons/cluster/user.svg" />,
+      icon: <Box component="img" className={styles.menuIcon} src="/icons/user/user.svg" />,
+      selectedIcon: <Box component="img" className={styles.menuIcon} src="/icons/user/selected-user.svg" />,
     });
   }
 
@@ -267,33 +273,36 @@ export default function Layout(props: any) {
                           items?.setExpand(!items?.expand);
                         }}
                         sx={{
-                          '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                          color: (location.pathname.split('/')[1] || '') === items.label ? 'var(--menu-color)' : '',
                           '&.Mui-selected:hover': {
-                            backgroundColor: '#DDFF55',
-                            color: '#121726',
+                            backgroundColor: 'var(--hover-menu-background-color)',
+                            color: 'var(--menu-color)',
                           },
                           height: '2rem',
                         }}
                       >
-                        {items.icon}
+                        {(location.pathname.split('/')[1] || '') === items.label ? items.selectedIcon : items.icon}
                         <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}>
                           {items.text}
                         </Typography>
-                        {items.expand ? <ExpandLess /> : <ExpandMore />}
+                        {items.expand ? <ExpandMore /> : <ChevronRightOutlinedIcon />}
                       </ListItemButton>
                       <Collapse in={items.expand} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
                           {items.menuProps?.map((item) => {
                             return (
                               <ListItemButton
-                                selected={location.pathname.split('/')[2] === item.label}
+                                selected={(location.pathname.split('/')[2] || '') === item.label}
                                 component={Link}
                                 to={item.href || ''}
                                 sx={{
-                                  '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                                  '&.Mui-selected': {
+                                    backgroundColor: 'var(--menu-background-color)',
+                                    color: 'var(--menu-color)',
+                                  },
                                   '&.Mui-selected:hover': {
-                                    backgroundColor: '#DDFF55',
-                                    color: '#121726',
+                                    backgroundColor: 'var(--hover-menu-background-color)',
+                                    color: 'var(--menu-color)',
                                   },
                                   height: '2rem',
                                   pl: '1rem',
@@ -312,21 +321,24 @@ export default function Layout(props: any) {
                   ) : (
                     <ListItemButton
                       key={items.href}
-                      selected={location.pathname.split('/')[1] === items.label}
+                      selected={(location.pathname.split('/')[1] || '') === items.label}
                       component={Link}
                       to={items.href}
                       sx={{
-                        '&.Mui-selected': { backgroundColor: '#DFFF55' },
+                        '&.Mui-selected': {
+                          backgroundColor: 'var(--menu-background-color)',
+                          color: 'var(--menu-color)',
+                        },
                         '&.Mui-selected:hover': {
-                          backgroundColor: '#DDFF55',
-                          color: '#121726',
+                          backgroundColor: 'var(--hover-menu-background-color)',
+                          color: 'var(--menu-color)',
                         },
                         height: '2rem',
                         mb: '0.4rem',
                         mt: '0.4rem',
                       }}
                     >
-                      {items.icon}
+                      {(location.pathname.split('/')[1] || '') === items.label ? items.selectedIcon : items.icon}
                       <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
                         {items.text}
                       </Typography>

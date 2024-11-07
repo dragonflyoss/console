@@ -267,18 +267,23 @@ export default function Layout(props: any) {
               <List component="nav" aria-label="main mailbox folders">
                 {menu.map((items) =>
                   items?.menuProps ? (
-                    <Box key={items.href} className={styles.expandMenu}>
+                    <Box key={items.href} className={styles.menu}>
                       <ListItemButton
+                        selected={(location.pathname.split('/')[1] || '') === items.label}
                         onClick={() => {
                           items?.setExpand(!items?.expand);
                         }}
                         sx={{
-                          color: (location.pathname.split('/')[1] || '') === items.label ? 'var(--menu-color)' : '',
+                          '&.Mui-selected': {
+                            backgroundColor: 'var(--menu-background-color)',
+                            color: 'var(--menu-color)',
+                          },
                           '&.Mui-selected:hover': {
                             backgroundColor: 'var(--hover-menu-background-color)',
                             color: 'var(--menu-color)',
                           },
-                          height: '2rem',
+                          height: '2.6rem',
+                          borderRadius: '0.2rem',
                         }}
                       >
                         {(location.pathname.split('/')[1] || '') === items.label ? items.selectedIcon : items.icon}
@@ -292,24 +297,26 @@ export default function Layout(props: any) {
                           {items.menuProps?.map((item) => {
                             return (
                               <ListItemButton
+                                className={styles.expandMenu}
                                 selected={(location.pathname.split('/')[2] || '') === item.label}
                                 component={Link}
                                 to={item.href || ''}
                                 sx={{
                                   '&.Mui-selected': {
-                                    backgroundColor: 'var(--menu-background-color)',
+                                    backgroundColor: '#fff',
                                     color: 'var(--menu-color)',
                                   },
                                   '&.Mui-selected:hover': {
-                                    backgroundColor: 'var(--hover-menu-background-color)',
+                                    backgroundColor: '#fff',
                                     color: 'var(--menu-color)',
                                   },
-                                  height: '2rem',
+                                  height: '2.4rem',
+                                  borderRadius: '0.2rem',
                                   pl: '1rem',
                                   mt: '0.8rem',
                                 }}
                               >
-                                <Typography variant="body1" sx={{ ml: '2rem', fontFamily: 'mabry-bold' }}>
+                                <Typography variant="body1" sx={{ fontFamily: 'mabry-bold', ml: '2rem' }}>
                                   {item.text}
                                 </Typography>
                               </ListItemButton>
@@ -320,6 +327,7 @@ export default function Layout(props: any) {
                     </Box>
                   ) : (
                     <ListItemButton
+                      className={styles.menu}
                       key={items.href}
                       selected={(location.pathname.split('/')[1] || '') === items.label}
                       component={Link}
@@ -333,7 +341,8 @@ export default function Layout(props: any) {
                           backgroundColor: 'var(--hover-menu-background-color)',
                           color: 'var(--menu-color)',
                         },
-                        height: '2rem',
+                        height: '2.6rem',
+                        borderRadius: '0.2rem',
                         mb: '0.4rem',
                         mt: '0.4rem',
                       }}

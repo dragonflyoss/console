@@ -38,8 +38,15 @@
   background: var(--button-color) !important;
 }
 
+.menu {
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  width: 14rem;
+}
+
 .expandMenu {
   padding-top: 0.4rem;
   padding-bottom: 0.4rem;
   width: 14rem;
+  float: right;
 }

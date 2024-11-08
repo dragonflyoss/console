@@ -82,7 +82,7 @@ describe('Executions', () => {
 
       cy.get('#list-11 > .css-1mlhis1').should('exist').find('#PENDING-11').should('exist');
 
-      cy.get(':nth-child(3) > .css-ibh903-MuiButtonBase-root-MuiListItemButton-root').click();
+      cy.get('.MuiList-root > :nth-child(3) > .MuiButtonBase-root').click();
 
       // Whether the style selected by menu is Task.
       cy.get(

@@ -79,7 +79,7 @@ describe('Preheats', () => {
 
       cy.get('[data-testid="isloading"]').should('not.exist');
 
-      cy.get(':nth-child(3) > .css-ibh903-MuiButtonBase-root-MuiListItemButton-root').click();
+      cy.get('.MuiList-root > :nth-child(3) > .MuiButtonBase-root').click();
 
       // Whether the style selected by menu is Preheat.
       cy.get(

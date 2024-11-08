@@ -22,6 +22,9 @@
   --scopes-icon-color: #edeff2;
   --table-title-color: #f6f6f6;
   --title-light-color: #7a7a7a;
+  --menu-background-color: rgba(0, 167, 111, 0.08);
+  --hover-menu-background-color: rgba(0, 167, 111, 0.2);
+  --menu-color: #00a76f;
 }
 
 body {

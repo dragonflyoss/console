@@ -197,14 +197,15 @@ export interface getClusterResponse {
   scopes: {
     idc: string;
     location: string;
-    cidrs: Array<string>;
-    hostnames: Array<string>;
+    cidrs: Array<string> | null;
+    hostnames: Array<string> | null;
   };
   scheduler_cluster_id: number;
   seed_peer_cluster_id: number;
   scheduler_cluster_config: {
     candidate_parent_limit: number;
     filter_parent_limit: number;
+    job_rate_limit: number;
   };
   seed_peer_cluster_config: {
     load_limit: number;
@@ -231,6 +232,7 @@ interface createClusterRequest {
   scheduler_cluster_config: {
     candidate_parent_limit: number;
     filter_parent_limit: number;
+    job_rate_limit: number;
   };
   seed_peer_cluster_config: {
     load_limit: number;
@@ -254,6 +256,7 @@ interface createClusterResponse {
   scheduler_cluster_config: {
     candidate_parent_limit: number;
     filter_parent_limit: number;
+    job_rate_limit: number;
   };
   scheduler_cluster_id?: number;
   seed_peer_cluster_id?: number;
@@ -285,6 +288,7 @@ interface updateClusterRequset {
   scheduler_cluster_config: {
     candidate_parent_limit: number;
     filter_parent_limit: number;
+    job_rate_limit: number;
   };
   scopes: {
     cidrs: Array<string>;
@@ -306,6 +310,7 @@ interface updateClusterResponse {
   scheduler_cluster_config: {
     candidate_parent_limit: number;
     filter_parent_limit: number;
+    job_rate_limit: number;
   };
   scheduler_cluster_id?: number;
   seed_peer_cluster_id?: number;
@@ -696,6 +701,7 @@ interface scheduler_clusters {
   config: {
     candidate_parent_limit: number;
     filter_parent_limit: number;
+    job_rate_limit: number;
   };
   client_config: {
     load_limit: number;
@@ -902,6 +908,7 @@ export interface getPeersResponse {
     config: {
       candidate_parent_limit: number;
       filter_parent_limit: number;
+      job_rate_limit: number;
     };
     client_config: {
       load_limit: number;

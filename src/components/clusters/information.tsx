@@ -441,7 +441,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                     <Skeleton data-testid="cluster-loading" sx={{ width: '10rem' }} />
                   ) : (
                     <Box className={styles.cidrsTags}>
-                      {cluster?.scopes?.cidrs?.length > 0 ? (
+                      {Array.isArray(cluster?.scopes?.cidrs) && cluster?.scopes?.cidrs?.length > 0 ? (
                         <>
                           <Box className={styles.cidrWrapper}>
                             <Paper variant="outlined" className={styles.cidrsContent}>
@@ -556,7 +556,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                     <Skeleton data-testid="cluster-loading" sx={{ width: '10rem' }} />
                   ) : (
                     <Box className={styles.cidrsTags}>
-                      {cluster?.scopes?.hostnames?.length > 0 ? (
+                      {Array.isArray(cluster?.scopes?.hostnames) && cluster?.scopes?.hostnames?.length > 0 ? (
                         <>
                           <Box className={styles.cidrWrapper}>
                             <Paper variant="outlined" className={styles.cidrsContent}>
@@ -742,6 +742,29 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                   </Box>
                 ) : (
                   <Typography component="div">{cluster?.scheduler_cluster_config?.filter_parent_limit || 0}</Typography>
+                )}
+              </Box>
+              <Divider />
+              <Box className={styles.configContent}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="body2" component="div" color="#80828B" sx={{ mr: '0.2rem' }}>
+                    Job Rate Limit(requests per seconds)
+                  </Typography>
+                  <Tooltip
+                    title="The rate limit(requests per second) for  job Open API, default value is 10."
+                    placement="top"
+                  >
+                    <HelpIcon color="disabled" className={styles.descriptionIcon} />
+                  </Tooltip>
+                </Box>
+                {isLoading ? (
+                  <Box sx={{ width: '20%' }}>
+                    <Skeleton data-testid="cluster-loading" />
+                  </Box>
+                ) : (
+                  <Typography id="filter-parent-limit" component="div">
+                    {cluster?.scheduler_cluster_config?.job_rate_limit || 0}
+                  </Typography>
                 )}
               </Box>
             </Paper>

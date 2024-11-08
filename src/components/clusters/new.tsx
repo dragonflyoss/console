@@ -30,6 +30,7 @@ export default function NewCluster() {
   const [peerLoadLimitError, setPeerLoadLimitError] = useState(false);
   const [candidateParentLimitError, setCandidateParentLimitError] = useState(false);
   const [filterParentLimitError, setFilterParentLimitError] = useState(false);
+  const [jobRateLimitError, setJobRateLimit] = useState(false);
   const [locationError, setLocationError] = useState(false);
   const [idcError, setIDCError] = useState(false);
   const [cidrsError, setCIDRsError] = useState(false);
@@ -469,6 +470,39 @@ export default function NewCluster() {
         return reg.test(value);
       },
     },
+    {
+      formProps: {
+        id: 'jobRateLimit',
+        label: 'Job Rate Limit',
+        name: 'jobRateLimit',
+        type: 'number',
+        autoComplete: 'family-name',
+        placeholder: 'Please enter Job Rate Limit',
+        defaultValue: 10,
+        fullWidth: false,
+        helperText: jobRateLimitError ? 'Fill in the number, the length is 1-1000000.' : '',
+        error: jobRateLimitError,
+
+        onChange: (e: any) => {
+          changeValidate(e.target.value, configForm[4]);
+        },
+
+        InputProps: {
+          endAdornment: (
+            <Tooltip title="The rate limit(requests per second) for job Open API, default value is 10." placement="top">
+              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+            </Tooltip>
+          ),
+        },
+      },
+      syncError: false,
+      setError: setJobRateLimit,
+
+      validate: (value: string) => {
+        const reg = /^(?:[1-9][0-9]{0,5}|1000000)$/;
+        return reg.test(value);
+      },
+    },
   ];
 
   const handleSubmit = async (event: any) => {
@@ -485,6 +519,7 @@ export default function NewCluster() {
     const peerLoadLimit = event.currentTarget.elements.peerLoadLimit.value;
     const candidateParentLimit = event.currentTarget.elements.candidateParentLimit.value;
     const filterParentLimit = event.currentTarget.elements.filterParentLimit.value;
+    const jobRateLimit = event.currentTarget.elements.jobRateLimit.value;
     const idcText = event.currentTarget.elements.idc.value;
     const cidrsText = event.currentTarget.elements.cidrs.value;
     const hostnamesText = event.currentTarget.elements.hostnames.value;
@@ -552,6 +587,7 @@ export default function NewCluster() {
       scheduler_cluster_config: {
         candidate_parent_limit: Number(candidateParentLimit),
         filter_parent_limit: Number(filterParentLimit),
+        job_rate_limit: Number(jobRateLimit),
       },
       seed_peer_cluster_config: {
         load_limit: Number(seedPeerLoadLimit),

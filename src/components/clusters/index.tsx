@@ -223,6 +223,7 @@ export default function Clusters() {
             </Typography>
           </Breadcrumbs>
           <Button
+            id="create-cluster"
             size="small"
             sx={{ background: 'var(--button-color)', borderRadius: '0' }}
             variant="contained"

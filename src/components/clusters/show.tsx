@@ -185,6 +185,7 @@ export default function ShowCluster() {
     scheduler_cluster_config: {
       candidate_parent_limit: 0,
       filter_parent_limit: 0,
+      job_rate_limit: 0,
     },
     seed_peer_cluster_config: {
       load_limit: 0,

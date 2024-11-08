@@ -32,6 +32,7 @@ export default function EditCluster() {
   const [peerLoadLimitError, setPeerLoadLimitError] = useState(false);
   const [candidateParentLimitError, setCandidateParentLimitError] = useState(false);
   const [filterParentLimitError, setFilterParentLimitError] = useState(false);
+  const [jobRateLimitError, setJobRateLimit] = useState(false);
   const [locationError, setLocationError] = useState(false);
   const [idcError, setIDCError] = useState(false);
   const [cidrsError, setCIDRsError] = useState(false);
@@ -56,6 +57,7 @@ export default function EditCluster() {
     scheduler_cluster_config: {
       candidate_parent_limit: 0,
       filter_parent_limit: 0,
+      job_rate_limit: 0,
     },
     seed_peer_cluster_config: {
       load_limit: 0,
@@ -75,7 +77,7 @@ export default function EditCluster() {
     is_default,
     id,
     peer_cluster_config: { load_limit },
-    scheduler_cluster_config: { candidate_parent_limit, filter_parent_limit },
+    scheduler_cluster_config: { candidate_parent_limit, filter_parent_limit, job_rate_limit },
     scopes: { idc, location, cidrs, hostnames },
     seed_peer_cluster_config,
   } = cluster;
@@ -519,6 +521,47 @@ export default function EditCluster() {
         return reg.test(value);
       },
     },
+    {
+      formProps: {
+        id: 'jobRateLimit',
+        label: 'Job Rate Limit',
+        name: 'jobRateLimit',
+        type: 'number',
+        autoComplete: 'family-name',
+        placeholder: 'Please enter Job Rate Limit',
+        value: job_rate_limit,
+        helperText: jobRateLimitError ? 'Fill in the number, the length is 1-1000000.' : '',
+        error: jobRateLimitError,
+
+        onChange: (e: any) => {
+          setCluster({
+            ...cluster,
+            scheduler_cluster_config: {
+              ...cluster.scheduler_cluster_config,
+              job_rate_limit: e.target.value,
+            },
+          });
+          changeValidate(e.target.value, configForm[4]);
+        },
+
+        InputProps: {
+          endAdornment: (
+            <Tooltip
+              title={`The scheduler will randomly select the  number of parents from all the parents according to the filter parent limit and evaluate the optimal parents in selecting parents for the peer to download task. The number of optimal parent is the scheduling parent limit.`}
+              placement="top"
+            >
+              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+            </Tooltip>
+          ),
+        },
+      },
+      syncError: false,
+      setError: setJobRateLimit,
+      validate: (value: string) => {
+        const reg = /^(?:[1-9][0-9]{0,5}|1000000)$/;
+        return reg.test(value);
+      },
+    },
   ];
 
   const changeValidate = (value: string, data: any) => {
@@ -605,12 +648,13 @@ export default function EditCluster() {
       scheduler_cluster_config: {
         candidate_parent_limit: Number(candidate_parent_limit),
         filter_parent_limit: Number(filter_parent_limit),
+        job_rate_limit: Number(job_rate_limit),
       },
       scopes: {
-        cidrs: cidrs,
+        cidrs: cidrs || [],
         idc: String(idc),
         location: String(location),
-        hostnames: hostnames,
+        hostnames: hostnames || [],
       },
       seed_peer_cluster_config: {
         load_limit: Number(seed_peer_cluster_config.load_limit),

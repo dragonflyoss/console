@@ -484,16 +484,16 @@ describe('Update cluster', () => {
       cy.get('#jobRateLimit').type('0');
       cy.get('#jobRateLimit-helper-text')
         .should('be.visible')
-        .and('contain', `Fill in the number, the length is 1-10000.`);
+        .and('contain', `Fill in the number, the length is 1-1000000.`);
       cy.get('#save').click();
       cy.url().should('include', '/clusters/1/edit');
       cy.get('#jobRateLimit').clear();
 
       // Maximum verification range exceeded.
-      cy.get('#jobRateLimit').type('10001');
+      cy.get('#jobRateLimit').type('1000001');
       cy.get('#jobRateLimit-helper-text')
         .should('be.visible')
-        .and('contain', `Fill in the number, the length is 1-10000.`);
+        .and('contain', `Fill in the number, the length is 1-1000000.`);
       cy.get('#save').click();
       cy.url().should('include', '/clusters/1/edit');
       cy.get('#jobRateLimit').clear();

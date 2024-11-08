@@ -480,7 +480,7 @@ export default function NewCluster() {
         placeholder: 'Please enter Job Rate Limit',
         defaultValue: 10,
         fullWidth: false,
-        helperText: jobRateLimitError ? 'Fill in the number, the length is 1-10000.' : '',
+        helperText: jobRateLimitError ? 'Fill in the number, the length is 1-1000000.' : '',
         error: jobRateLimitError,
 
         onChange: (e: any) => {
@@ -499,7 +499,7 @@ export default function NewCluster() {
       setError: setJobRateLimit,
 
       validate: (value: string) => {
-        const reg = /^(10000|[1-9][0-9]{0,3}|[1-9])$/;
+        const reg = /^(?:[1-9][0-9]{0,5}|1000000)$/;
         return reg.test(value);
       },
     },

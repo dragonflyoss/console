@@ -57,13 +57,13 @@ export default function EditCluster() {
     scheduler_cluster_config: {
       candidate_parent_limit: 0,
       filter_parent_limit: 0,
-      job_rate_limit: 0,
+      job_rate_limit: 10,
     },
     seed_peer_cluster_config: {
-      load_limit: 0,
+      load_limit: 2000,
     },
     peer_cluster_config: {
-      load_limit: 0,
+      load_limit: 200,
     },
     created_at: '',
     updated_at: '',
@@ -529,7 +529,7 @@ export default function EditCluster() {
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Job Rate Limit',
-        value: job_rate_limit,
+        value: job_rate_limit || 10,
         helperText: jobRateLimitError ? 'Fill in the number, the length is 1-1000000.' : '',
         error: jobRateLimitError,
 
@@ -547,7 +547,7 @@ export default function EditCluster() {
         InputProps: {
           endAdornment: (
             <Tooltip
-              title={`The scheduler will randomly select the  number of parents from all the parents according to the filter parent limit and evaluate the optimal parents in selecting parents for the peer to download task. The number of optimal parent is the scheduling parent limit.`}
+              title={`The rate limit(requests per second) for job Open API, default value is 10.`}
               placement="top"
             >
               <HelpIcon color="disabled" className={styles.descriptionIcon} />

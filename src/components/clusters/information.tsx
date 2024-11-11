@@ -763,7 +763,7 @@ export default function Information(props: { cluster: getClusterResponse; isLoad
                   </Box>
                 ) : (
                   <Typography id="filter-parent-limit" component="div">
-                    {cluster?.scheduler_cluster_config?.job_rate_limit || 0}
+                    {cluster?.scheduler_cluster_config?.job_rate_limit || 10}
                   </Typography>
                 )}
               </Box>

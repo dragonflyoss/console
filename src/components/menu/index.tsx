@@ -276,11 +276,11 @@ export default function Layout(props: any) {
                         sx={{
                           '&.Mui-selected': {
                             backgroundColor: 'var(--menu-background-color)',
-                            color: 'var(--menu-color)',
+                            color: 'var(--description-color)',
                           },
                           '&.Mui-selected:hover': {
                             backgroundColor: 'var(--hover-menu-background-color)',
-                            color: 'var(--menu-color)',
+                            color: 'var(--description-color)',
                           },
                           height: '2.6rem',
                           borderRadius: '0.2rem',
@@ -304,11 +304,11 @@ export default function Layout(props: any) {
                                 sx={{
                                   '&.Mui-selected': {
                                     backgroundColor: '#fff',
-                                    color: 'var(--menu-color)',
+                                    color: 'var(--description-color)',
                                   },
                                   '&.Mui-selected:hover': {
                                     backgroundColor: '#fff',
-                                    color: 'var(--menu-color)',
+                                    color: 'var(--description-color)',
                                   },
                                   height: '2.4rem',
                                   borderRadius: '0.2rem',
@@ -335,11 +335,11 @@ export default function Layout(props: any) {
                       sx={{
                         '&.Mui-selected': {
                           backgroundColor: 'var(--menu-background-color)',
-                          color: 'var(--menu-color)',
+                          color: 'var(--description-color)',
                         },
                         '&.Mui-selected:hover': {
                           backgroundColor: 'var(--hover-menu-background-color)',
-                          color: 'var(--menu-color)',
+                          color: 'var(--description-color)',
                         },
                         height: '2.6rem',
                         borderRadius: '0.2rem',

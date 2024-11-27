@@ -19,6 +19,15 @@ import {
   Snackbar,
   Alert,
   Tooltip as MuiTooltip,
+  Stack,
+  Autocomplete,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Chip,
+  IconButton,
 } from '@mui/material';
 import {
   Chart as ChartJS,
@@ -31,16 +40,21 @@ import {
   Title,
   Chart,
 } from 'chart.js';
+import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Bar, Pie } from 'react-chartjs-2';
 import { getPeers, getPeersResponse } from '../../../lib/api';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { useEffect, useState } from 'react';
-import { MAX_PAGE_SIZE } from '../../../lib/constants';
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+
+import { useContext, useEffect, useState } from 'react';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './inde.module.css';
-import { exportCSVFile } from '../../../lib/utils';
+import { exportCSVFile, getPaginatedList } from '../../../lib/utils';
 import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
+import { MyContext } from '../../clusters/show';
+import _ from 'lodash';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 Chart.defaults.font.family = 'mabry-light';
@@ -71,92 +85,90 @@ export default function Peer() {
   const [peer, setPeer] = useState<getPeersResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [openExport, setOpenExport] = useState(false);
+  const [openRefresh, setOpenRefresh] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
-  const [cluster, setCluster] = useState([{ name: '', count: 0 }]);
+  const [refresh, setRefresh] = useState(false);
   const [gitVersion, setGitVersion] = useState([{ name: '', count: 0 }]);
   const [gitCommit, setGitCommit] = useState([{ name: '', count: 0 }]);
-  const [clusterActive, setClusterActive] = useState(0);
   const [gitVersionActive, setGitVersionActive] = useState(0);
   const [gitCommitActive, setGitCommitActive] = useState(0);
   const [gitVersionCount, setGitVersionCount] = useState(0);
   const [gitCommitCount, setGitCommitCount] = useState(0);
-  const [selectedCluster, setSelectedCluster] = useState(['']);
   const [selectedGitVersions, setSelectedGitVersions] = useState(['']);
-  const [selectedGitVersion, setSelectedGitVersion] = useState<string>('All');
-  const [selectedGitCommit, setSelectedGitCommit] = useState<string>('All');
   const [selectedGitCommitByVersion, setSelectedGitGitCommitByVersion] = useState<string>('All');
-  const [exportCluster, setExportCluster] = useState<getPeersResponse[]>([]);
   const [exportGitVersion, setExportGitVersion] = useState<getPeersResponse[]>([]);
   const [exportGitCommit, setExportGitCommit] = useState<getPeersResponse[]>([]);
-  const [exportSelectedCluster, setExportSelectedCluster] = useState<string>('All');
   const [exportSelectedVersion, setExportSelectedVersion] = useState<string>('All');
   const [exportSelectedCommit, setExportSelectedCommit] = useState<string>('All');
   const [exportSelectedGitVersion, setExportSelectedGitVersion] = useState(['']);
   const [exportSelectedGitCommit, setExportSelectedGitCommit] = useState(['']);
 
+  const { cluster } = useContext(MyContext);
   useEffect(() => {
     (async function () {
       try {
         setIsLoading(true);
 
-        const peer = await getPeers({ page: 1, per_page: MAX_PAGE_SIZE });
-        const clusterNames = Array.from(new Set(peer.map((item) => item.scheduler_cluster.name)));
+        if (cluster.seed_peer_cluster_id) {
+          const peer = await getPeers({
+            page: 1,
+            per_page: MAX_PAGE_SIZE,
+            scheduler_cluster_id: cluster.seed_peer_cluster_id,
+          });
+          // const clusterNames = Array.from(new Set(peer.map((item) => item.scheduler_cluster.name)));
+          // setSelectedCluster(clusterNames);
+          setPeer(peer);
 
-        setPeer(peer);
-        setSelectedCluster(clusterNames);
+          const gitVersionCount = new Set(peer.map((item) => item.git_version)).size;
+          const gitCommitCount = new Set(peer.map((item) => item.git_commit)).size;
 
-        const gitVersionCount = new Set(peer.map((item) => item.git_version)).size;
-        const gitCommitCount = new Set(peer.map((item) => item.git_commit)).size;
+          setGitVersionCount(gitVersionCount);
+          setGitCommitCount(gitCommitCount);
 
-        setGitVersionCount(gitVersionCount);
-        setGitCommitCount(gitCommitCount);
+          // const cluster = Object.entries(
+          //   peer.reduce<{ [key: string]: number }>((acc, curr) => {
+          //     const { scheduler_cluster } = curr;
+          //     if (acc[scheduler_cluster?.name]) {
+          //       acc[scheduler_cluster?.name] += 1;
+          //     } else {
+          //       acc[scheduler_cluster?.name] = 1;
+          //     }
+          //     return acc;
+          //   }, {}),
+          // ).map(([name, count]) => ({ name, count }));
 
-        const cluster = Object.entries(
-          peer.reduce<{ [key: string]: number }>((acc, curr) => {
-            const { scheduler_cluster } = curr;
-            if (acc[scheduler_cluster?.name]) {
-              acc[scheduler_cluster?.name] += 1;
-            } else {
-              acc[scheduler_cluster?.name] = 1;
-            }
-            return acc;
-          }, {}),
-        ).map(([name, count]) => ({ name, count }));
+          // setCluster(cluster);
 
-        setCluster(cluster);
+          const gitVersion = Object.entries(
+            peer.reduce<{ [key: string]: number }>((acc, curr) => {
+              const { git_version } = curr;
+              if (acc[git_version]) {
+                acc[git_version] += 1;
+              } else {
+                acc[git_version] = 1;
+              }
+              return acc;
+            }, {}),
+          ).map(([name, count]) => ({ name, count }));
 
-        const gitVersion = Object.entries(
-          peer.reduce<{ [key: string]: number }>((acc, curr) => {
-            const { git_version } = curr;
-            if (acc[git_version]) {
-              acc[git_version] += 1;
-            } else {
-              acc[git_version] = 1;
-            }
-            return acc;
-          }, {}),
-        ).map(([name, count]) => ({ name, count }));
+          setGitVersion(gitVersion);
 
-        setGitVersion(gitVersion);
+          const getCommit = Object.entries(
+            peer.reduce<{ [key: string]: number }>((acc, curr) => {
+              const { git_commit } = curr;
+              if (acc[git_commit]) {
+                acc[git_commit] += 1;
+              } else {
+                acc[git_commit] = 1;
+              }
+              return acc;
+            }, {}),
+          ).map(([name, count]) => ({ name, count }));
 
-        const getCommit = Object.entries(
-          peer.reduce<{ [key: string]: number }>((acc, curr) => {
-            const { git_commit } = curr;
-            if (acc[git_commit]) {
-              acc[git_commit] += 1;
-            } else {
-              acc[git_commit] = 1;
-            }
-            return acc;
-          }, {}),
-        ).map(([name, count]) => ({ name, count }));
+          setGitCommit(getCommit);
 
-        setGitCommit(getCommit);
-
-        const active = (peer.filter((item) => item.state === 'active').length / peer.length) * 100;
-
-        setClusterActive(Number(active.toFixed(2)));
-        setIsLoading(false);
+          setIsLoading(false);
+        }
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
@@ -165,58 +177,30 @@ export default function Peer() {
         }
       }
     })();
-  }, []);
+  }, [cluster.seed_peer_cluster_id]);
 
   useEffect(() => {
-    if (selectedGitVersion === 'All') {
-      const gitVersion = Object.entries(
-        peer.reduce<{ [key: string]: number }>((acc, curr) => {
-          const { git_version } = curr;
-          if (acc[git_version]) {
-            acc[git_version] += 1;
-          } else {
-            acc[git_version] = 1;
-          }
-          return acc;
-        }, {}),
-      ).map(([name, count]) => ({ name, count }));
+    const gitVersion = Object.entries(
+      peer.reduce<{ [key: string]: number }>((acc, curr) => {
+        const { git_version } = curr;
+        if (acc[git_version]) {
+          acc[git_version] += 1;
+        } else {
+          acc[git_version] = 1;
+        }
+        return acc;
+      }, {}),
+    ).map(([name, count]) => ({ name, count }));
 
-      const active = (peer.filter((item) => item.state === 'active').length / peer.length) * 100;
+    const active = (peer.filter((item) => item.state === 'active').length / peer.length) * 100;
 
-      setGitVersion(gitVersion);
-      setGitVersionActive(Number(active.toFixed(2)));
-    } else {
-      const filteredByCluster = selectedGitVersion
-        ? peer.filter((item) => item.scheduler_cluster.name === selectedGitVersion)
-        : peer;
-
-      const gitVersion = Object.entries(
-        filteredByCluster.reduce<{ [key: string]: number }>((acc, curr) => {
-          const { git_version } = curr;
-          if (acc[git_version]) {
-            acc[git_version] += 1;
-          } else {
-            acc[git_version] = 1;
-          }
-          return acc;
-        }, {}),
-      ).map(([name, count]) => ({ name, count }));
-
-      const active =
-        (filteredByCluster.filter((item) => item.state === 'active').length / filteredByCluster.length) * 100;
-
-      setGitVersion(gitVersion);
-      setGitVersionActive(Number(active.toFixed(2)));
-    }
-  }, [selectedGitVersion, peer]);
+    setGitVersion(gitVersion);
+    setGitVersionActive(Number(active.toFixed(2)));
+  }, [peer]);
 
   useEffect(() => {
-    if (selectedGitCommit === 'All') {
-      const filteredByCluster = selectedGitCommit
-        ? peer.filter((item) => item.scheduler_cluster.name === selectedGitCommit)
-        : peer;
-
-      const gitVersion = Array.from(new Set(filteredByCluster.map((item) => item.git_version)));
+    if (selectedGitCommitByVersion === 'All') {
+      const gitVersion = Array.from(new Set(peer.map((item) => item.git_version)));
 
       const gitCommit = Object.entries(
         peer.reduce<{ [key: string]: number }>((acc, curr) => {
@@ -235,41 +219,12 @@ export default function Peer() {
       setGitCommit(gitCommit);
       setSelectedGitVersions(gitVersion);
       setGitCommitActive(Number(active.toFixed(2)));
-    } else if (selectedGitCommit === 'All' || selectedGitCommitByVersion === 'All') {
-      const filteredByCluster = selectedGitCommit
-        ? peer.filter((item) => item.scheduler_cluster.name === selectedGitCommit)
-        : peer;
-
-      const gitVersion = Array.from(new Set(filteredByCluster.map((item) => item.git_version)));
-
-      const gitCommit = Object.entries(
-        filteredByCluster.reduce<{ [key: string]: number }>((acc, curr) => {
-          const { git_commit } = curr;
-          if (acc[git_commit]) {
-            acc[git_commit] += 1;
-          } else {
-            acc[git_commit] = 1;
-          }
-          return acc;
-        }, {}),
-      ).map(([name, count]) => ({ name, count }));
-
-      const active =
-        (filteredByCluster.filter((item) => item.state === 'active').length / filteredByCluster.length) * 100;
-
-      setGitCommit(gitCommit);
-      setSelectedGitVersions(gitVersion);
-      setGitCommitActive(Number(active.toFixed(2)));
     } else {
-      const filteredByCluster = selectedGitCommit
-        ? peer.filter((item) => item.scheduler_cluster.name === selectedGitCommit)
-        : peer;
-
       const filteredByVersion = selectedGitCommitByVersion
-        ? filteredByCluster.filter((item) => item.git_version === selectedGitCommitByVersion)
-        : filteredByCluster;
+        ? peer.filter((item) => item.git_version === selectedGitCommitByVersion)
+        : peer;
 
-      const gitVersion = Array.from(new Set(filteredByCluster.map((item) => item.git_version)));
+      const gitVersion = Array.from(new Set(peer.map((item) => item.git_version)));
 
       setSelectedGitVersions(gitVersion);
 
@@ -292,20 +247,16 @@ export default function Peer() {
 
       setGitCommitActive(Number(active.toFixed(2)));
     }
-  }, [selectedGitCommit, selectedGitCommitByVersion, peer]);
+  }, [selectedGitCommitByVersion, peer]);
 
   useEffect(() => {
-    const filteredByCluster = exportSelectedCluster
-      ? peer.filter((item) => item.scheduler_cluster.name === exportSelectedCluster)
-      : peer;
-    const gitVersion = Array.from(new Set(filteredByCluster.map((item) => item.git_version)));
+    const gitVersion = Array.from(new Set(peer.map((item) => item.git_version)));
 
-    setExportCluster(filteredByCluster);
     setExportSelectedGitVersion(gitVersion);
 
     const filteredByVersion = exportSelectedVersion
-      ? filteredByCluster.filter((item) => item.git_version === exportSelectedVersion)
-      : filteredByCluster;
+      ? peer.filter((item) => item.git_version === exportSelectedVersion)
+      : peer;
     const gitCommit = Array.from(new Set(filteredByVersion.map((item) => item.git_commit)));
 
     setExportGitVersion(filteredByVersion);
@@ -316,7 +267,7 @@ export default function Peer() {
       : filteredByVersion;
 
     setExportGitCommit(filteredByCommit);
-  }, [exportSelectedCluster, exportSelectedVersion, exportSelectedCommit, peer]);
+  }, [exportSelectedVersion, exportSelectedCommit, peer]);
 
   const barOptions = {
     plugins: {
@@ -331,43 +282,12 @@ export default function Peer() {
     },
   };
 
-  const clusterBar = {
-    labels: cluster.map((item) => item.name),
-    datasets: [
-      {
-        data: cluster.map((item) => item.count),
-        backgroundColor: 'rgb(46,143,121)',
-        borderColor: 'rgb(46,143,121)',
-        borderWidth: 1,
-        borderRadius: 5,
-        barPercentage: 0.6,
-      },
-    ],
-  };
-
   const doughnutOptions = {
     plugins: {
       legend: {
         position: 'bottom' as 'bottom',
       },
     },
-  };
-
-  const clusterDoughnut = {
-    labels: cluster.map((item) => item.name),
-    datasets: [
-      {
-        data: cluster.map((item) => item.count),
-        backgroundColor: [
-          'rgb(36,110,93)',
-          'rgb(46,143,121)',
-          'rgba(46,143,121,0.7)',
-          'rgba(46,143,121,0.4)',
-          'rgba(46,143,121,0.1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
   };
 
   const gitVersionBar = {
@@ -496,39 +416,37 @@ export default function Peer() {
         throw Error;
       }
 
-      if (exportSelectedVersion === 'All' && exportSelectedCommit === 'All' && exportSelectedCluster === 'All') {
+      if (exportSelectedVersion === 'All' && exportSelectedCommit === 'All') {
         exportCSVFile(headers, peer, 'Peer Data');
         setLoadingButton(false);
         setOpenExport(false);
-        setExportSelectedCluster('All');
         setExportSelectedVersion('All');
         setExportSelectedCommit('All');
-      } else if (exportSelectedVersion === 'All' && exportSelectedCommit === 'All') {
-        exportCSVFile(headers, exportCluster, 'Peer Data');
-        setLoadingButton(false);
-        setOpenExport(false);
-        setExportSelectedCluster('All');
-        setExportSelectedVersion('All');
-        setExportSelectedCommit('All');
-      } else if (exportSelectedCommit === 'All') {
+      }
+      //  else if (exportSelectedVersion === 'All' && exportSelectedCommit === 'All') {
+      //   exportCSVFile(headers, exportCluster, 'Peer Data');
+      //   setLoadingButton(false);
+      //   setOpenExport(false);
+      //   setExportSelectedCluster('All');
+      //   setExportSelectedVersion('All');
+      //   setExportSelectedCommit('All');
+      // }
+      else if (exportSelectedCommit === 'All') {
         exportCSVFile(headers, exportGitVersion, 'Peer Data');
         setLoadingButton(false);
         setOpenExport(false);
-        setExportSelectedCluster('All');
         setExportSelectedVersion('All');
         setExportSelectedCommit('All');
       } else {
         exportCSVFile(headers, exportGitCommit, 'Peer Data');
         setLoadingButton(false);
         setOpenExport(false);
-        setExportSelectedCluster('All');
         setExportSelectedVersion('All');
         setExportSelectedCommit('All');
       }
     } catch (error) {
       setErrorMessage(true);
       setErrorMessageText('Export failed');
-      setExportSelectedCluster('All');
       setExportSelectedVersion('All');
       setExportSelectedCommit('All');
       setLoadingButton(false);
@@ -542,207 +460,153 @@ export default function Peer() {
 
     setErrorMessage(false);
     setOpenExport(false);
-    setExportSelectedCluster('All');
     setExportSelectedVersion('All');
     setExportSelectedCommit('All');
+    setOpenRefresh(false);
+  };
+  const handleRefresh = () => {
+    setRefresh(true);
+
+    setOpenRefresh(false);
+    setTimeout(function () {
+      setRefresh(false);
+    }, 3000);
   };
 
   return (
-    <Box>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
-        <Typography color="inherit">insight</Typography>
-        <Typography color="text.primary">peers</Typography>
-      </Breadcrumbs>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: '2rem' }}>
-        <Typography variant="h5" fontFamily="mabry-bold" color="text.primary">
-          Peers
-        </Typography>
-        <Button
-          size="small"
-          sx={{
-            background: 'var(--button-color)',
-            borderRadius: '0',
-            ':hover': {
-              backgroundColor: 'var(--button-color)',
-              borderColor: 'var(--button-color)',
-            },
-          }}
-          variant="contained"
-          onClick={() => {
-            setOpenExport(true);
-          }}
-          startIcon={<GetAppIcon />}
+    <ThemeProvider theme={theme}>
+      <Box>
+        <Snackbar
+          open={errorMessage}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
-          Export
-        </Button>
-      </Box>
-      <Box sx={{ display: 'flex', mb: '2rem' }}>
-        <Box sx={{ width: '33.33%', mr: '1rem' }}>
-          <Paper variant="outlined" sx={{ p: '1rem' }}>
-            <Box className={styles.navigationContent}>
-              <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" className={styles.navigationTitle}>
-                  Total
-                </Typography>
-                <Typography variant="h5">{isLoading ? <Skeleton width="6rem" /> : peer.length}</Typography>
-                <Typography variant="body1" sx={{ color: '#8a8a8a' }}>
-                  number of peers
-                </Typography>
-              </Box>
-              <Box component="img" className={styles.navigationIcon} src="/icons/insight/peer/statistics.svg" />
-            </Box>
-          </Paper>
+          <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+            {errorMessageText}
+          </Alert>
+        </Snackbar>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: '2rem' }}>
+          <Typography variant="h5" fontFamily="mabry-bold" color="text.primary">
+            Peers
+          </Typography>
+          <Box>
+            <Button
+              id="refresh"
+              size="small"
+              sx={{
+                background: 'var(--button-color)',
+                borderRadius: '0',
+                ':hover': {
+                  backgroundColor: 'var(--button-color)',
+                  borderColor: 'var(--button-color)',
+                },
+                mr: '1rem',
+              }}
+              variant="contained"
+              onClick={() => {
+                setOpenRefresh(true);
+              }}
+              startIcon={
+                refresh ? (
+                  <Box component="img" sx={{ width: '1.2rem' }} src="/icons/peer/refresh-loading.svg" />
+                ) : (
+                  <Box component="img" sx={{ width: '1.2rem' }} src="/icons/peer/refresh.svg" />
+                )
+              }
+            >
+              refresh
+            </Button>
+            <Button
+              id="export"
+              size="small"
+              sx={{
+                background: 'var(--button-color)',
+                borderRadius: '0',
+                ':hover': {
+                  backgroundColor: 'var(--button-color)',
+                  borderColor: 'var(--button-color)',
+                },
+              }}
+              variant="contained"
+              onClick={() => {
+                setOpenExport(true);
+              }}
+              startIcon={<GetAppIcon />}
+            >
+              Export
+            </Button>
+          </Box>
         </Box>
-        <Box sx={{ width: '33.33%', mr: '1rem' }}>
-          <Paper variant="outlined" sx={{ p: '1rem' }}>
-            <Box className={styles.navigationContent}>
-              <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" className={styles.navigationTitle}>
-                  Git Version
-                </Typography>
-                <Typography variant="h5">{isLoading ? <Skeleton width="6rem" /> : gitVersionCount}</Typography>
-                <Typography variant="body1" sx={{ color: '#8a8a8a' }}>
-                  number of git versions
-                </Typography>
+        <Box sx={{ display: 'flex', mb: '3rem' }}>
+          <Box sx={{ width: '33.33%', mr: '1rem' }}>
+            <Paper variant="outlined" className={styles.navigationWrapper}>
+              <Box className={styles.navigationContent}>
+                <Box>
+                  <Typography variant="subtitle1" fontFamily="mabry-bold" className={styles.navigationTitle}>
+                    Total
+                  </Typography>
+                  <Typography id="total" variant="h5" p="0.5rem 0">
+                    {isLoading ? <Skeleton width="6rem" /> : peer.length}
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: '#8a8a8a' }}>
+                    number of peers
+                  </Typography>
+                </Box>
+                <Box className={styles.navigation}></Box>
+                <Box component="img" className={styles.navigationIcon} src="/icons/peer/total.svg" />
               </Box>
-              <Box component="img" className={styles.navigationIcon} src="/icons/insight/peer/statistics.svg" />
-            </Box>
-          </Paper>
-        </Box>
-        <Box sx={{ width: '33.33%' }}>
-          <Paper variant="outlined" sx={{ p: '1rem' }}>
-            <Box className={styles.navigationContent}>
-              <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" className={styles.navigationTitle}>
-                  Git Commit
-                </Typography>
-                <Typography variant="h5">{isLoading ? <Skeleton width="6rem" /> : gitCommitCount}</Typography>
-                <Typography variant="body1" sx={{ color: '#8a8a8a' }}>
-                  number of git commits
-                </Typography>
+            </Paper>
+          </Box>
+          <Box sx={{ width: '33.33%', mr: '1rem' }}>
+            <Paper variant="outlined" className={styles.navigationWrapper}>
+              <Box className={styles.navigationContent}>
+                <Box>
+                  <Typography variant="subtitle1" fontFamily="mabry-bold" className={styles.navigationTitle}>
+                    Git Version
+                  </Typography>
+                  <Typography id="git-version" variant="h5" p="0.5rem 0">
+                    {isLoading ? <Skeleton width="6rem" /> : gitVersionCount}
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: '#8a8a8a' }}>
+                    number of git versions
+                  </Typography>
+                </Box>
+                <Box className={styles.navigation} />
+                <Box component="img" className={styles.navigationIcon} src="/icons/peer/git-versions.svg" />
               </Box>
-              <Box component="img" className={styles.navigationIcon} src="/icons/insight/peer/statistics.svg" />
-            </Box>
-          </Paper>
+            </Paper>
+          </Box>
+          <Box sx={{ width: '33.33%' }}>
+            <Paper variant="outlined" className={styles.navigationWrapper}>
+              <Box className={styles.navigationContent}>
+                <Box>
+                  <Typography variant="subtitle1" fontFamily="mabry-bold" className={styles.navigationTitle}>
+                    Git Commit
+                  </Typography>
+                  <Typography id="git-commit" variant="h5" p="0.5rem 0">
+                    {isLoading ? <Skeleton width="6rem" /> : gitCommitCount}
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: '#8a8a8a' }}>
+                    number of git commits
+                  </Typography>
+                </Box>
+                <Box className={styles.navigation} />
+                <Box component="img" className={styles.navigationIcon} src="/icons/peer/git-commits.svg" />
+              </Box>
+            </Paper>
+          </Box>
         </Box>
-      </Box>
-      <ThemeProvider theme={theme}>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between' }}>
           <Box
             sx={{
               mb: '2rem',
               width: '100% ',
               [theme.breakpoints.up('xl')]: {
-                width: '49% ',
+                width: '49%',
               },
             }}
           >
-            <Box className={styles.dashboard}>
-              <Paper variant="outlined" className={styles.barContainer}>
-                <Box className={styles.barTitle}>
-                  <Box>
-                    <Typography variant="subtitle1" component="span" sx={{ fontWeight: 500 }}>
-                      Peer Statistics&nbsp;
-                    </Typography>
-                    <Typography variant="subtitle1" component="span" sx={{ fontWeight: 500, color: '#8a8a8a' }}>
-                      by Scheduler Cluster
-                    </Typography>
-                  </Box>
-                  <MuiTooltip title="Number of peer under different scheduler clusters" placement="top">
-                    <ErrorOutlineIcon className={styles.descriptionIcon} />
-                  </MuiTooltip>
-                </Box>
-                <Bar options={barOptions} data={clusterBar} />
-              </Paper>
-              <Paper variant="outlined" className={styles.doughnutContainer}>
-                <Box>
-                  <Box className={styles.doughnutTitle}>
-                    <Box>
-                      <Typography variant="subtitle2" component="span" sx={{ fontWeight: 500 }}>
-                        Peer Statistics&nbsp;
-                      </Typography>
-                      <Typography variant="subtitle2" component="span" sx={{ fontWeight: 500, color: '#8a8a8a' }}>
-                        by Scheduler Cluster
-                      </Typography>
-                    </Box>
-                    <MuiTooltip
-                      title="Number of peer and active proportion under different scheduler cluster"
-                      placement="top"
-                    >
-                      <ErrorOutlineIcon className={styles.descriptionIcon} />
-                    </MuiTooltip>
-                  </Box>
-                  <Pie data={clusterDoughnut} options={doughnutOptions} />
-                </Box>
-                <Box className={styles.activeContainer}>
-                  <Box component="img" className={styles.activeIcon} src="/icons/insight/peer/active.svg" />
-                  <Box sx={{ width: '100%' }}>
-                    <Box className={styles.activeContent}>
-                      <Typography variant="subtitle2" fontFamily="mabry-light">
-                        Active
-                      </Typography>
-                      <Typography id="cluster-active" variant="subtitle1" fontFamily="mabry-bold">
-                        {isLoading ? <Skeleton width="2rem" /> : clusterActive ? `${clusterActive}%` : '0'}
-                      </Typography>
-                    </Box>
-                    <LinearProgress
-                      sx={{
-                        bgcolor: '#e0e0e0',
-                        '& .MuiLinearProgress-bar': {
-                          bgcolor: 'var(--description-color)',
-                        },
-                      }}
-                      variant="determinate"
-                      value={clusterActive ? clusterActive : 0}
-                    />
-                  </Box>
-                </Box>
-              </Paper>
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              mb: '2rem',
-              width: '100% ',
-              [theme.breakpoints.up('xl')]: {
-                width: '49% ',
-              },
-            }}
-          >
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: '1rem' }}>
-              <FormControl sx={{ width: '10rem' }} size="small">
-                <InputLabel id="states-select">Clusters</InputLabel>
-                <Select
-                  id="states-select"
-                  label="changeGitVersion"
-                  value={selectedGitVersion}
-                  onChange={(e) => setSelectedGitVersion(e.target.value)}
-                >
-                  <Typography variant="body1" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
-                    Filter by cluster
-                  </Typography>
-                  <Divider />
-                  <MenuItem key="All" value="All">
-                    All
-                  </MenuItem>
-                  {selectedCluster.map((item) => (
-                    <MenuItem key={item} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
             <Box className={styles.dashboard}>
               <Paper variant="outlined" className={styles.barContainer}>
                 <Box className={styles.barTitle}>
@@ -755,7 +619,7 @@ export default function Peer() {
                     </Typography>
                   </Box>
                   <MuiTooltip title="Number of peer under different git version" placement="top">
-                    <ErrorOutlineIcon className={styles.descriptionIcon} />
+                    <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                   </MuiTooltip>
                 </Box>
                 <Box className={styles.barContent}>
@@ -777,13 +641,17 @@ export default function Peer() {
                       title="Number of peer and active proportion under different git version"
                       placement="top"
                     >
-                      <ErrorOutlineIcon className={styles.descriptionIcon} />
+                      <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                     </MuiTooltip>
                   </Box>
-                  <Pie data={gitVersionDoughnut} options={doughnutOptions} />
+                  <Divider />
+                  <Box sx={{ p: '1rem 2rem' }}>
+                    <Pie data={gitVersionDoughnut} options={doughnutOptions} />
+                  </Box>
                 </Box>
+
                 <Box className={styles.activeContainer}>
-                  <Box component="img" className={styles.activeIcon} src="/icons/insight/peer/active.svg" />
+                  <Box component="img" className={styles.activeIcon} src="/icons/peer/active.svg" />
                   <Box sx={{ width: '100%' }}>
                     <Box className={styles.activeContent}>
                       <Typography variant="subtitle2" fontFamily="mabry-light">
@@ -813,41 +681,16 @@ export default function Peer() {
               mb: '2rem',
               width: '100% ',
               [theme.breakpoints.up('xl')]: {
-                width: '49% ',
+                width: '49%',
               },
             }}
           >
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: '1rem' }}>
               <Box>
-                <FormControl sx={{ width: '10rem', mr: '1rem' }} size="small">
-                  <InputLabel id="states-select">Clusters</InputLabel>
-                  <Select
-                    id="states-select"
-                    value={selectedGitCommit}
-                    label="changeGitVersion"
-                    onChange={(e) => {
-                      setSelectedGitCommit(e.target.value);
-                      setSelectedGitGitCommitByVersion('All');
-                    }}
-                  >
-                    <Typography variant="body2" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
-                      Filter by cluster
-                    </Typography>
-                    <Divider />
-                    <MenuItem key="All" value="All">
-                      All
-                    </MenuItem>
-                    {selectedCluster.map((item) => (
-                      <MenuItem key={item} value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
                 <FormControl sx={{ width: '10rem' }} size="small">
-                  <InputLabel id="states-select">Git Version</InputLabel>
+                  <InputLabel id="git-version-select">Git Version</InputLabel>
                   <Select
-                    id="states-select"
+                    id="git-version-select"
                     value={selectedGitCommitByVersion}
                     label="changeGitCommit"
                     onChange={(e) => {
@@ -882,7 +725,7 @@ export default function Peer() {
                     </Typography>
                   </Box>
                   <MuiTooltip title="Number of peer under different git commit" placement="top">
-                    <ErrorOutlineIcon className={styles.descriptionIcon} />
+                    <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                   </MuiTooltip>
                 </Box>
                 <Box className={styles.barContent}>
@@ -901,13 +744,16 @@ export default function Peer() {
                       </Typography>
                     </Box>
                     <MuiTooltip title="Number of peer and active proportion under different git commit" placement="top">
-                      <ErrorOutlineIcon className={styles.descriptionIcon} />
+                      <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                     </MuiTooltip>
                   </Box>
-                  <Pie data={gitCommitDoughnut} options={doughnutOptions} />
+                  <Divider />
+                  <Box sx={{ p: '1rem 2rem' }}>
+                    <Pie data={gitCommitDoughnut} options={doughnutOptions} />
+                  </Box>
                 </Box>
                 <Box className={styles.activeContainer}>
-                  <Box component="img" className={styles.activeIcon} src="/icons/insight/peer/active.svg" />
+                  <Box component="img" className={styles.activeIcon} src="/icons/peer/active.svg" />
                   <Box sx={{ width: '100%' }}>
                     <Box className={styles.activeContent}>
                       <Typography variant="subtitle2" fontFamily="mabry-light">
@@ -938,42 +784,61 @@ export default function Peer() {
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
+          sx={{
+            '& .MuiDialog-paper': {
+              minWidth: '32rem',
+            },
+          }}
         >
-          <DialogTitle id="alert-dialog-title">Export</DialogTitle>
-          <Divider/>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '1rem' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box component="img" className={styles.exportIcon} src="/icons/peer/export.svg" />
+              <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
+                Export
+              </Typography>
+            </Box>
+            <IconButton
+              aria-label="close"
+              id="close-delete-icon"
+              onClick={() => {
+                setOpenExport(false);
+                setExportSelectedVersion('All');
+                setExportSelectedCommit('All');
+              }}
+              sx={{
+                color: (theme) => theme.palette.grey[500],
+                p: 0,
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <Divider />
           <DialogContent>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column',
+                pb: '1rem',
+              }}
+            >
+              <Box component="img" sx={{ width: '2.8rem', pb: '0.8rem' }} src="/icons/peer/export-file.svg" />
+              <Typography variant="subtitle1" fontFamily="mabry-bold">
+                Export Your Data With Fun
+              </Typography>
+            </Box>
             <Box
               noValidate
               component="form"
-              sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '0.4rem' }}
+              sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '1rem' }}
             >
-              <FormControl sx={{ width: '23rem', mb: '1rem' }} size="small">
-                <InputLabel id="states-select">Clusters</InputLabel>
-                <Select
-                  id="states-select"
-                  value={exportSelectedCluster}
-                  label="changeCluster"
-                  onChange={(e) => setExportSelectedCluster(e.target.value)}
-                >
-                  <Typography variant="body1" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
-                    Filter by cluster
-                  </Typography>
-                  <Divider />
-                  <MenuItem key="All" value="All">
-                    All
-                  </MenuItem>
-                  {selectedCluster.map((item) => (
-                    <MenuItem key={item} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <Box sx={{ display: 'flex' }}>
-                <FormControl sx={{ width: '11rem' }} size="small">
-                  <InputLabel id="states-select">Git Version</InputLabel>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <FormControl sx={{ width: '14rem' }} size="small">
+                  <InputLabel id="git-version-label">Git Version</InputLabel>
                   <Select
-                    id="states-select"
+                    id="export-git-version"
                     value={exportSelectedVersion}
                     label="changeGitVersion"
                     onChange={(e) => setExportSelectedVersion(e.target.value)}
@@ -982,20 +847,20 @@ export default function Peer() {
                       Filter by git version
                     </Typography>
                     <Divider />
-                    <MenuItem key="All" value="All">
+                    <MenuItem id="all" key="All" value="All">
                       All
                     </MenuItem>
                     {exportSelectedGitVersion.map((item) => (
-                      <MenuItem key={item} value={item}>
+                      <MenuItem id={`select-${item}`} key={item} value={item}>
                         {item}
                       </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
-                <FormControl sx={{ width: '11rem', ml: '1rem' }} size="small">
-                  <InputLabel id="states-select">Git Commit</InputLabel>
+                <FormControl sx={{ width: '14rem', ml: '1rem' }} size="small">
+                  <InputLabel id="git-commit-label">Git Commit</InputLabel>
                   <Select
-                    id="states-select"
+                    id="export-git-commit"
                     value={exportSelectedCommit}
                     label="changeGitCommit"
                     onChange={(e) => setExportSelectedCommit(e.target.value)}
@@ -1008,7 +873,7 @@ export default function Peer() {
                       All
                     </MenuItem>
                     {exportSelectedGitCommit.map((item) => (
-                      <MenuItem key={item} value={item}>
+                      <MenuItem id={`select-${item}`} key={item} value={item}>
                         {item}
                       </MenuItem>
                     ))}
@@ -1016,13 +881,12 @@ export default function Peer() {
                 </FormControl>
               </Box>
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '2rem' }}>
               <CancelLoadingButton
                 id="cancel"
                 loading={loadingButton}
                 onClick={() => {
                   setOpenExport(false);
-                  setExportSelectedCluster('All');
                   setExportSelectedVersion('All');
                   setExportSelectedCommit('All');
                 }}
@@ -1037,7 +901,77 @@ export default function Peer() {
             </Box>
           </DialogContent>
         </Dialog>
-      </ThemeProvider>
-    </Box>
+        <Dialog
+          open={openRefresh}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          sx={{
+            '& .MuiDialog-paper': {
+              minWidth: '34rem',
+            },
+          }}
+        >
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '1rem' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box component="img" className={styles.exportIcon} src="/icons/peer/refresh-dialog.svg" />
+              <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
+                Refresh
+              </Typography>
+            </Box>
+
+            <IconButton
+              aria-label="close"
+              id="close-delete-icon"
+              onClick={() => {
+                setOpenRefresh(false);
+              }}
+              sx={{
+                color: (theme) => theme.palette.grey[500],
+                p: 0,
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <Divider />
+
+          <DialogContent>
+            <Box display="flex" alignItems="flex-start" pb="1rem">
+              <Box
+                component="img"
+                src="/icons/cluster/delete-warning.svg"
+                sx={{ width: '1.4rem', height: '1.4rem', pr: '0.2rem' }}
+              />
+              <Box>
+                <Typography variant="body1" fontFamily="mabry-bold" component="span" sx={{ color: '#D81E06' }}>
+                  WARNING:&nbsp;
+                </Typography>
+                <Typography variant="body1" component="span" sx={{ color: '#D81E06' }}>
+                  This action CANNOT be undone.
+                </Typography>
+              </Box>
+            </Box>
+            The peer data will be forced to refresh.
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '2rem' }}>
+              <CancelLoadingButton
+                id="cancel"
+                loading={loadingButton}
+                onClick={() => {
+                  setOpenRefresh(false);
+                }}
+              />
+              <SavelLoadingButton
+                loading={loadingButton}
+                endIcon={<CheckCircleIcon />}
+                id="save"
+                text="Save"
+                onClick={handleRefresh}
+              />
+            </Box>
+          </DialogContent>
+        </Dialog>
+      </Box>
+    </ThemeProvider>
   );
 }

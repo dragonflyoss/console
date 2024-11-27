@@ -25,6 +25,7 @@
   --menu-background-color: rgba(0, 167, 111, 0.08);
   --hover-menu-background-color: rgba(0, 167, 111, 0.2);
   --menu-color: #00a76f;
+  --table-title-text-color: #515155;
 }
 
 body {

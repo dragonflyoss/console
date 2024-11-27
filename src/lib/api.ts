@@ -873,6 +873,7 @@ export async function createJob(request: createJobRequest): Promise<cerateJobRes
 interface getpeerParams {
   page?: number;
   per_page?: number;
+  scheduler_cluster_id?: number;
 }
 
 export interface getPeersResponse {

@@ -1,5 +1,15 @@
 import Paper from '@mui/material/Paper';
-import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Breadcrumbs,
+  Chip,
+  Link as RouterLink,
+  Skeleton,
+  Snackbar,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getSeedPeer, getSeedPeerResponse } from '../../lib/api';
 import { getDatetime } from '../../lib/utils';
@@ -92,17 +102,27 @@ export default function SeedPeer() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '1rem' }}
+      >
         <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters`}>
           clusters
         </RouterLink>
         <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}`}>
           {`seed-peer-cluster-${clusterID}`}
         </RouterLink>
-        <Typography color="inherit">seed-peers</Typography>
+        <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}/seed-peers`}>
+          seed-peers
+        </RouterLink>
         <Typography color="text.primary">{seedPeer?.host_name || '-'}</Typography>
       </Breadcrumbs>
-      <Typography variant="h5" sx={{ pb: '1rem' }}>
+      <Typography variant="h6" fontFamily="mabry-bold" sx={{ pb: '1rem' }}>
         Seed-Peer
       </Typography>
       <Box className={styles.container}>
@@ -124,9 +144,11 @@ export default function SeedPeer() {
               Hostname
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : seedPeer?.host_name || '-'}
-          </Typography>
+          <Tooltip title={seedPeer?.host_name || '-'} placement="top">
+            <Typography component="div" variant="subtitle1" fontFamily="mabry-bold" className={styles.hostname}>
+              {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : seedPeer?.host_name || '-'}
+            </Typography>
+          </Tooltip>
         </Paper>
         <Paper variant="outlined" className={styles.headerContainer}>
           <Box className={styles.headerContent}>

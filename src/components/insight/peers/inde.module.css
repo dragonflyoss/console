@@ -1,16 +1,39 @@
+.navigationWrapper {
+  padding: 1rem;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
 .navigationContent {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
 }
 
+.navigation {
+  top: -2rem;
+  width: 160px;
+  z-index: -1;
+  height: 160px;
+  right: -6rem;
+  opacity: 0.12;
+  border-radius: 24px;
+  position: absolute;
+  transform: rotate(34deg);
+  background: linear-gradient(to right, #22c55e 0%, rgba(34 197 94 / 0) 100%);
+}
+
 .navigationTitle {
-  padding-bottom: 1rem;
+  color: #637381;
 }
 
 .navigationIcon {
-  width: 4.4rem;
-  height: 4.4rem;
+  width: 2.6rem;
+  height: 2.6rem;
+  top: 2rem;
+  right: 1.2rem;
+  position: absolute;
 }
 
 .dashboard {
@@ -34,7 +57,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 0 1.2rem 0.2rem;
+  padding: 0.8rem 1rem;
 }
 
 .doughnutContainer {
@@ -43,12 +66,12 @@
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  padding: 1rem;
 }
 
 .activeContainer {
   display: flex;
   align-items: flex-end;
+  padding: 0 1rem 1rem 1rem;
 }
 
 .activeIcon {
@@ -76,4 +99,34 @@
 
 .descriptionIcon:hover {
   color: var(--description-color);
+}
+
+.exportIcon {
+  width: 1.8rem;
+}
+
+.featuresIconWrapper {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  background-color: #fbfbfb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.6rem;
+}
+
+.featuresIconContainer {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background-color: #efefef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featuresIcon {
+  width: 1.2rem;
+  height: 1.2rem;
 }

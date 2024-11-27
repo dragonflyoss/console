@@ -174,22 +174,22 @@ export default function Layout(props: any) {
         },
       ],
     },
-    {
-      label: 'insight',
-      href: '/insight',
-      text: 'Insight',
-      icon: <Box component="img" className={styles.menuIcon} src="/icons/insight/insight.svg" />,
-      selectedIcon: <Box component="img" className={styles.menuIcon} src="/icons/insight/selected-insight.svg" />,
-      expand: expandInsight,
-      setExpand: setExpandInsight,
-      menuProps: [
-        {
-          label: 'peers',
-          href: '/insight/peers',
-          text: 'Peer',
-        },
-      ],
-    },
+    // {
+    //   label: 'insight',
+    //   href: '/insight',
+    //   text: 'Insight',
+    //   icon: <Box component="img" className={styles.menuIcon} src="/icons/insight/insight.svg" />,
+    //   selectedIcon: <Box component="img" className={styles.menuIcon} src="/icons/insight/selected-insight.svg" />,
+    //   expand: expandInsight,
+    //   setExpand: setExpandInsight,
+    //   menuProps: [
+    //     {
+    //       label: 'peers',
+    //       href: '/insight/peers',
+    //       text: 'Peer',
+    //     },
+    //   ],
+    // },
   ];
 
   if (role === ROLE_ROOT) {

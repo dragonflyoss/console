@@ -6,6 +6,9 @@ import Layout from '../components/menu';
 import Clusters from '../components/clusters';
 import EditCluster from '../components/clusters/edit';
 import NewCluster from '../components/clusters/new';
+import Cluster from '../components/clusters/information';
+import SeedPeers from '../components/seed-peers';
+import Schedulers from '../components/schedulers/index';
 import ShowCluster from '../components/clusters/show';
 import ShowScheduler from '../components/schedulers/show';
 import ShowSeedPeer from '../components/seed-peers/show';
@@ -57,7 +60,13 @@ function Main() {
         <Route path="/clusters" element={<Clusters />} />
         <Route path="/clusters/new" element={<NewCluster />} />
         <Route path="/clusters/:id/edit" element={<EditCluster />} />
-        <Route path="/clusters/:id" element={<ShowCluster />} />
+        {/* <Route path="/clusters/:id" element={<ShowCluster />} /> */}
+        <Route element={<ShowCluster />}>
+          <Route path="/clusters/:id" element={<Cluster />} />
+          <Route path="/clusters/:id/schedulers" element={<Schedulers />} />
+          <Route path="/clusters/:id/seed-peers" element={<SeedPeers />} />
+          <Route path="/clusters/:id/peers" element={<Peers />} />
+        </Route>
         <Route path="/clusters/:id/schedulers/:id" element={<ShowScheduler />} />
         <Route path="/clusters/:id/seed-peers/:id" element={<ShowSeedPeer />} />
         <Route path="/profile" element={<Profile />} />
@@ -67,7 +76,7 @@ function Main() {
         <Route path="/jobs/preheats" element={<Preheats />} />
         <Route path="/jobs/preheats/new" element={<NewPreheat />} />
         <Route path="/jobs/preheats/:id" element={<ShowPreheat />} />
-        <Route path="/insight/peers" element={<Peers />} />
+
         <Route element={<Task />}>
           <Route path="/jobs/task/clear" element={<Clear />} />
           <Route path="/jobs/task/executions" element={<Executions />} />

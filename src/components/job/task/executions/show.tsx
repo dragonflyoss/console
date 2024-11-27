@@ -583,7 +583,6 @@ export default function ShowExecutions() {
                                   sx={{ width: '1.5rem', mr: '0.4rem' }}
                                   src="/icons/job/task/ip.svg"
                                 />
-
                                 <Typography variant="body2" component="div">
                                   {item?.ip}
                                 </Typography>

@@ -1,5 +1,15 @@
 import Paper from '@mui/material/Paper';
-import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Breadcrumbs,
+  Chip,
+  Link as RouterLink,
+  Skeleton,
+  Snackbar,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import HistoryIcon from '@mui/icons-material/History';
@@ -84,17 +94,27 @@ export default function Schedulers() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '1rem' }}
+      >
         <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters`}>
           clusters
         </RouterLink>
-        <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}`}>
+        <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}/schedulers`}>
           {`scheduler-cluster-${clusterID}`}
         </RouterLink>
-        <Typography color="inherit">schedulers</Typography>
+        <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}/schedulers`}>
+          {`schedulers`}
+        </RouterLink>
         <Typography color="text.primary">{scheduler?.host_name || '-'}</Typography>
       </Breadcrumbs>
-      <Typography variant="h5" sx={{ pb: '1rem' }}>
+      <Typography variant="h6" fontFamily="mabry-bold" sx={{ pb: '1rem' }}>
         Scheduler
       </Typography>
       <Box className={styles.container}>
@@ -116,9 +136,11 @@ export default function Schedulers() {
               Hostname
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : scheduler?.host_name || '-'}
-          </Typography>
+          <Tooltip title={scheduler?.host_name || '-'} placement="top">
+            <Typography component="div" variant="subtitle1" fontFamily="mabry-bold" className={styles.hostname}>
+              {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : scheduler?.host_name || '-'}
+            </Typography>
+          </Tooltip>
         </Paper>
         <Paper variant="outlined" className={styles.headerContainer}>
           <Box className={styles.headerContent}>

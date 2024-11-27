@@ -151,7 +151,7 @@ describe('Update cluster', () => {
     cy.get('#peerLoadLimit').should('have.value', 0);
     cy.get('#candidateParentLimit').should('have.value', 0);
     cy.get('#filterParentLimit').should('have.value', 0);
-    cy.get('#jobRateLimit').should('have.value', 10);
+    cy.get('#jobRateLimit').should('have.value', 0);
   });
 
   it('can update cluster', () => {

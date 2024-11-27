@@ -236,124 +236,134 @@ export default function Clusters() {
           </Button>
         </Box>
         <Grid className={styles.clusterHeaderContainer}>
-          <Paper variant="outlined" className={styles.clusterContainer}>
-            <Box p="1rem">
-              <Box display="flex">
-                <Box className={styles.clusterIconContainer}>
-                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/icons/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterIcon} src="/icons/cluster/cluster.svg" />
-                </Box>
-                <Typography variant="h6" className={styles.clusterIconTitle}>
-                  Cluster
-                </Typography>
-              </Box>
-              <Box className={styles.clusterContentContainer}>
-                <Box marginLeft="0.6rem">
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? (
-                        <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
-                      ) : (
-                        clusterCount?.length || 0
-                      )}
-                    </Typography>
-                    <span>number of clusters</span>
+          <Box className={styles.clusterContainer}>
+            <Paper variant="outlined" elevation={1}>
+              <Box p="1rem">
+                <Box display="flex">
+                  <Box className={styles.clusterIconContainer}>
+                    <Box component="img" className={styles.clusterSmallCircleIcon} src="/icons/cluster/round.svg" />
+                    <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
+                    <Box component="img" className={styles.clusterIcon} src="/icons/cluster/cluster.svg" />
                   </Box>
-                  <Grid className={styles.clusterBottomContainer}>
-                    <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/default.svg" />
-                    <Box className={styles.clusterBottomContentContainer}>
-                      <span className={styles.clusterBottomContent}>
+                  <Typography variant="h6" className={styles.clusterIconTitle}>
+                    Cluster
+                  </Typography>
+                </Box>
+                <Box className={styles.clusterContentContainer}>
+                  <Box marginLeft="0.6rem">
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography variant="h5" sx={{ mr: '1rem' }}>
                         {isLoading ? (
                           <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
                         ) : (
-                          numberOfDefaultClusters || 0
+                          clusterCount?.length || 0
                         )}
-                      </span>
-                      <span className={styles.clusterBottomContentMsg}>default</span>
+                      </Typography>
+                      <span>number of clusters</span>
                     </Box>
-                  </Grid>
-                </Box>
-                <Box component="img" src="/icons/cluster/statistics.svg" />
-              </Box>
-            </Box>
-          </Paper>
-          <Paper variant="outlined" className={styles.clusterContainer}>
-            <Box p="1rem">
-              <Box display="flex">
-                <Box className={styles.clusterIconContainer}>
-                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/icons/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterIcon} src="/icons/cluster/scheduler.svg" />
-                </Box>
-                <Typography variant="h6" className={styles.clusterIconTitle}>
-                  Scheduler
-                </Typography>
-              </Box>
-              <Box className={styles.clusterContentContainer}>
-                <Box sx={{ ml: '0.6rem' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '1rem' }} /> : scheduler?.length || 0}
-                    </Typography>
-                    <span>number of schedulers</span>
+                    <Grid className={styles.clusterBottomContainer}>
+                      <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/default.svg" />
+                      <Box className={styles.clusterBottomContentContainer}>
+                        <span className={styles.clusterBottomContent}>
+                          {isLoading ? (
+                            <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
+                          ) : (
+                            numberOfDefaultClusters || 0
+                          )}
+                        </span>
+                        <span className={styles.clusterBottomContentMsg}>default</span>
+                      </Box>
+                    </Grid>
                   </Box>
-                  <Grid className={styles.clusterBottomContainer}>
-                    <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/active.svg" />
-                    <Box className={styles.clusterBottomContentContainer}>
-                      <span className={styles.clusterBottomContent}>
+                  <Box component="img" src="/icons/cluster/statistics.svg" />
+                </Box>
+              </Box>
+            </Paper>
+          </Box>
+          <Box className={styles.clusterContainer}>
+            <Paper variant="outlined" elevation={1}>
+              <Box p="1rem">
+                <Box display="flex">
+                  <Box className={styles.clusterIconContainer}>
+                    <Box component="img" className={styles.clusterSmallCircleIcon} src="/icons/cluster/round.svg" />
+                    <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
+                    <Box component="img" className={styles.clusterIcon} src="/icons/cluster/scheduler.svg" />
+                  </Box>
+                  <Typography variant="h6" className={styles.clusterIconTitle}>
+                    Scheduler
+                  </Typography>
+                </Box>
+                <Box className={styles.clusterContentContainer}>
+                  <Box sx={{ ml: '0.6rem' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography variant="h5" sx={{ mr: '1rem' }}>
                         {isLoading ? (
                           <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
                         ) : (
-                          numberOfActiveSchedulers || 0
+                          scheduler?.length || 0
                         )}
-                      </span>
-                      <span className={styles.clusterBottomContentMsg}>active</span>
+                      </Typography>
+                      <span>number of schedulers</span>
                     </Box>
-                  </Grid>
-                </Box>
-                <Box component="img" src="/icons/cluster/statistics.svg" />
-              </Box>
-            </Box>
-          </Paper>
-          <Paper variant="outlined" className={styles.seedPeerContainer}>
-            <Box p="1rem">
-              <Box display="flex">
-                <Box className={styles.clusterIconContainer}>
-                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/icons/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterIcon} src="/icons/cluster/seed-peer.svg" />
-                </Box>
-                <Typography variant="h6" className={styles.seedPseerIconTitle}>
-                  Seed Peer
-                </Typography>
-              </Box>
-              <Box className={styles.clusterContentContainer}>
-                <Box sx={{ ml: '0.6rem' }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h5" sx={{ mr: '1rem' }}>
-                      {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '1rem' }} /> : seedPeer.length || 0}
-                    </Typography>
-                    <span>number of seed peers</span>
+                    <Grid className={styles.clusterBottomContainer}>
+                      <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/active.svg" />
+                      <Box className={styles.clusterBottomContentContainer}>
+                        <span className={styles.clusterBottomContent}>
+                          {isLoading ? (
+                            <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
+                          ) : (
+                            numberOfActiveSchedulers || 0
+                          )}
+                        </span>
+                        <span className={styles.clusterBottomContentMsg}>active</span>
+                      </Box>
+                    </Grid>
                   </Box>
-                  <Grid className={styles.clusterBottomContainer}>
-                    <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/active.svg" />
-                    <Box className={styles.clusterBottomContentContainer}>
-                      <span className={styles.clusterBottomContent}>
-                        {isLoading ? (
-                          <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
-                        ) : (
-                          numberOfActiveSeedPeers || 0
-                        )}
-                      </span>
-                      <span className={styles.clusterBottomContentMsg}>active</span>
-                    </Box>
-                  </Grid>
+                  <Box component="img" src="/icons/cluster/statistics.svg" />
                 </Box>
-                <Box component="img" src="/icons/cluster/statistics.svg" />
               </Box>
-            </Box>
-          </Paper>
+            </Paper>
+          </Box>
+          <Box className={styles.seedPeerContainer}>
+            <Paper variant="outlined" elevation={1}>
+              <Box p="1rem">
+                <Box display="flex">
+                  <Box className={styles.clusterIconContainer}>
+                    <Box component="img" className={styles.clusterSmallCircleIcon} src="/icons/cluster/round.svg" />
+                    <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
+                    <Box component="img" className={styles.clusterIcon} src="/icons/cluster/seed-peer.svg" />
+                  </Box>
+                  <Typography variant="h6" className={styles.seedPseerIconTitle}>
+                    Seed Peer
+                  </Typography>
+                </Box>
+                <Box className={styles.clusterContentContainer}>
+                  <Box sx={{ ml: '0.6rem' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography variant="h5" sx={{ mr: '1rem' }}>
+                        {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '1rem' }} /> : seedPeer.length || 0}
+                      </Typography>
+                      <span>number of seed peers</span>
+                    </Box>
+                    <Grid className={styles.clusterBottomContainer}>
+                      <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/active.svg" />
+                      <Box className={styles.clusterBottomContentContainer}>
+                        <span className={styles.clusterBottomContent}>
+                          {isLoading ? (
+                            <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
+                          ) : (
+                            numberOfActiveSeedPeers || 0
+                          )}
+                        </span>
+                        <span className={styles.clusterBottomContentMsg}>active</span>
+                      </Box>
+                    </Grid>
+                  </Box>
+                  <Box component="img" src="/icons/cluster/statistics.svg" />
+                </Box>
+              </Box>
+            </Paper>
+          </Box>
         </Grid>
         <Box className={styles.searchContainer}>
           <Stack spacing={2} sx={{ width: '20rem' }}>
@@ -397,82 +407,94 @@ export default function Clusters() {
             Array.isArray(allClusters) &&
             allClusters.map((item) => (
               <Box key={item.id} id="clusters" className={styles.clusterCard}>
-                <Paper variant="outlined">
+                <Paper variant="outlined" elevation={1}>
                   <Box className={styles.clusterListContent}>
-                    <Box display="flex">
-                      <span className={styles.idText}>ID&nbsp;:&nbsp;</span>
-                      {clusterIsLoading ? (
-                        <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
-                      ) : (
-                        <span className={styles.idText}>{item.id}</span>
-                      )}
-                    </Box>
-                    {clusterIsLoading ? (
-                      <Skeleton
-                        data-testid="isloading"
-                        sx={{ width: '4rem', height: '1.4rem', mt: '0.8rem', mb: '0.8rem' }}
-                      />
-                    ) : (
-                      <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        id="isDefault"
-                        sx={{
-                          mt: '0.8rem',
-                          mb: '0.8rem',
-                          width: item.is_default ? '4rem' : '6rem',
-                          height: '1.4rem',
-                          background: item.is_default ? 'var(--description-color)' : 'var(--button-color)',
-                          color: item.is_default ? '#FFFFFF' : '#FFFFFF',
-                        }}
-                      >
-                        <Typography variant="body2" fontFamily="system-ui">
-                          {`${item.is_default ? 'Default' : 'Non-Default'}`}
-                        </Typography>
+                    <Box p="1.6rem 1.6rem 0 1.6rem">
+                      <Box display="flex">
+                        {/* <span className={styles.idText}>ID&nbsp;:&nbsp;</span> */}
+                        <img className={styles.idIcon} src="/icons/cluster/id.svg" alt="" />
+                        {clusterIsLoading ? (
+                          <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
+                        ) : (
+                          <span className={styles.idText}>{item.id}</span>
+                        )}
                       </Box>
-                    )}
-                    <Typography variant="h6">
-                      {clusterIsLoading ? <Skeleton data-testid="isloading" sx={{ width: '6rem' }} /> : item.name}
-                    </Typography>
-                    <Box display="flex" mt="0.4rem">
-                      <Tooltip title={item.bio || '-'} placement="top">
-                        <Typography variant="body2" className={styles.descriptionText}>
-                          {clusterIsLoading ? (
-                            <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
-                          ) : (
-                            item.bio || '-'
-                          )}
-                        </Typography>
-                      </Tooltip>
+                      {clusterIsLoading ? (
+                        <Skeleton
+                          data-testid="isloading"
+                          sx={{ width: '4rem', height: '1.4rem', mt: '0.8rem', mb: '0.8rem' }}
+                        />
+                      ) : (
+                        <Paper
+                          elevation={0}
+                          sx={{
+                            mt: '0.8rem',
+                            mb: '0.8rem',
+                            height: '1.4rem',
+                            background: item.is_default ? 'var(--description-color)' : 'var(--button-color)',
+                            color: item.is_default ? '#FFFFFF' : '#FFFFFF',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '0.4rem',
+                          }}
+                        >
+                          <Typography variant="subtitle2">{`${
+                            item.is_default ? 'Default' : 'Non-Default'
+                          }`}</Typography>
+                        </Paper>
+                      )}
+                      <Typography variant="h5" className={styles.nameText}>
+                        {clusterIsLoading ? <Skeleton data-testid="isloading" sx={{ width: '6rem' }} /> : item.name}
+                      </Typography>
                     </Box>
-                    <Box className={styles.creatTimeContainer}>
-                      <Chip
-                        avatar={<MoreTimeIcon />}
-                        label={
-                          clusterIsLoading ? (
-                            <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
-                          ) : (
-                            getDatetime(item.created_at)
-                          )
-                        }
-                        variant="outlined"
-                        size="small"
-                      />
-                      <IconButton
-                        className={styles.buttonContent}
-                        sx={{
-                          '&.MuiButton-root': {
-                            backgroundColor: '#fff',
-                            padding: 0,
-                          },
-                        }}
-                        onClick={() => {
-                          navigate(`/clusters/${item.id}`);
-                        }}
-                      >
-                        <ArrowCircleRightIcon fontSize="large" sx={{ color: 'var(--button-color)' }} />
-                      </IconButton>
+                    <hr
+                      style={{
+                        borderStyle: 'dashed',
+                        borderColor: 'rgba(145 158 171 / 0.2)',
+                        borderWidth: '0px 0px thin',
+                      }}
+                    />
+                    <Box p="0 1.6rem 1.6rem 1.6rem">
+                      <Box display="flex" mt="0.4rem">
+                        <Tooltip title={item.bio || '-'} placement="top">
+                          <Typography variant="body2" className={styles.descriptionText}>
+                            {clusterIsLoading ? (
+                              <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
+                            ) : (
+                              item.bio || '-'
+                            )}
+                          </Typography>
+                        </Tooltip>
+                      </Box>
+                      <Box className={styles.creatTimeContainer}>
+                        <Chip
+                          avatar={<MoreTimeIcon />}
+                          label={
+                            clusterIsLoading ? (
+                              <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
+                            ) : (
+                              getDatetime(item.created_at)
+                            )
+                          }
+                          variant="outlined"
+                          size="small"
+                        />
+                        <IconButton
+                          className={styles.buttonContent}
+                          sx={{
+                            '&.MuiButton-root': {
+                              backgroundColor: '#fff',
+                              padding: 0,
+                            },
+                          }}
+                          onClick={() => {
+                            navigate(`/clusters/${item.id}`);
+                          }}
+                        >
+                          <ArrowCircleRightIcon fontSize="large" sx={{ color: 'var(--button-color)' }} />
+                        </IconButton>
+                      </Box>
                     </Box>
                   </Box>
                 </Paper>

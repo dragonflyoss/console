@@ -528,12 +528,25 @@ export default function ShowCluster() {
       setSearchSchedulerIconISLodaing(true);
       debouncedScheduler(newSearch);
 
-      const schedulerQueryString = newSearch ? `?schedulerSearch=${newSearch}` : '';
-      const seedpeerQueryString = searchSeedPeers ? `${newSearch ? '&' : '?'}seedPeerSearch=${searchSeedPeers}` : '';
+      const queryParts = [];
 
-      navigate(`${location.pathname}${schedulerQueryString}${seedpeerQueryString}`);
+      if (newSearch) {
+        queryParts.push(`schedulerSearch=${newSearch}`);
+      }
+
+      if (seedPeerSearch) {
+        queryParts.push(`seedPeerSearch=${seedPeerSearch}`);
+      }
+
+      if (seedPeerPage > 1) {
+        queryParts.push(`seedPeerPage=${seedPeerPage}`);
+      }
+
+      const queryString = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
+
+      navigate(`${location.pathname}${queryString}`);
     },
-    [debouncedScheduler, location.pathname, navigate, searchSeedPeers],
+    [debouncedScheduler, location.pathname, navigate, seedPeerPage, seedPeerSearch],
   );
 
   const debouncedSeedPeer = useMemo(
@@ -558,12 +571,25 @@ export default function ShowCluster() {
       setSearchSeedPeerIconISLodaing(true);
       debouncedSeedPeer(newSearch);
 
-      const schedulerQueryString = searchSchedulers ? `?schedulerSearch=${searchSchedulers}` : '';
-      const seedPeerQueryString = newSearch ? `seedPeerSearch=${newSearch}` : '';
+      const queryParts = [];
 
-      navigate(`${location.pathname}${schedulerQueryString}${`${searchSchedulers ? '&' : '?'}${seedPeerQueryString}`}`);
+      if (schedulerSearch) {
+        queryParts.push(`schedulerSearch=${schedulerSearch}`);
+      }
+
+      if (schedulerPage > 1) {
+        queryParts.push(`schedulerPage=${schedulerPage}`);
+      }
+
+      if (newSearch) {
+        queryParts.push(`seedPeerSearch=${newSearch}`);
+      }
+
+      const queryString = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
+
+      navigate(`${location.pathname}${queryString}`);
     },
-    [debouncedSeedPeer, location.pathname, navigate, searchSchedulers],
+    [debouncedSeedPeer, location.pathname, navigate, schedulerSearch, schedulerPage],
   );
 
   useEffect(() => {
@@ -1947,11 +1973,27 @@ export default function ShowCluster() {
             page={schedulerPage}
             onChange={(_event: any, newPage: number) => {
               setSchedulerPage(newPage);
-              navigate(
-                `/clusters/${params.id}${newPage > 1 ? `?schedulerPage=${newPage}` : ''}${
-                  seedPeerPage > 1 ? `${newPage > 1 ? '&' : '?'}seedPeerPage=${seedPeerPage}` : ''
-                }`,
-              );
+              const queryParts = [];
+
+              if (schedulerSearch) {
+                queryParts.push(`schedulerSearch=${schedulerSearch}`);
+              }
+
+              if (newPage > 1) {
+                queryParts.push(`schedulerPage=${newPage}`);
+              }
+
+              if (seedPeerSearch) {
+                queryParts.push(`seedPeerSearch=${seedPeerSearch}`);
+              }
+
+              if (seedPeerPage > 1) {
+                queryParts.push(`seedPeerPage=${seedPeerPage}`);
+              }
+
+              const queryString = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
+
+              navigate(`/clusters/${params.id}${queryString}`);
             }}
             color="primary"
             size="small"
@@ -2243,13 +2285,29 @@ export default function ShowCluster() {
           <Pagination
             count={seedPeerTotalPages}
             page={seedPeerPage}
-            onChange={(_event: any, newPage: number) => {
+            onChange={(_event: any, newPage: any) => {
               setSeedPeerPage(newPage);
-              navigate(
-                `/clusters/${params.id}${schedulerPage > 1 ? `?schedulerPage=${schedulerPage}` : ''}${
-                  newPage > 1 ? `${schedulerPage > 1 ? '&' : '?'}seedPeerPage=${newPage}` : ''
-                }`,
-              );
+              const queryParts = [];
+
+              if (schedulerSearch) {
+                queryParts.push(`schedulerSearch=${schedulerSearch}`);
+              }
+
+              if (schedulerPage > 1) {
+                queryParts.push(`schedulerPage=${schedulerPage}`);
+              }
+
+              if (seedPeerSearch) {
+                queryParts.push(`seedPeerSearch=${seedPeerSearch}`);
+              }
+
+              if (newPage > 1) {
+                queryParts.push(`seedPeerPage=${newPage}`);
+              }
+
+              const queryString = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
+
+              navigate(`/clusters/${params.id}${queryString}`);
             }}
             color="primary"
             size="small"

@@ -202,7 +202,7 @@ export default function Clear() {
         InputProps: (
           <Tooltip
             title={
-              'When the task URLs are the same but the tags are different, they are differentiated based on the tags and the query caches are also different.'
+              'When the task URL is the same but the tags are different, they will be distinguished based on the tags, and the queried tasks will also be different.'
             }
             placement="top"
           >
@@ -237,7 +237,7 @@ export default function Clear() {
         helperText: applicationError ? 'Fill in the characters, the length is 0-1000.' : '',
         error: applicationError,
         InputProps: (
-          <Tooltip title={'Application is the application of the task.'} placement="top">
+          <Tooltip title={'Caller application which is used for statistics and access control.'} placement="top">
             <HelpIcon
               color="disabled"
               sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
@@ -320,7 +320,11 @@ export default function Clear() {
       helperText: taskIDError ? 'Fill in the characters, the length is 0-1000.' : '',
       error: taskIDError,
       InputProps: {
-        startAdornment: isLoading ? <SearchCircularProgress /> : <SearchIcon sx={{ color: '#9BA0A6' }} />,
+        startAdornment: isLoading ? (
+          <SearchCircularProgress className={styles.circularProgress} />
+        ) : (
+          <SearchIcon sx={{ color: '#9BA0A6' }} />
+        ),
         endAdornment: searchTask ? (
           <IconButton
             type="button"
@@ -669,7 +673,7 @@ export default function Clear() {
                               {item?.id === 'filteredQueryParams' ? (
                                 <Tooltip
                                   title={
-                                    'By setting the filter parameter, you can specify the file type of the resource that needs to be searched for cache. This filter is used to generate a unique cache and filter out unnecessary query parameters in the URL, separated by the & character.'
+                                    'Filter the query parameters of the downloaded URL. If the download URL is the same, it will be scheduled as the same task.'
                                   }
                                   placement="top"
                                 >
@@ -966,7 +970,7 @@ export default function Clear() {
               </Box>
             </>
           ) : (
-            <Box id='no-task' sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '6rem' }}>
+            <Box id="no-task" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '6rem' }}>
               <Box component="img" sx={{ width: '4rem', mb: '3rem' }} src="/icons/job/task/no-search.svg" />
               <Box>
                 <Typography variant="h5" component="span">

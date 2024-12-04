@@ -487,7 +487,11 @@ export default function Clusters() {
               page={clusterPage}
               onChange={(_event: any, newPage: number) => {
                 setClusterPage(newPage);
-                navigate(`/clusters${newPage > 1 ? `?page=${newPage}` : ''}`);
+                navigate(
+                  `/clusters${search ? `?search=${search}` : ''}${
+                    newPage > 1 ? `${search ? '&' : '?'}page=${newPage}` : ''
+                  }`,
+                );
               }}
               color="primary"
               size="small"

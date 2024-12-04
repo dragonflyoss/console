@@ -1,9 +1,13 @@
 import Box from '@mui/material/Box';
 import CircularProgress, { circularProgressClasses, CircularProgressProps } from '@mui/material/CircularProgress';
 
-const SearchCircularProgress = (props: CircularProgressProps) => {
+interface CardProps {
+  className?: string;
+}
+
+const SearchCircularProgress: React.FC<CardProps> = (props: CircularProgressProps, { className }) => {
   return (
-    <Box sx={{ position: 'relative', display: 'flex' }}>
+    <Box sx={{ position: 'relative', display: 'flex' }} className={className}>
       <CircularProgress
         variant="determinate"
         sx={(theme) => ({

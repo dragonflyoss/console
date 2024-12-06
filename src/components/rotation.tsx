@@ -49,41 +49,37 @@ export default function Rotation() {
           onChangeIndex={handleStepChange}
           enableMouseEvents
         >
-          {imageList.map((step, index) => {
-            return (
-              <picture key={step.label}>
-                <div>
-                  {Math.abs(imageIndex - index) <= 2 ? (
-                    <Box
-                      component="img"
-                      sx={{
-                        width: '100%',
-                        height: '100vh',
-                      }}
-                      src={step.imageURL}
-                    />
-                  ) : null}
-                </div>
-              </picture>
-            );
-          })}
+          {imageList.map((step, index) => (
+            <div key={step.label}>
+              {Math.abs(imageIndex - index) <= 2 ? (
+                <Box
+                  component="img"
+                  sx={{
+                    width: '100%',
+                    height: '100vh',
+                    objectFit: 'cover',
+                  }}
+                  src={step.imageURL}
+                  alt={step.label}
+                />
+              ) : null}
+            </div>
+          ))}
         </AutoPlaySwipeableViews>
-        {
-          <MobileStepper
-            sx={{
-              width: '50%',
-              height: '6%',
-              display: 'flex',
-              alignItems: 'flex-start',
-              justifyContent: 'center',
-              backgroundColor: '#f6f7f9',
-            }}
-            backButton={undefined}
-            nextButton={undefined}
-            activeStep={imageIndex}
-            steps={imageList?.length}
-          />
-        }
+        <MobileStepper
+          sx={{
+            width: '50%',
+            height: '6%',
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            backgroundColor: '#f6f7f9',
+          }}
+          backButton={null}
+          nextButton={null}
+          activeStep={imageIndex}
+          steps={imageList.length}
+        />
       </Grid>
     </ThemeProvider>
   );

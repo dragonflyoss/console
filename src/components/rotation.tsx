@@ -1,7 +1,7 @@
 import { Box, Grid, MobileStepper, ThemeProvider, createTheme } from '@mui/material';
 import { useState } from 'react';
-import { autoPlay } from 'react-swipeable-views-utils';
 import SwipeableViews from 'react-swipeable-views';
+import { autoPlay } from 'react-swipeable-views-utils';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -68,22 +68,20 @@ export default function Rotation() {
             );
           })}
         </AutoPlaySwipeableViews>
-        {
-          <MobileStepper
-            sx={{
-              width: '50%',
-              height: '6%',
-              display: 'flex',
-              alignItems: 'flex-start',
-              justifyContent: 'center',
-              backgroundColor: '#f6f7f9',
-            }}
-            backButton={undefined}
-            nextButton={undefined}
-            activeStep={imageIndex}
-            steps={imageList?.length}
-          />
-        }
+        <MobileStepper
+          sx={{
+            width: '50%',
+            height: '6%',
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            backgroundColor: '#f6f7f9',
+          }}
+          backButton={undefined}
+          nextButton={undefined}
+          activeStep={imageIndex}
+          steps={imageList?.length}
+        />
       </Grid>
     </ThemeProvider>
   );

@@ -395,7 +395,7 @@ export default function ShowPreheat() {
                 </Typography>
               )
             ) : (
-              <Typography id="headers" variant="body1" className={styles.informationContent}>
+              <Typography variant="body1" className={styles.informationContent}>
                 -
               </Typography>
             )}
@@ -417,11 +417,7 @@ export default function ShowPreheat() {
                 return (
                   <Box className={styles.schedulerClustersIDContent}>
                     <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
-                      {isLoading ? (
-                        <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
-                      ) : (
-                        item.id || '-'
-                      )}
+                      {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} /> : item.id || '-'}
                     </Typography>
                   </Box>
                 );

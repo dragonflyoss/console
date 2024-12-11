@@ -528,35 +528,3 @@ export default function ShowPreheat() {
     </ThemeProvider>
   );
 }
-
-// curl --location --request POST 'http://localhost:8080/oapi/v1/jobs' \
-// --header 'Content-Type: application/json' \
-// --header 'Authorization: Bearer ZjhlOGI3YmUtNWZmZi00MWEwLWIyYTUtZDEzODE3ZDJiZGIx' \
-// --data-raw '{
-//     "type": "preheat",
-//     "args": {
-//         "type": "image",
-//         "url": "https://dockerpull.org/v2/library/alpine/manifests/3.19",
-//         "username": "zhaoxinxin1",
-//         "password": "zhaoxin666..",
-//         "scope": "single_seed_peer",
-//         "scheduler_cluster_ids":[1]
-//     }
-// }'
-
-// curl --request GET 'http://localhost:8080/oapi/v1/jobs/3' \
-// --header 'Content-Type: application/json' \
-// --header 'Authorization: Bearer ZjhlOGI3YmUtNWZmZi00MWEwLWIyYTUtZDEzODE3ZDJiZGIx'
-
-// curl --location --request POST 'http://localhost:8080/oapi/v1/jobs' \
-// --header 'Content-Type: application/json' \
-// --header 'Authorization: Bearer ZjhlOGI3YmUtNWZmZi00MWEwLWIyYTUtZDEzODE3ZDJiZGIx' \
-// --data-raw '{
-//     "type": "preheat",
-//     "args": {
-//         "type": "file",
-//         "url": "https://image.baidu.com/front/aigc?atn=aigc&fr=home&imgcontent=%7B%22aigcQuery%22%3A%22%22%2C%22imageAigcId%22%3A%224199096378%22%7D&isImmersive=1&pd=image_content&quality=1&ratio=9%3A16&sa=searchpromo_shijian_photohp_inspire&tn=aigc&top=%7B%22sfhs%22%3A1%7D&word=%E5%86%AC%E6%97%A5%E7%9A%84%E5%B0%8F%E4%BC%81%E9%B9%85%EF%BC%8C%E5%9C%A8%E5%86%B0%E9%9B%AA%E8%A6%86%E7%9B%96%E7%9A%84%E5%8D%97%E6%9E%81%EF%BC%8C%E4%B8%80%E5%8F%AA%E5%B0%8F%E4%BC%81%E9%B9%85%E8%B9%92%E8%B7%9A%E5%9C%B0%E5%AD%A6%E7%9D%80%E8%B5%B0%E8%B7%AF%EF%BC%8C%E5%AE%83%E7%9A%84%E9%BB%91%E7%99%BD%E7%9B%B8%E9%97%B4%E7%9A%84%E7%BE%BD%E6%AF%9B%E5%9C%A8%E9%9B%AA%E5%9C%B0%E4%B8%AD%E6%98%BE%E5%BE%97%E6%A0%BC%E5%A4%96%E9%86%92%E7%9B%AE%EF%BC%8C%E5%BC%95%E6%9D%A5%E4%BA%86%E5%90%8C%E4%BC%B4%E4%BB%AC%E5%A5%BD%E5%A5%87%E7%9A%84%E7%9B%AE%E5%85%89%E3%80%82",
-//         "scope": "all_seed_peers",
-//         "scheduler_cluster_ids":[1]
-//     }
-// }'

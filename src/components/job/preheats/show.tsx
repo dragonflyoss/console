@@ -418,7 +418,7 @@ export default function ShowPreheat() {
                   <Box className={styles.schedulerClustersIDContent}>
                     <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
                       {isLoading ? (
-                        <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
+                        <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
                       ) : (
                         item.id || '-'
                       )}

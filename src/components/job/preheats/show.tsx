@@ -395,7 +395,7 @@ export default function ShowPreheat() {
                 </Typography>
               )
             ) : (
-              <Typography variant="body1" className={styles.informationContent}>
+              <Typography id="headers" variant="body1" className={styles.informationContent}>
                 -
               </Typography>
             )}

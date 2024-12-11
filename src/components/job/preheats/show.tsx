@@ -122,6 +122,14 @@ export default function ShowPreheat() {
     setErrorLog(false);
   };
 
+  const scopeList = [
+    { label: 'Single Seed Peer', name: 'single_seed_peer' },
+    { label: 'All Seed Peers', name: 'all_seed_peers' },
+    { label: 'All Peers', name: 'all_peers' },
+  ];
+
+  const scope = preheat?.args?.scope && scopeList.find((item) => item.name === preheat?.args?.scope);
+
   return (
     <ThemeProvider theme={theme}>
       <Snackbar
@@ -160,7 +168,7 @@ export default function ShowPreheat() {
                 ID
               </Typography>
             </Box>
-            <Typography variant="body1" className={styles.informationContent}>
+            <Typography id="id" variant="body1" className={styles.informationContent}>
               {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '2rem' }} /> : preheat?.id || 0}
             </Typography>
           </Box>
@@ -176,7 +184,7 @@ export default function ShowPreheat() {
                 Description
               </Typography>
             </Box>
-            <Typography variant="body1" className={styles.informationContent}>
+            <Typography id="description" variant="body1" className={styles.informationContent}>
               {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '2rem' }} /> : preheat?.bio || '-'}
             </Typography>
           </Box>
@@ -299,6 +307,28 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
+              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/scope.svg" />
+              <Typography
+                variant="body1"
+                fontFamily="mabry-bold"
+                component="div"
+                className={styles.informationTitleText}
+              >
+                Scope
+              </Typography>
+            </Box>
+            <Typography id="scope" variant="body1" className={styles.informationContent}>
+              {isLoading ? (
+                <Skeleton data-testid="preheat-isloading" sx={{ width: '2rem' }} />
+              ) : scope ? (
+                scope.label
+              ) : (
+                ''
+              )}
+            </Typography>
+          </Box>
+          <Box className={styles.informationContainer}>
+            <Box className={styles.informationTitle}>
               <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/tag.svg" />
               <Typography
                 variant="body1"
@@ -309,7 +339,7 @@ export default function ShowPreheat() {
                 Tag
               </Typography>
             </Box>
-            <Box className={styles.informationContent}>
+            <Box id="tag" className={styles.informationContent}>
               {isLoading ? (
                 <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
               ) : preheat?.args?.tag ? (
@@ -349,7 +379,7 @@ export default function ShowPreheat() {
               <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
             ) : preheat?.args?.headers && preheat?.args?.headers !== null ? (
               Object.keys(preheat?.args?.headers).length > 0 ? (
-                <Paper variant="outlined" className={styles.headersContent}>
+                <Paper id="headers" variant="outlined" className={styles.headersContent}>
                   {Object.entries(preheat?.args.headers).map(([key, value], index) => (
                     <Box key={index} className={styles.headersText}>
                       <Box fontFamily="mabry-bold" width="35%" mr="1rem">
@@ -360,12 +390,12 @@ export default function ShowPreheat() {
                   ))}
                 </Paper>
               ) : (
-                <Typography variant="body1" className={styles.informationContent}>
+                <Typography id="headers" variant="body1" className={styles.informationContent}>
                   -
                 </Typography>
               )
             ) : (
-              <Typography variant="body1" className={styles.informationContent}>
+              <Typography id="headers" variant="body1" className={styles.informationContent}>
                 -
               </Typography>
             )}
@@ -382,16 +412,12 @@ export default function ShowPreheat() {
                 Scheduler Clusters ID
               </Typography>
             </Box>
-            <Box className={styles.schedulerClustersID}>
+            <Box id="scheduler-lusters-id" className={styles.schedulerClustersID}>
               {preheat?.scheduler_clusters?.map((item, index) => {
                 return (
                   <Box className={styles.schedulerClustersIDContent}>
                     <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
-                      {isLoading ? (
-                        <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
-                      ) : (
-                        item.id || '-'
-                      )}
+                      {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} /> : item.id || '-'}
                     </Typography>
                   </Box>
                 );
@@ -414,13 +440,14 @@ export default function ShowPreheat() {
               <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
             ) : preheat?.created_at ? (
               <Chip
+                id="created-at"
                 avatar={<MoreTimeIcon />}
                 label={getBJTDatetime(preheat.created_at)}
                 variant="outlined"
                 size="small"
               />
             ) : (
-              <Typography variant="body1" className={styles.informationContent}>
+              <Typography id="created-at" variant="body1" className={styles.informationContent}>
                 -
               </Typography>
             )}

@@ -59,6 +59,11 @@ describe('Create preheat', () => {
     cy.get('#cluster-1').check();
     cy.get('body').click('topLeft');
 
+    // Select a scope.
+    cy.get('#select-scope').click();
+
+    cy.get('#all_seed_peers').click();
+
     // Add url.
     cy.get('#url').type('https://example.com/path/to/file');
 
@@ -123,6 +128,12 @@ describe('Create preheat', () => {
     cy.get('#cluster-2').check();
     cy.get('body').click('topLeft');
 
+    // Select a scope.
+    cy.get('#select-scope').click();
+    cy.get('body').click('topLeft');
+    cy.get('#select-scope').click();
+    cy.get('#all_seed_peers').click();
+
     cy.get('#url').type('https://example.com/path/to/file');
 
     cy.get('#save').click();
@@ -152,6 +163,10 @@ describe('Create preheat', () => {
     cy.get('#select-cluster').click();
     cy.get('#cluster-1').check();
     cy.get('body').click('topLeft');
+
+    // Select a scope.
+    cy.get('#select-scope').click();
+    cy.get('#single_seed_peer').click();
 
     // Add ure.
     cy.get('#url').type('https://example.com/path/to/file');
@@ -217,6 +232,10 @@ describe('Create preheat', () => {
     cy.get('#select-cluster').click();
     cy.get('#cluster-2').check();
     cy.get('body').click('topLeft');
+
+    // Select a scope.
+    cy.get('#select-scope').click();
+    cy.get('#all_peers').click();
 
     cy.get('#url').type('https://example.com/path/to/file');
 

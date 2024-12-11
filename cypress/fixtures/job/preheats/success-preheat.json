@@ -16,7 +16,7 @@
     },
     "password": "",
     "platform": "",
-    "scope": "single_peer",
+    "scope": "single_seed_peer",
     "tag": "",
     "timeout": 1800000000000,
     "type": "file",

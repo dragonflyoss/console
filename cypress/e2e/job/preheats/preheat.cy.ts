@@ -61,8 +61,6 @@ describe('Preheat', () => {
 
   describe('when data is loaded', () => {
     it('should display detailed preheat failure information', () => {
-      // Click the preheat details button.
-
       cy.intercept(
         {
           method: 'GET',
@@ -78,8 +76,9 @@ describe('Preheat', () => {
           });
         },
       );
-      cy.get('#preheat-10').click();
 
+      // Click the preheat details button.
+      cy.get('#preheat-10').click();
       cy.get('[data-testid="preheat-isloading"]').should('be.exist');
 
       // Check for breadcrumb.
@@ -87,15 +86,17 @@ describe('Preheat', () => {
       cy.get('.MuiBreadcrumbs-ol > :nth-child(5) > .MuiTypography-root').should('have.text', 10);
 
       // Show preheat id.
-      cy.get(':nth-child(1) > .show_informationContent__wKGxa').should('have.text', 10);
+      cy.get('#id').should('have.text', 10);
 
       // Show preheat description.
       cy.get('.css-1k5mnne-MuiPaper-root > :nth-child(2) > .show_informationContent__wKGxa').should(
         'have.text',
         'This is a preheat task with status failure',
       );
-
       cy.get('[data-testid="preheat-isloading"]').should('not.exist');
+
+      // Show preheat scope.
+      cy.get('#scope').should('have.text', 'All Peers');
 
       // Show preheat status.
       cy.get('#status')
@@ -103,23 +104,21 @@ describe('Preheat', () => {
         .and('have.css', 'background-color', 'rgb(212, 37, 54)')
         .find('#error-log-icon')
         .and('exist');
-
       cy.get('#url').should('have.text', 'http://dock.io/preheat/test');
 
       // Show preheat tag.
-      cy.get(':nth-child(5) > .show_informationContent__wKGxa').should('have.text', 'prheat tag');
+      cy.get('#tag').should('have.text', 'prheat tag');
 
-      // Show preheat hearder.
-      cy.get(':nth-child(6) > .MuiPaper-root').children().should('have.length', 1);
-
+      // Show preheat headers.
+      cy.get('#headers').children().should('have.length', 1);
       cy.get('.css-172ywp3').should('have.text', 'Connection');
       cy.get('.css-ft9ciy').should('have.text', 'keep-alive');
 
       // Show preheat scheduler clusters ID.
-      cy.get('.show_schedulerClustersID__iQd1s').should('have.text', 1);
+      cy.get('#scheduler-lusters-id').should('have.text', 1);
 
       // Show preheat Created At.
-      cy.get(':nth-child(8) > .MuiChip-root').should('have.text', '2023-12-13 19:58:53');
+      cy.get('#created-at').should('have.text', '2023-12-13 19:58:53');
 
       // Click the show error log button.
       cy.get('#status > .MuiButtonBase-root').click();
@@ -131,7 +130,6 @@ describe('Preheat', () => {
         .should('be.visible')
         .and('have.text', 'rpc error: code = Aborted desc = source response 401/401 Unauthorized is not valid');
     });
-
     it('should display detailed preheat success information', () => {
       cy.get('#preheat-8').click();
 
@@ -140,7 +138,10 @@ describe('Preheat', () => {
       cy.get('.MuiBreadcrumbs-ol > :nth-child(5) > .MuiTypography-root').should('have.text', 8);
 
       // Show preheat id.
-      cy.get(':nth-child(1) > .show_informationContent__wKGxa').should('have.text', 8);
+      cy.get('#id').should('have.text', 8);
+
+      // Show preheat scope.
+      cy.get('#scope').should('have.text', 'Single Seed Peer');
 
       // Show preheat status.
       cy.get('#status')
@@ -149,10 +150,9 @@ describe('Preheat', () => {
         .find('#error-log-icon')
         .and('not.exist');
 
-      // Show preheat hearder.
-      cy.get(':nth-child(6) > .MuiPaper-root').children().should('have.length', 2);
+      // Show preheat headers.
+      cy.get('#headers').children().should('have.length', 2);
     });
-
     it('should display detailed preheat pending information', () => {
       let interceptCount = 0;
 
@@ -177,7 +177,7 @@ describe('Preheat', () => {
       cy.get('.MuiBreadcrumbs-ol > :nth-child(5) > .MuiTypography-root').should('have.text', 11);
 
       // Show preheat id.
-      cy.get(':nth-child(1) > .show_informationContent__wKGxa').should('have.text', 11);
+      cy.get('#id').should('have.text', 11);
 
       // Show preheat status.
       cy.get('#status')
@@ -188,9 +188,11 @@ describe('Preheat', () => {
         .find('#error-log-icon')
         .and('not.exist');
 
-      // Show preheat hearder.
-      cy.get(':nth-child(6) > .MuiPaper-root').children().should('have.length', 1);
+      // Show preheat scope.
+      cy.get('#scope').should('have.text', 'All Seed Peers');
 
+      // Show preheat headers.
+      cy.get('#headers').children().should('have.length', 1);
       cy.wait(120000);
 
       // Check how many times the API should be executed after six seconds.
@@ -250,10 +252,10 @@ describe('Preheat', () => {
 
     it('preheat information should appear empty', () => {
       // Show preheat id.
-      cy.get(':nth-child(1) > .show_informationContent__wKGxa').should('have.text', 0);
+      cy.get('#id').should('have.text', 0);
 
       // Show preheat description.
-      cy.get('.MuiPaper-root > :nth-child(2) > .show_informationContent__wKGxa').should('have.text', '-');
+      cy.get('#description').should('have.text', '-');
 
       // Show preheat status.
       cy.get('#status').should('not.exist');
@@ -262,16 +264,16 @@ describe('Preheat', () => {
       cy.get('#url').should('have.text', '-');
 
       // Show preheat tag.
-      cy.get('.show_informationContent__wKGxa.MuiBox-root').should('have.text', '-');
+      cy.get('#tag').should('have.text', '-');
 
-      // Show preheat hearder.
-      cy.get(':nth-child(6) > .show_informationContent__wKGxa').should('have.text', '-');
+      // Show preheat headers.
+      cy.get('#headers').should('have.text', '-');
 
       // Show preheat scheduler clusters ID.
-      cy.get('.show_schedulerClustersID__iQd1s').should('have.text', '-');
+      cy.get('#scheduler-lusters-id').should('have.text', '-');
 
       // Show preheat Created At.
-      cy.get(':nth-child(8) > .show_informationContent__wKGxa').should('have.text', '-');
+      cy.get('#created-at').should('have.text', '-');
     });
   });
 
@@ -309,10 +311,10 @@ describe('Preheat', () => {
 
     it('preheat information should appear empty', () => {
       // Show preheat id.
-      cy.get(':nth-child(1) > .show_informationContent__wKGxa').should('have.text', 0);
+      cy.get('#id').should('have.text', 0);
 
       // Show preheat description.
-      cy.get('.MuiPaper-root > :nth-child(2) > .show_informationContent__wKGxa').should('have.text', '-');
+      cy.get('#description').should('have.text', '-');
 
       // Show preheat status.
       cy.get('#status').should('not.exist');
@@ -321,16 +323,16 @@ describe('Preheat', () => {
       cy.get('#url').should('have.text', '-');
 
       // Show preheat tag.
-      cy.get('.show_informationContent__wKGxa.MuiBox-root').should('have.text', '-').should('have.text', '-');
+      cy.get('#tag').should('have.text', '-').should('have.text', '-');
 
-      // Show preheat hearder.
-      cy.get(':nth-child(6) > .show_informationContent__wKGxa').should('have.text', '-');
+      // Show preheat headers.
+      cy.get('#headers').should('have.text', '-');
 
       // Show preheat scheduler clusters ID.
-      cy.get('.show_schedulerClustersID__iQd1s').should('have.text', '-');
+      cy.get('#scheduler-lusters-id').should('have.text', '-');
 
       // Show preheat Created At.
-      cy.get(':nth-child(8) > .show_informationContent__wKGxa').should('have.text', '-');
+      cy.get('#created-at').should('have.text', '-');
     });
 
     it('when the status is pending, preheat API error response', () => {
@@ -357,7 +359,7 @@ describe('Preheat', () => {
       cy.get('.MuiBreadcrumbs-ol > :nth-child(5) > .MuiTypography-root').should('have.text', 11);
 
       // Show preheat id.
-      cy.get(':nth-child(1) > .show_informationContent__wKGxa').should('have.text', 11);
+      cy.get('#id').should('have.text', 11);
 
       // Show preheat status.
       cy.get('#status')
@@ -368,8 +370,8 @@ describe('Preheat', () => {
         .find('#error-log-icon')
         .and('not.exist');
 
-      // Show preheat hearder.
-      cy.get(':nth-child(6) > .MuiPaper-root').children().should('have.length', 1);
+      // Show preheat headers.
+      cy.get('#headers').children().should('have.length', 1);
 
       cy.wait(120000);
 

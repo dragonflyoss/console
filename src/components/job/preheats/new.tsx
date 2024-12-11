@@ -22,7 +22,7 @@ import {
   Snackbar,
   Alert,
   Paper,
-  InputAdornment,
+  SelectChangeEvent,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import HelpIcon from '@mui/icons-material/Help';
@@ -50,6 +50,7 @@ export default function NewPreheat() {
   const [filter, setFilter] = useState([]);
   const [clusterName, setClusterName] = useState<string[]>([]);
   const [clusterID, setClusterID] = useState<number[]>([]);
+  const [scope, setScope] = useState<string>('single_seed_peer');
   const [filterHelperText, setFilterHelperText] = useState('Fill in the characters, the length is 0-100.');
 
   const navigate = useNavigate();
@@ -230,6 +231,12 @@ export default function NewPreheat() {
     },
   ];
 
+  const scopeList = [
+    { label: 'Single Seed Peer', name: 'single_seed_peer' },
+    { label: 'All Seed Peers', name: 'all_seed_peers' },
+    { label: 'All Peers', name: 'all_peers' },
+  ];
+
   const handleSelectCluster = (event: any) => {
     const selectedValues = event.target.value;
     const selectedNames = selectedValues.map((item: any) => item.name);
@@ -237,6 +244,12 @@ export default function NewPreheat() {
     setClusterName(selectedNames);
     setClusterID(selectedIds);
     setClusterError(false);
+  };
+
+  const handleSelectScope = (event: SelectChangeEvent) => {
+    const selectedValues = event.target.value;
+    const currentSelection = scopeList.find((scope) => scope.name === selectedValues);
+    setScope(currentSelection?.name || '');
   };
 
   const headersKeyValidate = (key: any) => {
@@ -326,6 +339,7 @@ export default function NewPreheat() {
         tag: tag,
         filtered_query_params: filters,
         headers: headerList,
+        scope: scope,
       },
       scheduler_cluster_ids: clusterID,
     };
@@ -473,10 +487,33 @@ export default function NewPreheat() {
                 />
               </Tooltip>
             </Box>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              <FormControl className={styles.textField} margin="normal" required size="small" color="secondary">
+                <InputLabel id="scope">Scope</InputLabel>
+                <Select
+                  id="select-scope"
+                  label="scope"
+                  value={scope}
+                  onChange={handleSelectScope}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxHeight: '14rem',
+                        width: '18rem',
+                      },
+                    },
+                  }}
+                >
+                  {scopeList.map((item: any) => (
+                    <MenuItem id={item.name} key={item.name} value={item.name} sx={{ height: '2.6rem' }}>
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               {argsForm.map((item) => {
                 return (
-                  <Box key={item.formProps.id} className={styles.argsWrapper}>
+                  <>
                     {item.id === 'filteredQueryParams' ? (
                       <Autocomplete
                         freeSolo
@@ -524,7 +561,7 @@ export default function NewPreheat() {
                         margin="normal"
                         size="small"
                         {...item.formProps}
-                        sx={{ width: '26rem' }}
+                        sx={{ marginLeft: '1rem' }}
                         className={styles.textField}
                       />
                     ) : (
@@ -536,7 +573,7 @@ export default function NewPreheat() {
                         className={styles.filterInput}
                       />
                     )}
-                  </Box>
+                  </>
                 );
               })}
             </Box>

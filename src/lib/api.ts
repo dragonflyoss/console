@@ -860,6 +860,7 @@ interface cerateJobResponse {
     tag: string;
     type: string;
     url: string;
+    scope: string;
   };
   result: string;
 }

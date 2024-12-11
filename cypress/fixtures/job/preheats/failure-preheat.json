@@ -15,7 +15,7 @@
     },
     "password": "",
     "platform": "",
-    "scope": "single_peer",
+    "scope": "all_peers",
     "tag": "prheat tag",
     "timeout": 1800000000000,
     "type": "file",

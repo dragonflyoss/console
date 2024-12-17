@@ -1,3 +1,7 @@
+.container {
+  padding: 1rem 2rem;
+}
+
 .informationContainer {
   display: flex;
   align-items: center;
@@ -13,7 +17,7 @@
 .informationContent {
   width: 70%;
   word-break: break-all;
-  font-family: 'mabry-bold' !important;
+  font-family: 'thai-semi-bold' !important;
 }
 
 .urlContent {
@@ -22,6 +26,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-style: italic;
+  font-family: 'thai-semi-bold' !important;
 }
 
 .informationTitleIcon {
@@ -32,6 +37,7 @@
 .informationTitleText {
   margin-left: 1rem !important;
   color: #515151;
+  font-family: 'thai-semi-bold' !important;
 }
 
 .statusIcon {

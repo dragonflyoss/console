@@ -3,7 +3,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
   Alert,
   Box,
-  Breadcrumbs,
   Button,
   Chip,
   Dialog,
@@ -34,13 +33,18 @@ import {
   AccordionDetails,
   LinearProgress,
   debounce,
-  Checkbox,
   Menu,
   MenuItem,
   ListItemIcon,
   FormControl,
   InputLabel,
   Select,
+  toggleButtonGroupClasses,
+  ToggleButtonGroup,
+  styled,
+  ToggleButton,
+  ListItemButton,
+  ListItemText,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -56,21 +60,8 @@ import {
   Chart,
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import {
-  getSchedulers,
-  getSeedPeers,
-  getCluster,
-  deleteCluster,
-  deleteScheduler,
-  deleteSeedPeer,
-  getClusterResponse,
-  getSchedulersResponse,
-  getSeedPeersResponse,
-  getSchedulerFeatrues,
-  updateSchedulerFeatrues,
-} from '../../lib/api';
+import { getSeedPeers, deleteSeedPeer, getSeedPeersResponse } from '../../lib/api';
 import DeleteIcon from '@mui/icons-material/Delete';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
@@ -87,6 +78,10 @@ import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { MyContext } from '../clusters/show';
 import DeleteSuccessfullyAnimation from '../deleted-successfully-animation';
+import Card from '../card';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 const theme = createTheme({
   palette: {
@@ -98,12 +93,12 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'mabry-light,sans-serif',
+    fontFamily: 'thai-regular,sans-serif',
   },
 });
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
-Chart.defaults.font.family = 'mabry-light';
+Chart.defaults.font.family = 'thai-regular';
 
 function CircularProgressWithLabel(props: LinearProgressProps & { value: number }) {
   return (
@@ -117,7 +112,7 @@ function CircularProgressWithLabel(props: LinearProgressProps & { value: number 
         />
       </Box>
       <Box sx={{ minWidth: 35 }}>
-        <Typography variant="body2" fontFamily="mabry-bold" color="text.secondary">{`${Math.round(
+        <Typography variant="body2" fontFamily="thai-semi-bold" color="text.secondary">{`${Math.round(
           props.value,
         )}%`}</Typography>
       </Box>
@@ -125,17 +120,33 @@ function CircularProgressWithLabel(props: LinearProgressProps & { value: number 
   );
 }
 
+const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
+  [`& .${toggleButtonGroupClasses.grouped}`]: {
+    margin: theme.spacing(0.5),
+    border: 0,
+    borderRadius: theme.shape.borderRadius,
+    [`&.${toggleButtonGroupClasses.disabled}`]: {
+      border: 0,
+    },
+  },
+  [`& .${toggleButtonGroupClasses.middleButton},& .${toggleButtonGroupClasses.lastButton}`]: {
+    marginLeft: -1,
+    borderLeft: '1px solid transparent',
+  },
+}));
+
 export default function ShowCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [seedPeerTableIsLoading, setSeedPeerTableIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [openDeleteInactive, setOpenDeleteInactive] = useState(false);
   const [openDeleteSeedPeer, setOpenDeleteSeedPeer] = useState(false);
   const [seedPeerSelectedRow, setSeedPeerSelectedRow] = useState<getSeedPeersResponse | null>(null);
   const [seedPeerSelectedID, setSeedPeerSelectedID] = useState('');
   const [seedPeerPage, setSeedPeerPage] = useState(1);
+  const [pageSize, setPageSize] = useState<number>(9);
   const [seedPeerTotalPages, setSeedPeerTotalPages] = useState<number>(1);
   const [searchSeedPeers, setSearchSeedPeer] = useState('');
   const [seedPeerCount, setSeedPeerCount] = useState<getSeedPeersResponse[]>([]);
@@ -151,14 +162,18 @@ export default function ShowCluster() {
   const [seedPeerAnchorElement, setSeedPeerAnchorElement] = useState(null);
   const [openStatusSelect, setOpenStatusSelect] = useState(false);
   const [status, setStatus] = useState<string>('ALL');
+  const [alignment, setAlignment] = useState('table');
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const steps = ['Seed peers', 'Confirm delete'];
   const params = useParams();
   const navigate = useNavigate();
   const query = useQuery();
   const location = useLocation();
-  const seedPeerCurrentPage = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
-  const seedPeerSearch = query.get('search') ? (query.get('search') as string) : '';
+  const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
+  const search = query.get('search') ? (query.get('search') as string) : '';
+  const open = Boolean(anchorEl);
 
   const { cluster } = useContext(MyContext);
 
@@ -178,23 +193,23 @@ export default function ShowCluster() {
   useEffect(() => {
     (async function () {
       try {
-        setSeedPeerTableIsLoading(true);
-        setSeedPeerPage(seedPeerCurrentPage);
+        setIsLoading(true);
+        setSeedPeerPage(page);
 
         if (typeof params.id === 'string') {
           await seedPeers();
 
-          setSeedPeerTableIsLoading(false);
+          setIsLoading(false);
         }
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
-          setSeedPeerTableIsLoading(false);
+          setIsLoading(false);
         }
       }
     })();
-  }, [params.id, seedPeerCurrentPage, seedPeers]);
+  }, [params.id, page, seedPeers]);
 
   useEffect(() => {
     if (Array.isArray(seedPeer) && seedPeer.length >= 1) {
@@ -209,11 +224,35 @@ export default function ShowCluster() {
         }
       });
 
+      if (alignment === 'card') {
+        const updatePageSize = () => {
+          if (window.matchMedia('(max-width: 1440px)').matches) {
+            setPageSize(9);
+          } else if (window.matchMedia('(max-width: 1600px)').matches) {
+            setPageSize(9);
+          } else if (window.matchMedia('(max-width: 1920px)').matches) {
+            setPageSize(12);
+          } else if (window.matchMedia('(max-width: 2048px)').matches) {
+            setPageSize(12);
+          } else if (window.matchMedia('(max-width: 2560px)').matches) {
+            setPageSize(15);
+          }
+        };
+
+        updatePageSize();
+
+        window.addEventListener('resize', updatePageSize);
+      }
+
       const statusSeedPeer =
         (status !== 'ALL' && Array.isArray(seedPeer) && seedPeer.filter((item) => item.state === status)) || seedPeer;
 
-      const totalPage = Math.ceil(statusSeedPeer.length / DEFAULT_PAGE_SIZE);
-      const currentPageData = getPaginatedList(statusSeedPeer, seedPeerPage, DEFAULT_PAGE_SIZE);
+      const totalPage = Math.ceil(statusSeedPeer.length / (alignment === 'card' ? pageSize : DEFAULT_PAGE_SIZE));
+      const currentPageData = getPaginatedList(
+        statusSeedPeer,
+        seedPeerPage,
+        alignment === 'card' ? pageSize : DEFAULT_PAGE_SIZE,
+      );
 
       if (currentPageData?.length === 0 && seedPeerPage > 1) {
         setSeedPeerPage(seedPeerPage - 1);
@@ -225,7 +264,7 @@ export default function ShowCluster() {
       setSeedPeerTotalPages(1);
       setAllSeedPeers([]);
     }
-  }, [seedPeer, seedPeerPage, status]);
+  }, [seedPeer, seedPeerPage, status, alignment, pageSize]);
 
   const numberOfActiveSeedPeers =
     Array.isArray(seedPeerCount) && seedPeerCount?.filter((item: any) => item?.state === 'active').length;
@@ -243,6 +282,16 @@ export default function ShowCluster() {
 
     setErrorMessage(false);
     setSuccessMessage(false);
+    setAnchorEl(null);
+    setOpenDeleteSeedPeer(false);
+    setSeedPeerSelectedRow(null);
+    setSeedPeerAnchorElement(null);
+    if (!progressLoading) {
+      setOpenDeleteInactive(false);
+      setDeleteAllInactiveErrorMessage([]);
+      setDeleteInactiveSeedPeerSuccessful(0);
+      setActiveStep(0);
+    }
   };
 
   const seedPeerDoughnutOptions = {
@@ -270,22 +319,18 @@ export default function ShowCluster() {
     ],
   };
 
-  const handleDeleteClose = (_event: any, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+  // const handleDeleteClose = (_event: any, reason?: string) => {
+  //   if (reason === 'clickaway') {
+  //     return;
+  //   }
 
-    setOpenDeleteSeedPeer(false);
-    setSeedPeerSelectedRow(null);
-
-    setSeedPeerAnchorElement(null);
-    if (!progressLoading) {
-      setOpenDeleteInactive(false);
-      setDeleteAllInactiveErrorMessage([]);
-      setDeleteInactiveSeedPeerSuccessful(0);
-      setActiveStep(0);
-    }
-  };
+  //   if (!progressLoading) {
+  //     setOpenDeleteInactive(false);
+  //     setDeleteAllInactiveErrorMessage([]);
+  //     setDeleteInactiveSeedPeerSuccessful(0);
+  //     setActiveStep(0);
+  //   }
+  // };
 
   const openHandleSeedPeer = (row: any) => {
     setSeedPeerSelectedRow(row);
@@ -295,7 +340,7 @@ export default function ShowCluster() {
 
   const handleDeleteSeedPeer = async () => {
     setDeleteLoadingButton(true);
-    setSeedPeerTableIsLoading(true);
+    setIsLoading(true);
 
     try {
       await deleteSeedPeer(seedPeerSelectedID);
@@ -310,7 +355,7 @@ export default function ShowCluster() {
           per_page: MAX_PAGE_SIZE,
         });
 
-        setSeedPeerTableIsLoading(false);
+        setIsLoading(false);
 
         setSeedPeer(seedPeer);
         setSeedPeerCount(seedPeer);
@@ -321,7 +366,7 @@ export default function ShowCluster() {
         setErrorMessage(true);
         setErrorMessageText(error.message);
         setDeleteLoadingButton(false);
-        setSeedPeerTableIsLoading(false);
+        setIsLoading(false);
       }
     }
   };
@@ -356,11 +401,11 @@ export default function ShowCluster() {
   );
 
   useEffect(() => {
-    if (seedPeerSearch) {
-      setSearchSeedPeer(seedPeerSearch);
-      debouncedSeedPeer(seedPeerSearch);
+    if (search) {
+      setSearchSeedPeer(search);
+      debouncedSeedPeer(search);
     }
-  }, [seedPeerSearch, debouncedSeedPeer]);
+  }, [search, debouncedSeedPeer]);
 
   const handleConfirmDelete = async (event: any) => {
     event.preventDefault();
@@ -473,8 +518,23 @@ export default function ShowCluster() {
     { lable: 'Inactive', name: 'inactive' },
   ];
 
-  const changeStatus = (event: any) => {
-    setStatus(event.target.value);
+  // const changeStatus = (event: any) => {
+  //   setStatus(event.target.value);
+  // };
+
+  const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string) => {
+    setAlignment(newAlignment);
+  };
+
+  const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuItemClick = (event: any, index: number) => {
+    setSelectedIndex(index);
+    setStatus(event.name);
+
+    setAnchorEl(null);
   };
 
   return (
@@ -500,7 +560,7 @@ export default function ShowCluster() {
         </Alert>
       </Snackbar>
       <Box className={styles.openDeleteInactiveDialog}>
-        <Typography variant="h6" fontFamily="mabry-bold">
+        <Typography variant="h6" fontWeight="600">
           Seed Peers
         </Typography>
         <MuiTooltip title="Delete inactive schedulers and inactive seed peers." placement="top">
@@ -515,7 +575,6 @@ export default function ShowCluster() {
             sx={{
               '&.MuiButton-root': {
                 backgroundColor: 'var(--button-color)',
-                borderRadius: 0,
                 color: '#fff',
               },
             }}
@@ -527,7 +586,7 @@ export default function ShowCluster() {
       </Box>
       <Dialog
         open={openDeleteInactive}
-        onClose={handleDeleteClose}
+        onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         sx={{
@@ -556,7 +615,7 @@ export default function ShowCluster() {
               src="/icons/cluster/delete.svg"
               sx={{ width: '1.8rem', height: '1.8rem', mr: '0.4rem' }}
             />
-            <Typography variant="h6" component="div" fontFamily="mabry-bold">
+            <Typography variant="h6" component="div" fontFamily="thai-semi-bold">
               Delete inactive seed peers
             </Typography>
           </Box>
@@ -584,7 +643,7 @@ export default function ShowCluster() {
                 {progressLoading ? (
                   <Box className={styles.circularProgressWrapper}>
                     <DeleteAnimation />
-                    <Typography variant="subtitle1" component="div" fontFamily="mabry-bold">
+                    <Typography variant="subtitle1" component="div" fontFamily="thai-semi-bold">
                       LOADING...
                     </Typography>
                     <CircularProgressWithLabel value={progress} />
@@ -597,11 +656,11 @@ export default function ShowCluster() {
                           <Paper variant="outlined" className={styles.headerContainer}>
                             <Box>
                               <Box className={styles.headerContent}>
-                                <Typography fontFamily="mabry-bold" variant="subtitle2" component="div">
+                                <Typography fontFamily="thai-semi-bold" variant="subtitle2" component="div">
                                   Seed Peers
                                 </Typography>
                               </Box>
-                              <Typography component="div" variant="h5" fontFamily="mabry-bold">
+                              <Typography component="div" variant="h5" fontFamily="thai-semi-bold">
                                 {deleteInactiveSeedPeerSuccessful || '0'}
                               </Typography>
                               <Typography color="#8a8a8a" fontSize="0.8rem" component="div" variant="subtitle2">
@@ -617,11 +676,16 @@ export default function ShowCluster() {
                           <Paper variant="outlined" className={styles.headerContainer}>
                             <Box>
                               <Box className={styles.headerContent}>
-                                <Typography fontFamily="mabry-bold" variant="subtitle2" component="div" id="failure">
+                                <Typography
+                                  fontFamily="thai-semi-bold"
+                                  variant="subtitle2"
+                                  component="div"
+                                  id="failure"
+                                >
                                   Failure
                                 </Typography>
                               </Box>
-                              <Typography component="div" variant="h6" fontFamily="mabry-bold">
+                              <Typography component="div" variant="h6" fontFamily="thai-semi-bold">
                                 {deleteAllInactiveErrorMessage.length || '0'}
                               </Typography>
                               <Typography color="#8a8a8a" fontSize="0.8rem" component="div" variant="subtitle2">
@@ -636,7 +700,7 @@ export default function ShowCluster() {
                           </Paper>
                         </Box>
                         <Paper variant="outlined" className={styles.deleteInactiveWrapper}>
-                          <Typography variant="inherit" fontFamily="mabry-bold" pb="1rem">
+                          <Typography variant="inherit" fontFamily="thai-semi-bold" pb="1rem">
                             Logs
                           </Typography>
                           <Accordion
@@ -673,7 +737,7 @@ export default function ShowCluster() {
                                   sx={{ width: '1.2rem', height: '1.2rem', mr: '0.4rem' }}
                                   src="/icons/job/preheat/failure.svg"
                                 />
-                                <Typography variant="body2" fontFamily="mabry-bold">
+                                <Typography variant="body2" fontFamily="thai-semi-bold">
                                   Error log
                                 </Typography>
                               </Box>
@@ -697,11 +761,11 @@ export default function ShowCluster() {
                           {/* <Paper variant="outlined" className={styles.successHeaderContainer}>
                             <Box>
                               <Box className={styles.headerContent}>
-                                <Typography fontFamily="mabry-bold" variant="subtitle2" component="div">
+                                <Typography fontFamily="thai-semi-bold" variant="subtitle2" component="div">
                                   Seed peers
                                 </Typography>
                               </Box>
-                              <Typography component="div" variant="h6" fontFamily="mabry-bold">
+                              <Typography component="div" variant="h6" fontFamily="thai-semi-bold">
                                 {deleteInactiveSeedPeerSuccessful || '0'}
                               </Typography>
                               <Typography color="#8a8a8a" component="div" variant="subtitle2">
@@ -734,7 +798,6 @@ export default function ShowCluster() {
                       sx={{
                         '&.MuiButton-root': {
                           backgroundColor: 'var(--button-color)',
-                          borderRadius: 0,
                           color: '#fff',
                         },
                       }}
@@ -751,7 +814,7 @@ export default function ShowCluster() {
                 {activeStep === 0 ? (
                   <Paper variant="outlined">
                     <Box className={styles.schedulerInactiveCountWrapper}>
-                      <Typography fontFamily="mabry-bold" variant="subtitle1" component="div">
+                      <Typography fontFamily="thai-semi-bold" variant="subtitle1" component="div">
                         Seed peers
                       </Typography>
                       <Box
@@ -772,7 +835,7 @@ export default function ShowCluster() {
                         <Typography
                           id="seedPeerTotal"
                           variant="caption"
-                          fontFamily="mabry-bold"
+                          fontFamily="thai-semi-bold"
                           component="div"
                           pl="0.3rem"
                           lineHeight="1rem"
@@ -785,17 +848,17 @@ export default function ShowCluster() {
                       <Divider />
                       <ListSubheader color="inherit" className={styles.schedulerInactiveListTitle}>
                         <Box className={styles.schedulerInactiveHeaderID}>
-                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                          <Typography variant="body2" fontFamily="thai-semi-bold" color="#515155" component="div">
                             ID
                           </Typography>
                         </Box>
                         <Box className={styles.schedulerInactiveHeaderHostname}>
-                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                          <Typography variant="body2" fontFamily="thai-semi-bold" color="#515155" component="div">
                             Hostname
                           </Typography>
                         </Box>
                         <Box className={styles.schedulerInactiveHeaderIP}>
-                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                          <Typography variant="body2" fontFamily="thai-semi-bold" color="#515155" component="div">
                             IP
                           </Typography>
                         </Box>
@@ -856,7 +919,12 @@ export default function ShowCluster() {
                         sx={{ width: '1.4rem', height: '1.4rem', pr: '0.2rem' }}
                       />
                       <Box>
-                        <Typography variant="body1" fontFamily="mabry-bold" component="span" sx={{ color: '#D81E06' }}>
+                        <Typography
+                          variant="body1"
+                          fontFamily="thai-semi-bold"
+                          component="span"
+                          sx={{ color: '#D81E06' }}
+                        >
                           WARNING:&nbsp;
                         </Typography>
                         <Typography variant="body1" component="span" sx={{ color: '#D81E06' }}>
@@ -900,7 +968,6 @@ export default function ShowCluster() {
                     sx={{
                       '&.MuiButton-root': {
                         backgroundColor: activeStep === 0 ? '' : 'var(--button-color)',
-                        borderRadius: 0,
                         color: '#fff',
                       },
                     }}
@@ -918,7 +985,6 @@ export default function ShowCluster() {
                       sx={{
                         '&.MuiLoadingButton-root': {
                           backgroundColor: 'var(--save-color)',
-                          borderRadius: 0,
                           color: '#fff',
                           borderColor: 'var(--save-color)',
                         },
@@ -940,7 +1006,6 @@ export default function ShowCluster() {
                             Array.isArray(seedPeerInactive) && seedPeerInactive.length === 0
                               ? ''
                               : 'var(--button-color)',
-                          borderRadius: 0,
                           color: '#fff',
                         },
                       }}
@@ -954,343 +1019,713 @@ export default function ShowCluster() {
           </Box>
         </DialogContent>
       </Dialog>
-      <Box sx={{ display: 'flex', mb: '3rem' }}>
-        <Paper variant="outlined" sx={{ width: '50%', p: '1.2rem', display: 'flex', justifyContent: 'space-between' }}>
+      <Box sx={{ display: 'flex', mb: '2rem' }}>
+        <Card className={styles.seedPeerHeader}>
           <Box sx={{ display: 'flex', width: '70%' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+              <Typography variant="subtitle1" fontWeight="600" color="#637381">
                 Total
               </Typography>
               <Box>
-                {seedPeerTableIsLoading ? (
-                  <Skeleton data-testid="cluster-loading" width="2rem" />
+                {isLoading ? (
+                  <Box p="0.4rem 0">
+                    <Skeleton height={40} data-testid="isloading" width="2rem" />
+                  </Box>
                 ) : (
-                  <Typography id="total" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
+                  <Typography id="total" variant="h5" fontWeight="600" p="0.4rem 0">
                     {seedPeerCount?.length || 0}
                   </Typography>
                 )}
-                <div>number of seed peers</div>
+
+                <Typography variant="body2" color="var(--table-title-text-color)">
+                  number of seed peers
+                </Typography>
               </Box>
             </Box>
           </Box>
-          <Box component="img" src="/icons/peer/statistics.svg" sx={{ width: '5rem' }} />
-        </Paper>
-        <Paper
-          variant="outlined"
-          sx={{ width: '50%', ml: '1rem', p: '1.2rem', display: 'flex', justifyContent: 'space-between' }}
-        >
+          <Box className={styles.navigation} />
+          <Box component="img" className={styles.navigationIcon} src="/icons/peer/total.svg" />
+        </Card>
+        <Card className={styles.activeHeader}>
           <Box sx={{ display: 'flex', width: '70%' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+              <Typography variant="subtitle1" fontWeight="600" color="#637381">
                 Active
               </Typography>
               <Box>
-                {seedPeerTableIsLoading ? (
-                  <Skeleton data-testid="cluster-loading" width="2rem" />
+                {isLoading ? (
+                  <Box p="0.4rem 0">
+                    <Skeleton height={40} data-testid="isloading" width="2rem" />
+                  </Box>
                 ) : (
-                  <Typography id="active" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
+                  <Typography id="active" variant="h5" fontWeight="600" p="0.4rem 0">
                     {numberOfActiveSeedPeers}
                   </Typography>
                 )}
-                <div>number of active seed peers</div>
+                <Typography variant="body2" color="var(--table-title-text-color)">
+                  number of active seed peers
+                </Typography>
               </Box>
             </Box>
           </Box>
-          <Box className={styles.doughnut}>
-            {seedPeerTableIsLoading ? (
-              <Skeleton data-testid="cluster-loading" variant="circular" width="100%" height="100%" />
+          {/* <Box className={styles.doughnut}>
+            {isLoading ? (
+              <Skeleton data-testid="isloading" variant="circular" width="100%" height="100%" />
             ) : (
               <Doughnut data={seedPeerDoughnut} options={seedPeerDoughnutOptions} />
             )}
+          </Box> */}
+          <Box className={styles.navigation} />
+          <Box component="img" className={styles.navigationIcon} src="/icons/cluster/scheduler/active.svg" />
+        </Card>
+        <Card className={styles.activeHeader}>
+          <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <Typography variant="subtitle2" fontWeight="600" color="#637381">
+                Inactive
+              </Typography>
+              <Box>
+                {isLoading ? (
+                  <Box p="0.4rem 0">
+                    <Skeleton height={40} data-testid="isloading" width="2rem" />
+                  </Box>
+                ) : (
+                  <Typography id="inactive" variant="h5" fontWeight="600" p="0.4rem 0">
+                    {numberOfInactiveSeedPeers}
+                  </Typography>
+                )}
+                <Typography variant="body2" color="var(--table-title-text-color)">
+                  number of inactive seed peer
+                </Typography>
+              </Box>
+            </Box>
           </Box>
-        </Paper>
+          <Box className={styles.navigation} />
+          <Box component="img" className={styles.navigationIcon} src="/icons/cluster/scheduler/inactive.svg" />
+        </Card>
       </Box>
-      <Paper variant="outlined" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-        <Box className={styles.searchContainer}>
-          <Stack spacing={2} sx={{ width: '20rem' }}>
-            <Autocomplete
-              size="small"
-              color="secondary"
-              id="seedPeerSearch"
-              freeSolo
-              inputValue={searchSeedPeers}
-              onInputChange={(_event, newInputValue) => {
-                handleSearchSeedPeer(newInputValue);
-              }}
-              options={seedPeerCount.map((option) => option.host_name)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Search"
-                  InputProps={{
-                    ...params.InputProps,
-                    startAdornment: searchSeedPeerIconISLodaing ? <SearchCircularProgress /> : <SearchIcon />,
-                  }}
-                />
-              )}
-            />
-          </Stack>
-          <FormControl sx={{ width: '10rem' }} size="small">
-            <InputLabel id="states-select">Status</InputLabel>
-            <Select
-              id="states-select"
-              value={status}
-              label="changeStatus"
-              open={openStatusSelect}
-              onClose={() => {
-                setOpenStatusSelect(false);
-              }}
-              onOpen={() => {
-                setOpenStatusSelect(true);
-              }}
-              onChange={changeStatus}
+      <Box className={styles.searchContainer}>
+        <Stack spacing={2} sx={{ width: '16rem' }}>
+          <Autocomplete
+            size="small"
+            color="secondary"
+            id="seed-peer-search"
+            freeSolo
+            inputValue={searchSeedPeers}
+            onInputChange={(_event, newInputValue) => {
+              handleSearchSeedPeer(newInputValue);
+            }}
+            options={seedPeerCount.map((option) => option.host_name)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Search"
+                InputProps={{
+                  ...params.InputProps,
+                  startAdornment: searchSeedPeerIconISLodaing ? (
+                    <Box
+                      sx={{
+                        width: '2.2rem',
+                        height: '2.2rem',
+                        pl: '0.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <SearchCircularProgress />
+                    </Box>
+                  ) : (
+                    <Box
+                      sx={{
+                        width: '2.2rem',
+                        height: '2.2rem',
+                        pl: '0.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <SearchIcon sx={{ color: '#919EAB' }} />
+                    </Box>
+                  ),
+                }}
+              />
+            )}
+          />
+        </Stack>
+        {/* <FormControl sx={{ width: '10rem' }} size="small">
+          <InputLabel id="states-select">Status</InputLabel>
+          <Select
+            id="states-select"
+            value={status}
+            label="changeStatus"
+            open={openStatusSelect}
+            onClose={() => {
+              setOpenStatusSelect(false);
+            }}
+            onOpen={() => {
+              setOpenStatusSelect(true);
+            }}
+            onChange={changeStatus}
+          >
+            <Typography variant="body1" fontFamily="thai-semi-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
+              Filter by status
+            </Typography>
+            <Divider />
+            {statusList.map((item) => (
+              <MenuItem key={item.name} value={item.name}>
+                {item.lable}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl> */}
+
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper' }}>
+            <ListItemButton
+              id="lock-button"
+              aria-haspopup="listbox"
+              aria-controls="lock-menu"
+              aria-label="when device is locked"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClickListItem}
             >
-              <Typography variant="body1" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
+              <ListItemText
+                primary={`Filter : ${statusList[selectedIndex].lable}`}
+                // secondary={statusList[selectedIndex].lable}
+                sx={{ pr: '0.6rem' }}
+              />
+
+              {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </ListItemButton>
+          </List>
+          <Menu
+            id="lock-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'lock-button',
+              role: 'listbox',
+            }}
+            sx={{
+              '& .MuiMenu-list': {
+                p: 0,
+                width: '10rem',
+              },
+            }}
+          >
+            <Box className={styles.menu}>
+              <Typography variant="body1" fontFamily="thai-semi-bold" sx={{ m: '0.4rem 1rem' }}>
                 Filter by status
               </Typography>
-              <Divider />
-              {statusList.map((item) => (
-                <MenuItem key={item.name} value={item.name}>
+              <Divider sx={{ mb: '0.2rem' }} />
+              {statusList.map((item, index) => (
+                <MenuItem key={item.name} value={item.name} onClick={() => handleMenuItemClick(item, index)}>
                   {item.lable}
                 </MenuItem>
               ))}
-            </Select>
-          </FormControl>
+            </Box>
+          </Menu>
+          <Paper
+            elevation={0}
+            sx={(theme) => ({
+              display: 'flex',
+              border: `1px solid ${theme.palette.divider}`,
+              flexWrap: 'wrap',
+              ml: '1rem',
+            })}
+          >
+            <StyledToggleButtonGroup
+              size="small"
+              value={alignment}
+              exclusive
+              onChange={handleAlignment}
+              aria-label="text alignment"
+            >
+              <ToggleButton id="table" value="table" aria-label="left aligned">
+                <Box component="img" src="/icons/cluster/scheduler/table.svg" />
+              </ToggleButton>
+              <ToggleButton id="card" value="card" aria-label="centered">
+                <Box component="img" src="/icons/cluster/scheduler/card.svg" />
+              </ToggleButton>
+            </StyledToggleButtonGroup>
+          </Paper>
         </Box>
-        <Box width="100%">
-          <Divider />
-          <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="seed-peer-table">
-            <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
-              <TableRow>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    ID
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    Hostname
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    IP
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    Port
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    Download Port
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    Object Storage Port
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    Type
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    Status
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    Operation
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody id="seed-peer-table-body">
-              {seedPeerTableIsLoading ? (
-                <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell align="center">
-                    <Skeleton data-testid="seed-peer-loading" />
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton data-testid="seed-peer-loading" width="4rem" />
+      </Box>
+      {alignment === 'card' ? (
+        <Box id="seed-peer-card" display="flex" flexWrap="wrap">
+          {isLoading ? (
+            <Box id="clusters" className={styles.clusterCard}>
+              <Card>
+                <Box className={styles.clusterListContent}>
+                  <Box p="1.5rem 1.5rem 0 1.5rem">
+                    <Box display="flex" mb="0.5rem">
+                      <img className={styles.idIcon} src="/icons/cluster/id.svg" alt="" />
+                      <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
                     </Box>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
-                      <Skeleton data-testid="seed-peer-loading" width="4rem" />
+                    <Typography variant="h6" mb="0.5rem" className={styles.nameText}>
+                      <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
+                    </Typography>
+                    <Box display="flex">
+                      <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
                     </Box>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton data-testid="seed-peer-loading" width="2rem" />
-                    </Box>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton data-testid="seed-peer-loading" width="2rem" />
-                    </Box>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton data-testid="seed-peer-loading" width="2rem" />
-                    </Box>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton data-testid="seed-peer-loading" width="2rem" />
-                    </Box>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton data-testid="seed-peer-loading" width="3.5rem" height="2.6rem" />
-                    </Box>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton data-testid="seed-peer-loading" width="2.5rem" height="2.5rem" />
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ) : allseedPeers.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={9} align="center" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    You don't have seed peer cluster.
-                  </TableCell>
-                </TableRow>
-              ) : (
-                <>
-                  {Array.isArray(allseedPeers) &&
-                    allseedPeers.map((item: any) => {
-                      return (
-                        <TableRow
-                          key={item?.id}
-                          selected={seedPeerSelectedRow === item}
-                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  </Box>
+                  <Divider
+                    sx={{
+                      borderStyle: 'dashed',
+                      borderColor: 'var(--palette-divider)',
+                      borderWidth: '0px 0px thin',
+                      m: '1rem 0',
+                    }}
+                  />
+                  <Box p="0 1.5rem 1.5rem 1.5rem">
+                    <Skeleton data-testid="isloading" sx={{ width: '4rem', height: '1.4rem', mb: '0.8rem' }} />
+
+                    <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
+                  </Box>
+                </Box>
+              </Card>
+            </Box>
+          ) : Array.isArray(allseedPeers) && allseedPeers.length > 0 ? (
+            Array.isArray(allseedPeers) &&
+            allseedPeers.map((item: any) => (
+              <Box key={item.id} className={styles.clusterCard}>
+                <Card>
+                  <Box className={styles.scheduleListContent}>
+                    <Box p="1.5rem 1.5rem 0 1.5rem">
+                      <IconButton
+                        onClick={(event: any) => {
+                          setSeedPeerAnchorElement(event.currentTarget);
+                          setSeedPeerSelectedRow(item);
+                          setSeedPeerSelectedID(item.id);
+                        }}
+                        size="small"
+                        id={`operation-${item?.id}`}
+                        aria-controls={Boolean(seedPeerAnchorElement) ? item?.host_name : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={Boolean(seedPeerAnchorElement) ? 'true' : undefined}
+                        className={styles.moreVertIcon}
+                      >
+                        <MoreVertIcon color="action" />
+                      </IconButton>
+                      <Menu
+                        anchorEl={seedPeerAnchorElement}
+                        id={seedPeerSelectedRow?.host_name}
+                        open={Boolean(seedPeerAnchorElement)}
+                        onClose={handleClose}
+                        sx={{
+                          position: 'absolute',
+                          left: '-6rem',
+                          '& .MuiMenu-paper': {
+                            boxShadow:
+                              '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d',
+                          },
+                          '& .MuiMenu-list': {
+                            p: 0,
+                            width: '9rem',
+                          },
+                        }}
+                      >
+                        <Box className={styles.menu}>
+                          <MenuItem
+                            // className={styles.menuItem}
+                            id={`view-${seedPeerSelectedRow?.host_name}`}
+                            onClick={() => {
+                              // openHandleScheduler(schedulerSelectedRow);
+                              navigate(`/clusters/${params.id}/seed-peers/${seedPeerSelectedRow?.id}`);
+                              setSeedPeerAnchorElement(null);
+                            }}
+                          >
+                            <ListItemIcon>
+                              <RemoveRedEyeIcon className={styles.menuItemIcon} />
+                            </ListItemIcon>
+                            <Typography variant="subtitle2">View</Typography>
+                          </MenuItem>
+                          <MenuItem
+                            id={`delete-${seedPeerSelectedRow?.host_name}`}
+                            onClick={() => {
+                              openHandleSeedPeer(seedPeerSelectedRow);
+                              setSeedPeerAnchorElement(null);
+                            }}
+                          >
+                            <ListItemIcon>
+                              <DeleteIcon sx={{ color: '#FF5630' }} />
+                            </ListItemIcon>
+                            <Typography variant="subtitle2" color="#FF5630">
+                              Delete
+                            </Typography>
+                          </MenuItem>
+                        </Box>
+                      </Menu>
+                      <Box display="flex">
+                        <img className={styles.idIcon} src="/icons/cluster/id.svg" alt="" />
+                        {isLoading ? (
+                          <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
+                        ) : (
+                          <Typography id={`card-id-${item.id}`} className={styles.idText}>
+                            {item.id}
+                          </Typography>
+                        )}
+                      </Box>
+                      <MuiTooltip title={item.host_name || '-'} placement="top">
+                        <RouterLink
+                          component={Link}
+                          to={`/clusters/${params.id}/schedulers/${item?.id}`}
+                          underline="hover"
                         >
-                          <TableCell id={`id-${item?.id}`} align="center">
-                            {item?.id}
-                          </TableCell>
-                          <TableCell id={`hostname-${item?.host_name}`} align="center">
-                            <RouterLink
-                              component={Link}
-                              to={`/clusters/${params.id}/seed-peers/${item?.id}`}
-                              underline="hover"
-                              sx={{ color: 'var(--description-color)' }}
-                            >
-                              {item?.host_name}
-                            </RouterLink>
-                          </TableCell>
-                          <TableCell id={`ip-${item?.id}`} align="center">
-                            <Box className={styles.ipContainer}>
-                              <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
-                              {item?.ip}
-                            </Box>
-                          </TableCell>
-                          <TableCell id={`port-${item?.id}`} align="center">
-                            {item?.port}
-                          </TableCell>
-                          <TableCell id={`download-port-${item?.id}`} align="center">
-                            {item?.download_port}
-                          </TableCell>
-                          <TableCell id={`object-storage-port-${item?.id}`} align="center">
-                            {item?.object_storage_port === 0 ? '-' : item?.object_storage_port}
-                          </TableCell>
-                          <TableCell id={`type-${item?.id}`} align="center">
+                          <Typography
+                            id={`card-hostname-${item.host_name}`}
+                            variant="subtitle1"
+                            m="0.6rem 0"
+                            className={styles.hostnameCardText}
+                          >
+                            {item.host_name}
+                          </Typography>
+                        </RouterLink>
+                      </MuiTooltip>
+                      <Box sx={{ display: 'flex', width: '50%', mb: '1rem', alignItems: 'center' }}>
+                        <Box component="img" className={styles.statusIcon} src="/icons/cluster/status.svg" />
+                        <Chip
+                          label={_.upperFirst(item?.state) || ''}
+                          size="small"
+                          variant="outlined"
+                          id={`card-state-${item.id}`}
+                          sx={{
+                            borderRadius: '0.2rem',
+                            backgroundColor:
+                              item?.state === 'active'
+                                ? 'var(--menu-background-color)'
+                                : 'var(--palette-background-inactive)',
+                            color: item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                            borderColor:
+                              item?.state === 'active'
+                                ? 'var(--menu-background-color)'
+                                : 'var(--palette-background-inactive)',
+                            fontWeight: '600',
+                          }}
+                        />
+                      </Box>
+                    </Box>
+                    <Divider
+                      sx={{
+                        borderStyle: 'dashed',
+                        borderColor: 'var(--palette-divider)',
+                        borderWidth: '0px 0px thin',
+                        m: '1rem 0',
+                      }}
+                    />
+                    <Box p="0 1.5rem 1.5rem 1.5rem">
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                        <Box sx={{ display: 'flex', width: '50%', mb: '1rem', alignItems: 'center' }}>
+                          <Box component="img" className={styles.portIcon} src="/icons/cluster/ip.svg" />
+                          <Typography
+                            id={`card-ip-${item.id}`}
+                            variant="caption"
+                            sx={{ display: 'block', color: '#919EAB' }}
+                          >
+                            {item.ip}
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', width: '50%', mb: '1rem', alignItems: 'center' }}>
+                          <Box component="img" className={styles.portIcon} src="/icons/cluster/seed-peer/type.svg" />
+                          <Typography
+                            id={`card-type-${item.id}`}
+                            variant="caption"
+                            sx={{ display: 'block', color: '#919EAB' }}
+                          >
                             {_.upperFirst(item?.type) || ''}
-                          </TableCell>
-                          <TableCell id={`state-${item?.id}`} align="center">
-                            <Chip
-                              label={_.upperFirst(item?.state) || ''}
-                              size="small"
-                              variant="outlined"
-                              sx={{
-                                borderRadius: '0%',
-                                backgroundColor:
-                                  item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                                color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
-                                borderColor:
-                                  item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                                fontWeight: 'bold',
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell align="center">
-                            <IconButton
-                              onClick={(event: any) => {
-                                setSeedPeerAnchorElement(event.currentTarget);
-                                setSeedPeerSelectedRow(item);
-                                setSeedPeerSelectedID(item.id);
-                              }}
-                              size="small"
-                              id={`operate-${item?.id}`}
-                              aria-controls={Boolean(seedPeerAnchorElement) ? item?.host_name : undefined}
-                              aria-haspopup="true"
-                              aria-expanded={Boolean(seedPeerAnchorElement) ? 'true' : undefined}
-                              sx={{ position: 'relative', padding: '0' }}
-                            >
-                              <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
-                            </IconButton>
-                            <Menu
-                              anchorEl={seedPeerAnchorElement}
-                              id={seedPeerSelectedRow?.host_name}
-                              open={Boolean(seedPeerAnchorElement)}
-                              onClose={handleDeleteClose}
-                              sx={{
-                                position: 'absolute',
-                                left: '-3rem',
-                                '& .MuiMenu-paper': {
-                                  boxShadow:
-                                    '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
-                                },
-                                '& .MuiMenu-list': {
-                                  p: 0,
-                                  width: '10rem',
-                                },
-                              }}
-                            >
-                              <MenuItem
-                                className={styles.menuItem}
-                                id={`delete-${seedPeerSelectedRow?.host_name}`}
-                                onClick={() => {
-                                  openHandleSeedPeer(seedPeerSelectedRow);
-                                  setSeedPeerAnchorElement(null);
+                          </Typography>
+                        </Box>
+                        <Box className={styles.portContainer}>
+                          <Box component="img" className={styles.portIcon} src="/icons/cluster/seed-peer/port.svg" />
+                          <Typography
+                            id={`card-port-${item.id}`}
+                            variant="caption"
+                            sx={{ display: 'block', color: '#919EAB' }}
+                          >
+                            {_.upperFirst(item?.port) || ''}
+                          </Typography>
+                        </Box>
+                        <Box className={styles.portContainer}>
+                          <Box
+                            component="img"
+                            className={styles.portIcon}
+                            src="/icons/cluster/seed-peer/download-port.svg"
+                          />
+                          <Typography
+                            id={`card-download-port-${item.id}`}
+                            variant="caption"
+                            sx={{ display: 'block', color: '#919EAB' }}
+                          >
+                            {_.upperFirst(item?.download_port) || ''}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Card>
+              </Box>
+            ))
+          ) : (
+            <Card className={styles.noData}>
+              <Box component="img" className={styles.nodataIcon} src="/icons/cluster/scheduler/ic-content.svg" />
+              <Typography id="no-seed-peer" variant="h6" className={styles.nodataText}>
+                No data
+              </Typography>
+            </Card>
+          )}
+        </Box>
+      ) : (
+        <Card>
+          <Box width="100%">
+            <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="seed-peer-table">
+              <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
+                <TableRow>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      ID
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      Hostname
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      IP
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      Port
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      Download Port
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      Object Storage Port
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      Type
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      Status
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      {/* Operation */}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody id="seed-peer-table-body">
+                {isLoading ? (
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell align="center">
+                      <Skeleton data-testid="isloading" />
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="4rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="4rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="2rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="2rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="2rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="2rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="3.5rem" height="2.6rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="2.5rem" height="2.5rem" />
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ) : allseedPeers.length === 0 ? (
+                  <TableRow>
+                    <TableCell id="no-seed-peer-table" colSpan={9} align="center" sx={{ border: 0 }}>
+                      You don't have seed peer cluster.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  <>
+                    {Array.isArray(allseedPeers) &&
+                      allseedPeers.map((item: any) => {
+                        return (
+                          <TableRow
+                            key={item?.id}
+                            selected={seedPeerSelectedRow === item}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            className={styles.tableRow}
+                          >
+                            <TableCell id={`id-${item?.id}`} align="center">
+                              {item?.id}
+                            </TableCell>
+                            <TableCell id={`hostname-${item?.host_name}`} align="center">
+                              <RouterLink
+                                component={Link}
+                                to={`/clusters/${params.id}/seed-peers/${item?.id}`}
+                                underline="hover"
+                                sx={{ color: 'var(--description-color)' }}
+                              >
+                                {item?.host_name}
+                              </RouterLink>
+                            </TableCell>
+                            <TableCell id={`ip-${item?.id}`} align="center">
+                              {item?.ip}
+                            </TableCell>
+                            <TableCell id={`port-${item?.id}`} align="center">
+                              {item?.port}
+                            </TableCell>
+                            <TableCell id={`download-port-${item?.id}`} align="center">
+                              {item?.download_port}
+                            </TableCell>
+                            <TableCell id={`object-storage-port-${item?.id}`} align="center">
+                              {item?.object_storage_port === 0 ? '-' : item?.object_storage_port}
+                            </TableCell>
+                            <TableCell id={`type-${item?.id}`} align="center">
+                              {_.upperFirst(item?.type) || ''}
+                            </TableCell>
+                            <TableCell id={`state-${item?.id}`} align="center">
+                              <Chip
+                                label={_.upperFirst(item?.state) || ''}
+                                size="small"
+                                variant="outlined"
+                                sx={{
+                                  borderRadius: '0.2rem',
+                                  backgroundColor:
+                                    item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                                  color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
+                                  borderColor:
+                                    item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                                  fontWeight: 'bold',
+                                }}
+                              />
+                            </TableCell>
+                            <TableCell align="center">
+                              <IconButton
+                                onClick={(event: any) => {
+                                  setSeedPeerAnchorElement(event.currentTarget);
+                                  setSeedPeerSelectedRow(item);
+                                  setSeedPeerSelectedID(item.id);
+                                }}
+                                size="small"
+                                id={`operation-${item?.id}`}
+                                aria-controls={Boolean(seedPeerAnchorElement) ? item?.host_name : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={Boolean(seedPeerAnchorElement) ? 'true' : undefined}
+                                sx={{ position: 'relative', padding: '0' }}
+                              >
+                                <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                              </IconButton>
+                              <Menu
+                                anchorEl={seedPeerAnchorElement}
+                                id={seedPeerSelectedRow?.host_name}
+                                open={Boolean(seedPeerAnchorElement)}
+                                onClose={handleClose}
+                                sx={{
+                                  position: 'absolute',
+                                  left: '-6rem',
+
+                                  '& .MuiMenu-paper': {
+                                    boxShadow:
+                                      '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d',
+                                  },
+                                  '& .MuiMenu-list': {
+                                    p: 0,
+                                    width: '9rem',
+                                  },
                                 }}
                               >
-                                <ListItemIcon>
-                                  <DeleteOutlineIcon
-                                    sx={{ color: 'var(--button-color)' }}
-                                    className={styles.menuItemIcon}
-                                  />
-                                </ListItemIcon>
-                                Delete
-                              </MenuItem>
-                            </Menu>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                </>
-              )}
-            </TableBody>
-          </Table>
-        </Box>
-      </Paper>
+                                <Box className={styles.menu}>
+                                  <MenuItem
+                                    // className={styles.menuItem}
+                                    id={`view-${seedPeerSelectedRow?.host_name}`}
+                                    onClick={() => {
+                                      // openHandleScheduler(schedulerSelectedRow);
+                                      navigate(`/clusters/${params.id}/seed-peers/${seedPeerSelectedRow?.id}`);
+                                      setSeedPeerAnchorElement(null);
+                                    }}
+                                  >
+                                    <ListItemIcon>
+                                      <RemoveRedEyeIcon className={styles.menuItemIcon} />
+                                    </ListItemIcon>
+                                    <Typography variant="subtitle2">View</Typography>
+                                  </MenuItem>
+                                  <MenuItem
+                                    // className={styles.menuItem}
+                                    id={`delete-${seedPeerSelectedRow?.host_name}`}
+                                    onClick={() => {
+                                      openHandleSeedPeer(seedPeerSelectedRow);
+                                      setSeedPeerAnchorElement(null);
+                                    }}
+                                  >
+                                    <ListItemIcon>
+                                      <DeleteIcon sx={{ color: '#FF5630' }} className={styles.menuItemIcon} />
+                                    </ListItemIcon>
+                                    <Typography variant="subtitle2" color="#FF5630">
+                                      Delete
+                                    </Typography>
+                                  </MenuItem>
+                                </Box>
+                              </Menu>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                  </>
+                )}
+              </TableBody>
+            </Table>
+          </Box>
+        </Card>
+      )}
       <Dialog
         open={openDeleteSeedPeer}
-        onClose={handleDeleteClose}
+        onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Box component="img" className={styles.deleteClusterIcon} src="/icons/cluster/delete.svg" />
-            <Typography fontFamily="mabry-bold" pt="1rem">
+            <Typography fontFamily="thai-semi-bold" pt="1rem">
               Are you sure you want to delet this seed peer?
             </Typography>
           </Box>
@@ -1319,8 +1754,22 @@ export default function ShowCluster() {
             count={seedPeerTotalPages}
             page={seedPeerPage}
             onChange={(_event: any, newPage: number) => {
+              // setSeedPeerPage(newPage);
+              // navigate(`/clusters/${params.id}/seed-peers${newPage > 1 ? `?page=${newPage}` : ''}`);
+
               setSeedPeerPage(newPage);
-              navigate(`/clusters/${params.id}/seed-peers${newPage > 1 ? `?page=${newPage}` : ''}`);
+
+              const queryParts = [];
+              if (search) {
+                queryParts.push(`search=${search}`);
+              }
+              if (newPage > 1) {
+                queryParts.push(`page=${newPage}`);
+              }
+
+              const queryString = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
+
+              navigate(`/clusters/${params.id}/seed-peers${queryString}`);
             }}
             color="primary"
             size="small"
@@ -1330,7 +1779,6 @@ export default function ShowCluster() {
       ) : (
         <></>
       )}
-      <Grid sx={{ height: 2 }}> </Grid>
     </ThemeProvider>
   );
 }

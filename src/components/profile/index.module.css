@@ -27,6 +27,10 @@
   background-color: var(--button-color) !important;
 }
 
+.information {
+  padding: 2rem;
+}
+
 .informationHeader {
   display: flex;
   justify-content: space-between;

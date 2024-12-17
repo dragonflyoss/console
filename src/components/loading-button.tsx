@@ -15,13 +15,12 @@ export const CancelLoadingButton: React.FC<cancelLoadingButtonProps> = ({ loadin
     endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
     size="small"
     variant="outlined"
-    type='reset'
+    type="reset"
     loadingPosition="end"
     id={id}
     sx={{
       '&.MuiLoadingButton-root': {
         color: 'var(--calcel-size-color)',
-        borderRadius: 0,
         borderColor: 'var(--calcel-color)',
       },
       ':hover': {
@@ -77,7 +76,6 @@ export const SavelLoadingButton: React.FC<saveLoadingButtonProps> = ({
       sx={{
         '&.MuiLoadingButton-root': {
           backgroundColor: 'var(--save-color)',
-          borderRadius: 0,
           color: 'var(--save-size-color)',
           borderColor: 'var(--save-color)',
         },

@@ -4,7 +4,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
   Alert,
   Box,
-  Breadcrumbs,
   Button,
   Chip,
   Dialog,
@@ -14,11 +13,6 @@ import {
   Link as RouterLink,
   Skeleton,
   Snackbar,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   Typography,
   Pagination,
   Autocomplete,
@@ -42,6 +36,17 @@ import {
   FormControl,
   InputLabel,
   Select,
+  toggleButtonGroupClasses,
+  ToggleButtonGroup,
+  ToggleButton,
+  styled,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  ListItemButton,
+  ListItemText,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -59,15 +64,14 @@ import {
 import { Doughnut } from 'react-chartjs-2';
 import {
   getSchedulers,
-  deleteCluster,
   deleteScheduler,
   getSchedulersResponse,
-  getSeedPeersResponse,
   getSchedulerFeatrues,
   updateSchedulerFeatrues,
 } from '../../lib/api';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
@@ -86,6 +90,10 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 import { MyContext } from '../clusters/show';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import Card from '../card';
 
 const theme = createTheme({
   palette: {
@@ -97,12 +105,12 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'mabry-light,sans-serif',
+    fontFamily: 'thai-regular,sans-serif',
   },
 });
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
-Chart.defaults.font.family = 'mabry-light';
+Chart.defaults.font.family = 'thai-regular';
 
 function CircularProgressWithLabel(props: LinearProgressProps & { value: number }) {
   return (
@@ -116,20 +124,33 @@ function CircularProgressWithLabel(props: LinearProgressProps & { value: number 
         />
       </Box>
       <Box sx={{ minWidth: 35 }}>
-        <Typography variant="body2" fontFamily="mabry-bold" color="text.secondary">{`${Math.round(
+        <Typography variant="body2" fontFamily="thai-semi-bold" color="text.secondary">{`${Math.round(
           props.value,
         )}%`}</Typography>
       </Box>
     </Box>
   );
 }
+const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
+  [`& .${toggleButtonGroupClasses.grouped}`]: {
+    margin: theme.spacing(0.5),
+    border: 0,
+    borderRadius: theme.shape.borderRadius,
+    [`&.${toggleButtonGroupClasses.disabled}`]: {
+      border: 0,
+    },
+  },
+  [`& .${toggleButtonGroupClasses.middleButton},& .${toggleButtonGroupClasses.lastButton}`]: {
+    marginLeft: -1,
+    borderLeft: '1px solid transparent',
+  },
+}));
 
 export default function ShowCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [schedulerTableIsLoading, setSchedulerTableIsLoading] = useState(true);
-  const [seedPeerTableIsLoading, setSeedPeerTableIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [openDeleteInactive, setOpenDeleteInactive] = useState(false);
   const [openDeleteScheduler, setOpenDeleteScheduler] = useState(false);
@@ -141,8 +162,8 @@ export default function ShowCluster() {
   const [schedulerSelectedID, setSchedulerSelectedID] = useState('');
   const [schedulerPage, setSchedulerPage] = useState(1);
   const [schedulerTotalPages, setSchedulerTotalPages] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(9);
   const [searchSchedulers, setSearchSchedulers] = useState('');
-  const [searchSeedPeers, setSearchSeedPeer] = useState('');
   const [scheduler, setScheduler] = useState<getSchedulersResponse[]>([]);
   const [schedulerCount, setSchedulerCount] = useState<getSchedulersResponse[]>([]);
   const [allSchedulers, setAllSchedlers] = useState<getSchedulersResponse[]>([]);
@@ -154,8 +175,11 @@ export default function ShowCluster() {
   const [progressLoading, setProgressLoading] = useState(false);
   const [searchSchedulerIconISLodaing, setSearchSchedulerIconISLodaing] = useState(false);
   const [schedulerAnchorElement, setSchedulerAnchorElement] = useState(null);
-  const [openStatusSelect, setOpenStatusSelect] = useState(false);
   const [status, setStatus] = useState<string>('ALL');
+  const [alignment, setAlignment] = useState('table');
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
   const steps = ['Schedulers', 'Confirm delete'];
   const params = useParams();
   const navigate = useNavigate();
@@ -163,6 +187,18 @@ export default function ShowCluster() {
   const location = useLocation();
   const schedulerCurrentPage = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
   const search = query.get('search') ? (query.get('search') as string) : '';
+
+  const open = Boolean(anchorEl);
+  const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuItemClick = (event: any, index: number) => {
+    setSelectedIndex(index);
+    setStatus(event.name);
+
+    setAnchorEl(null);
+  };
 
   const { cluster } = useContext(MyContext);
 
@@ -182,8 +218,7 @@ export default function ShowCluster() {
   useEffect(() => {
     (async function () {
       try {
-        setSeedPeerTableIsLoading(true);
-        setSchedulerTableIsLoading(true);
+        setIsLoading(true);
         setSchedulerPage(schedulerCurrentPage);
 
         if (typeof params.id === 'string') {
@@ -191,15 +226,13 @@ export default function ShowCluster() {
           const features = await getSchedulerFeatrues();
 
           setSchedulerFeatures(features);
-          setSchedulerTableIsLoading(false);
-          setSeedPeerTableIsLoading(false);
+          setIsLoading(false);
         }
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
           setErrorMessageText(error.message);
-          setSchedulerTableIsLoading(false);
-          setSeedPeerTableIsLoading(false);
+          setIsLoading(false);
         }
       }
     })();
@@ -218,12 +251,36 @@ export default function ShowCluster() {
         }
       });
 
+      if (alignment === 'card') {
+        const updatePageSize = () => {
+          if (window.matchMedia('(max-width: 1440px)').matches) {
+            setPageSize(9);
+          } else if (window.matchMedia('(max-width: 1600px)').matches) {
+            setPageSize(9);
+          } else if (window.matchMedia('(max-width: 1920px)').matches) {
+            setPageSize(12);
+          } else if (window.matchMedia('(max-width: 2048px)').matches) {
+            setPageSize(12);
+          } else if (window.matchMedia('(max-width: 2560px)').matches) {
+            setPageSize(15);
+          }
+        };
+
+        updatePageSize();
+
+        window.addEventListener('resize', updatePageSize);
+      }
+
       const statusScheduler =
         (status !== 'ALL' && Array.isArray(scheduler) && scheduler.filter((item) => item.state === status)) ||
         scheduler;
 
-      const totalPage = Math.ceil(statusScheduler.length / DEFAULT_PAGE_SIZE);
-      const currentPageData = getPaginatedList(statusScheduler, schedulerPage, DEFAULT_PAGE_SIZE);
+      const totalPage = Math.ceil(statusScheduler.length / (alignment === 'card' ? pageSize : DEFAULT_PAGE_SIZE));
+      const currentPageData = getPaginatedList(
+        statusScheduler,
+        schedulerPage,
+        alignment === 'card' ? pageSize : DEFAULT_PAGE_SIZE,
+      );
 
       if (currentPageData.length === 0 && schedulerPage > 1) {
         setSchedulerPage(schedulerPage - 1);
@@ -235,7 +292,7 @@ export default function ShowCluster() {
       setSchedulerTotalPages(1);
       setAllSchedlers([]);
     }
-  }, [scheduler, schedulerPage, status]);
+  }, [scheduler, schedulerPage, status, pageSize, alignment]);
 
   const numberOfActiveSchedulers =
     Array.isArray(schedulerCount) && schedulerCount?.filter((item: any) => item?.state === 'active').length;
@@ -245,15 +302,6 @@ export default function ShowCluster() {
 
   const schedulerInactive =
     Array.isArray(schedulerCount) && schedulerCount?.filter((item: any) => item?.state === 'inactive');
-
-  const handleClose = (_event: any, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setErrorMessage(false);
-    setSuccessMessage(false);
-  };
 
   const schedulerDoughnutOptions = {
     plugins: {
@@ -280,14 +328,18 @@ export default function ShowCluster() {
     ],
   };
 
-  const handleDeleteClose = (_event: any, reason?: string) => {
+  const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
+    setErrorMessage(false);
+    setSuccessMessage(false);
+    setAnchorEl(null);
     setOpenDeleteScheduler(false);
     setSchedulerSelectedRow(null);
     setOpenSchedulerEditFeatures(false);
     setSchedulerAnchorElement(null);
+
     if (!progressLoading) {
       setOpenDeleteInactive(false);
       setDeleteAllInactiveErrorMessage([]);
@@ -303,7 +355,7 @@ export default function ShowCluster() {
   };
 
   const handleDeleteScheduler = async () => {
-    setSchedulerTableIsLoading(true);
+    setIsLoading(true);
     setDeleteLoadingButton(true);
 
     try {
@@ -312,11 +364,11 @@ export default function ShowCluster() {
       setDeleteLoadingButton(false);
 
       await schedulers();
-      setSchedulerTableIsLoading(false);
+      setIsLoading(false);
       setSuccessMessage(true);
     } catch (error) {
       if (error instanceof Error) {
-        setSchedulerTableIsLoading(false);
+        setIsLoading(false);
 
         setErrorMessage(true);
         setErrorMessageText(error.message);
@@ -464,7 +516,7 @@ export default function ShowCluster() {
 
   const handleEditFeatures = async () => {
     setDeleteLoadingButton(true);
-    setSchedulerTableIsLoading(true);
+    setIsLoading(true);
 
     const features = [featuresScheduler ? 'schedule' : '', featuresPreheat ? 'preheat' : ''];
     const filteredFeatures = features.filter((item) => item !== '');
@@ -479,12 +531,12 @@ export default function ShowCluster() {
         setOpenSchedulerEditFeatures(false);
 
         await schedulers();
-        setSchedulerTableIsLoading(false);
+        setIsLoading(false);
         setSuccessMessage(true);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
-          setSchedulerTableIsLoading(false);
+          setIsLoading(false);
           setErrorMessageText(error.message);
           setDeleteLoadingButton(false);
         }
@@ -503,8 +555,8 @@ export default function ShowCluster() {
     { lable: 'Inactive', name: 'inactive' },
   ];
 
-  const changeStatus = (event: any) => {
-    setStatus(event.target.value);
+  const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string) => {
+    setAlignment(newAlignment);
   };
 
   return (
@@ -530,7 +582,7 @@ export default function ShowCluster() {
         </Alert>
       </Snackbar>
       <Box className={styles.openDeleteInactiveDialog}>
-        <Typography variant="h6" fontFamily="mabry-bold">
+        <Typography variant="h6" fontWeight="600">
           Schedulers
         </Typography>
         <MuiTooltip title="Delete inactive schedulers and inactive seed peers." placement="top">
@@ -545,7 +597,6 @@ export default function ShowCluster() {
             sx={{
               '&.MuiButton-root': {
                 backgroundColor: 'var(--button-color)',
-                borderRadius: 0,
                 color: '#fff',
               },
             }}
@@ -555,374 +606,730 @@ export default function ShowCluster() {
           </Button>
         </MuiTooltip>
       </Box>
-      <Box sx={{ display: 'flex', mb: '3rem' }}>
-        <Paper variant="outlined" sx={{ width: '50%', p: '1.2rem', display: 'flex', justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex', width: '70%' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
-                Total
-              </Typography>
+      <Box sx={{ display: 'flex', mb: '2rem' }}>
+        <Box sx={{ width: '33.33%', mr: '1.6rem' }}>
+          <Card className={styles.navigationWrapper}>
+            <Box className={styles.navigationContent}>
               <Box>
-                {schedulerTableIsLoading ? (
-                  <Skeleton data-testid="cluster-loading" width="2rem" />
+                <Typography variant="subtitle1" fontWeight="600" color="#637381">
+                  Total
+                </Typography>
+                {isLoading ? (
+                  <Box p="0.4rem 0">
+                    <Skeleton height={40} data-testid="isloading" width="2rem" />
+                  </Box>
                 ) : (
-                  <Typography id="total" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
+                  <Typography id="total" variant="h5" fontWeight="600" p="0.4rem 0">
                     {schedulerCount.length}
                   </Typography>
                 )}
-                <div>number of schedulers</div>
+                <Typography variant="body2" color="var(--table-title-text-color)">
+                  number of schedulers
+                </Typography>
               </Box>
+              <Box className={styles.navigation} />
+              <Box component="img" className={styles.navigationIcon} src="/icons/peer/total.svg" />
             </Box>
-          </Box>
-          <Box component="img" src="/icons/peer/statistics.svg" sx={{ width: '5rem' }} />
-        </Paper>
-        <Paper
-          variant="outlined"
-          sx={{ width: '50%', ml: '1rem', p: '1.2rem', display: 'flex', justifyContent: 'space-between' }}
-        >
-          <Box sx={{ display: 'flex', width: '70%' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
-                Active
-              </Typography>
+          </Card>
+        </Box>
+        <Box sx={{ width: '33.33%', mr: '1.6rem' }}>
+          <Card className={styles.navigationWrapper}>
+            <Box className={styles.navigationContent}>
               <Box>
-                {seedPeerTableIsLoading ? (
-                  <Skeleton data-testid="cluster-loading" width="2rem" />
+                <Typography variant="subtitle1" fontWeight="600" color="#637381">
+                  Active
+                </Typography>
+                {isLoading ? (
+                  <Box p="0.4rem 0">
+                    <Skeleton height={40} data-testid="isloading" width="2rem" />
+                  </Box>
                 ) : (
-                  <Typography id="active" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
+                  <Typography id="active" variant="h5" fontWeight="600" p="0.4rem 0">
                     {numberOfActiveSchedulers}
                   </Typography>
                 )}
-                <div>number of active schedulers</div>
+                <Typography variant="body2" color="var(--table-title-text-color)">
+                  number of active schedulers
+                </Typography>
+              </Box>
+              <Box className={styles.navigation} />
+              <Box component="img" className={styles.navigationIcon} src="/icons/cluster/scheduler/active.svg" />
+            </Box>
+          </Card>
+        </Box>
+        <Box sx={{ width: '33.33%' }}>
+          <Card className={styles.navigationWrapper}>
+            <Box className={styles.navigationContent}>
+              <Box>
+                <Typography variant="subtitle1" fontWeight="600" color="#637381">
+                  Inactive
+                </Typography>
+                {isLoading ? (
+                  <Box p="0.4rem 0">
+                    <Skeleton height={40} data-testid="isloading" width="2rem" />
+                  </Box>
+                ) : (
+                  <Typography id="inactive" variant="h5" fontWeight="600" p="0.4rem 0">
+                    {numberOfInactiveSchedulers}
+                  </Typography>
+                )}
+                <Typography variant="body2" color="var(--table-title-text-color)">
+                  number of inactive schedulers
+                </Typography>
+              </Box>
+              <Box className={styles.navigation} />
+              <Box component="img" className={styles.navigationIcon} src="/icons/cluster/scheduler/inactive.svg" />
+            </Box>
+          </Card>
+        </Box>
+
+        {/* <Card className={styles.activeHeader}>
+          <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <Typography variant="subtitle1" fontWeight="600" color="#637381">
+                Inactive
+              </Typography>
+              <Box>
+                {seedPeerTableIsLoading ? (
+                  <Box p="0.4rem 0">
+                    <Skeleton height={40} data-testid="isloading" width="2rem" />
+                  </Box>
+                ) : (
+                  <Typography id="active" variant="h5" fontWeight="600" p="0.4rem 0">
+                    {numberOfInactiveSchedulers}
+                  </Typography>
+                )}
+                <Typography variant="body2" color="var(--table-title-text-color)">
+                  number of inactive schedulers
+                </Typography>
               </Box>
             </Box>
           </Box>
           <Box className={styles.doughnut}>
-            {schedulerTableIsLoading ? (
-              <Skeleton data-testid="cluster-loading" variant="circular" width="100%" height="100%" />
+            {isLoading ? (
+              <Skeleton data-testid="isloading" variant="circular" width="100%" height="100%" />
             ) : (
               <Doughnut data={schedulerDoughnut} options={schedulerDoughnutOptions} />
             )}
           </Box>
-        </Paper>
+          <Box component="img" src="/icons/peer/statistics.svg" sx={{ width: '4rem' }} />
+        </Card> */}
       </Box>
-      <Paper variant="outlined" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-        <Box className={styles.searchContainer}>
-          <Stack spacing={2} sx={{ width: '20rem' }}>
-            <Autocomplete
-              size="small"
-              color="secondary"
-              id="free-solo-demo"
-              freeSolo
-              inputValue={searchSchedulers}
-              onInputChange={(_event, newInputValue) => {
-                handlesearchScheduler(newInputValue);
-              }}
-              options={schedulerCount.map((option) => option?.host_name)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Search"
-                  InputProps={{
-                    ...params.InputProps,
-                    startAdornment: searchSchedulerIconISLodaing ? <SearchCircularProgress /> : <SearchIcon />,
-                  }}
-                />
-              )}
-            />
-          </Stack>
-          <FormControl sx={{ width: '10rem' }} size="small">
-            <InputLabel id="states-select">Status</InputLabel>
-            <Select
-              id="states-select"
-              value={status}
-              label="changeStatus"
-              open={openStatusSelect}
-              onClose={() => {
-                setOpenStatusSelect(false);
-              }}
-              onOpen={() => {
-                setOpenStatusSelect(true);
-              }}
-              onChange={changeStatus}
+      <Box className={styles.searchWrapper}>
+        <Stack spacing={2} sx={{ width: '16rem' }}>
+          <Autocomplete
+            size="small"
+            color="secondary"
+            id="free-solo-demo"
+            freeSolo
+            inputValue={searchSchedulers}
+            onInputChange={(_event, newInputValue) => {
+              handlesearchScheduler(newInputValue);
+            }}
+            options={schedulerCount.map((option) => option?.host_name)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Search"
+                InputProps={{
+                  ...params.InputProps,
+                  startAdornment: searchSchedulerIconISLodaing ? (
+                    <Box
+                      sx={{
+                        width: '2.2rem',
+                        height: '2.2rem',
+                        pl: '0.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <SearchCircularProgress />
+                    </Box>
+                  ) : (
+                    <Box
+                      sx={{
+                        width: '2.2rem',
+                        height: '2.2rem',
+                        pl: '0.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <SearchIcon sx={{ color: '#919EAB' }} />
+                    </Box>
+                  ),
+                }}
+              />
+            )}
+          />
+        </Stack>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper' }}>
+            <ListItemButton
+              id="lock-button"
+              aria-haspopup="listbox"
+              aria-controls="lock-menu"
+              aria-label="when device is locked"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClickListItem}
             >
-              <Typography variant="body1" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
+              <ListItemText
+                primary={`Filter : ${statusList[selectedIndex].lable}`}
+                // secondary={statusList[selectedIndex].lable}
+                sx={{ pr: '0.6rem' }}
+              />
+
+              {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </ListItemButton>
+          </List>
+          <Menu
+            id="lock-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'lock-button',
+              role: 'listbox',
+            }}
+            sx={{
+              '& .MuiMenu-list': {
+                p: 0,
+                width: '10rem',
+              },
+            }}
+          >
+            <Box className={styles.menu}>
+              <Typography variant="body1" fontFamily="thai-semi-bold" sx={{ m: '0.4rem 1rem' }}>
                 Filter by status
               </Typography>
-              <Divider />
-              {statusList.map((item) => (
-                <MenuItem key={item.name} value={item.name}>
+              <Divider sx={{ mb: '0.2rem' }} />
+              {statusList.map((item, index) => (
+                <MenuItem key={item.name} value={item.name} onClick={() => handleMenuItemClick(item, index)}>
                   {item.lable}
                 </MenuItem>
               ))}
-            </Select>
-          </FormControl>
+            </Box>
+          </Menu>
+          <Paper
+            elevation={0}
+            sx={(theme) => ({
+              display: 'flex',
+              border: `1px solid ${theme.palette.divider}`,
+              flexWrap: 'wrap',
+              ml: '1rem',
+            })}
+          >
+            <StyledToggleButtonGroup
+              size="small"
+              value={alignment}
+              exclusive
+              onChange={handleAlignment}
+              aria-label="text alignment"
+            >
+              <ToggleButton id="table" value="table" aria-label="left aligned">
+                <Box component="img" src="/icons/cluster/scheduler/table.svg" />
+              </ToggleButton>
+              <ToggleButton id="card" value="card" aria-label="centered">
+                <Box component="img" src="/icons/cluster/scheduler/card.svg" />
+              </ToggleButton>
+            </StyledToggleButtonGroup>
+          </Paper>
         </Box>
-        <Box width="100%">
-          <Divider />
-          <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
-            <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
-              <TableRow>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    ID
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    Hostname
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    IP
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    Port
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    Status
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    Features
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="var(--table-title-text-color)" fontFamily="mabry-bold">
-                    Operation
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody id="scheduler-table-body">
-              {schedulerTableIsLoading ? (
-                <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell align="center">
-                    <Skeleton data-testid="scheduler-loading" />
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton data-testid="scheduler-loading" width="4rem" />
+      </Box>
+      {alignment === 'card' ? (
+        <Box id="scheduler-card" display="flex" flexWrap="wrap">
+          {isLoading ? (
+            <Box id="clusters" className={styles.clusterCard}>
+              <Card>
+                <Box className={styles.clusterListContent}>
+                  <Box p="1.5rem 1.5rem 0 1.5rem">
+                    <Box display="flex" mb="0.5rem">
+                      <img className={styles.idIcon} src="/icons/cluster/id.svg" alt="" />
+                      <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
                     </Box>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
-                      <Skeleton data-testid="scheduler-loading" width="4rem" />
+                    <Typography variant="h6" mb="0.5rem" className={styles.nameText}>
+                      <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
+                    </Typography>
+                    <Box display="flex">
+                      <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
                     </Box>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton data-testid="scheduler-loading" width="2rem" />
-                    </Box>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton data-testid="scheduler-loading" width="3.5rem" height="2.6rem" />
-                    </Box>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton data-testid="scheduler-loading" width="3.8rem" height="2.8rem" />
-                    </Box>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <Skeleton data-testid="scheduler-loading" width="2.5rem" height="2.5rem" />
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ) : allSchedulers.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={9} align="center" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    You don't have scheduler cluster.
-                  </TableCell>
-                </TableRow>
-              ) : (
-                <>
-                  {Array.isArray(allSchedulers) &&
-                    allSchedulers.map((item: any) => {
-                      return (
-                        <TableRow
-                          key={item?.id}
-                          selected={schedulerSelectedRow === item}
-                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                          <TableCell align="center" id={`id-${item?.id}`}>
-                            {item?.id}
-                          </TableCell>
-                          <TableCell align="center" id={`hostname-${item?.host_name}`}>
-                            <RouterLink
-                              component={Link}
-                              to={`/clusters/${params.id}/schedulers/${item?.id}`}
-                              underline="hover"
-                              sx={{ color: 'var(--description-color)' }}
-                            >
-                              {item?.host_name}
-                            </RouterLink>
-                          </TableCell>
-                          <TableCell align="center" id={`ip-${item?.id}`}>
-                            <Box className={styles.ipContainer}>
-                              <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
-                              {item?.ip}
-                            </Box>
-                          </TableCell>
-                          <TableCell align="center" id={`port-${item?.port}`}>
-                            {item?.port}
-                          </TableCell>
-                          <TableCell align="center" id={`state-${item?.id}`}>
-                            {/* <Paper
-                              elevation={0}
-                              sx={{
-                                backgroundColor:
-                                  item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                                color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
-                                borderColor:
-                                  item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                                fontWeight: 'bold',
-                                p: '0.1rem',
-                              }}
-                            >
-                              {_.upperFirst(item?.state) || ''}
-                            </Paper> */}
-                            <Chip
-                              label={_.upperFirst(item?.state) || ''}
-                              size="small"
-                              variant="outlined"
-                              sx={{
-                                borderRadius: '0.2rem',
-                                backgroundColor:
-                                  item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                                color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
-                                borderColor:
-                                  item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                                fontWeight: 'bold',
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell align="center" id={`features-${item?.id}`}>
-                            <Box className={styles.features}>
-                              {Array.isArray(item.features) &&
-                                item.features.map((item: string, id: any) => (
-                                  <Chip
-                                    key={id}
-                                    label={_.upperFirst(item) || ''}
-                                    size="small"
-                                    variant="outlined"
-                                    sx={{
-                                      borderRadius: '0.2rem',
-                                      background: 'var(--button-color)',
-                                      color: '#FFFFFF',
-                                      m: '0 0.4rem',
-                                      borderColor: 'var(--button-color)',
-                                      fontWeight: 'bold',
-                                    }}
-                                  />
+                  </Box>
+                  <Divider
+                    sx={{
+                      borderStyle: 'dashed',
+                      borderColor: 'var(--palette-divider)',
+                      borderWidth: '0px 0px thin',
+                      m: '1rem 0',
+                    }}
+                  />
+                  <Box p="0 1.5rem 1.5rem 1.5rem">
+                    <Skeleton data-testid="isloading" sx={{ width: '4rem', height: '1.4rem', mb: '0.8rem' }} />
 
-                                  // <Paper
-                                  //   elevation={0}
-                                  //   sx={{
-                                  //     backgroundColor: 'var(--button-color)',
-                                  //     color: '#FFFFFF',
-                                  //     borderColor: 'var(--button-color)',
-                                  //     m: '0 0.4rem',
-                                  //     p: '0.1rem 0.1rem',
-                                  //   }}
-                                  // >
-                                  //   {_.upperFirst(item) || ''}
-                                  // </Paper>
-                                ))}
-                            </Box>
-                          </TableCell>
-                          <TableCell align="center">
-                            <IconButton
-                              id={`operation-${item?.id}`}
-                              onClick={(event: any) => {
-                                setSchedulerAnchorElement(event.currentTarget);
-                                setSchedulerSelectedRow(item);
-                                setSchedulerSelectedID(item.id);
+                    <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
+                  </Box>
+                </Box>
+              </Card>
+            </Box>
+          ) : Array.isArray(allSchedulers) && allSchedulers.length > 0 ? (
+            Array.isArray(allSchedulers) &&
+            allSchedulers.map((item: any) => (
+              <Box className={styles.clusterCard}>
+                <Card>
+                  <Box className={styles.scheduleListContent}>
+                    <Box p="1.5rem 1.5rem 0 1.5rem">
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Box display="flex">
+                          <img className={styles.idIcon} src="/icons/cluster/id.svg" alt="" />
+                          {isLoading ? (
+                            <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
+                          ) : (
+                            <Typography id={`card-id-${item.id}`} className={styles.idText}>
+                              {item.id}
+                            </Typography>
+                          )}
+                        </Box>
+                        <IconButton
+                          id={`operation-${item?.id}`}
+                          onClick={(event: any) => {
+                            setSchedulerAnchorElement(event.currentTarget);
+                            setSchedulerSelectedRow(item);
+                            setSchedulerSelectedID(item.id);
+                          }}
+                          size="small"
+                          aria-controls={Boolean(schedulerAnchorElement) ? item?.host_name : undefined}
+                          aria-haspopup="true"
+                          aria-expanded={Boolean(schedulerAnchorElement) ? 'true' : undefined}
+                          className={styles.moreVertIcon}
+                        >
+                          <MoreVertIcon color="action" />
+                        </IconButton>
+                        <Menu
+                          anchorEl={schedulerAnchorElement}
+                          id={schedulerSelectedRow?.host_name}
+                          open={Boolean(schedulerAnchorElement)}
+                          onClose={handleClose}
+                          sx={{
+                            position: 'absolute',
+                            left: '-8rem',
+                            '& .MuiMenu-paper': {
+                              boxShadow:
+                                '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
+                            },
+                            '& .MuiMenu-list': {
+                              p: 0,
+                              width: '10rem',
+                            },
+                          }}
+                        >
+                          <Box className={styles.menu}>
+                            <MenuItem
+                              id={`view-${schedulerSelectedRow?.id}`}
+                              onClick={() => {
+                                navigate(`/clusters/${params.id}/schedulers/${schedulerSelectedRow?.id}`);
+                                setSchedulerAnchorElement(null);
                               }}
-                              size="small"
-                              aria-controls={Boolean(schedulerAnchorElement) ? item?.host_name : undefined}
-                              aria-haspopup="true"
-                              aria-expanded={Boolean(schedulerAnchorElement) ? 'true' : undefined}
-                              sx={{ position: 'relative', padding: '0' }}
                             >
-                              <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
-                            </IconButton>
-                            <Menu
-                              anchorEl={schedulerAnchorElement}
-                              id={schedulerSelectedRow?.host_name}
-                              open={Boolean(schedulerAnchorElement)}
-                              onClose={handleDeleteClose}
-                              sx={{
-                                position: 'absolute',
-                                left: '-3rem',
-                                '& .MuiMenu-paper': {
-                                  boxShadow:
-                                    '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
-                                },
-                                '& .MuiMenu-list': {
-                                  p: 0,
-                                  width: '10rem',
-                                },
-                              }}
-                            >
-                              {schedulerFeatures && schedulerFeatures.length > 0 ? (
-                                <MenuItem
-                                  className={styles.menuItem}
-                                  id={`edit-${schedulerSelectedRow?.host_name}`}
-                                  onClick={() => {
-                                    setOpenSchedulerEditFeatures(true);
-                                    setSchedulerAnchorElement(null);
-                                  }}
-                                >
-                                  <ListItemIcon>
-                                    <DriveFileRenameOutlineOutlinedIcon className={styles.menuItemIcon} />
-                                  </ListItemIcon>
-                                  Edit Features
-                                </MenuItem>
-                              ) : (
-                                ''
-                              )}
+                              <ListItemIcon>
+                                <RemoveRedEyeIcon className={styles.menuItemIcon} />
+                              </ListItemIcon>
+                              <Typography variant="subtitle2">View</Typography>
+                            </MenuItem>
+                            {schedulerFeatures && schedulerFeatures.length > 0 ? (
                               <MenuItem
-                                className={styles.menuItem}
-                                id={`delete-${schedulerSelectedRow?.host_name}`}
+                                id={`edit-${schedulerSelectedRow?.id}`}
                                 onClick={() => {
-                                  openHandleScheduler(schedulerSelectedRow);
+                                  setOpenSchedulerEditFeatures(true);
                                   setSchedulerAnchorElement(null);
                                 }}
                               >
                                 <ListItemIcon>
-                                  <DeleteOutlineIcon className={styles.menuItemIcon} />
+                                  <ModeEditIcon className={styles.menuItemIcon} />
                                 </ListItemIcon>
-                                Delete
+                                <Typography variant="subtitle2">Edit Features</Typography>
                               </MenuItem>
-                            </Menu>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                </>
-              )}
-            </TableBody>
-          </Table>
+                            ) : (
+                              ''
+                            )}
+                            <MenuItem
+                              id={`delete-${schedulerSelectedRow?.id}`}
+                              onClick={() => {
+                                openHandleScheduler(schedulerSelectedRow);
+                                setSchedulerAnchorElement(null);
+                              }}
+                            >
+                              <ListItemIcon>
+                                <DeleteIcon sx={{ color: '#FF5630' }} />
+                              </ListItemIcon>
+                              <Typography variant="subtitle2" color="#FF5630">
+                                Delete
+                              </Typography>
+                            </MenuItem>
+                          </Box>
+                        </Menu>
+                      </Box>
+                      <MuiTooltip title={item.host_name || '-'} placement="top">
+                        <RouterLink
+                          component={Link}
+                          to={`/clusters/${params.id}/schedulers/${item?.id}`}
+                          underline="hover"
+                        >
+                          <Typography
+                            id={`card-hostname-${item.host_name}`}
+                            variant="subtitle1"
+                            m="0.6rem 0"
+                            className={styles.hostnameCardText}
+                          >
+                            {item.host_name}
+                          </Typography>
+                        </RouterLink>
+                      </MuiTooltip>
+                      <Box sx={{ display: 'flex', width: '50%', mb: '1rem', alignItems: 'center' }}>
+                        <Box component="img" className={styles.statusIcon} src="/icons/cluster/status.svg" />
+                        <Chip
+                          label={_.upperFirst(item?.state) || ''}
+                          size="small"
+                          variant="outlined"
+                          id={`card-state-${item.id}`}
+                          sx={{
+                            borderRadius: '0.2rem',
+                            backgroundColor:
+                              item?.state === 'active'
+                                ? 'var(--menu-background-color)'
+                                : 'var(--palette-background-inactive)',
+                            color: item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                            borderColor:
+                              item?.state === 'active'
+                                ? 'var(--menu-background-color)'
+                                : 'var(--palette-background-inactive)',
+                            fontWeight: '600',
+                          }}
+                        />
+                      </Box>
+                    </Box>
+                    <Divider
+                      sx={{
+                        borderStyle: 'dashed',
+                        borderColor: 'var(--palette-divider)',
+                        borderWidth: '0px 0px thin',
+                        m: '1rem 0',
+                      }}
+                    />
+                    <Box p="0 1.5rem 1.5rem 1.5rem">
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: '1rem' }}>
+                          <Box component="img" className={styles.statusIcon} src="/icons/cluster/ip.svg" />
+                          <Typography
+                            id={`card-ip-${item.id}`}
+                            variant="caption"
+                            sx={{ display: 'block', color: '#919EAB' }}
+                          >
+                            {item.ip}
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', width: '100%', alignItems: 'center' }}>
+                          <Box component="img" className={styles.statusIcon} src="/icons/cluster/card-features.svg" />
+                          <Box className={styles.features} id={`card-features-${item.id}`}>
+                            {Array.isArray(item.features) &&
+                              item.features.map((features: string, id: any) => (
+                                <Chip
+                                  key={id}
+                                  label={_.upperFirst(features) || ''}
+                                  size="small"
+                                  variant="outlined"
+                                  sx={{
+                                    borderRadius: '0.2rem',
+                                    background: 'var(--palette-background-inactive)',
+                                    color: 'var(--button-color)',
+                                    mr: '0.4rem',
+                                    borderColor: 'var(--palette-background-inactive)',
+                                  }}
+                                />
+                              ))}
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Card>
+              </Box>
+            ))
+          ) : (
+            <Card className={styles.noData}>
+              <Box component="img" className={styles.nodataIcon} src="/icons/cluster/scheduler/ic-content.svg" />
+              <Typography id="no-scheduler" variant="h6" className={styles.nodataText}>
+                No data
+              </Typography>
+            </Card>
+          )}
         </Box>
-      </Paper>
+      ) : (
+        <Card>
+          <Box width="100%">
+            <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
+              <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
+                <TableRow>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      ID
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      Hostname
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      IP
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      Port
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      Status
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      Features
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle1" color="var(--table-title-text-color)">
+                      Operation
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody id="scheduler-table-body" sx={{ border: 'none' }}>
+                {isLoading ? (
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell align="center">
+                      <Skeleton data-testid="isloading" />
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="4rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="4rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="2rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="3.5rem" height="2.6rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="3.8rem" height="2.8rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="2.5rem" height="2.5rem" />
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ) : allSchedulers.length === 0 ? (
+                  <TableCell id="no-scheduler-table" colSpan={9} align="center" sx={{ border: 0 }}>
+                    You don't have scheduler cluster.
+                  </TableCell>
+                ) : (
+                  <>
+                    {Array.isArray(allSchedulers) &&
+                      allSchedulers.map((item: any) => {
+                        return (
+                          <TableRow
+                            key={item?.id}
+                            selected={schedulerSelectedRow === item}
+                            sx={{
+                              '&:last-child td, &:last-child th': { border: 0 },
+                            }}
+                            className={styles.tableRow}
+                          >
+                            <TableCell align="center" id={`id-${item?.id}`}>
+                              {item?.id}
+                            </TableCell>
+                            <TableCell align="center" id={`hostname-${item?.host_name}`}>
+                              <RouterLink
+                                component={Link}
+                                to={`/clusters/${params.id}/schedulers/${item?.id}`}
+                                underline="hover"
+                                sx={{ color: 'var(--description-color)' }}
+                              >
+                                {item?.host_name}
+                              </RouterLink>
+                            </TableCell>
+                            <TableCell align="center" id={`ip-${item?.id}`}>
+                              {item?.ip}
+                            </TableCell>
+                            <TableCell align="center" id={`port-${item?.port}`}>
+                              {item?.port}
+                            </TableCell>
+                            <TableCell align="center">
+                              <Chip
+                                id={`state-${item?.id}`}
+                                label={_.upperFirst(item?.state) || ''}
+                                size="small"
+                                variant="outlined"
+                                sx={{
+                                  borderRadius: '0.2rem',
+                                  backgroundColor:
+                                    item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                                  color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
+                                  borderColor:
+                                    item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                                  fontWeight: 'bold',
+                                }}
+                              />
+                            </TableCell>
+                            <TableCell align="center" id={`features-${item?.id}`}>
+                              <Box className={styles.features}>
+                                {Array.isArray(item.features) &&
+                                  item.features.map((features: string, id: any) => (
+                                    <Chip
+                                      key={id}
+                                      label={_.upperFirst(features) || ''}
+                                      size="small"
+                                      variant="outlined"
+                                      sx={{
+                                        borderRadius: '0.2rem',
+                                        background: 'var(--button-color)',
+                                        color: '#FFFFFF',
+                                        m: '0 0.4rem',
+                                        borderColor: 'var(--button-color)',
+                                        fontWeight: 'bold',
+                                      }}
+                                    />
+                                  ))}
+                              </Box>
+                            </TableCell>
+                            <TableCell align="center">
+                              <IconButton
+                                id={`operation-${item?.id}`}
+                                onClick={(event: any) => {
+                                  setSchedulerAnchorElement(event.currentTarget);
+                                  setSchedulerSelectedRow(item);
+                                  setSchedulerSelectedID(item.id);
+                                }}
+                                size="small"
+                                aria-controls={Boolean(schedulerAnchorElement) ? item?.host_name : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={Boolean(schedulerAnchorElement) ? 'true' : undefined}
+                                sx={{ position: 'relative', padding: '0' }}
+                              >
+                                <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                              </IconButton>
+                              <Menu
+                                anchorEl={schedulerAnchorElement}
+                                id={schedulerSelectedRow?.host_name}
+                                open={Boolean(schedulerAnchorElement)}
+                                onClose={handleClose}
+                                sx={{
+                                  position: 'absolute',
+                                  left: '-3rem',
+                                  '& .MuiMenu-paper': {
+                                    boxShadow:
+                                      '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
+                                  },
+                                  '& .MuiMenu-list': {
+                                    p: 0,
+                                    width: '10rem',
+                                  },
+                                }}
+                              >
+                                <Box className={styles.menu}>
+                                  <MenuItem
+                                    id={`view-${schedulerSelectedRow?.host_name}`}
+                                    onClick={() => {
+                                      // openHandleScheduler(schedulerSelectedRow);
+                                      navigate(`/clusters/${params.id}/schedulers/${schedulerSelectedRow?.id}`);
+                                      setSchedulerAnchorElement(null);
+                                    }}
+                                  >
+                                    <ListItemIcon>
+                                      <RemoveRedEyeIcon className={styles.menuItemIcon} />
+                                    </ListItemIcon>
+                                    <Typography variant="subtitle2">View</Typography>
+                                  </MenuItem>
+                                  {schedulerFeatures && schedulerFeatures.length > 0 ? (
+                                    <MenuItem
+                                      className={styles.menuItem}
+                                      id={`edit-${schedulerSelectedRow?.host_name}`}
+                                      onClick={() => {
+                                        setOpenSchedulerEditFeatures(true);
+                                        setSchedulerAnchorElement(null);
+                                      }}
+                                    >
+                                      <ListItemIcon>
+                                        <ModeEditIcon className={styles.menuItemIcon} />
+                                      </ListItemIcon>
+                                      <Typography variant="subtitle2">Edit Features</Typography>
+                                    </MenuItem>
+                                  ) : (
+                                    ''
+                                  )}
+                                  <MenuItem
+                                    className={styles.menuItem}
+                                    id={`delete-${schedulerSelectedRow?.host_name}`}
+                                    onClick={() => {
+                                      openHandleScheduler(schedulerSelectedRow);
+                                      setSchedulerAnchorElement(null);
+                                    }}
+                                  >
+                                    <ListItemIcon>
+                                      <DeleteIcon sx={{ color: '#FF5630' }} />
+                                    </ListItemIcon>
+                                    <Typography variant="subtitle2" color="#FF5630">
+                                      Delete
+                                    </Typography>
+                                  </MenuItem>
+                                </Box>
+                              </Menu>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                  </>
+                )}
+              </TableBody>
+            </Table>
+          </Box>
+        </Card>
+      )}
       {schedulerTotalPages > 1 ? (
-        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+        <Box id="pagination" display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
           <Pagination
             count={schedulerTotalPages}
             page={schedulerPage}
             onChange={(_event: any, newPage: number) => {
               setSchedulerPage(newPage);
-              navigate(`/clusters/${params.id}/schedulers${newPage > 1 ? `?page=${newPage}` : ''}`);
+
+              const queryParts = [];
+              if (search) {
+                queryParts.push(`search=${search}`);
+              }
+              if (newPage > 1) {
+                queryParts.push(`page=${newPage}`);
+              }
+
+              const queryString = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
+
+              navigate(`/clusters/${params.id}/schedulers${queryString}`);
             }}
             color="primary"
             size="small"
@@ -934,7 +1341,7 @@ export default function ShowCluster() {
       )}
       <Dialog
         open={openDeleteInactive}
-        onClose={handleDeleteClose}
+        onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         sx={{
@@ -963,7 +1370,7 @@ export default function ShowCluster() {
               src="/icons/cluster/delete.svg"
               sx={{ width: '1.8rem', height: '1.8rem', mr: '0.4rem' }}
             />
-            <Typography variant="h6" component="div" fontFamily="mabry-bold">
+            <Typography variant="h6" component="div" fontFamily="thai-semi-bold">
               Delete inactive schedulers
             </Typography>
           </Box>
@@ -991,7 +1398,7 @@ export default function ShowCluster() {
                 {progressLoading ? (
                   <Box className={styles.circularProgressWrapper}>
                     <DeleteAnimation />
-                    <Typography variant="subtitle1" component="div" fontFamily="mabry-bold">
+                    <Typography variant="subtitle1" component="div" fontFamily="thai-semi-bold">
                       LOADING...
                     </Typography>
                     <CircularProgressWithLabel value={progress} />
@@ -1001,17 +1408,17 @@ export default function ShowCluster() {
                     {deleteAllInactiveErrorMessage.length > 0 ? (
                       <>
                         <Box className={styles.logHeaderWrapper}>
-                          <Paper variant="outlined" className={styles.headerContainer}>
+                          <Card className={styles.headerContainer}>
                             <Box>
                               <Box className={styles.headerContent}>
-                                <Typography fontFamily="mabry-bold" variant="subtitle2" component="div">
+                                <Typography fontFamily="thai-semi-bold" variant="subtitle2" component="div">
                                   Schedulers
                                 </Typography>
                               </Box>
-                              <Typography component="div" variant="h5" fontFamily="mabry-bold">
+                              <Typography component="div" variant="h5" fontFamily="thai-semi-bold">
                                 {deleteInactiveSchedulerSuccessful || '0'}
                               </Typography>
-                              <Typography color="#8a8a8a" fontSize="0.8rem" component="div" variant="subtitle2">
+                              <Typography color="var(--table-title-text-color)" component="div" variant="subtitle2">
                                 number of deleted schedulers
                               </Typography>
                             </Box>
@@ -1020,15 +1427,20 @@ export default function ShowCluster() {
                               className={styles.headerErrorIcon}
                               src="/icons/cluster/delete-inactive.svg"
                             />
-                          </Paper>
-                          <Paper variant="outlined" className={styles.headerContainer}>
+                          </Card>
+                          <Card className={styles.headerContainer}>
                             <Box>
                               <Box className={styles.headerContent}>
-                                <Typography fontFamily="mabry-bold" variant="subtitle2" component="div" id="failure">
+                                <Typography
+                                  fontFamily="thai-semi-bold"
+                                  variant="subtitle2"
+                                  component="div"
+                                  id="failure"
+                                >
                                   Failure
                                 </Typography>
                               </Box>
-                              <Typography component="div" variant="h5" fontFamily="mabry-bold">
+                              <Typography component="div" variant="h5" fontFamily="thai-semi-bold">
                                 {deleteAllInactiveErrorMessage.length || '0'}
                               </Typography>
                               <Typography color="#8a8a8a" fontSize="0.8rem" component="div" variant="subtitle2">
@@ -1040,10 +1452,10 @@ export default function ShowCluster() {
                               className={styles.headerErrorIcon}
                               src="/icons/cluster/delete-inactive-error.svg"
                             />
-                          </Paper>
+                          </Card>
                         </Box>
                         <Paper variant="outlined" className={styles.deleteInactiveWrapper}>
-                          <Typography variant="inherit" fontFamily="mabry-bold" pb="1rem">
+                          <Typography variant="inherit" fontFamily="thai-semi-bold" pb="1rem">
                             Logs
                           </Typography>
                           <Accordion
@@ -1080,7 +1492,7 @@ export default function ShowCluster() {
                                   sx={{ width: '1.2rem', height: '1.2rem', mr: '0.4rem' }}
                                   src="/icons/job/preheat/failure.svg"
                                 />
-                                <Typography variant="body2" fontFamily="mabry-bold">
+                                <Typography variant="body2" fontFamily="thai-semi-bold">
                                   Error log
                                 </Typography>
                               </Box>
@@ -1103,11 +1515,11 @@ export default function ShowCluster() {
                           <Paper variant="outlined" className={styles.successHeaderContainer}>
                             <Box>
                               <Box className={styles.headerContent}>
-                                <Typography fontFamily="mabry-bold" variant="subtitle2" component="div">
+                                <Typography fontFamily="thai-semi-bold" variant="subtitle2" component="div">
                                   Schedulers
                                 </Typography>
                               </Box>
-                              <Typography component="div" variant="h6" fontFamily="mabry-bold">
+                              <Typography component="div" variant="h6" fontFamily="thai-semi-bold">
                                 {deleteInactiveSchedulerSuccessful || '0'}
                               </Typography>
                               <Typography color="#8a8a8a" component="div" variant="subtitle2">
@@ -1127,11 +1539,11 @@ export default function ShowCluster() {
                           {/* <Paper variant="outlined" className={styles.successHeaderContainer}>
                             <Box>
                               <Box className={styles.headerContent}>
-                                <Typography fontFamily="mabry-bold" variant="subtitle2" component="div">
+                                <Typography fontFamily="thai-semi-bold" variant="subtitle2" component="div">
                                   Seed peers
                                 </Typography>
                               </Box>
-                              <Typography component="div" variant="h6" fontFamily="mabry-bold">
+                              <Typography component="div" variant="h6" fontFamily="thai-semi-bold">
                                 {deleteInactiveSeedPeerSuccessful || '0'}
                               </Typography>
                               <Typography color="#8a8a8a" component="div" variant="subtitle2">
@@ -1164,7 +1576,6 @@ export default function ShowCluster() {
                       sx={{
                         '&.MuiButton-root': {
                           backgroundColor: 'var(--button-color)',
-                          borderRadius: 0,
                           color: '#fff',
                         },
                       }}
@@ -1179,9 +1590,9 @@ export default function ShowCluster() {
             ) : (
               <Fragment>
                 {activeStep === 0 ? (
-                  <Paper variant="outlined">
+                  <Card>
                     <Box className={styles.schedulerInactiveCountWrapper}>
-                      <Typography fontFamily="mabry-bold" variant="subtitle1" component="div">
+                      <Typography fontFamily="thai-semi-bold" variant="subtitle1" component="div">
                         Schedulers
                       </Typography>
                       <Box
@@ -1202,7 +1613,7 @@ export default function ShowCluster() {
                         <Typography
                           id="schedulerTotal"
                           variant="caption"
-                          fontFamily="mabry-bold"
+                          fontFamily="thai-semi-bold"
                           component="div"
                           pl="0.3rem"
                           lineHeight="1rem"
@@ -1212,30 +1623,43 @@ export default function ShowCluster() {
                       </Box>
                     </Box>
                     <Box>
-                      <Divider />
                       <ListSubheader color="inherit" className={styles.schedulerInactiveListTitle}>
                         <Box className={styles.schedulerInactiveHeaderID}>
-                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                          <Typography
+                            variant="body2"
+                            fontFamily="thai-semi-bold"
+                            color="var(--table-title-text-color)"
+                            component="div"
+                          >
                             ID
                           </Typography>
                         </Box>
                         <Box className={styles.schedulerInactiveHeaderHostname}>
-                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                          <Typography
+                            variant="body2"
+                            fontFamily="thai-semi-bold"
+                            color="var(--table-title-text-color)"
+                            component="div"
+                          >
                             Hostname
                           </Typography>
                         </Box>
                         <Box className={styles.schedulerInactiveHeaderIP}>
-                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                          <Typography
+                            variant="body2"
+                            fontFamily="thai-semi-bold"
+                            color="var(--table-title-text-color)"
+                            component="div"
+                          >
                             IP
                           </Typography>
                         </Box>
                       </ListSubheader>
-                      <Divider />
                       {Array.isArray(schedulerInactive) && schedulerInactive.length !== 0 ? (
                         <List
                           sx={{
                             width: '100%',
-                            bgcolor: 'background.paper',
+                            bgcolor: 'background.Card',
 
                             overflow: 'auto',
                             maxHeight: 300,
@@ -1277,7 +1701,7 @@ export default function ShowCluster() {
                         </Typography>
                       )}
                     </Box>
-                  </Paper>
+                  </Card>
                 ) : activeStep === 1 ? (
                   <Box>
                     <Box display="flex" alignItems="flex-start" pb="1rem">
@@ -1287,7 +1711,12 @@ export default function ShowCluster() {
                         sx={{ width: '1.4rem', height: '1.4rem', pr: '0.2rem' }}
                       />
                       <Box>
-                        <Typography variant="body1" fontFamily="mabry-bold" component="span" sx={{ color: '#D81E06' }}>
+                        <Typography
+                          variant="body1"
+                          fontFamily="thai-semi-bold"
+                          component="span"
+                          sx={{ color: '#D81E06' }}
+                        >
                           WARNING:&nbsp;
                         </Typography>
                         <Typography variant="body1" component="span" sx={{ color: '#D81E06' }}>
@@ -1331,7 +1760,6 @@ export default function ShowCluster() {
                     sx={{
                       '&.MuiButton-root': {
                         backgroundColor: activeStep === 0 ? '' : 'var(--button-color)',
-                        borderRadius: 0,
                         color: '#fff',
                       },
                     }}
@@ -1349,7 +1777,6 @@ export default function ShowCluster() {
                       sx={{
                         '&.MuiLoadingButton-root': {
                           backgroundColor: 'var(--save-color)',
-                          borderRadius: 0,
                           color: '#fff',
                           borderColor: 'var(--save-color)',
                         },
@@ -1371,7 +1798,6 @@ export default function ShowCluster() {
                             Array.isArray(schedulerInactive) && schedulerInactive.length === 0
                               ? ''
                               : 'var(--button-color)',
-                          borderRadius: 0,
                           color: '#fff',
                         },
                       }}
@@ -1387,14 +1813,14 @@ export default function ShowCluster() {
       </Dialog>
       <Dialog
         open={openDeleteScheduler}
-        onClose={handleDeleteClose}
+        onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Box component="img" className={styles.deleteClusterIcon} src="/icons/cluster/delete.svg" />
-            <Typography fontFamily="mabry-bold" pt="1rem">
+            <Typography fontFamily="thai-semi-bold" pt="1rem">
               Are you sure you want to delet this scheduler?
             </Typography>
           </Box>
@@ -1419,19 +1845,19 @@ export default function ShowCluster() {
       </Dialog>
       <Dialog
         open={openSchedulerEditFeatures}
-        onClose={handleDeleteClose}
+        onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         sx={{
           '& .MuiDialog-paper': {
-            minWidth: '38rem',
+            minWidth: '36rem',
           },
         }}
       >
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '1rem' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '0.8rem 1rem' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box component="img" sx={{ width: '1.8rem' }} src="/icons/cluster/features.svg" />
-            <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
+            <Box component="img" sx={{ width: '1.6rem' }} src="/icons/cluster/features.svg" />
+            <Typography variant="h6" fontFamily="thai-semi-bold" pl="0.5rem">
               Featrues
             </Typography>
           </Box>
@@ -1452,16 +1878,7 @@ export default function ShowCluster() {
         </Box>
         <Divider />
         <DialogContent>
-          <Paper
-            variant="outlined"
-            sx={{
-              p: '0.2rem 0.4rem',
-              m: '0.6rem 0',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
+          <Card className={styles.featuresEdit}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box className={styles.featuresIconWrapper}>
                 <Box className={styles.featuresIconContainer}>
@@ -1469,10 +1886,10 @@ export default function ShowCluster() {
                 </Box>
               </Box>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold">
+                <Typography component="div" variant="body2" fontFamily="thai-semi-bold">
                   Schedule
                 </Typography>
-                <Typography variant="subtitle2" color="rgb(82 82 82 / 87%)">
+                <Typography component="div" variant="caption" color="rgb(82 82 82 / 87%)">
                   If schedule feature is enabled, the scheduler can schedule download tasks.
                 </Typography>
               </Box>
@@ -1486,17 +1903,8 @@ export default function ShowCluster() {
               }}
               inputProps={{ 'aria-label': 'controlled' }}
             />
-          </Paper>
-          <Paper
-            variant="outlined"
-            sx={{
-              p: '0.2rem 0.4rem',
-              m: '0.6rem 0',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
+          </Card>
+          <Card className={styles.featuresEdit}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box className={styles.featuresIconWrapper}>
                 <Box className={styles.featuresIconContainer}>
@@ -1504,10 +1912,10 @@ export default function ShowCluster() {
                 </Box>
               </Box>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold">
+                <Typography component="div" variant="body2" fontFamily="thai-semi-bold">
                   Preheat
                 </Typography>
-                <Typography variant="subtitle2" color="rgb(82 82 82 / 87%)">
+                <Typography component="div" variant="caption" color="rgb(82 82 82 / 87%)">
                   If preheat feature is enabled, the scheduler can execute preheating job.
                 </Typography>
               </Box>
@@ -1521,7 +1929,7 @@ export default function ShowCluster() {
               }}
               inputProps={{ 'aria-label': 'controlled' }}
             />
-          </Paper>
+          </Card>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
             <CancelLoadingButton
               id="cancelEditFeatures"
@@ -1541,7 +1949,6 @@ export default function ShowCluster() {
           </Box>
         </DialogContent>
       </Dialog>
-      <Grid sx={{ height: 2 }}> </Grid>
     </ThemeProvider>
   );
 }

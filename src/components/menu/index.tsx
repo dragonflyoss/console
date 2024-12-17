@@ -7,6 +7,7 @@ import {
   Divider,
   Grid,
   IconButton,
+  LinearProgress,
   Menu,
   MenuItem,
   Snackbar,
@@ -59,12 +60,13 @@ const Main = styled('div')(({ theme }) => ({
   overflow: 'auto',
   minHeight: '100%',
   height: '100vh',
-  paddingBottom: theme.spacing(10),
+  paddingBottom: theme.spacing(8),
   [theme.breakpoints.up('lg')]: {
-    paddingTop: '2rem',
+    paddingTop: '1.5rem',
     paddingLeft: theme.spacing(4),
     paddingRight: theme.spacing(4),
   },
+  fontFamily: 'thai-regular,sans-serif',
 }));
 
 export default function Layout(props: any) {
@@ -90,6 +92,7 @@ export default function Layout(props: any) {
   const [expandDeveloper, setExpandDeveloper] = useState(false);
   const [expandJob, setExpandJob] = useState(false);
   const [expandInsight, setExpandInsight] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const openProfile = Boolean(anchorElement);
   const location = useLocation();
@@ -97,8 +100,20 @@ export default function Layout(props: any) {
 
   useEffect(() => {
     (async function () {
-      setPageLoding(true);
       try {
+        setPageLoding(true);
+        setProgress(0);
+
+        const interval = setInterval(() => {
+          setProgress((prev) => {
+            if (prev >= 30) {
+              clearInterval(interval);
+              return prev;
+            }
+            return prev + 10;
+          });
+        }, 10);
+
         const payload = getJwtPayload();
         setPageTitle(location.pathname);
 
@@ -106,7 +121,20 @@ export default function Layout(props: any) {
           const [user, userRoles] = await Promise.all([getUser(payload?.id), getUserRoles(payload?.id)]);
           setUser(user);
           setRole(userRoles.includes(ROLE_ROOT) ? ROLE_ROOT : ROLE_GUEST);
-          setPageLoding(false);
+
+          clearInterval(interval);
+          setProgress(30);
+
+          const secondInterval = setInterval(() => {
+            setProgress((prev) => {
+              if (prev > 200) {
+                clearInterval(secondInterval);
+                setPageLoding(false);
+                return prev;
+              }
+              return prev + 10;
+            });
+          }, 20);
         } else {
           setPageLoding(false);
           navigate('/signin');
@@ -123,7 +151,7 @@ export default function Layout(props: any) {
     if (location.state?.firstLogin) {
       setFirstLogin(true);
     }
-  }, [location, navigate]);
+  }, [location.pathname, navigate, location.state?.firstLogin]);
 
   const handleUserUpdate = (newUser: getUserResponse) => {
     setUser(newUser);
@@ -228,6 +256,22 @@ export default function Layout(props: any) {
   return (
     <MyContext.Provider value={{ user, role, handleUserUpdate }}>
       <LoadingBackdrop open={pageLoding} />
+
+      {pageLoding ? (
+        <LinearProgress
+          sx={{
+            '& .MuiLinearProgress-bar': {
+              bgcolor: 'var(--description-color)',
+            },
+            bgcolor: 'rgba(0, 167, 111, 0.4)',
+          }}
+          variant="determinate"
+          value={progress}
+        />
+      ) : (
+        <></>
+      )}
+
       <Snackbar
         open={firstLogin}
         autoHideDuration={60000}
@@ -260,7 +304,7 @@ export default function Layout(props: any) {
                 <picture>
                   <Box component="img" className={styles.logo} src="/icons/cluster/logo.svg" />
                 </picture>
-                <Typography variant="h6" gutterBottom sx={{ fontFamily: 'mabry-bold' }}>
+                <Typography variant="h6" gutterBottom sx={{ fontWeight: '600' }}>
                   Dragonfly
                 </Typography>
               </Box>
@@ -287,7 +331,7 @@ export default function Layout(props: any) {
                         }}
                       >
                         {(location.pathname.split('/')[1] || '') === items.label ? items.selectedIcon : items.icon}
-                        <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: '600', ml: '0.4rem', width: '100%' }}>
                           {items.text}
                         </Typography>
                         {items.expand ? <ExpandMore /> : <ChevronRightOutlinedIcon />}
@@ -316,7 +360,7 @@ export default function Layout(props: any) {
                                   mt: '0.8rem',
                                 }}
                               >
-                                <Typography variant="body1" sx={{ fontFamily: 'mabry-bold', ml: '2rem' }}>
+                                <Typography variant="body1" sx={{ fontWeight: '600', ml: '2rem' }}>
                                   {item.text}
                                 </Typography>
                               </ListItemButton>
@@ -348,7 +392,7 @@ export default function Layout(props: any) {
                       }}
                     >
                       {(location.pathname.split('/')[1] || '') === items.label ? items.selectedIcon : items.icon}
-                      <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: '600', ml: '0.4rem' }}>
                         {items.text}
                       </Typography>
                     </ListItemButton>
@@ -374,7 +418,7 @@ export default function Layout(props: any) {
                       justifyContent: 'space-between',
                     }}
                   >
-                    <Typography component="div" fontFamily="mabry-bold">
+                    <Typography component="div" fontFamily="thai-semi-bold">
                       {user?.name || '-'}
                     </Typography>
                     <Tooltip title={user?.email || '-'} placement="top">
@@ -438,7 +482,7 @@ export default function Layout(props: any) {
               </Menu>
             </Grid>
           </Box>
-          <Divider orientation="vertical" flexItem />
+          <Divider orientation="vertical" flexItem sx={{ borderColor: 'rgba(145 158 171 / 0.12)' }} />
           <Main>
             <Outlet />
           </Main>

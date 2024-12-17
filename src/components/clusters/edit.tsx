@@ -701,33 +701,31 @@ export default function EditCluster() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography variant="h5" fontFamily="mabry-bold">
-        Update Cluster
-      </Typography>
+      <Typography variant="h5">Update Cluster</Typography>
       <Divider sx={{ mt: '1rem', mb: '1rem' }} />
       <Paper variant="outlined" sx={{ display: 'inline-flex', alignItems: 'center', mb: '1rem', p: '1rem' }}>
         <Box component="img" src="/icons/cluster/cluster.svg" sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }} />
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography component="span" variant="body1" fontFamily="mabry-bold">
+            <Typography component="span" variant="body1" fontFamily="thai-semi-bold">
               ID:&nbsp;&nbsp;
             </Typography>
             {isLoading ? (
               <Skeleton sx={{ width: '2rem' }} />
             ) : (
-              <Typography component="div" variant="body1" fontFamily="mabry-bold">
+              <Typography component="div" variant="body1" fontFamily="thai-semi-bold">
                 {cluster.id}
               </Typography>
             )}
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography component="span" variant="body1" fontFamily="mabry-bold">
+            <Typography component="span" variant="body1" fontFamily="thai-semi-bold">
               Name:&nbsp;&nbsp;
             </Typography>
             {isLoading ? (
               <Skeleton sx={{ width: '4rem' }} />
             ) : (
-              <Typography component="div" variant="body1" fontFamily="mabry-bold">
+              <Typography component="div" variant="body1" fontFamily="thai-semi-bold">
                 {cluster.name}
               </Typography>
             )}
@@ -737,7 +735,7 @@ export default function EditCluster() {
       <Grid component="form" noValidate onSubmit={handleSubmit}>
         <Box className={styles.container}>
           <Box className={styles.informationTitle}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+            <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
               Information
             </Typography>
             <Tooltip title="The information of cluster." placement="top">
@@ -776,7 +774,7 @@ export default function EditCluster() {
             />
           ))}
           <Box className={styles.scopesTitle}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+            <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
               Scopes
             </Typography>
             <Tooltip
@@ -819,7 +817,7 @@ export default function EditCluster() {
             })}
           </Grid>
           <Box className={styles.configTitle}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+            <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
               Config
             </Typography>
             <Tooltip title=" The configuration for P2P downloads." placement="top">

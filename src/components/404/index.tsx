@@ -9,7 +9,7 @@ export default function NotFound() {
     <Grid className={styles.container}>
       <Box className={styles.logoContainer}>
         <Box component="img" sx={{ width: '1.8rem', height: '1.8rem', mr: '0.4rem' }} src="/images/404/logo.svg" />
-        <Typography variant="h6" sx={{ fontFamily: 'mabry-bold' }}>
+        <Typography variant="h6" sx={{ fontFamily: 'thai-semi-bold' }}>
           Dragonfly
         </Typography>
       </Box>
@@ -19,7 +19,7 @@ export default function NotFound() {
         <Typography variant="h4" gutterBottom mt="2rem">
           Something gone wrong!
         </Typography>
-        <Typography variant="body1" fontFamily="mabry-light" mb="2rem">
+        <Typography variant="body1" fontFamily="thai-regular" mb="2rem">
           The page you were looking for doesn't exist.
         </Typography>
         <Button

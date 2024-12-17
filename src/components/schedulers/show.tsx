@@ -1,4 +1,3 @@
-import Paper from '@mui/material/Paper';
 import {
   Alert,
   Box,
@@ -18,6 +17,7 @@ import { getDatetime } from '../../lib/utils';
 import styles from './show.module.css';
 import _ from 'lodash';
 import { useParams, Link, useLocation } from 'react-router-dom';
+import Card from '../card';
 
 export default function Schedulers() {
   const [isLoading, setIsLoading] = useState(false);
@@ -106,7 +106,7 @@ export default function Schedulers() {
         <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters`}>
           clusters
         </RouterLink>
-        <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}/schedulers`}>
+        <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}`}>
           {`scheduler-cluster-${clusterID}`}
         </RouterLink>
         <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}/schedulers`}>
@@ -114,66 +114,66 @@ export default function Schedulers() {
         </RouterLink>
         <Typography color="text.primary">{scheduler?.host_name || '-'}</Typography>
       </Breadcrumbs>
-      <Typography variant="h6" fontFamily="mabry-bold" sx={{ pb: '1rem' }}>
+      <Typography variant="h6" sx={{ pb: '1rem' }}>
         Scheduler
       </Typography>
       <Box className={styles.container}>
-        <Paper variant="outlined" className={styles.headerContainer}>
+        <Card className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler-id.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/scheduler-id.svg" />
             <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               ID
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+          <Typography component="div" variant="subtitle1" className={styles.headerText}>
             {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : scheduler?.id || '-'}
           </Typography>
-        </Paper>
-        <Paper variant="outlined" className={styles.headerContainer}>
+        </Card>
+        <Card className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/hostname.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/hostname.svg" />
             <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               Hostname
             </Typography>
           </Box>
           <Tooltip title={scheduler?.host_name || '-'} placement="top">
-            <Typography component="div" variant="subtitle1" fontFamily="mabry-bold" className={styles.hostname}>
+            <Typography component="div" variant="subtitle1" className={styles.hostname}>
               {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : scheduler?.host_name || '-'}
             </Typography>
           </Tooltip>
-        </Paper>
-        <Paper variant="outlined" className={styles.headerContainer}>
+        </Card>
+        <Card className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler-ip.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/scheduler-ip.svg" />
             <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               IP
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+          <Typography component="div" variant="subtitle1" className={styles.headerText}>
             {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : scheduler?.ip || '-'}
           </Typography>
-        </Paper>
-        <Paper variant="outlined" className={styles.clusterIDContaine}>
+        </Card>
+        <Card className={styles.clusterIDContaine}>
           <Box className={styles.clusterIDContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/cluster-id.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/cluster-id.svg" />
             <Typography className={styles.clusterIDTitle} variant="subtitle1" component="div">
               Cluster ID
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+          <Typography component="div" variant="subtitle1" className={styles.headerText}>
             {isLoading ? (
               <Skeleton data-testid="isloading" sx={{ width: '8rem' }} />
             ) : (
               scheduler?.scheduler_cluster_id || '-'
             )}
           </Typography>
-        </Paper>
+        </Card>
       </Box>
-      <Paper variant="outlined" className={styles.schedulerContainer}>
+      <Card className={styles.schedulerContainer}>
         {schedulerLabel.map((item) => {
           return (
             <Box key={item.label} className={styles.schedulerContent}>
-              <Typography variant="subtitle1" component="div" mb="1rem">
+              <Typography variant="subtitle1" component="div" className={styles.text}>
                 {item.label}
               </Typography>
               {isLoading ? (
@@ -243,7 +243,7 @@ export default function Schedulers() {
                       '-'
                     )
                   ) : (
-                    <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+                    <Typography component="div" variant="subtitle1" className={styles.headerText}>
                       {scheduler?.[item?.name as keyof typeof scheduler] || '-'}
                     </Typography>
                   )}
@@ -252,7 +252,7 @@ export default function Schedulers() {
             </Box>
           );
         })}
-      </Paper>
+      </Card>
     </Box>
   );
 }

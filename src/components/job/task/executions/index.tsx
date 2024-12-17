@@ -23,6 +23,7 @@ import {
   Skeleton,
 } from '@mui/material';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
+import Card from '../../../card';
 
 export default function Executions() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -125,7 +126,7 @@ export default function Executions() {
       },
     },
     typography: {
-      fontFamily: 'mabry-light,sans-serif',
+      fontFamily: 'thai-regular,sans-serif',
     },
   });
 
@@ -149,9 +150,9 @@ export default function Executions() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Paper variant="outlined">
+      <Card>
         <Box className={styles.titleContainer}>
-          <Typography variant="body1" fontFamily="mabry-bold">
+          <Typography variant="body1" fontFamily="thai-semi-bold">
             Workflow runs
           </Typography>
           <FormControl sx={{ width: '10rem' }} size="small">
@@ -169,7 +170,7 @@ export default function Executions() {
               }}
               onChange={changeStatus}
             >
-              <Typography variant="body1" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
+              <Typography variant="body1" fontFamily="thai-semi-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
                 Filter by status
               </Typography>
               <Divider />
@@ -241,7 +242,7 @@ export default function Executions() {
                           sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
                           ml="0.6rem"
                         >
-                          <Typography variant="body1" fontFamily="mabry-bold">
+                          <Typography variant="body1" fontFamily="thai-semi-bold">
                             {item.id}
                           </Typography>
                           <Typography variant="body2">{item?.args?.task_id || '-'}</Typography>
@@ -271,7 +272,13 @@ export default function Executions() {
                         </RouterLink>
                       </Box>
                     </Box>
-                    <Divider />
+                    <Divider
+                      sx={{
+                        borderStyle: 'dashed',
+                        borderColor: 'var(--palette-divider)',
+                        borderWidth: '0px 0px thin',
+                      }}
+                    />
                   </Box>
                 ) : (
                   <Box key={item.id} id={`list-${item.id}`} className={styles.listWrapper}>
@@ -302,7 +309,7 @@ export default function Executions() {
                         sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
                         ml="0.6rem"
                       >
-                        <Typography variant="body1" fontFamily="mabry-bold">
+                        <Typography variant="body1" fontFamily="thai-semi-bold">
                           {item.id}
                         </Typography>
                         <Typography variant="body2">{item.args?.task_id || '-'}</Typography>
@@ -336,7 +343,7 @@ export default function Executions() {
               })}
           </Box>
         )}
-      </Paper>
+      </Card>
       {totalPages > 1 ? (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
           <Pagination

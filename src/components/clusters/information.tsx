@@ -8,18 +8,17 @@ import {
   DialogContent,
   IconButton,
   Skeleton,
-  Chip,
   createTheme,
   ThemeProvider,
   Snackbar,
   Button,
   Alert,
+  Chip,
 } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import styles from './information.module.css';
-import HelpIcon from '@mui/icons-material/Help';
-import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
+import Card from '../card';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import { useContext, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
@@ -39,23 +38,11 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { deleteCluster } from '../../lib/api';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1C293A',
-    },
-    secondary: {
-      main: '#2E8F79',
-    },
-  },
-  typography: {
-    fontFamily: 'mabry-light,sans-serif',
-  },
-});
+import MoreTimeIcon from '@mui/icons-material/MoreTime';
+import { getDatetime } from '../../lib/utils';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
-Chart.defaults.font.family = 'mabry-light';
+Chart.defaults.font.family = 'thai-regular';
 
 export default function Information() {
   const [openCIDRs, setOpenCIDRs] = useState(false);
@@ -128,7 +115,7 @@ export default function Information() {
     }
   };
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -150,7 +137,7 @@ export default function Information() {
         </Alert>
       </Snackbar>
       <Box className={styles.container}>
-        <Typography variant="h6" fontFamily="mabry-bold">
+        <Typography variant="h6" fontFamily="thai-semi-bold">
           Cluster
         </Typography>
         <Box>
@@ -164,7 +151,6 @@ export default function Information() {
             sx={{
               '&.MuiButton-root': {
                 backgroundColor: 'var(--button-color)',
-                borderRadius: 0,
                 color: '#fff',
               },
               mr: '1rem',
@@ -184,7 +170,6 @@ export default function Information() {
             sx={{
               '&.MuiButton-root': {
                 backgroundColor: 'var(--button-color)',
-                borderRadius: 0,
                 color: '#fff',
               },
             }}
@@ -193,425 +178,500 @@ export default function Information() {
             Delete Cluster
           </Button>
         </Box>
-        <Dialog
-          open={openDeleteCluster}
-          onClose={handleDeleteClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogContent>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Box component="img" className={styles.deleteClusterIcon} src="/icons/cluster/delete.svg" />
-              <Typography fontFamily="mabry-bold" pt="1rem">
-                Are you sure you want to delet this cluster?
-              </Typography>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
-              <CancelLoadingButton id="cancelDeleteCluster" loading={deleteLoadingButton} onClick={handleDeleteClose} />
-              <SavelLoadingButton
-                loading={deleteLoadingButton}
-                endIcon={<DeleteIcon />}
-                id="deleteCluster"
-                onClick={handleDeleteCluster}
-                text="Delete"
-              />
-            </Box>
-          </DialogContent>
-        </Dialog>
       </Box>
-      <Paper variant="outlined" elevation={1} sx={{ p: '1rem' }}>
-        {/* <Box sx={{ display: 'flex', alignItems: 'center', mb: '1rem' }}>
-          <Typography variant="subtitle1" fontFamily="mabry-bold" sx={{ mr: '0.2rem' }}>
-            Information
-          </Typography>
-          <MuiTooltip title="The information of cluster." placement="top">
-            <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
-          </MuiTooltip>
-        </Box> */}
-
-        <Typography id="name" variant="body2" component="div" fontFamily="mabry-bold">
-          {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster.name || '-'}
-        </Typography>
-        <Paper variant="outlined" className={styles.clusterContainer}>
-          <Box className={styles.clusterWrap}>
-            <Box className={styles.clusterTitle}>
-              <Typography variant="body2" component="div" className={styles.configLable}>
-                Name
-              </Typography>
-              <MuiTooltip title="Cluster name." placement="top">
-                <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
-              </MuiTooltip>
-            </Box>
-            <Typography id="name" variant="body2" component="div" fontFamily="mabry-bold">
+      <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
+        <Card className={styles.wrapper}>
+          <Box sx={{ pb: '0.5rem' }}>
+            <Typography id="name" variant="h6" component="div" className={styles.className}>
               {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster.name || '-'}
             </Typography>
-          </Box>
-          <Divider orientation="vertical" flexItem />
-          <Box className={styles.clusterWrap}>
-            <Box className={styles.clusterTitle}>
-              <Typography variant="body2" component="div" className={styles.configLable}>
-                Description
-              </Typography>
-              <MuiTooltip title="Cluster description." placement="top">
-                <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
-              </MuiTooltip>
-            </Box>
-            <MuiTooltip title={cluster?.bio || '-'} placement="bottom">
-              <Typography
-                id="description"
-                variant="body2"
-                component="div"
-                fontFamily="mabry-bold"
-                sx={{
-                  width: '80%',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  textAlign: 'center',
-                }}
-              >
-                {isLoading ? <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} /> : cluster?.bio || '-'}
-              </Typography>
-            </MuiTooltip>
-          </Box>
-          <Divider orientation="vertical" flexItem />
-          <Box className={styles.clusterWrap}>
-            <Box className={styles.clusterTitle}>
-              <Typography variant="body2" component="div" className={styles.configLable}>
-                Set as default cluster
-              </Typography>
-              <MuiTooltip
-                title="When peer does not find a matching cluster based on scopes, the default cluster will be used."
-                placement="top"
-              >
-                <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
-              </MuiTooltip>
-            </Box>
-            <Typography id="default" variant="body2" component="div" fontFamily="mabry-bold">
-              {isLoading ? (
-                <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
-              ) : cluster.is_default ? (
-                'Yes'
-              ) : (
-                'No'
-              )}
+            <Typography id="description" variant="body2" component="div" color="var(--text---palette-text-secondary)">
+              {isLoading ? <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} /> : cluster?.bio || '-'}
             </Typography>
           </Box>
-          <Divider orientation="vertical" flexItem />
-          <Box className={styles.clusterWrap}>
-            <Box className={styles.clusterTitle}>
-              <Typography variant="body2" component="div" className={styles.configLable}>
-                Scheduler cluster ID
-              </Typography>
-              <MuiTooltip
-                title="When the scheduler is deployed, the schedulerClusterID must be filled with this scheduler cluster ID in scheduler configuration. In this way, the scheduler will become the scheduling service of this cluster."
-                placement="top"
-              >
-                <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
-              </MuiTooltip>
-            </Box>
-            <Box className={styles.schedulerClusterID}>
-              <Typography id="scheduler-cluster-id" variant="body2" component="div" fontFamily="mabry-bold" mr="0.4rem">
+          <hr className={styles.divider} />
+          <Box className={styles.clusterContainer}>
+            <Box className={styles.clusterWrap}>
+              <Box className={styles.clusterTitle}>
+                <Typography variant="body2" component="div" className={styles.configLable}>
+                  Set as default cluster
+                </Typography>
+                <MuiTooltip
+                  title="When peer does not find a matching cluster based on scopes, the default cluster will be used."
+                  placement="top"
+                >
+                  <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                </MuiTooltip>
+              </Box>
+              <Typography id="default" variant="body2" component="div" className={styles.clusterContent}>
                 {isLoading ? (
                   <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
+                ) : cluster.is_default ? (
+                  'Yes'
                 ) : (
-                  cluster?.scheduler_cluster_id || 0
+                  'No'
                 )}
               </Typography>
-              {isLoading ? (
-                <></>
-              ) : (
-                <IconButton
-                  aria-label="copy"
-                  sx={{
-                    width: '1.2rem',
-                    height: '1.2rem',
-                  }}
-                  onClick={() => {
-                    copyClusterID('schedulerClusterID', cluster?.scheduler_cluster_id || 0);
-                  }}
-                  id="copy-scheduler-cluster-id"
-                >
-                  {showSchedulerClusterIDCopyIcon ? (
-                    <MuiTooltip
-                      placement="top"
-                      PopperProps={{
-                        disablePortal: true,
-                      }}
-                      open={showSchedulerClusterIDCopyIcon}
-                      disableFocusListener
-                      disableHoverListener
-                      disableTouchListener
-                      title="copied!"
-                      id="schedulerClusterIDTooltip"
-                    >
-                      <Box
-                        component="img"
-                        id="schedulerClusterIDCopyIcon"
-                        sx={{ width: '1rem', height: '1rem' }}
-                        src="/icons/tokens/done.svg"
-                      />
-                    </MuiTooltip>
-                  ) : (
-                    <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/copy.svg" />
-                  )}
-                </IconButton>
-              )}
             </Box>
-          </Box>
-          <Divider orientation="vertical" flexItem />
-          <Box className={styles.clusterWrap}>
-            <Box className={styles.clusterTitle}>
-              <Typography variant="body2" component="div" className={styles.configLable}>
-                Seed peer cluster ID
-              </Typography>
-              <MuiTooltip
-                title="When the seed peer is deployed, the clusterID must be filled with this seed peer cluster ID in scheduler configuration. In this way, the seed peer will become the seed peer service of this cluster."
-                placement="top"
-              >
-                <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
-              </MuiTooltip>
-            </Box>
-            <Box className={styles.schedulerClusterID}>
-              <Typography id="seed-peer-cluster-id" variant="body2" component="div" fontFamily="mabry-bold" mr="0.4rem">
+            <Box className={styles.clusterWrap}>
+              <Box className={styles.clusterTitle}>
+                <Typography variant="body2" component="div" className={styles.configLable}>
+                  Create At
+                </Typography>
+                <MuiTooltip title="Cluster name." placement="top">
+                  <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                </MuiTooltip>
+              </Box>
+              <Typography id="name" variant="body2" component="div" className={styles.clusterContent}>
                 {isLoading ? (
-                  <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
+                  <Skeleton sx={{ width: '8rem' }} />
                 ) : (
-                  cluster?.seed_peer_cluster_id || 0
+                  // <Chip
+                  //   avatar={<MoreTimeIcon />}
+                  //   label={getDatetime(cluster.created_at)}
+                  //   variant="outlined"
+                  //   size="small"
+                  // />
+                  getDatetime(cluster.created_at)
                 )}
               </Typography>
-              {isLoading ? (
-                <></>
-              ) : (
-                <IconButton
-                  aria-label="copy"
-                  id="copy-seed-peer-cluster-id"
-                  sx={{
-                    width: '1.2rem',
-                    height: '1.2rem',
-                  }}
-                  onClick={() => {
-                    copyClusterID('seedPeerClusterID', cluster?.seed_peer_cluster_id || 0);
-                  }}
+            </Box>
+            <Box className={styles.clusterWrap}>
+              <Box className={styles.clusterTitle}>
+                <Typography variant="body2" component="div" className={styles.configLable}>
+                  Scheduler cluster ID
+                </Typography>
+                <MuiTooltip
+                  title="When the scheduler is deployed, the schedulerClusterID must be filled with this scheduler cluster ID in scheduler configuration. In this way, the scheduler will become the scheduling service of this cluster."
+                  placement="top"
                 >
-                  {showSeedPeerClusterIDCopyIcon ? (
-                    <MuiTooltip
-                      placement="top"
-                      PopperProps={{
-                        disablePortal: true,
-                      }}
-                      open={showSeedPeerClusterIDCopyIcon}
-                      disableFocusListener
-                      disableHoverListener
-                      disableTouchListener
-                      title="copied!"
-                      id="seedPeerClusterIDTooltip"
-                    >
-                      <Box
-                        component="img"
-                        id="seedPeerClusterIDCopyIcon"
-                        sx={{ width: '1rem', height: '1rem' }}
-                        src="/icons/tokens/done.svg"
-                      />
-                    </MuiTooltip>
+                  <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                </MuiTooltip>
+              </Box>
+              <Box className={styles.schedulerClusterID}>
+                <Typography
+                  id="scheduler-cluster-id"
+                  variant="body2"
+                  component="div"
+                  mr="0.5rem"
+                  className={styles.clusterContent}
+                >
+                  {isLoading ? (
+                    <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
                   ) : (
-                    <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/copy.svg" />
+                    cluster?.scheduler_cluster_id || 0
                   )}
-                </IconButton>
-              )}
-            </Box>
-          </Box>
-        </Paper>
-        <Box className={styles.scopesContainer}>
-          <Box className={styles.configTitle}>
-            <Typography variant="subtitle1" color="text.primary" fontFamily="mabry-bold" sx={{ mr: '0.4rem' }}>
-              Scopes
-            </Typography>
-            <MuiTooltip
-              title="The cluster needs to serve the scope. It wil provide scheduler services and seed peer services to
-                  peers in the scope."
-              placement="top"
-            >
-              <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
-            </MuiTooltip>
-          </Box>
-          <Paper elevation={0} className={styles.scopesContentContainer}>
-            <Box className={styles.scopesCard}>
-              <Paper variant="outlined" className={styles.cidrsContainer}>
-                <Box className={styles.scopesTitle}>
-                  <Box className={styles.locationTitle}>
-                    <Typography variant="body2" component="div" className={styles.scopesLable}>
-                      Location
-                    </Typography>
-                    <MuiTooltip
-                      title={`The cluster needs to serve all peers in the location. When the location in the peer configuration matches the location in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. It separated by "|", for example "area|country|province|city".`}
-                      placement="top"
-                    >
-                      <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
-                    </MuiTooltip>
-                  </Box>
-                  <Box className={styles.scopesIconContainer}>
-                    <Box component="img" className={styles.scopesIcon} src="/icons/cluster/location.svg" />
-                  </Box>
-                </Box>
-                <Box className={styles.locationTextContainer}>
-                  <MuiTooltip title={cluster?.scopes?.location || '-'} placement="top">
-                    <Typography
-                      id="location"
-                      variant="body2"
-                      component="div"
-                      fontFamily="mabry-bold"
-                      className={styles.locationContent}
-                    >
-                      {isLoading ? (
-                        <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
-                      ) : (
-                        cluster?.scopes?.location || '-'
-                      )}
-                    </Typography>
-                  </MuiTooltip>
-                </Box>
-              </Paper>
-            </Box>
-            <Box className={styles.scopesCard}>
-              <Paper variant="outlined" className={styles.cidrsContainer}>
-                <Box className={styles.scopesTitle}>
-                  <Box className={styles.cidrsTitle}>
-                    <Typography variant="body2" component="p" className={styles.scopesLable}>
-                      IDC
-                    </Typography>
-                    <MuiTooltip
-                      title={`The cluster needs to serve all peers in the IDC. When the IDC in the peer configuration matches the IDC in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. IDC has higher priority than location in the scopes.`}
-                      placement="top"
-                    >
-                      <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
-                    </MuiTooltip>
-                  </Box>
-                  <Paper
-                    id="idc-total"
-                    elevation={0}
-                    sx={{ display: 'flex', padding: '0.2rem 0.5rem', backgroundColor: 'var(--menu-background-color)' }}
+                </Typography>
+                {isLoading ? (
+                  <></>
+                ) : (
+                  <IconButton
+                    aria-label="copy"
+                    sx={{
+                      width: '1.2rem',
+                      height: '1.2rem',
+                    }}
+                    onClick={() => {
+                      copyClusterID('schedulerClusterID', cluster?.scheduler_cluster_id || 0);
+                    }}
+                    id="copy-scheduler-cluster-id"
                   >
-                    <Box component="img" className={styles.scopesIcon} src="/icons/cluster/idc.svg" />
-                    <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
-                      {`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`}
-                    </Typography>
-                  </Paper>
-                  {/* <Chip
+                    {showSchedulerClusterIDCopyIcon ? (
+                      <MuiTooltip
+                        placement="top"
+                        PopperProps={{
+                          disablePortal: true,
+                        }}
+                        open={showSchedulerClusterIDCopyIcon}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        title="copied!"
+                        id="schedulerClusterIDTooltip"
+                      >
+                        <Box
+                          component="img"
+                          id="schedulerClusterIDCopyIcon"
+                          sx={{ width: '1rem', height: '1rem' }}
+                          src="/icons/tokens/done.svg"
+                        />
+                      </MuiTooltip>
+                    ) : (
+                      <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/copy.svg" />
+                    )}
+                  </IconButton>
+                )}
+              </Box>
+            </Box>
+            <Box className={styles.clusterWrap}>
+              <Box className={styles.clusterTitle}>
+                <Typography variant="body2" component="div" className={styles.configLable}>
+                  Seed peer cluster ID
+                </Typography>
+                <MuiTooltip
+                  title="When the seed peer is deployed, the clusterID must be filled with this seed peer cluster ID in scheduler configuration. In this way, the seed peer will become the seed peer service of this cluster."
+                  placement="top"
+                >
+                  <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                </MuiTooltip>
+              </Box>
+              <Box className={styles.schedulerClusterID}>
+                <Typography
+                  id="seed-peer-cluster-id"
+                  variant="body2"
+                  component="div"
+                  mr="0.5rem"
+                  className={styles.clusterContent}
+                >
+                  {isLoading ? (
+                    <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
+                  ) : (
+                    cluster?.seed_peer_cluster_id || 0
+                  )}
+                </Typography>
+                {isLoading ? (
+                  <></>
+                ) : (
+                  <IconButton
+                    aria-label="copy"
+                    id="copy-seed-peer-cluster-id"
+                    sx={{
+                      width: '1.2rem',
+                      height: '1.2rem',
+                    }}
+                    onClick={() => {
+                      copyClusterID('seedPeerClusterID', cluster?.seed_peer_cluster_id || 0);
+                    }}
+                  >
+                    {showSeedPeerClusterIDCopyIcon ? (
+                      <MuiTooltip
+                        placement="top"
+                        PopperProps={{
+                          disablePortal: true,
+                        }}
+                        open={showSeedPeerClusterIDCopyIcon}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        title="copied!"
+                        id="seedPeerClusterIDTooltip"
+                      >
+                        <Box
+                          component="img"
+                          id="seedPeerClusterIDCopyIcon"
+                          sx={{ width: '1rem', height: '1rem' }}
+                          src="/icons/tokens/done.svg"
+                        />
+                      </MuiTooltip>
+                    ) : (
+                      <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/copy.svg" />
+                    )}
+                  </IconButton>
+                )}
+              </Box>
+            </Box>
+          </Box>
+          <hr className={styles.divider} />
+          <Box className={styles.scopesContainer}>
+            <Box className={styles.scopesWrapper}>
+              <Typography variant="body1" sx={{ mr: '0.4rem', fontWeight: '600' }}>
+                Scopes
+              </Typography>
+              <MuiTooltip
+                title="The cluster needs to serve the scope. It wil provide scheduler services and seed peer services to
+                  peers in the scope."
+                placement="top"
+              >
+                <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+              </MuiTooltip>
+            </Box>
+            <Paper elevation={0} className={styles.scopesContentContainer}>
+              <Box className={styles.scopesCard}>
+                <Card className={styles.cidrsContainer}>
+                  <Box className={styles.scopesTitle}>
+                    <Box className={styles.locationTitle}>
+                      <Typography variant="body2" component="div" className={styles.scopesLable}>
+                        Location
+                      </Typography>
+                      <MuiTooltip
+                        title={`The cluster needs to serve all peers in the location. When the location in the peer configuration matches the location in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. It separated by "|", for example "area|country|province|city".`}
+                        placement="top"
+                      >
+                        <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                      </MuiTooltip>
+                    </Box>
+                    <Box className={styles.scopesIconContainer}>
+                      <Box component="img" className={styles.scopesIcon} src="/icons/cluster/location.svg" />
+                    </Box>
+                  </Box>
+                  <Box className={styles.locationTextContainer}>
+                    <MuiTooltip title={cluster?.scopes?.location || '-'} placement="top">
+                      <Typography id="location" variant="body2" component="div" className={styles.locationContent}>
+                        {isLoading ? (
+                          <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
+                        ) : (
+                          cluster?.scopes?.location || '-'
+                        )}
+                      </Typography>
+                    </MuiTooltip>
+                  </Box>
+                </Card>
+              </Box>
+              <Box className={styles.scopesCard}>
+                <Card className={styles.cidrsContainer}>
+                  <Box className={styles.scopesTitle}>
+                    <Box className={styles.cidrsTitle}>
+                      <Typography variant="body2" component="p" className={styles.scopesLable}>
+                        IDC
+                      </Typography>
+                      <MuiTooltip
+                        title={`The cluster needs to serve all peers in the IDC. When the IDC in the peer configuration matches the IDC in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. IDC has higher priority than location in the scopes.`}
+                        placement="top"
+                      >
+                        <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                      </MuiTooltip>
+                    </Box>
+                    <Paper
+                      id="idc-total"
+                      elevation={0}
+                      sx={{
+                        display: 'flex',
+                        padding: '0.2rem 0.3rem',
+                        backgroundColor: 'var(--menu-background-color)',
+                      }}
+                    >
+                      <Box component="img" className={styles.scopesIcon} src="/icons/cluster/idc.svg" />
+                      <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
+                        {`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`}
+                      </Typography>
+                    </Paper>
+                    {/* <Chip
                   size="small"
                   icon={<Box component="img" className={styles.scopesIcon} src="/icons/cluster/idc.svg" />}
                   label={`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`}
                 /> */}
-                </Box>
-                <Box className={styles.cidrsTags}>
-                  {cluster?.scopes?.idc ? (
-                    <>
-                      <Box className={styles.cidrWrapper}>
-                        <Paper elevation={0} className={styles.cidrsContent}>
-                          <MuiTooltip title={cluster?.scopes?.idc.split('|')[0] || '-'} placement="top">
-                            <Typography variant="body2" component="div" className={styles.cidrsText}>
-                              {isLoading ? (
-                                <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
-                              ) : (
-                                cluster?.scopes?.idc.split('|')[0] || '-'
-                              )}
+                  </Box>
+                  <Box className={styles.cidrsTags}>
+                    {cluster?.scopes?.idc ? (
+                      <>
+                        <Box className={styles.cidrWrapper}>
+                          <Paper elevation={0} className={styles.cidrsContent}>
+                            <MuiTooltip title={cluster?.scopes?.idc.split('|')[0] || '-'} placement="top">
+                              <Typography variant="body2" component="div" className={styles.cidrsText}>
+                                {cluster?.scopes?.idc.split('|')[0] || '-'}
+                              </Typography>
+                            </MuiTooltip>
+                          </Paper>
+                          {cluster?.scopes?.idc.split('|').length > 1 ? (
+                            <Paper elevation={0} className={styles.cidrsContent}>
+                              <MuiTooltip title={cluster?.scopes?.idc.split('|')[1] || ''} placement="top">
+                                <Typography variant="body2" component="div" className={styles.cidrsText}>
+                                  {cluster?.scopes?.idc.split('|')[1] || ''}
+                                </Typography>
+                              </MuiTooltip>
+                            </Paper>
+                          ) : (
+                            <></>
+                          )}
+                          {cluster?.scopes?.idc.split('|').length > 2 ? (
+                            <Paper elevation={0} className={styles.cidrsContent}>
+                              <MuiTooltip title={cluster?.scopes?.idc.split('|')[2] || ''} placement="top">
+                                <Typography variant="body2" component="div" className={styles.cidrsText}>
+                                  {cluster?.scopes?.idc.split('|')[2] || ''}
+                                </Typography>
+                              </MuiTooltip>
+                            </Paper>
+                          ) : (
+                            <></>
+                          )}
+                          {cluster?.scopes?.idc.split('|').length > 3 ? (
+                            <Paper elevation={0} className={styles.cidrsContent}>
+                              <MuiTooltip title={cluster?.scopes?.idc.split('|')[3] || ''} placement="top">
+                                <Typography variant="body2" component="div" className={styles.cidrsText}>
+                                  {cluster?.scopes?.idc.split('|')[3] || ''}
+                                </Typography>
+                              </MuiTooltip>
+                            </Paper>
+                          ) : (
+                            <></>
+                          )}
+                          {/* {cluster?.scopes?.idc.split('|').length > 4 ? (
+                            <Paper elevation={0} className={styles.cidrsContent}>
+                              <MuiTooltip title={cluster?.scopes?.idc.split('|')[4] || ''} placement="top">
+                                <Typography variant="body2" component="div" className={styles.cidrsText}>
+                                  {isLoading ? (
+                                    <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
+                                  ) : (
+                                    cluster?.scopes?.idc.split('|')[4] || ''
+                                  )}
+                                </Typography>
+                              </MuiTooltip>
+                            </Paper>
+                          ) : (
+                            <></>
+                          )} */}
+                        </Box>
+                        {cluster?.scopes?.idc.split('|').length > 2 ? (
+                          <IconButton
+                            size="small"
+                            id="idc"
+                            onClick={() => {
+                              setOpenIDC(true);
+                            }}
+                          >
+                            <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                          </IconButton>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                    ) : (
+                      <Typography variant="subtitle1" component="div">
+                        -
+                      </Typography>
+                    )}
+                  </Box>
+                  <Dialog
+                    maxWidth="sm"
+                    fullWidth
+                    open={openIDC}
+                    onClose={() => {
+                      setOpenIDC(false);
+                    }}
+                  >
+                    <DialogTitle>IDC</DialogTitle>
+                    <DialogContent dividers className={styles.idcDialogContainer}>
+                      {cluster?.scopes?.idc.split('|').map((item: any, id: any) => (
+                        <Paper key={id} elevation={0} className={styles.idcDialogContent}>
+                          <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/idc.svg" />
+                          <MuiTooltip title={item} placement="top">
+                            <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
+                              {item}
                             </Typography>
                           </MuiTooltip>
                         </Paper>
-                        {cluster?.scopes?.idc.split('|').length > 1 ? (
-                          <Paper elevation={0} className={styles.cidrsContent}>
-                            <MuiTooltip title={cluster?.scopes?.idc.split('|')[1] || ''} placement="top">
-                              <Typography variant="body2" component="div" className={styles.cidrsText}>
-                                {isLoading ? (
-                                  <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
-                                ) : (
-                                  cluster?.scopes?.idc.split('|')[1] || ''
-                                )}
-                              </Typography>
-                            </MuiTooltip>
-                          </Paper>
-                        ) : (
-                          <></>
-                        )}
-                        {cluster?.scopes?.idc.split('|').length > 2 ? (
-                          <Paper elevation={0} className={styles.cidrsContent}>
-                            <MuiTooltip title={cluster?.scopes?.idc.split('|')[2] || ''} placement="top">
-                              <Typography variant="body2" component="div" className={styles.cidrsText}>
-                                {isLoading ? (
-                                  <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
-                                ) : (
-                                  cluster?.scopes?.idc.split('|')[2] || ''
-                                )}
-                              </Typography>
-                            </MuiTooltip>
-                          </Paper>
-                        ) : (
-                          <></>
-                        )}
-                        {cluster?.scopes?.idc.split('|').length > 3 ? (
-                          <Paper elevation={0} className={styles.cidrsContent}>
-                            <MuiTooltip title={cluster?.scopes?.idc.split('|')[3] || ''} placement="top">
-                              <Typography variant="body2" component="div" className={styles.cidrsText}>
-                                {isLoading ? (
-                                  <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
-                                ) : (
-                                  cluster?.scopes?.idc.split('|')[3] || ''
-                                )}
-                              </Typography>
-                            </MuiTooltip>
-                          </Paper>
-                        ) : (
-                          <></>
-                        )}
-                        {cluster?.scopes?.idc.split('|').length > 4 ? (
-                          <Paper elevation={0} className={styles.cidrsContent}>
-                            <MuiTooltip title={cluster?.scopes?.idc.split('|')[4] || ''} placement="top">
-                              <Typography variant="body2" component="div" className={styles.cidrsText}>
-                                {isLoading ? (
-                                  <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
-                                ) : (
-                                  cluster?.scopes?.idc.split('|')[4] || ''
-                                )}
-                              </Typography>
-                            </MuiTooltip>
-                          </Paper>
-                        ) : (
-                          <></>
-                        )}
-                      </Box>
-                      {cluster?.scopes?.idc.split('|').length > 2 ? (
-                        <IconButton
-                          size="small"
-                          id="idc"
-                          onClick={() => {
-                            setOpenIDC(true);
-                          }}
-                        >
-                          <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
-                        </IconButton>
-                      ) : (
-                        <></>
-                      )}
-                    </>
+                      ))}
+                    </DialogContent>
+                  </Dialog>
+                </Card>
+              </Box>
+              <Box className={styles.scopesCard}>
+                <Card className={styles.cidrsContainer}>
+                  <Box className={styles.scopesTitle}>
+                    <Box className={styles.cidrsTitle}>
+                      <Typography variant="body2" component="div" className={styles.scopesLable}>
+                        CIDRs
+                      </Typography>
+                      <MuiTooltip
+                        title={`The cluster needs to serve all peers in the CIDRs. The advertise IP will be reported in the peer configuration when the peer is started, and if the advertise IP is empty in the peer configuration, peer will automatically get expose IP as advertise IP. When advertise IP of the peer matches the CIDRs in cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. CIDRs has higher priority than IDC in the scopes. CIDRs has higher priority than IDC in the scopes. CIDRs has priority equal to hostname in the scopes.`}
+                        placement="top"
+                      >
+                        <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                      </MuiTooltip>
+                    </Box>
+                    <Paper
+                      id="cidrs-total"
+                      elevation={0}
+                      sx={{
+                        display: 'flex',
+                        padding: '0.2rem 0.3rem',
+                        backgroundColor: 'var(--menu-background-color)',
+                      }}
+                    >
+                      <Box component="img" className={styles.scopesIcon} src="/icons/cluster/cidrs.svg" />
+                      <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
+                        {`Total: ${cluster?.scopes?.cidrs?.length || 0}`}
+                      </Typography>
+                    </Paper>
+                    {/* <Chip
+                  size="small"
+                  icon={<Box component="img" className={styles.scopesIcon} src="/icons/cluster/cidrs.svg" />}
+                  label={`Total: ${cluster?.scopes?.cidrs?.length ? cluster?.scopes?.cidrs?.length : 0}`}
+                /> */}
+                  </Box>
+                  {isLoading ? (
+                    <Skeleton data-testid="cluster-loading" sx={{ width: '10rem' }} />
                   ) : (
-                    <Typography variant="subtitle1" component="div">
-                      -
-                    </Typography>
+                    <Box className={styles.cidrsTags}>
+                      {Array.isArray(cluster?.scopes?.cidrs) && cluster?.scopes?.cidrs?.length > 0 ? (
+                        <>
+                          <Box className={styles.cidrWrapper}>
+                            <Paper elevation={0} className={styles.cidrsContent}>
+                              <MuiTooltip title={cluster?.scopes?.cidrs[0] || '-'} placement="top">
+                                <Typography variant="body2" className={styles.cidrsText}>
+                                  {cluster?.scopes?.cidrs[0] || ''}
+                                </Typography>
+                              </MuiTooltip>
+                            </Paper>
+                            {cluster?.scopes?.cidrs?.length > 1 ? (
+                              <Paper elevation={0} className={styles.cidrsContent}>
+                                <MuiTooltip title={cluster?.scopes?.cidrs[1] || ''} placement="top">
+                                  <Typography variant="body2" className={styles.cidrsText}>
+                                    {cluster?.scopes?.cidrs[1] || ''}
+                                  </Typography>
+                                </MuiTooltip>
+                              </Paper>
+                            ) : (
+                              <></>
+                            )}
+                            {cluster?.scopes?.cidrs?.length > 2 ? (
+                              <Paper elevation={0} className={styles.cidrsContent}>
+                                <MuiTooltip title={cluster?.scopes?.cidrs[2] || ''} placement="top">
+                                  <Typography variant="body2" className={styles.cidrsText}>
+                                    {cluster?.scopes?.cidrs[2] || ''}
+                                  </Typography>
+                                </MuiTooltip>
+                              </Paper>
+                            ) : (
+                              <></>
+                            )}
+                            {cluster?.scopes?.cidrs?.length > 3 ? (
+                              <Paper elevation={0} className={styles.cidrsContent}>
+                                <MuiTooltip title={cluster?.scopes?.cidrs[3] || ''} placement="top">
+                                  <Typography variant="body2" className={styles.cidrsText}>
+                                    {cluster?.scopes?.cidrs[3] || ''}
+                                  </Typography>
+                                </MuiTooltip>
+                              </Paper>
+                            ) : (
+                              <></>
+                            )}
+                          </Box>
+                          {cluster?.scopes?.cidrs?.length > 2 ? (
+                            <IconButton
+                              size="small"
+                              id="cidrs"
+                              onClick={() => {
+                                setOpenCIDRs(true);
+                              }}
+                            >
+                              <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                            </IconButton>
+                          ) : (
+                            <></>
+                          )}
+                        </>
+                      ) : (
+                        <Typography variant="subtitle1" component="div">
+                          -
+                        </Typography>
+                      )}
+                    </Box>
                   )}
-                </Box>
+                </Card>
                 <Dialog
                   maxWidth="sm"
                   fullWidth
-                  open={openIDC}
+                  open={openCIDRs}
                   onClose={() => {
-                    setOpenIDC(false);
+                    setOpenCIDRs(false);
                   }}
                 >
-                  <DialogTitle fontFamily="mabry-bold">IDC</DialogTitle>
-                  <DialogContent dividers className={styles.idcDialogContainer}>
-                    {cluster?.scopes?.idc.split('|').map((item: any, id: any) => (
-                      <Paper key={id} elevation={0} className={styles.idcDialogContent}>
-                        <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/idc.svg" />
+                  <DialogTitle>CIDRs</DialogTitle>
+                  <DialogContent dividers className={styles.cidrsDialogContainer}>
+                    {cluster?.scopes?.cidrs?.map((item: any, id: any) => (
+                      <Paper key={id} elevation={0} className={styles.cidrsDialogContent}>
+                        <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/cidrs.svg" />
                         <MuiTooltip title={item} placement="top">
                           <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
                             {item}
@@ -621,268 +681,148 @@ export default function Information() {
                     ))}
                   </DialogContent>
                 </Dialog>
-              </Paper>
-            </Box>
-            <Box className={styles.scopesCard}>
-              <Paper variant="outlined" className={styles.cidrsContainer}>
-                <Box className={styles.scopesTitle}>
-                  <Box className={styles.cidrsTitle}>
-                    <Typography variant="body2" component="div" className={styles.scopesLable}>
-                      CIDRs
-                    </Typography>
-                    <MuiTooltip
-                      title={`The cluster needs to serve all peers in the CIDRs. The advertise IP will be reported in the peer configuration when the peer is started, and if the advertise IP is empty in the peer configuration, peer will automatically get expose IP as advertise IP. When advertise IP of the peer matches the CIDRs in cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. CIDRs has higher priority than IDC in the scopes. CIDRs has higher priority than IDC in the scopes. CIDRs has priority equal to hostname in the scopes.`}
-                      placement="top"
-                    >
-                      <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
-                    </MuiTooltip>
-                  </Box>
-                  <Paper
-                    id="cidrs-total"
-                    elevation={0}
-                    sx={{ display: 'flex', padding: '0.2rem 0.5rem', backgroundColor: 'var(--menu-background-color)' }}
-                  >
-                    <Box component="img" className={styles.scopesIcon} src="/icons/cluster/cidrs.svg" />
-                    <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
-                      {`Total: ${cluster?.scopes?.cidrs?.length || 0}`}
-                    </Typography>
-                  </Paper>
-                  {/* <Chip
-                  size="small"
-                  icon={<Box component="img" className={styles.scopesIcon} src="/icons/cluster/cidrs.svg" />}
-                  label={`Total: ${cluster?.scopes?.cidrs?.length ? cluster?.scopes?.cidrs?.length : 0}`}
-                /> */}
-                </Box>
-                {isLoading ? (
-                  <Skeleton data-testid="cluster-loading" sx={{ width: '10rem' }} />
-                ) : (
-                  <Box className={styles.cidrsTags}>
-                    {Array.isArray(cluster?.scopes?.cidrs) && cluster?.scopes?.cidrs?.length > 0 ? (
-                      <>
-                        <Box className={styles.cidrWrapper}>
-                          <Paper elevation={0} className={styles.cidrsContent}>
-                            <MuiTooltip title={cluster?.scopes?.cidrs[0] || '-'} placement="top">
-                              <Typography variant="body2" className={styles.cidrsText}>
-                                {cluster?.scopes?.cidrs[0] || ''}
-                              </Typography>
-                            </MuiTooltip>
-                          </Paper>
-                          {cluster?.scopes?.cidrs?.length > 1 ? (
-                            <Paper elevation={0} className={styles.cidrsContent}>
-                              <MuiTooltip title={cluster?.scopes?.cidrs[1] || ''} placement="top">
-                                <Typography variant="body2" className={styles.cidrsText}>
-                                  {cluster?.scopes?.cidrs[1] || ''}
-                                </Typography>
-                              </MuiTooltip>
-                            </Paper>
-                          ) : (
-                            <></>
-                          )}
-                          {cluster?.scopes?.cidrs?.length > 2 ? (
-                            <Paper elevation={0} className={styles.cidrsContent}>
-                              <MuiTooltip title={cluster?.scopes?.cidrs[2] || ''} placement="top">
-                                <Typography variant="body2" className={styles.cidrsText}>
-                                  {cluster?.scopes?.cidrs[2] || ''}
-                                </Typography>
-                              </MuiTooltip>
-                            </Paper>
-                          ) : (
-                            <></>
-                          )}
-                          {cluster?.scopes?.cidrs?.length > 3 ? (
-                            <Paper elevation={0} className={styles.cidrsContent}>
-                              <MuiTooltip title={cluster?.scopes?.cidrs[3] || ''} placement="top">
-                                <Typography variant="body2" className={styles.cidrsText}>
-                                  {cluster?.scopes?.cidrs[3] || ''}
-                                </Typography>
-                              </MuiTooltip>
-                            </Paper>
-                          ) : (
-                            <></>
-                          )}
-                        </Box>
-                        {cluster?.scopes?.cidrs?.length > 2 ? (
-                          <IconButton
-                            size="small"
-                            id="cidrs"
-                            onClick={() => {
-                              setOpenCIDRs(true);
-                            }}
-                          >
-                            <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
-                          </IconButton>
-                        ) : (
-                          <></>
-                        )}
-                      </>
-                    ) : (
-                      <Typography variant="subtitle1" component="div">
-                        -
+              </Box>
+              <Box className={styles.scopesCard}>
+                <Card className={styles.cidrsContainer}>
+                  <Box className={styles.scopesTitle}>
+                    <Box className={styles.cidrsTitle}>
+                      <Typography variant="body2" component="div" className={styles.scopesLable}>
+                        Hostnames
                       </Typography>
-                    )}
-                  </Box>
-                )}
-              </Paper>
-              <Dialog
-                maxWidth="sm"
-                fullWidth
-                open={openCIDRs}
-                onClose={() => {
-                  setOpenCIDRs(false);
-                }}
-              >
-                <DialogTitle fontFamily="mabry-bold">CIDRs</DialogTitle>
-                <DialogContent dividers className={styles.cidrsDialogContainer}>
-                  {cluster?.scopes?.cidrs?.map((item: any, id: any) => (
-                    <Paper key={id} elevation={0} className={styles.cidrsDialogContent}>
-                      <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/cidrs.svg" />
-                      <MuiTooltip title={item} placement="top">
-                        <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
-                          {item}
-                        </Typography>
+                      <MuiTooltip
+                        title={
+                          'The cluster needs to serve all peers in hostname. The input parameter is the multiple hostname regexes. The hostname will be reported in the peer configuration when the peer is started. When the hostname matches the multiple hostname regexes in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. Hostname has higher priority than IDC in the scopes. Hostname has priority equal to CIDRs in the scopes.'
+                        }
+                        placement="top"
+                      >
+                        <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
                       </MuiTooltip>
-                    </Paper>
-                  ))}
-                </DialogContent>
-              </Dialog>
-            </Box>
-            <Box className={styles.scopesCard}>
-              <Paper variant="outlined" className={styles.cidrsContainer}>
-                <Box className={styles.scopesTitle}>
-                  <Box className={styles.cidrsTitle}>
-                    <Typography variant="body2" component="div" className={styles.scopesLable}>
-                      Hostnames
-                    </Typography>
-                    <MuiTooltip
-                      title={
-                        'The cluster needs to serve all peers in hostname. The input parameter is the multiple hostname regexes. The hostname will be reported in the peer configuration when the peer is started. When the hostname matches the multiple hostname regexes in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. Hostname has higher priority than IDC in the scopes. Hostname has priority equal to CIDRs in the scopes.'
-                      }
-                      placement="top"
+                    </Box>
+                    <Paper
+                      id="hostnames-total"
+                      elevation={0}
+                      sx={{
+                        display: 'flex',
+                        padding: '0.2rem 0.3rem',
+                        backgroundColor: 'var(--menu-background-color)',
+                      }}
                     >
-                      <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
-                    </MuiTooltip>
-                  </Box>
-                  <Paper
-                    id="hostnames-total"
-                    elevation={0}
-                    sx={{ display: 'flex', padding: '0.2rem 0.5rem', backgroundColor: 'var(--menu-background-color)' }}
-                  >
-                    <Box component="img" className={styles.scopesIcon} src="/icons/cluster/hostnames.svg" />
-                    <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
-                      {`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`}
-                    </Typography>
-                  </Paper>
-                  {/* <Chip
+                      <Box component="img" className={styles.scopesIcon} src="/icons/cluster/hostnames.svg" />
+                      <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
+                        {`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`}
+                      </Typography>
+                    </Paper>
+                    {/* <Chip
                   size="small"
                   icon={<Box component="img" className={styles.scopesIcon} src="/icons/cluster/hostnames.svg" />}
                   label={`Total: ${cluster?.scopes?.hostnames?.length ? cluster?.scopes?.hostnames?.length : 0}`}
                 /> */}
-                </Box>
-                {isLoading ? (
-                  <Skeleton data-testid="cluster-loading" sx={{ width: '10rem' }} />
-                ) : (
-                  <Box className={styles.cidrsTags}>
-                    {Array.isArray(cluster?.scopes?.hostnames) && cluster?.scopes?.hostnames?.length > 0 ? (
-                      <>
-                        <Box className={styles.cidrWrapper}>
-                          <Paper elevation={0} className={styles.cidrsContent}>
-                            <MuiTooltip title={cluster?.scopes?.hostnames[0] || '-'} placement="top">
-                              <Typography variant="body2" className={styles.cidrsText}>
-                                {cluster?.scopes?.hostnames[0] || '-'}
-                              </Typography>
-                            </MuiTooltip>
-                          </Paper>
-                          {cluster?.scopes?.hostnames?.length > 1 ? (
-                            <Paper elevation={0} className={styles.cidrsContent}>
-                              <MuiTooltip title={cluster?.scopes?.hostnames[1] || ''} placement="top">
-                                <Typography variant="body2" className={styles.cidrsText}>
-                                  {cluster?.scopes?.hostnames[1] || ''}
-                                </Typography>
-                              </MuiTooltip>
-                            </Paper>
-                          ) : (
-                            <></>
-                          )}
-                          {cluster?.scopes?.hostnames?.length > 2 ? (
-                            <Paper elevation={0} className={styles.cidrsContent}>
-                              <MuiTooltip title={cluster?.scopes?.hostnames[2] || ''} placement="top">
-                                <Typography variant="body2" className={styles.cidrsText}>
-                                  {cluster?.scopes?.hostnames[2] || ''}
-                                </Typography>
-                              </MuiTooltip>
-                            </Paper>
-                          ) : (
-                            <></>
-                          )}
-                          {cluster?.scopes?.hostnames?.length > 3 ? (
-                            <Paper elevation={0} className={styles.cidrsContent}>
-                              <MuiTooltip title={cluster?.scopes?.hostnames[3] || ''} placement="top">
-                                <Typography variant="body2" className={styles.cidrsText}>
-                                  {cluster?.scopes?.hostnames[3] || ''}
-                                </Typography>
-                              </MuiTooltip>
-                            </Paper>
-                          ) : (
-                            <></>
-                          )}
-                        </Box>
-                        {cluster?.scopes?.hostnames?.length > 2 ? (
-                          <IconButton
-                            size="small"
-                            id="hostnames"
-                            onClick={() => {
-                              setOpenHostnames(true);
-                            }}
-                          >
-                            <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
-                          </IconButton>
-                        ) : (
-                          <></>
-                        )}
-                      </>
-                    ) : (
-                      <Typography variant="subtitle1" component="div">
-                        -
-                      </Typography>
-                    )}
                   </Box>
-                )}
-              </Paper>
-              <Dialog
-                maxWidth="sm"
-                fullWidth
-                open={openHostnames}
-                onClose={() => {
-                  setOpenHostnames(false);
-                }}
-              >
-                <DialogTitle fontFamily="mabry-bold">Hostnames</DialogTitle>
-                <DialogContent dividers className={styles.cidrsDialogContainer}>
-                  {cluster?.scopes?.hostnames?.map((item: any, id: any) => (
-                    <Paper key={id} elevation={0} className={styles.cidrsDialogContent}>
-                      <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/hostnames.svg" />
-                      <MuiTooltip title={item} placement="top">
-                        <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
-                          {item}
+                  {isLoading ? (
+                    <Skeleton data-testid="cluster-loading" sx={{ width: '10rem' }} />
+                  ) : (
+                    <Box className={styles.cidrsTags}>
+                      {Array.isArray(cluster?.scopes?.hostnames) && cluster?.scopes?.hostnames?.length > 0 ? (
+                        <>
+                          <Box className={styles.cidrWrapper}>
+                            <Paper elevation={0} className={styles.cidrsContent}>
+                              <MuiTooltip title={cluster?.scopes?.hostnames[0] || '-'} placement="top">
+                                <Typography variant="body2" className={styles.cidrsText}>
+                                  {cluster?.scopes?.hostnames[0] || '-'}
+                                </Typography>
+                              </MuiTooltip>
+                            </Paper>
+                            {cluster?.scopes?.hostnames?.length > 1 ? (
+                              <Paper elevation={0} className={styles.cidrsContent}>
+                                <MuiTooltip title={cluster?.scopes?.hostnames[1] || ''} placement="top">
+                                  <Typography variant="body2" className={styles.cidrsText}>
+                                    {cluster?.scopes?.hostnames[1] || ''}
+                                  </Typography>
+                                </MuiTooltip>
+                              </Paper>
+                            ) : (
+                              <></>
+                            )}
+                            {cluster?.scopes?.hostnames?.length > 2 ? (
+                              <Paper elevation={0} className={styles.cidrsContent}>
+                                <MuiTooltip title={cluster?.scopes?.hostnames[2] || ''} placement="top">
+                                  <Typography variant="body2" className={styles.cidrsText}>
+                                    {cluster?.scopes?.hostnames[2] || ''}
+                                  </Typography>
+                                </MuiTooltip>
+                              </Paper>
+                            ) : (
+                              <></>
+                            )}
+                            {cluster?.scopes?.hostnames?.length > 3 ? (
+                              <Paper elevation={0} className={styles.cidrsContent}>
+                                <MuiTooltip title={cluster?.scopes?.hostnames[3] || ''} placement="top">
+                                  <Typography variant="body2" className={styles.cidrsText}>
+                                    {cluster?.scopes?.hostnames[3] || ''}
+                                  </Typography>
+                                </MuiTooltip>
+                              </Paper>
+                            ) : (
+                              <></>
+                            )}
+                          </Box>
+                          {cluster?.scopes?.hostnames?.length > 2 ? (
+                            <IconButton
+                              size="small"
+                              id="hostnames"
+                              onClick={() => {
+                                setOpenHostnames(true);
+                              }}
+                            >
+                              <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                            </IconButton>
+                          ) : (
+                            <></>
+                          )}
+                        </>
+                      ) : (
+                        <Typography variant="subtitle1" component="div">
+                          -
                         </Typography>
-                      </MuiTooltip>
-                    </Paper>
-                  ))}
-                </DialogContent>
-              </Dialog>
-            </Box>
-          </Paper>
-        </Box>
-        <Box className={styles.configContainer}>
-          <Box className={styles.configTitle}>
-            <Typography variant="subtitle1" color="text.primary" fontFamily="mabry-bold" mr="0.4rem">
-              Config
-            </Typography>
-            <MuiTooltip title="The configuration for P2P downloads." placement="top">
-              <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
-            </MuiTooltip>
+                      )}
+                    </Box>
+                  )}
+                </Card>
+                <Dialog
+                  maxWidth="sm"
+                  fullWidth
+                  open={openHostnames}
+                  onClose={() => {
+                    setOpenHostnames(false);
+                  }}
+                >
+                  <DialogTitle>Hostnames</DialogTitle>
+                  <DialogContent dividers className={styles.cidrsDialogContainer}>
+                    {cluster?.scopes?.hostnames?.map((item: any, id: any) => (
+                      <Paper key={id} elevation={0} className={styles.cidrsDialogContent}>
+                        <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/hostnames.svg" />
+                        <MuiTooltip title={item} placement="top">
+                          <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
+                            {item}
+                          </Typography>
+                        </MuiTooltip>
+                      </Paper>
+                    ))}
+                  </DialogContent>
+                </Dialog>
+              </Box>
+            </Paper>
           </Box>
-          <Paper variant="outlined">
+          <hr className={styles.divider} />
+          <Box className={styles.configContainer}>
+            <Box className={styles.configTitle}>
+              <Typography variant="body1" sx={{ mr: '0.4rem', fontWeight: '600' }}>
+                Config
+              </Typography>
+              <MuiTooltip title="The configuration for P2P downloads." placement="top">
+                <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+              </MuiTooltip>
+            </Box>
             <Box className={styles.configListContainer}>
               <Box className={styles.configContent}>
                 <Box className={styles.configContentTitle}>
@@ -996,9 +936,32 @@ export default function Information() {
                 )}
               </Box>
             </Box>
-          </Paper>
-        </Box>
-      </Paper>
-    </ThemeProvider>
+          </Box>
+        </Card>
+      </Box>
+      <Dialog
+        open={openDeleteCluster}
+        onClose={handleDeleteClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Box component="img" className={styles.deleteClusterIcon} src="/icons/cluster/delete.svg" />
+            <Typography pt="1rem">Are you sure you want to delet this cluster?</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
+            <CancelLoadingButton id="cancelDeleteCluster" loading={deleteLoadingButton} onClick={handleDeleteClose} />
+            <SavelLoadingButton
+              loading={deleteLoadingButton}
+              endIcon={<DeleteIcon />}
+              id="deleteCluster"
+              onClick={handleDeleteCluster}
+              text="Delete"
+            />
+          </Box>
+        </DialogContent>
+      </Dialog>
+    </Box>
   );
 }

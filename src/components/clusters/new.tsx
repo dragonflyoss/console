@@ -656,14 +656,12 @@ export default function NewCluster() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography variant="h5" fontFamily="mabry-bold">
-        Create Cluster
-      </Typography>
+      <Typography variant="h5">Create Cluster</Typography>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Grid component="form" onSubmit={handleSubmit} noValidate>
         <Box className={styles.container}>
           <Box className={styles.informationTitle}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+            <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
               Information
             </Typography>
             <Tooltip title="The information of cluster." placement="top">
@@ -696,7 +694,7 @@ export default function NewCluster() {
             ))}
           </Grid>
           <Box className={styles.scopesTitle}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+            <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
               Scopes
             </Typography>
             <Tooltip
@@ -739,7 +737,7 @@ export default function NewCluster() {
             })}
           </Grid>
           <Box className={styles.configTitle}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+            <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
               Config
             </Typography>
             <Tooltip title=" The configuration for P2P downloads." placement="top">

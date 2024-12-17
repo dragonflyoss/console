@@ -27,6 +27,7 @@ import { getDatetime } from '../../lib/utils';
 import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../menu/index';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
+import Card from '../card';
 
 export default function Profile() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -530,7 +531,7 @@ export default function Profile() {
       <Typography sx={{ mb: '2rem' }} variant="h5">
         My Profile
       </Typography>
-      <Paper variant="outlined" className={styles.profileContainer}>
+      <Card className={styles.profileContainer}>
         {showMyProfile ? (
           <Box className={styles.avatarContainer}>
             <Box display="flex" alignItems="center">
@@ -549,7 +550,6 @@ export default function Profile() {
                 size="small"
                 sx={{
                   background: 'var(--button-color)',
-                  borderRadius: '0',
                   ':hover': { background: 'var(--button-color)' },
                 }}
                 variant="contained"
@@ -568,7 +568,7 @@ export default function Profile() {
           </Box>
         ) : (
           <Grid sx={{ width: '40rem' }} onSubmit={handleChangePassword} component="form" noValidate>
-            <Typography variant="h6" fontFamily="mabry-bold" mb="1rem">
+            <Typography variant="h6" fontFamily="thai-semi-bold" mb="1rem">
               Change Password
             </Typography>
             {passwordForm.map((item) => (
@@ -577,7 +577,11 @@ export default function Profile() {
               </Box>
             ))}
             <Box mt="2rem">
-              <CancelLoadingButton id="cancel-change-password" loading={passwordLoadingButton} onClick={cancelChangePassword} />
+              <CancelLoadingButton
+                id="cancel-change-password"
+                loading={passwordLoadingButton}
+                onClick={cancelChangePassword}
+              />
               <SavelLoadingButton
                 loading={passwordLoadingButton}
                 endIcon={<CheckCircleIcon />}
@@ -587,12 +591,12 @@ export default function Profile() {
             </Box>
           </Grid>
         )}
-      </Paper>
-      <Paper variant="outlined" sx={{ p: '2rem' }}>
+      </Card>
+      <Card className={styles.information}>
         {showPersonalInformation ? (
           <Box>
             <Grid className={styles.informationHeader}>
-              <Typography variant="h6" fontFamily="mabry-bold">
+              <Typography variant="h6" fontFamily="thai-semi-bold">
                 Personal Information
               </Typography>
               <Button
@@ -600,7 +604,6 @@ export default function Profile() {
                 variant="contained"
                 sx={{
                   background: 'var(--button-color)',
-                  borderRadius: '0',
                   ':hover': { background: 'var(--button-color)' },
                 }}
                 onClick={() => {
@@ -627,7 +630,7 @@ export default function Profile() {
                             id={item.name}
                             component="div"
                             variant="body1"
-                            fontFamily="mabry-bold"
+                            fontFamily="thai-semi-bold"
                             ml="0.6rem"
                           >
                             {getDatetime(users?.[item.name]) || '-'}
@@ -637,14 +640,20 @@ export default function Profile() {
                             id={item.name}
                             component="div"
                             variant="body1"
-                            fontFamily="mabry-bold"
+                            fontFamily="thai-semi-bold"
                             ml="0.6rem"
                           >
                             -
                           </Typography>
                         )
                       ) : (
-                        <Typography id={item.name} component="div" variant="body1" fontFamily="mabry-bold" ml="0.6rem">
+                        <Typography
+                          id={item.name}
+                          component="div"
+                          variant="body1"
+                          fontFamily="thai-semi-bold"
+                          ml="0.6rem"
+                        >
                           {users?.[item?.name as keyof typeof users] || '-'}
                         </Typography>
                       )}
@@ -656,7 +665,7 @@ export default function Profile() {
           </Box>
         ) : (
           <Box>
-            <Typography variant="h6" fontFamily="mabry-bold" mb="1rem">
+            <Typography variant="h6" fontFamily="thai-semi-bold" mb="1rem">
               Update Personal Information
             </Typography>
             <Box component="form" onSubmit={handlePersonalInformation} noValidate>
@@ -688,7 +697,7 @@ export default function Profile() {
             </Box>
           </Box>
         )}
-      </Paper>
+      </Card>
     </Box>
   );
 }

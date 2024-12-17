@@ -43,7 +43,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Bar, Pie } from 'react-chartjs-2';
-import { getPeers, getPeersResponse } from '../../../lib/api';
+import { getPeers, getPeersResponse, getSyncPeers } from '../../../lib/api';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
@@ -55,9 +55,10 @@ import { exportCSVFile, getPaginatedList } from '../../../lib/utils';
 import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
 import { MyContext } from '../../clusters/show';
 import _ from 'lodash';
+import Card from '../../card';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
-Chart.defaults.font.family = 'mabry-light';
+Chart.defaults.font.family = 'thai-regular';
 
 const theme = createTheme({
   breakpoints: {
@@ -76,6 +77,9 @@ const theme = createTheme({
     primary: {
       main: '#1C293A',
     },
+  },
+  typography: {
+    fontFamily: 'thai-regular,sans-serif',
   },
 });
 
@@ -102,6 +106,7 @@ export default function Peer() {
   const [exportSelectedCommit, setExportSelectedCommit] = useState<string>('All');
   const [exportSelectedGitVersion, setExportSelectedGitVersion] = useState(['']);
   const [exportSelectedGitCommit, setExportSelectedGitCommit] = useState(['']);
+  const [disabled, setDisabled] = useState(false);
 
   const { cluster } = useContext(MyContext);
   useEffect(() => {
@@ -464,13 +469,32 @@ export default function Peer() {
     setExportSelectedCommit('All');
     setOpenRefresh(false);
   };
-  const handleRefresh = () => {
+
+  const handleRefresh = async () => {
+    setOpenRefresh(false);
     setRefresh(true);
 
-    setOpenRefresh(false);
-    setTimeout(function () {
+    setDisabled(true);
+
+    const params = {
+      type: 'sync_peers',
+      scheduler_cluster_ids: [cluster.seed_peer_cluster_id],
+    };
+
+    try {
+      const res = await getSyncPeers(params);
+
+      const peer = await getPeers({
+        page: 1,
+        per_page: MAX_PAGE_SIZE,
+        scheduler_cluster_id: cluster.seed_peer_cluster_id,
+      });
+      setPeer(peer);
       setRefresh(false);
-    }, 3000);
+      setDisabled(false);
+    } catch (error) {
+      console.log('error');
+    }
   };
 
   return (
@@ -487,16 +511,16 @@ export default function Peer() {
           </Alert>
         </Snackbar>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: '2rem' }}>
-          <Typography variant="h5" fontFamily="mabry-bold" color="text.primary">
+          <Typography variant="h6" fontWeight="600">
             Peers
           </Typography>
           <Box>
             <Button
               id="refresh"
+              disabled={disabled}
               size="small"
               sx={{
                 background: 'var(--button-color)',
-                borderRadius: '0',
                 ':hover': {
                   backgroundColor: 'var(--button-color)',
                   borderColor: 'var(--button-color)',
@@ -522,7 +546,6 @@ export default function Peer() {
               size="small"
               sx={{
                 background: 'var(--button-color)',
-                borderRadius: '0',
                 ':hover': {
                   backgroundColor: 'var(--button-color)',
                   borderColor: 'var(--button-color)',
@@ -539,62 +562,74 @@ export default function Peer() {
           </Box>
         </Box>
         <Box sx={{ display: 'flex', mb: '3rem' }}>
-          <Box sx={{ width: '33.33%', mr: '1rem' }}>
-            <Paper variant="outlined" className={styles.navigationWrapper}>
+          <Box sx={{ width: '33.33%', mr: '1.6rem' }}>
+            <Card className={styles.navigationWrapper}>
               <Box className={styles.navigationContent}>
                 <Box>
-                  <Typography variant="subtitle1" fontFamily="mabry-bold" className={styles.navigationTitle}>
+                  <Typography variant="subtitle1" fontWeight="600" color="#637381">
                     Total
                   </Typography>
-                  <Typography id="total" variant="h5" p="0.5rem 0">
-                    {isLoading ? <Skeleton width="6rem" /> : peer.length}
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: '#8a8a8a' }}>
+                  {isLoading ? (
+                    <Skeleton data-testid="cluster-loading" width="2rem" />
+                  ) : (
+                    <Typography id="total" variant="h5" fontWeight="600" p="0.4rem 0">
+                      {peer.length}
+                    </Typography>
+                  )}
+                  <Typography variant="body2" color="var(--table-title-text-color)">
                     number of peers
                   </Typography>
                 </Box>
                 <Box className={styles.navigation}></Box>
                 <Box component="img" className={styles.navigationIcon} src="/icons/peer/total.svg" />
               </Box>
-            </Paper>
+            </Card>
           </Box>
-          <Box sx={{ width: '33.33%', mr: '1rem' }}>
-            <Paper variant="outlined" className={styles.navigationWrapper}>
+          <Box sx={{ width: '33.33%', mr: '1.6rem' }}>
+            <Card className={styles.navigationWrapper}>
               <Box className={styles.navigationContent}>
                 <Box>
-                  <Typography variant="subtitle1" fontFamily="mabry-bold" className={styles.navigationTitle}>
+                  <Typography variant="subtitle1" fontWeight="600" color="#637381">
                     Git Version
                   </Typography>
-                  <Typography id="git-version" variant="h5" p="0.5rem 0">
-                    {isLoading ? <Skeleton width="6rem" /> : gitVersionCount}
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: '#8a8a8a' }}>
+                  {isLoading ? (
+                    <Skeleton data-testid="cluster-loading" width="2rem" />
+                  ) : (
+                    <Typography id="git-version" variant="h5" fontWeight="600" p="0.4rem 0">
+                      {gitVersionCount}
+                    </Typography>
+                  )}
+                  <Typography variant="body2" color="var(--table-title-text-color)">
                     number of git versions
                   </Typography>
                 </Box>
                 <Box className={styles.navigation} />
                 <Box component="img" className={styles.navigationIcon} src="/icons/peer/git-versions.svg" />
               </Box>
-            </Paper>
+            </Card>
           </Box>
           <Box sx={{ width: '33.33%' }}>
-            <Paper variant="outlined" className={styles.navigationWrapper}>
+            <Card className={styles.navigationWrapper}>
               <Box className={styles.navigationContent}>
                 <Box>
-                  <Typography variant="subtitle1" fontFamily="mabry-bold" className={styles.navigationTitle}>
+                  <Typography variant="subtitle1" fontWeight="600" color="#637381">
                     Git Commit
                   </Typography>
-                  <Typography id="git-commit" variant="h5" p="0.5rem 0">
-                    {isLoading ? <Skeleton width="6rem" /> : gitCommitCount}
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: '#8a8a8a' }}>
+                  {isLoading ? (
+                    <Skeleton data-testid="cluster-loading" width="2rem" />
+                  ) : (
+                    <Typography id="git-commit" variant="h5" fontWeight="600" p="0.4rem 0">
+                      {gitCommitCount}
+                    </Typography>
+                  )}
+                  <Typography variant="body2" color="var(--table-title-text-color)">
                     number of git commits
                   </Typography>
                 </Box>
                 <Box className={styles.navigation} />
                 <Box component="img" className={styles.navigationIcon} src="/icons/peer/git-commits.svg" />
               </Box>
-            </Paper>
+            </Card>
           </Box>
         </Box>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between' }}>
@@ -608,7 +643,7 @@ export default function Peer() {
             }}
           >
             <Box className={styles.dashboard}>
-              <Paper variant="outlined" className={styles.barContainer}>
+              <Card className={styles.barContainer}>
                 <Box className={styles.barTitle}>
                   <Box>
                     <Typography variant="subtitle1" component="span" sx={{ fontWeight: 500 }}>
@@ -625,8 +660,8 @@ export default function Peer() {
                 <Box className={styles.barContent}>
                   <Bar options={barOptions} data={gitVersionBar} />
                 </Box>
-              </Paper>
-              <Paper variant="outlined" className={styles.doughnutContainer}>
+              </Card>
+              <Card className={styles.doughnutContainer}>
                 <Box>
                   <Box className={styles.doughnutTitle}>
                     <Box>
@@ -644,20 +679,19 @@ export default function Peer() {
                       <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                     </MuiTooltip>
                   </Box>
-                  <Divider />
+                  <hr className={styles.divider} />
                   <Box sx={{ p: '1rem 2rem' }}>
                     <Pie data={gitVersionDoughnut} options={doughnutOptions} />
                   </Box>
                 </Box>
-
                 <Box className={styles.activeContainer}>
                   <Box component="img" className={styles.activeIcon} src="/icons/peer/active.svg" />
                   <Box sx={{ width: '100%' }}>
                     <Box className={styles.activeContent}>
-                      <Typography variant="subtitle2" fontFamily="mabry-light">
+                      <Typography variant="subtitle2" fontFamily="thai-regular">
                         Active
                       </Typography>
-                      <Typography id="git-version-active" variant="subtitle1" fontFamily="mabry-bold">
+                      <Typography id="git-version-active" variant="subtitle1" fontFamily="thai-semi-bold">
                         {isLoading ? <Skeleton width="2rem" /> : gitVersionActive ? `${gitVersionActive}%` : '0'}
                       </Typography>
                     </Box>
@@ -673,7 +707,7 @@ export default function Peer() {
                     />
                   </Box>
                 </Box>
-              </Paper>
+              </Card>
             </Box>
           </Box>
           <Box
@@ -697,7 +731,11 @@ export default function Peer() {
                       setSelectedGitGitCommitByVersion(e.target.value);
                     }}
                   >
-                    <Typography variant="body2" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
+                    <Typography
+                      variant="body2"
+                      fontFamily="thai-semi-bold"
+                      sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}
+                    >
                       Filter by git version
                     </Typography>
                     <Divider />
@@ -714,7 +752,7 @@ export default function Peer() {
               </Box>
             </Box>
             <Box className={styles.dashboard}>
-              <Paper variant="outlined" className={styles.barContainer}>
+              <Card className={styles.barContainer}>
                 <Box className={styles.barTitle}>
                   <Box>
                     <Typography variant="subtitle1" component="span" sx={{ fontWeight: 500 }}>
@@ -731,8 +769,8 @@ export default function Peer() {
                 <Box className={styles.barContent}>
                   <Bar options={barOptions} data={gitCommitBar} />
                 </Box>
-              </Paper>
-              <Paper variant="outlined" className={styles.doughnutContainer}>
+              </Card>
+              <Card className={styles.doughnutContainer}>
                 <Box>
                   <Box className={styles.doughnutTitle}>
                     <Box>
@@ -747,7 +785,7 @@ export default function Peer() {
                       <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                     </MuiTooltip>
                   </Box>
-                  <Divider />
+                  <hr className={styles.divider} />
                   <Box sx={{ p: '1rem 2rem' }}>
                     <Pie data={gitCommitDoughnut} options={doughnutOptions} />
                   </Box>
@@ -756,10 +794,10 @@ export default function Peer() {
                   <Box component="img" className={styles.activeIcon} src="/icons/peer/active.svg" />
                   <Box sx={{ width: '100%' }}>
                     <Box className={styles.activeContent}>
-                      <Typography variant="subtitle2" fontFamily="mabry-light">
+                      <Typography variant="subtitle2" fontFamily="thai-regular">
                         Active
                       </Typography>
-                      <Typography id="git-commit-active" variant="subtitle1" fontFamily="mabry-bold">
+                      <Typography id="git-commit-active" variant="subtitle1" fontFamily="thai-semi-bold">
                         {isLoading ? <Skeleton width="2rem" /> : gitCommitActive ? `${gitCommitActive}%` : '0'}
                       </Typography>
                     </Box>
@@ -775,7 +813,7 @@ export default function Peer() {
                     />
                   </Box>
                 </Box>
-              </Paper>
+              </Card>
             </Box>
           </Box>
         </Box>
@@ -793,7 +831,7 @@ export default function Peer() {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '1rem' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box component="img" className={styles.exportIcon} src="/icons/peer/export.svg" />
-              <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
+              <Typography variant="h6" fontFamily="thai-semi-bold" pl="0.5rem">
                 Export
               </Typography>
             </Box>
@@ -825,7 +863,7 @@ export default function Peer() {
               }}
             >
               <Box component="img" sx={{ width: '2.8rem', pb: '0.8rem' }} src="/icons/peer/export-file.svg" />
-              <Typography variant="subtitle1" fontFamily="mabry-bold">
+              <Typography variant="subtitle1" fontFamily="thai-semi-bold">
                 Export Your Data With Fun
               </Typography>
             </Box>
@@ -843,7 +881,11 @@ export default function Peer() {
                     label="changeGitVersion"
                     onChange={(e) => setExportSelectedVersion(e.target.value)}
                   >
-                    <Typography variant="body1" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
+                    <Typography
+                      variant="body1"
+                      fontFamily="thai-semi-bold"
+                      sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}
+                    >
                       Filter by git version
                     </Typography>
                     <Divider />
@@ -865,7 +907,11 @@ export default function Peer() {
                     label="changeGitCommit"
                     onChange={(e) => setExportSelectedCommit(e.target.value)}
                   >
-                    <Typography variant="body1" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
+                    <Typography
+                      variant="body1"
+                      fontFamily="thai-semi-bold"
+                      sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}
+                    >
                       Filter by git commit
                     </Typography>
                     <Divider />
@@ -915,11 +961,10 @@ export default function Peer() {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '1rem' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box component="img" className={styles.exportIcon} src="/icons/peer/refresh-dialog.svg" />
-              <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
+              <Typography variant="h6" fontFamily="thai-semi-bold" pl="0.5rem">
                 Refresh
               </Typography>
             </Box>
-
             <IconButton
               aria-label="close"
               id="close-delete-icon"
@@ -944,7 +989,7 @@ export default function Peer() {
                 sx={{ width: '1.4rem', height: '1.4rem', pr: '0.2rem' }}
               />
               <Box>
-                <Typography variant="body1" fontFamily="mabry-bold" component="span" sx={{ color: '#D81E06' }}>
+                <Typography variant="body1" fontFamily="thai-semi-bold" component="span" sx={{ color: '#D81E06' }}>
                   WARNING:&nbsp;
                 </Typography>
                 <Typography variant="body1" component="span" sx={{ color: '#D81E06' }}>

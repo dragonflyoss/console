@@ -24,7 +24,7 @@ import { createTokens } from '../../../lib/api';
 import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { MyContext } from '../../menu';
-import {CancelLoadingButton, SavelLoadingButton} from '../../loading-button';
+import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
 
 const theme = createTheme({
   palette: {
@@ -32,6 +32,9 @@ const theme = createTheme({
       contrastText: '#fff',
       main: '#1c293a',
     },
+  },
+  typography: {
+    fontFamily: 'thai-regular,sans-serif',
   },
 });
 
@@ -218,14 +221,12 @@ export default function CreateTokens() {
         </Alert>
       </Snackbar>
       <ThemeProvider theme={theme}>
-        <Typography variant="h5" fontFamily="mabry-bold">
-          Create personal access token
-        </Typography>
+        <Typography variant="h5">Create personal access token</Typography>
         <Divider sx={{ mt: 2, mb: 2 }} />
         <Box component="form" onSubmit={handleSubmit} noValidate>
           <FormControl fullWidth>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
                 Information
               </Typography>
               <Tooltip title="  The information of personal access token." placement="top">
@@ -246,7 +247,7 @@ export default function CreateTokens() {
               />
             ))}
             <Box sx={{ display: 'flex', alignItems: 'center', mb: '1.4rem', mt: '1rem' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
                 Expiration
               </Typography>
               <Tooltip title="Expiration of personal access token." placement="top">
@@ -282,7 +283,7 @@ export default function CreateTokens() {
               </Box>
             </FormControl>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.8rem', mt: '1rem' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
                 Select scopes
               </Typography>
               <Tooltip title="Scopes define the access for personal tokens." placement="top">
@@ -363,12 +364,7 @@ export default function CreateTokens() {
                   navigate('/developer/personal-access-tokens');
                 }}
               />
-               <SavelLoadingButton
-                loading={loadingButton}
-                endIcon={<CheckCircleIcon />}
-                id="save"
-                text="Save"
-              />
+              <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />
               {/* <LoadingButton
                 loading={loadingButton}
                 endIcon={<CheckCircleIcon />}

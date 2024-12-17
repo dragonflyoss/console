@@ -60,6 +60,9 @@ export default function NewPreheat() {
         main: '#1c293a',
       },
     },
+    typography: {
+      fontFamily: 'thai-regular,sans-serif',
+    },
   });
 
   useEffect(() => {
@@ -378,15 +381,13 @@ export default function NewPreheat() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography variant="h5" fontFamily="mabry-bold">
-        Create Preheat
-      </Typography>
+      <Typography variant="h5">Create Preheat</Typography>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <FormControl fullWidth>
           <Box className={styles.title}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
                 Information
               </Typography>
               <Tooltip title=" The information of preheat." placement="top">
@@ -409,7 +410,7 @@ export default function NewPreheat() {
           </Box>
           <Box className={styles.title}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
                 Clusters
               </Typography>
               <Tooltip title="Used for clusters that need to be preheating." placement="top">
@@ -463,7 +464,7 @@ export default function NewPreheat() {
           </Box>
           <Box className={styles.title}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
                 Args
               </Typography>
               <Tooltip title="Args used to pass additional configuration options to the preheat task." placement="top">
@@ -543,7 +544,7 @@ export default function NewPreheat() {
             {headers.length > 0 ? (
               <Paper id="header" variant="outlined" sx={{ p: '1rem', width: '36rem', mt: '1rem' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography variant="body1" fontFamily="mabry-bold" mr="0.4rem">
+                  <Typography variant="body1" fontFamily="thai-semi-bold" mr="0.4rem">
                     Headers
                   </Typography>
                   <Tooltip title="Add headers for preheat request." placement="top">

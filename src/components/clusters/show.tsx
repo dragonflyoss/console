@@ -23,7 +23,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'mabry-light,sans-serif',
+    fontFamily: 'thai-regular,sans-serif',
   },
 });
 
@@ -160,7 +160,7 @@ export default function NavTabs() {
       },
       '&.Mui-selected': {
         color: '#000',
-        fontFamily: 'mabry-bold',
+        fontWeight: '600',
       },
     }),
   );
@@ -189,14 +189,14 @@ export default function NavTabs() {
     },
     {
       id: 'tab-cluster',
-      icon: <Box component="img" sx={{ width: '1.3rem' }} src="/icons/cluster/seed-peer/tab-seed-peer.svg" />,
+      icon: <Box component="img" sx={{ width: '1.4rem' }} src="/icons/cluster/seed-peer/tab-seed-peer.svg" />,
       label: 'Seed Peers',
       component: Link,
       to: `/clusters/${params.id}/seed-peers`,
     },
     {
       id: 'tab-cluster',
-      icon: <Box component="img" sx={{ width: '1.2rem' }} src="/icons/peer/tab-peer.svg" />,
+      icon: <Box component="img" sx={{ width: '1.3rem' }} src="/icons/peer/tab-peer.svg" />,
       label: 'Peers',
       component: Link,
       to: `/clusters/${params.id}/peers`,
@@ -240,9 +240,7 @@ export default function NavTabs() {
             {cluster?.name || '-'}
           </RouterLink>
           {location.pathname.split('/')[3] && (
-            <>
-              <Typography color="inherit">{location.pathname.split('/')[3]}</Typography>
-            </>
+            <Typography color="inherit">{location.pathname.split('/')[3]}</Typography>
           )}
         </Breadcrumbs>
         <AntTabs

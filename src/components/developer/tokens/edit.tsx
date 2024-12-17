@@ -34,6 +34,9 @@ const theme = createTheme({
       main: '#1c293a',
     },
   },
+  typography: {
+    fontFamily: 'thai-regular,sans-serif',
+  },
 });
 
 export default function UpdateTokens() {
@@ -210,9 +213,7 @@ export default function UpdateTokens() {
         </Alert>
       </Snackbar>
       <ThemeProvider theme={theme}>
-        <Typography variant="h5" fontFamily="mabry-bold">
-          Update personal access token
-        </Typography>
+        <Typography variant="h5">Update personal access token</Typography>
         <Divider sx={{ mt: 2, mb: 2 }} />
         <Paper
           variant="outlined"
@@ -221,25 +222,25 @@ export default function UpdateTokens() {
           <Box component="img" src="/icons/tokens/key.svg" sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }} />
           <Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography component="span" variant="body1" fontFamily="mabry-bold">
+              <Typography component="span" variant="body1" fontFamily="thai-semi-bold">
                 ID:&nbsp;&nbsp;
               </Typography>
               {isLoading ? (
                 <Skeleton sx={{ width: '2rem' }} />
               ) : (
-                <Typography component="div" variant="body1" fontFamily="mabry-bold">
+                <Typography component="div" variant="body1" fontFamily="thai-semi-bold">
                   {tokens.id}
                 </Typography>
               )}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography component="span" variant="body1" fontFamily="mabry-bold">
+              <Typography component="span" variant="body1" fontFamily="thai-semi-bold">
                 Name:&nbsp;&nbsp;
               </Typography>
               {isLoading ? (
                 <Skeleton sx={{ width: '3rem' }} />
               ) : (
-                <Typography component="div" variant="body1" fontFamily="mabry-bold">
+                <Typography component="div" variant="body1" fontFamily="thai-semi-bold">
                   {tokens.name}
                 </Typography>
               )}
@@ -249,7 +250,7 @@ export default function UpdateTokens() {
         <Box component="form" onSubmit={handleSubmit} noValidate>
           <FormControl fullWidth>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
                 Information
               </Typography>
               <Tooltip title="  The information of personal access token." placement="top">
@@ -270,7 +271,7 @@ export default function UpdateTokens() {
               />
             ))}
             <Box sx={{ display: 'flex', alignItems: 'center', mb: '1.4rem', mt: '1rem' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
                 Expiration
               </Typography>
               <Tooltip title="Expiration of personal access token." placement="top">
@@ -309,7 +310,7 @@ export default function UpdateTokens() {
               </Box>
             </FormControl>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.8rem', mt: '1rem' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              <Typography variant="h6" fontFamily="thai-semi-bold" mr="0.4rem">
                 Select scopes
               </Typography>
               <Tooltip title="Scopes define the access for personal tokens." placement="top">

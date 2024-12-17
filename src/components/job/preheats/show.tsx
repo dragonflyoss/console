@@ -28,6 +28,7 @@ import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { getBJTDatetime } from '../../../lib/utils';
 import styles from './show.module.css';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import Card from '../../card';
 
 const theme = createTheme({
   palette: {
@@ -36,7 +37,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'mabry-light,sans-serif',
+    fontFamily: 'thai-regular,sans-serif',
   },
 });
 
@@ -134,12 +135,20 @@ export default function ShowPreheat() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '1rem' }}
+      >
         <Typography>jobs</Typography>
         <RouterLink component={Link} underline="hover" color="inherit" to={`/jobs/preheats`}>
           preheats
         </RouterLink>
-        <Typography color="text.primary" fontFamily="mabry-bold">
+        <Typography color="text.primary" fontFamily="thai-semi-bold">
           {preheat?.id || '-'}
         </Typography>
       </Breadcrumbs>
@@ -147,16 +156,11 @@ export default function ShowPreheat() {
         Preheat
       </Typography>
       <Box width="100%">
-        <Paper variant="outlined" sx={{ p: '1rem 2rem' }}>
+        <Card className={styles.container}>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
               <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/id.svg" />
-              <Typography
-                variant="body1"
-                fontFamily="mabry-bold"
-                component="div"
-                className={styles.informationTitleText}
-              >
+              <Typography variant="body1" component="div" className={styles.informationTitleText}>
                 ID
               </Typography>
             </Box>
@@ -169,7 +173,7 @@ export default function ShowPreheat() {
               <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/description.svg" />
               <Typography
                 variant="body1"
-                fontFamily="mabry-bold"
+                fontFamily="thai-semi-bold"
                 component="div"
                 className={styles.informationTitleText}
               >
@@ -183,12 +187,7 @@ export default function ShowPreheat() {
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
               <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/status.svg" />
-              <Typography
-                variant="body1"
-                fontFamily="mabry-bold"
-                component="div"
-                className={styles.informationTitleText}
-              >
+              <Typography variant="body1" component="div" className={styles.informationTitleText}>
                 Status
               </Typography>
             </Box>
@@ -228,7 +227,7 @@ export default function ShowPreheat() {
                     )}
                     <Typography
                       variant="body2"
-                      fontFamily="mabry-bold"
+                      fontFamily="thai-semi-bold"
                       sx={{
                         color: '#FFF',
                       }}
@@ -276,12 +275,7 @@ export default function ShowPreheat() {
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
               <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/url.svg" />
-              <Typography
-                variant="body1"
-                fontFamily="mabry-bold"
-                component="div"
-                className={styles.informationTitleText}
-              >
+              <Typography variant="body1" component="div" className={styles.informationTitleText}>
                 URL
               </Typography>
             </Box>
@@ -289,7 +283,7 @@ export default function ShowPreheat() {
               <Typography
                 id="url"
                 variant="body1"
-                fontFamily="mabry-bold"
+                fontFamily="thai-semi-bold"
                 component="div"
                 className={styles.urlContent}
               >
@@ -300,12 +294,7 @@ export default function ShowPreheat() {
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
               <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/tag.svg" />
-              <Typography
-                variant="body1"
-                fontFamily="mabry-bold"
-                component="div"
-                className={styles.informationTitleText}
-              >
+              <Typography variant="body1" thai-semi-bold component="div" className={styles.informationTitleText}>
                 Tag
               </Typography>
             </Box>
@@ -336,12 +325,7 @@ export default function ShowPreheat() {
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
               <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/headers.svg" />
-              <Typography
-                variant="body1"
-                fontFamily="mabry-bold"
-                component="div"
-                className={styles.informationTitleText}
-              >
+              <Typography variant="body1" thai-semi-bold component="div" className={styles.informationTitleText}>
                 Headers
               </Typography>
             </Box>
@@ -349,16 +333,16 @@ export default function ShowPreheat() {
               <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
             ) : preheat?.args?.headers && preheat?.args?.headers !== null ? (
               Object.keys(preheat?.args?.headers).length > 0 ? (
-                <Paper variant="outlined" className={styles.headersContent}>
+                <Card className={styles.headersContent}>
                   {Object.entries(preheat?.args.headers).map(([key, value], index) => (
                     <Box key={index} className={styles.headersText}>
-                      <Box fontFamily="mabry-bold" width="35%" mr="1rem">
+                      <Box fontFamily="thai-semi-bold" width="35%" mr="1rem">
                         {key}
                       </Box>
                       <Box width="65%">{value}</Box>
                     </Box>
                   ))}
-                </Paper>
+                </Card>
               ) : (
                 <Typography variant="body1" className={styles.informationContent}>
                   -
@@ -373,12 +357,7 @@ export default function ShowPreheat() {
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
               <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/id.svg" />
-              <Typography
-                variant="body1"
-                fontFamily="mabry-bold"
-                component="div"
-                className={styles.informationTitleText}
-              >
+              <Typography variant="body1" component="div" className={styles.informationTitleText}>
                 Scheduler Clusters ID
               </Typography>
             </Box>
@@ -386,7 +365,7 @@ export default function ShowPreheat() {
               {preheat?.scheduler_clusters?.map((item, index) => {
                 return (
                   <Box className={styles.schedulerClustersIDContent}>
-                    <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
+                    <Typography key={index} variant="body2" component="div" fontFamily="thai-semi-bold">
                       {isLoading ? (
                         <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
                       ) : (
@@ -401,12 +380,7 @@ export default function ShowPreheat() {
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
               <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/created-at.svg" />
-              <Typography
-                variant="body1"
-                fontFamily="mabry-bold"
-                component="div"
-                className={styles.informationTitleText}
-              >
+              <Typography variant="body1" thai-semi-bold component="div" className={styles.informationTitleText}>
                 Created At
               </Typography>
             </Box>
@@ -425,11 +399,11 @@ export default function ShowPreheat() {
               </Typography>
             )}
           </Box>
-        </Paper>
+        </Card>
         <Drawer anchor="right" open={errorLog} onClose={handleClose}>
           <Box role="presentation" sx={{ width: '28rem' }}>
             <Box sx={{ height: '100vh', backgroundColor: '#24292f' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#fff' }}>
+              <Typography variant="h6" fontFamily="thai-semi-bold" sx={{ p: '1rem', color: '#fff' }}>
                 Error log
               </Typography>
               <Divider sx={{ backgroundColor: '#6c6e6f' }} />
@@ -469,7 +443,7 @@ export default function ShowPreheat() {
                         sx={{ width: '1.4rem', height: '1.4rem', mr: '0.6rem' }}
                         src="/icons/job/preheat/failure.svg"
                       />
-                      <Typography variant="body2" fontFamily="mabry-bold" sx={{ color: '#d0d7de' }}>
+                      <Typography variant="body2" fontFamily="thai-semi-bold" sx={{ color: '#d0d7de' }}>
                         Preheat
                       </Typography>
                     </Box>

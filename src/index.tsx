@@ -9,7 +9,7 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 const theme = createTheme({
   typography: {
-    fontFamily: 'mabry-light,sans-serif',
+    fontFamily: 'thai-regular,sans-serif',
   },
 });
 

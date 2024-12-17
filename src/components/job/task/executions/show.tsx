@@ -34,6 +34,7 @@ import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { getBJTDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
 import _ from 'lodash';
 import { DEFAULT_SCHEDULER_TABLE_PAGE_SIZE } from '../../../../lib/constants';
+import Card from '../../../card';
 
 const theme = createTheme({
   palette: {
@@ -42,7 +43,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'mabry-light,sans-serif',
+    fontFamily: 'thai-regular,sans-serif',
   },
 });
 
@@ -186,7 +187,7 @@ export default function ShowExecutions() {
       </Snackbar>
       <Drawer anchor="right" open={errorLog} onClose={handleClose}>
         <Box role="presentation" sx={{ width: '28rem', height: '100vh', backgroundColor: '#24292f' }}>
-          <Typography variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#d0d7de' }}>
+          <Typography variant="h6" fontFamily="thai-semi-bold" sx={{ p: '1rem', color: '#d0d7de' }}>
             Error log
           </Typography>
           <Divider sx={{ backgroundColor: '#6c6e6f' }} />
@@ -226,7 +227,7 @@ export default function ShowExecutions() {
                     sx={{ width: '1.2rem', height: '1.2rem', mr: '0.4rem' }}
                     src="/icons/job/preheat/failure.svg"
                   />
-                  <Typography variant="body2" fontFamily="mabry-bold" sx={{ color: '#d0d7de' }}>
+                  <Typography variant="body2" fontFamily="thai-semi-bold" sx={{ color: '#d0d7de' }}>
                     Error log
                   </Typography>
                 </Box>
@@ -240,7 +241,7 @@ export default function ShowExecutions() {
                 <Typography
                   variant="body2"
                   component="div"
-                  fontFamily="mabry-bold"
+                  fontFamily="thai-semi-bold"
                   color="#d0d7de"
                   mb="1rem"
                   className={styles.errorLog}
@@ -252,11 +253,11 @@ export default function ShowExecutions() {
           </Box>
         </Box>
       </Drawer>
-      <Paper variant="outlined" sx={{ p: '1rem 2rem' }}>
+      <Card className={styles.container}>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/id.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               ID
             </Typography>
           </Box>
@@ -267,7 +268,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/status.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Status
             </Typography>
           </Box>
@@ -304,7 +305,7 @@ export default function ShowExecutions() {
                 )}
                 <Typography
                   variant="body2"
-                  fontFamily="mabry-bold"
+                  fontFamily="thai-semi-bold"
                   sx={{
                     color: '#FFF',
                   }}
@@ -358,7 +359,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/task/task-id.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Task ID
             </Typography>
           </Box>
@@ -373,7 +374,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/url.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               URL
             </Typography>
           </Box>
@@ -381,7 +382,7 @@ export default function ShowExecutions() {
             <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
           ) : (
             <CustomWidthTooltip title={executions?.args?.url || '-'} placement="bottom">
-              <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.urlContent}>
+              <Typography variant="body1" component="div" className={styles.urlContent}>
                 {executions?.args?.url || '-'}
               </Typography>
             </CustomWidthTooltip>
@@ -390,7 +391,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/tag.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Tag
             </Typography>
           </Box>
@@ -421,7 +422,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/task/type.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Application
             </Typography>
           </Box>
@@ -438,7 +439,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/id.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Scheduler Clusters ID
             </Typography>
           </Box>
@@ -449,7 +450,7 @@ export default function ShowExecutions() {
               executions?.scheduler_clusters?.map((item: any, index: number) => {
                 return (
                   <Box className={styles.schedulerClustersIDContent}>
-                    <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
+                    <Typography key={index} variant="body2" component="div" fontFamily="thai-semi-bold">
                       {item.id || '-'}
                     </Typography>
                   </Box>
@@ -461,7 +462,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/created-at.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Created At
             </Typography>
           </Box>
@@ -482,7 +483,7 @@ export default function ShowExecutions() {
             )}
           </Typography>
         </Box>
-      </Paper>
+      </Card>
       {failure && Array.isArray(failure) && failure.length !== 0 ? (
         <Box id="failure-tasks">
           <Box m="2.5rem 0 1.5rem 0" sx={{ display: 'flex', alignItems: 'center' }}>
@@ -496,31 +497,31 @@ export default function ShowExecutions() {
                 mb: '0.1rem',
               }}
             />
-            <Typography variant="h6" fontFamily="mabry-bold">
+            <Typography variant="h6" fontFamily="thai-semi-bold">
               Failure
             </Typography>
           </Box>
-          <Paper variant="outlined">
+          <Card>
             <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
               <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
                 <TableRow>
                   <TableCell align="center">
-                    <Typography variant="subtitle1" fontFamily="mabry-bold">
+                    <Typography variant="subtitle1" fontFamily="thai-semi-bold">
                       Hostname
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="subtitle1" fontFamily="mabry-bold">
+                    <Typography variant="subtitle1" fontFamily="thai-semi-bold">
                       IP
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="subtitle1" fontFamily="mabry-bold">
+                    <Typography variant="subtitle1" fontFamily="thai-semi-bold">
                       Host Type
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="subtitle1" fontFamily="mabry-bold">
+                    <Typography variant="subtitle1" fontFamily="thai-semi-bold">
                       Description
                     </Typography>
                   </TableCell>
@@ -572,7 +573,7 @@ export default function ShowExecutions() {
                         return (
                           <TableRow key={item?.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                             <TableCell align="center">
-                              <Typography variant="body2" component="div" fontFamily="mabry-bold">
+                              <Typography variant="body2" component="div" fontFamily="thai-semi-bold">
                                 {item?.hostname}
                               </Typography>
                             </TableCell>
@@ -626,7 +627,7 @@ export default function ShowExecutions() {
                 )}
               </TableBody>
             </Table>
-          </Paper>
+          </Card>
           {totalPages > 1 ? (
             <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
               <Pagination

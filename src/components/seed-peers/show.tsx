@@ -18,6 +18,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import styles from './show.module.css';
 import _ from 'lodash';
 import { useParams, Link, useLocation } from 'react-router-dom';
+import Card from '../card';
 
 export default function SeedPeer() {
   const [isLoading, setIsLoading] = useState(false);
@@ -122,66 +123,66 @@ export default function SeedPeer() {
         </RouterLink>
         <Typography color="text.primary">{seedPeer?.host_name || '-'}</Typography>
       </Breadcrumbs>
-      <Typography variant="h6" fontFamily="mabry-bold" sx={{ pb: '1rem' }}>
+      <Typography variant="h6" fontFamily="thai-semi-bold" sx={{ pb: '1rem' }}>
         Seed-Peer
       </Typography>
       <Box className={styles.container}>
-        <Paper variant="outlined" className={styles.headerContainer}>
+        <Card className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler-id.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/scheduler-id.svg" />
             <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               ID
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+          <Typography component="div" variant="subtitle1" fontFamily="thai-semi-bold">
             {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : seedPeer?.id || '-'}
           </Typography>
-        </Paper>
-        <Paper variant="outlined" className={styles.headerContainer}>
+        </Card>
+        <Card className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/hostname.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/hostname.svg" />
             <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               Hostname
             </Typography>
           </Box>
           <Tooltip title={seedPeer?.host_name || '-'} placement="top">
-            <Typography component="div" variant="subtitle1" fontFamily="mabry-bold" className={styles.hostname}>
+            <Typography component="div" variant="subtitle1" fontFamily="thai-semi-bold" className={styles.hostname}>
               {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : seedPeer?.host_name || '-'}
             </Typography>
           </Tooltip>
-        </Paper>
-        <Paper variant="outlined" className={styles.headerContainer}>
+        </Card>
+        <Card className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler-ip.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/scheduler-ip.svg" />
             <Typography className={styles.headerTitle} variant="subtitle1" component="div">
               IP
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+          <Typography component="div" variant="subtitle1" fontFamily="thai-semi-bold">
             {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : seedPeer?.ip || '-'}
           </Typography>
-        </Paper>
-        <Paper variant="outlined" className={styles.clusterIDContaine}>
+        </Card>
+        <Card className={styles.clusterIDContaine}>
           <Box className={styles.clusterIDContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/cluster-id.svg" />
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/cluster-id.svg" />
             <Typography className={styles.clusterIDTitle} variant="subtitle1" component="div">
               Cluster ID
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+          <Typography component="div" variant="subtitle1" fontFamily="thai-semi-bold">
             {isLoading ? (
               <Skeleton data-testid="isloading" sx={{ width: '8rem' }} />
             ) : (
               seedPeer?.seed_peer_cluster_id || '-'
             )}
           </Typography>
-        </Paper>
+        </Card>
       </Box>
-      <Paper variant="outlined" className={styles.seedPeerContainer}>
+      <Card className={styles.seedPeerContainer}>
         {seedPeerLabel.map((item) => {
           return (
             <Box key={item.label} className={styles.seedPeerContent}>
-              <Typography variant="subtitle1" component="div" mb="1rem">
+              <Typography variant="subtitle1" component="div" className={styles.text}>
                 {item.label}
               </Typography>
               {isLoading ? (
@@ -217,24 +218,23 @@ export default function SeedPeer() {
                         size="small"
                         variant="outlined"
                         sx={{
-                          borderRadius: '0%',
+                          borderRadius: '0.2rem',
                           backgroundColor:
+                            seedPeer?.[item.name] === 'active' ? 'var(--menu-background-color)' : '#f7f7f8',
+                          color:
                             seedPeer?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                          color: seedPeer?.[item.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
-                          borderColor:
-                            seedPeer?.[item.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                          fontWeight: 'bold',
+                          borderColor: seedPeer?.[item.name] === 'active' ? 'var(--menu-background-color)' : '#f7f7f8',
                         }}
                       />
                     ) : (
                       '-'
                     )
                   ) : item.name === 'type' ? (
-                    <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+                    <Typography component="div" variant="subtitle1" className={styles.headerText}>
                       {_.upperFirst(seedPeer?.[item.name]) || '-'}
                     </Typography>
                   ) : (
-                    <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+                    <Typography component="div" variant="subtitle1" className={styles.headerText}>
                       {seedPeer?.[item.name as keyof typeof seedPeer] || '-'}
                     </Typography>
                   )}
@@ -243,7 +243,7 @@ export default function SeedPeer() {
             </Box>
           );
         })}
-      </Paper>
+      </Card>
     </Box>
   );
 }

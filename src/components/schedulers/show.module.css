@@ -16,6 +16,11 @@
 
 .headerTitle {
   margin-left: 0.6rem !important;
+  color: var(--table-title-text-color);
+}
+
+.headerText {
+  font-family: 'thai-semi-bold' !important;
 }
 
 .clusterIDContaine {
@@ -31,6 +36,7 @@
 
 .clusterIDTitle {
   margin-left: 0.6rem !important;
+  color: var(--table-title-text-color);
 }
 
 .schedulerContainer {
@@ -54,4 +60,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-family: 'thai-semi-bold' !important;
+}
+
+.text {
+  color: var(--table-title-text-color);
+  padding-bottom: 1rem;
 }

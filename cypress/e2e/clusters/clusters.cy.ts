@@ -59,47 +59,23 @@ describe('Clusters', () => {
       cy.url().should('include', '/clusters');
       cy.get('[data-testid="isloading"]').should('be.exist');
 
-      cy.get(
-        ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
-      )
-        .should('be.visible')
-        .and('contain', '16');
+      cy.get('#total-clusters').should('be.visible').and('contain', '16');
 
-      cy.get(
-        ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
-      )
-        .should('be.visible')
-        .and('contain', '7');
+      cy.get('#default-clusters').should('be.visible').and('contain', '7');
 
       cy.get('[data-testid="isloading"]').should('not.exist');
     });
 
     it('display the total number of schedulers and the active number', () => {
-      cy.get(
-        ':nth-child(2) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
-      )
-        .should('be.visible')
-        .and('contain', '12');
+      cy.get('#total-schedulers').should('be.visible').and('contain', '12');
 
-      cy.get(
-        ':nth-child(2) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
-      )
-        .should('be.visible')
-        .and('contain', '4');
+      cy.get('#active-schedulers').should('be.visible').and('contain', '4');
     });
 
     it('display the total number of seed peers and the active number', () => {
-      cy.get(
-        '.clusters_seedPeerContainer__u4Xst > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
-      )
-        .should('be.visible')
-        .and('contain', '12');
+      cy.get('#total-seed-peer').should('be.visible').and('contain', '12');
 
-      cy.get(
-        '.clusters_seedPeerContainer__u4Xst > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
-      )
-        .should('be.visible')
-        .and('contain', '8');
+      cy.get('#active-seed-peer').should('be.visible').and('contain', '8');
     });
 
     it('can display clusters card', () => {
@@ -107,18 +83,16 @@ describe('Clusters', () => {
       cy.get('.MuiBackdrop-root > .MuiBox-root').should('exist');
 
       // Show Default background color.
-      cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > #isDefault')
+      cy.get('#default-cluster-1')
         .should('be.visible')
         .and('contain', 'Default')
         .and('have.css', 'background-color', 'rgb(46, 143, 121)');
 
       // Show cluster name.
-      cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', 'cluster-1');
+      cy.get('#cluster-name-1').should('be.visible').and('contain', 'cluster-1');
 
       // Show cluster description.
-      cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .css-m4gmz7 > .MuiTypography-root')
+      cy.get('#cluster-description-1')
         .should('be.visible')
         .and(
           'contain',
@@ -126,12 +100,10 @@ describe('Clusters', () => {
         );
 
       // Show Non-Default cluster.
-      cy.get(':nth-child(8) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', 'cluster-2');
+      cy.get('#cluster-name-2').should('be.visible').and('contain', 'cluster-2');
 
       // Show Non-Default background color.
-      cy.get(':nth-child(8) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > #isDefault')
+      cy.get('#default-cluster-2')
         .should('be.visible')
         .and('contain', 'Non-Default')
         .and('have.css', 'background-color', 'rgb(28, 41, 58)');
@@ -182,45 +154,21 @@ describe('Clusters', () => {
     });
 
     it('display the total number of clusters and the default number', () => {
-      cy.get(
-        ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
-      )
-        .should('be.visible')
-        .and('contain', '0');
+      cy.get('#total-clusters').should('be.visible').and('contain', '0');
 
-      cy.get(
-        ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
-      )
-        .should('be.visible')
-        .and('contain', '0');
+      cy.get('#default-clusters').should('be.visible').and('contain', '0');
     });
 
     it('display the total number of schedulers and the active number', () => {
-      cy.get(
-        ':nth-child(2) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
-      )
-        .should('be.visible')
-        .and('contain', '0');
+      cy.get('#total-schedulers').should('be.visible').and('contain', '0');
 
-      cy.get(
-        ':nth-child(2) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
-      )
-        .should('be.visible')
-        .and('contain', '0');
+      cy.get('#default-clusters').should('be.visible').and('contain', '0');
     });
 
     it('display the total number of seed peers and the active number', () => {
-      cy.get(
-        '.clusters_seedPeerContainer__u4Xst > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
-      )
-        .should('be.visible')
-        .and('contain', '0');
+      cy.get('#total-seed-peer').should('be.visible').and('contain', '0');
 
-      cy.get(
-        '.clusters_seedPeerContainer__u4Xst > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
-      )
-        .should('be.visible')
-        .and('contain', '0');
+      cy.get('#active-seed-peer').should('be.visible').and('contain', '0');
     });
 
     it('cluster card should present an empty status', () => {
@@ -239,9 +187,7 @@ describe('Clusters', () => {
       cy.get('#clusterPagination > .MuiPagination-ul').children().should('have.length', 4);
 
       // Show cluster name.
-      cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', 'cluster-1');
+      cy.get('#cluster-name-1').should('be.visible').and('contain', 'cluster-1');
     });
 
     it('when pagination changes, different page results are rendered', () => {
@@ -251,19 +197,17 @@ describe('Clusters', () => {
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
       // Display last page cluster information.
-      cy.get('.clusters_clusterListContent__UwWjF > .css-k008qs').should('be.visible').and('contain', '8');
+      cy.get('#cluster-id-8').should('be.visible').and('contain', '8');
 
       // Display cluster information.
-      cy.get('#isDefault')
+      cy.get('#default-cluster-8')
         .should('be.visible')
         .and('contain', 'Non-Default')
         .and('have.css', 'background-color', 'rgb(28, 41, 58)');
 
-      cy.get('.clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', 'cluster-8');
+      cy.get('#cluster-name-8').should('be.visible').and('contain', 'cluster-8');
 
-      cy.get('.css-m4gmz7 > .MuiTypography-root')
+      cy.get('#cluster-description-8')
         .should('be.visible')
         .and(
           'contain',
@@ -278,9 +222,7 @@ describe('Clusters', () => {
       // Go to last page.
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
-      cy.get('.clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', 'cluster-8');
+      cy.get('#cluster-name-8').should('be.visible').and('contain', 'cluster-8');
 
       // Check the current page number.
       cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
@@ -293,23 +235,17 @@ describe('Clusters', () => {
       // Check if the page number has been reset.
       cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
-      cy.get('.clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', 'cluster-8');
+      cy.get('#cluster-name-8').should('be.visible').and('contain', 'cluster-8');
     });
 
     it('when returning to the previous page, pagination and results remain unchanged', () => {
       // Go to last page.
-      cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
+      cy.get('.MuiPagination-ul > :nth-child(4)').click();
 
-      cy.get(':nth-child(2) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', 'cluster-8');
+      cy.get('#cluster-name-8').should('be.visible').and('contain', 'cluster-8');
 
       // Go to show cluster page.
-      cy.get(
-        ':nth-child(2) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .clusters_creatTimeContainer__k6XfL > .MuiButtonBase-root',
-      ).click();
+      cy.get('#show-cluster-8').click();
 
       // Then I see that the current page is the show cluster.
       cy.url().should('include', '/clusters/8');
@@ -320,9 +256,7 @@ describe('Clusters', () => {
       // Check the current page number.
       cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
-      cy.get(':nth-child(2) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', 'cluster-8');
+      cy.get('#cluster-name-8').should('be.visible').and('contain', 'cluster-8');
     });
   });
 
@@ -355,56 +289,30 @@ describe('Clusters', () => {
 
     it('show error message', () => {
       // Show error message.
-      cy.get('.css-1rr4qq7 > .MuiSnackbar-root > .MuiPaper-root > .MuiAlert-message')
-        .should('be.visible')
-        .and('contain', 'Failed to fetch');
+      cy.get('.MuiSnackbar-root > .MuiPaper-root').should('be.visible').and('contain', 'Failed to fetch');
 
       // Close error message.
-      cy.get('.css-1rr4qq7 > .MuiSnackbar-root > .MuiPaper-root > .MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('.css-1rr4qq7 > .MuiSnackbar-root > .MuiPaper-root > .MuiAlert-message').should('not.exist');
+      cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+      cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
     });
 
     it('display the total number of clusters and the default number', () => {
-      cy.get(
-        ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
-      )
-        .should('be.visible')
-        .and('contain', '0');
+      cy.get('#total-clusters').should('be.visible').and('contain', '0');
 
       cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');
-      cy.get(
-        ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
-      )
-        .should('be.visible')
-        .and('contain', '0');
+      cy.get('#default-clusters').should('be.visible').and('contain', '0');
     });
 
     it('display the total number of schedulers and the active number', () => {
-      cy.get(
-        ':nth-child(2) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
-      )
-        .should('be.visible')
-        .and('contain', '0');
+      cy.get('#total-schedulers').should('be.visible').and('contain', '0');
 
-      cy.get(
-        ':nth-child(2) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
-      )
-        .should('be.visible')
-        .and('contain', '0');
+      cy.get('#default-clusters').should('be.visible').and('contain', '0');
     });
 
     it('display the total number of seed peers and the active number', () => {
-      cy.get(
-        '.clusters_seedPeerContainer__u4Xst > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
-      )
-        .should('be.visible')
-        .and('contain', '0');
+      cy.get('#total-seed-peer').should('be.visible').and('contain', '0');
 
-      cy.get(
-        '.clusters_seedPeerContainer__u4Xst > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
-      )
-        .should('be.visible')
-        .and('contain', '0');
+      cy.get('#active-seed-peer').should('be.visible').and('contain', '0');
     });
 
     it('cluster card should present an empty status', () => {
@@ -424,7 +332,7 @@ describe('Clusters', () => {
       cy.url().should('include', '/clusters?search=cluster-10');
       cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');
       cy.get('#clustersCard').should('exist').children().should('have.length', 1);
-      cy.get('.clusters_clusterListContent__UwWjF > .MuiTypography-h6').should('have.text', 'cluster-10');
+      cy.get('#cluster-name-10').should('have.text', 'cluster-10');
 
       // Clear search box.
       cy.get('#free-solo-demo').clear();
@@ -435,12 +343,8 @@ describe('Clusters', () => {
 
       // Check number of pagination.
       cy.get('#clusterPagination > .MuiPagination-ul').children().should('have.length', 4);
-      cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', 'cluster-1');
-      cy.get(':nth-child(8) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', 'cluster-2');
+      cy.get('#cluster-name-1').should('be.visible').and('contain', 'cluster-1');
+      cy.get('#cluster-name-2').should('be.visible').and('contain', 'cluster-2');
     });
 
     it('should search cluster name and show no results', () => {
@@ -464,6 +368,16 @@ describe('Clusters', () => {
       cy.get('#free-solo-demo').should('have.value', 'cluster-2');
 
       cy.get('#clustersCard').should('exist').children().should('have.length', 1);
+    });
+
+    it('should search for cluster name and switch paging', () => {
+      cy.get('#free-solo-demo').type('cluster');
+
+      // Go to last page.
+      cy.get(':nth-child(4) > .MuiButtonBase-root').click();
+
+      // Then I see that the current page is the create clusters!
+      cy.url().should('include', '/clusters?search=cluster&page=2');
     });
   });
 

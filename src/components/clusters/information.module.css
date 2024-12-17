@@ -5,6 +5,11 @@
   align-items: center;
 }
 
+.wrapper {
+  padding: 1.5rem;
+  width: 100%;
+}
+
 .updateClusterIcon {
   width: 1.4rem;
   height: 1.4rem;
@@ -23,6 +28,11 @@
   padding: 1rem;
 }
 
+.className {
+  padding-bottom: 0.5rem;
+  font-family: 'thai-semi-bold' !important;
+}
+
 .informationWrapper:nth-child(5) {
   display: flex;
   align-items: center;
@@ -32,7 +42,7 @@
 
 .informationLable {
   color: #80828b;
-  font-family: 'mabry-bold' !important;
+  /* font-family: 'thai-semi-bold' !important; */
   margin-right: 0.3rem !important;
 }
 
@@ -54,24 +64,39 @@
   width: 40% !important;
 }
 
+.divider {
+  margin: 1.5rem 0px;
+  flex-shrink: 0;
+  border-width: 0px 0px thin;
+  border-color: var(--palette-divider);
+  border-style: dashed;
+}
+
 .clusterContainer {
   display: flex;
   justify-content: space-between;
-  padding-top: 1.4rem;
-  padding-bottom: 1.4rem;
+  /* padding: 1.2rem 0; */
+  flex-wrap: wrap;
+
+  /* background-color: #f7f7f8 !important; */
 }
 
 .clusterWrap {
   display: flex;
+  /* align-items: center; */
+  width: 25%;
   flex-direction: column;
-  align-items: center;
-  width: 33.3333%;
+  padding: 0.5rem 0;
 }
 
 .clusterTitle {
   display: flex;
   align-items: center;
-  margin-bottom: 0.3rem;
+  padding-bottom: 0.4rem;
+}
+
+.clusterContent {
+  font-family: 'thai-semi-bold' !important;
 }
 
 .schedulerClusterID {
@@ -93,7 +118,6 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: stretch;
-  margin-top: 2rem;
 }
 
 .scopesCard {
@@ -113,13 +137,13 @@
 }
 
 .configLable {
-  color: #515151;
+  color: var(--table-title-text-color);
   margin-right: 0.2rem !important;
 }
 
 .scopesLable {
-  color: #515151;
-  font-family: 'mabry-bold' !important;
+  color: var(--table-title-text-color);
+  font-family: 'thai-semi-bold' !important;
   margin-right: 0.2rem !important;
 }
 
@@ -144,8 +168,8 @@
 }
 
 .scopesIcon {
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
 .scopesIconContainer {
@@ -154,8 +178,8 @@
   justify-content: center;
   background-color: var(--menu-background-color);
   border-radius: 12%;
-  width: 2rem;
-  height: 2rem;
+  width: 1.8rem;
+  height: 1.8rem;
 }
 
 .locationTitle {
@@ -180,7 +204,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 9rem;
+  height: 8rem;
+  /* background-color: #f4f6f8 !important; */
 }
 
 .cidrsTitleWrapper {
@@ -199,7 +224,11 @@
 }
 
 @media only screen and (min-width: 2049px) and (max-width: 2560px) {
-  .cidrsContent:nth-child(6) {
+  .cidrsContent:nth-child(3) {
+    display: flex !important;
+  }
+
+  .cidrsContent:nth-child(4) {
     display: flex !important;
   }
 
@@ -209,7 +238,11 @@
 }
 
 @media only screen and (max-width: 1920px) {
-  .cidrsContent:nth-child(5) {
+  .cidrsContent:nth-child(3) {
+    display: flex !important;
+  }
+
+  .cidrsContent:nth-child(4) {
     display: none !important;
   }
 
@@ -219,12 +252,20 @@
 }
 
 @media only screen and (max-width: 1600px) {
+  .cidrsContent:nth-child(3) {
+    display: none !important;
+  }
+
   .cidrsContent:nth-child(4) {
     display: none !important;
   }
 }
 
 @media only screen and (max-width: 1440px) {
+  .cidrsContent:nth-child(3) {
+    display: none !important;
+  }
+
   .cidrsContent:nth-child(4) {
     display: none !important;
   }
@@ -236,7 +277,7 @@
 }
 
 .cidrsContent {
-  background-color: rgba(145 158 171 / 0.16) !important;
+  background-color: #f7f7f8 !important;
   width: 6rem;
   height: 1.6rem;
   margin-right: 1rem;
@@ -252,7 +293,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   color: #637381;
-  /* font-family: 'mabry-bold' !important; */
+  /* font-family: 'thai-semi-bold' !important; */
 }
 
 .configRightContainer {
@@ -262,40 +303,48 @@
 }
 
 .configContainer {
-  display: flex;
-  flex-direction: column;
-  margin-top: 2rem;
+  /* display: flex; */
 }
 
-.configTitle {
+.scopesWrapper {
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
 }
 
+.configTitle {
+  display: flex;
+  align-items: center;
+  padding-left: 1.5rem;
+}
+
 .configListContainer {
   display: flex;
   flex-wrap: wrap;
-  padding: 0.5rem;
+  padding: 0.5rem 0.9rem 0.9rem 0.9rem;
 }
 
 .configContent {
-  width: 33.333%;
+  width: 25%;
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
 }
 
+.configContent:last-child {
+  width: 30%;
+}
+
 .configContentTitle {
-  width: 85%;
+  /* width: 85%; */
   display: flex;
   align-items: center;
-  padding-bottom: 0.3rem;
+  padding-bottom: 0.4rem;
 }
 
 .configText {
   width: 15%;
-  font-family: 'mabry-bold' !important;
+  font-family: 'thai-semi-bold' !important;
 }
 
 .idcDialogContainer {
@@ -306,7 +355,7 @@
 
 .cidrsDialogContent {
   width: 45%;
-  background-color: #f4f3f6 !important;
+  background-color: #f7f7f8 !important;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -323,7 +372,7 @@
 
 .idcDialogContent {
   width: 45%;
-  background-color: #f4f3f6 !important;
+  background-color: #f7f7f8 !important;
   display: flex;
   align-items: center;
   justify-content: flex-start;

@@ -936,6 +936,17 @@ export async function getPeers(params?: getpeerParams): Promise<getPeersResponse
   return await response.json();
 }
 
+interface SyncPeers {
+  type: string;
+  scheduler_cluster_ids?: Array<number>;
+}
+
+export async function getSyncPeers(request: SyncPeers): Promise<string> {
+  const url = new URL(`/api/v1/jobs`, API_URL);
+  const response = await post(url, request);
+  return await response.json();
+}
+
 interface user {
   id: number;
   created_at: string;

@@ -38,6 +38,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import SearchCircularProgress from '../../../circular-progress';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import LinkOutlinedIcon from '@mui/icons-material/LinkOutlined';
+import Card from '../../../card';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
@@ -64,7 +65,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'mabry-light,sans-serif',
+    fontFamily: 'thai-regular,sans-serif',
   },
 });
 
@@ -164,7 +165,7 @@ export default function Clear() {
       helperText: urlError ? 'Fill in the characters, the length is 0-1000.' : '',
       error: urlError,
       InputProps: {
-        startAdornment: <SearchIcon sx={{ color: '#9BA0A6' }} />,
+        startAdornment: <SearchIcon className={styles.circularProgress} sx={{ color: '#919EAB' }} />,
         endAdornment: searchTask ? (
           <IconButton type="button" sx={{ p: 0 }} aria-label="search">
             <ClearIcon />
@@ -202,7 +203,7 @@ export default function Clear() {
         InputProps: (
           <Tooltip
             title={
-              'When the task URLs are the same but the tags are different, they are differentiated based on the tags and the query caches are also different.'
+              'When the task URL is the same but the tags are different, they will be distinguished based on the tags, and the queried tasks will also be different.'
             }
             placement="top"
           >
@@ -237,7 +238,7 @@ export default function Clear() {
         helperText: applicationError ? 'Fill in the characters, the length is 0-1000.' : '',
         error: applicationError,
         InputProps: (
-          <Tooltip title={'Application is the application of the task.'} placement="top">
+          <Tooltip title={'Caller application which is used for statistics and access control.'} placement="top">
             <HelpIcon
               color="disabled"
               sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
@@ -320,7 +321,11 @@ export default function Clear() {
       helperText: taskIDError ? 'Fill in the characters, the length is 0-1000.' : '',
       error: taskIDError,
       InputProps: {
-        startAdornment: isLoading ? <SearchCircularProgress /> : <SearchIcon sx={{ color: '#9BA0A6' }} />,
+        startAdornment: isLoading ? (
+          <SearchCircularProgress className={styles.circularProgress} />
+        ) : (
+          <SearchIcon className={styles.circularProgress} sx={{ color: '#9BA0A6' }} />
+        ),
         endAdornment: searchTask ? (
           <IconButton
             type="button"
@@ -654,7 +659,7 @@ export default function Clear() {
               {optional ? (
                 <>
                   <Divider sx={{ m: '1rem 0' }} />
-                  <Typography variant="subtitle1" fontFamily="mabry-bold" component="div">
+                  <Typography variant="subtitle1" fontFamily="thai-semi-bold" component="div">
                     Optional
                   </Typography>
                   <Paper elevation={0} sx={{ top: '2rem', backgroundColor: '#FFF' }}>
@@ -663,13 +668,13 @@ export default function Clear() {
                         return (
                           <Box key={item.formProps.id} className={styles.filterInput}>
                             <Box width="30%" display="flex" alignItems="center">
-                              <Typography variant="body2" color="#5e5e5e" fontFamily="mabry-bold" mr="0.4rem">
+                              <Typography variant="body2" color="#5e5e5e" fontFamily="thai-semi-bold" mr="0.4rem">
                                 {item?.formProps?.labels}
                               </Typography>
                               {item?.id === 'filteredQueryParams' ? (
                                 <Tooltip
                                   title={
-                                    'By setting the filter parameter, you can specify the file type of the resource that needs to be searched for cache. This filter is used to generate a unique cache and filter out unnecessary query parameters in the URL, separated by the & character.'
+                                    'Filter the query parameters of the downloaded URL. If the download URL is the same, it will be scheduled as the same task.'
                                   }
                                   placement="top"
                                 >
@@ -736,7 +741,7 @@ export default function Clear() {
         <Box sx={{ width: '100%', typography: 'body1', mt: '2rem' }}>
           {peers && peers?.length > 0 ? (
             <>
-              <Typography variant="h6" m="1rem 0" fontFamily="mabry-bold">
+              <Typography variant="h6" m="1rem 0" fontFamily="thai-semi-bold">
                 Cache
               </Typography>
               <Box id="cache">
@@ -747,7 +752,7 @@ export default function Clear() {
                   const currentPageData = getPaginatedList(peer?.peers, taskPage, 5);
                   return (
                     <Box mb="2rem" key={index}>
-                      <Paper variant="outlined">
+                      <Card>
                         <Box
                           sx={{
                             display: 'flex',
@@ -757,7 +762,7 @@ export default function Clear() {
                           }}
                         >
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography variant="subtitle1" mr="0.6rem" fontFamily="mabry-bold">
+                            <Typography variant="subtitle1" mr="0.6rem" fontFamily="thai-semi-bold">
                               Scheduler Cluster
                             </Typography>
                             <Box
@@ -777,7 +782,7 @@ export default function Clear() {
                               <Typography
                                 id="schedulerTotal"
                                 variant="subtitle2"
-                                fontFamily="mabry-bold"
+                                fontFamily="thai-semi-bold"
                                 component="div"
                                 pl="0.3rem"
                                 lineHeight="1rem"
@@ -788,7 +793,7 @@ export default function Clear() {
                           </Box>
                           <Button
                             size="small"
-                            sx={{ background: 'var(--button-color)', borderRadius: '0' }}
+                            sx={{ background: 'var(--button-color)' }}
                             variant="contained"
                             onClick={(event) => {
                               event.stopPropagation();
@@ -802,30 +807,35 @@ export default function Clear() {
                         </Box>
                         <Divider />
                         <Box
-                          sx={{ p: '1rem 0.8rem', display: 'flex', alignItems: 'center', backgroundColor: '#f6f6f6' }}
+                          sx={{
+                            p: '1rem 0.8rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            backgroundColor: 'var(--table-title-color)',
+                          }}
                         >
                           <Box width="20%" sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography variant="body2" fontFamily="mabry-bold" className={styles.hostnameTitle}>
+                            <Typography variant="body2" fontFamily="thai-semi-bold" className={styles.hostnameTitle}>
                               Hostname
                             </Typography>
                           </Box>
                           <Box width="35%" sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography variant="body2" fontFamily="mabry-bold" className={styles.hostnameTitle}>
+                            <Typography variant="body2" fontFamily="thai-semi-bold" className={styles.hostnameTitle}>
                               ID
                             </Typography>
                           </Box>
                           <Box width="15%" sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography variant="body2" fontFamily="mabry-bold" className={styles.hostnameTitle}>
+                            <Typography variant="body2" fontFamily="thai-semi-bold" className={styles.hostnameTitle}>
                               IP
                             </Typography>
                           </Box>
                           <Box width="15%" sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography variant="body2" fontFamily="mabry-bold" className={styles.hostnameTitle}>
+                            <Typography variant="body2" fontFamily="thai-semi-bold" className={styles.hostnameTitle}>
                               Host type
                             </Typography>
                           </Box>
                           <Box width="15%" sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography variant="body2" fontFamily="mabry-bold" className={styles.hostnameTitle}>
+                            <Typography variant="body2" fontFamily="thai-semi-bold" className={styles.hostnameTitle}>
                               Created at
                             </Typography>
                           </Box>
@@ -945,7 +955,7 @@ export default function Clear() {
                             );
                           })}
                         </Box>
-                      </Paper>
+                      </Card>
                       {totalPage > 1 ? (
                         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
                           <Pagination
@@ -966,7 +976,7 @@ export default function Clear() {
               </Box>
             </>
           ) : (
-            <Box id='no-task' sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '6rem' }}>
+            <Box id="no-task" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '6rem' }}>
               <Box component="img" sx={{ width: '4rem', mb: '3rem' }} src="/icons/job/task/no-search.svg" />
               <Box>
                 <Typography variant="h5" component="span">
@@ -1018,7 +1028,7 @@ export default function Clear() {
               src="/icons/cluster/delete.svg"
               sx={{ width: '1.8rem', height: '1.8rem', mr: '0.4rem' }}
             />
-            <Typography variant="h6" component="div" fontFamily="mabry-bold">
+            <Typography variant="h6" component="div" fontFamily="thai-semi-bold">
               Delete
             </Typography>
           </Box>
@@ -1044,7 +1054,7 @@ export default function Clear() {
                 sx={{ width: '1.4rem', height: '1.4rem', pr: '0.2rem' }}
               />
               <Box>
-                <Typography variant="body1" fontFamily="mabry-bold" component="span" sx={{ color: '#D81E06' }}>
+                <Typography variant="body1" fontFamily="thai-semi-bold" component="span" sx={{ color: '#D81E06' }}>
                   WARNING:&nbsp;
                 </Typography>
                 <Typography variant="body1" component="span" sx={{ color: '#D81E06' }}>

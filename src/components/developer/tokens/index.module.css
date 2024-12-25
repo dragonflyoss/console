@@ -1,0 +1,28 @@
+.noData {
+  width: 100%;
+  height: 16rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: rgba(var(--no-data-color) / 0.04) !important;
+  border: dashed 1px rgba(var(--no-data-color) / 0.08);
+}
+
+.nodataIcon {
+  max-width: 10rem;
+  height: 10rem;
+}
+
+.nodataText {
+  color: var(--palette-text-disabled);
+  font-family: 'mabry-bold';
+}
+
+.copyToken {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem;
+  background-color: var(--menu-background-color) !important;
+  margin-bottom: 1rem;
+}

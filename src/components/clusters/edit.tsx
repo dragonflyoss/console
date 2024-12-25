@@ -21,6 +21,7 @@ import { getCluster, updateCluster, getClusterResponse } from '../../lib/api';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
+import Card from '../card';
 
 export default function EditCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -57,13 +58,13 @@ export default function EditCluster() {
     scheduler_cluster_config: {
       candidate_parent_limit: 0,
       filter_parent_limit: 0,
-      job_rate_limit: 10,
+      job_rate_limit: 0,
     },
     seed_peer_cluster_config: {
-      load_limit: 2000,
+      load_limit: 0,
     },
     peer_cluster_config: {
-      load_limit: 200,
+      load_limit: 0,
     },
     created_at: '',
     updated_at: '',
@@ -529,7 +530,7 @@ export default function EditCluster() {
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Job Rate Limit',
-        value: job_rate_limit || 10,
+        value: job_rate_limit,
         helperText: jobRateLimitError ? 'Fill in the number, the length is 1-1000000.' : '',
         error: jobRateLimitError,
 
@@ -547,7 +548,7 @@ export default function EditCluster() {
         InputProps: {
           endAdornment: (
             <Tooltip
-              title={`The rate limit(requests per second) for job Open API, default value is 10.`}
+              title={`The scheduler will randomly select the  number of parents from all the parents according to the filter parent limit and evaluate the optimal parents in selecting parents for the peer to download task. The number of optimal parent is the scheduling parent limit.`}
               placement="top"
             >
               <HelpIcon color="disabled" className={styles.descriptionIcon} />
@@ -701,12 +702,10 @@ export default function EditCluster() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography variant="h5" fontFamily="mabry-bold">
-        Update Cluster
-      </Typography>
+      <Typography variant="h5">Update Cluster</Typography>
       <Divider sx={{ mt: '1rem', mb: '1rem' }} />
-      <Paper variant="outlined" sx={{ display: 'inline-flex', alignItems: 'center', mb: '1rem', p: '1rem' }}>
-        <Box component="img" src="/icons/cluster/cluster.svg" sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }} />
+      <Card className={styles.header}>
+        <Box component="img" src="/icons/cluster/information-cluster.svg" sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }} />
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography component="span" variant="body1" fontFamily="mabry-bold">
@@ -733,7 +732,7 @@ export default function EditCluster() {
             )}
           </Box>
         </Box>
-      </Paper>
+      </Card>
       <Grid component="form" noValidate onSubmit={handleSubmit}>
         <Box className={styles.container}>
           <Box className={styles.informationTitle}>
@@ -812,7 +811,7 @@ export default function EditCluster() {
                       )}
                     />
                   ) : (
-                    <TextField size="small" className={styles.textField} color="success" {...item.formProps} />
+                    <TextField size="small" className={styles.cidrsInput} color="success" {...item.formProps} />
                   )}
                 </Box>
               );

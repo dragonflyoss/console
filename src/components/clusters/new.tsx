@@ -604,10 +604,10 @@ export default function NewCluster() {
 
     if (canSubmit) {
       try {
-        await createCluster({ ...formData });
+        const cluster = await createCluster({ ...formData });
         setLoadingButton(false);
         setSuccessMessage(true);
-        navigate('/clusters');
+        navigate(`/clusters/${cluster?.id }`);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
@@ -656,9 +656,7 @@ export default function NewCluster() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography variant="h5" fontFamily="mabry-bold">
-        Create Cluster
-      </Typography>
+      <Typography variant="h5">Create Cluster</Typography>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Grid component="form" onSubmit={handleSubmit} noValidate>
         <Box className={styles.container}>
@@ -732,7 +730,7 @@ export default function NewCluster() {
                       )}
                     />
                   ) : (
-                    <TextField size="small" className={styles.textField} color="success" {...item.formProps} />
+                    <TextField size="small" className={styles.cidrsInput} color="success" {...item.formProps} />
                   )}
                 </Box>
               );

@@ -1,3 +1,7 @@
+.container {
+  padding: 1rem 2rem;
+}
+
 .statusIcon {
   width: 1.3rem !important;
   height: 1.3rem !important;
@@ -24,6 +28,8 @@
 .informationTitleText {
   margin-left: 1rem !important;
   color: #515151;
+  font-family: 'mabry-bold' !important;
+  
 }
 
 .informationContent {

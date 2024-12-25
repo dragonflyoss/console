@@ -25,6 +25,8 @@ import { useEffect, useState } from 'react';
 import { getJobs, JobsResponse } from '../../../lib/api';
 import { DEFAULT_PAGE_SIZE } from '../../../lib/constants';
 import { getBJTDatetime, useQuery } from '../../../lib/utils';
+import styles from './index.module.css';
+import Card from '../../card';
 
 export default function Preheats() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -152,9 +154,17 @@ export default function Preheats() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
-        <Typography color="inherit">jobs</Typography>
-        <Typography color="text.primary">preheats</Typography>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '1rem' }}
+      >
+        <Typography color="text.primary">jobs</Typography>
+        <Typography color="inherit">preheats</Typography>
       </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '2rem' }}>
         <Typography variant="h5">Preheats</Typography>
@@ -163,7 +173,6 @@ export default function Preheats() {
           sx={{
             '&.MuiButton-root': {
               backgroundColor: 'var(--button-color)',
-              borderRadius: 0,
               color: '#fff',
             },
           }}
@@ -176,7 +185,7 @@ export default function Preheats() {
           add preheat
         </Button>
       </Box>
-      <Paper variant="outlined">
+      <Card>
         <Box
           sx={{
             p: '0.8rem',
@@ -237,8 +246,11 @@ export default function Preheats() {
             <Divider />
           </Box>
         ) : allPreheats.length === 0 ? (
-          <Box sx={{ height: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            You don't have any preheat tasks.
+          <Box className={styles.noData}>
+            <Box component="img" className={styles.nodataIcon} src="/icons/cluster/scheduler/ic-content.svg" />
+            <Typography variant="h6" className={styles.nodataText}>
+              You don't have any preheat tasks.
+            </Typography>
           </Box>
         ) : (
           <Box id="preheats-list">
@@ -304,7 +316,13 @@ export default function Preheats() {
                         </RouterLink>
                       </Box>
                     </Box>
-                    <Divider />
+                    <Divider
+                      sx={{
+                        borderStyle: 'dashed',
+                        borderColor: 'var(--palette-divider)',
+                        borderWidth: '0px 0px thin',
+                      }}
+                    />
                   </Box>
                 ) : (
                   <Box key={item.id} id={`list-${item.id}`} sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
@@ -369,7 +387,7 @@ export default function Preheats() {
               })}
           </Box>
         )}
-      </Paper>
+      </Card>
       {preheatTotalPages > 1 ? (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
           <Pagination

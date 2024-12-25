@@ -1,3 +1,7 @@
+.container {
+  padding: 1rem 2rem;
+}
+
 .informationContainer {
   display: flex;
   align-items: center;
@@ -22,6 +26,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-style: italic;
+  font-family: 'mabry-bold' !important;
 }
 
 .informationTitleIcon {
@@ -32,6 +37,7 @@
 .informationTitleText {
   margin-left: 1rem !important;
   color: #515151;
+  font-family: 'mabry-bold' !important;
 }
 
 .statusIcon {

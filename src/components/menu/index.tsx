@@ -7,6 +7,8 @@ import {
   Divider,
   Grid,
   IconButton,
+  LinearProgress,
+  linearProgressClasses,
   Menu,
   MenuItem,
   Snackbar,
@@ -59,11 +61,23 @@ const Main = styled('div')(({ theme }) => ({
   overflow: 'auto',
   minHeight: '100%',
   height: '100vh',
-  paddingBottom: theme.spacing(10),
+  paddingBottom: theme.spacing(8),
   [theme.breakpoints.up('lg')]: {
-    paddingTop: '2rem',
+    paddingTop: '1.5rem',
     paddingLeft: theme.spacing(4),
     paddingRight: theme.spacing(4),
+  },
+  fontFamily: 'mabry-light,sans-serif',
+}));
+
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+  borderRadius: 5,
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor: 'rgba(0, 167, 111, 0.4)',
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 3,
+    backgroundColor: 'var(--description-color)',
   },
 }));
 
@@ -90,6 +104,7 @@ export default function Layout(props: any) {
   const [expandDeveloper, setExpandDeveloper] = useState(false);
   const [expandJob, setExpandJob] = useState(false);
   const [expandInsight, setExpandInsight] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const openProfile = Boolean(anchorElement);
   const location = useLocation();
@@ -97,8 +112,20 @@ export default function Layout(props: any) {
 
   useEffect(() => {
     (async function () {
-      setPageLoding(true);
       try {
+        setPageLoding(true);
+        setProgress(0);
+
+        const interval = setInterval(() => {
+          setProgress((prev) => {
+            if (prev >= 30) {
+              clearInterval(interval);
+              return prev;
+            }
+            return prev + 10;
+          });
+        }, 10);
+
         const payload = getJwtPayload();
         setPageTitle(location.pathname);
 
@@ -106,7 +133,20 @@ export default function Layout(props: any) {
           const [user, userRoles] = await Promise.all([getUser(payload?.id), getUserRoles(payload?.id)]);
           setUser(user);
           setRole(userRoles.includes(ROLE_ROOT) ? ROLE_ROOT : ROLE_GUEST);
-          setPageLoding(false);
+
+          clearInterval(interval);
+          setProgress(30);
+
+          const secondInterval = setInterval(() => {
+            setProgress((prev) => {
+              if (prev > 200) {
+                clearInterval(secondInterval);
+                setPageLoding(false);
+                return prev;
+              }
+              return prev + 10;
+            });
+          }, 20);
         } else {
           setPageLoding(false);
           navigate('/signin');
@@ -123,7 +163,7 @@ export default function Layout(props: any) {
     if (location.state?.firstLogin) {
       setFirstLogin(true);
     }
-  }, [location, navigate]);
+  }, [location.pathname, navigate, location.state?.firstLogin]);
 
   const handleUserUpdate = (newUser: getUserResponse) => {
     setUser(newUser);
@@ -174,22 +214,6 @@ export default function Layout(props: any) {
         },
       ],
     },
-    {
-      label: 'insight',
-      href: '/insight',
-      text: 'Insight',
-      icon: <Box component="img" className={styles.menuIcon} src="/icons/insight/insight.svg" />,
-      selectedIcon: <Box component="img" className={styles.menuIcon} src="/icons/insight/selected-insight.svg" />,
-      expand: expandInsight,
-      setExpand: setExpandInsight,
-      menuProps: [
-        {
-          label: 'peers',
-          href: '/insight/peers',
-          text: 'Peer',
-        },
-      ],
-    },
   ];
 
   if (role === ROLE_ROOT) {
@@ -227,7 +251,7 @@ export default function Layout(props: any) {
 
   return (
     <MyContext.Provider value={{ user, role, handleUserUpdate }}>
-      <LoadingBackdrop open={pageLoding} />
+      {pageLoding ? <BorderLinearProgress variant="determinate" value={progress} /> : <></>}
       <Snackbar
         open={firstLogin}
         autoHideDuration={60000}
@@ -287,7 +311,10 @@ export default function Layout(props: any) {
                         }}
                       >
                         {(location.pathname.split('/')[1] || '') === items.label ? items.selectedIcon : items.icon}
-                        <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}>
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                        >
                           {items.text}
                         </Typography>
                         {items.expand ? <ExpandMore /> : <ChevronRightOutlinedIcon />}
@@ -374,11 +401,12 @@ export default function Layout(props: any) {
                       justifyContent: 'space-between',
                     }}
                   >
-                    <Typography component="div" fontFamily="mabry-bold">
+                    <Typography id="menu-name" component="div" fontFamily="mabry-bold">
                       {user?.name || '-'}
                     </Typography>
                     <Tooltip title={user?.email || '-'} placement="top">
                       <Typography
+                        id="menu-email"
                         component="div"
                         variant="caption"
                         sx={{
@@ -414,31 +442,47 @@ export default function Layout(props: any) {
                 onClose={() => {
                   setAnchorElement(null);
                 }}
-                sx={{ position: 'absolute', top: '-5.8rem', left: '-5rem' }}
+                sx={{
+                  position: 'absolute',
+                  top: '-6rem',
+                  left: '-5.2rem',
+                  '& .MuiMenu-paper': {
+                    boxShadow: '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
+                  },
+                  '& .MuiMenu-list': {
+                    p: 0,
+                  },
+                }}
               >
-                <MenuItem
-                  id="profile-menu"
-                  onClick={() => {
-                    setAnchorElement(null);
+                <Box className={styles.profileMenu}>
+                  <MenuItem
+                    id="profile-menu"
+                    onClick={() => {
+                      setAnchorElement(null);
 
-                    navigate('/profile');
-                  }}
-                >
-                  <ListItemIcon>
-                    <PersonAdd fontSize="small" />
-                  </ListItemIcon>
-                  Profile
-                </MenuItem>
-                <MenuItem id="logout-menu" onClick={handleLogout}>
-                  <ListItemIcon>
-                    <Logout fontSize="small" />
-                  </ListItemIcon>
-                  Logout
-                </MenuItem>
+                      navigate('/profile');
+                    }}
+                  >
+                    <ListItemIcon>
+                      <PersonAdd fontSize="small" className={styles.menuItemIcon} />
+                    </ListItemIcon>
+                    <Typography variant="body2" className={styles.menuText}>
+                      Profile
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem id="logout-menu" onClick={handleLogout}>
+                    <ListItemIcon>
+                      <Logout fontSize="small" className={styles.menuItemIcon} />
+                    </ListItemIcon>
+                    <Typography variant="body2" className={styles.menuText}>
+                      Logout
+                    </Typography>
+                  </MenuItem>
+                </Box>
               </Menu>
             </Grid>
           </Box>
-          <Divider orientation="vertical" flexItem />
+          <Divider orientation="vertical" flexItem sx={{ borderColor: 'rgba(145 158 171 / 0.12)' }} />
           <Main>
             <Outlet />
           </Main>

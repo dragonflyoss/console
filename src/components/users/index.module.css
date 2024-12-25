@@ -15,7 +15,7 @@
   padding-bottom: 1.6rem !important;
 }
 
-.detailTitle {
+.detailWrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -35,23 +35,55 @@
 .detailContentLabelContainer {
   display: flex;
   align-items: center;
-  width: 50%;
+  width: 45%;
 }
 
 .detailIcon {
-  width: 1.6rem;
-  height: 1.6rem;
-}
-
-.menuItem:hover {
-  background-color: var(--button-color) !important;
-  color: var(--save-size-color);
+  width: 1.4rem;
+  height: 1.4rem;
 }
 
 .menuItemIcon {
   color: var(--button-color);
+  width: 2rem;
 }
 
-.menuItem:hover .menuItemIcon {
-  color: var(--save-size-color);
+.menuText {
+  font-family: 'mabry-bold' !important;
+}
+
+.menu {
+  background-image: url(../../../public/images/menu/cyan-blur.png), url(../../../public/images/menu/red-blur.png);
+  background-color: rgba(255, 255, 255, 0.9);
+  background-repeat: no-repeat, no-repeat;
+  padding: 0.2rem;
+  background-size: 50%, 50%;
+  box-shadow: rgba(145, 158, 171, 0.24) 0px 0px 2px 0px, rgba(145, 158, 171, 0.24) -20px 20px 40px -4px;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  outline: 0px;
+  background-position: right top, left bottom;
+  border-radius: 10px;
+  overflow: inherit;
+}
+
+.detailTitle {
+  padding-left: 0.8rem;
+  color: var(--text---palette-text-secondary);
+}
+
+.detailContent {
+  font-family: 'mabry-bold' !important;
+}
+
+.tableHeader {
+  color: var(--table-title-text-color);
+  font-family: 'mabry-bold' !important;
+}
+
+.tableRow {
+  border-bottom: dashed var(--palette-divider);
+}
+
+.tableRow:last-child {
+  border-bottom: none;
 }

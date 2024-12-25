@@ -23,6 +23,7 @@ import {
   Skeleton,
 } from '@mui/material';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
+import Card from '../../../card';
 
 export default function Executions() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -149,7 +150,7 @@ export default function Executions() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Paper variant="outlined">
+      <Card>
         <Box className={styles.titleContainer}>
           <Typography variant="body1" fontFamily="mabry-bold">
             Workflow runs
@@ -201,11 +202,11 @@ export default function Executions() {
             </Box>
           </Box>
         ) : executions && executions.length === 0 ? (
-          <Box
-            id="no-executions"
-            sx={{ height: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            You don't have any executions.
+          <Box id="no-executions" className={styles.noData}>
+            <Box component="img" className={styles.nodataIcon} src="/icons/cluster/scheduler/ic-content.svg" />
+            <Typography variant="h6" className={styles.nodataText}>
+              You don't have any executions.
+            </Typography>
           </Box>
         ) : (
           <Box id="executions-list">
@@ -214,7 +215,7 @@ export default function Executions() {
                 return index !== executions.length - 1 ? (
                   <Box key={item.id} id={`list-${item.id}`}>
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
-                      <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
+                      <Box className={styles.statusContainer}>
                         {item.result.state === 'SUCCESS' ? (
                           <Box
                             id={`SUCCESS-${item.id}`}
@@ -247,7 +248,7 @@ export default function Executions() {
                           <Typography variant="body2">{item?.args?.task_id || '-'}</Typography>
                         </Box>
                       </Box>
-                      <Box width="30%">
+                      <Box className={styles.timeContainer}>
                         <Chip
                           avatar={<MoreTimeIcon />}
                           label={getBJTDatetime(item.created_at) || '-'}
@@ -255,7 +256,7 @@ export default function Executions() {
                           size="small"
                         />
                       </Box>
-                      <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Box className={styles.iconButton}>
                         <RouterLink
                           component={Link}
                           id={`execution-${item?.id}`}
@@ -271,7 +272,13 @@ export default function Executions() {
                         </RouterLink>
                       </Box>
                     </Box>
-                    <Divider />
+                    <Divider
+                      sx={{
+                        borderStyle: 'dashed',
+                        borderColor: 'var(--palette-divider)',
+                        borderWidth: '0px 0px thin',
+                      }}
+                    />
                   </Box>
                 ) : (
                   <Box key={item.id} id={`list-${item.id}`} className={styles.listWrapper}>
@@ -336,7 +343,7 @@ export default function Executions() {
               })}
           </Box>
         )}
-      </Paper>
+      </Card>
       {totalPages > 1 ? (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
           <Pagination

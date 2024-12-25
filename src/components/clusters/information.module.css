@@ -1,65 +1,161 @@
+.container {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wrapper {
+  padding-top: 1.5rem;
+  width: 100%;
+  display: inline-flex;
+}
+
+.wrapper:last-child {
+  padding-top: 1rem;
+  width: 100%;
+  display: inline-flex;
+}
+
+.informationWrapper {
+  padding: 1.5rem;
+}
+
+.classNameWrapper {
+  padding-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.clusterIcon {
+  width: 2.8rem;
+  height: 2.8rem;
+  margin-right: 1rem;
+}
+
+.updateClusterIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-right: 0.4rem;
+}
+
+.deleteClusterIcon {
+  width: 6rem;
+  height: 6rem;
+}
+
+.className {
+  padding-bottom: 0.4rem;
+  font-family: 'mabry-bold' !important;
+}
+
+/* .informationWrapper:nth-child(5) {
+  display: flex;
+  align-items: center;
+  width: 66.66%;
+  padding: 1rem;
+} */
+
+.informationLable {
+  color: #80828b;
+  /* font-family: 'mabry-bold' !important; */
+  margin-right: 0.3rem !important;
+}
+
+.informationIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-right: 0.5rem;
+}
+
+.informationTitel {
+  display: flex;
+  align-items: center;
+  width: 80%;
+}
+
+.informationDescriptionTitel {
+  display: flex;
+  align-items: center;
+  width: 40% !important;
+}
+
+.divider {
+  margin: 1.5rem 0px;
+  flex-shrink: 0;
+  border-width: 0px 0px thin;
+  border-color: var(--palette-divider);
+  border-style: dashed;
+}
+
 .clusterContainer {
   display: flex;
   justify-content: space-between;
-  padding-top: 1.4rem;
-  padding-bottom: 1.4rem;
+  flex-wrap: wrap;
+
+  /* background-color: #f7f7f8 !important; */
 }
 
 .clusterWrap {
   display: flex;
+  /* align-items: center; */
+  width: 25%;
   flex-direction: column;
-  align-items: center;
-  width: 20%;
 }
 
 .clusterTitle {
   display: flex;
   align-items: center;
+  padding-bottom: 0.4rem;
+}
+
+.clusterContent {
+  font-family: 'mabry-bold' !important;
+}
+
+.schedulerClusterID {
+  display: flex;
+  align-items: center;
 }
 
 .descriptionIcon {
-  width: 0.8rem !important ;
-  height: 0.8rem !important;
+  width: 0.9rem !important ;
+  height: 0.9rem !important;
 }
 
 .descriptionIcon:hover {
   color: var(--description-color);
 }
 
-.container {
-  display: flex;
-  margin-top: 2rem;
+.configLable {
+  color: var(--table-title-text-color);
+  margin-right: 0.2rem !important;
+  font-family: 'mabry-bold' !important;
 }
 
-.scopesContainer {
+.scopesLable {
+  color: var(--button-color) !important;
+  font-family: 'mabry-bold' !important;
+  margin-right: 0.2rem !important;
+  padding-left: 0.4rem;
+}
+
+.scopesTitle {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
-  width: 60%;
-  align-items: stretch;
-}
-
-.scopesCard {
-  width: 50%;
-  padding-right: 0.6rem;
-}
-
-.scopesCard:nth-child(1) {
-  padding-bottom: 0.6rem !important;
-}
-
-.scopesCard:nth-child(2) {
-  padding-bottom: 0.6rem !important;
+  margin-bottom: 1.5rem;
 }
 
 .scopesContentContainer {
-  display: flex;
-  flex-wrap: wrap;
-  height: 100%;
+  padding-right: 1.5rem;
+  width: 70%;
+  gap: calc(1.5rem);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .locationContainer {
-  height: 100%;
   padding: 1.4rem;
   display: flex;
   flex-direction: column;
@@ -67,18 +163,20 @@
 }
 
 .scopesIcon {
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1.6rem;
+  height: 1.6rem;
 }
 
-.scopesIconContainer {
+.totalContainer {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background-color: #2e8f791c;
-  border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
+  padding: 0.3rem;
+  background-color: var(--menu-background-color) !important;
+}
+
+.totalIcon {
+  width: 1rem;
+  height: 1rem;
 }
 
 .locationTitle {
@@ -87,23 +185,24 @@
 }
 
 .locationTextContainer {
-  height: 2rem;
   display: flex;
   align-items: flex-end;
 }
 
 .locationContent {
-  white-space: nowrap;
+  width: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cidrsContainer {
-  height: 100%;
-  padding: 1rem;
+  padding: 1.2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  /* height: 9rem; */
+  /* background-color: #f4f6f8 !important; */
 }
 
 .cidrsTitleWrapper {
@@ -175,47 +274,65 @@
 }
 
 .cidrsContent {
+  background-color: var(--palette-background-inactive) !important;
   width: 6rem;
-  height: 1.6rem;
-  margin-right: 0.6rem;
+  height: 1.8rem;
+  margin-right: 1rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   margin-top: 0.4rem;
   padding: 0.5rem;
-  border-radius: 2rem !important;
 }
 
 .cidrsText {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: #637381;
+  /* font-family: 'mabry-bold' !important; */
 }
 
 .configRightContainer {
-  width: 40%;
-  max-width: 55rem;
   display: flex;
   flex-direction: column;
+  margin-top: 2rem;
 }
 
-.configContainer {
+.scopesWrapper {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
+  width: 70%;
+}
+
+.configTitle {
+  display: flex;
+  align-items: center;
 }
 
 .configListContainer {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-around;
+  width: 30%;
+  gap: calc(0.8rem);
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  padding: 1.5rem;
 }
 
 .configContent {
-  padding: 0.8rem;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+}
+
+.configContentTitle {
+  /* width: 85%; */
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.4rem;
+}
+
+.configText {
+  width: 15%;
+  font-family: 'mabry-bold' !important;
 }
 
 .idcDialogContainer {
@@ -226,7 +343,7 @@
 
 .cidrsDialogContent {
   width: 45%;
-  background-color: #f4f3f6 !important;
+  background-color: #f7f7f8 !important;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -243,7 +360,7 @@
 
 .idcDialogContent {
   width: 45%;
-  background-color: #f4f3f6 !important;
+  background-color: #f7f7f8 !important;
   display: flex;
   align-items: center;
   justify-content: flex-start;

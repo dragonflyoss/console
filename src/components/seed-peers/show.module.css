@@ -1,21 +1,27 @@
 .container {
-  display: flex;
+  padding: 1rem 2rem;
 }
 
 .headerContainer {
-  width: 25%;
-  margin-right: 1rem;
-  padding: 1.4rem;
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
 }
 
 .headerContent {
+  width: 30%;
   display: flex;
   align-items: center;
-  margin-bottom: 0.6rem;
 }
 
 .headerTitle {
-  margin-left: 0.6rem !important;
+  margin-left: 1rem !important;
+  color: var(--palette-detail-lable-color);
+  font-family: 'mabry-bold' !important;
+}
+
+.headerText {
+  font-family: 'mabry-bold' !important;
 }
 
 .clusterIDContaine {
@@ -31,6 +37,7 @@
 
 .clusterIDTitle {
   margin-left: 0.6rem !important;
+  color: var(--table-title-text-color);
 }
 
 .seedPeerContainer {
@@ -48,4 +55,15 @@
 .headerIcon {
   width: 1.4rem;
   height: 1.4rem;
+}
+
+.hostname {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text {
+  color: var(--table-title-text-color);
+  padding-bottom: 1rem;
 }

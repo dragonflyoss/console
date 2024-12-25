@@ -32,12 +32,13 @@ import { getBJTDatetime, getPaginatedList, useQuery } from '../../../../lib/util
 import _ from 'lodash';
 import SearchTaskAnimation from '../../../search-task-animation';
 import { useNavigate } from 'react-router-dom';
-import { CancelLoadingButton, SavelLoadingButton } from '../../../loading-button';
+import { CancelLoadingButton, DeleteLoadingButton, SavelLoadingButton } from '../../../loading-button';
 import HelpIcon from '@mui/icons-material/Help';
 import SearchIcon from '@mui/icons-material/Search';
 import SearchCircularProgress from '../../../circular-progress';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import LinkOutlinedIcon from '@mui/icons-material/LinkOutlined';
+import Card from '../../../card';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
@@ -164,7 +165,7 @@ export default function Clear() {
       helperText: urlError ? 'Fill in the characters, the length is 0-1000.' : '',
       error: urlError,
       InputProps: {
-        startAdornment: <SearchIcon sx={{ color: '#9BA0A6' }} />,
+        startAdornment: <SearchIcon className={styles.circularProgress} sx={{ color: '#919EAB' }} />,
         endAdornment: searchTask ? (
           <IconButton type="button" sx={{ p: 0 }} aria-label="search">
             <ClearIcon />
@@ -323,7 +324,7 @@ export default function Clear() {
         startAdornment: isLoading ? (
           <SearchCircularProgress className={styles.circularProgress} />
         ) : (
-          <SearchIcon sx={{ color: '#9BA0A6' }} />
+          <SearchIcon className={styles.circularProgress} sx={{ color: '#9BA0A6' }} />
         ),
         endAdornment: searchTask ? (
           <IconButton
@@ -751,7 +752,7 @@ export default function Clear() {
                   const currentPageData = getPaginatedList(peer?.peers, taskPage, 5);
                   return (
                     <Box mb="2rem" key={index}>
-                      <Paper variant="outlined">
+                      <Card>
                         <Box
                           sx={{
                             display: 'flex',
@@ -792,7 +793,7 @@ export default function Clear() {
                           </Box>
                           <Button
                             size="small"
-                            sx={{ background: 'var(--button-color)', borderRadius: '0' }}
+                            sx={{ background: 'var(--button-color)' }}
                             variant="contained"
                             onClick={(event) => {
                               event.stopPropagation();
@@ -806,7 +807,12 @@ export default function Clear() {
                         </Box>
                         <Divider />
                         <Box
-                          sx={{ p: '1rem 0.8rem', display: 'flex', alignItems: 'center', backgroundColor: '#f6f6f6' }}
+                          sx={{
+                            p: '1rem 0.8rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            backgroundColor: 'var(--table-title-color)',
+                          }}
                         >
                           <Box width="20%" sx={{ display: 'flex', alignItems: 'center' }}>
                             <Typography variant="body2" fontFamily="mabry-bold" className={styles.hostnameTitle}>
@@ -949,7 +955,7 @@ export default function Clear() {
                             );
                           })}
                         </Box>
-                      </Paper>
+                      </Card>
                       {totalPage > 1 ? (
                         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
                           <Pagination
@@ -1048,10 +1054,15 @@ export default function Clear() {
                 sx={{ width: '1.4rem', height: '1.4rem', pr: '0.2rem' }}
               />
               <Box>
-                <Typography variant="body1" fontFamily="mabry-bold" component="span" sx={{ color: '#D81E06' }}>
+                <Typography
+                  variant="body1"
+                  fontFamily="mabry-bold"
+                  component="span"
+                  sx={{ color: 'var(--delete-button-color)' }}
+                >
                   WARNING:&nbsp;
                 </Typography>
-                <Typography variant="body1" component="span" sx={{ color: '#D81E06' }}>
+                <Typography variant="body1" component="span" sx={{ color: 'var(--delete-button-color)' }}>
                   This action CANNOT be undone.
                 </Typography>
               </Box>
@@ -1079,7 +1090,7 @@ export default function Clear() {
             />
             <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
               <CancelLoadingButton id="cancelDeleteCluster" loading={deleteLoadingButton} onClick={handleClose} />
-              <SavelLoadingButton
+              <DeleteLoadingButton
                 loading={deleteLoadingButton}
                 endIcon={<DeleteIcon />}
                 id="deleteTask"

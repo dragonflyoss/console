@@ -22,24 +22,40 @@
 }
 
 .avatarContent {
-  width: 6rem !important;
-  height: 6rem !important;
+  width: 5rem !important;
+  height: 5rem !important;
   background-color: var(--button-color) !important;
 }
 
 .informationHeader {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  align-items: center;
+  padding: 1.5rem 2rem;
 }
 
 .informationContainer {
-  display: flex;
   flex-wrap: wrap;
+  padding: 1rem 2rem;
 }
 
 .informationContent {
-  width: 34%;
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+.editIcon {
+  color: var(--palette-text-disabled);
+}
+
+.informationLable {
+  width: 30%;
+  display: flex;
+  align-items: center;
+}
+
+.informationLableText {
+  margin-left: 1rem !important;
+  color: var(--palette-detail-lable-color);
+  font-family: 'mabry-bold' !important;
 }

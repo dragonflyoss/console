@@ -20,15 +20,28 @@
   --button-loading-color: #dedede;
   --button-loading-size-color: #000000;
   --scopes-icon-color: #edeff2;
-  --table-title-color: #f6f6f6;
+  --table-title-color: #f4f6f8;
   --title-light-color: #7a7a7a;
-  --menu-background-color: rgba(0, 167, 111, 0.08);
+  --menu-background-color: rgba(0, 167, 111, 0.1);
   --hover-menu-background-color: rgba(0, 167, 111, 0.2);
   --menu-color: #00a76f;
+  --table-title-text-color: #637381;
+  --palette-background-paper: #ffffff;
+  --no-data-color: 145 158 171;
+  --palette-text-disabled: #919eab;
+  --text---palette-text-secondary: #637381;
+  --palette-divider: rgba(145 158 171 / 0.4);
+  --palette-background-neutral: #f4f6f8;
+  --palette-background-inactive: rgb(145 158 171 / 0.16);
+  --palette-card-hover-background-color: #f4f6f8;
+  --palette-detail-lable-color: #515151;
+  --palette-action-hover: rgba(145 158 171 / 0.08);
+  --delete-button-color: #d42536;
+  --delete-button-hover-color: #d42537b8;
 }
 
 body {
-  font-family: 'mabry-light', sans-serif;
+  font-family: 'mabry-light' !important;
 }
 
 h2 {

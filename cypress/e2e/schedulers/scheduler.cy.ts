@@ -61,17 +61,16 @@ describe('Scheduler', () => {
   });
 
   it('click the hostname', () => {
-    cy.visit('/clusters/1');
+    cy.visit('/clusters/1/schedulers');
 
-    cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(2) > .MuiTypography-root').should(
-      'have.text',
-      'scheduler-7',
-    );
+    cy.get('#table').click();
 
-    cy.get('#scheduler-table-body > :nth-child(1) > :nth-child(2) > .MuiTypography-root').click();
+    cy.get('#hostname-scheduler-51').should('have.text', 'scheduler-51');
+
+    cy.get('#hostname-scheduler-51').click();
 
     // Then I see that the current page is the clusters/1/schedulers/7!
-    cy.url().should('include', '/clusters/1/schedulers/7');
+    cy.url().should('include', '/clusters/1/schedulers/51');
   });
 
   it('click the breadcrumb', () => {
@@ -102,43 +101,34 @@ describe('Scheduler', () => {
 
     it('can display active scheduler', () => {
       // Show id.
-      cy.get('.show_container__qetel > :nth-child(1) > .css-1n0qe7k-MuiTypography-root')
-        .should('be.visible')
-        .and('contain', '7');
+      cy.get('#id').should('be.visible').and('contain', '7');
 
       // Show hostname.
-      cy.get(':nth-child(2) > .css-1n0qe7k-MuiTypography-root').should('be.visible').and('contain', 'scheduler-7');
+      cy.get('#hostname').should('be.visible').and('contain', 'scheduler-7');
 
       // Show ip.
-      cy.get(':nth-child(3) > .css-1n0qe7k-MuiTypography-root').should('be.visible').and('contain', '30.44.98.202');
+      cy.get('#ip').should('be.visible').and('contain', '30.44.98.202');
 
       // Show cluster id.
-      cy.get('.show_clusterIDContaine__Gvk7F > .css-1n0qe7k-MuiTypography-root')
-        .should('be.visible')
-        .and('contain', '1');
+      cy.get('#cluster-id').should('be.visible').and('contain', '1');
 
       // Show port.
-      cy.get('.show_schedulerContainer__euX4O > :nth-child(1) > .css-1n0qe7k-MuiTypography-root')
-        .should('be.visible')
-        .and('contain', '8002');
+      cy.get('#port').should('be.visible').and('contain', '8002');
 
       // Show Active background color.
-      cy.get(':nth-child(2) > .MuiChip-root')
+      cy.get('#status')
         .should('be.visible')
         .and('contain', 'Active')
         .and('have.css', 'background-color', 'rgb(46, 143, 121)');
 
       // Show features.
-      cy.get('.show_schedulerContainer__euX4O > :nth-child(3)')
-        .should('be.visible')
-        .and('contain', 'Schedule')
-        .and('contain', 'Preheat');
+      cy.get('#features').should('be.visible').and('contain', 'Schedule').and('contain', 'Preheat');
 
       // Show created at.
-      cy.get(':nth-child(4) > .MuiChip-root').should('have.text', '2023-11-09 07:09:06');
+      cy.get('#created-at').should('have.text', '2023-11-09 07:09:06');
 
       // Show updated at.
-      cy.get(':nth-child(5) > .MuiChip-root').should('have.text', '2023-11-09 07:09:11');
+      cy.get('#updated-at').should('have.text', '2023-11-09 07:09:11');
     });
 
     it('can display inactive scheduler', () => {
@@ -158,10 +148,10 @@ describe('Scheduler', () => {
       cy.visit('/clusters/1/schedulers/2');
 
       // Show hostname.
-      cy.get(':nth-child(2) > .css-1n0qe7k-MuiTypography-root').should('be.visible').and('contain', 'scheduler-2');
+      cy.get('#hostname').should('be.visible').and('contain', 'scheduler-2');
 
       // Show Inactive background color.
-      cy.get(':nth-child(2) > .MuiChip-root')
+      cy.get('#status')
         .should('be.visible')
         .and('contain', 'Inactive')
         .and('have.css', 'background-color', 'rgb(28, 41, 58)');
@@ -188,34 +178,31 @@ describe('Scheduler', () => {
 
     it('scheduler should render empty status', () => {
       // Show ID.
-      cy.get('.show_container__qetel > :nth-child(1) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      cy.get('#id').should('contain', '-');
 
       // Show Hostname.
-      cy.get(':nth-child(2) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      cy.get('#hostname').should('contain', '-');
 
       // Show IP.
-      cy.get(':nth-child(3) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      cy.get('#ip').should('contain', '-');
 
       // Show Cluster ID.
-      cy.get('.show_clusterIDContaine__Gvk7F > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      cy.get('#cluster-id').should('contain', '-');
 
       // Show Port.
-      cy.get('.show_schedulerContainer__euX4O > :nth-child(1) > .css-1n0qe7k-MuiTypography-root').should(
-        'contain',
-        '-',
-      );
+      cy.get('#port').should('contain', '-');
 
       // Show Start.
-      cy.get('.show_schedulerContainer__euX4O > :nth-child(2)').should('contain', '-');
+      cy.get(':nth-child(5) > .show_headerText__TxL6s').should('contain', '-');
 
       // Show Features.
-      cy.get('.show_schedulerContainer__euX4O > :nth-child(3)').should('contain', '-');
+      cy.get('#features').should('contain', '-');
 
       // Show Created At.
-      cy.get(':nth-child(4) > .MuiChip-root').should('not.exist');
+      cy.get('#created-at').should('contain', '-');
 
       // Show Updated At.
-      cy.get(':nth-child(5) > .MuiChip-root').should('not.exist');
+      cy.get('#updated-at').should('contain', '-');
     });
   });
 
@@ -254,34 +241,31 @@ describe('Scheduler', () => {
 
     it('scheduler should render empty status', () => {
       // Show ID.
-      cy.get('.show_container__qetel > :nth-child(1) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      cy.get('#id').should('contain', '-');
 
       // Show Hostname.
-      cy.get(':nth-child(2) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      cy.get('#hostname').should('contain', '-');
 
       // Show IP.
-      cy.get(':nth-child(3) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      cy.get('#ip').should('contain', '-');
 
       // Show Cluster ID.
-      cy.get('.show_clusterIDContaine__Gvk7F > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      cy.get('#cluster-id').should('contain', '-');
 
       // Show Port.
-      cy.get('.show_schedulerContainer__euX4O > :nth-child(1) > .css-1n0qe7k-MuiTypography-root').should(
-        'contain',
-        '-',
-      );
+      cy.get('#port').should('contain', '-');
 
       // Show Start.
-      cy.get('.show_schedulerContainer__euX4O > :nth-child(2)').should('contain', '-');
+      cy.get(':nth-child(5) > .show_headerText__TxL6s').should('contain', '-');
 
       // Show Features.
-      cy.get('.show_schedulerContainer__euX4O > :nth-child(3)').should('contain', '-');
+      cy.get('#features').should('contain', '-');
 
       // Show Created At.
-      cy.get(':nth-child(4) > .MuiChip-root').should('not.exist');
+      cy.get('#created-at').should('contain', '-');
 
       // Show Updated At.
-      cy.get(':nth-child(5) > .MuiChip-root').should('not.exist');
+      cy.get('#updated-at').should('contain', '-');
     });
   });
 });

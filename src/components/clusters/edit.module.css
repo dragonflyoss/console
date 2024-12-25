@@ -2,6 +2,13 @@
   width: 70%;
 }
 
+.header {
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
 .informationTitle {
   display: flex;
   align-items: center;

@@ -13,7 +13,16 @@ export async function get(url: URL) {
     if (response.status === 200) {
       return response;
     }
-    const errorMessage = (await response.json())?.message;
+
+    let errorMessage = null;
+
+    if (response.headers.get('Content-Type')?.includes('application/json')) {
+      const jsonResponse = await response.json();
+      errorMessage = jsonResponse?.message || response.statusText;
+    } else {
+      errorMessage = await response.text();
+    }
+
     throw new Error(errorMessage && typeof errorMessage === 'string' ? errorMessage : response.statusText);
   } catch (err) {
     if (err instanceof Error) {
@@ -36,7 +45,16 @@ export async function post(url: URL, request = {}) {
     if (response.status === 200) {
       return response;
     }
-    const errorMessage = (await response.json())?.message;
+
+    let errorMessage = null;
+
+    if (response.headers.get('Content-Type')?.includes('application/json')) {
+      const jsonResponse = await response.json();
+      errorMessage = jsonResponse?.message || response.statusText;
+    } else {
+      errorMessage = await response.text();
+    }
+
     throw new Error(errorMessage && typeof errorMessage === 'string' ? errorMessage : response.statusText);
   } catch (err) {
     if (err instanceof Error) {
@@ -59,7 +77,16 @@ export async function patch(url: URL, request = {}) {
     if (response.status === 200) {
       return response;
     }
-    const errorMessage = (await response.json())?.message;
+
+    let errorMessage = null;
+
+    if (response.headers.get('Content-Type')?.includes('application/json')) {
+      const jsonResponse = await response.json();
+      errorMessage = jsonResponse?.message || response.statusText;
+    } else {
+      errorMessage = await response.text();
+    }
+
     throw new Error(errorMessage && typeof errorMessage === 'string' ? errorMessage : response.statusText);
   } catch (err) {
     if (err instanceof Error) {
@@ -81,7 +108,16 @@ export async function destroy(url: URL) {
     if (response.status === 200) {
       return response;
     }
-    const errorMessage = (await response.json())?.message;
+
+    let errorMessage = null;
+
+    if (response.headers.get('Content-Type')?.includes('application/json')) {
+      const jsonResponse = await response.json();
+      errorMessage = jsonResponse?.message || response.statusText;
+    } else {
+      errorMessage = await response.text();
+    }
+
     throw new Error(errorMessage && typeof errorMessage === 'string' ? errorMessage : response.statusText);
   } catch (err) {
     if (err instanceof Error) {
@@ -103,7 +139,16 @@ export async function put(url: URL) {
     if (response.status === 200) {
       return response;
     }
-    const errorMessage = (await response.json())?.message;
+
+    let errorMessage = null;
+
+    if (response.headers.get('Content-Type')?.includes('application/json')) {
+      const jsonResponse = await response.json();
+      errorMessage = jsonResponse?.message || response.statusText;
+    } else {
+      errorMessage = await response.text();
+    }
+
     throw new Error(errorMessage && typeof errorMessage === 'string' ? errorMessage : response.statusText);
   } catch (err) {
     if (err instanceof Error) {
@@ -860,7 +905,6 @@ interface cerateJobResponse {
     tag: string;
     type: string;
     url: string;
-    scope: string;
   };
   result: string;
 }
@@ -874,6 +918,7 @@ export async function createJob(request: createJobRequest): Promise<cerateJobRes
 interface getpeerParams {
   page?: number;
   per_page?: number;
+  scheduler_cluster_id?: number;
 }
 
 export interface getPeersResponse {
@@ -933,6 +978,17 @@ export async function getPeers(params?: getpeerParams): Promise<getPeersResponse
     : new URL('/api/v1/peers', API_URL);
 
   const response = await get(url);
+  return await response.json();
+}
+
+interface SyncPeers {
+  type: string;
+  scheduler_cluster_ids?: Array<number>;
+}
+
+export async function getSyncPeers(request: SyncPeers): Promise<string> {
+  const url = new URL(`/api/v1/jobs`, API_URL);
+  const response = await post(url, request);
   return await response.json();
 }
 

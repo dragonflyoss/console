@@ -28,6 +28,7 @@ import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { getBJTDatetime } from '../../../lib/utils';
 import styles from './show.module.css';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import Card from '../../card';
 
 const theme = createTheme({
   palette: {
@@ -155,7 +156,7 @@ export default function ShowPreheat() {
         Preheat
       </Typography>
       <Box width="100%">
-        <Paper variant="outlined" sx={{ p: '1rem 2rem' }}>
+        <Card className={styles.container}>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
               <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/id.svg" />
@@ -379,7 +380,7 @@ export default function ShowPreheat() {
               <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
             ) : preheat?.args?.headers && preheat?.args?.headers !== null ? (
               Object.keys(preheat?.args?.headers).length > 0 ? (
-                <Paper id="headers" variant="outlined" className={styles.headersContent}>
+                <Card id="headers" className={styles.headersContent}>
                   {Object.entries(preheat?.args.headers).map(([key, value], index) => (
                     <Box key={index} className={styles.headersText}>
                       <Box fontFamily="mabry-bold" width="35%" mr="1rem">
@@ -388,7 +389,7 @@ export default function ShowPreheat() {
                       <Box width="65%">{value}</Box>
                     </Box>
                   ))}
-                </Paper>
+                </Card>
               ) : (
                 <Typography id="headers" variant="body1" className={styles.informationContent}>
                   -
@@ -452,7 +453,7 @@ export default function ShowPreheat() {
               </Typography>
             )}
           </Box>
-        </Paper>
+        </Card>
         <Drawer anchor="right" open={errorLog} onClose={handleClose}>
           <Box role="presentation" sx={{ width: '28rem' }}>
             <Box sx={{ height: '100vh', backgroundColor: '#24292f' }}>

@@ -54,13 +54,12 @@ describe('Seed peer', () => {
   });
 
   it('click the hostname', () => {
-    cy.visit('/clusters/1');
+    cy.visit('/clusters/1/seed-peers');
 
-    cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(2) > .MuiTypography-root').should(
-      'have.text',
-      'seed-peer-10',
-    );
-    cy.get('#seed-peer-table-body > :nth-child(1) > :nth-child(2) > .MuiTypography-root').click();
+    cy.get(':nth-child(4) > .MuiButtonBase-root').click();
+
+    cy.get('#card-hostname-seed-peer-10').should('have.text', 'seed-peer-10');
+    cy.get('#card-hostname-seed-peer-10').click();
 
     // Then I see that the current page is the clusters/1/seed-peers/10!
     cy.url().should('include', '/clusters/1/seed-peers/10');
@@ -95,42 +94,40 @@ describe('Seed peer', () => {
 
     it('can display active seed peer', () => {
       // Show ID.
-      cy.get('.show_container__nkAxK > :nth-child(1)').should('be.visible').and('contain', '10');
+      cy.get('#id').should('be.visible').and('contain', '10');
 
       // Show Hostname.
-      cy.get('.show_container__nkAxK > :nth-child(2)').should('be.visible').and('contain', 'seed-peer-10');
+      cy.get('#hostname').should('be.visible').and('contain', 'seed-peer-10');
 
       // Show IP.
-      cy.get('.show_container__nkAxK > :nth-child(3)').should('be.visible').and('contain', '33.149.137.183');
+      cy.get('#ip').should('be.visible').and('contain', '33.149.137.183');
 
       // Show Cluster ID.
-      cy.get('.show_clusterIDContaine__GdZwH').should('be.visible').and('contain', '1');
+      cy.get('#cluster-id').should('be.visible').and('contain', '1');
 
       // Show Port.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(1)').should('be.visible').and('contain', '65006');
+      cy.get('#port').should('be.visible').and('contain', '65006');
 
       // Show Download Port.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(2)').should('be.visible').and('contain', '65002');
+      cy.get('#download-port').should('be.visible').and('contain', '65002');
 
       // Show Object Storage Port.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(3) > .css-1n0qe7k-MuiTypography-root')
-        .should('be.visible')
-        .and('contain', '443');
+      cy.get('#object-storage-port').should('be.visible').and('contain', '443');
 
       // Show Type.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(4)').should('be.visible').and('contain', 'Supe');
+      cy.get('#type').should('be.visible').and('contain', 'Supe');
 
       // Show Active background color.
-      cy.get(':nth-child(5) > .MuiChip-root')
+      cy.get('#status')
         .should('be.visible')
         .and('contain', 'Active')
         .and('have.css', 'background-color', 'rgb(46, 143, 121)');
 
       // Show Created At.
-      cy.get(':nth-child(6) > .MuiChip-root > .MuiChip-label').should('have.text', '2023-11-11 20:09:08');
+      cy.get('#created-at').should('have.text', '2023-11-11 20:09:08');
 
       // Show Updated At.
-      cy.get(':nth-child(7) > .MuiChip-root > .MuiChip-label').should('have.text', '2023-11-11 20:09:13');
+      cy.get('#updated-at').should('have.text', '2023-11-11 20:09:13');
     });
 
     it('can display inactive seed peer', () => {
@@ -144,10 +141,10 @@ describe('Seed peer', () => {
       cy.visit('/clusters/1/seed-peers/11');
 
       // Show Hostname.
-      cy.get('.show_container__nkAxK > :nth-child(2)').should('be.visible').and('contain', 'seed-peer-11');
+      cy.get('#hostname').should('be.visible').and('contain', 'seed-peer-11');
 
       // Show Inactive background color.
-      cy.get(':nth-child(5) > .MuiChip-root')
+      cy.get('#status')
         .should('be.visible')
         .and('contain', 'Inactive')
         .and('have.css', 'background-color', 'rgb(28, 41, 58)');
@@ -175,37 +172,37 @@ describe('Seed peer', () => {
 
     it('seed peer should render empty status', () => {
       // Show ID.
-      cy.get('.show_container__nkAxK > :nth-child(1)').should('contain', '-');
+      cy.get('#id').should('contain', '-');
 
       // Show Hostname.
-      cy.get('.show_container__nkAxK > :nth-child(2)').should('contain', '-');
+      cy.get('#hostname').should('contain', '-');
 
       // Show IP.
-      cy.get('.show_container__nkAxK > :nth-child(3)').should('contain', '-');
+      cy.get('#ip').should('contain', '-');
 
       // Show Cluster ID.
-      cy.get('.show_clusterIDContaine__GdZwH').should('contain', '-');
+      cy.get('#cluster-id').should('contain', '-');
 
       // Show Port.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(1)').should('contain', '-');
+      cy.get('#port').should('contain', '-');
 
       // Show Download Port.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(2)').should('contain', '-');
+      cy.get('#download-port').should('contain', '-');
 
       // Show Object Storage Port.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(3) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      cy.get('#object-storage-port').should('contain', '-');
 
       // Show Type.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(4)').should('contain', '-');
+      cy.get('#type').should('contain', '-');
 
       // Show Start.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(5)').should('contain', '-');
+      cy.get(':nth-child(6) > .css-1q4o9qp-MuiTypography-root').should('contain', '-');
 
       // Show Created At.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(6)').should('contain', '-');
+      cy.get('#created-at').should('contain', '-');
 
       // Show Updated At.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(7)').should('contain', '-');
+      cy.get('#updated-at').should('contain', '-');
     });
   });
 
@@ -239,37 +236,37 @@ describe('Seed peer', () => {
 
     it('seed peer should render empty status', () => {
       // Show ID.
-      cy.get('.show_container__nkAxK > :nth-child(1)').should('contain', '-');
+      cy.get('#id').should('contain', '-');
 
       // Show Hostname.
-      cy.get('.show_container__nkAxK > :nth-child(2)').should('contain', '-');
+      cy.get('#hostname').should('contain', '-');
 
       // Show IP.
-      cy.get('.show_container__nkAxK > :nth-child(3)').should('contain', '-');
+      cy.get('#ip').should('contain', '-');
 
       // Show Cluster ID.
-      cy.get('.show_clusterIDContaine__GdZwH').should('contain', '-');
+      cy.get('#cluster-id').should('contain', '-');
 
       // Show Port.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(1)').should('contain', '-');
+      cy.get('#port').should('contain', '-');
 
       // Show Download Port.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(2)').should('contain', '-');
+      cy.get('#download-port').should('contain', '-');
 
       // Show Object Storage Port.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(3) > .css-1n0qe7k-MuiTypography-root').should('contain', '-');
+      cy.get('#object-storage-port').should('contain', '-');
 
       // Show Type.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(4)').should('contain', '-');
+      cy.get('#type').should('contain', '-');
 
       // Show Start.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(5)').should('contain', '-');
+      cy.get(':nth-child(6) > .css-1q4o9qp-MuiTypography-root').should('contain', '-');
 
       // Show Created At.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(6)').should('contain', '-');
+      cy.get('#created-at').should('contain', '-');
 
       // Show Updated At.
-      cy.get('.show_seedPeerContainer__X4hKN > :nth-child(7)').should('contain', '-');
+      cy.get('#updated-at').should('contain', '-');
     });
   });
 });

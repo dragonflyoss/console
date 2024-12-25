@@ -477,66 +477,66 @@
                 </g>
             </g>
         </g>
-        <text id="P2P-File-Distributio" font-family="MabryPro-Bold, Mabry Pro" font-size="15" font-weight="bold" letter-spacing="0.3">
+        <text id="P2P-File-Distributio" font-family="mabry-bold, Mabry Pro" font-size="15" font-weight="bold" letter-spacing="0.3">
             <tspan x="53" y="337" fill="#2E8F79">P2P File Distribution</tspan>
             <tspan x="53" y="355" font-family="Times-Roman, Times" font-size="21" font-weight="normal" letter-spacing="1.1" fill="#1B1B1B"></tspan>
         </text>
-        <text id="Ecosystem" font-family="MabryPro-Bold, Mabry Pro" font-size="15" font-weight="bold" letter-spacing="0.285714">
+        <text id="Ecosystem" font-family="mabry-bold, Mabry Pro" font-size="15" font-weight="bold" letter-spacing="0.285714">
             <tspan x="294" y="549" fill="#2E8F79">Ecosystem</tspan>
             <tspan x="371.512832" y="549" font-family="ComicSansMS, Comic Sans MS" font-weight="normal" letter-spacing="0.785714286" fill="#1B1B1B"></tspan>
         </text>
-        <text id="Peer-Level-Control" font-family="MabryPro-Bold, Mabry Pro" font-size="15" font-weight="bold" letter-spacing="0.285714">
+        <text id="Peer-Level-Control" font-family="mabry-bold, Mabry Pro" font-size="15" font-weight="bold" letter-spacing="0.285714">
             <tspan x="462" y="549" fill="#2E8F79">Peer Level Control</tspan>
             <tspan x="462" y="567" font-family="ComicSansMS, Comic Sans MS" font-weight="normal" letter-spacing="0.785714286" fill="#1B1B1B"></tspan>
         </text>
-        <text id="Consistency" font-family="MabryPro-Bold, Mabry Pro" font-size="15" font-weight="bold" letter-spacing="0.285714">
+        <text id="Consistency" font-family="mabry-bold, Mabry Pro" font-size="15" font-weight="bold" letter-spacing="0.285714">
             <tspan x="85" y="549" fill="#2E8F79">Consistency</tspan>
             <tspan x="85" y="567" font-family="Times-Roman, Times" font-weight="normal" letter-spacing="0.785714286" fill="#239B56"></tspan>
             <tspan x="85" y="585" font-family="Times-Roman, Times" font-size="21" font-weight="normal" letter-spacing="1.1" fill="#1B1B1B"></tspan>
         </text>
-        <text id="Isolate-Abnormal-Pee" font-family="MabryPro-Bold, Mabry Pro" font-size="15" font-weight="bold" letter-spacing="0.285714" fill="#2E8F79">
+        <text id="Isolate-Abnormal-Pee" font-family="mabry-bold, Mabry Pro" font-size="15" font-weight="bold" letter-spacing="0.285714" fill="#2E8F79">
             <tspan x="436" y="337">Isolate Abnormal Peers</tspan>
             <tspan x="603.110903" y="337" letter-spacing="-0.014286"></tspan>
         </text>
-        <text id="Noninvasive" font-family="MabryPro-Bold, Mabry Pro" font-size="15" font-weight="bold" letter-spacing="0.3">
+        <text id="Noninvasive" font-family="mabry-bold, Mabry Pro" font-size="15" font-weight="bold" letter-spacing="0.3">
             <tspan x="287" y="337" fill="#2E8F79">Noninvasive</tspan>
             <tspan x="374.059766" y="337" letter-spacing="1.285714" fill="#239B56"></tspan>
             <tspan x="287" y="355" font-family="Times-Roman, Times" font-weight="normal" letter-spacing="0.785714286" fill="#239B56"></tspan>
             <tspan x="287" y="373" font-family="Times-Roman, Times" font-size="21" font-weight="normal" letter-spacing="1.1" fill="#1B1B1B"></tspan>
         </text>
-        <text id="Use-P2P-technology-f" font-family="MabryPro-Light, Mabry Pro" font-size="12" font-weight="300" letter-spacing="0.4" fill="#5A5A5A" fill-opacity="0.85">
+        <text id="Use-P2P-technology-f" font-family="mabry-light, Mabry Pro" font-size="12" font-weight="300" letter-spacing="0.4" fill="#5A5A5A" fill-opacity="0.85">
             <tspan x="57.6427734" y="366">Use P2P technology for file </tspan>
             <tspan x="57.8917969" y="380">transfer, improve download </tspan>
             <tspan x="50.3814453" y="394">efficiency, and save bandwidth </tspan>
             <tspan x="101.421094" y="408">across IDC.</tspan>
         </text>
-        <text id="Support-for-host-lev" font-family="MabryPro-Light, Mabry Pro" font-size="12" font-weight="300" letter-spacing="0.428571" fill="#5A5A5A" fill-opacity="0.85">
+        <text id="Support-for-host-lev" font-family="mabry-light, Mabry Pro" font-size="12" font-weight="300" letter-spacing="0.428571" fill="#5A5A5A" fill-opacity="0.85">
             <tspan x="454.987869" y="582">Support for host-level limits </tspan>
             <tspan x="516.145928" y="596">speed.</tspan>
         </text>
-        <text id="Automatically-isolat" font-family="MabryPro-Light, Mabry Pro" font-size="12" font-weight="300" letter-spacing="0.4" fill="#5A5A5A" fill-opacity="0.85">
+        <text id="Automatically-isolat" font-family="mabry-light, Mabry Pro" font-size="12" font-weight="300" letter-spacing="0.4" fill="#5A5A5A" fill-opacity="0.85">
             <tspan x="444.350586" y="367">Automatically isolate abnormal </tspan>
             <tspan x="454.083984" y="381">peers to improve download </tspan>
             <tspan x="506.838867" y="395">stability.</tspan>
         </text>
-        <text id="Harbor-can-distribut" font-family="MabryPro-Light, Mabry Pro" font-size="12" font-weight="300" letter-spacing="0.428571" fill="#5A5A5A" fill-opacity="0.85">
+        <text id="Harbor-can-distribut" font-family="mabry-light, Mabry Pro" font-size="12" font-weight="300" letter-spacing="0.428571" fill="#5A5A5A" fill-opacity="0.85">
             <tspan x="265.854777" y="582">Harbor can distribute and </tspan>
             <tspan x="267.513816" y="596">warm up images based on </tspan>
             <tspan x="311.292134" y="610">Dragonfly.</tspan>
         </text>
-        <text id="It-can-ensure-that-t" font-family="MabryPro-Light, Mabry Pro" font-size="12" font-weight="300" letter-spacing="0.428571" fill="#5A5A5A" fill-opacity="0.85">
+        <text id="It-can-ensure-that-t" font-family="mabry-light, Mabry Pro" font-size="12" font-weight="300" letter-spacing="0.428571" fill="#5A5A5A" fill-opacity="0.85">
             <tspan x="61.7523774" y="581">It can ensure that the same </tspan>
             <tspan x="59.3487788" y="595">file is consistent in the peer-</tspan>
             <tspan x="79.2509811" y="609">to-peer transmission.</tspan>
         </text>
-        <text id="Supports-multiple-co" font-family="MabryPro-Light, Mabry Pro" font-size="12" font-weight="300" letter-spacing="0.428571" fill="#5A5A5A" fill-opacity="0.85">
+        <text id="Supports-multiple-co" font-family="mabry-light, Mabry Pro" font-size="12" font-weight="300" letter-spacing="0.428571" fill="#5A5A5A" fill-opacity="0.85">
             <tspan x="250.351569" y="366">Supports multiple containers </tspan>
             <tspan x="266.656953" y="380">for distributing images.</tspan>
         </text>
-        <text id="Features" font-family="MabryPro-Bold, Mabry Pro" font-size="24" font-weight="bold" fill="#000000">
+        <text id="Features" font-family="mabry-bold, Mabry Pro" font-size="24" font-weight="bold" fill="#000000">
             <tspan x="40" y="62">Features</tspan>
         </text>
-        <text id="Dragonfly-provides-a" font-family="MabryPro-Light, Mabry Pro" font-size="14" font-weight="300" letter-spacing="0.175" fill="#5D5D5D">
+        <text id="Dragonfly-provides-a" font-family="mabry-light, Mabry Pro" font-size="14" font-weight="300" letter-spacing="0.175" fill="#5D5D5D">
             <tspan x="41" y="95">Dragonfly provides a one-stop solution for large-scale file distribution. The basic capabilities </tspan>
             <tspan x="41" y="112">provided by Dragonfly include:</tspan>
         </text>

@@ -2,8 +2,6 @@ import clusters from '../../fixtures/clusters/clusters.json';
 import seedPeers from '../../fixtures/seed-peers/seed-peers.json';
 import schedulers from '../../fixtures/schedulers/schedulers.json';
 import cluster from '../../fixtures/clusters/cluster/cluster.json';
-import seedPeer from '../../fixtures/clusters/cluster/seed-peer.json';
-import scheduler from '../../fixtures/clusters/cluster/scheduler.json';
 import deleteCluster from '../../fixtures/clusters/cluster/delete-cluster.json';
 import deleteClusters from '../../fixtures/clusters/cluster/delete-clusters.json';
 
@@ -58,66 +56,32 @@ describe('Cluster', () => {
         });
       },
     );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/seed-peers?page=1&per_page=10000000&seed_peer_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: seedPeer,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: scheduler,
-        });
-      },
-    );
 
     cy.visit('clusters/1');
-    cy.viewport(1440, 2080);
+    cy.viewport(1440, 1080);
   });
 
   describe('when data is loaded', () => {
     it('can display breadcrumb', () => {
       // Show isloading.
       cy.get('[data-testid="cluster-loading"]').should('be.exist');
-      cy.get('[data-testid="scheduler-loading"]').should('be.exist');
-      cy.get('[data-testid="seed-peer-loading"]').should('be.exist');
-
       cy.url().should('include', '/clusters/1');
-
       cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
         .should('be.visible')
         .and('contain', 'cluster-1');
-
       cy.get('.MuiBreadcrumbs-ol > :nth-child(1) > .MuiTypography-root').click();
 
       // Does not show isloading.
       cy.get('[data-testid="cluster-loading"]').should('not.exist');
-      cy.get('[data-testid="scheduler-loading"]').should('not.exist');
-      cy.get('[data-testid="seed-peer-loading"]').should('not.exist');
-
       cy.url().should('include', '/clusters');
     });
 
     it('can display information', () => {
       // Show cluster name.
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
-        .should('be.visible')
-        .and('contain', 'cluster-1');
+      cy.get('#name').should('be.visible').and('contain', 'cluster-1');
 
       // Show cluster description.
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(3) > .MuiTypography-subtitle1')
+      cy.get('#description')
         .should('be.visible')
         .and(
           'contain',
@@ -125,135 +89,72 @@ describe('Cluster', () => {
         );
 
       // Show whether it is the default cluster.
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(5) > .MuiTypography-subtitle1')
-        .should('be.visible')
-        .and('contain', 'Yes');
+      cy.get('#default').should('be.visible').and('contain', 'Yes');
 
       // Show scheduler cluster id.
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(7) > .css-70qvj9 > .MuiTypography-root')
-        .should('be.visible')
-        .and('contain', '1');
+      cy.get('#scheduler-cluster-id').should('be.visible').and('contain', '1');
 
       // Show seed peer cluster id.
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(9) > .css-70qvj9 > .MuiTypography-root')
-        .should('be.visible')
-        .and('contain', '1');
+      cy.get('#seed-peer-cluster-id').should('be.visible').and('contain', '1');
     });
 
     it('can display scopes', () => {
       // Show location.
-      cy.get('.information_locationTextContainer__ZdjKa > .MuiTypography-root')
-        .should('be.visible')
-        .and('contain', 'China|Hang|Zhou');
+      cy.get('#location').should('be.visible').and('contain', 'China|Hang|Zhou');
 
       // Show idc.
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .MuiBox-root > :nth-child(1)',
-      )
-        .should('be.visible')
-        .and('contain', 'Hangzhou');
+      cy.get('#idc-1').should('be.visible').and('contain', 'Hangzhou');
+      cy.get('#idc-2').should('be.visible').and('contain', 'Shanghai');
 
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .MuiBox-root > :nth-child(2)',
-      )
-        .should('be.visible')
-        .and('contain', 'Shanghai');
+      // IDC is not visible.
+      cy.get('#idc-3').should('not.be.visible', 'Beijing');
 
       // The number of idc is 2 and the button is no longer displayed.
       cy.get('#idc').should('exist').click();
 
       // Click the button to show more idc.
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)',
-      )
-        .should('be.visible')
-        .and('have.text', 'Hangzhou');
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)',
-      )
-        .should('be.visible')
-        .and('have.text', 'Shanghai');
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)',
-      ).should('not.be.visible');
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)',
-      ).should('not.be.visible');
-
+      cy.get('.MuiDialogContent-root > :nth-child(1)').should('be.visible').and('have.text', 'Hangzhou');
+      cy.get('.MuiDialogContent-root > :nth-child(2)').should('be.visible').and('have.text', 'Shanghai');
+      cy.get('.MuiDialogContent-root > :nth-child(3)').should('be.visible').and('have.text', 'Beijing');
+      cy.get('.MuiDialogContent-root > :nth-child(4)').should('be.visible').and('have.text', 'Xiamen');
       cy.get('.MuiDialogContent-root').should('exist');
-
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root > .MuiChip-label',
-      ).should('contain', 'Total: 4');
-
+      cy.get('#idc-total').should('contain', 'Total: 5');
       cy.get('body').click('topLeft');
 
       // Show CIDRs
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .MuiBox-root > :nth-child(2) > .MuiTypography-root',
-      )
-        .should('be.visible')
-        .and('contain', '192.168.0.0/16');
-
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root > .MuiChip-label',
-      ).should('contain', 'Total: 4');
+      cy.get('#cidrs-2').should('be.visible').and('contain', '192.168.0.0/16');
+      cy.get('#cidrs-total').should('contain', 'Total: 5');
 
       // Click the button to show more cidrs.
       cy.get('#cidrs').should('exist').click();
 
       // Show idc dialog module.
       cy.get('.MuiDialogContent-root').should('exist');
-
       cy.get('.MuiDialogContent-root').should('be.visible').and('contain', '10.0.0.0/8');
-
       cy.get('body').click('topLeft');
 
-      // The number of CIDRs displayed is 2.
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)',
-      ).should('have.text', '10.0.0.0/8');
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)',
-      ).should('have.text', '192.168.0.0/16');
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)',
-      ).should('not.be.visible');
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)',
-      ).should('not.be.visible');
+      // The number of CIDRs displayed is 3.
+      cy.get('.MuiDialogContent-root > :nth-child(1)').should('have.text', '10.0.0.0/8');
+      cy.get('.MuiDialogContent-root > :nth-child(2)').should('have.text', '192.168.0.0/16');
 
-      // The number of hostnames displayed is 2.
-      cy.get(
-        ':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)',
-      ).should('have.text', 'cluster-1');
-      cy.get(
-        ':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)',
-      ).should('have.text', 'cluster-2');
-      cy.get(
-        ':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)',
-      ).should('not.be.visible');
-      cy.get(
-        ':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)',
-      ).should('not.be.visible');
+      // CIDRs is not visible.
+      cy.get('.MuiDialogContent-root > :nth-child(3)').should('not.be.visible', '172.16.0.0/12');
 
-      cy.get(':nth-child(4) > .MuiPaper-root > .information_cidrsTags__4sKxa')
-        .should('be.visible')
-        .and('contain', 'cluster-1');
+      // The number of hostnames displayed is 3.
+      cy.get('#hostname-1').should('have.text', 'cluster-1');
+      cy.get('#hostname-2').should('have.text', 'cluster-2');
 
-      cy.get(':nth-child(4) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root').should(
-        'contain',
-        'Total: 4',
-      );
+      // Hostname is not visible.
+      cy.get('#hostname-3').should('not.be.visible', 'cluster-3');
+      cy.get('#hostname-4').and('not.be.visible', 'cluster-4');
+      cy.get('#hostnames-total').should('contain', 'Total: 5');
 
       // Click the button to show more cidrs.
       cy.get('#hostnames').should('exist').click();
 
       // Show hostnames dialog module.
       cy.get('.MuiDialogContent-root').children().should('have.length', 4);
-
       cy.get('body').click('topLeft');
-
       cy.get('.MuiDialogContent-root').should('not.be.visible');
     });
 
@@ -261,120 +162,57 @@ describe('Cluster', () => {
       cy.viewport(1920, 1080);
 
       // The number of idc displayed is 3.
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)',
-      )
-        .should('be.visible')
-        .and('have.text', 'Hangzhou');
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)',
-      )
-        .should('be.visible')
-        .and('have.text', 'Shanghai');
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)',
-      )
-        .should('be.visible')
-        .and('have.text', 'Beijing');
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)',
-      ).should('not.be.visible');
+      cy.get('#idc-1').should('be.visible').and('have.text', 'Hangzhou');
+      cy.get('#idc-2').should('be.visible').and('have.text', 'Shanghai');
+      cy.get('#idc-3').should('be.visible').and('have.text', 'Beijing');
+      cy.get('#idc-4').should('not.be.visible');
 
       // The number of CIDRs displayed is 3.
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)',
-      ).should('have.text', '10.0.0.0/8');
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)',
-      ).should('have.text', '192.168.0.0/16');
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)',
-      ).should('have.text', '172.16.0.0/12');
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)',
-      ).should('not.be.visible');
+      cy.get('#cidrs-1').should('be.visible').should('have.text', '10.0.0.0/8');
+      cy.get('#cidrs-2').should('be.visible').should('have.text', '192.168.0.0/16');
+      cy.get('#cidrs-3').should('be.visible').should('have.text', '172.16.0.0/12');
+      cy.get('#cidrs-4').should('not.be.visible');
 
       // The number of hostnames displayed is 3.
-      cy.get(
-        ':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)',
-      ).should('have.text', 'cluster-1');
-      cy.get(
-        ':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)',
-      ).should('have.text', 'cluster-2');
-      cy.get(
-        ':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)',
-      ).should('have.text', 'cluster-3');
-      cy.get(
-        ':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)',
-      ).should('not.be.visible');
+      cy.get('#hostname-1').should('be.visible').should('have.text', 'cluster-1');
+      cy.get('#hostname-2').should('be.visible').should('have.text', 'cluster-2');
+      cy.get('#hostname-3').should('be.visible').should('have.text', 'cluster-3');
+      cy.get('#hostname-4').should('not.be.visible');
     });
 
     it('the visible width of the screen is 1920px. Display scopes', () => {
       cy.viewport(2560, 1080);
 
-      // The number of idc displayed is 4.
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)',
-      )
-        .should('be.visible')
-        .and('have.text', 'Hangzhou');
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)',
-      )
-        .should('be.visible')
-        .and('have.text', 'Shanghai');
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)',
-      )
-        .should('be.visible')
-        .and('have.text', 'Beijing');
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)',
-      )
-        .should('be.visible')
-        .and('have.text', 'Xiamen');
+      // The number of idc displayed is 3.
+      cy.get('#idc-1').should('be.visible').and('have.text', 'Hangzhou');
+      cy.get('#idc-2').should('be.visible').and('have.text', 'Shanghai');
+      cy.get('#idc-3').should('be.visible').and('have.text', 'Beijing');
+      cy.get('#idc-4').should('be.visible').and('have.text', 'Xiamen');
 
-      // The number of CIDRs displayed is 4.
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)',
-      ).should('have.text', '10.0.0.0/8');
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)',
-      ).should('have.text', '192.168.0.0/16');
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)',
-      ).should('have.text', '172.16.0.0/12');
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)',
-      ).should('have.text', '173.16.0.1/11');
+      // The number of CIDRs displayed is 3.
+      cy.get('#cidrs-1').should('be.visible').and('have.text', '10.0.0.0/8');
+      cy.get('#cidrs-2').should('be.visible').and('have.text', '192.168.0.0/16');
+      cy.get('#cidrs-3').should('be.visible').and('have.text', '172.16.0.0/12');
+      cy.get('#cidrs-4').should('be.visible').and('have.text', '173.16.0.1/11');
 
-      // The number of hostnames displayed is 4.
-      cy.get(
-        ':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(1)',
-      ).should('have.text', 'cluster-1');
-      cy.get(
-        ':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(2)',
-      ).should('have.text', 'cluster-2');
-      cy.get(
-        ':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(3)',
-      ).should('have.text', 'cluster-3');
-      cy.get(
-        ':nth-child(4) > .information_cidrsContainer__joiB7 > .information_cidrsTags__4sKxa > .information_cidrWrapper__wLuys > :nth-child(4)',
-      ).should('have.text', 'cluster-4');
+      // The number of hostnames displayed is 3.
+      cy.get('#hostname-1').should('be.visible').and('have.text', 'cluster-1');
+      cy.get('#hostname-2').should('be.visible').and('have.text', 'cluster-2');
+      cy.get('#hostname-3').should('be.visible').and('have.text', 'cluster-3');
+      cy.get('#hostname-4').should('be.visible').and('have.text', 'cluster-4');
     });
 
     it('can display config', () => {
-      cy.get('.MuiPaper-root > :nth-child(1) > .MuiTypography-body1').should('be.visible').and('have.text', '300');
-      cy.get('.MuiPaper-root > :nth-child(3) > .MuiTypography-body1').should('be.visible').and('have.text', '51');
-      cy.get(':nth-child(5) > .MuiTypography-body1').should('be.visible').and('have.text', '4');
-      cy.get(':nth-child(7) > .MuiTypography-body1').should('be.visible').and('have.text', '40');
-      cy.get('#filter-parent-limit').should('be.visible').and('have.text', '15');
+      cy.get('#seed-peer-load-limit').should('be.visible').and('have.text', '300');
+      cy.get('#peer-load-limit').should('be.visible').and('have.text', '51');
+      cy.get('#candidate-parent-limit').should('be.visible').and('have.text', '4');
+      cy.get('#filter-parent-limit').should('be.visible').and('have.text', '40');
+      cy.get('#job-rate-limit').should('be.visible').and('have.text', '15');
     });
 
     it('copies text to clipboard', () => {
       // Click the copy scheduler cluster id icon.
-      cy.get(':nth-child(7) > .css-70qvj9 > .MuiButtonBase-root > .MuiBox-root').click();
-
+      cy.get('#copy-scheduler-cluster-id').click();
       cy.get('#schedulerClusterIDCopyIcon').should('exist');
       cy.get('#schedulerClusterIDTooltip').should('exist');
       cy.wait(1000);
@@ -390,11 +228,9 @@ describe('Cluster', () => {
         .should('equal', '1');
 
       // Click the copy seed peer cluster id icon.
-      cy.get(':nth-child(9) > .css-70qvj9 > .MuiButtonBase-root > .MuiBox-root').click();
-
+      cy.get('#copy-seed-peer-cluster-id').click();
       cy.get('#seedPeerClusterIDCopyIcon').should('exist');
       cy.get('#seedPeerClusterIDTooltip').should('exist');
-
       cy.wait(1000);
 
       // Display successful copy icon.
@@ -453,6 +289,9 @@ describe('Cluster', () => {
     });
 
     it('unable to display breadcrumb', () => {
+      // Show isloading.
+      cy.get('[data-testid="cluster-loading"]').should('be.exist');
+
       cy.url().should('include', '/clusters/1');
 
       cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root').should('be.visible').and('contain', '-');
@@ -462,60 +301,39 @@ describe('Cluster', () => {
     });
 
     it('unable to display information', () => {
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1').should(
-        'have.text',
-        'cluster-1',
-      );
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(3) > .MuiTypography-subtitle1').should(
-        'have.text',
-        '-',
-      );
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(5) > .MuiTypography-subtitle1').should(
-        'have.text',
-        'Yes',
-      );
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(7) > .css-70qvj9 > .MuiTypography-root').should(
-        'have.text',
-        '1',
-      );
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(9) > .css-70qvj9 > .MuiTypography-root').should(
-        'have.text',
-        '1',
-      );
+      cy.get('#name').should('have.text', 'cluster-1');
+      cy.get('#description').should('have.text', '-');
+      cy.get('#default').should('have.text', 'Yes');
+      cy.get('#scheduler-cluster-id').should('have.text', '1');
+      cy.get('#seed-peer-cluster-id').should('have.text', '1');
     });
 
     it('unable to display scopes', () => {
       // Show location.
-      cy.get('.information_locationTextContainer__ZdjKa').should('have.text', '-');
+      cy.get('#no-location').should('have.text', '-');
 
       // Show idc.
       cy.get('#idc').should('not.exist');
-      cy.get(':nth-child(2) > .MuiPaper-root > .information_cidrsTags__4sKxa').should('have.text', '-');
-      cy.get(
-        ':nth-child(2) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root > .MuiChip-label',
-      ).should('have.text', 'Total: 0');
+      cy.get('#no-idc').should('have.text', '-');
+      cy.get('#idc-total').should('have.text', 'Total: 0');
 
       // Show cidrs.
       cy.get('#cidrs').should('not.exist');
-      cy.get(':nth-child(3) > .MuiPaper-root > .information_cidrsTags__4sKxa').should('have.text', '-');
-      cy.get(
-        ':nth-child(3) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root > .MuiChip-label',
-      ).should('have.text', 'Total: 0');
+      cy.get('#no-cidrs').should('have.text', '-');
+      cy.get('#cidrs-total').should('have.text', 'Total: 0');
 
       // Show hostnames.
       cy.get('#hostnames').should('not.exist');
-      cy.get(':nth-child(4) > .MuiPaper-root > .information_cidrsTags__4sKxa').should('have.text', '-');
-      cy.get(
-        ':nth-child(4) > .information_cidrsContainer__joiB7 > .css-gg4vpm > .MuiChip-root > .MuiChip-label',
-      ).should('have.text', 'Total: 0');
+      cy.get('#no-hostnames').should('have.text', '-');
+      cy.get('#hostnames-total').should('have.text', 'Total: 0');
     });
 
     it('unable to display config', () => {
-      cy.get('.MuiPaper-root > :nth-child(1) > .MuiTypography-body1').should('have.text', 500);
-      cy.get('.MuiPaper-root > :nth-child(3) > .MuiTypography-body1').should('have.text', 200);
-      cy.get(':nth-child(5) > .MuiTypography-body1').should('have.text', 4);
-      cy.get(':nth-child(7) > .MuiTypography-body1').should('have.text', 15);
-      cy.get('#filter-parent-limit').should('be.visible').and('have.text', 100);
+      cy.get('#seed-peer-load-limit').should('have.text', 500);
+      cy.get('#peer-load-limit').should('have.text', 200);
+      cy.get('#candidate-parent-limit').should('have.text', 4);
+      cy.get('#filter-parent-limit').should('be.visible').and('have.text', 15);
+      cy.get('#job-rate-limit').should('have.text', 100);
     });
   });
 
@@ -533,6 +351,9 @@ describe('Cluster', () => {
     );
 
     cy.visit('clusters/1');
+
+    // Show isloading.
+    cy.get('[data-testid="cluster-loading"]').should('be.exist');
 
     // Show error message.
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
@@ -586,31 +407,17 @@ describe('Cluster', () => {
       );
 
       // Display the total number of clusters and the default number.
-      cy.get(
-        ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
-      )
-        .should('be.visible')
-        .and('contain', 16);
-      cy.get(
-        ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
-      )
-        .should('be.visible')
-        .and('contain', 7);
+      cy.get('#total-clusters').should('be.visible').and('contain', 37);
+      cy.get('#default-clusters').should('be.visible').and('contain', 13);
 
       // Choose a cluster without scheduler and seed peer.
-      cy.get(':nth-child(7) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', 'cluster-10');
+      cy.get('#cluster-name-10').should('be.visible').and('contain', 'cluster-10');
 
-      cy.get(
-        ':nth-child(7) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .clusters_creatTimeContainer__k6XfL > .MuiButtonBase-root',
-      ).click();
+      cy.get('#show-cluster-10').click();
 
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1').scrollIntoView();
+      cy.get('#name').scrollIntoView();
 
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
-        .should('be.visible')
-        .and('contain', 'cluster-10');
+      cy.get('#name').should('be.visible').and('contain', 'cluster-10');
 
       cy.intercept(
         {
@@ -647,42 +454,21 @@ describe('Cluster', () => {
 
       // Then I see that the current page is the clusters!
       cy.url().should('include', '/clusters');
-      cy.get(':nth-child(7) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6').should(
-        'not.exist',
-      );
-
-      cy.get(':nth-child(7) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', 'cluster-2');
+      cy.get('#cluster-name-10').should('not.exist');
 
       // Display the total number of clusters after deletion.
-      cy.get(
-        ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
-      )
-        .should('be.visible')
-        .and('contain', 15);
+      cy.get('#total-clusters').should('be.visible').and('contain', 36);
 
       // Display the default number after deletion.
-      cy.get(
-        ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
-      )
-        .should('be.visible')
-        .and('contain', 6);
+      cy.get('#default-clusters').should('be.visible').and('contain', 12);
     });
 
     it('cluster cannot be deleted if scheduler and seed nodes exist in the cluster', () => {
-      cy.get(':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', '1');
+      cy.get('#cluster-id-1').should('be.visible').and('contain', '1');
 
-      cy.get(
-        ':nth-child(1) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .clusters_creatTimeContainer__k6XfL > .MuiButtonBase-root',
-      ).click();
+      cy.get('#show-cluster-1').click();
 
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
-        .scrollIntoView()
-        .should('be.visible')
-        .and('contain', 'cluster-1');
+      cy.get('#name').scrollIntoView().should('be.visible').and('contain', 'cluster-1');
 
       cy.intercept(
         {
@@ -744,18 +530,11 @@ describe('Cluster', () => {
       );
 
       // Choose a cluster without scheduler and seed peer.
-      cy.get(':nth-child(7) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', 'cluster-10');
+      cy.get('#cluster-name-10').should('be.visible').and('contain', 'cluster-10');
 
-      cy.get(
-        ':nth-child(7) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .clusters_creatTimeContainer__k6XfL > .MuiButtonBase-root',
-      ).click();
+      cy.get('#show-cluster-10').click();
 
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
-        .scrollIntoView()
-        .should('be.visible')
-        .and('contain', 'cluster-10');
+      cy.get('#name').scrollIntoView().should('be.visible').and('contain', 'cluster-10');
 
       cy.intercept(
         {
@@ -794,18 +573,11 @@ describe('Cluster', () => {
 
       cy.guestSignin();
 
-      cy.get(':nth-child(7) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-        .should('be.visible')
-        .and('contain', 'cluster-10');
+      cy.get('#cluster-name-10').should('be.visible').and('contain', 'cluster-10');
 
-      cy.get(
-        ':nth-child(7) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .clusters_creatTimeContainer__k6XfL > .MuiButtonBase-root',
-      ).click();
+      cy.get('#show-cluster-10').click();
 
-      cy.get('.information_clusterContainer__l8H8p > :nth-child(1) > .MuiTypography-subtitle1')
-        .scrollIntoView()
-        .should('be.visible')
-        .and('contain', 'cluster-10');
+      cy.get('#name').scrollIntoView().should('be.visible').and('contain', 'cluster-10');
 
       cy.intercept(
         {

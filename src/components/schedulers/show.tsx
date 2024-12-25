@@ -1,5 +1,14 @@
-import Paper from '@mui/material/Paper';
-import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Breadcrumbs,
+  Chip,
+  Link as RouterLink,
+  Skeleton,
+  Snackbar,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import HistoryIcon from '@mui/icons-material/History';
@@ -8,6 +17,7 @@ import { getDatetime } from '../../lib/utils';
 import styles from './show.module.css';
 import _ from 'lodash';
 import { useParams, Link, useLocation } from 'react-router-dom';
+import Card from '../card';
 
 export default function Schedulers() {
   const [isLoading, setIsLoading] = useState(false);
@@ -84,153 +94,197 @@ export default function Schedulers() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '1rem' }}
+      >
         <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters`}>
           clusters
         </RouterLink>
         <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}`}>
           {`scheduler-cluster-${clusterID}`}
         </RouterLink>
-        <Typography color="inherit">schedulers</Typography>
+        <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}/schedulers`}>
+          {`schedulers`}
+        </RouterLink>
         <Typography color="text.primary">{scheduler?.host_name || '-'}</Typography>
       </Breadcrumbs>
-      <Typography variant="h5" sx={{ pb: '1rem' }}>
+      <Typography variant="h6" sx={{ p: '1rem 0 2rem 0', fontFamily: 'mabry-bold' }}>
         Scheduler
       </Typography>
-      <Box className={styles.container}>
-        <Paper variant="outlined" className={styles.headerContainer}>
+      <Card className={styles.container}>
+        <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler-id.svg" />
-            <Typography className={styles.headerTitle} variant="subtitle1" component="div">
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/scheduler-id.svg" />
+            <Typography className={styles.headerTitle} variant="body1" component="div">
               ID
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+          <Typography id="id" component="div" variant="body1" className={styles.headerText}>
             {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : scheduler?.id || '-'}
           </Typography>
-        </Paper>
-        <Paper variant="outlined" className={styles.headerContainer}>
+        </Box>
+        <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/hostname.svg" />
-            <Typography className={styles.headerTitle} variant="subtitle1" component="div">
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/hostname.svg" />
+            <Typography className={styles.headerTitle} variant="body1" component="div">
               Hostname
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-            {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : scheduler?.host_name || '-'}
-          </Typography>
-        </Paper>
-        <Paper variant="outlined" className={styles.headerContainer}>
+          <Tooltip title={scheduler?.host_name || '-'} placement="top">
+            <Typography id="hostname" component="div" variant="body1" className={styles.hostname}>
+              {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : scheduler?.host_name || '-'}
+            </Typography>
+          </Tooltip>
+        </Box>
+        <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler-ip.svg" />
-            <Typography className={styles.headerTitle} variant="subtitle1" component="div">
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/scheduler-ip.svg" />
+            <Typography className={styles.headerTitle} variant="body1" component="div">
               IP
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+          <Typography id="ip" component="div" variant="body1" className={styles.headerText}>
             {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : scheduler?.ip || '-'}
           </Typography>
-        </Paper>
-        <Paper variant="outlined" className={styles.clusterIDContaine}>
-          <Box className={styles.clusterIDContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/cluster-id.svg" />
-            <Typography className={styles.clusterIDTitle} variant="subtitle1" component="div">
+        </Box>
+        <Box className={styles.headerContainer}>
+          <Box className={styles.headerContent}>
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/cluster-id.svg" />
+            <Typography className={styles.headerTitle} variant="body1" component="div">
               Cluster ID
             </Typography>
           </Box>
-          <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
+          <Typography id="cluster-id" component="div" variant="body1" className={styles.headerText}>
             {isLoading ? (
               <Skeleton data-testid="isloading" sx={{ width: '8rem' }} />
             ) : (
               scheduler?.scheduler_cluster_id || '-'
             )}
           </Typography>
-        </Paper>
-      </Box>
-      <Paper variant="outlined" className={styles.schedulerContainer}>
-        {schedulerLabel.map((item) => {
-          return (
-            <Box key={item.label} className={styles.schedulerContent}>
-              <Typography variant="subtitle1" component="div" mb="1rem">
-                {item.label}
-              </Typography>
-              {isLoading ? (
-                <Skeleton data-testid="isloading" sx={{ width: '80%' }} />
-              ) : (
-                <>
-                  {item.name === 'created_at' ? (
-                    scheduler?.[item?.name] ? (
-                      <Chip
-                        avatar={<MoreTimeIcon />}
-                        label={getDatetime(scheduler?.[item?.name])}
-                        variant="outlined"
-                        size="small"
-                      />
-                    ) : (
-                      '-'
-                    )
-                  ) : item.name === 'updated_at' ? (
-                    scheduler?.[item?.name] ? (
-                      <Chip
-                        avatar={<HistoryIcon />}
-                        label={getDatetime(scheduler?.[item?.name])}
-                        variant="outlined"
-                        size="small"
-                      />
-                    ) : (
-                      '-'
-                    )
-                  ) : item.name === 'state' ? (
-                    scheduler?.[item.name] ? (
-                      <Chip
-                        label={_.upperFirst(scheduler?.[item.name]) || ''}
-                        size="small"
-                        variant="outlined"
-                        sx={{
-                          borderRadius: '0%',
-                          backgroundColor:
-                            scheduler?.[item?.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                          color: scheduler?.[item?.name] === 'active' ? '#FFFFFF' : '#FFFFFF',
-                          borderColor:
-                            scheduler?.[item?.name] === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                          fontWeight: 'bold',
-                        }}
-                      />
-                    ) : (
-                      '-'
-                    )
-                  ) : item.name === 'features' ? (
-                    scheduler?.[item?.name] ? (
-                      scheduler?.[item?.name]?.map((items: string, id: any) => (
-                        <Chip
-                          key={id}
-                          label={_.upperFirst(items) || ''}
-                          size="small"
-                          variant="outlined"
-                          sx={{
-                            borderRadius: '0%',
-                            background: 'var(--button-color)',
-                            color: '#FFFFFF',
-                            mr: '0.4rem',
-                            borderColor: 'var(--button-color)',
-                            fontWeight: 'bold',
-                          }}
-                        />
-                      ))
-                    ) : (
-                      '-'
-                    )
-                  ) : (
-                    <Typography component="div" variant="subtitle1" fontFamily="mabry-bold">
-                      {scheduler?.[item?.name as keyof typeof scheduler] || '-'}
-                    </Typography>
-                  )}
-                </>
-              )}
-            </Box>
-          );
-        })}
-      </Paper>
+        </Box>
+        <Box className={styles.headerContainer}>
+          <Box className={styles.headerContent}>
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/status.svg" />
+            <Typography className={styles.headerTitle} variant="body1" component="div">
+              Status
+            </Typography>
+          </Box>
+          <Typography component="div" variant="body1" className={styles.headerText}>
+            {isLoading ? (
+              <Skeleton data-testid="isloading" sx={{ width: '8rem' }} />
+            ) : scheduler?.state ? (
+              <Chip
+                label={_.upperFirst(scheduler?.state)}
+                size="small"
+                variant="outlined"
+                id="status"
+                sx={{
+                  borderRadius: '0.25rem',
+                  backgroundColor: scheduler?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                  color: scheduler?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
+                  borderColor: scheduler?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                  fontWeight: 'bold',
+                }}
+              />
+            ) : (
+              '-'
+            )}
+          </Typography>
+        </Box>
+        <Box className={styles.headerContainer}>
+          <Box className={styles.headerContent}>
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/features.svg" />
+            <Typography className={styles.headerTitle} variant="body1" component="div">
+              Features
+            </Typography>
+          </Box>
+          <Box id="features" component="div" className={styles.headerText}>
+            {isLoading ? (
+              <Skeleton data-testid="isloading" sx={{ width: '8rem' }} />
+            ) : scheduler?.features ? (
+              scheduler?.features?.map((items: string, id: any) => (
+                <Chip
+                  key={id}
+                  label={_.upperFirst(items) || ''}
+                  size="small"
+                  variant="outlined"
+                  sx={{
+                    borderRadius: '0.25rem',
+                    background: 'var(--button-color)',
+                    color: '#FFFFFF',
+                    mr: '0.4rem',
+                    borderColor: 'var(--button-color)',
+                    fontWeight: 'bold',
+                  }}
+                />
+              ))
+            ) : (
+              '-'
+            )}
+          </Box>
+        </Box>
+        <Box className={styles.headerContainer}>
+          <Box className={styles.headerContent}>
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/port.svg" />
+            <Typography className={styles.headerTitle} variant="body1" component="div">
+              Port
+            </Typography>
+          </Box>
+          <Typography id="port" component="div" variant="body1" className={styles.headerText}>
+            {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : scheduler?.port || '-'}
+          </Typography>
+        </Box>
+        <Box className={styles.headerContainer}>
+          <Box className={styles.headerContent}>
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/created-at.svg" />
+            <Typography className={styles.headerTitle} variant="body1" component="div">
+              Created At
+            </Typography>
+          </Box>
+          <Typography id="created-at" component="div" variant="body1" className={styles.headerText}>
+            {isLoading ? (
+              <Skeleton data-testid="isloading" sx={{ width: '8rem' }} />
+            ) : scheduler?.created_at ? (
+              <Chip
+                avatar={<MoreTimeIcon />}
+                label={getDatetime(scheduler?.created_at || '')}
+                variant="outlined"
+                size="small"
+              />
+            ) : (
+              '-'
+            )}
+          </Typography>
+        </Box>
+        <Box className={styles.headerContainer}>
+          <Box className={styles.headerContent}>
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/updated-at.svg" />
+            <Typography className={styles.headerTitle} variant="body1" component="div">
+              Updated At
+            </Typography>
+          </Box>
+          <Typography id="updated-at" component="div" variant="body1" className={styles.headerText}>
+            {isLoading ? (
+              <Skeleton data-testid="isloading" sx={{ width: '8rem' }} />
+            ) : scheduler?.updated_at ? (
+              <Chip
+                avatar={<MoreTimeIcon />}
+                label={getDatetime(scheduler?.updated_at)}
+                variant="outlined"
+                size="small"
+              />
+            ) : (
+              '-'
+            )}
+          </Typography>
+        </Box>
+      </Card>
     </Box>
   );
 }

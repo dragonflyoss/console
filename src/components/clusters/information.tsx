@@ -427,16 +427,6 @@ export default function Information() {
                     -
                   </Typography>
                 )}
-
-                {/* <MuiTooltip title={cluster?.scopes?.location || '-'} placement="top">
-                  <Typography id="location" variant="body2" component="div" className={styles.locationContent}>
-                    {isLoading ? (
-                      <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
-                    ) : (
-                      cluster?.scopes?.location || '-'
-                    )}
-                  </Typography>
-                </MuiTooltip> */}
               </Box>
             </Card>
             <Card className={styles.cidrsContainer}>

@@ -33,17 +33,17 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Bar, Pie } from 'react-chartjs-2';
-import { getPeers, getPeersResponse, getSyncPeers } from '../../lib/api';
+import { getPeers, getPeersResponse, getSyncPeers } from '../../../lib/api';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import { useContext, useEffect, useState } from 'react';
-import { MAX_PAGE_SIZE } from '../../lib/constants';
+import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './inde.module.css';
-import { exportCSVFile } from '../../lib/utils';
-import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
-import { MyContext } from '../clusters/show';
+import { exportCSVFile } from '../../../lib/utils';
+import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
+import { MyContext } from '../../clusters/show';
 import _ from 'lodash';
-import Card from '../card';
+import Card from '../../card';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 Chart.defaults.font.family = 'mabry-light';
@@ -111,39 +111,6 @@ export default function Peer() {
 
           setPeer(peer);
 
-          // const gitVersionCount = new Set(peer.map((item) => item.git_version)).size;
-          // const gitCommitCount = new Set(peer.map((item) => item.git_commit)).size;
-
-          // setGitVersionCount(gitVersionCount);
-          // setGitCommitCount(gitCommitCount);
-
-          // const gitVersion = Object.entries(
-          //   peer.reduce<{ [key: string]: number }>((acc, curr) => {
-          //     const { git_version } = curr;
-          //     if (acc[git_version]) {
-          //       acc[git_version] += 1;
-          //     } else {
-          //       acc[git_version] = 1;
-          //     }
-          //     return acc;
-          //   }, {}),
-          // ).map(([name, count]) => ({ name, count }));
-
-          // setGitVersion(gitVersion);
-
-          // const getCommit = Object.entries(
-          //   peer.reduce<{ [key: string]: number }>((acc, curr) => {
-          //     const { git_commit } = curr;
-          //     if (acc[git_commit]) {
-          //       acc[git_commit] += 1;
-          //     } else {
-          //       acc[git_commit] = 1;
-          //     }
-          //     return acc;
-          //   }, {}),
-          // ).map(([name, count]) => ({ name, count }));
-
-          // setGitCommit(getCommit);
           setIsLoading(false);
         }
       } catch (error) {
@@ -459,11 +426,6 @@ export default function Peer() {
       });
       setPeer(peer);
 
-      // const gitVersionCount = new Set(peer.map((item) => item.git_version)).size;
-      // const gitCommitCount = new Set(peer.map((item) => item.git_commit)).size;
-
-      // setGitVersionCount(gitVersionCount);
-      // setGitCommitCount(gitCommitCount);
       setRefresh(false);
       setDisabled(false);
     } catch (error) {
@@ -719,11 +681,7 @@ export default function Peer() {
                       setSelectedGitGitCommitByVersion(e.target.value);
                     }}
                   >
-                    <Typography
-                      variant="body2"
-                      fontFamily="mabry-bold"
-                      sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}
-                    >
+                    <Typography variant="body2" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
                       Filter by git version
                     </Typography>
                     <Divider />
@@ -877,11 +835,7 @@ export default function Peer() {
                     label="changeGitVersion"
                     onChange={(e) => setExportSelectedVersion(e.target.value)}
                   >
-                    <Typography
-                      variant="body1"
-                      fontFamily="mabry-bold"
-                      sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}
-                    >
+                    <Typography variant="body1" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
                       Filter by git version
                     </Typography>
                     <Divider />
@@ -903,11 +857,7 @@ export default function Peer() {
                     label="changeGitCommit"
                     onChange={(e) => setExportSelectedCommit(e.target.value)}
                   >
-                    <Typography
-                      variant="body1"
-                      fontFamily="mabry-bold"
-                      sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}
-                    >
+                    <Typography variant="body1" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
                       Filter by git commit
                     </Typography>
                     <Divider />

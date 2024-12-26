@@ -366,45 +366,57 @@ export default function Clear() {
     ? Array.from(new Set(results.map((item) => JSON.stringify(item)))).map((str) => JSON.parse(str))
     : [];
 
-  const handleDeleteTask = async () => {
+  const handleDeleteTask = async (event: any) => {
     try {
       setDeleteLoadingButton(true);
-      if (schedulerClusterID && !deleteError) {
-        if (task?.args?.url && task?.args?.url !== '') {
-          const formList = {
-            args: {
-              url: task?.args?.url,
-              tag: task?.args?.tag,
-              application: task?.args?.application,
-              filtered_query_params: task?.args?.filtered_query_params,
-            },
-            scheduler_cluster_ids: [schedulerClusterID],
-            type: 'delete_task',
-          };
 
-          const tasks = await createTaskJob(formList);
+      setLoadingButton(true);
+      event.preventDefault();
 
-          if (tasks?.id) {
-            setDeleteLoadingButton(false);
-            navigate(`/jobs/task/executions/${tasks?.id}`);
-            setOpenDeleteTask(false);
-          }
-        } else if (task?.args?.task_id) {
-          const formList = {
-            args: {
-              task_id: task?.args?.task_id,
-            },
-            scheduler_cluster_ids: [schedulerClusterID],
-            type: 'delete_task',
-          };
+      const delet = event.currentTarget.elements.deletCache.value;
 
-          const tasks = await createTaskJob(formList);
-          if (tasks?.id) {
-            setDeleteLoadingButton(false);
-            navigate(`/jobs/task/executions/${tasks?.id}`);
-            setOpenDeleteTask(false);
+      if (delet === 'DELETE') {
+        if (schedulerClusterID && !deleteError) {
+          if (task?.args?.url && task?.args?.url !== '') {
+            const formList = {
+              args: {
+                url: task?.args?.url,
+                tag: task?.args?.tag,
+                application: task?.args?.application,
+                filtered_query_params: task?.args?.filtered_query_params,
+              },
+              scheduler_cluster_ids: [schedulerClusterID],
+              type: 'delete_task',
+            };
+
+            const tasks = await createTaskJob(formList);
+
+            if (tasks?.id) {
+              setDeleteLoadingButton(false);
+              navigate(`/jobs/task/executions/${tasks?.id}`);
+              setOpenDeleteTask(false);
+            }
+          } else if (task?.args?.task_id) {
+            const formList = {
+              args: {
+                task_id: task?.args?.task_id,
+              },
+              scheduler_cluster_ids: [schedulerClusterID],
+              type: 'delete_task',
+            };
+
+            const tasks = await createTaskJob(formList);
+            if (tasks?.id) {
+              setDeleteLoadingButton(false);
+              navigate(`/jobs/task/executions/${tasks?.id}`);
+              setOpenDeleteTask(false);
+            }
           }
         }
+      } else {
+        setDeleteError(true);
+        setDeleteLoadingButton(false);
+        setIsLoading(false);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -461,7 +473,7 @@ export default function Clear() {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
-    const filterText = event.currentTarget.elements.filteredQueryParams.value;
+    const filterText = event.currentTarget.elements.filteredQueryParams?.value;
     formList.forEach((item) => {
       const value = data.get(item.formProps.name);
       item.setError(!item.validate(value as string));
@@ -530,6 +542,9 @@ export default function Clear() {
     }
     setOpenDeleteTask(false);
     setErrorMessage(false);
+    setDeleteError(false);
+    setDeleteLoadingButton(false);
+    setIsLoading(false);
   };
 
   const handleCloseSearch = () => {
@@ -642,7 +657,7 @@ export default function Clear() {
               elevation={optional ? 3 : 0}
               sx={{
                 p: optional ? '1rem' : '',
-                borderRadius: '4px',
+                borderRadius: '0.2rem',
                 width: optional ? '45rem' : '36rem',
                 position: 'absolute',
               }}
@@ -769,7 +784,7 @@ export default function Clear() {
                               sx={{
                                 border: '1px solid #d5d2d2',
                                 p: '0.2rem 0.3rem',
-                                borderRadius: '0.4rem',
+                                borderRadius: '0.2rem',
                                 display: 'inline-flex',
                                 alignItems: 'center',
                               }}
@@ -873,7 +888,7 @@ export default function Clear() {
                                       size="small"
                                       variant="outlined"
                                       sx={{
-                                        borderRadius: '0%',
+                                        borderRadius: '0.2rem',
                                         backgroundColor:
                                           item?.host_type === 'super'
                                             ? 'var( --description-color)'
@@ -929,7 +944,7 @@ export default function Clear() {
                                     size="small"
                                     variant="outlined"
                                     sx={{
-                                      borderRadius: '0%',
+                                      borderRadius: '0.2rem',
                                       backgroundColor:
                                         item?.host_type === 'super'
                                           ? 'var( --description-color)'
@@ -1046,7 +1061,7 @@ export default function Clear() {
         </Box>
         <Divider />
         <DialogContent>
-          <Box onSubmit={handleDeleteTask}>
+          <Box component="form" onSubmit={handleDeleteTask}>
             <Box display="flex" alignItems="flex-start" pb="1rem">
               <Box
                 component="img"
@@ -1094,7 +1109,6 @@ export default function Clear() {
                 loading={deleteLoadingButton}
                 endIcon={<DeleteIcon />}
                 id="deleteTask"
-                onClick={handleDeleteTask}
                 text="Delete"
               />
             </Box>

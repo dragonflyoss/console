@@ -236,16 +236,27 @@ export default function CreateTokens() {
                 />
               </Tooltip>
             </Box>
-            {formList.map((item) => (
-              <TextField
-                margin="normal"
-                color="success"
-                size="small"
-                key={item.formProps.name}
-                {...item.formProps}
-                sx={{ width: '20rem' }}
-              />
-            ))}
+            {formList.map((item) => {
+              return item?.formProps?.name === 'bio' ? (
+                <TextField
+                  margin="normal"
+                  color="success"
+                  size="small"
+                  key={item.formProps.name}
+                  {...item.formProps}
+                  sx={{ width: '36rem' }}
+                />
+              ) : (
+                <TextField
+                  margin="normal"
+                  color="success"
+                  size="small"
+                  key={item.formProps.name}
+                  {...item.formProps}
+                  sx={{ width: '18rem' }}
+                />
+              );
+            })}
             <Box sx={{ display: 'flex', alignItems: 'center', mb: '1.4rem', mt: '1rem' }}>
               <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
                 Expiration

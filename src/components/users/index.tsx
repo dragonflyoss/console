@@ -77,16 +77,16 @@ const useStyles = makeStyles((theme: any) => ({
   },
 }));
 
-// const theme = createTheme({
-//   palette: {
-//     primary: {
-//       main: '#1C293A',
-//     },
-//   },
-//   // typography: {
-//   //   fontFamily: 'mabry-light,sans-serif',
-//   // },
-// });
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1C293A',
+    },
+  },
+  typography: {
+    fontFamily: 'mabry-light,sans-serif',
+  },
+});
 
 export default function Users() {
   const [isLoading, setIsLoading] = useState(true);
@@ -249,7 +249,7 @@ export default function Users() {
   };
 
   return (
-    <Box>
+    <ThemeProvider theme={theme}>
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -582,8 +582,8 @@ export default function Users() {
                   ID
                 </Typography>
               </ListItemAvatar>
-              <Typography variant="body2" className={styles.detailContent}>
-                {detailIsLoading ? <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} /> : user?.id || ''}
+              <Typography id="id" variant="body2" className={styles.detailContent}>
+                {detailIsLoading ? <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} /> : user?.id || 0}
               </Typography>
             </ListItem>
             <Divider
@@ -600,7 +600,7 @@ export default function Users() {
                   Name
                 </Typography>
               </ListItemAvatar>
-              <Typography variant="body2" className={styles.detailContent}>
+              <Typography id="name" variant="body2" className={styles.detailContent}>
                 {detailIsLoading ? (
                   <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                 ) : (
@@ -622,7 +622,7 @@ export default function Users() {
                   Role
                 </Typography>
               </ListItemAvatar>
-              <Typography variant="body2" component="div">
+              <Typography id="role" variant="body2" component="div">
                 {detailIsLoading ? (
                   <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                 ) : detailRole ? (
@@ -640,7 +640,9 @@ export default function Users() {
                     }}
                   />
                 ) : (
-                  '-'
+                  <Typography id="role" variant="body2" component="div">
+                    -
+                  </Typography>
                 )}
               </Typography>
             </ListItem>
@@ -659,7 +661,7 @@ export default function Users() {
                 </Typography>
               </ListItemAvatar>
               <Tooltip title={user?.email || '-'} placement="top">
-                <Typography variant="body2" className={styles.emailContent}>
+                <Typography id="email" variant="body2" className={styles.emailContent}>
                   {detailIsLoading ? (
                     <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                   ) : (
@@ -682,7 +684,7 @@ export default function Users() {
                   Phone
                 </Typography>
               </ListItemAvatar>
-              <Typography variant="body2" className={styles.detailContent}>
+              <Typography id="phone" variant="body2" className={styles.detailContent}>
                 {detailIsLoading ? (
                   <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                 ) : (
@@ -706,7 +708,7 @@ export default function Users() {
               </ListItemAvatar>
               <Tooltip title={user.location || '-'} placement="top">
                 <Box className={styles.emailContent}>
-                  <Typography variant="body2">
+                  <Typography id="location" variant="body2">
                     {detailIsLoading ? (
                       <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                     ) : (
@@ -733,14 +735,7 @@ export default function Users() {
               {detailIsLoading ? (
                 <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
               ) : user.created_at ? (
-                // <Chip
-                //   avatar={<Box component="img" src="/icons/user/created-at.svg" />}
-                //   label={getDatetime(user.created_at || '-')}
-                //   variant="outlined"
-                //   size="small"
-                // />
-
-                <Typography variant="body2" className={styles.detailContent}>
+                <Typography id="created-at" variant="body2" className={styles.detailContent}>
                   {detailIsLoading ? (
                     <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                   ) : (
@@ -748,7 +743,9 @@ export default function Users() {
                   )}
                 </Typography>
               ) : (
-                '-'
+                <Typography id="created-at" variant="body2" className={styles.detailContent}>
+                  -
+                </Typography>
               )}
             </ListItem>
             <Divider
@@ -768,13 +765,7 @@ export default function Users() {
               {detailIsLoading ? (
                 <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
               ) : user.updated_at ? (
-                // <Chip
-                //   avatar={<Box component="img" src="/icons/user/updated-at.svg" />}
-                //   label={getDatetime(user.updated_at || '-')}
-                //   variant="outlined"
-                //   size="small"
-                // />
-                <Typography variant="body2" className={styles.detailContent}>
+                <Typography id="updated-at" variant="body2" className={styles.detailContent}>
                   {detailIsLoading ? (
                     <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                   ) : (
@@ -782,12 +773,14 @@ export default function Users() {
                   )}
                 </Typography>
               ) : (
-                '-'
+                <Typography id="updated-at" variant="body2" className={styles.detailContent}>
+                  -
+                </Typography>
               )}
             </ListItem>
           </List>
         </Box>
       </Drawer>
-    </Box>
+    </ThemeProvider>
   );
 }

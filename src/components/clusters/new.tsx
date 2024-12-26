@@ -607,7 +607,7 @@ export default function NewCluster() {
         const cluster = await createCluster({ ...formData });
         setLoadingButton(false);
         setSuccessMessage(true);
-        navigate(`/clusters/${cluster?.id }`);
+        navigate(`/clusters/${cluster?.id}`);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
@@ -658,7 +658,7 @@ export default function NewCluster() {
       </Snackbar>
       <Typography variant="h5">Create Cluster</Typography>
       <Divider sx={{ mt: 2, mb: 2 }} />
-      <Grid component="form" onSubmit={handleSubmit} noValidate>
+      <Box component="form" onSubmit={handleSubmit} noValidate>
         <Box className={styles.container}>
           <Box className={styles.informationTitle}>
             <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
@@ -682,17 +682,27 @@ export default function NewCluster() {
               <HelpIcon color="disabled" className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
-          <Grid sx={{ display: 'flex' }}>
-            {informationForm.map((item) => (
-              <TextField
-                className={styles.textField}
-                color="success"
-                size="small"
-                key={item.formProps.name}
-                {...item.formProps}
-              />
-            ))}
-          </Grid>
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            {informationForm.map((item) => {
+              return item?.formProps?.name === 'description' ? (
+                <TextField
+                  className={styles.cidrsInput}
+                  color="success"
+                  size="small"
+                  key={item.formProps.name}
+                  {...item.formProps}
+                />
+              ) : (
+                <TextField
+                  className={styles.textField}
+                  color="success"
+                  size="small"
+                  key={item.formProps.name}
+                  {...item.formProps}
+                />
+              );
+            })}
+          </Box>
           <Box className={styles.scopesTitle}>
             <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
               Scopes
@@ -730,7 +740,7 @@ export default function NewCluster() {
                       )}
                     />
                   ) : (
-                    <TextField size="small" className={styles.cidrsInput} color="success" {...item.formProps} />
+                    <TextField size="small" className={styles.textField} color="success" {...item.formProps} />
                   )}
                 </Box>
               );
@@ -769,7 +779,7 @@ export default function NewCluster() {
           />
           <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />
         </Box>
-      </Grid>
+      </Box>
     </Grid>
   );
 }

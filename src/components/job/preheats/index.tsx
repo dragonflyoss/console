@@ -109,6 +109,7 @@ export default function Preheats() {
             if (error instanceof Error) {
               setErrorMessage(true);
               setErrorMessageText(error.message);
+              setShouldPoll(false);
             }
           }
         };
@@ -248,7 +249,7 @@ export default function Preheats() {
         ) : allPreheats.length === 0 ? (
           <Box className={styles.noData}>
             <Box component="img" className={styles.nodataIcon} src="/icons/cluster/scheduler/ic-content.svg" />
-            <Typography variant="h6" className={styles.nodataText}>
+            <Typography id="no-preheat" variant="h6" className={styles.nodataText}>
               You don't have any preheat tasks.
             </Typography>
           </Box>

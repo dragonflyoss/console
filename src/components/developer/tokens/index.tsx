@@ -204,11 +204,12 @@ export default function PersonalAccessTokens() {
         Tokens you have generated that can be used to access the Dragonfly API.
       </Typography>
       {showCopyColumn ? (
-        <Card className={styles.copyToken}>
+        <Card id="copy-column" className={styles.copyToken}>
           <Typography variant="body2" mr="0.4rem">
             {newToken || ''}
           </Typography>
           <IconButton
+            id="copy-button"
             aria-label="delete"
             sx={{
               p: '0',
@@ -289,13 +290,15 @@ export default function PersonalAccessTokens() {
                         >
                           {item.name}
                         </RouterLink>
-                        <Typography variant="body2">&nbsp;—&nbsp;{item?.user?.name}</Typography>
+                        <Typography id={`user-name-${item.id}`} variant="body2">
+                          &nbsp;—&nbsp;{item?.user?.name}
+                        </Typography>
                       </Box>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Typography variant="body2" component="span" fontFamily="mabry-bold">
                           Expires on&nbsp;
                         </Typography>
-                        <Typography variant="body2" component="span">
+                        <Typography id={`expired-at-${item?.id}`} variant="body2" component="span">
                           {formatDate(item?.expired_at) || ''}.
                         </Typography>
                       </Box>
@@ -303,7 +306,7 @@ export default function PersonalAccessTokens() {
                     <Box>
                       <Button
                         size="small"
-                        id="delete-token"
+                        id={`delete-token-${item?.id}`}
                         sx={{
                           '&.MuiButton-root': {
                             backgroundColor: 'var(--button-color)',
@@ -343,13 +346,15 @@ export default function PersonalAccessTokens() {
                         >
                           {item.name}
                         </RouterLink>
-                        <Typography variant="body2">&nbsp;—&nbsp;{item?.user?.name}</Typography>
+                        <Typography id={`user-name-${item.id}`} variant="body2">
+                          &nbsp;—&nbsp;{item?.user?.name}
+                        </Typography>
                       </Box>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Typography variant="body2" component="span" fontFamily="mabry-bold">
                           Expires on&nbsp;
                         </Typography>
-                        <Typography variant="body2" component="span">
+                        <Typography id={`expired-at-${item?.id}`} variant="body2" component="span">
                           {formatDate(item?.expired_at) || ''}.
                         </Typography>
                       </Box>
@@ -357,7 +362,7 @@ export default function PersonalAccessTokens() {
                     <Box>
                       <Button
                         size="small"
-                        id="delete-token"
+                        id={`delete-token-${item?.id}`}
                         sx={{
                           '&.MuiButton-root': {
                             backgroundColor: 'var(--button-color)',

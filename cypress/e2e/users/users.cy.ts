@@ -77,7 +77,7 @@ describe('Users', () => {
         .should('be.visible')
         .and('have.text', 'root@example.com');
 
-      // Show root user location.
+      // Show root user #location.
       cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(4)').should('be.visible').and('have.text', 'Shanghai');
 
       // Show root user state.
@@ -133,18 +133,18 @@ describe('Users', () => {
       // Click detail button.
       cy.get('#action-root').click();
 
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #detail-root').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #detail-root').click();
 
       // Display user lucy details.
       cy.get('.MuiDrawer-root > .MuiPaper-root').should('be.visible');
-      cy.get(':nth-child(3) > .css-e784if-MuiTypography-root').should('have.text', 1);
-      cy.get(':nth-child(5) > .css-e784if-MuiTypography-root').should('have.text', 'root');
-      cy.get('.css-e784if-MuiTypography-root > .MuiChip-root').should('have.text', 'root');
-      cy.get(':nth-child(9) > .css-e784if-MuiTypography-root').should('have.text', 'root@example.com');
-      cy.get(':nth-child(11) > .css-e784if-MuiTypography-root').should('have.text', '1234567890');
-      cy.get('.users_emailContent__jraG8 > .MuiTypography-root').should('have.text', 'Hangzhou');
-      cy.get('.MuiList-root > :nth-child(15)').should('contain', '2023-11-06 06:09:04');
-      cy.get('.MuiList-root > :nth-child(17)').should('contain', '2023-11-06 06:09:04');
+      cy.get('#id').should('have.text', 1);
+      cy.get('#name').should('have.text', 'root');
+      cy.get('#role').should('have.text', 'root');
+      cy.get('#email').should('have.text', 'root@example.com');
+      cy.get('#phone').should('have.text', '1234567890');
+      cy.get('#location').should('have.text', 'Hangzhou');
+      cy.get('#created-at').should('contain', '2023-11-06 06:09:04');
+      cy.get('#updated-at').should('contain', '2023-11-06 06:09:04');
 
       // closure user details.
       cy.get('.MuiListSubheader-root > .MuiButtonBase-root').click();
@@ -167,19 +167,19 @@ describe('Users', () => {
         },
       );
 
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #detail-jack').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #detail-jack').click();
 
       cy.get('[data-testid="detail-isloading"]').should('be.exist');
 
       // Display user jack details.
       cy.get('.MuiDrawer-root > .MuiPaper-root').should('be.visible');
-      cy.get(':nth-child(3) > .css-e784if-MuiTypography-root').should('have.text', 2);
-      cy.get(':nth-child(5) > .css-e784if-MuiTypography-root').should('have.text', 'jack');
-      cy.get('.css-e784if-MuiTypography-root > .MuiChip-root').should('have.text', 'guest');
-      cy.get(':nth-child(9) > .css-e784if-MuiTypography-root').should('have.text', 'jack@example.com');
-      cy.get(':nth-child(11) > .css-e784if-MuiTypography-root').should('have.text', '1234567890');
-      cy.get('.users_emailContent__jraG8 > .MuiTypography-root').should('have.text', 'Shanghai');
-      cy.get('.MuiList-root > :nth-child(15)').should('contain', '2023-11-07 06:09:04');
+      cy.get('#id').should('have.text', 2);
+      cy.get('#name').should('have.text', 'jack');
+      cy.get('#role').should('have.text', 'guest');
+      cy.get('#email').should('have.text', 'jack@example.com');
+      cy.get('#phone').should('have.text', '1234567890');
+      cy.get('#location').should('have.text', 'Shanghai');
+      cy.get('#created-at').should('contain', '2023-11-07 06:09:04');
       cy.get('.MuiList-root > :nth-child(17)').should('contain', '2023-11-07 06:09:04');
 
       cy.get('[data-testid="detail-isloading"]').should('not.exist');
@@ -188,7 +188,7 @@ describe('Users', () => {
     it('can display update user', () => {
       // Click update user button.
       cy.get('#action-lucy').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-lucy').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-lucy').click();
 
       // Check role.
       cy.get('#role-root').should('be.checked').check({ force: true });
@@ -196,7 +196,7 @@ describe('Users', () => {
       cy.get('body').click('topLeft');
 
       cy.get('#action-jack').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-jack').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-jack').click();
 
       cy.get('#role-root').should('not.be.checked');
       cy.get('#role-guest').should('be.checked').check({ force: true });
@@ -301,16 +301,16 @@ describe('Users', () => {
       );
 
       cy.get('#action-jack').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #detail-jack').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #detail-jack').click();
 
       // Display user jack details.
-      cy.get(':nth-child(3) > .css-e784if-MuiTypography-root').should('have.text', 0);
-      cy.get(':nth-child(5) > .css-e784if-MuiTypography-root').should('have.text', '-');
+      cy.get('#id').should('have.text', 0);
+      cy.get('#name').should('have.text', '-');
       cy.get('.MuiList-root > :nth-child(7)').should('contain', '-');
-      cy.get(':nth-child(9) > .css-e784if-MuiTypography-root').should('have.text', '-');
-      cy.get(':nth-child(11) > .css-e784if-MuiTypography-root').should('have.text', '-');
-      cy.get('.users_emailContent__jraG8 > .MuiTypography-root').should('have.text', '-');
-      cy.get('.MuiList-root > :nth-child(15)').should('contain', '-');
+      cy.get('#email').should('have.text', '-');
+      cy.get('#phone').should('have.text', '-');
+      cy.get('#location').should('have.text', '-');
+      cy.get('#created-at').should('contain', '-');
       cy.get('.MuiList-root > :nth-child(17)').should('contain', '-');
     });
   });
@@ -431,7 +431,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-lucy').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-lucy').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-lucy').click();
 
       cy.get('#role-root').should('be.checked').check({ force: true });
       cy.get('#role-guest').should('not.be.checked');
@@ -455,7 +455,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-lucy').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-lucy').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-lucy').click();
 
       // Change success message.
       cy.get('.MuiAlert-message').should('be.visible').and('have.text', 'Submission successful!');
@@ -504,7 +504,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-jack').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-jack').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-jack').click();
 
       // Check if role is guest.
       cy.get('#role-root').should('not.be.checked');
@@ -529,7 +529,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-jack').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-jack').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-jack').click();
 
       // Check if role is root.
       cy.get('#role-root').should('be.checked').check({ force: true });
@@ -591,7 +591,7 @@ describe('Users', () => {
 
       // Click edit button.
       cy.get('#action-lucy').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-lucy').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-lucy').click();
 
       cy.get('#role-root').should('be.checked').check({ force: true });
       cy.get('#role-guest').should('not.be.checked');
@@ -617,7 +617,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-lucy').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-lucy').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-lucy').click();
 
       // Check role.
       cy.get('#role-root').should('not.be.checked');
@@ -669,7 +669,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-lucy').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-lucy').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-lucy').click();
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('have.text', 'Failed to fetch');
@@ -716,7 +716,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-lucy').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-lucy').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-lucy').click();
 
       // Check if role is root.
       cy.get('#role-root').should('be.checked').check({ force: true });

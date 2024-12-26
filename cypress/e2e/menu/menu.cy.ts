@@ -1,3 +1,7 @@
+import clusters from '../../fixtures/clusters/clusters.json';
+import seedPeers from '../../fixtures/seed-peers/seed-peers.json';
+import schedulers from '../../fixtures/schedulers/schedulers.json';
+
 describe('Menu', () => {
   it('user not signin', () => {
     // redirect when not signin.
@@ -62,6 +66,43 @@ describe('Menu', () => {
       cy.signin();
 
       cy.visit('/');
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/clusters?page=1&per_page=10000000',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: clusters,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/schedulers?page=1&per_page=10000000',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: schedulers,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/seed-peers?page=1&per_page=10000000',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: seedPeers,
+          });
+        },
+      );
     });
 
     it('should be redirect when signin', () => {
@@ -169,7 +210,9 @@ describe('Menu', () => {
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
 
-      cy.get('.css-1s0mjnw > .MuiSnackbar-root > .MuiPaper-root > .MuiAlert-action > .MuiButtonBase-root').click();
+      // Close error message.
+      cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+      cy.get('.MuiAlert-message').should('not.exist');
     });
   });
 });

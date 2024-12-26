@@ -89,10 +89,7 @@ describe('Preheat', () => {
       cy.get('#id').should('have.text', 10);
 
       // Show preheat description.
-      cy.get('.css-1k5mnne-MuiPaper-root > :nth-child(2) > .show_informationContent__wKGxa').should(
-        'have.text',
-        'This is a preheat task with status failure',
-      );
+      cy.get('#description').should('have.text', 'This is a preheat task with status failure');
       cy.get('[data-testid="preheat-isloading"]').should('not.exist');
 
       // Show preheat scope.
@@ -130,6 +127,7 @@ describe('Preheat', () => {
         .should('be.visible')
         .and('have.text', 'rpc error: code = Aborted desc = source response 401/401 Unauthorized is not valid');
     });
+
     it('should display detailed preheat success information', () => {
       cy.get('#preheat-8').click();
 
@@ -153,6 +151,7 @@ describe('Preheat', () => {
       // Show preheat headers.
       cy.get('#headers').children().should('have.length', 2);
     });
+
     it('should display detailed preheat pending information', () => {
       let interceptCount = 0;
 

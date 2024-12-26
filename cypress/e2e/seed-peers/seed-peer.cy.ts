@@ -196,7 +196,7 @@ describe('Seed peer', () => {
       cy.get('#type').should('contain', '-');
 
       // Show Start.
-      cy.get(':nth-child(6) > .css-1q4o9qp-MuiTypography-root').should('contain', '-');
+      cy.get(':nth-child(6) > .css-1ltbflq-MuiTypography-root').should('contain', '-');
 
       // Show Created At.
       cy.get('#created-at').should('contain', '-');
@@ -260,7 +260,7 @@ describe('Seed peer', () => {
       cy.get('#type').should('contain', '-');
 
       // Show Start.
-      cy.get(':nth-child(6) > .css-1q4o9qp-MuiTypography-root').should('contain', '-');
+      cy.get(':nth-child(6) > .css-1ltbflq-MuiTypography-root').should('contain', '-');
 
       // Show Created At.
       cy.get('#created-at').should('contain', '-');

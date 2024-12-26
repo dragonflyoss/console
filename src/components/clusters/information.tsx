@@ -142,6 +142,7 @@ export default function Information() {
         </Typography>
         <Box>
           <Button
+            id="update"
             onClick={() => {
               navigate(`/clusters/${params.id}/edit`);
             }}

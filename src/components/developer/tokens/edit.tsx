@@ -266,7 +266,7 @@ export default function UpdateTokens() {
                 size="small"
                 key={item.formProps.name}
                 {...item.formProps}
-                sx={{ width: '20rem' }}
+                sx={{ width: '36rem' }}
               />
             ))}
             <Box sx={{ display: 'flex', alignItems: 'center', mb: '1.4rem', mt: '1rem' }}>

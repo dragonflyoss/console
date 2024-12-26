@@ -11,7 +11,6 @@ import {
   TextField,
   Tooltip,
   Typography,
-  Paper,
   Skeleton,
 } from '@mui/material';
 import styles from './edit.module.css';
@@ -705,16 +704,20 @@ export default function EditCluster() {
       <Typography variant="h5">Update Cluster</Typography>
       <Divider sx={{ mt: '1rem', mb: '1rem' }} />
       <Card className={styles.header}>
-        <Box component="img" src="/icons/cluster/information-cluster.svg" sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }} />
+        <Box
+          component="img"
+          src="/icons/cluster/information-cluster.svg"
+          sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }}
+        />
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography component="span" variant="body1" fontFamily="mabry-bold">
               ID:&nbsp;&nbsp;
             </Typography>
             {isLoading ? (
-              <Skeleton sx={{ width: '2rem' }} />
+              <Skeleton data-testid="isloading" sx={{ width: '2rem' }} />
             ) : (
-              <Typography component="div" variant="body1" fontFamily="mabry-bold">
+              <Typography id="id" component="div" variant="body1" fontFamily="mabry-bold">
                 {cluster.id}
               </Typography>
             )}
@@ -724,9 +727,9 @@ export default function EditCluster() {
               Name:&nbsp;&nbsp;
             </Typography>
             {isLoading ? (
-              <Skeleton sx={{ width: '4rem' }} />
+              <Skeleton data-testid="isloading" sx={{ width: '4rem' }} />
             ) : (
-              <Typography component="div" variant="body1" fontFamily="mabry-bold">
+              <Typography id="name" component="div" variant="body1" fontFamily="mabry-bold">
                 {cluster.name}
               </Typography>
             )}
@@ -771,7 +774,7 @@ export default function EditCluster() {
               color="success"
               key={item.formProps.name}
               {...item.formProps}
-              className={styles.textField}
+              className={styles.idcInput}
             />
           ))}
           <Box className={styles.scopesTitle}>
@@ -811,7 +814,7 @@ export default function EditCluster() {
                       )}
                     />
                   ) : (
-                    <TextField size="small" className={styles.cidrsInput} color="success" {...item.formProps} />
+                    <TextField size="small" className={styles.textField} color="success" {...item.formProps} />
                   )}
                 </Box>
               );

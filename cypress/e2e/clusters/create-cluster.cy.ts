@@ -1,6 +1,7 @@
 import clusters from '../../fixtures/clusters/clusters.json';
 import seedPeers from '../../fixtures/seed-peers/seed-peers.json';
 import schedulers from '../../fixtures/schedulers/schedulers.json';
+import createClusters from '../../fixtures/clusters/create-clusters.json';
 import createCluster from '../../fixtures/clusters/create-cluster.json';
 import _ from 'lodash';
 
@@ -52,18 +53,10 @@ describe('Create cluster', () => {
     cy.visit('/clusters');
 
     // Show number of cluster.
-    cy.get(
-      ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', '16');
+    cy.get('#total-clusters').should('be.visible').and('contain', '37');
 
     // Show number of cluster default.
-    cy.get(
-      ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
-    )
-      .should('be.visible')
-      .and('contain', '7');
+    cy.get('#default-clusters').should('be.visible').and('contain', '13');
 
     // Click the `ADD CLUSTER` button.
     cy.get('.clusters_clusterTitle__5Lhnw > .MuiButtonBase-root').click();
@@ -101,7 +94,7 @@ describe('Create cluster', () => {
         req.body = '';
         req.reply({
           statusCode: 200,
-          body: [],
+          body: createCluster,
         });
       },
     );
@@ -109,6 +102,19 @@ describe('Create cluster', () => {
       {
         method: 'GET',
         url: '/api/v1/clusters?page=1&per_page=10000000',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: createClusters,
+        });
+      },
+    );
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/38',
       },
       (req) => {
         req.reply({
@@ -122,26 +128,29 @@ describe('Create cluster', () => {
     cy.get('#save').click();
 
     // Then I see that the current page is the clusters.
-    cy.url().should('include', '/clusters');
+    cy.url().should('include', '/clusters/38');
 
-    // Displays successfully added clusters.
-    cy.get(':nth-child(8) > .MuiPaper-root > .clusters_clusterListContent__UwWjF > .MuiTypography-h6')
-      .should('be.visible')
-      .and('contain', 'cluster-17');
+    cy.get('.information_classNameWrapper__Ey-oo > div.MuiBox-root > #name').should('have.text', 'cluster-38');
+
+    cy.get('#description').should('have.text', 'Add new cluster case');
+
+    // Show Scopes.
+    cy.get('#location').should('have.text', 'China|Hang|Zhou');
+
+    cy.get('#idc-1').should('have.text', 'hz');
+    cy.get('#idc-2').should('have.text', 'sh');
+
+    cy.get('#cidrs-1').should('have.text', '10.0.0.0/8');
+    cy.get('#cidrs-2').should('have.text', '172.16.0.0/12');
+    cy.get('#cidrs-3').should('have.text', '192.168.0.0/16');
+
+    cy.get('.MuiBreadcrumbs-ol > :nth-child(1) > .MuiTypography-root').click();
 
     // The number of clusters has been increased.
-    cy.get(
-      ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .css-70qvj9 > .MuiTypography-root',
-    )
-      .should('be.visible')
-      .and('contain', '17');
+    cy.get('#total-clusters').should('be.visible').and('contain', '38');
 
     // The default number of clusters has been increased.
-    cy.get(
-      ':nth-child(1) > .css-q5fqw0 > .clusters_clusterContentContainer__ZxKuh > .css-zm3ms > .MuiGrid-root > .clusters_clusterBottomContentContainer__KII0M > .clusters_clusterBottomContent__k3P4u',
-    )
-      .should('be.visible')
-      .and('contain', '8');
+    cy.get('#default-clusters').should('be.visible').and('contain', '14');
   });
 
   it('cannot create cluster with existing cluster', () => {

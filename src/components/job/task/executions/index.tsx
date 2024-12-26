@@ -95,6 +95,7 @@ export default function Executions() {
             if (error instanceof Error) {
               setErrorMessage(true);
               setErrorMessageText(error.message);
+              setShouldPoll(false);
             }
           }
         };
@@ -242,10 +243,12 @@ export default function Executions() {
                           sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
                           ml="0.6rem"
                         >
-                          <Typography variant="body1" fontFamily="mabry-bold">
-                            {item.id}
+                          <Typography id={`id-${item?.id}`} variant="body1" fontFamily="mabry-bold">
+                            {item?.id || '-'}
                           </Typography>
-                          <Typography variant="body2">{item?.args?.task_id || '-'}</Typography>
+                          <Typography id={`task-id-${item?.id}`} variant="body2">
+                            {item?.args?.task_id || '-'}
+                          </Typography>
                         </Box>
                       </Box>
                       <Box className={styles.timeContainer}>

@@ -862,7 +862,7 @@ export default function Information() {
                   Job Rate Limit(requests per seconds)
                 </Typography>
                 <MuiTooltip
-                  title="The rate limit(requests per second) for  job Open API, default value is 10."
+                  title="The rate limit(requests per second) for job Open API, default value is 10."
                   placement="top"
                 >
                   <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />

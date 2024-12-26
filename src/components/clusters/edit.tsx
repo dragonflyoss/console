@@ -547,7 +547,7 @@ export default function EditCluster() {
         InputProps: {
           endAdornment: (
             <Tooltip
-              title={`The scheduler will randomly select the  number of parents from all the parents according to the filter parent limit and evaluate the optimal parents in selecting parents for the peer to download task. The number of optimal parent is the scheduling parent limit.`}
+              title={`The rate limit(requests per second) for job Open API, default value is 10.`}
               placement="top"
             >
               <HelpIcon color="disabled" className={styles.descriptionIcon} />

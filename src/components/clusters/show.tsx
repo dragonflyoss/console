@@ -112,10 +112,6 @@ export default function NavTabs() {
 
           setCluster(cluster);
           setIsLoading(false);
-
-          //   setCluster(cluster);
-
-          //   setInformationIsLoading(false);
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -160,7 +156,7 @@ export default function NavTabs() {
       },
       '&.Mui-selected': {
         color: '#000',
-        fontFamily:"mabry-bold",
+        fontFamily: 'mabry-bold',
       },
     }),
   );

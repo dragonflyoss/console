@@ -7,7 +7,6 @@ import {
   Chip,
   Dialog,
   DialogContent,
-  Grid,
   IconButton,
   Link as RouterLink,
   Skeleton,
@@ -36,9 +35,6 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
-  FormControl,
-  InputLabel,
-  Select,
   toggleButtonGroupClasses,
   ToggleButtonGroup,
   styled,
@@ -48,19 +44,7 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Chart,
-} from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
-import { getSeedPeers, deleteSeedPeer, getSeedPeersResponse } from '../../lib/api';
+import { getSeedPeers, deleteSeedPeer, getSeedPeersResponse } from '../../../lib/api';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -69,16 +53,16 @@ import { LoadingButton } from '@mui/lab';
 import styles from './index.module.css';
 import _ from 'lodash';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
-import { MAX_PAGE_SIZE, DEFAULT_PAGE_SIZE } from '../../lib/constants';
-import { fuzzySearchScheduler, getPaginatedList, useQuery } from '../../lib/utils';
+import { MAX_PAGE_SIZE, DEFAULT_PAGE_SIZE } from '../../../lib/constants';
+import { fuzzySearchScheduler, getPaginatedList, useQuery } from '../../../lib/utils';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
-import DeleteAnimation from '../delete-animation';
-import SearchCircularProgress from '../circular-progress';
-import { CancelLoadingButton, DeleteLoadingButton, SavelLoadingButton } from '../loading-button';
+import DeleteAnimation from '../../delete-animation';
+import SearchCircularProgress from '../../circular-progress';
+import { CancelLoadingButton, DeleteLoadingButton } from '../../loading-button';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { MyContext } from '../clusters/show';
-import DeleteSuccessfullyAnimation from '../deleted-successfully-animation';
-import Card from '../card';
+import { MyContext } from '../../clusters/show';
+import DeleteSuccessfullyAnimation from '../../deleted-successfully-animation';
+import Card from '../../card';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -1639,7 +1623,6 @@ export default function ShowCluster() {
                                   <MenuItem
                                     id={`view-${seedPeerSelectedRow?.host_name}`}
                                     onClick={() => {
-                                      // openHandleScheduler(schedulerSelectedRow);
                                       navigate(`/clusters/${params.id}/seed-peers/${seedPeerSelectedRow?.id}`);
                                       setSeedPeerAnchorElement(null);
                                     }}

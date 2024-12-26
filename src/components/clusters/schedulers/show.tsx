@@ -11,13 +11,12 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import HistoryIcon from '@mui/icons-material/History';
-import { getScheduler, getSchedulerResponse } from '../../lib/api';
-import { getDatetime } from '../../lib/utils';
+import { getScheduler, getSchedulerResponse } from '../../../lib/api';
+import { getDatetime } from '../../../lib/utils';
 import styles from './show.module.css';
 import _ from 'lodash';
 import { useParams, Link, useLocation } from 'react-router-dom';
-import Card from '../card';
+import Card from '../../card';
 
 export default function Schedulers() {
   const [isLoading, setIsLoading] = useState(false);

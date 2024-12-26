@@ -65,8 +65,6 @@ describe('Menu', () => {
     beforeEach(() => {
       cy.signin();
 
-      cy.visit('/');
-
       cy.intercept(
         {
           method: 'GET',
@@ -103,6 +101,8 @@ describe('Menu', () => {
           });
         },
       );
+
+      cy.visit('/');
     });
 
     it('should be redirect when signin', () => {

@@ -1,6 +1,5 @@
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
 import {
   Alert,
   Box,
@@ -8,7 +7,6 @@ import {
   Chip,
   Dialog,
   DialogContent,
-  Grid,
   IconButton,
   Link as RouterLink,
   Skeleton,
@@ -33,9 +31,6 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
-  FormControl,
-  InputLabel,
-  Select,
   toggleButtonGroupClasses,
   ToggleButtonGroup,
   ToggleButton,
@@ -61,16 +56,14 @@ import {
   Title,
   Chart,
 } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
 import {
   getSchedulers,
   deleteScheduler,
   getSchedulersResponse,
   getSchedulerFeatrues,
   updateSchedulerFeatrues,
-} from '../../lib/api';
+} from '../../../lib/api';
 import DeleteIcon from '@mui/icons-material/Delete';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -79,21 +72,20 @@ import { LoadingButton } from '@mui/lab';
 import styles from './index.module.css';
 import _ from 'lodash';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
-import { MAX_PAGE_SIZE, DEFAULT_PAGE_SIZE } from '../../lib/constants';
-import { fuzzySearchScheduler, getPaginatedList, useQuery } from '../../lib/utils';
+import { MAX_PAGE_SIZE, DEFAULT_PAGE_SIZE } from '../../../lib/constants';
+import { fuzzySearchScheduler, getPaginatedList, useQuery } from '../../../lib/utils';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
-import DeleteAnimation from '../delete-animation';
-import DeleteSuccessfullyAnimation from '../deleted-successfully-animation';
-import SearchCircularProgress from '../circular-progress';
-import { CancelLoadingButton, DeleteLoadingButton, SavelLoadingButton } from '../loading-button';
+import DeleteAnimation from '../../delete-animation';
+import DeleteSuccessfullyAnimation from '../../deleted-successfully-animation';
+import SearchCircularProgress from '../../circular-progress';
+import { CancelLoadingButton, DeleteLoadingButton, SavelLoadingButton } from '../../loading-button';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
-import { MyContext } from '../clusters/show';
+import { MyContext } from '../../clusters/show';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import Card from '../card';
+import Card from '../../card';
 
 const theme = createTheme({
   palette: {
@@ -1247,7 +1239,6 @@ export default function ShowCluster() {
                                   <MenuItem
                                     id={`view-${schedulerSelectedRow?.host_name}`}
                                     onClick={() => {
-                                      // openHandleScheduler(schedulerSelectedRow);
                                       navigate(`/clusters/${params.id}/schedulers/${schedulerSelectedRow?.id}`);
                                       setSchedulerAnchorElement(null);
                                     }}

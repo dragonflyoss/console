@@ -1,4 +1,3 @@
-import Divider from '@mui/material/Divider';
 import {
   Box,
   Tooltip as MuiTooltip,
@@ -8,12 +7,9 @@ import {
   DialogContent,
   IconButton,
   Skeleton,
-  createTheme,
-  ThemeProvider,
   Snackbar,
   Button,
   Alert,
-  Chip,
 } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -38,7 +34,6 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { deleteCluster } from '../../lib/api';
 import DeleteIcon from '@mui/icons-material/Delete';
-import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { getDatetime } from '../../lib/utils';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);

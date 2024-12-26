@@ -7,17 +7,16 @@ import {
   Link as RouterLink,
   Skeleton,
   Snackbar,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { getSeedPeer, getSeedPeerResponse } from '../../lib/api';
-import { getDatetime } from '../../lib/utils';
+import { getSeedPeer, getSeedPeerResponse } from '../../../lib/api';
+import { getDatetime } from '../../../lib/utils';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import styles from './show.module.css';
 import _ from 'lodash';
 import { useParams, Link, useLocation } from 'react-router-dom';
-import Card from '../card';
+import Card from '../../card';
 
 export default function SeedPeer() {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,37 +29,6 @@ export default function SeedPeer() {
   const location = useLocation();
   const pathSegments = location.pathname.split('/');
   const clusterID = pathSegments[pathSegments.length - 3];
-
-  const seedPeerLabel = [
-    {
-      label: 'Port',
-      name: 'port',
-    },
-    {
-      label: 'Download Port',
-      name: 'download_port',
-    },
-    {
-      label: 'Object Storage Port',
-      name: 'object_storage_port',
-    },
-    {
-      label: 'Type',
-      name: 'type',
-    },
-    {
-      label: 'State',
-      name: 'state',
-    },
-    {
-      label: 'Created At',
-      name: 'created_at',
-    },
-    {
-      label: 'Updated At',
-      name: 'updated_at',
-    },
-  ];
 
   useEffect(() => {
     (async function () {
@@ -144,13 +112,7 @@ export default function SeedPeer() {
               Hostname
             </Typography>
           </Box>
-          <Typography
-            id="hostname"
-            component="div"
-            variant="body1"
-            fontFamily="mabry-bold"
-            className={styles.hostname}
-          >
+          <Typography id="hostname" component="div" variant="body1" fontFamily="mabry-bold" className={styles.hostname}>
             {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : seedPeer?.host_name || '-'}
           </Typography>
         </Box>

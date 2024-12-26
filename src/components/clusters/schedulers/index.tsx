@@ -812,7 +812,7 @@ export default function ShowCluster() {
       {alignment === 'card' ? (
         <Box>
           {isLoading ? (
-            <Card className={styles.card}>
+            <Card className={styles.loadingCard}>
               <Box className={styles.clusterListContent}>
                 <Box p="1.2rem 1.2rem 0 1.2rem">
                   <Box display="flex" mb="0.5rem">

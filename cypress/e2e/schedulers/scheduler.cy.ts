@@ -193,7 +193,7 @@ describe('Scheduler', () => {
       cy.get('#port').should('contain', '-');
 
       // Show Start.
-      cy.get(':nth-child(5) > .show_headerText__TxL6s').should('contain', '-');
+      cy.get(':nth-child(5) > .show_headerText__DJulT').should('contain', '-');
 
       // Show Features.
       cy.get('#features').should('contain', '-');
@@ -256,7 +256,7 @@ describe('Scheduler', () => {
       cy.get('#port').should('contain', '-');
 
       // Show Start.
-      cy.get(':nth-child(5) > .show_headerText__TxL6s').should('contain', '-');
+      cy.get(':nth-child(5) > .show_headerText__DJulT').should('contain', '-');
 
       // Show Features.
       cy.get('#features').should('contain', '-');

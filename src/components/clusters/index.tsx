@@ -426,7 +426,7 @@ export default function Clusters() {
       </Box>
       <Box>
         {isLoading ? (
-          <Box id="clusters" className={styles.clusterCard}>
+          <Box id="clusters" className={styles.loadingCard}>
             <Card>
               <Box className={styles.clusterListContent}>
                 <Box p="1.2rem 1.2rem 0 1.2rem">

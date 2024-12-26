@@ -141,6 +141,10 @@
   grid-template-columns: repeat(3, 1fr);
 }
 
+.loadingCard {
+  width: 33.33%;
+}
+
 .card {
   overflow: hidden;
 }

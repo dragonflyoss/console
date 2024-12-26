@@ -125,7 +125,7 @@ describe('Seed peers', () => {
       // It can show that the seed-peer card is 10.
       cy.get('#seed-peer-card').children().should('have.length', 9);
       cy.get('#operation-51').click();
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__He8yp > #view-seed-peer-51').click();
+      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__BE2ff > #view-seed-peer-51').click();
 
       // Then I see that the current page is the seed-peer 7.
       cy.url().should('include', 'clusters/1/seed-peers/51');
@@ -404,7 +404,7 @@ describe('Seed peers', () => {
 
       cy.get('#operation-19').click();
 
-      cy.get(':nth-child(8) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__He8yp > #view-seed-peer-19').click();
+      cy.get(':nth-child(8) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__BE2ff > #view-seed-peer-19').click();
 
       // Then I see that the current page is the show seed-peers 19.
       cy.url().should('include', '/clusters/1/seed-peers/19');
@@ -647,7 +647,7 @@ describe('Seed peers', () => {
         .should('be.visible')
         .and('contain', 'Inactive');
       cy.get('#operation-9').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__He8yp > #delete-seed-peer-9').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__BE2ff > #delete-seed-peer-9').click();
 
       cy.intercept({ method: 'DELETE', url: '/api/v1/seed-peers/9' }, (req) => {
         req.reply({
@@ -689,13 +689,13 @@ describe('Seed peers', () => {
       cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '6');
       cy.get('#card-hostname-seed-peer-3').should('be.visible').and('contain', 'seed-peer-3');
       cy.get('#operation-3').click();
-      cy.get(':nth-child(8) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__He8yp > #delete-seed-peer-3').click();
+      cy.get(':nth-child(8) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__BE2ff > #delete-seed-peer-3').click();
       cy.get('#cancelDeleteSeedPeer').click();
       cy.get('.MuiDialogContent-root').should('not.exist');
 
       // Confirm delete.
       cy.get('#operation-3').click();
-      cy.get(':nth-child(8) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__He8yp > #delete-seed-peer-3').click();
+      cy.get(':nth-child(8) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__BE2ff > #delete-seed-peer-3').click();
 
       cy.intercept({ method: 'DELETE', url: '/api/v1/seed-peers/3' }, (req) => {
         req.reply({
@@ -740,7 +740,7 @@ describe('Seed peers', () => {
 
       cy.get('#operation-51').click();
       cy.get(
-        ':nth-child(11) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__He8yp > #delete-seed-peer-51',
+        ':nth-child(11) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__BE2ff > #delete-seed-peer-51',
       ).click();
       cy.get('#deleteSeedPeer').click();
 
@@ -765,7 +765,7 @@ describe('Seed peers', () => {
 
       cy.get('#operation-51').click();
       cy.get(
-        ':nth-child(11) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__He8yp > #delete-seed-peer-51',
+        ':nth-child(11) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__BE2ff > #delete-seed-peer-51',
       ).click();
       cy.get('#deleteSeedPeer').click();
 
@@ -834,7 +834,7 @@ describe('Seed peers', () => {
 
       cy.get('#operation-3').click();
 
-      cy.get(':nth-child(8) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__He8yp > #delete-seed-peer-3').click();
+      cy.get(':nth-child(8) > .MuiPaper-root > .MuiList-root > .seed-peers_menu__BE2ff > #delete-seed-peer-3').click();
 
       cy.intercept({ method: 'DELETE', url: '/api/v1/seed-peers/3' }, (req) => {
         req.reply({

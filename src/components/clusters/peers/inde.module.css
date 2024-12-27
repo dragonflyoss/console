@@ -5,6 +5,18 @@
   overflow: hidden;
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.headerTitle {
+  display: flex;
+  align-items: center;
+}
+
 .navigationContent {
   display: flex;
   justify-content: space-between;
@@ -62,7 +74,7 @@
 }
 
 .doughnutContainer {
-  margin-left: 1rem;
+  margin-left: 1.6rem;
   width: 33%;
   display: flex;
   justify-content: space-between;
@@ -137,4 +149,15 @@
   border-width: 0px 0px thin;
   border-color: var(--palette-divider);
   border-style: dashed;
+}
+
+.visualizationWrapper {
+  width: 100%;
+}
+
+.pieWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
 }

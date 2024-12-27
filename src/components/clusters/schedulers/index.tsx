@@ -143,6 +143,7 @@ export default function ShowCluster() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [alignment, setAlignment] = useState('card');
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [openDeleteInactive, setOpenDeleteInactive] = useState(false);
   const [openDeleteScheduler, setOpenDeleteScheduler] = useState(false);
@@ -168,7 +169,6 @@ export default function ShowCluster() {
   const [searchSchedulerIconISLodaing, setSearchSchedulerIconISLodaing] = useState(false);
   const [schedulerAnchorElement, setSchedulerAnchorElement] = useState(null);
   const [status, setStatus] = useState<string>('all');
-  const [alignment, setAlignment] = useState('card');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const steps = ['Schedulers', 'Confirm delete'];
@@ -181,11 +181,8 @@ export default function ShowCluster() {
   const statr = query.get('status') ? (query.get('status') as string) : 'all';
 
   const open = Boolean(anchorEl);
-  const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
 
-  const handleMenuItemClick = (event: any, index: number) => {
+  const handleMenuItemClick = (event: any) => {
     setStatus(event.name);
 
     const queryParts = [];
@@ -230,6 +227,7 @@ export default function ShowCluster() {
           const features = await getSchedulerFeatrues();
 
           setSchedulerFeatures(features);
+
           setIsLoading(false);
         }
       } catch (error) {
@@ -241,64 +239,6 @@ export default function ShowCluster() {
       }
     })();
   }, [params.id, schedulers]);
-
-  const numberOfActiveSchedulers =
-    Array.isArray(schedulerCount) && schedulerCount?.filter((item: any) => item?.state === 'active').length;
-
-  const numberOfInactiveSchedulers =
-    Array.isArray(schedulerCount) && schedulerCount?.filter((item: any) => item?.state === 'inactive').length;
-
-  const schedulerInactive =
-    Array.isArray(schedulerCount) && schedulerCount?.filter((item: any) => item?.state === 'inactive');
-
-  const handleClose = (_event: any, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setErrorMessage(false);
-    setSuccessMessage(false);
-    setAnchorEl(null);
-    setOpenDeleteScheduler(false);
-    setSchedulerSelectedRow(null);
-    setOpenSchedulerEditFeatures(false);
-    setSchedulerAnchorElement(null);
-
-    if (!progressLoading) {
-      setOpenDeleteInactive(false);
-      setDeleteAllInactiveErrorMessage([]);
-      setDeleteInactiveSchedulerSuccessful(0);
-      setActiveStep(0);
-    }
-  };
-
-  const openHandleScheduler = (row: any) => {
-    setSchedulerSelectedRow(row);
-    setSchedulerSelectedID(row.id);
-    setOpenDeleteScheduler(true);
-  };
-
-  const handleDeleteScheduler = async () => {
-    setIsLoading(true);
-    setDeleteLoadingButton(true);
-
-    try {
-      await deleteScheduler(schedulerSelectedID);
-      setOpenDeleteScheduler(false);
-      setDeleteLoadingButton(false);
-
-      await schedulers();
-      setIsLoading(false);
-      setSuccessMessage(true);
-    } catch (error) {
-      if (error instanceof Error) {
-        setIsLoading(false);
-
-        setErrorMessage(true);
-        setErrorMessageText(error.message);
-        setDeleteLoadingButton(false);
-      }
-    }
-  };
 
   useEffect(() => {
     setSchedulerPage(page);
@@ -370,7 +310,65 @@ export default function ShowCluster() {
       setSchedulerTotalPages(1);
       setAllSchedlers([]);
     }
-  }, [scheduler, schedulerPage, status, pageSize, alignment, page, statr, location.pathname, navigate, search]);
+  }, [scheduler, schedulerPage, alignment, pageSize, page, status, location.pathname, navigate, search, statr]);
+
+  const numberOfActiveSchedulers =
+    Array.isArray(schedulerCount) && schedulerCount?.filter((item: any) => item?.state === 'active').length;
+
+  const numberOfInactiveSchedulers =
+    Array.isArray(schedulerCount) && schedulerCount?.filter((item: any) => item?.state === 'inactive').length;
+
+  const schedulerInactive =
+    Array.isArray(schedulerCount) && schedulerCount?.filter((item: any) => item?.state === 'inactive');
+
+  const handleClose = (_event: any, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErrorMessage(false);
+    setSuccessMessage(false);
+    setAnchorEl(null);
+    setOpenDeleteScheduler(false);
+    setSchedulerSelectedRow(null);
+    setOpenSchedulerEditFeatures(false);
+    setSchedulerAnchorElement(null);
+
+    if (!progressLoading) {
+      setOpenDeleteInactive(false);
+      setDeleteAllInactiveErrorMessage([]);
+      setDeleteInactiveSchedulerSuccessful(0);
+      setActiveStep(0);
+    }
+  };
+
+  const openHandleScheduler = (row: any) => {
+    setSchedulerSelectedRow(row);
+    setSchedulerSelectedID(row.id);
+    setOpenDeleteScheduler(true);
+  };
+
+  const handleDeleteScheduler = async () => {
+    setIsLoading(true);
+    setDeleteLoadingButton(true);
+
+    try {
+      await deleteScheduler(schedulerSelectedID);
+      setOpenDeleteScheduler(false);
+      setDeleteLoadingButton(false);
+
+      await schedulers();
+      setIsLoading(false);
+      setSuccessMessage(true);
+    } catch (error) {
+      if (error instanceof Error) {
+        setIsLoading(false);
+
+        setErrorMessage(true);
+        setErrorMessageText(error.message);
+        setDeleteLoadingButton(false);
+      }
+    }
+  };
 
   const debouncedScheduler = useMemo(
     () =>
@@ -563,6 +561,10 @@ export default function ShowCluster() {
     setAlignment(newAlignment);
   };
 
+  const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Snackbar
@@ -589,7 +591,7 @@ export default function ShowCluster() {
         <Typography variant="h6" fontFamily="mabry-bold">
           Schedulers
         </Typography>
-        <MuiTooltip title="Delete inactive schedulers and inactive seed peers." placement="top">
+        <MuiTooltip title="Delete inactive schedulers." placement="top">
           <Button
             variant="contained"
             size="small"
@@ -777,7 +779,7 @@ export default function ShowCluster() {
               </Typography>
               <Divider sx={{ mb: '0.2rem' }} />
               {statusList.map((item, index) => (
-                <MenuItem key={item.name} value={item.name} onClick={() => handleMenuItemClick(item, index)}>
+                <MenuItem key={item.name} value={item.name} onClick={() => handleMenuItemClick(item)}>
                   {item.lable}
                 </MenuItem>
               ))}
@@ -809,7 +811,7 @@ export default function ShowCluster() {
           </Paper>
         </Box>
       </Box>
-      {alignment === 'card' ? (
+      {alignment && alignment === 'card' ? (
         <Box>
           {isLoading ? (
             <Card className={styles.loadingCard}>
@@ -1714,7 +1716,7 @@ export default function ShowCluster() {
                       </Box>
                     </Box>
                     <Typography variant="body1" component="div">
-                      Inactive schedulers and inactive seed peers will be permanently delete.
+                      Inactive schedulers and will be permanently delete.
                     </Typography>
                     <TextField
                       error={allInactiveError}

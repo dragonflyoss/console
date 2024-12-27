@@ -103,7 +103,6 @@ export default function Layout(props: any) {
   const [firstLogin, setFirstLogin] = useState(false);
   const [expandDeveloper, setExpandDeveloper] = useState(false);
   const [expandJob, setExpandJob] = useState(false);
-  const [expandInsight, setExpandInsight] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const openProfile = Boolean(anchorElement);
@@ -251,52 +250,121 @@ export default function Layout(props: any) {
 
   return (
     <MyContext.Provider value={{ user, role, handleUserUpdate }}>
-      {pageLoding ? <BorderLinearProgress variant="determinate" value={progress} /> : <></>}
-      <Snackbar
-        open={firstLogin}
-        autoHideDuration={60000}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        onClose={handleClose}
-        sx={{ alignItems: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
-          Please change the password in time for the first login!
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
-      {location.pathname === '/signin' || location.pathname === '/signup' ? (
-        <main>{props.children}</main>
-      ) : (
-        <Box className={styles.container}>
-          <CssBaseline />
-          <Box className={styles.navigationBarContainer}>
-            <Grid sx={{ pl: '1rem', pr: '1rem' }}>
-              <Box className={styles.title}>
-                <picture>
-                  <Box component="img" className={styles.logo} src="/icons/cluster/logo.svg" />
-                </picture>
-                <Typography variant="h6" gutterBottom sx={{ fontFamily: 'mabry-bold' }}>
-                  Dragonfly
-                </Typography>
-              </Box>
-              <List component="nav" aria-label="main mailbox folders">
-                {menu.map((items) =>
-                  items?.menuProps ? (
-                    <Box key={items.href} className={styles.menu}>
+      <Box className={styles.pageContainer}>
+        {pageLoding ? (
+          <Box className={styles.pageloading}>
+            <BorderLinearProgress id="page-loading" variant="determinate" value={progress} />
+          </Box>
+        ) : (
+          <></>
+        )}
+        <Snackbar
+          open={firstLogin}
+          autoHideDuration={60000}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          onClose={handleClose}
+          sx={{ alignItems: 'center' }}
+        >
+          <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+            Please change the password in time for the first login!
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={errorMessage}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+            {errorMessageText}
+          </Alert>
+        </Snackbar>
+        {location.pathname === '/signin' || location.pathname === '/signup' ? (
+          <main>{props.children}</main>
+        ) : (
+          <Box className={styles.container}>
+            <CssBaseline />
+            <Box className={styles.navigationBarContainer}>
+              <Grid sx={{ pl: '1rem', pr: '1rem' }}>
+                <Box className={styles.title}>
+                  <picture>
+                    <Box component="img" className={styles.logo} src="/icons/cluster/logo.svg" />
+                  </picture>
+                  <Typography variant="h6" gutterBottom sx={{ fontFamily: 'mabry-bold' }}>
+                    Dragonfly
+                  </Typography>
+                </Box>
+                <List component="nav" aria-label="main mailbox folders">
+                  {menu.map((items) =>
+                    items?.menuProps ? (
+                      <Box key={items.href} className={styles.menu}>
+                        <ListItemButton
+                          selected={(location.pathname.split('/')[1] || '') === items.label}
+                          onClick={() => {
+                            items?.setExpand(!items?.expand);
+                          }}
+                          sx={{
+                            '&.Mui-selected': {
+                              backgroundColor: 'var(--menu-background-color)',
+                              color: 'var(--description-color)',
+                            },
+                            '&.Mui-selected:hover': {
+                              backgroundColor: 'var(--hover-menu-background-color)',
+                              color: 'var(--description-color)',
+                            },
+                            height: '2.6rem',
+                            borderRadius: '0.2rem',
+                          }}
+                        >
+                          {(location.pathname.split('/')[1] || '') === items.label ? items.selectedIcon : items.icon}
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
+                          >
+                            {items.text}
+                          </Typography>
+                          {items.expand ? <ExpandMore /> : <ChevronRightOutlinedIcon />}
+                        </ListItemButton>
+                        <Collapse in={items.expand} timeout="auto" unmountOnExit>
+                          <List component="div" disablePadding>
+                            {items.menuProps?.map((item) => {
+                              return (
+                                <ListItemButton
+                                  className={styles.expandMenu}
+                                  selected={(location.pathname.split('/')[2] || '') === item.label}
+                                  component={Link}
+                                  to={item.href || ''}
+                                  sx={{
+                                    '&.Mui-selected': {
+                                      backgroundColor: '#fff',
+                                      color: 'var(--description-color)',
+                                    },
+                                    '&.Mui-selected:hover': {
+                                      backgroundColor: '#fff',
+                                      color: 'var(--description-color)',
+                                    },
+                                    height: '2.4rem',
+                                    borderRadius: '0.2rem',
+                                    pl: '1rem',
+                                    mt: '0.8rem',
+                                  }}
+                                >
+                                  <Typography variant="body1" sx={{ fontFamily: 'mabry-bold', ml: '2rem' }}>
+                                    {item.text}
+                                  </Typography>
+                                </ListItemButton>
+                              );
+                            })}
+                          </List>
+                        </Collapse>
+                      </Box>
+                    ) : (
                       <ListItemButton
+                        className={styles.menu}
+                        key={items.href}
                         selected={(location.pathname.split('/')[1] || '') === items.label}
-                        onClick={() => {
-                          items?.setExpand(!items?.expand);
-                        }}
+                        component={Link}
+                        to={items.href}
                         sx={{
                           '&.Mui-selected': {
                             backgroundColor: 'var(--menu-background-color)',
@@ -308,186 +376,125 @@ export default function Layout(props: any) {
                           },
                           height: '2.6rem',
                           borderRadius: '0.2rem',
+                          mb: '0.4rem',
+                          mt: '0.4rem',
                         }}
                       >
                         {(location.pathname.split('/')[1] || '') === items.label ? items.selectedIcon : items.icon}
-                        <Typography
-                          variant="subtitle1"
-                          sx={{ fontFamily: 'mabry-bold', ml: '0.4rem', width: '100%' }}
-                        >
+                        <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
                           {items.text}
                         </Typography>
-                        {items.expand ? <ExpandMore /> : <ChevronRightOutlinedIcon />}
                       </ListItemButton>
-                      <Collapse in={items.expand} timeout="auto" unmountOnExit>
-                        <List component="div" disablePadding>
-                          {items.menuProps?.map((item) => {
-                            return (
-                              <ListItemButton
-                                className={styles.expandMenu}
-                                selected={(location.pathname.split('/')[2] || '') === item.label}
-                                component={Link}
-                                to={item.href || ''}
-                                sx={{
-                                  '&.Mui-selected': {
-                                    backgroundColor: '#fff',
-                                    color: 'var(--description-color)',
-                                  },
-                                  '&.Mui-selected:hover': {
-                                    backgroundColor: '#fff',
-                                    color: 'var(--description-color)',
-                                  },
-                                  height: '2.4rem',
-                                  borderRadius: '0.2rem',
-                                  pl: '1rem',
-                                  mt: '0.8rem',
-                                }}
-                              >
-                                <Typography variant="body1" sx={{ fontFamily: 'mabry-bold', ml: '2rem' }}>
-                                  {item.text}
-                                </Typography>
-                              </ListItemButton>
-                            );
-                          })}
-                        </List>
-                      </Collapse>
-                    </Box>
-                  ) : (
-                    <ListItemButton
-                      className={styles.menu}
-                      key={items.href}
-                      selected={(location.pathname.split('/')[1] || '') === items.label}
-                      component={Link}
-                      to={items.href}
+                    ),
+                  )}
+                </List>
+              </Grid>
+              <Grid sx={{ mb: '4rem', pl: '1rem', pr: '1rem' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Avatar className={styles.avatar} src={user?.avatar} />
+                    <Box
                       sx={{
-                        '&.Mui-selected': {
-                          backgroundColor: 'var(--menu-background-color)',
-                          color: 'var(--description-color)',
-                        },
-                        '&.Mui-selected:hover': {
-                          backgroundColor: 'var(--hover-menu-background-color)',
-                          color: 'var(--description-color)',
-                        },
-                        height: '2.6rem',
-                        borderRadius: '0.2rem',
-                        mb: '0.4rem',
-                        mt: '0.4rem',
+                        width: '7rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
                       }}
                     >
-                      {(location.pathname.split('/')[1] || '') === items.label ? items.selectedIcon : items.icon}
-                      <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
-                        {items.text}
+                      <Typography id="menu-name" component="div" fontFamily="mabry-bold">
+                        {user?.name || '-'}
                       </Typography>
-                    </ListItemButton>
-                  ),
-                )}
-              </List>
-            </Grid>
-            <Grid sx={{ mb: '4rem', pl: '1rem', pr: '1rem' }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Avatar className={styles.avatar} src={user?.avatar} />
-                  <Box
-                    sx={{
-                      width: '7rem',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                    }}
-                  >
-                    <Typography id="menu-name" component="div" fontFamily="mabry-bold">
-                      {user?.name || '-'}
-                    </Typography>
-                    <Tooltip title={user?.email || '-'} placement="top">
-                      <Typography
-                        id="menu-email"
-                        component="div"
-                        variant="caption"
-                        sx={{
-                          width: '7rem',
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}
-                      >
-                        {user?.email || '-'}
-                      </Typography>
-                    </Tooltip>
+                      <Tooltip title={user?.email || '-'} placement="top">
+                        <Typography
+                          id="menu-email"
+                          component="div"
+                          variant="caption"
+                          sx={{
+                            width: '7rem',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {user?.email || '-'}
+                        </Typography>
+                      </Tooltip>
+                    </Box>
                   </Box>
-                </Box>
-                <IconButton
-                  onClick={(event: any) => {
-                    setAnchorElement(event.currentTarget);
-                  }}
-                  size="small"
-                  id="unfold-more"
-                  aria-controls={openProfile ? 'account-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={openProfile ? 'true' : undefined}
-                  sx={{ position: 'relative', padding: '0' }}
-                >
-                  <UnfoldMoreIcon />
-                </IconButton>
-              </Box>
-              <Menu
-                anchorEl={anchorElement}
-                id="account-menu"
-                open={openProfile}
-                onClose={() => {
-                  setAnchorElement(null);
-                }}
-                sx={{
-                  position: 'absolute',
-                  top: '-6rem',
-                  left: '-5.2rem',
-                  '& .MuiMenu-paper': {
-                    boxShadow: '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
-                  },
-                  '& .MuiMenu-list': {
-                    p: 0,
-                  },
-                }}
-              >
-                <Box className={styles.profileMenu}>
-                  <MenuItem
-                    id="profile-menu"
-                    onClick={() => {
-                      setAnchorElement(null);
-
-                      navigate('/profile');
+                  <IconButton
+                    onClick={(event: any) => {
+                      setAnchorElement(event.currentTarget);
                     }}
+                    size="small"
+                    id="unfold-more"
+                    aria-controls={openProfile ? 'account-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={openProfile ? 'true' : undefined}
+                    sx={{ position: 'relative', padding: '0' }}
                   >
-                    <ListItemIcon>
-                      <PersonAdd fontSize="small" className={styles.menuItemIcon} />
-                    </ListItemIcon>
-                    <Typography variant="body2" className={styles.menuText}>
-                      Profile
-                    </Typography>
-                  </MenuItem>
-                  <MenuItem id="logout-menu" onClick={handleLogout}>
-                    <ListItemIcon>
-                      <Logout fontSize="small" className={styles.menuItemIcon} />
-                    </ListItemIcon>
-                    <Typography variant="body2" className={styles.menuText}>
-                      Logout
-                    </Typography>
-                  </MenuItem>
+                    <UnfoldMoreIcon />
+                  </IconButton>
                 </Box>
-              </Menu>
-            </Grid>
+                <Menu
+                  anchorEl={anchorElement}
+                  id="account-menu"
+                  open={openProfile}
+                  onClose={() => {
+                    setAnchorElement(null);
+                  }}
+                  sx={{
+                    position: 'absolute',
+                    top: '-6rem',
+                    left: '-5.2rem',
+                    '& .MuiMenu-paper': {
+                      boxShadow: '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
+                    },
+                    '& .MuiMenu-list': {
+                      p: 0,
+                    },
+                  }}
+                >
+                  <Box className={styles.profileMenu}>
+                    <MenuItem
+                      id="profile-menu"
+                      onClick={() => {
+                        setAnchorElement(null);
+
+                        navigate('/profile');
+                      }}
+                    >
+                      <ListItemIcon>
+                        <PersonAdd fontSize="small" className={styles.menuItemIcon} />
+                      </ListItemIcon>
+                      <Typography variant="body2" className={styles.menuText}>
+                        Profile
+                      </Typography>
+                    </MenuItem>
+                    <MenuItem id="logout-menu" onClick={handleLogout}>
+                      <ListItemIcon>
+                        <Logout fontSize="small" className={styles.menuItemIcon} />
+                      </ListItemIcon>
+                      <Typography variant="body2" className={styles.menuText}>
+                        Logout
+                      </Typography>
+                    </MenuItem>
+                  </Box>
+                </Menu>
+              </Grid>
+            </Box>
+            <Divider orientation="vertical" flexItem sx={{ borderColor: 'rgba(145 158 171 / 0.12)' }} />
+            <Main>
+              <Outlet />
+            </Main>
           </Box>
-          <Divider orientation="vertical" flexItem sx={{ borderColor: 'rgba(145 158 171 / 0.12)' }} />
-          <Main>
-            <Outlet />
-          </Main>
-        </Box>
-      )}
+        )}
+      </Box>
     </MyContext.Provider>
   );
 }

@@ -417,7 +417,7 @@ export default function NewPreheat() {
                 margin="normal"
                 key={item.formProps.name}
                 {...item.formProps}
-                className={styles.textField}
+                className={styles.filterInput}
               />
             ))}
           </Box>
@@ -578,7 +578,7 @@ export default function NewPreheat() {
               })}
             </Box>
             {headers.length > 0 ? (
-              <Paper id="header" variant="outlined" sx={{ p: '1rem', width: '36rem', mt: '1rem' }}>
+              <Paper id="header" variant="outlined" sx={{ p: '1rem', width: '37rem', mt: '1rem' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography variant="body1" fontFamily="mabry-bold" mr="0.4rem">
                     Headers
@@ -626,8 +626,9 @@ export default function NewPreheat() {
                     />
                     <IconButton
                       sx={{
-                        width: '2.6rem',
-                        height: '2.6rem',
+                        width: '2.4rem',
+                        height: '2.4rem',
+                        p: '0.2rem',
                       }}
                       onClick={() => {
                         const newheaders = [...headers];
@@ -644,13 +645,11 @@ export default function NewPreheat() {
                     '&.MuiButton-root': {
                       backgroundColor: 'var(--description-color)',
                       borderColor: 'var(--description-color)',
-                      borderRadius: 0,
                       color: '#FFF',
                       display: 'inline-flex',
                       alignItems: 'center',
                     },
                     width: '100%',
-
                     mt: '1.5rem',
                   }}
                   variant="outlined"
@@ -669,11 +668,9 @@ export default function NewPreheat() {
                   '&.MuiButton-root': {
                     backgroundColor: 'var(--description-color)',
                     borderColor: 'var(--description-color)',
-                    borderRadius: 0,
                     color: '#FFF',
                   },
                   width: '8rem',
-
                   mt: '1rem',
                 }}
                 variant="outlined"

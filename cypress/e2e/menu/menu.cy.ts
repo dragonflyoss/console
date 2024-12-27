@@ -128,6 +128,9 @@ describe('Menu', () => {
       cy.get('.MuiList-root > :nth-child(3) > .MuiButtonBase-root').click();
       cy.get('[href="/jobs/preheats"]').click();
 
+      // Show page loading.
+      cy.get('#page-loading').should('be.visible');
+
       // Then I see that the current page is the preheats!
       cy.url().should('include', '/jobs/preheats');
 

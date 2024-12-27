@@ -29,7 +29,6 @@
   margin-left: 1rem !important;
   color: #515151;
   font-family: 'mabry-bold' !important;
-  
 }
 
 .informationContent {
@@ -53,6 +52,22 @@
 .headersText {
   display: flex;
   padding: 1rem 1rem 0 1rem;
+  max-height: 10rem;
+}
+
+.headerKey {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.headerValue {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  text-overflow: ellipsis;
 }
 
 .schedulerClustersID {

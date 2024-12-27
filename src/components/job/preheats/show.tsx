@@ -383,10 +383,16 @@ export default function ShowPreheat() {
                 <Card id="headers" className={styles.headersContent}>
                   {Object.entries(preheat?.args.headers).map(([key, value], index) => (
                     <Box key={index} className={styles.headersText}>
-                      <Box fontFamily="mabry-bold" width="35%" mr="1rem">
+                      <Box id={`header-key${index}`} fontFamily="mabry-bold" width="35%" mr="1rem">
                         {key}
                       </Box>
-                      <Box width="65%">{value}</Box>
+                      <Box width="65%" className={styles.headerValue} id={`header-value${index}`}>
+                        <CustomWidthTooltip title={value || '-'} placement="bottom">
+                          <Typography id="url" variant="body1" component="div">
+                            {value}
+                          </Typography>
+                        </CustomWidthTooltip>
+                      </Box>
                     </Box>
                   ))}
                 </Card>

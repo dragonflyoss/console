@@ -18,6 +18,7 @@ import {
   Alert,
   Tooltip as MuiTooltip,
   IconButton,
+  Link,
 } from '@mui/material';
 import {
   Chart as ChartJS,
@@ -452,10 +453,31 @@ export default function Peer() {
             {errorMessageText}
           </Alert>
         </Snackbar>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: '2rem' }}>
-          <Typography variant="h6" fontFamily="mabry-bold">
-            Peers
-          </Typography>
+        <Box className={styles.header}>
+          <Box className={styles.headerTitle}>
+            <Typography variant="h6" fontFamily="mabry-bold" pr="0.4rem">
+              Peers
+            </Typography>
+            <MuiTooltip
+              title={
+                <Typography variant="body2">
+                  Peer statistics are only supported in the Rust client, refer to&nbsp;
+                  <Link
+                    underline="hover"
+                    href="https://github.com/dragonflyoss/client"
+                    target="_blank"
+                    style={{ color: 'var(--menu-color)' }}
+                  >
+                    dragonflyoss/client
+                  </Link>
+                  .
+                </Typography>
+              }
+              placement="top"
+            >
+              <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
+            </MuiTooltip>
+          </Box>
           <Box>
             <Button
               id="refresh"
@@ -575,15 +597,7 @@ export default function Peer() {
           </Box>
         </Box>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-          <Box
-            sx={{
-              mb: '2rem',
-              width: '100% ',
-              [theme.breakpoints.up('xl')]: {
-                width: '49%',
-              },
-            }}
-          >
+          <Box className={styles.visualizationWrapper}>
             <Box className={styles.dashboard}>
               <Card className={styles.barContainer}>
                 <Box className={styles.barTitle}>
@@ -630,7 +644,7 @@ export default function Peer() {
                     </MuiTooltip>
                   </Box>
                   <hr className={styles.divider} />
-                  <Box sx={{ p: '1rem 2rem' }}>
+                  <Box className={styles.pieWrapper}>
                     <Pie data={gitVersionDoughnut} options={doughnutOptions} />
                   </Box>
                 </Box>
@@ -660,15 +674,7 @@ export default function Peer() {
               </Card>
             </Box>
           </Box>
-          <Box
-            sx={{
-              mb: '2rem',
-              width: '100% ',
-              [theme.breakpoints.up('xl')]: {
-                width: '49%',
-              },
-            }}
-          >
+          <Box className={styles.visualizationWrapper}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: '1rem' }}>
               <Box>
                 <FormControl sx={{ width: '10rem' }} size="small">
@@ -740,7 +746,7 @@ export default function Peer() {
                     </MuiTooltip>
                   </Box>
                   <hr className={styles.divider} />
-                  <Box sx={{ p: '1rem 2rem' }}>
+                  <Box className={styles.pieWrapper}>
                     <Pie data={gitCommitDoughnut} options={doughnutOptions} />
                   </Box>
                 </Box>

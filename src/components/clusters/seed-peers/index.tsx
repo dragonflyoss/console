@@ -193,82 +193,74 @@ export default function ShowCluster() {
   useEffect(() => {
     setSeedPeerPage(page);
     setStatus(statr);
-  }, [page, statr]);
 
-  useEffect(() => {
-    try {
-      setIsLoading(true);
-
-      if (Array.isArray(seedPeer) && seedPeer.length >= 1) {
-        seedPeer.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-        seedPeer.sort((a, b) => {
-          if (a.state < b.state) {
-            return -1;
-          } else if (a.state > b.state) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-
-        if (alignment === 'card') {
-          const updatePageSize = () => {
-            if (window.matchMedia('(max-width: 1440px)').matches) {
-              setPageSize(9);
-            } else if (window.matchMedia('(max-width: 1600px)').matches) {
-              setPageSize(9);
-            } else if (window.matchMedia('(max-width: 1920px)').matches) {
-              setPageSize(12);
-            } else if (window.matchMedia('(max-width: 2048px)').matches) {
-              setPageSize(12);
-            } else if (window.matchMedia('(max-width: 2560px)').matches) {
-              setPageSize(15);
-            }
-          };
-
-          updatePageSize();
-
-          window.addEventListener('resize', updatePageSize);
+    if (Array.isArray(seedPeer) && seedPeer.length >= 1) {
+      seedPeer.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      seedPeer.sort((a, b) => {
+        if (a.state < b.state) {
+          return -1;
+        } else if (a.state > b.state) {
+          return 1;
+        } else {
+          return 0;
         }
+      });
 
-        const statusSeedPeer =
-          (status !== 'all' && Array.isArray(seedPeer) && seedPeer.filter((item) => item.state === status)) || seedPeer;
-
-        const totalPage = Math.ceil(statusSeedPeer.length / (alignment === 'card' ? pageSize : DEFAULT_PAGE_SIZE));
-        const currentPageData = getPaginatedList(
-          statusSeedPeer,
-          seedPeerPage,
-          alignment === 'card' ? pageSize : DEFAULT_PAGE_SIZE,
-        );
-
-        if (currentPageData?.length === 0 && seedPeerPage > 1) {
-          const queryParts = [];
-          if (search) {
-            queryParts.push(`search=${search}`);
+      if (alignment === 'card') {
+        const updatePageSize = () => {
+          if (window.matchMedia('(max-width: 1440px)').matches) {
+            setPageSize(9);
+          } else if (window.matchMedia('(max-width: 1600px)').matches) {
+            setPageSize(9);
+          } else if (window.matchMedia('(max-width: 1920px)').matches) {
+            setPageSize(12);
+          } else if (window.matchMedia('(max-width: 2048px)').matches) {
+            setPageSize(12);
+          } else if (window.matchMedia('(max-width: 2560px)').matches) {
+            setPageSize(15);
           }
+        };
 
-          if (page > 1) {
-            queryParts.push(`page=${seedPeerPage - 1}`);
-          }
+        updatePageSize();
 
-          if (status !== 'all') {
-            queryParts.push(`status=${status}`);
-          }
-          const queryString = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
-
-          navigate(`${location.pathname}${queryString}`);
-        }
-
-        setSeedPeerTotalPages(totalPage);
-        setAllSeedPeers(currentPageData);
-      } else {
-        setSeedPeerTotalPages(1);
-        setAllSeedPeers([]);
+        window.addEventListener('resize', updatePageSize);
       }
 
-      setIsLoading(false);
-    } catch (error) {}
-  }, [seedPeer, seedPeerPage, alignment, pageSize, page, status, location.pathname, navigate, search]);
+      const statusSeedPeer =
+        (status !== 'all' && Array.isArray(seedPeer) && seedPeer.filter((item) => item.state === status)) || seedPeer;
+
+      const totalPage = Math.ceil(statusSeedPeer.length / (alignment === 'card' ? pageSize : DEFAULT_PAGE_SIZE));
+      const currentPageData = getPaginatedList(
+        statusSeedPeer,
+        seedPeerPage,
+        alignment === 'card' ? pageSize : DEFAULT_PAGE_SIZE,
+      );
+
+      if (currentPageData?.length === 0 && seedPeerPage > 1) {
+        const queryParts = [];
+        if (search) {
+          queryParts.push(`search=${search}`);
+        }
+
+        if (page > 1) {
+          queryParts.push(`page=${seedPeerPage - 1}`);
+        }
+
+        if (status !== 'all') {
+          queryParts.push(`status=${status}`);
+        }
+        const queryString = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
+
+        navigate(`${location.pathname}${queryString}`);
+      }
+
+      setSeedPeerTotalPages(totalPage);
+      setAllSeedPeers(currentPageData);
+    } else {
+      setSeedPeerTotalPages(1);
+      setAllSeedPeers([]);
+    }
+  }, [seedPeer, seedPeerPage, alignment, pageSize, page, status, location.pathname, navigate, search, statr]);
 
   const numberOfActiveSeedPeers =
     Array.isArray(seedPeerCount) && seedPeerCount?.filter((item: any) => item?.state === 'active').length;
@@ -334,9 +326,9 @@ export default function ShowCluster() {
     () =>
       debounce(async (currentSearch) => {
         if (currentSearch && seedPeerCount.length > 0) {
-          const schedulers = fuzzySearchScheduler(currentSearch, seedPeerCount);
+          const seedpeers = fuzzySearchScheduler(currentSearch, seedPeerCount);
 
-          setSeedPeer(schedulers);
+          setSeedPeer(seedpeers);
           setSearchSeedPeerIconISLodaing(false);
         } else if (currentSearch === '' && seedPeerCount.length > 0) {
           setSeedPeer(seedPeerCount);
@@ -494,7 +486,7 @@ export default function ShowCluster() {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuItemClick = (event: any, index: number) => {
+  const handleMenuItemClick = (event: any) => {
     setStatus(event.name);
     const queryParts = [];
     if (search) {
@@ -535,10 +527,10 @@ export default function ShowCluster() {
         </Alert>
       </Snackbar>
       <Box className={styles.openDeleteInactiveDialog}>
-        <Typography variant="h6" fontWeight="600">
+        <Typography variant="h6" fontFamily="mabry-bold">
           Seed Peers
         </Typography>
-        <MuiTooltip title="Delete inactive schedulers and inactive seed peers." placement="top">
+        <MuiTooltip title="Delete inactive seed peers." placement="top">
           <Button
             variant="contained"
             size="small"
@@ -925,7 +917,7 @@ export default function ShowCluster() {
                       </Box>
                     </Box>
                     <Typography variant="body1" component="div">
-                      Inactive schedulers and inactive seed peers will be permanently delete.
+                      inactive seed peers will be permanently delete.
                     </Typography>
                     <TextField
                       error={allInactiveError}
@@ -1015,7 +1007,7 @@ export default function ShowCluster() {
         <Card className={styles.seedPeerHeader}>
           <Box sx={{ display: 'flex', width: '70%' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle1" fontWeight="600" color="#637381">
+              <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
                 Total
               </Typography>
               <Box>
@@ -1024,7 +1016,7 @@ export default function ShowCluster() {
                     <Skeleton height={40} data-testid="isloading" width="2rem" />
                   </Box>
                 ) : (
-                  <Typography id="total" variant="h5" fontWeight="600" p="0.5rem 0">
+                  <Typography id="total" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
                     {seedPeerCount?.length || 0}
                   </Typography>
                 )}
@@ -1041,7 +1033,7 @@ export default function ShowCluster() {
         <Card className={styles.activeHeader}>
           <Box sx={{ display: 'flex', width: '70%' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle1" fontWeight="600" color="#637381">
+              <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
                 Active
               </Typography>
               <Box>
@@ -1050,7 +1042,7 @@ export default function ShowCluster() {
                     <Skeleton height={40} data-testid="isloading" width="2rem" />
                   </Box>
                 ) : (
-                  <Typography id="active" variant="h5" fontWeight="600" p="0.5rem 0">
+                  <Typography id="active" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
                     {numberOfActiveSeedPeers}
                   </Typography>
                 )}
@@ -1066,7 +1058,7 @@ export default function ShowCluster() {
         <Card className={styles.activeHeader}>
           <Box sx={{ display: 'flex' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle2" fontWeight="600" color="#637381">
+              <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
                 Inactive
               </Typography>
               <Box>
@@ -1075,12 +1067,12 @@ export default function ShowCluster() {
                     <Skeleton height={40} data-testid="isloading" width="2rem" />
                   </Box>
                 ) : (
-                  <Typography id="inactive" variant="h5" fontWeight="600" p="0.5rem 0">
+                  <Typography id="inactive" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
                     {numberOfInactiveSeedPeers}
                   </Typography>
                 )}
                 <Typography variant="body2" color="var(--table-title-text-color)">
-                  number of inactive seed peer
+                  number of inactive seed peers
                 </Typography>
               </Box>
             </Box>
@@ -1179,7 +1171,7 @@ export default function ShowCluster() {
               </Typography>
               <Divider sx={{ mb: '0.2rem' }} />
               {statusList.map((item, index) => (
-                <MenuItem key={item.name} value={item.name} onClick={() => handleMenuItemClick(item, index)}>
+                <MenuItem key={item.name} value={item.name} onClick={() => handleMenuItemClick(item)}>
                   {item.lable}
                 </MenuItem>
               ))}

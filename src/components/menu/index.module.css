@@ -72,3 +72,14 @@
 .menuItemIcon {
   color: var(--button-color);
 }
+
+.pageContainer {
+  position: relative;
+  width: 100%;
+}
+
+.pageloading {
+  width: 100%;
+  position: absolute;
+  top: 0;
+}

@@ -19,6 +19,7 @@ export default function NavTabs() {
 
   const location = useLocation();
   const params = useParams();
+  const breadcrumbsColor = location.pathname.split('/').length || 0;
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -78,7 +79,12 @@ export default function NavTabs() {
         <Typography color="text.primary">jobs</Typography>
         <Typography color="text.primary">task</Typography>
         {location.pathname.split('/')[3] === 'executions' ? (
-          <RouterLink component={Link} underline="hover" color="inherit" to={`/jobs/task/executions`}>
+          <RouterLink
+            component={Link}
+            underline="hover"
+            color={breadcrumbsColor === 5 ? 'text.primary' : 'inherit'}
+            to={`/jobs/task/executions`}
+          >
             executions
           </RouterLink>
         ) : (

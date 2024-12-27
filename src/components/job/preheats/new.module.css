@@ -7,12 +7,12 @@
 }
 
 .headersKeyInput {
-  width: 18rem;
+  width: 40%;
   margin-right: 0.6rem !important;
 }
 
 .headersValueInput {
-  width: 18rem;
+  width: 60%;
 }
 
 .title {

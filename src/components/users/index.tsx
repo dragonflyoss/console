@@ -190,10 +190,9 @@ export default function Users() {
   };
 
   const closeAllPopups = () => {
+    setAnchorElement(null);
     setUserDetail(false);
     setSwitchUser(false);
-    setAnchorElement(null);
-    setSelectedRow(null);
   };
 
   const handleSubmit = async () => {
@@ -278,7 +277,7 @@ export default function Users() {
         }
         sx={{ mb: '2rem' }}
       >
-        <Typography variant="h5" color="text.primary">
+        <Typography variant="h6" fontFamily="mabry-bold" color="text.primary">
           User
         </Typography>
       </Breadcrumbs>
@@ -375,27 +374,26 @@ export default function Users() {
                       />
                     </Box>
                   </TableCell>
-                  <TableCell align="center">{item?.name || '-'}</TableCell>
+                  <TableCell align="center">
+                    <Typography variant="body1" fontFamily="mabry-bold" color="text.primary">
+                      {item?.name || '-'}
+                    </Typography>
+                  </TableCell>
                   <TableCell align="center">{item?.email || '-'}</TableCell>
                   <TableCell align="center">{item?.location || '-'}</TableCell>
                   <TableCell align="center">
-                    {isLoading ? (
-                      <Skeleton />
-                    ) : (
-                      <Chip
-                        label={_.upperFirst(item?.state) || ''}
-                        size="small"
-                        variant="outlined"
-                        sx={{
-                          borderRadius: '0.2rem',
-                          backgroundColor:
-                            item?.state === 'enable' ? 'var( --description-color)' : 'var(--button-color)',
-                          color: item?.state === 'enable' ? '#FFFFFF' : '#FFFFFF',
-                          borderColor: item?.state === 'enable' ? 'var( --description-color)' : 'var(--button-color)',
-                          fontWeight: 'bold',
-                        }}
-                      />
-                    )}
+                    <Chip
+                      label={_.upperFirst(item?.state) || ''}
+                      size="small"
+                      variant="outlined"
+                      sx={{
+                        borderRadius: '0.2rem',
+                        backgroundColor: item?.state === 'enable' ? 'var( --description-color)' : 'var(--button-color)',
+                        color: item?.state === 'enable' ? '#FFFFFF' : '#FFFFFF',
+                        borderColor: item?.state === 'enable' ? 'var( --description-color)' : 'var(--button-color)',
+                        fontWeight: 'bold',
+                      }}
+                    />
                   </TableCell>
                   <TableCell align="center">
                     <IconButton

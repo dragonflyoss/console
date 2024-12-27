@@ -1,0 +1,17 @@
+.noData {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 1rem 0;
+}
+
+.nodataIcon {
+  max-width: 10rem;
+  height: 10rem;
+}
+
+.nodataText {
+  color: var(--palette-text-disabled);
+  font-family: 'mabry-bold';
+}

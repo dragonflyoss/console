@@ -21,7 +21,6 @@ import {
   Snackbar,
   Tooltip,
   Typography,
-  Paper,
   Table,
   TableHead,
   TableRow,
@@ -47,8 +46,9 @@ import { ROLE_ROOT, ROLE_GUEST, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../l
 import { useNavigate } from 'react-router-dom';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import PersonIcon from '@mui/icons-material/Person';
+import Card from '../card';
 
 const useStyles = makeStyles((theme: any) => ({
   tableRow: {
@@ -82,6 +82,9 @@ const theme = createTheme({
     primary: {
       main: '#1C293A',
     },
+  },
+  typography: {
+    fontFamily: 'mabry-light,sans-serif',
   },
 });
 
@@ -189,8 +192,8 @@ export default function Users() {
   const closeAllPopups = () => {
     setUserDetail(false);
     setSwitchUser(false);
-    setSelectedRow(null);
     setAnchorElement(null);
+    setSelectedRow(null);
   };
 
   const handleSubmit = async () => {
@@ -267,30 +270,47 @@ export default function Users() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Breadcrumbs sx={{ mb: '2rem' }}>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        sx={{ mb: '2rem' }}
+      >
         <Typography variant="h5" color="text.primary">
           User
         </Typography>
       </Breadcrumbs>
-      <Paper variant="outlined">
+      <Card>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
             <TableRow>
               <TableCell align="center"></TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1">Name</Typography>
+                <Typography variant="subtitle1" className={styles.tableHeader}>
+                  Name
+                </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1">Email</Typography>
+                <Typography variant="subtitle1" className={styles.tableHeader}>
+                  Email
+                </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1">Location</Typography>
+                <Typography variant="subtitle1" className={styles.tableHeader}>
+                  Location
+                </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1">State</Typography>
+                <Typography variant="subtitle1" className={styles.tableHeader}>
+                  State
+                </Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography variant="subtitle1">Operation</Typography>
+                <Typography variant="subtitle1" className={styles.tableHeader}>
+                  Operation
+                </Typography>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -335,7 +355,11 @@ export default function Users() {
                   id="user-table-row"
                   key={item?.name}
                   selected={selectedRow === item}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 },
+                    ':hover': { backgroundColor: 'var(--palette-action-hover)' },
+                  }}
+                  className={styles.tableRow}
                 >
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -363,7 +387,7 @@ export default function Users() {
                         size="small"
                         variant="outlined"
                         sx={{
-                          borderRadius: '0%',
+                          borderRadius: '0.2rem',
                           backgroundColor:
                             item?.state === 'enable' ? 'var( --description-color)' : 'var(--button-color)',
                           color: item?.state === 'enable' ? '#FFFFFF' : '#FFFFFF',
@@ -392,48 +416,50 @@ export default function Users() {
                       onClose={closeAllPopups}
                       sx={{
                         position: 'absolute',
-                        left: '-5rem',
-                        width: '16rem',
+                        left: '-6.5rem',
                         '& .MuiMenu-paper': {
                           boxShadow:
-                            '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
+                            '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d',
                         },
                         '& .MuiMenu-list': {
                           p: 0,
-                          width: '10rem',
                         },
                       }}
                     >
-                      <MenuItem
-                        className={styles.menuItem}
-                        id={`detail-${selectedRow?.name}`}
-                        onClick={() => {
-                          handleChange(selectedRow);
-                          setAnchorElement(null);
-                        }}
-                      >
-                        <ListItemIcon>
-                          <PersonOutlineOutlinedIcon className={styles.menuItemIcon} />
-                        </ListItemIcon>
-                        Detail
-                      </MenuItem>
-                      {selectedRow?.name === 'root' ? (
-                        <></>
-                      ) : (
+                      <Box className={styles.menu}>
                         <MenuItem
-                          className={styles.menuItem}
-                          id={`edit-${selectedRow?.name}`}
+                          id={`detail-${selectedRow?.name}`}
                           onClick={() => {
-                            openSwitchUser(selectedRow);
+                            handleChange(selectedRow);
                             setAnchorElement(null);
                           }}
                         >
                           <ListItemIcon>
-                            <DriveFileRenameOutlineOutlinedIcon className={styles.menuItemIcon} />
+                            <PersonIcon className={styles.menuItemIcon} />
                           </ListItemIcon>
-                          Edit Role
+                          <Typography variant="body2" className={styles.menuText}>
+                            Detail
+                          </Typography>
                         </MenuItem>
-                      )}
+                        {selectedRow?.name === 'root' ? (
+                          <></>
+                        ) : (
+                          <MenuItem
+                            id={`edit-${selectedRow?.name}`}
+                            onClick={() => {
+                              openSwitchUser(selectedRow);
+                              setAnchorElement(null);
+                            }}
+                          >
+                            <ListItemIcon>
+                              <ModeEditIcon className={styles.menuItemIcon} />
+                            </ListItemIcon>
+                            <Typography variant="body2" className={styles.menuText}>
+                              Edit Role
+                            </Typography>
+                          </MenuItem>
+                        )}
+                      </Box>
                     </Menu>
                   </TableCell>
                 </TableRow>
@@ -441,9 +467,9 @@ export default function Users() {
             )}
           </TableBody>
         </Table>
-      </Paper>
+      </Card>
       {userTotalPages > 1 ? (
-        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '1rem' }}>
           <Pagination
             id="user-pagination"
             count={userTotalPages}
@@ -527,7 +553,7 @@ export default function Users() {
       <Drawer anchor="right" open={userDetail} onClose={closeAllPopups}>
         <Box role="presentation" sx={{ width: 350 }}>
           <List>
-            <ListSubheader component="div" color="inherit" className={styles.detailTitle}>
+            <ListSubheader component="div" color="inherit" className={styles.detailWrapper}>
               <Typography variant="h6" fontFamily="mabry-bold">
                 User Detail
               </Typography>
@@ -542,27 +568,39 @@ export default function Users() {
                 <ClearOutlinedIcon sx={{ color: 'var(--button-color)' }} />
               </IconButton>
             </ListSubheader>
-            <Divider />
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <Box component="img" className={styles.detailIcon} src="/icons/user/id.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
+                <Typography variant="body2" className={styles.detailTitle}>
                   ID
                 </Typography>
               </ListItemAvatar>
-              <Typography variant="body2">
-                {detailIsLoading ? <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} /> : user?.id}
+              <Typography id="id" variant="body2" className={styles.detailContent}>
+                {detailIsLoading ? <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} /> : user?.id || 0}
               </Typography>
             </ListItem>
-            <Divider />
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <Box component="img" className={styles.detailIcon} src="/icons/user/name.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
+                <Typography variant="body2" className={styles.detailTitle}>
                   Name
                 </Typography>
               </ListItemAvatar>
-              <Typography variant="body2">
+              <Typography id="name" variant="body2" className={styles.detailContent}>
                 {detailIsLoading ? (
                   <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                 ) : (
@@ -570,15 +608,21 @@ export default function Users() {
                 )}
               </Typography>
             </ListItem>
-            <Divider />
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <Box component="img" className={styles.detailIcon} src="/icons/user/detail-role.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
+                <Typography variant="body2" className={styles.detailTitle}>
                   Role
                 </Typography>
               </ListItemAvatar>
-              <Typography variant="body2" component="div">
+              <Typography id="role" variant="body2" component="div">
                 {detailIsLoading ? (
                   <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                 ) : detailRole ? (
@@ -587,7 +631,7 @@ export default function Users() {
                     size="small"
                     variant="outlined"
                     sx={{
-                      borderRadius: '0%',
+                      borderRadius: '0.2rem',
                       background: 'var(--button-color)',
                       color: '#FFFFFF',
                       mr: '0.4rem',
@@ -596,20 +640,28 @@ export default function Users() {
                     }}
                   />
                 ) : (
-                  '-'
+                  <Typography id="role" variant="body2" component="div">
+                    -
+                  </Typography>
                 )}
               </Typography>
             </ListItem>
-            <Divider />
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <Box component="img" className={styles.detailIcon} src="/icons/user/email.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
+                <Typography variant="body2" className={styles.detailTitle}>
                   Email
                 </Typography>
               </ListItemAvatar>
               <Tooltip title={user?.email || '-'} placement="top">
-                <Typography variant="body2" className={styles.emailContent}>
+                <Typography id="email" variant="body2" className={styles.emailContent}>
                   {detailIsLoading ? (
                     <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                   ) : (
@@ -618,15 +670,21 @@ export default function Users() {
                 </Typography>
               </Tooltip>
             </ListItem>
-            <Divider />
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <Box component="img" className={styles.detailIcon} src="/icons/user/phone.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
+                <Typography variant="body2" className={styles.detailTitle}>
                   Phone
                 </Typography>
               </ListItemAvatar>
-              <Typography variant="body2">
+              <Typography id="phone" variant="body2" className={styles.detailContent}>
                 {detailIsLoading ? (
                   <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                 ) : (
@@ -634,17 +692,23 @@ export default function Users() {
                 )}
               </Typography>
             </ListItem>
-            <Divider />
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <Box component="img" className={styles.detailIcon} src="/icons/user/location.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
+                <Typography variant="body2" className={styles.detailTitle}>
                   Location
                 </Typography>
               </ListItemAvatar>
               <Tooltip title={user.location || '-'} placement="top">
                 <Box className={styles.emailContent}>
-                  <Typography variant="body2">
+                  <Typography id="location" variant="body2">
                     {detailIsLoading ? (
                       <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                     ) : (
@@ -654,46 +718,64 @@ export default function Users() {
                 </Box>
               </Tooltip>
             </ListItem>
-            <Divider />
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <Box component="img" className={styles.detailIcon} src="/icons/user/created-at.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
+                <Typography variant="body2" className={styles.detailTitle}>
                   Created At
                 </Typography>
               </ListItemAvatar>
               {detailIsLoading ? (
                 <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
               ) : user.created_at ? (
-                <Chip
-                  avatar={<Box component="img" src="/icons/user/created-at.svg" />}
-                  label={getDatetime(user.created_at || '-')}
-                  variant="outlined"
-                  size="small"
-                />
+                <Typography id="created-at" variant="body2" className={styles.detailContent}>
+                  {detailIsLoading ? (
+                    <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
+                  ) : (
+                    getDatetime(user.created_at || '-')
+                  )}
+                </Typography>
               ) : (
-                '-'
+                <Typography id="created-at" variant="body2" className={styles.detailContent}>
+                  -
+                </Typography>
               )}
             </ListItem>
-            <Divider />
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <Box component="img" className={styles.detailIcon} src="/icons/user/updated-at.svg" />
-                <Typography variant="body2" ml="0.8rem" fontFamily="mabry-bold">
+                <Typography variant="body2" className={styles.detailTitle}>
                   Updated At
                 </Typography>
               </ListItemAvatar>
               {detailIsLoading ? (
                 <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
               ) : user.updated_at ? (
-                <Chip
-                  avatar={<Box component="img" src="/icons/user/updated-at.svg" />}
-                  label={getDatetime(user.updated_at || '-')}
-                  variant="outlined"
-                  size="small"
-                />
+                <Typography id="updated-at" variant="body2" className={styles.detailContent}>
+                  {detailIsLoading ? (
+                    <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
+                  ) : (
+                    getDatetime(user.updated_at || '-')
+                  )}
+                </Typography>
               ) : (
-                '-'
+                <Typography id="updated-at" variant="body2" className={styles.detailContent}>
+                  -
+                </Typography>
               )}
             </ListItem>
           </List>

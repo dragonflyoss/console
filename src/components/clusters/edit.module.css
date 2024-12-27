@@ -2,6 +2,13 @@
   width: 70%;
 }
 
+.header {
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
 .informationTitle {
   display: flex;
   align-items: center;
@@ -42,8 +49,8 @@
 
 .idcInput {
   width: 37rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
 }
 
 .cidrsInput {

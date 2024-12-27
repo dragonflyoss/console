@@ -238,7 +238,7 @@ describe('Preheats', () => {
     cy.get('#preheats-list').should('not.exist');
 
     // Show You don't have any preheat tasks.
-    cy.get('.css-e76tiu').should('be.visible').and('contain', `You don't have any preheat tasks.`);
+    cy.get('#no-preheat').should('be.visible').and('contain', `You don't have any preheat tasks.`);
   });
 
   it('should handle API error response', () => {
@@ -265,7 +265,7 @@ describe('Preheats', () => {
     cy.get('#preheats-list').should('not.exist');
 
     // Show You don't have any preheat tasks.
-    cy.get('.css-e76tiu').should('be.visible').and('contain', `You don't have any preheat tasks.`);
+    cy.get('#no-preheat').should('be.visible').and('contain', `You don't have any preheat tasks.`);
   });
 
   describe('pagination', () => {

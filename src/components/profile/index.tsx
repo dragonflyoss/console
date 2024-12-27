@@ -2,6 +2,8 @@ import {
   Alert,
   Box,
   Button,
+  Chip,
+  Divider,
   Grid,
   IconButton,
   InputAdornment,
@@ -27,6 +29,8 @@ import { getDatetime } from '../../lib/utils';
 import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../menu/index';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
+import Card from '../card';
+import MoreTimeIcon from '@mui/icons-material/MoreTime';
 
 export default function Profile() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -47,7 +51,8 @@ export default function Profile() {
   const [personalLoadingButton, setPersonalLoadingButton] = useState(false);
   const [showMyProfile, setShowMyProfile] = useState(true);
   const [showPersonalInformation, setShowPersonalInformation] = useState(true);
-  const [bio, setBio] = useState('');
+  const [location, setLocation] = useState('');
+
   const [users, setUsers] = useState<getUserResponse>({
     id: 0,
     created_at: '',
@@ -72,7 +77,7 @@ export default function Profile() {
 
   useEffect(() => {
     setUsers(user);
-    setBio(user.bio);
+    setLocation(user?.location);
   }, [user]);
 
   const { old_password, new_password } = password;
@@ -81,32 +86,32 @@ export default function Profile() {
     {
       name: 'id',
       label: 'ID',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/user/id.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/id.svg" />,
     },
     {
       name: 'name',
       label: 'Name',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/user/name.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/name.svg" />,
     },
     {
       name: 'email',
       label: 'Email',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/user/email.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/email.svg" />,
     },
     {
       name: 'location',
       label: 'Location',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/user/location.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/location.svg" />,
     },
     {
       name: 'phone',
       label: 'Phone',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/user/phone.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/phone.svg" />,
     },
     {
       name: 'created_at',
       label: 'Created At',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/user/created-at.svg" />,
+      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/created-at.svg" />,
     },
   ];
 
@@ -132,7 +137,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <DescriptionIcon />:
+              <DescriptionIcon className={styles.editIcon} />:
             </InputAdornment>
           ),
         },
@@ -146,7 +151,6 @@ export default function Profile() {
         return reg.test(value);
       },
     },
-
     {
       formProps: {
         id: 'phone',
@@ -166,7 +170,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <LocalPhoneIcon />:
+              <LocalPhoneIcon className={styles.editIcon} />:
             </InputAdornment>
           ),
         },
@@ -179,7 +183,6 @@ export default function Profile() {
         return reg.test(value);
       },
     },
-
     {
       formProps: {
         id: 'location',
@@ -199,7 +202,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <LocationOnIcon />:
+              <LocationOnIcon className={styles.editIcon} />:
             </InputAdornment>
           ),
         },
@@ -232,7 +235,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <EmailIcon />:
+              <EmailIcon className={styles.editIcon} />:
             </InputAdornment>
           ),
         },
@@ -268,7 +271,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <VpnKeyIcon />
+              <VpnKeyIcon className={styles.editIcon} />
             </InputAdornment>
           ),
 
@@ -280,7 +283,11 @@ export default function Profile() {
               }}
               edge="end"
             >
-              {showOldPassword ? <Visibility /> : <VisibilityOff />}
+              {showOldPassword ? (
+                <Visibility className={styles.editIcon} />
+              ) : (
+                <VisibilityOff className={styles.editIcon} />
+              )}
             </IconButton>
           ),
         },
@@ -315,7 +322,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <LockIcon />
+              <LockIcon className={styles.editIcon} />
             </InputAdornment>
           ),
           endAdornment: (
@@ -326,7 +333,11 @@ export default function Profile() {
               }}
               edge="end"
             >
-              {showNewPassword ? <Visibility /> : <VisibilityOff />}
+              {showNewPassword ? (
+                <Visibility className={styles.editIcon} />
+              ) : (
+                <VisibilityOff className={styles.editIcon} />
+              )}
             </IconButton>
           ),
         },
@@ -356,7 +367,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <LockIcon />
+              <LockIcon className={styles.editIcon} />
             </InputAdornment>
           ),
 
@@ -368,7 +379,11 @@ export default function Profile() {
               }}
               edge="end"
             >
-              {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+              {showConfirmPassword ? (
+                <Visibility className={styles.editIcon} />
+              ) : (
+                <VisibilityOff className={styles.editIcon} />
+              )}
             </IconButton>
           ),
         },
@@ -446,7 +461,7 @@ export default function Profile() {
 
   const cancelHandlePersonalInformation = async () => {
     setUsers(user);
-    setBio(user.bio);
+    setLocation(user?.location);
     setShowPersonalInformation(true);
   };
 
@@ -527,10 +542,10 @@ export default function Profile() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography sx={{ mb: '2rem' }} variant="h5">
+      <Typography id="my-profile" sx={{ mb: '2rem', fontFamily: 'mabry-bold' }} variant="h6">
         My Profile
       </Typography>
-      <Paper variant="outlined" className={styles.profileContainer}>
+      <Card className={styles.profileContainer}>
         {showMyProfile ? (
           <Box className={styles.avatarContainer}>
             <Box display="flex" alignItems="center">
@@ -538,10 +553,15 @@ export default function Profile() {
                 <Avatar alt="Remy Sharp" src={users?.avatar} className={styles.avatarContent} />
               </Stack>
               <Box sx={{ pl: '1rem' }}>
-                <Typography variant="h5">{users?.name || '-'}</Typography>
-                <Typography variant="subtitle1" component="div" width="36rem">
-                  {bio || '-'}
+                <Typography id="name-title" variant="h5">
+                  {users?.name || '-'}
                 </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', pt: '0.3rem' }}>
+                  <Box component="img" className={styles.userIcon} src="/icons/user/location.svg" />
+                  <Typography variant="body2" component="div" ml="0.5rem" color="#919EAB" fontFamily="mabry-bold">
+                    {location || '-'}
+                  </Typography>
+                </Box>
               </Box>
             </Box>
             <Box sx={{ justifyContent: 'flex-end' }}>
@@ -549,7 +569,6 @@ export default function Profile() {
                 size="small"
                 sx={{
                   background: 'var(--button-color)',
-                  borderRadius: '0',
                   ':hover': { background: 'var(--button-color)' },
                 }}
                 variant="contained"
@@ -568,7 +587,7 @@ export default function Profile() {
           </Box>
         ) : (
           <Grid sx={{ width: '40rem' }} onSubmit={handleChangePassword} component="form" noValidate>
-            <Typography variant="h6" fontFamily="mabry-bold" mb="1rem">
+            <Typography variant="subtitle1" fontFamily="mabry-bold" mb="1rem">
               Change Password
             </Typography>
             {passwordForm.map((item) => (
@@ -577,7 +596,11 @@ export default function Profile() {
               </Box>
             ))}
             <Box mt="2rem">
-              <CancelLoadingButton id="cancel-change-password" loading={passwordLoadingButton} onClick={cancelChangePassword} />
+              <CancelLoadingButton
+                id="cancel-change-password"
+                loading={passwordLoadingButton}
+                onClick={cancelChangePassword}
+              />
               <SavelLoadingButton
                 loading={passwordLoadingButton}
                 endIcon={<CheckCircleIcon />}
@@ -587,20 +610,19 @@ export default function Profile() {
             </Box>
           </Grid>
         )}
-      </Paper>
-      <Paper variant="outlined" sx={{ p: '2rem' }}>
+      </Card>
+      <Card>
         {showPersonalInformation ? (
           <Box>
             <Grid className={styles.informationHeader}>
-              <Typography variant="h6" fontFamily="mabry-bold">
-                Personal Information
+              <Typography variant="subtitle1" fontFamily="mabry-bold">
+                About me
               </Typography>
               <Button
                 size="small"
                 variant="contained"
                 sx={{
                   background: 'var(--button-color)',
-                  borderRadius: '0',
                   ':hover': { background: 'var(--button-color)' },
                 }}
                 onClick={() => {
@@ -615,39 +637,53 @@ export default function Profile() {
                 Edit
               </Button>
             </Grid>
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            />
+            <Box sx={{ p: '1.5rem 2rem 0 2rem' }}>
+              <Typography id="description" variant="subtitle1" component="div" pb="1.5rem">
+                {user?.bio || '-'}
+              </Typography>
+              <Typography variant="subtitle1" fontFamily="mabry-bold">
+                Personal Details
+              </Typography>
+            </Box>
             <Box className={styles.informationContainer}>
               {userLable.map((item) => {
                 return (
                   <Box className={styles.informationContent} key={item.name}>
-                    <Box display="flex" alignItems="center" mb="0.6rem">
-                      {item.icon}
-                      {item.name === 'created_at' ? (
-                        users?.[item.name] ? (
-                          <Typography
-                            id={item.name}
-                            component="div"
-                            variant="body1"
-                            fontFamily="mabry-bold"
-                            ml="0.6rem"
-                          >
-                            {getDatetime(users?.[item.name]) || '-'}
-                          </Typography>
-                        ) : (
-                          <Typography
-                            id={item.name}
-                            component="div"
-                            variant="body1"
-                            fontFamily="mabry-bold"
-                            ml="0.6rem"
-                          >
-                            -
-                          </Typography>
-                        )
-                      ) : (
-                        <Typography id={item.name} component="div" variant="body1" fontFamily="mabry-bold" ml="0.6rem">
-                          {users?.[item?.name as keyof typeof users] || '-'}
+                    <Box display="flex" alignItems="center">
+                      <Box className={styles.informationLable}>
+                        {item.icon}
+                        <Typography component="div" variant="body1" className={styles.informationLableText}>
+                          {item.label}
                         </Typography>
-                      )}
+                      </Box>
+                      <Box ml="0.6rem">
+                        {item.name === 'created_at' ? (
+                          users?.[item.name] ? (
+                            <Chip
+                              id={item.name}
+                              avatar={<MoreTimeIcon />}
+                              label={getDatetime(users?.[item.name]) || '-'}
+                              variant="outlined"
+                              size="small"
+                            />
+                          ) : (
+                            <Typography id={item.name} component="div" variant="body1" fontFamily="mabry-bold">
+                              -
+                            </Typography>
+                          )
+                        ) : (
+                          <Typography id={item.name} component="div" variant="body1" fontFamily="mabry-bold">
+                            {users?.[item?.name as keyof typeof users] || '-'}
+                          </Typography>
+                        )}
+                      </Box>
                     </Box>
                   </Box>
                 );
@@ -655,8 +691,8 @@ export default function Profile() {
             </Box>
           </Box>
         ) : (
-          <Box>
-            <Typography variant="h6" fontFamily="mabry-bold" mb="1rem">
+          <Box p="2rem">
+            <Typography variant="subtitle1" fontFamily="mabry-bold" mb="1rem">
               Update Personal Information
             </Typography>
             <Box component="form" onSubmit={handlePersonalInformation} noValidate>
@@ -688,7 +724,7 @@ export default function Profile() {
             </Box>
           </Box>
         )}
-      </Paper>
+      </Card>
     </Box>
   );
 }

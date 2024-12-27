@@ -18,30 +18,6 @@ describe('Update cluster', () => {
         });
       },
     );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/seed-peers?page=1&per_page=10000000&seed_peer_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: [],
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: [],
-        });
-      },
-    );
 
     cy.visit('/clusters/1/edit');
     cy.viewport(1440, 1080);
@@ -49,7 +25,7 @@ describe('Update cluster', () => {
 
   it('when data is loaded', () => {
     // Show cluster information.
-    cy.get('.MuiPaper-root > .css-0 > :nth-child(2)').should('contain', 'cluster-1');
+    cy.get('#name').should('contain', 'cluster-1');
 
     cy.get('.PrivateSwitchBase-input').should('be.checked').check({ force: true });
 
@@ -121,9 +97,9 @@ describe('Update cluster', () => {
 
     // Show cluster information.
 
-    cy.get('.MuiPaper-outlined > .css-0 > :nth-child(1)').should('contain', '0');
+    cy.get('#id').should('contain', '0');
 
-    cy.get('.MuiPaper-root > .css-0 > :nth-child(2)').should('contain', '');
+    cy.get('#name').should('contain', '');
 
     cy.get('.PrivateSwitchBase-input').should('not.be.checked').check({ force: false });
 
@@ -151,7 +127,7 @@ describe('Update cluster', () => {
     cy.get('#peerLoadLimit').should('have.value', 0);
     cy.get('#candidateParentLimit').should('have.value', 0);
     cy.get('#filterParentLimit').should('have.value', 0);
-    cy.get('#jobRateLimit').should('have.value', 10);
+    cy.get('#jobRateLimit').should('have.value', 0);
   });
 
   it('can update cluster', () => {
@@ -165,10 +141,10 @@ describe('Update cluster', () => {
     cy.visit('/clusters/1');
 
     // Click update cluster button.
-    cy.get('.css-bbra84-MuiButtonBase-root-MuiButton-root').click();
+    cy.get('#update').click();
 
     // Show cluster name.
-    cy.get('.MuiPaper-root > .css-0 > :nth-child(2)').should('be.visible').and('contain', 'cluster-1');
+    cy.get('#name').should('be.visible').and('contain', 'cluster-1');
 
     cy.get('.PrivateSwitchBase-input').click();
 
@@ -223,16 +199,10 @@ describe('Update cluster', () => {
     // Then I see that the current page is the clusters/1!
     cy.url().should('include', '/clusters/1');
 
-    cy.get('.show_container__osP4U > .MuiTypography-root').scrollIntoView();
-
     // Check whether the cluster information is updated successfully.
-    cy.get('.information_clusterContainer__l8H8p > :nth-child(3) > .MuiTypography-subtitle1')
-      .should('be.visible')
-      .and('contain', 'update cluster-1');
+    cy.get('#description').should('be.visible').and('contain', 'update cluster-1');
 
-    cy.get('.information_clusterContainer__l8H8p > :nth-child(5) > .MuiTypography-subtitle1')
-      .should('be.visible')
-      .and('contain', 'No');
+    cy.get('#default').should('be.visible').and('contain', 'No');
 
     cy.get('#cidrs').click();
 
@@ -240,15 +210,17 @@ describe('Update cluster', () => {
 
     cy.get('body').click('topLeft');
 
-    cy.get('.MuiPaper-root > :nth-child(1) > .MuiTypography-body1')
-      .scrollIntoView()
-      .should('be.visible')
-      .and('contain', '400');
+    cy.get('#seed-peer-load-limit').scrollIntoView().should('be.visible').and('contain', '400');
 
-    cy.get('#filter-parent-limit').should('be.visible').and('contain', '20');
+    cy.get('#job-rate-limit').should('be.visible').and('contain', '20');
   });
 
   it('click the `CANCEL button', () => {
+    cy.url().should('include', '/clusters/1/edit');
+    cy.get('[data-testid="isloading"]').should('be.exist');
+
+    cy.wait(1000);
+
     cy.get('#cancel').click();
 
     // Then I see that the current page is the clusters/1!

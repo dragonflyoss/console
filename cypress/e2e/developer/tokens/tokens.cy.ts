@@ -36,38 +36,23 @@ describe('Tokens', () => {
     cy.get('#root-11').should('be.visible').and('have.text', 'root-11');
 
     // Show user name.
-    cy.get(':nth-child(1) > .css-fyy1jt > :nth-child(1) > .MuiBox-root > .MuiTypography-body2').should(
-      'contain',
-      'root',
-    );
+    cy.get('#user-name-11').should('contain', 'root');
 
     // Show Expiration.
-    cy.get(':nth-child(1) > .css-fyy1jt > :nth-child(1) > .css-70qvj9 > .css-189ppmh-MuiTypography-root')
-      .should('be.visible')
-      .and('have.text', 'Mon, Dec 11 2023.');
+    cy.get('#expired-at-11').should('be.visible').and('have.text', 'Mon, Dec 11 2023.');
 
     // Show token information.
     cy.get('#root-9').should('be.visible').and('have.text', 'root-9');
 
-    cy.get(':nth-child(3) > .css-fyy1jt > :nth-child(1) > .css-fu0n4a > .MuiTypography-body2').should(
-      'contain',
-      'jack',
-    );
+    cy.get('#user-name-9').should('contain', 'jack');
 
-    cy.get(':nth-child(3) > .css-fyy1jt > :nth-child(1) > .css-70qvj9 > .css-189ppmh-MuiTypography-root')
-      .should('be.visible')
-      .and('have.text', 'Thu, Dec 1 2033.');
+    cy.get('#expired-at-9').should('be.visible').and('have.text', 'Thu, Dec 1 2033.');
 
     cy.get('#root-4').should('be.visible').and('have.text', 'root-4');
 
-    cy.get(':nth-child(8) > .css-fyy1jt > :nth-child(1) > .css-fu0n4a > .MuiTypography-body2').should(
-      'contain',
-      'lucy',
-    );
+    cy.get('#user-name-3').should('contain', 'lucy');
 
-    cy.get(':nth-child(8) > .css-fyy1jt > :nth-child(1) > .css-70qvj9 > .css-189ppmh-MuiTypography-root')
-      .should('be.visible')
-      .and('have.text', 'Sun, Feb 11 2024.');
+    cy.get('#expired-at-4').should('be.visible').and('have.text', 'Sun, Feb 11 2024.');
   });
 
   it('when no data is loaded', () => {
@@ -190,11 +175,11 @@ describe('Tokens', () => {
       cy.get('#root-1').should('be.visible').and('have.text', 'root-1');
 
       // Click DELETE button.
-      cy.get('.css-fyy1jt > :nth-child(2) > .MuiButtonBase-root').click();
+      cy.get('#delete-token-1').click();
 
       // Click cancel button.
       cy.get('#cancel').click();
-      cy.get('.css-fyy1jt > :nth-child(2) > .MuiButtonBase-root').click();
+      cy.get('#delete-token-1').click();
 
       cy.intercept(
         {
@@ -248,7 +233,7 @@ describe('Tokens', () => {
       // Displays the name of the token that needs to be deleted.
       cy.get('#root-11').should('be.visible').and('have.text', 'root-11');
 
-      cy.get(':nth-child(1) > .css-fyy1jt > :nth-child(2) > #delete-token').click();
+      cy.get('#delete-token-11').click();
 
       cy.intercept(
         {
@@ -290,7 +275,7 @@ describe('Tokens', () => {
     it('try to delete token using guest user', () => {
       cy.guestSignin();
 
-      cy.get(':nth-child(1) > .css-fyy1jt > :nth-child(2) > #delete-token').click();
+      cy.get('#delete-token-11').click();
 
       cy.intercept(
         {
@@ -314,7 +299,7 @@ describe('Tokens', () => {
     it('try to delete token using guest user', () => {
       cy.guestSignin();
 
-      cy.get(':nth-child(1) > .css-fyy1jt > :nth-child(2) > #delete-token').click();
+      cy.get('#delete-token-11').click();
 
       cy.intercept(
         {

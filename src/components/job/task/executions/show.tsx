@@ -34,6 +34,7 @@ import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { getBJTDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
 import _ from 'lodash';
 import { DEFAULT_SCHEDULER_TABLE_PAGE_SIZE } from '../../../../lib/constants';
+import Card from '../../../card';
 
 const theme = createTheme({
   palette: {
@@ -252,11 +253,11 @@ export default function ShowExecutions() {
           </Box>
         </Box>
       </Drawer>
-      <Paper variant="outlined" sx={{ p: '1rem 2rem' }}>
+      <Card className={styles.container}>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/id.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               ID
             </Typography>
           </Box>
@@ -267,7 +268,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/status.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Status
             </Typography>
           </Box>
@@ -358,7 +359,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/task/task-id.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Task ID
             </Typography>
           </Box>
@@ -373,7 +374,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/url.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               URL
             </Typography>
           </Box>
@@ -381,7 +382,7 @@ export default function ShowExecutions() {
             <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
           ) : (
             <CustomWidthTooltip title={executions?.args?.url || '-'} placement="bottom">
-              <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.urlContent}>
+              <Typography variant="body1" component="div" className={styles.urlContent}>
                 {executions?.args?.url || '-'}
               </Typography>
             </CustomWidthTooltip>
@@ -390,7 +391,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/tag.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Tag
             </Typography>
           </Box>
@@ -421,7 +422,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/task/type.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Application
             </Typography>
           </Box>
@@ -438,7 +439,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/id.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Scheduler Clusters ID
             </Typography>
           </Box>
@@ -461,7 +462,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/created-at.svg" />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Created At
             </Typography>
           </Box>
@@ -482,7 +483,7 @@ export default function ShowExecutions() {
             )}
           </Typography>
         </Box>
-      </Paper>
+      </Card>
       {failure && Array.isArray(failure) && failure.length !== 0 ? (
         <Box id="failure-tasks">
           <Box m="2.5rem 0 1.5rem 0" sx={{ display: 'flex', alignItems: 'center' }}>
@@ -500,7 +501,7 @@ export default function ShowExecutions() {
               Failure
             </Typography>
           </Box>
-          <Paper variant="outlined">
+          <Card>
             <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
               <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
                 <TableRow>
@@ -583,7 +584,6 @@ export default function ShowExecutions() {
                                   sx={{ width: '1.5rem', mr: '0.4rem' }}
                                   src="/icons/job/task/ip.svg"
                                 />
-
                                 <Typography variant="body2" component="div">
                                   {item?.ip}
                                 </Typography>
@@ -627,7 +627,7 @@ export default function ShowExecutions() {
                 )}
               </TableBody>
             </Table>
-          </Paper>
+          </Card>
           {totalPages > 1 ? (
             <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
               <Pagination

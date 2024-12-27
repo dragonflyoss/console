@@ -24,7 +24,7 @@ import { createTokens } from '../../../lib/api';
 import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { MyContext } from '../../menu';
-import {CancelLoadingButton, SavelLoadingButton} from '../../loading-button';
+import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
 
 const theme = createTheme({
   palette: {
@@ -32,6 +32,9 @@ const theme = createTheme({
       contrastText: '#fff',
       main: '#1c293a',
     },
+  },
+  typography: {
+    fontFamily: 'mabry-light,sans-serif',
   },
 });
 
@@ -218,9 +221,7 @@ export default function CreateTokens() {
         </Alert>
       </Snackbar>
       <ThemeProvider theme={theme}>
-        <Typography variant="h5" fontFamily="mabry-bold">
-          Create personal access token
-        </Typography>
+        <Typography variant="h5">Create personal access token</Typography>
         <Divider sx={{ mt: 2, mb: 2 }} />
         <Box component="form" onSubmit={handleSubmit} noValidate>
           <FormControl fullWidth>
@@ -235,16 +236,27 @@ export default function CreateTokens() {
                 />
               </Tooltip>
             </Box>
-            {formList.map((item) => (
-              <TextField
-                margin="normal"
-                color="success"
-                size="small"
-                key={item.formProps.name}
-                {...item.formProps}
-                sx={{ width: '20rem' }}
-              />
-            ))}
+            {formList.map((item) => {
+              return item?.formProps?.name === 'bio' ? (
+                <TextField
+                  margin="normal"
+                  color="success"
+                  size="small"
+                  key={item.formProps.name}
+                  {...item.formProps}
+                  sx={{ width: '36rem' }}
+                />
+              ) : (
+                <TextField
+                  margin="normal"
+                  color="success"
+                  size="small"
+                  key={item.formProps.name}
+                  {...item.formProps}
+                  sx={{ width: '18rem' }}
+                />
+              );
+            })}
             <Box sx={{ display: 'flex', alignItems: 'center', mb: '1.4rem', mt: '1rem' }}>
               <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
                 Expiration
@@ -363,41 +375,7 @@ export default function CreateTokens() {
                   navigate('/developer/personal-access-tokens');
                 }}
               />
-               <SavelLoadingButton
-                loading={loadingButton}
-                endIcon={<CheckCircleIcon />}
-                id="save"
-                text="Save"
-              />
-              {/* <LoadingButton
-                loading={loadingButton}
-                endIcon={<CheckCircleIcon />}
-                size="small"
-                variant="outlined"
-                type="submit"
-                loadingPosition="end"
-                id="save"
-                sx={{
-                  '&.MuiLoadingButton-root': {
-                    backgroundColor: 'var(--save-color)',
-                    borderRadius: 0,
-                    color: 'var(--save-size-color)',
-                    borderColor: 'var(--save-color)',
-                  },
-                  ':hover': {
-                    backgroundColor: 'var(--save-hover-corlor)',
-                    borderColor: 'var(--save-hover-corlor)',
-                  },
-                  '&.MuiLoadingButton-loading': {
-                    backgroundColor: 'var(--button-loading-color)',
-                    color: 'var(--button-loading-size-color)',
-                    borderColor: 'var(--button-loading-color)',
-                  },
-                  width: '8rem',
-                }}
-              >
-                Save
-              </LoadingButton> */}
+              <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />
             </Box>
           </FormControl>
         </Box>

@@ -32,12 +32,13 @@ import { getBJTDatetime, getPaginatedList, useQuery } from '../../../../lib/util
 import _ from 'lodash';
 import SearchTaskAnimation from '../../../search-task-animation';
 import { useNavigate } from 'react-router-dom';
-import { CancelLoadingButton, SavelLoadingButton } from '../../../loading-button';
+import { CancelLoadingButton, DeleteLoadingButton, SavelLoadingButton } from '../../../loading-button';
 import HelpIcon from '@mui/icons-material/Help';
 import SearchIcon from '@mui/icons-material/Search';
 import SearchCircularProgress from '../../../circular-progress';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import LinkOutlinedIcon from '@mui/icons-material/LinkOutlined';
+import Card from '../../../card';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
@@ -164,7 +165,7 @@ export default function Clear() {
       helperText: urlError ? 'Fill in the characters, the length is 0-1000.' : '',
       error: urlError,
       InputProps: {
-        startAdornment: <SearchIcon sx={{ color: '#9BA0A6' }} />,
+        startAdornment: <SearchIcon className={styles.circularProgress} sx={{ color: '#919EAB' }} />,
         endAdornment: searchTask ? (
           <IconButton type="button" sx={{ p: 0 }} aria-label="search">
             <ClearIcon />
@@ -323,7 +324,7 @@ export default function Clear() {
         startAdornment: isLoading ? (
           <SearchCircularProgress className={styles.circularProgress} />
         ) : (
-          <SearchIcon sx={{ color: '#9BA0A6' }} />
+          <SearchIcon className={styles.circularProgress} sx={{ color: '#9BA0A6' }} />
         ),
         endAdornment: searchTask ? (
           <IconButton
@@ -365,45 +366,57 @@ export default function Clear() {
     ? Array.from(new Set(results.map((item) => JSON.stringify(item)))).map((str) => JSON.parse(str))
     : [];
 
-  const handleDeleteTask = async () => {
+  const handleDeleteTask = async (event: any) => {
     try {
       setDeleteLoadingButton(true);
-      if (schedulerClusterID && !deleteError) {
-        if (task?.args?.url && task?.args?.url !== '') {
-          const formList = {
-            args: {
-              url: task?.args?.url,
-              tag: task?.args?.tag,
-              application: task?.args?.application,
-              filtered_query_params: task?.args?.filtered_query_params,
-            },
-            scheduler_cluster_ids: [schedulerClusterID],
-            type: 'delete_task',
-          };
 
-          const tasks = await createTaskJob(formList);
+      setLoadingButton(true);
+      event.preventDefault();
 
-          if (tasks?.id) {
-            setDeleteLoadingButton(false);
-            navigate(`/jobs/task/executions/${tasks?.id}`);
-            setOpenDeleteTask(false);
-          }
-        } else if (task?.args?.task_id) {
-          const formList = {
-            args: {
-              task_id: task?.args?.task_id,
-            },
-            scheduler_cluster_ids: [schedulerClusterID],
-            type: 'delete_task',
-          };
+      const delet = event.currentTarget.elements.deletCache.value;
 
-          const tasks = await createTaskJob(formList);
-          if (tasks?.id) {
-            setDeleteLoadingButton(false);
-            navigate(`/jobs/task/executions/${tasks?.id}`);
-            setOpenDeleteTask(false);
+      if (delet === 'DELETE') {
+        if (schedulerClusterID && !deleteError) {
+          if (task?.args?.url && task?.args?.url !== '') {
+            const formList = {
+              args: {
+                url: task?.args?.url,
+                tag: task?.args?.tag,
+                application: task?.args?.application,
+                filtered_query_params: task?.args?.filtered_query_params,
+              },
+              scheduler_cluster_ids: [schedulerClusterID],
+              type: 'delete_task',
+            };
+
+            const tasks = await createTaskJob(formList);
+
+            if (tasks?.id) {
+              setDeleteLoadingButton(false);
+              navigate(`/jobs/task/executions/${tasks?.id}`);
+              setOpenDeleteTask(false);
+            }
+          } else if (task?.args?.task_id) {
+            const formList = {
+              args: {
+                task_id: task?.args?.task_id,
+              },
+              scheduler_cluster_ids: [schedulerClusterID],
+              type: 'delete_task',
+            };
+
+            const tasks = await createTaskJob(formList);
+            if (tasks?.id) {
+              setDeleteLoadingButton(false);
+              navigate(`/jobs/task/executions/${tasks?.id}`);
+              setOpenDeleteTask(false);
+            }
           }
         }
+      } else {
+        setDeleteError(true);
+        setDeleteLoadingButton(false);
+        setIsLoading(false);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -460,7 +473,7 @@ export default function Clear() {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
-    const filterText = event.currentTarget.elements.filteredQueryParams.value;
+    const filterText = event.currentTarget.elements.filteredQueryParams?.value;
     formList.forEach((item) => {
       const value = data.get(item.formProps.name);
       item.setError(!item.validate(value as string));
@@ -529,6 +542,9 @@ export default function Clear() {
     }
     setOpenDeleteTask(false);
     setErrorMessage(false);
+    setDeleteError(false);
+    setDeleteLoadingButton(false);
+    setIsLoading(false);
   };
 
   const handleCloseSearch = () => {
@@ -641,7 +657,7 @@ export default function Clear() {
               elevation={optional ? 3 : 0}
               sx={{
                 p: optional ? '1rem' : '',
-                borderRadius: '4px',
+                borderRadius: '0.2rem',
                 width: optional ? '45rem' : '36rem',
                 position: 'absolute',
               }}
@@ -751,7 +767,7 @@ export default function Clear() {
                   const currentPageData = getPaginatedList(peer?.peers, taskPage, 5);
                   return (
                     <Box mb="2rem" key={index}>
-                      <Paper variant="outlined">
+                      <Card>
                         <Box
                           sx={{
                             display: 'flex',
@@ -768,7 +784,7 @@ export default function Clear() {
                               sx={{
                                 border: '1px solid #d5d2d2',
                                 p: '0.2rem 0.3rem',
-                                borderRadius: '0.4rem',
+                                borderRadius: '0.2rem',
                                 display: 'inline-flex',
                                 alignItems: 'center',
                               }}
@@ -792,7 +808,7 @@ export default function Clear() {
                           </Box>
                           <Button
                             size="small"
-                            sx={{ background: 'var(--button-color)', borderRadius: '0' }}
+                            sx={{ background: 'var(--button-color)' }}
                             variant="contained"
                             onClick={(event) => {
                               event.stopPropagation();
@@ -806,7 +822,12 @@ export default function Clear() {
                         </Box>
                         <Divider />
                         <Box
-                          sx={{ p: '1rem 0.8rem', display: 'flex', alignItems: 'center', backgroundColor: '#f6f6f6' }}
+                          sx={{
+                            p: '1rem 0.8rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            backgroundColor: 'var(--table-title-color)',
+                          }}
                         >
                           <Box width="20%" sx={{ display: 'flex', alignItems: 'center' }}>
                             <Typography variant="body2" fontFamily="mabry-bold" className={styles.hostnameTitle}>
@@ -867,7 +888,7 @@ export default function Clear() {
                                       size="small"
                                       variant="outlined"
                                       sx={{
-                                        borderRadius: '0%',
+                                        borderRadius: '0.2rem',
                                         backgroundColor:
                                           item?.host_type === 'super'
                                             ? 'var( --description-color)'
@@ -923,7 +944,7 @@ export default function Clear() {
                                     size="small"
                                     variant="outlined"
                                     sx={{
-                                      borderRadius: '0%',
+                                      borderRadius: '0.2rem',
                                       backgroundColor:
                                         item?.host_type === 'super'
                                           ? 'var( --description-color)'
@@ -949,7 +970,7 @@ export default function Clear() {
                             );
                           })}
                         </Box>
-                      </Paper>
+                      </Card>
                       {totalPage > 1 ? (
                         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
                           <Pagination
@@ -1040,7 +1061,7 @@ export default function Clear() {
         </Box>
         <Divider />
         <DialogContent>
-          <Box onSubmit={handleDeleteTask}>
+          <Box component="form" onSubmit={handleDeleteTask}>
             <Box display="flex" alignItems="flex-start" pb="1rem">
               <Box
                 component="img"
@@ -1048,10 +1069,15 @@ export default function Clear() {
                 sx={{ width: '1.4rem', height: '1.4rem', pr: '0.2rem' }}
               />
               <Box>
-                <Typography variant="body1" fontFamily="mabry-bold" component="span" sx={{ color: '#D81E06' }}>
+                <Typography
+                  variant="body1"
+                  fontFamily="mabry-bold"
+                  component="span"
+                  sx={{ color: 'var(--delete-button-color)' }}
+                >
                   WARNING:&nbsp;
                 </Typography>
-                <Typography variant="body1" component="span" sx={{ color: '#D81E06' }}>
+                <Typography variant="body1" component="span" sx={{ color: 'var(--delete-button-color)' }}>
                   This action CANNOT be undone.
                 </Typography>
               </Box>
@@ -1079,11 +1105,10 @@ export default function Clear() {
             />
             <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
               <CancelLoadingButton id="cancelDeleteCluster" loading={deleteLoadingButton} onClick={handleClose} />
-              <SavelLoadingButton
+              <DeleteLoadingButton
                 loading={deleteLoadingButton}
                 endIcon={<DeleteIcon />}
                 id="deleteTask"
-                onClick={handleDeleteTask}
                 text="Delete"
               />
             </Box>

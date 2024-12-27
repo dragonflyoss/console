@@ -1,3 +1,7 @@
+import clusters from '../../fixtures/clusters/clusters.json';
+import seedPeers from '../../fixtures/seed-peers/seed-peers.json';
+import schedulers from '../../fixtures/schedulers/schedulers.json';
+
 describe('Menu', () => {
   it('user not signin', () => {
     // redirect when not signin.
@@ -5,6 +9,8 @@ describe('Menu', () => {
 
     // Then I see that the current page is the signin!
     cy.url().should('include', '/signin');
+
+    cy.viewport(1440, 1080);
   });
 
   describe('try to signin as guest user', () => {
@@ -53,22 +59,48 @@ describe('Menu', () => {
 
       cy.get('[href="/jobs/task/clear"]').should('have.class', 'Mui-selected');
     });
-
-    it('should navigate to the peers page', () => {
-      cy.get('.MuiList-root > :nth-child(4) > .MuiButtonBase-root').click();
-      cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').click();
-
-      // Then I see that the current page is the peers!
-      cy.url().should('include', '/insight/peers');
-
-      // The selected menu is peers.
-      cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').should('have.class', 'Mui-selected');
-    });
   });
 
   describe('try to signin as root user', () => {
     beforeEach(() => {
       cy.signin();
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/clusters?page=1&per_page=10000000',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: clusters,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/schedulers?page=1&per_page=10000000',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: schedulers,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/seed-peers?page=1&per_page=10000000',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: seedPeers,
+          });
+        },
+      );
 
       cy.visit('/');
     });
@@ -109,17 +141,6 @@ describe('Menu', () => {
 
       // The selected menu is task.
       cy.get('[href="/jobs/task/clear"]').should('have.class', 'Mui-selected');
-    });
-
-    it('should navigate to the peers page', () => {
-      cy.get('.MuiList-root > :nth-child(4) > .MuiButtonBase-root').click();
-      cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').click();
-
-      // Then I see that the current page is the peers!
-      cy.url().should('include', '/insight/peers');
-
-      // The selected menu is peers.
-      cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').should('have.class', 'Mui-selected');
     });
 
     it('should navigate to the users page', () => {
@@ -189,7 +210,8 @@ describe('Menu', () => {
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
 
-      cy.get('.css-1rr4qq7 > .MuiSnackbar-root > .MuiPaper-root > .MuiAlert-action > .MuiButtonBase-root').click();
+      // Close error message.
+      cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
       cy.get('.MuiAlert-message').should('not.exist');
     });
   });

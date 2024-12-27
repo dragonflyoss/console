@@ -503,7 +503,10 @@ describe('Clear', () => {
 
       cy.get('#searchByURL').click();
 
-      cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .css-70qvj9 > .css-qxmwuj').should('contain', '2');
+      cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .css-70qvj9 > .css-1y3f2j > #schedulerTotal').should(
+        'contain',
+        '2',
+      );
 
       cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .MuiButtonBase-root').click();
 
@@ -573,7 +576,10 @@ describe('Clear', () => {
         'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916{enter}',
       );
 
-      cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .css-70qvj9 > .css-qxmwuj').should('contain', '2');
+      cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .css-70qvj9 > .css-1y3f2j > #schedulerTotal').should(
+        'contain',
+        '2',
+      );
 
       cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .MuiButtonBase-root').click();
 

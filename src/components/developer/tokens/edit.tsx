@@ -27,12 +27,17 @@ import { getToken, updateTokens } from '../../../lib/api';
 import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
+import Card from '../../card';
+import styles from './edit.module.css';
 
 const theme = createTheme({
   palette: {
     secondary: {
       main: '#1c293a',
     },
+  },
+  typography: {
+    fontFamily: 'mabry-light,sans-serif',
   },
 });
 
@@ -210,14 +215,9 @@ export default function UpdateTokens() {
         </Alert>
       </Snackbar>
       <ThemeProvider theme={theme}>
-        <Typography variant="h5" fontFamily="mabry-bold">
-          Update personal access token
-        </Typography>
+        <Typography variant="h5">Update personal access token</Typography>
         <Divider sx={{ mt: 2, mb: 2 }} />
-        <Paper
-          variant="outlined"
-          sx={{ flexGrow: '1', display: 'inline-flex', alignItems: 'center', mb: '1rem', p: '1rem' }}
-        >
+        <Card className={styles.header}>
           <Box component="img" src="/icons/tokens/key.svg" sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }} />
           <Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -245,7 +245,7 @@ export default function UpdateTokens() {
               )}
             </Box>
           </Box>
-        </Paper>
+        </Card>
         <Box component="form" onSubmit={handleSubmit} noValidate>
           <FormControl fullWidth>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -266,7 +266,7 @@ export default function UpdateTokens() {
                 size="small"
                 key={item.formProps.name}
                 {...item.formProps}
-                sx={{ width: '20rem' }}
+                sx={{ width: '36rem' }}
               />
             ))}
             <Box sx={{ display: 'flex', alignItems: 'center', mb: '1.4rem', mt: '1rem' }}>

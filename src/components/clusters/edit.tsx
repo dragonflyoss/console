@@ -11,7 +11,6 @@ import {
   TextField,
   Tooltip,
   Typography,
-  Paper,
   Skeleton,
 } from '@mui/material';
 import styles from './edit.module.css';
@@ -21,6 +20,7 @@ import { getCluster, updateCluster, getClusterResponse } from '../../lib/api';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
+import Card from '../card';
 
 export default function EditCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -57,13 +57,13 @@ export default function EditCluster() {
     scheduler_cluster_config: {
       candidate_parent_limit: 0,
       filter_parent_limit: 0,
-      job_rate_limit: 10,
+      job_rate_limit: 0,
     },
     seed_peer_cluster_config: {
-      load_limit: 2000,
+      load_limit: 0,
     },
     peer_cluster_config: {
-      load_limit: 200,
+      load_limit: 0,
     },
     created_at: '',
     updated_at: '',
@@ -529,7 +529,7 @@ export default function EditCluster() {
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Job Rate Limit',
-        value: job_rate_limit || 10,
+        value: job_rate_limit,
         helperText: jobRateLimitError ? 'Fill in the number, the length is 1-1000000.' : '',
         error: jobRateLimitError,
 
@@ -701,21 +701,23 @@ export default function EditCluster() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography variant="h5" fontFamily="mabry-bold">
-        Update Cluster
-      </Typography>
+      <Typography variant="h5">Update Cluster</Typography>
       <Divider sx={{ mt: '1rem', mb: '1rem' }} />
-      <Paper variant="outlined" sx={{ display: 'inline-flex', alignItems: 'center', mb: '1rem', p: '1rem' }}>
-        <Box component="img" src="/icons/cluster/cluster.svg" sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }} />
+      <Card className={styles.header}>
+        <Box
+          component="img"
+          src="/icons/cluster/information-cluster.svg"
+          sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }}
+        />
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography component="span" variant="body1" fontFamily="mabry-bold">
               ID:&nbsp;&nbsp;
             </Typography>
             {isLoading ? (
-              <Skeleton sx={{ width: '2rem' }} />
+              <Skeleton data-testid="isloading" sx={{ width: '2rem' }} />
             ) : (
-              <Typography component="div" variant="body1" fontFamily="mabry-bold">
+              <Typography id="id" component="div" variant="body1" fontFamily="mabry-bold">
                 {cluster.id}
               </Typography>
             )}
@@ -725,15 +727,15 @@ export default function EditCluster() {
               Name:&nbsp;&nbsp;
             </Typography>
             {isLoading ? (
-              <Skeleton sx={{ width: '4rem' }} />
+              <Skeleton data-testid="isloading" sx={{ width: '4rem' }} />
             ) : (
-              <Typography component="div" variant="body1" fontFamily="mabry-bold">
+              <Typography id="name" component="div" variant="body1" fontFamily="mabry-bold">
                 {cluster.name}
               </Typography>
             )}
           </Box>
         </Box>
-      </Paper>
+      </Card>
       <Grid component="form" noValidate onSubmit={handleSubmit}>
         <Box className={styles.container}>
           <Box className={styles.informationTitle}>
@@ -772,7 +774,7 @@ export default function EditCluster() {
               color="success"
               key={item.formProps.name}
               {...item.formProps}
-              className={styles.textField}
+              className={styles.idcInput}
             />
           ))}
           <Box className={styles.scopesTitle}>

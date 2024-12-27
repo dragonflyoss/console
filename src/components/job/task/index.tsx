@@ -12,9 +12,6 @@ const theme = createTheme({
       main: '#2e8f79',
     },
   },
-  typography: {
-    fontFamily: 'mabry-light,sans-serif',
-  },
 });
 
 export default function NavTabs() {
@@ -69,17 +66,25 @@ export default function NavTabs() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
-        <Typography color="inherit">jobs</Typography>
-        <Typography color="inherit">task</Typography>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '1rem' }}
+      >
+        <Typography color="text.primary">jobs</Typography>
+        <Typography color="text.primary">task</Typography>
         {location.pathname.split('/')[3] === 'executions' ? (
           <RouterLink component={Link} underline="hover" color="inherit" to={`/jobs/task/executions`}>
             executions
           </RouterLink>
         ) : (
-          <Typography color="text.primary">{location.pathname.split('/')[3]}</Typography>
+          <Typography color="inherit">{location.pathname.split('/')[3]}</Typography>
         )}
-        {params?.id ? <Typography color="text.primary"> {params?.id}</Typography> : ''}
+        {params?.id ? <Typography color="inherit"> {params?.id}</Typography> : ''}
       </Breadcrumbs>
       <AntTabs
         value={value}

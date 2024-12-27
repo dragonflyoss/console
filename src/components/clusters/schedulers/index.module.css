@@ -1,0 +1,434 @@
+.schedulerInactiveCountWrapper {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+}
+
+.schedulerInactiveList {
+  display: flex;
+  padding: 0.8rem 1rem !important;
+}
+
+.schedulerInactiveListTitle {
+  display: flex;
+  padding: 0.8rem 1rem;
+  background-color: var(--table-title-color) !important;
+}
+
+.noInactiveScheduler {
+  padding: 1rem 0;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+}
+
+.doughnut {
+  width: 6rem;
+  height: 6rem;
+}
+
+.hostnameText {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.openDeleteInactiveDialog {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.logHeaderWrapper {
+  display: flex;
+  margin-bottom: 2rem;
+}
+
+.successfulLog {
+  padding: 0rem !important;
+}
+
+.deleteInactiveWrapper {
+  padding: 1rem;
+}
+
+.schedulerInactiveCountWrapper {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+}
+
+.headerContainer {
+  width: 33.333%;
+  margin-right: 0.6rem;
+  padding: 0.8rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.successHeaderContainer {
+  width: 50%;
+  margin-right: 1rem;
+  padding: 1rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.successHeaderContainer:last-child {
+  margin-right: 0;
+}
+
+.headerIcon {
+  width: 3rem;
+  height: 3rem;
+  margin-right: '0.5rem';
+}
+
+.headerErrorIcon {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.features {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featuresIconWrapper {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  background-color: #fbfbfb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.6rem;
+}
+
+.featuresIconContainer {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background-color: #efefef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featuresIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.menu {
+  background-image: url(../../../../public/images/menu/cyan-blur.png), url(../../../../public/images/menu/red-blur.png);
+  background-color: rgba(255, 255, 255, 0.9);
+  background-repeat: no-repeat, no-repeat;
+  padding: 0.2rem;
+  background-size: 50%, 50%;
+  box-shadow: rgba(145, 158, 171, 0.24) 0px 0px 2px 0px, rgba(145, 158, 171, 0.24) -20px 20px 40px -4px;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  outline: 0px;
+  background-position: right top, left bottom;
+  border-radius: 10px;
+  overflow: inherit;
+}
+
+.menuItemIcon {
+  color: var(--button-color);
+}
+
+.menuText {
+  font-family: 'mabry-bold' !important;
+}
+
+.searchIcon {
+  margin: 0.4rem;
+}
+
+.searchContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.hostnameCardText {
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  width: 90% !important;
+  font-family: 'mabry-bold' !important;
+}
+
+.searchWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 2rem;
+}
+
+.ipContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.idIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-right: 0.4rem;
+}
+
+.statusIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.4rem;
+}
+
+.circularProgressWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem auto;
+}
+
+.logHeaderWrapper {
+  display: flex;
+  margin-bottom: 2rem;
+}
+
+.headerContainer {
+  width: 50%;
+  margin-right: 0.6rem;
+  padding: 0.8rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.headerContainer:last-child {
+  margin-right: 0;
+}
+
+.schedulerInactiveHeaderID {
+  width: 20%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+}
+
+.schedulerInactiveHeaderHostname {
+  width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+}
+
+.schedulerInactiveHeaderIP {
+  width: 25%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+}
+
+.schedulerInactiveID {
+  display: flex;
+  align-items: center;
+  width: 20%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.schedulerInactiveHostname {
+  width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 1rem;
+}
+
+.schedulerInactiveIP {
+  width: 25%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.featuresEdit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+.featuresEdit:nth-last-child(2n) {
+  margin-top: 1rem;
+}
+
+.moreVertIcon {
+  position: absolute !important;
+  top: 0.8rem;
+  right: 0.8rem;
+}
+
+.cardCantainer {
+  gap: calc(1.5rem);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.loadingCard {
+  width: 33.33%;
+}
+
+.card {
+  overflow: hidden;
+}
+
+.card:hover {
+  background-color: var(--palette-card-hover-background-color);
+}
+
+@media screen and (max-width: 2560px) {
+  .cardCantainer {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media screen and (max-width: 2048px) {
+  .cardCantainer {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media screen and (max-width: 1920px) {
+  .cardCantainer {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media screen and (max-width: 1600px) {
+  .cardCantainer {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .cardCantainer {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.descriptionText {
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  width: 90% !important;
+  font-family: 'mabry-bold';
+}
+
+.schedulersHeader {
+  width: 33.3333%;
+  padding: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.activeHeader {
+  width: 33.3333%;
+  padding: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  margin-left: 1rem;
+}
+
+.noData {
+  width: 100%;
+  height: 18rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: rgba(var(--no-data-color) / 0.04) !important;
+  border: dashed 1px rgba(var(--no-data-color) / 0.08);
+}
+
+.nodataIcon {
+  max-width: 11rem;
+  height: 11rem;
+}
+
+.nodataText {
+  color: var(--palette-text-disabled);
+  font-family: 'mabry-bold';
+}
+
+.navigationWrapper {
+  padding: 1.2rem;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.navigation {
+  top: -3rem;
+  width: 160px;
+  z-index: -1;
+  height: 160px;
+  right: -5rem;
+  opacity: 0.12;
+  border-radius: 24px;
+  position: absolute;
+  transform: rotate(34deg);
+  background: linear-gradient(to right, #22c55e 0%, rgba(34 197 94 / 0) 100%);
+}
+
+.navigationIcon {
+  width: 2.4rem;
+  height: 2.4rem;
+  top: 1.4rem;
+  right: 1.8rem;
+  position: absolute;
+}
+
+.tableHeader {
+  color: var(--table-title-text-color);
+  font-family: 'mabry-bold' !important;
+}
+
+.tableRow {
+  border-bottom: dashed var(--palette-divider);
+}
+
+.tableRow:last-child {
+  border-bottom: none;
+}
+
+.divider {
+  border-width: 0px 0px thin;
+  border-color: var(--palette-divider);
+  border-style: dashed;
+  margin: 0;
+}

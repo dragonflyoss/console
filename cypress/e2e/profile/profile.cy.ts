@@ -57,19 +57,19 @@ describe('Profile', () => {
     // Then I see that the current page is the profile!
     cy.url().should('include', '/profile');
 
-    cy.get('h5').should('contain', 'My Profile');
+    cy.get('#my-profile').should('contain', 'My Profile');
   });
 
   it('when data is loaded', () => {
-    cy.get('.css-70qvj9 > .MuiBox-root > .MuiTypography-body1').should('be.visible').and('have.text', 'root');
+    cy.get('#menu-name').should('be.visible').and('have.text', 'root');
 
-    cy.get('.MuiTypography-caption').should('be.visible').and('have.text', 'root@example.com');
+    cy.get('#menu-email').should('be.visible').and('have.text', 'root@example.com');
 
     // Show user name.
     cy.get('.css-70qvj9 > .MuiBox-root > .MuiTypography-h5').should('be.visible').and('have.text', 'root');
 
     // Show user description.
-    cy.get('.MuiBox-root > .MuiTypography-subtitle1').should('be.visible').and('have.text', 'I am root');
+    cy.get('#description').should('be.visible').and('have.text', 'I am root');
     cy.get('#id').should('be.visible').and('have.text', 1);
     cy.get('#name').should('be.visible').and('have.text', 'root');
     cy.get('#email').should('be.visible').and('have.text', 'root@example.com');
@@ -100,14 +100,14 @@ describe('Profile', () => {
       },
     );
 
-    cy.get('.css-70qvj9 > .MuiBox-root > .MuiTypography-body1').should('be.visible').and('have.text', '-');
-    cy.get('.MuiTypography-caption').should('be.visible').and('have.text', '-');
+    cy.get('#menu-name').should('be.visible').and('have.text', '-');
+    cy.get('#menu-email').should('be.visible').and('have.text', '-');
 
     // Show user name.
-    cy.get('.css-70qvj9 > .MuiBox-root > .MuiTypography-h5').should('be.visible').and('have.text', '-');
+    cy.get('.MuiTypography-caption').should('be.visible').and('have.text', '-');
 
     // Show user description.
-    cy.get('.MuiBox-root > .MuiTypography-subtitle1').should('be.visible').and('have.text', '-');
+    cy.get('#description').should('be.visible').and('have.text', '-');
     cy.get('#id').should('be.visible').and('have.text', '-');
     cy.get('#name').should('be.visible').and('have.text', '-');
     cy.get('#email').should('be.visible').and('have.text', '-');
@@ -197,9 +197,7 @@ describe('Profile', () => {
       cy.get('.MuiTypography-caption').should('have.text', 'root@gmail.com');
 
       // Check if profile description is updated.
-      cy.get('.MuiBox-root > .MuiTypography-subtitle1')
-        .should('be.visible')
-        .and('have.text', 'I am root, I will change the description');
+      cy.get('#description').should('be.visible').and('have.text', 'I am root, I will change the description');
 
       // Check if profile email is updated.
       cy.get('#email').should('be.visible').and('have.text', 'root@gmail.com');
@@ -221,7 +219,7 @@ describe('Profile', () => {
       cy.get('#email').clear();
       cy.get('#email').type('root@gmail.com');
       cy.get('#cancel').click();
-      cy.get('.MuiBox-root > .MuiTypography-subtitle1').should('be.visible').and('have.text', 'I am root');
+      cy.get('#description').should('be.visible').and('have.text', 'I am root');
 
       // Check whether the navigation bar email has changed.
       cy.get('.MuiTypography-caption').should('have.text', 'root@example.com');
@@ -293,9 +291,7 @@ describe('Profile', () => {
       // Show verification error message.
       cy.get('#bio-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 0-1000.');
       cy.get('#save').click();
-      cy.get('.css-1q42fhy-MuiPaper-root > :nth-child(1) > .MuiTypography-root')
-        .should('exist')
-        .and('have.text', 'Update Personal Information');
+      cy.get('.css-1033rfx > .MuiTypography-root').should('exist').and('have.text', 'Update Personal Information');
 
       cy.get('#bio').clear();
       cy.get('#bio').type('I am root');
@@ -310,9 +306,7 @@ describe('Profile', () => {
       // Show verification error message.
       cy.get('#phone-helper-text').should('be.visible').and('have.text', 'Invalid phone number.');
       cy.get('#save').click();
-      cy.get('.css-1q42fhy-MuiPaper-root > :nth-child(1) > .MuiTypography-root')
-        .should('exist')
-        .and('have.text', 'Update Personal Information');
+      cy.get('.css-1033rfx > .MuiTypography-root').should('exist').and('have.text', 'Update Personal Information');
 
       cy.get('#phone').clear();
       cy.get('#phone').type('15123456789');

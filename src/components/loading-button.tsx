@@ -15,13 +15,12 @@ export const CancelLoadingButton: React.FC<cancelLoadingButtonProps> = ({ loadin
     endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
     size="small"
     variant="outlined"
-    type='reset'
+    type="reset"
     loadingPosition="end"
     id={id}
     sx={{
       '&.MuiLoadingButton-root': {
         color: 'var(--calcel-size-color)',
-        borderRadius: 0,
         borderColor: 'var(--calcel-color)',
       },
       ':hover': {
@@ -77,7 +76,6 @@ export const SavelLoadingButton: React.FC<saveLoadingButtonProps> = ({
       sx={{
         '&.MuiLoadingButton-root': {
           backgroundColor: 'var(--save-color)',
-          borderRadius: 0,
           color: 'var(--save-size-color)',
           borderColor: 'var(--save-color)',
         },
@@ -89,6 +87,54 @@ export const SavelLoadingButton: React.FC<saveLoadingButtonProps> = ({
           backgroundColor: 'var(--button-loading-color)',
           color: 'var(--button-loading-size-color)',
           borderColor: 'var(--button-loading-color)',
+        },
+        width: '7rem',
+      }}
+      onClick={handleClick}
+      {...rest}
+    >
+      {text}
+    </LoadingButton>
+  );
+};
+
+export const DeleteLoadingButton: React.FC<saveLoadingButtonProps> = ({
+  loading,
+  onClick,
+  id,
+  endIcon,
+  text,
+  ...rest
+}) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (onClick) {
+      onClick(event);
+    }
+  };
+
+  return (
+    <LoadingButton
+      loading={loading}
+      endIcon={endIcon}
+      size="small"
+      variant="outlined"
+      type="submit"
+      loadingPosition="end"
+      id={id}
+      sx={{
+        '&.MuiLoadingButton-root': {
+          backgroundColor: 'var(--delete-button-color)',
+          color: 'var(--save-size-color)',
+          borderColor: 'var(--delete-button-color)',
+        },
+        ':hover': {
+          backgroundColor: 'var(--delete-button-hover-color)',
+          borderColor: 'var(--delete-button-hover-color)',
+        },
+        '&.MuiLoadingButton-loading': {
+          backgroundColor: 'var(--delete-button-color)',
+
+          borderColor: 'var(--delete-button-color)',
         },
         width: '7rem',
       }}

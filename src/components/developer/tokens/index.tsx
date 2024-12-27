@@ -26,18 +26,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
-import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1C293A',
-    },
-  },
-  typography: {
-    fontFamily: 'mabry-light,sans-serif',
-  },
-});
+import { CancelLoadingButton, DeleteLoadingButton, SavelLoadingButton } from '../../loading-button';
+import Card from '../../card';
+import styles from './index.module.css';
 
 export default function PersonalAccessTokens() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -157,7 +148,7 @@ export default function PersonalAccessTokens() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -178,9 +169,17 @@ export default function PersonalAccessTokens() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: '1rem' }}>
-        <Typography color="inherit">developer</Typography>
-        <Typography color="text.primary">personal access tokens</Typography>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '1rem' }}
+      >
+        <Typography color="#1C293A">developer</Typography>
+        <Typography color="inherit">personal access tokens</Typography>
       </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Typography variant="h5">Personal access tokens</Typography>
@@ -189,7 +188,6 @@ export default function PersonalAccessTokens() {
           sx={{
             '&.MuiButton-root': {
               backgroundColor: 'var(--button-color)',
-              borderRadius: 0,
               color: '#fff',
             },
           }}
@@ -202,23 +200,16 @@ export default function PersonalAccessTokens() {
           Add Personal access tokens
         </Button>
       </Box>
-      <Typography variant="subtitle2" mb="1rem" mt="1rem">
+      <Typography variant="subtitle2" mb="1.5rem" mt="1rem" color="var(--text---palette-text-secondary)">
         Tokens you have generated that can be used to access the Dragonfly API.
       </Typography>
       {showCopyColumn ? (
-        <Box
-          sx={{
-            display: 'flex',
-            p: '0.8rem',
-            alignItems: 'center',
-            backgroundColor: 'rgba(108,198,68,.1)',
-            mb: '1rem',
-          }}
-        >
-          <Typography variant="body2" mr="0.2rem">
-            {newToken}
+        <Card id="copy-column" className={styles.copyToken}>
+          <Typography variant="body2" mr="0.4rem">
+            {newToken || ''}
           </Typography>
           <IconButton
+            id="copy-button"
             aria-label="delete"
             sx={{
               p: '0',
@@ -250,12 +241,12 @@ export default function PersonalAccessTokens() {
               <Box component="img" id="copy" sx={{ width: '1.2rem', height: '1.2rem' }} src="/icons/tokens/copy.svg" />
             )}
           </IconButton>
-        </Box>
+        </Card>
       ) : (
         <></>
       )}
       {isLoading ? (
-        <Paper variant="outlined">
+        <Card>
           <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
@@ -271,21 +262,23 @@ export default function PersonalAccessTokens() {
               <Skeleton data-testid="isloading" width="4.5rem" height="3.2rem" />
             </Box>
           </Box>
-        </Paper>
+        </Card>
       ) : allTokens.length === 0 ? (
-        <Paper
-          variant="outlined"
-          sx={{ height: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-          You don't have any tokens.
-        </Paper>
+        <Card className={styles.noData}>
+          <Box component="img" className={styles.nodataIcon} src="/icons/cluster/scheduler/ic-content.svg" />
+          <Typography id="no-scheduler" variant="h6" className={styles.nodataText}>
+            You don't have any tokens.
+          </Typography>
+        </Card>
       ) : (
-        <Paper variant="outlined" id="tokens-list">
+        <Card id="tokens-list">
           {Array.isArray(allTokens) &&
             allTokens.map((item, index) => {
               return index !== allTokens.length - 1 ? (
                 <Box key={item.id}>
-                  <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box
+                    sx={{ display: 'flex', p: '0.8rem 1.5rem', justifyContent: 'space-between', alignItems: 'center' }}
+                  >
                     <Box>
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
                         <RouterLink
@@ -297,13 +290,15 @@ export default function PersonalAccessTokens() {
                         >
                           {item.name}
                         </RouterLink>
-                        <Typography variant="body2">&nbsp;—&nbsp;{item?.user?.name}</Typography>
+                        <Typography id={`user-name-${item.id}`} variant="body2">
+                          &nbsp;—&nbsp;{item?.user?.name}
+                        </Typography>
                       </Box>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Typography variant="body2" component="span" fontFamily="mabry-bold">
                           Expires on&nbsp;
                         </Typography>
-                        <Typography variant="body2" component="span">
+                        <Typography id={`expired-at-${item?.id}`} variant="body2" component="span">
                           {formatDate(item?.expired_at) || ''}.
                         </Typography>
                       </Box>
@@ -311,11 +306,10 @@ export default function PersonalAccessTokens() {
                     <Box>
                       <Button
                         size="small"
-                        id="delete-token"
+                        id={`delete-token-${item?.id}`}
                         sx={{
                           '&.MuiButton-root': {
                             backgroundColor: 'var(--button-color)',
-                            borderRadius: 0,
                             color: '#fff',
                           },
                         }}
@@ -328,11 +322,19 @@ export default function PersonalAccessTokens() {
                       </Button>
                     </Box>
                   </Box>
-                  <Divider />
+                  <Divider
+                    sx={{
+                      borderStyle: 'dashed',
+                      borderColor: 'var(--palette-divider)',
+                      borderWidth: '0px 0px thin',
+                    }}
+                  />
                 </Box>
               ) : (
                 <Box key={item.id}>
-                  <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box
+                    sx={{ display: 'flex', p: '0.8rem 1.5rem', justifyContent: 'space-between', alignItems: 'center' }}
+                  >
                     <Box>
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
                         <RouterLink
@@ -344,13 +346,15 @@ export default function PersonalAccessTokens() {
                         >
                           {item.name}
                         </RouterLink>
-                        <Typography variant="body2">&nbsp;—&nbsp;{item?.user?.name}</Typography>
+                        <Typography id={`user-name-${item.id}`} variant="body2">
+                          &nbsp;—&nbsp;{item?.user?.name}
+                        </Typography>
                       </Box>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Typography variant="body2" component="span" fontFamily="mabry-bold">
                           Expires on&nbsp;
                         </Typography>
-                        <Typography variant="body2" component="span">
+                        <Typography id={`expired-at-${item?.id}`} variant="body2" component="span">
                           {formatDate(item?.expired_at) || ''}.
                         </Typography>
                       </Box>
@@ -358,11 +362,10 @@ export default function PersonalAccessTokens() {
                     <Box>
                       <Button
                         size="small"
-                        id="delete-token"
+                        id={`delete-token-${item?.id}`}
                         sx={{
                           '&.MuiButton-root': {
                             backgroundColor: 'var(--button-color)',
-                            borderRadius: 0,
                             color: '#fff',
                           },
                         }}
@@ -378,10 +381,10 @@ export default function PersonalAccessTokens() {
                 </Box>
               );
             })}
-        </Paper>
+        </Card>
       )}
       {tokensTotalPages > 1 ? (
-        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '1rem' }}>
           <Pagination
             id="tokens-pagination"
             count={tokensTotalPages}
@@ -390,7 +393,12 @@ export default function PersonalAccessTokens() {
               setTokensPage(newPage);
               navigate(`/developer/personal-access-tokens${newPage > 1 ? `?page=${newPage}` : ''}`);
             }}
-            color="primary"
+            sx={{
+              '& .Mui-selected': {
+                backgroundColor: 'var(--button-color)!important',
+                color: '#FFF',
+              },
+            }}
             size="small"
           />
         </Box>
@@ -420,7 +428,7 @@ export default function PersonalAccessTokens() {
                 setOpenDeletToken(false);
               }}
             />
-            <SavelLoadingButton
+            <DeleteLoadingButton
               loading={deleteLoadingButton}
               endIcon={<DeleteIcon />}
               id="delete"
@@ -430,6 +438,6 @@ export default function PersonalAccessTokens() {
           </Box>
         </DialogContent>
       </Dialog>
-    </ThemeProvider>
+    </Box>
   );
 }

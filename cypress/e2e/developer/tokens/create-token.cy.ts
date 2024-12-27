@@ -82,10 +82,10 @@ describe('Create token', () => {
     cy.url().should('include', '/developer/personal-access-tokens');
 
     // After creation is completed, the copyable token will be displayed.
-    cy.get('.css-1s0a73l').should('exist');
+    cy.get('#copy-column').should('exist');
 
     // Click the Copy icon button.
-    cy.get('.css-1s0a73l > .MuiButtonBase-root').click();
+    cy.get('#copy-button').click();
 
     // The copy icon is no longer displayed.
     cy.get('#copy').should('not.exist');
@@ -113,11 +113,11 @@ describe('Create token', () => {
 
     // Refresh page.
     cy.reload().then(() => {
-      cy.wait(2000);
+      cy.wait(1000);
     });
 
     // When you click refresh, the replication token will not be displayed again for your security.
-    cy.get('.css-1s0a73l').should('not.exist');
+    cy.get('#copy-column').should('not.exist');
   });
 
   it('cannot create token with existing token', () => {

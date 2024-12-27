@@ -72,7 +72,7 @@ describe('Executions', () => {
 
       cy.wait(120000);
 
-      //Executed every 1 minute and once after 1 minute.
+      // Executed every 1 minute and once after 1 minute.
       cy.get('@executions').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
         expect(interceptCount).to.be.closeTo(2, 1);
@@ -93,18 +93,12 @@ describe('Executions', () => {
 
       // The executions status is displayed as PENDING.
       cy.get('#list-11 > .css-1mlhis1').should('exist').find('#PENDING-11').should('exist');
-      cy.get('#list-11 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body1').should('have.text', 11);
-      cy.get('#list-11 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body2').should(
-        'have.text',
-        'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916',
-      );
+      cy.get('#id-11').should('have.text', 11);
+      cy.get('#task-id-11').should('have.text', 'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916');
 
       // The executions status is displayed as FAILURE.
       cy.get('#list-10 > .css-1mlhis1').should('exist').find('#FAILURE-10').should('exist');
-      cy.get('#list-10 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body2').should(
-        'have.text',
-        'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916',
-      );
+      cy.get('#task-id-10').should('have.text', 'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916');
 
       cy.get('#tab-clear').click();
 
@@ -277,7 +271,7 @@ describe('Executions', () => {
 
       // The executions status is displayed as PENDING.
       cy.get('#list-11 > .css-1mlhis1').should('exist').find('#PENDING-11').should('exist');
-      cy.get('#list-11 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body1').should('have.text', 11);
+      cy.get('#id-11').should('have.text', 11);
     });
 
     it('when pagination changes, different page results are rendered', () => {
@@ -304,7 +298,7 @@ describe('Executions', () => {
 
       // Refresh page.
       cy.reload().then(() => {
-        cy.wait(2000);
+        cy.wait(1000);
       });
 
       // Check the current page number.

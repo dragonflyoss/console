@@ -177,18 +177,16 @@ describe('Update token', () => {
     cy.get('#save').click();
 
     // Check for updated expiration date.
-    cy.get(':nth-child(1) > .css-fyy1jt > :nth-child(1) > .css-70qvj9 > .css-189ppmh-MuiTypography-root')
-      .should('be.visible')
-      .and('have.text', 'Sat, Dec 3 2033.');
+    cy.get('#expired-at-11').should('be.visible').and('have.text', 'Sat, Dec 3 2033.');
 
     // Then I see that the current page is the developer/personal-access-tokens!
     cy.url().should('include', '/developer/personal-access-tokens');
 
     // After update is completed, the copyable token will be displayed.
-    cy.get('.css-1s0a73l').should('exist');
+    cy.get('#copy-column').should('exist');
 
     // Click the Copy icon button.
-    cy.get('.css-1s0a73l > .MuiButtonBase-root').click();
+    cy.get('#copy-button').click();
 
     // Let's check the copied text.
     cy.window()

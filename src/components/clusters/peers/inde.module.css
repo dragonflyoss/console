@@ -1,0 +1,140 @@
+.navigationWrapper {
+  padding: 1.2rem;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.navigationContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.navigationTitle {
+  color: #637381;
+  font-family: 'mabry-bold';
+}
+
+.navigation {
+  top: -3rem;
+  width: 160px;
+  z-index: -1;
+  height: 160px;
+  right: -5rem;
+  opacity: 0.12;
+  border-radius: 24px;
+  position: absolute;
+  transform: rotate(34deg);
+  background: linear-gradient(to right, #22c55e 0%, rgba(34 197 94 / 0) 100%);
+}
+
+.navigationIcon {
+  width: 2.4rem;
+  height: 2.4rem;
+  top: 1.4rem;
+  right: 1.8rem;
+  position: absolute;
+}
+
+.dashboard {
+  display: flex;
+  align-items: stretch;
+}
+
+.barContainer {
+  width: 67%;
+  padding: 1rem;
+}
+
+.barTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 1.2rem 0.2rem;
+}
+
+.doughnutTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1rem;
+}
+
+.doughnutContainer {
+  margin-left: 1rem;
+  width: 33%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.activeContainer {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 1rem 1rem 1rem;
+}
+
+.activeIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: 0.6rem;
+}
+
+.activeContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.linearProgress {
+  width: 100%;
+  color: var(--description-color);
+}
+
+.descriptionIcon {
+  width: 1.2rem !important ;
+  height: 1.2rem !important;
+  color: rgb(188, 188, 188);
+}
+
+.descriptionIcon:hover {
+  color: var(--description-color);
+}
+
+.exportIcon {
+  width: 1.8rem;
+}
+
+.featuresIconWrapper {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  background-color: #fbfbfb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.6rem;
+}
+
+.featuresIconContainer {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background-color: #efefef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featuresIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.divider {
+  flex-shrink: 0;
+  border-width: 0px 0px thin;
+  border-color: var(--palette-divider);
+  border-style: dashed;
+}

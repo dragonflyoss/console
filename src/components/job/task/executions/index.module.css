@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #f7f7f7;
+  background-color: var(--table-title-color);
 }
 
 .listWrapper {
@@ -25,11 +25,29 @@
 .iconButton {
   width: 10%;
   display: flex;
-  align-items: center;
+  justify-content: center;
 }
 
 .isLoadingWrapper {
   padding: 0.8rem;
   display: flex;
   align-items: center;
+}
+
+.noData {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 1rem 0;
+}
+
+.nodataIcon {
+  max-width: 10rem;
+  height: 10rem;
+}
+
+.nodataText {
+  color: var(--palette-text-disabled);
+  font-family: 'mabry-bold';
 }

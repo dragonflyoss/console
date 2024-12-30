@@ -674,7 +674,7 @@ export default function Peer() {
               </Card>
             </Box>
           </Box>
-          <Box className={styles.visualizationWrapper}>
+          <Box className={styles.visualizationWrapperCommit}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: '1rem' }}>
               <Box>
                 <FormControl sx={{ width: '10rem' }} size="small">

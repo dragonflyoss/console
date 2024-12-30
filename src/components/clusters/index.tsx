@@ -463,7 +463,7 @@ export default function Clusters() {
           <Card className={styles.noData}>
             <Box component="img" className={styles.nodataIcon} src="/icons/cluster/scheduler/ic-content.svg" />
             <Typography variant="h6" className={styles.nodataText}>
-              No data
+              You don't have any cluster.
             </Typography>
           </Card>
         ) : Array.isArray(allClusters) && allClusters.length === 0 ? (

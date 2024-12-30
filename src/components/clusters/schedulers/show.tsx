@@ -148,8 +148,8 @@ export default function Schedulers() {
               Cluster ID
             </Typography>
           </Box>
-          <Box className={styles.clusterID}>
-            <Typography id="cluster-id" component="div" variant="body2" className={styles.headerText}>
+          <Box id="cluster-id" className={styles.clusterID}>
+            <Typography component="div" variant="body2" className={styles.headerText}>
               {isLoading ? (
                 <Skeleton data-testid="isloading" sx={{ width: '8rem' }} />
               ) : (
@@ -194,7 +194,9 @@ export default function Schedulers() {
                 }}
               />
             ) : (
-              '-'
+              <Typography id="status" component="div">
+                -
+              </Typography>
             )}
           </Typography>
         </Box>

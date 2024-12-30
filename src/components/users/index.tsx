@@ -193,6 +193,7 @@ export default function Users() {
     setAnchorElement(null);
     setUserDetail(false);
     setSwitchUser(false);
+    setSelectedRow(null);
   };
 
   const handleSubmit = async () => {

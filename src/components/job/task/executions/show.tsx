@@ -571,7 +571,14 @@ export default function ShowExecutions() {
                       Array.isArray(failure) &&
                       failure.map((item: any) => {
                         return (
-                          <TableRow key={item?.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                          <TableRow
+                            key={item?.id}
+                            sx={{
+                              '&:last-child td, &:last-child th': { border: 0 },
+                              ':hover': { backgroundColor: 'var(--palette-action-hover)' },
+                            }}
+                            className={styles.tableRow}
+                          >
                             <TableCell align="center">
                               <Typography variant="body2" component="div" fontFamily="mabry-bold">
                                 {item?.hostname}
@@ -595,7 +602,7 @@ export default function ShowExecutions() {
                                 size="small"
                                 variant="outlined"
                                 sx={{
-                                  borderRadius: '0%',
+                                  borderRadius: '0.2rem',
                                   backgroundColor:
                                     item?.host_type === 'super' ? 'var( --description-color)' : 'var(--button-color)',
                                   color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',

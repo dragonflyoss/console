@@ -76,3 +76,11 @@
   word-break: normal;
   overflow: hidden;
 }
+
+.tableRow {
+  border-bottom: dashed var(--palette-divider);
+}
+
+.tableRow:last-child {
+  border-bottom: none;
+}

@@ -28,7 +28,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { getTaskJobResponse, createTaskJob, getTaskJob } from '../../../../lib/api';
-import { getBJTDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
+import { getBJTDatetime, getPaginatedList } from '../../../../lib/utils';
 import _ from 'lodash';
 import SearchTaskAnimation from '../../../search-task-animation';
 import { useNavigate } from 'react-router-dom';

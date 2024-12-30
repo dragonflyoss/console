@@ -156,9 +156,7 @@ export default function ShowPreheat() {
         <RouterLink component={Link} underline="hover" color="inherit" to={`/jobs/preheats`}>
           preheats
         </RouterLink>
-        <Typography color="text.primary" fontFamily="mabry-bold">
-          {preheat?.id || '-'}
-        </Typography>
+        <Typography color="text.primary">{preheat?.id || '-'}</Typography>
       </Breadcrumbs>
       <Typography variant="h5" mb="2rem">
         Preheat

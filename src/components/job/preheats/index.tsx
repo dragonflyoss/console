@@ -1,6 +1,5 @@
 import {
   Button,
-  Paper,
   Typography,
   Box,
   Pagination,

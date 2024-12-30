@@ -10,7 +10,6 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  Paper,
   Select,
   Typography,
   Link as RouterLink,

@@ -4,19 +4,15 @@ import {
   IconButton,
   Skeleton,
   Typography,
-  Paper,
   Button,
   Dialog,
   DialogContent,
-  DialogActions,
   Tooltip,
   Snackbar,
   Alert,
   Link as RouterLink,
   Divider,
   Pagination,
-  ThemeProvider,
-  createTheme,
 } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { getTokens, deleteTokens, getTokensResponse } from '../../../lib/api';
@@ -26,7 +22,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
-import { CancelLoadingButton, DeleteLoadingButton, SavelLoadingButton } from '../../loading-button';
+import { CancelLoadingButton, DeleteLoadingButton } from '../../loading-button';
 import Card from '../../card';
 import styles from './index.module.css';
 

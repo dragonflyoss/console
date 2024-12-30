@@ -1028,7 +1028,7 @@ export default function ShowCluster() {
             </Box>
           </Box>
           <Box className={styles.navigation} />
-          <Box component="img" className={styles.navigationIcon} src="/icons/peer/total.svg" />
+          <Box component="img" className={styles.navigationIcon} src="/icons/cluster/peer/total.svg" />
         </Card>
         <Card className={styles.activeHeader}>
           <Box sx={{ display: 'flex', width: '70%' }}>

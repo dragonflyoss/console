@@ -286,7 +286,7 @@ export default function Clusters() {
                     </Box>
                   </Grid>
                 </Box>
-                <Box component="img" src="/icons/peer/statistics.svg" />
+                <Box component="img" src="/icons/cluster/peer/statistics.svg" />
               </Box>
             </Box>
           </Card>
@@ -326,7 +326,7 @@ export default function Clusters() {
                     </Box>
                   </Grid>
                 </Box>
-                <Box component="img" src="/icons/peer/statistics.svg" />
+                <Box component="img" src="/icons/cluster/peer/statistics.svg" />
               </Box>
             </Box>
           </Card>
@@ -366,7 +366,7 @@ export default function Clusters() {
                     </Box>
                   </Grid>
                 </Box>
-                <Box component="img" src="/icons/peer/statistics.svg" />
+                <Box component="img" src="/icons/cluster/peer/statistics.svg" />
               </Box>
             </Box>
           </Card>

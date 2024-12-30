@@ -20,38 +20,6 @@
   font-family: 'mabry-bold' !important;
 }
 
-.headerText {
-  font-family: 'mabry-bold' !important;
-}
-
-.clusterIDContaine {
-  width: 25%;
-  padding: 1.4rem;
-}
-
-.clusterIDContent {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.6rem;
-}
-
-.clusterIDTitle {
-  margin-left: 0.6rem !important;
-  color: var(--table-title-text-color);
-}
-
-.seedPeerContainer {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 1rem;
-  margin-top: 2rem;
-}
-
-.seedPeerContent {
-  width: 20%;
-  padding: 1rem;
-}
-
 .headerIcon {
   width: 1.4rem;
   height: 1.4rem;
@@ -63,7 +31,13 @@
   white-space: nowrap;
 }
 
-.text {
-  color: var(--table-title-text-color);
-  padding-bottom: 1rem;
+.clusterID {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--button-color);
+  color: var(--save-size-color);
+  border-radius: 0.3rem;
+  min-width: 1.6rem;
+  padding: 0.2rem 0.4rem;
 }

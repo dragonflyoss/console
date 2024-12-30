@@ -1,14 +1,5 @@
 import Paper from '@mui/material/Paper';
-import {
-  Alert,
-  Box,
-  Breadcrumbs,
-  Chip,
-  Link as RouterLink,
-  Skeleton,
-  Snackbar,
-  Typography,
-} from '@mui/material';
+import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getSeedPeer, getSeedPeerResponse } from '../../../lib/api';
 import { getDatetime } from '../../../lib/utils';
@@ -134,13 +125,15 @@ export default function SeedPeer() {
               Cluster ID
             </Typography>
           </Box>
-          <Typography id="cluster-id" component="div" variant="body1" fontFamily="mabry-bold">
-            {isLoading ? (
-              <Skeleton data-testid="isloading" sx={{ width: '8rem' }} />
-            ) : (
-              seedPeer?.seed_peer_cluster_id || '-'
-            )}
-          </Typography>
+          <Box className={styles.clusterID}>
+            <Typography id="cluster-id" component="div" variant="body2" fontFamily="mabry-bold">
+              {isLoading ? (
+                <Skeleton data-testid="isloading" sx={{ width: '8rem' }} />
+              ) : (
+                seedPeer?.seed_peer_cluster_id || '-'
+              )}
+            </Typography>
+          </Box>
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>

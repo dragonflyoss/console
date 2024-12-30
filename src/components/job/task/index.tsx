@@ -12,6 +12,9 @@ const theme = createTheme({
       main: '#2e8f79',
     },
   },
+  typography: {
+    fontFamily: 'mabry-light,sans-serif',
+  },
 });
 
 export default function NavTabs() {

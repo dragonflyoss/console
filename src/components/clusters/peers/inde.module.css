@@ -105,8 +105,8 @@
 }
 
 .descriptionIcon {
-  width: 1.2rem !important ;
-  height: 1.2rem !important;
+  width: 1rem !important ;
+  height: 1rem !important;
   color: rgb(188, 188, 188);
 }
 
@@ -145,10 +145,9 @@
 }
 
 .divider {
-  flex-shrink: 0;
   border-width: 0px 0px thin;
-  border-color: var(--palette-divider);
-  border-style: dashed;
+  border-color: var(--palette-divider) !important;
+  border-style: dashed !important;
 }
 
 .visualizationWrapper {

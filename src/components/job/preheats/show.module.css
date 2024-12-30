@@ -83,9 +83,9 @@
   background-color: var(--button-color);
   color: var(--save-size-color);
   border-radius: 0.3rem;
-  width: 1.6rem;
-  height: 1.6rem;
+  min-width: 1.6rem;
   margin-right: 0.5rem;
+  padding: 0.2rem 0.4rem;
 }
 
 .urlContent {

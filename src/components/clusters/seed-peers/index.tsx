@@ -917,7 +917,7 @@ export default function ShowCluster() {
                       </Box>
                     </Box>
                     <Typography variant="body1" component="div">
-                      inactive seed peers will be permanently delete.
+                      Inactive seed peers will be permanently delete.
                     </Typography>
                     <TextField
                       error={allInactiveError}
@@ -1369,7 +1369,7 @@ export default function ShowCluster() {
                       }}
                     />
                     <Box p="1.5rem">
-                      <Box className={styles.cardContainer}>
+                      <Box className={styles.cardContent}>
                         <Box className={styles.portContainer}>
                           <Box component="img" className={styles.portIcon} src="/icons/cluster/ip.svg" />
                           <Typography id={`card-ip-${item.id}`} variant="caption" sx={{ color: '#919EAB' }}>

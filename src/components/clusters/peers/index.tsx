@@ -103,11 +103,11 @@ export default function Peer() {
       try {
         setIsLoading(true);
 
-        if (cluster.seed_peer_cluster_id) {
+        if (cluster.scheduler_cluster_id) {
           const peer = await getPeers({
             page: 1,
             per_page: MAX_PAGE_SIZE,
-            scheduler_cluster_id: cluster.seed_peer_cluster_id,
+            scheduler_cluster_id: cluster.scheduler_cluster_id,
           });
 
           setPeer(peer);
@@ -122,7 +122,7 @@ export default function Peer() {
         }
       }
     })();
-  }, [cluster.seed_peer_cluster_id]);
+  }, [cluster.scheduler_cluster_id]);
 
   useEffect(() => {
     const gitVersionCount = new Set(peer.map((item) => item.git_version)).size;
@@ -414,7 +414,7 @@ export default function Peer() {
 
     const params = {
       type: 'sync_peers',
-      scheduler_cluster_ids: [cluster.seed_peer_cluster_id],
+      scheduler_cluster_ids: [cluster.scheduler_cluster_id],
     };
 
     try {
@@ -423,7 +423,7 @@ export default function Peer() {
       const peer = await getPeers({
         page: 1,
         per_page: MAX_PAGE_SIZE,
-        scheduler_cluster_id: cluster.seed_peer_cluster_id,
+        scheduler_cluster_id: cluster.scheduler_cluster_id,
       });
       setPeer(peer);
 
@@ -643,7 +643,7 @@ export default function Peer() {
                       <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                     </MuiTooltip>
                   </Box>
-                  <hr className={styles.divider} />
+                  <Divider className={styles.divider} />
                   <Box className={styles.pieWrapper}>
                     <Pie data={gitVersionDoughnut} options={doughnutOptions} />
                   </Box>
@@ -745,7 +745,7 @@ export default function Peer() {
                       <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                     </MuiTooltip>
                   </Box>
-                  <hr className={styles.divider} />
+                  <Divider className={styles.divider} />
                   <Box className={styles.pieWrapper}>
                     <Pie data={gitCommitDoughnut} options={doughnutOptions} />
                   </Box>

@@ -192,7 +192,7 @@ export default function NavTabs() {
     },
     {
       id: 'tab-cluster',
-      icon: <Box component="img" sx={{ width: '1.3rem' }} src="/icons/peer/tab-peer.svg" />,
+      icon: <Box component="img" sx={{ width: '1.3rem' }} src="/icons/cluster/peer/tab-peer.svg" />,
       label: 'Peers',
       component: Link,
       to: `/clusters/${params.id}/peers`,

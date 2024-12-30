@@ -61,6 +61,9 @@ export default function NewPreheat() {
         main: '#1c293a',
       },
     },
+    typography: {
+      fontFamily: 'mabry-light,sans-serif',
+    },
   });
 
   useEffect(() => {

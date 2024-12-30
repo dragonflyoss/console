@@ -5,7 +5,6 @@ import {
   Typography,
   Box,
   IconButton,
-  Paper,
   Chip,
   Table,
   Skeleton,

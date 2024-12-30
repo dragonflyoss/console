@@ -1,4 +1,4 @@
-import { Breadcrumbs, Button, createTheme, styled, ThemeProvider, Typography, Link as RouterLink } from '@mui/material';
+import { Breadcrumbs, createTheme, styled, ThemeProvider, Typography, Link as RouterLink } from '@mui/material';
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import * as React from 'react';
 import Box from '@mui/material/Box';
@@ -11,6 +11,9 @@ const theme = createTheme({
     primary: {
       main: '#2e8f79',
     },
+  },
+  typography: {
+    fontFamily: 'mabry-light,sans-serif',
   },
 });
 

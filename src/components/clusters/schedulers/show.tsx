@@ -143,6 +143,23 @@ export default function Schedulers() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
+            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/cluster-id.svg" />
+            <Typography className={styles.headerTitle} variant="body1" component="div">
+              Cluster ID
+            </Typography>
+          </Box>
+          <Box id="cluster-id" className={styles.clusterID}>
+            <Typography component="div" variant="body2" className={styles.headerText}>
+              {isLoading ? (
+                <Skeleton data-testid="isloading" sx={{ width: '8rem' }} />
+              ) : (
+                scheduler?.scheduler_cluster_id || '-'
+              )}
+            </Typography>
+          </Box>
+        </Box>
+        <Box className={styles.headerContainer}>
+          <Box className={styles.headerContent}>
             <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/scheduler-ip.svg" />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               IP
@@ -150,21 +167,6 @@ export default function Schedulers() {
           </Box>
           <Typography id="ip" component="div" variant="body1" className={styles.headerText}>
             {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '8rem' }} /> : scheduler?.ip || '-'}
-          </Typography>
-        </Box>
-        <Box className={styles.headerContainer}>
-          <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/cluster-id.svg" />
-            <Typography className={styles.headerTitle} variant="body1" component="div">
-              Cluster ID
-            </Typography>
-          </Box>
-          <Typography id="cluster-id" component="div" variant="body1" className={styles.headerText}>
-            {isLoading ? (
-              <Skeleton data-testid="isloading" sx={{ width: '8rem' }} />
-            ) : (
-              scheduler?.scheduler_cluster_id || '-'
-            )}
           </Typography>
         </Box>
         <Box className={styles.headerContainer}>
@@ -192,7 +194,9 @@ export default function Schedulers() {
                 }}
               />
             ) : (
-              '-'
+              <Typography id="status" component="div">
+                -
+              </Typography>
             )}
           </Typography>
         </Box>

@@ -49,56 +49,14 @@
   font-family: 'mabry-bold' !important;
 }
 
-/* .informationWrapper:nth-child(5) {
-  display: flex;
-  align-items: center;
-  width: 66.66%;
-  padding: 1rem;
-} */
-
-.informationLable {
-  color: #80828b;
-  /* font-family: 'mabry-bold' !important; */
-  margin-right: 0.3rem !important;
-}
-
-.informationIcon {
-  width: 1.2rem;
-  height: 1.2rem;
-  margin-right: 0.5rem;
-}
-
-.informationTitel {
-  display: flex;
-  align-items: center;
-  width: 80%;
-}
-
-.informationDescriptionTitel {
-  display: flex;
-  align-items: center;
-  width: 40% !important;
-}
-
-.divider {
-  margin: 1.5rem 0px;
-  flex-shrink: 0;
-  border-width: 0px 0px thin;
-  border-color: var(--palette-divider);
-  border-style: dashed;
-}
-
 .clusterContainer {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-
-  /* background-color: #f7f7f8 !important; */
 }
 
 .clusterWrap {
   display: flex;
-  /* align-items: center; */
   width: 25%;
   flex-direction: column;
 }
@@ -155,13 +113,6 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
-.locationContainer {
-  padding: 1.4rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
 .scopesIcon {
   width: 1.6rem;
   height: 1.6rem;
@@ -189,24 +140,11 @@
   align-items: flex-end;
 }
 
-.locationContent {
-  width: 80%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .cidrsContainer {
   padding: 1.2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* height: 9rem; */
-  /* background-color: #f4f6f8 !important; */
-}
-
-.cidrsTitleWrapper {
-  padding-bottom: 1rem;
 }
 
 .cidrsTitle {
@@ -290,13 +228,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   color: #637381;
-  /* font-family: 'mabry-bold' !important; */
-}
-
-.configRightContainer {
-  display: flex;
-  flex-direction: column;
-  margin-top: 2rem;
 }
 
 .scopesWrapper {
@@ -324,7 +255,6 @@
 }
 
 .configContentTitle {
-  /* width: 85%; */
   display: flex;
   align-items: center;
   padding-bottom: 0.4rem;

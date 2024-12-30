@@ -103,11 +103,11 @@ export default function Peer() {
       try {
         setIsLoading(true);
 
-        if (cluster.seed_peer_cluster_id) {
+        if (cluster.scheduler_cluster_id) {
           const peer = await getPeers({
             page: 1,
             per_page: MAX_PAGE_SIZE,
-            scheduler_cluster_id: cluster.seed_peer_cluster_id,
+            scheduler_cluster_id: cluster.scheduler_cluster_id,
           });
 
           setPeer(peer);
@@ -122,7 +122,7 @@ export default function Peer() {
         }
       }
     })();
-  }, [cluster.seed_peer_cluster_id]);
+  }, [cluster.scheduler_cluster_id]);
 
   useEffect(() => {
     const gitVersionCount = new Set(peer.map((item) => item.git_version)).size;
@@ -414,7 +414,7 @@ export default function Peer() {
 
     const params = {
       type: 'sync_peers',
-      scheduler_cluster_ids: [cluster.seed_peer_cluster_id],
+      scheduler_cluster_ids: [cluster.scheduler_cluster_id],
     };
 
     try {
@@ -423,7 +423,7 @@ export default function Peer() {
       const peer = await getPeers({
         page: 1,
         per_page: MAX_PAGE_SIZE,
-        scheduler_cluster_id: cluster.seed_peer_cluster_id,
+        scheduler_cluster_id: cluster.scheduler_cluster_id,
       });
       setPeer(peer);
 
@@ -497,9 +497,9 @@ export default function Peer() {
               }}
               startIcon={
                 refresh ? (
-                  <Box component="img" sx={{ width: '1.2rem' }} src="/icons/peer/refresh-loading.svg" />
+                  <Box component="img" sx={{ width: '1.2rem' }} src="/icons/cluster/peer/refresh-loading.svg" />
                 ) : (
-                  <Box component="img" sx={{ width: '1.2rem' }} src="/icons/peer/refresh.svg" />
+                  <Box component="img" sx={{ width: '1.2rem' }} src="/icons/cluster/peer/refresh.svg" />
                 )
               }
             >
@@ -545,7 +545,7 @@ export default function Peer() {
                   </Typography>
                 </Box>
                 <Box className={styles.navigation}></Box>
-                <Box component="img" className={styles.navigationIcon} src="/icons/peer/total.svg" />
+                <Box component="img" className={styles.navigationIcon} src="/icons/cluster/peer/total.svg" />
               </Box>
             </Card>
           </Box>
@@ -568,7 +568,7 @@ export default function Peer() {
                   </Typography>
                 </Box>
                 <Box className={styles.navigation} />
-                <Box component="img" className={styles.navigationIcon} src="/icons/peer/git-versions.svg" />
+                <Box component="img" className={styles.navigationIcon} src="/icons/cluster/peer/git-versions.svg" />
               </Box>
             </Card>
           </Box>
@@ -591,7 +591,7 @@ export default function Peer() {
                   </Typography>
                 </Box>
                 <Box className={styles.navigation} />
-                <Box component="img" className={styles.navigationIcon} src="/icons/peer/git-commits.svg" />
+                <Box component="img" className={styles.navigationIcon} src="/icons/cluster/peer/git-commits.svg" />
               </Box>
             </Card>
           </Box>
@@ -643,13 +643,13 @@ export default function Peer() {
                       <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                     </MuiTooltip>
                   </Box>
-                  <hr className={styles.divider} />
+                  <Divider className={styles.divider} />
                   <Box className={styles.pieWrapper}>
                     <Pie data={gitVersionDoughnut} options={doughnutOptions} />
                   </Box>
                 </Box>
                 <Box className={styles.activeContainer}>
-                  <Box component="img" className={styles.activeIcon} src="/icons/peer/active.svg" />
+                  <Box component="img" className={styles.activeIcon} src="/icons/cluster/peer/active.svg" />
                   <Box sx={{ width: '100%' }}>
                     <Box className={styles.activeContent}>
                       <Typography variant="subtitle2" fontFamily="mabry-light">
@@ -745,13 +745,13 @@ export default function Peer() {
                       <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                     </MuiTooltip>
                   </Box>
-                  <hr className={styles.divider} />
+                  <Divider className={styles.divider} />
                   <Box className={styles.pieWrapper}>
                     <Pie data={gitCommitDoughnut} options={doughnutOptions} />
                   </Box>
                 </Box>
                 <Box className={styles.activeContainer}>
-                  <Box component="img" className={styles.activeIcon} src="/icons/peer/active.svg" />
+                  <Box component="img" className={styles.activeIcon} src="/icons/cluster/peer/active.svg" />
                   <Box sx={{ width: '100%' }}>
                     <Box className={styles.activeContent}>
                       <Typography variant="subtitle2" fontFamily="mabry-light">
@@ -790,7 +790,7 @@ export default function Peer() {
         >
           <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '1rem' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box component="img" className={styles.exportIcon} src="/icons/peer/export.svg" />
+              <Box component="img" className={styles.exportIcon} src="/icons/cluster/peer/export.svg" />
               <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
                 Export
               </Typography>
@@ -822,7 +822,7 @@ export default function Peer() {
                 pb: '1rem',
               }}
             >
-              <Box component="img" sx={{ width: '2.8rem', pb: '0.8rem' }} src="/icons/peer/export-file.svg" />
+              <Box component="img" sx={{ width: '2.8rem', pb: '0.8rem' }} src="/icons/cluster/peer/export-file.svg" />
               <Typography variant="subtitle1" fontFamily="mabry-bold">
                 Export Your Data With Fun
               </Typography>
@@ -912,7 +912,7 @@ export default function Peer() {
         >
           <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '1rem' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box component="img" className={styles.exportIcon} src="/icons/peer/refresh-dialog.svg" />
+              <Box component="img" className={styles.exportIcon} src="/icons/cluster/peer/refresh-dialog.svg" />
               <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
                 Refresh
               </Typography>

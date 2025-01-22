@@ -16,6 +16,7 @@ import {
   Alert,
   Skeleton,
   Breadcrumbs,
+  Tooltip,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
@@ -229,7 +230,7 @@ export default function Preheats() {
         {isLoading ? (
           <Box>
             <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
-              <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
+              <Box className={styles.information}>
                 <Skeleton data-testid="isloading" variant="circular" width="1.4rem" height="1.4rem" />
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }} ml="0.6rem">
                   <Skeleton data-testid="isloading" width="3rem" />
@@ -259,7 +260,7 @@ export default function Preheats() {
                 return index !== allPreheats.length - 1 ? (
                   <Box key={item.id} id={`list-${item.id}`}>
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
-                      <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
+                      <Box className={styles.information}>
                         {item.result.state === 'SUCCESS' ? (
                           <Box
                             id={`SUCCESS-${item.id}`}
@@ -282,14 +283,15 @@ export default function Preheats() {
                             src="/icons/job/preheat/pending.svg"
                           />
                         )}
-                        <Box
-                          sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-                          ml="0.6rem"
-                        >
+                        <Box className={styles.informationContent}>
                           <Typography variant="body1" fontFamily="mabry-bold">
                             {item.id}
                           </Typography>
-                          <Typography variant="body2">{item.bio || '-'}</Typography>
+                          <Tooltip title={item.bio || '-'} placement="top" arrow>
+                            <Typography variant="body2" className={styles.description}>
+                              {item.bio || '-'}
+                            </Typography>
+                          </Tooltip>
                         </Box>
                       </Box>
                       <Box width="30%">
@@ -326,7 +328,7 @@ export default function Preheats() {
                   </Box>
                 ) : (
                   <Box key={item.id} id={`list-${item.id}`} sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
+                    <Box className={styles.information}>
                       {item.result.state === 'SUCCESS' ? (
                         <Box
                           id={`SUCCESS-${item.id}`}
@@ -349,14 +351,15 @@ export default function Preheats() {
                           src="/icons/job/preheat/pending.svg"
                         />
                       )}
-                      <Box
-                        sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-                        ml="0.6rem"
-                      >
+                      <Box className={styles.informationContent}>
                         <Typography variant="body1" fontFamily="mabry-bold">
                           {item.id}
                         </Typography>
-                        <Typography variant="body2">{item.bio || '-'}</Typography>
+                        <Tooltip title={item.bio || '-'} placement="top" arrow>
+                          <Typography variant="body2" className={styles.description}>
+                            {item.bio || '-'}
+                          </Typography>
+                        </Tooltip>
                       </Box>
                     </Box>
                     <Box width="30%">

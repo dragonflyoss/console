@@ -37,6 +37,10 @@
   font-family: 'mabry-bold' !important;
 }
 
+.descriptionContent {
+  width: 70%;
+}
+
 .statusContent {
   display: inline-flex;
   align-items: center;
@@ -85,6 +89,26 @@
   border-radius: 0.3rem;
   min-width: 1.6rem;
   margin-right: 0.5rem;
+  padding: 0.2rem 0.4rem;
+}
+
+.scopeContent {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--button-color);
+  color: var(--save-size-color);
+  border-radius: 0.3rem;
+  min-width: 1.6rem;
+  margin-right: 0.5rem;
+  padding: 0.2rem 0.4rem;
+}
+
+.tagContent {
+  display: inline-flex;
+  background-color: var(--description-color);
+  color: var(--save-size-color);
+  border-radius: 0.3rem;
+  min-width: 1.6rem;
   padding: 0.2rem 0.4rem;
 }
 

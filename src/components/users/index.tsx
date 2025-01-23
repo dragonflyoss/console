@@ -278,7 +278,7 @@ export default function Users() {
         }
         sx={{ mb: '2rem' }}
       >
-        <Typography variant="h6" fontFamily="mabry-bold" color="text.primary">
+        <Typography variant="h5" fontFamily="mabry-bold" color="text.primary">
           User
         </Typography>
       </Breadcrumbs>

@@ -101,13 +101,11 @@ describe('Create preheat', () => {
     cy.url().should('include', '/jobs/preheats');
 
     // Displays successfully added preheat task.
-    cy.get('#list-12 > .css-1mlhis1').should('exist').find('#PENDING-12').should('exist');
-    cy.get('#list-12 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body1').should('have.text', 12);
-    // cy.get('#list-12 > .css-1mlhis1 > .css-18467a > .MuiChip-root').should('have.text', '2023-03-23 16:29:18');
-    cy.get('#list-12 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body2').should(
-      'have.text',
-      'create preheat',
-    );
+    cy.get('#PENDING-12').should('exist');
+    cy.get('#id-12').should('have.text', 12);
+
+    cy.get('#created_at-12').should('have.text', '2023-03-23 16:29:18');
+    cy.get('#description-12').should('have.text', 'create preheat');
   });
 
   it('cannot to use cluster without scheduler for preheat', () => {
@@ -207,13 +205,11 @@ describe('Create preheat', () => {
     cy.url().should('include', '/jobs/preheats');
 
     // Displays successfully added preheat task.
-    cy.get('#list-12 > .css-1mlhis1').should('exist').find('#PENDING-12').should('exist');
-    cy.get('#list-12 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body1').should('have.text', 12);
-    // cy.get('#list-12 > .css-1mlhis1 > .css-18467a > .MuiChip-root').should('have.text', '2023-03-23 16:29:18');
-    cy.get('#list-12 > .css-1mlhis1 > .css-ux5pj > .css-mu8687 > .MuiTypography-body2').should(
-      'have.text',
-      'create preheat',
-    );
+    cy.get('#PENDING-12').should('exist');
+    cy.get('#id-12').should('have.text', 12);
+
+    cy.get('#created_at-12').should('have.text', '2023-03-23 16:29:18');
+    cy.get('#description-12').should('have.text', 'create preheat');
   });
 
   it('should handle API error response', () => {

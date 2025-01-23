@@ -106,7 +106,7 @@ export default function ShowPreheat() {
         };
 
         pollPreheat();
-      }, 60000);
+      }, 600);
 
       return () => {
         clearInterval(pollingInterval);
@@ -331,11 +331,7 @@ export default function ShowPreheat() {
                 <Box className={styles.scopeContent}>
                   <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/tag-scope.svg" />
                   <Typography variant="body2" component="div" fontFamily="mabry-bold" pl="0.2rem">
-                    {isLoading ? (
-                      <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
-                    ) : (
-                      scope.label || '-'
-                    )}
+                    {scope.label || '-'}
                   </Typography>
                 </Box>
               ) : (
@@ -361,11 +357,7 @@ export default function ShowPreheat() {
               ) : preheat?.args?.tag ? (
                 <Box className={styles.tagContent}>
                   <Typography variant="body2" component="div" fontFamily="mabry-bold">
-                    {isLoading ? (
-                      <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
-                    ) : (
-                      preheat.args.tag || '-'
-                    )}
+                    {preheat.args.tag || '-'}
                   </Typography>
                 </Box>
               ) : (

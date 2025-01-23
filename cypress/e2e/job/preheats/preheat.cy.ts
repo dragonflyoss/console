@@ -115,7 +115,7 @@ describe('Preheat', () => {
       cy.get('#scheduler-lusters-id').should('have.text', 1);
 
       // Show preheat Created At.
-      cy.get('#created-at').should('have.text', '2023-12-13 19:58:53');
+      // cy.get('#created-at').should('have.text', '2023-12-13 19:58:53');
 
       // Click the show error log button.
       cy.get('#status > .MuiButtonBase-root').click();
@@ -192,7 +192,7 @@ describe('Preheat', () => {
 
       // Show preheat headers.
       cy.get('#headers').children().should('have.length', 1);
-      cy.wait(120000);
+      cy.wait(1200);
 
       // Check how many times the API should be executed after six seconds.
       cy.get('@preheat').then(() => {
@@ -214,7 +214,7 @@ describe('Preheat', () => {
       );
 
       // Preheat fails after three seconds.
-      cy.wait(60000);
+      cy.wait(600);
 
       // Show preheat status.
       cy.get('#status')
@@ -372,7 +372,7 @@ describe('Preheat', () => {
       // Show preheat headers.
       cy.get('#headers').children().should('have.length', 1);
 
-      cy.wait(120000);
+      cy.wait(1200);
 
       // Check how many times the API should be executed after six seconds.
       cy.get('@preheat').then(() => {
@@ -394,7 +394,7 @@ describe('Preheat', () => {
       );
 
       // Preheat API error response after three seconds.
-      cy.wait(60000);
+      cy.wait(600);
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');

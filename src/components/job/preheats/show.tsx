@@ -106,7 +106,7 @@ export default function ShowPreheat() {
         };
 
         pollPreheat();
-      }, 600);
+      }, 60000);
 
       return () => {
         clearInterval(pollingInterval);

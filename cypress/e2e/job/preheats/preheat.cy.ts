@@ -192,7 +192,7 @@ describe('Preheat', () => {
 
       // Show preheat headers.
       cy.get('#headers').children().should('have.length', 1);
-      cy.wait(1200);
+      cy.wait(120000);
 
       // Check how many times the API should be executed after six seconds.
       cy.get('@preheat').then(() => {
@@ -214,7 +214,7 @@ describe('Preheat', () => {
       );
 
       // Preheat fails after three seconds.
-      cy.wait(600);
+      cy.wait(60000);
 
       // Show preheat status.
       cy.get('#status')
@@ -372,7 +372,7 @@ describe('Preheat', () => {
       // Show preheat headers.
       cy.get('#headers').children().should('have.length', 1);
 
-      cy.wait(1200);
+      cy.wait(120000);
 
       // Check how many times the API should be executed after six seconds.
       cy.get('@preheat').then(() => {
@@ -394,7 +394,7 @@ describe('Preheat', () => {
       );
 
       // Preheat API error response after three seconds.
-      cy.wait(600);
+      cy.wait(60000);
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');

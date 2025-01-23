@@ -284,11 +284,15 @@ export default function Preheats() {
                           />
                         )}
                         <Box className={styles.informationContent}>
-                          <Typography variant="body1" fontFamily="mabry-bold">
+                          <Typography id={`id-${item?.id}`} variant="body1" fontFamily="mabry-bold">
                             {item.id}
                           </Typography>
                           <Tooltip title={item.bio || '-'} placement="top" arrow>
-                            <Typography variant="body2" className={styles.description}>
+                            <Typography
+                              id={`description-${item?.id || 0}`}
+                              variant="body2"
+                              className={styles.description}
+                            >
                               {item.bio || '-'}
                             </Typography>
                           </Tooltip>
@@ -296,6 +300,7 @@ export default function Preheats() {
                       </Box>
                       <Box width="30%">
                         <Chip
+                          id={`created_at-${item?.id}`}
                           avatar={<MoreTimeIcon />}
                           label={getBJTDatetime(item.created_at) || '-'}
                           variant="outlined"
@@ -352,11 +357,15 @@ export default function Preheats() {
                         />
                       )}
                       <Box className={styles.informationContent}>
-                        <Typography variant="body1" fontFamily="mabry-bold">
+                        <Typography id={`id-${item?.id}`} variant="body1" fontFamily="mabry-bold">
                           {item.id}
                         </Typography>
                         <Tooltip title={item.bio || '-'} placement="top" arrow>
-                          <Typography variant="body2" className={styles.description}>
+                          <Typography
+                            id={`description-${item?.id || 0}`}
+                            variant="body2"
+                            className={styles.description}
+                          >
                             {item.bio || '-'}
                           </Typography>
                         </Tooltip>
@@ -364,6 +373,7 @@ export default function Preheats() {
                     </Box>
                     <Box width="30%">
                       <Chip
+                        id={`created_at-${item?.id}`}
                         avatar={<MoreTimeIcon />}
                         label={getBJTDatetime(item.created_at) || '-'}
                         variant="outlined"

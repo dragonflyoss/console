@@ -347,7 +347,7 @@ export default function Executions() {
         )}
       </Card>
       {totalPages > 1 ? (
-        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
           <Pagination
             count={totalPages}
             page={executionsPage}

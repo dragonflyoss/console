@@ -45,32 +45,19 @@ import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
 import { MyContext } from '../../clusters/show';
 import _ from 'lodash';
 import Card from '../../card';
+import { ReactComponent as RefreshLoading } from '../../../assets/images/cluster/peer/refresh-loading.svg';
+import { ReactComponent as Refresh } from '../../../assets/images/cluster/peer/refresh.svg';
+import { ReactComponent as RefreshDialog } from '../../../assets/images/cluster/peer/refresh-dialog.svg';
+import { ReactComponent as DeleteWarning } from '../../../assets/images/cluster/delete-warning.svg';
+import { ReactComponent as Total } from '../../../assets/images/cluster/peer/total.svg';
+import { ReactComponent as GitVersion } from '../../../assets/images/cluster/peer/git-versions.svg';
+import { ReactComponent as GitCommit } from '../../../assets/images/cluster/peer/git-commits.svg';
+import { ReactComponent as Active } from '../../../assets/images/cluster/peer/active.svg';
+import { ReactComponent as Export } from '../../../assets/images/cluster/peer/export.svg';
+import { ReactComponent as ExportFile } from '../../../assets/images/cluster/peer/export-file.svg';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 Chart.defaults.font.family = 'mabry-light';
-
-const theme = createTheme({
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 900,
-      lg: 1135,
-      xl: 1441,
-    },
-  },
-  palette: {
-    secondary: {
-      main: '#2E8F79',
-    },
-    primary: {
-      main: '#1C293A',
-    },
-  },
-  typography: {
-    fontFamily: 'mabry-light,sans-serif',
-  },
-});
 
 export default function Peer() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -441,534 +428,514 @@ export default function Peer() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box>
-        <Snackbar
-          open={errorMessage}
-          autoHideDuration={3000}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        >
-          <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-            {errorMessageText}
-          </Alert>
-        </Snackbar>
-        <Box className={styles.header}>
-          <Box className={styles.headerTitle}>
-            <Typography variant="h6" fontFamily="mabry-bold" pr="0.4rem">
-              Peers
-            </Typography>
-            <MuiTooltip
-              title={
-                <Typography variant="body2">
-                  Peer statistics are only supported in the Rust client, refer to&nbsp;
-                  <Link
-                    underline="hover"
-                    href="https://github.com/dragonflyoss/client"
-                    target="_blank"
-                    style={{ color: 'var(--menu-color)' }}
-                  >
-                    dragonflyoss/client
-                  </Link>
-                  .
+    <Box>
+      <Snackbar
+        open={errorMessage}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          {errorMessageText}
+        </Alert>
+      </Snackbar>
+      <Box className={styles.header}>
+        <Box className={styles.headerTitle}>
+          <Typography variant="h6" fontFamily="mabry-bold" pr="0.4rem">
+            Peers
+          </Typography>
+          <MuiTooltip
+            title={
+              <Typography variant="body2">
+                Peer statistics are only supported in the Rust client, refer to&nbsp;
+                <Link
+                  underline="hover"
+                  href="https://github.com/dragonflyoss/client"
+                  target="_blank"
+                  style={{ color: 'var(--menu-color)' }}
+                >
+                  dragonflyoss/client
+                </Link>
+                .
+              </Typography>
+            }
+            placement="top"
+          >
+            <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
+          </MuiTooltip>
+        </Box>
+        <Box>
+          <Button
+            id="refresh"
+            disabled={disabled}
+            size="small"
+            sx={{
+              background: 'var(--button-color)',
+              ':hover': {
+                backgroundColor: 'var(--button-color)',
+                borderColor: 'var(--button-color)',
+              },
+              color: 'var(--button-text-color)',
+              mr: '1rem',
+            }}
+            variant="contained"
+            onClick={() => {
+              setOpenRefresh(true);
+            }}
+            startIcon={
+              refresh ? <RefreshLoading className={styles.refreshIcon} /> : <Refresh className={styles.refreshIcon} />
+            }
+          >
+            refresh
+          </Button>
+          <Button
+            id="export"
+            size="small"
+            sx={{
+              background: 'var(--button-color)',
+              ':hover': {
+                backgroundColor: 'var(--button-color)',
+                borderColor: 'var(--button-color)',
+              },
+              color: 'var(--button-text-color)',
+            }}
+            variant="contained"
+            onClick={() => {
+              setOpenExport(true);
+            }}
+            startIcon={<GetAppIcon />}
+          >
+            Export
+          </Button>
+        </Box>
+      </Box>
+      <Box sx={{ display: 'flex', mb: '3rem' }}>
+        <Box sx={{ width: '33.33%', mr: '1.6rem' }}>
+          <Card className={styles.navigationWrapper}>
+            <Box className={styles.navigationContent}>
+              <Box>
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+                  Total
                 </Typography>
-              }
-              placement="top"
-            >
-              <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
-            </MuiTooltip>
-          </Box>
-          <Box>
-            <Button
-              id="refresh"
-              disabled={disabled}
-              size="small"
-              sx={{
-                background: 'var(--button-color)',
-                ':hover': {
-                  backgroundColor: 'var(--button-color)',
-                  borderColor: 'var(--button-color)',
-                },
-                mr: '1rem',
-              }}
-              variant="contained"
-              onClick={() => {
-                setOpenRefresh(true);
-              }}
-              startIcon={
-                refresh ? (
-                  <Box component="img" sx={{ width: '1.2rem' }} src="/icons/cluster/peer/refresh-loading.svg" />
+                {isLoading ? (
+                  <Skeleton data-testid="cluster-loading" width="2rem" />
                 ) : (
-                  <Box component="img" sx={{ width: '1.2rem' }} src="/icons/cluster/peer/refresh.svg" />
-                )
-              }
-            >
-              refresh
-            </Button>
-            <Button
-              id="export"
-              size="small"
-              sx={{
-                background: 'var(--button-color)',
-                ':hover': {
-                  backgroundColor: 'var(--button-color)',
-                  borderColor: 'var(--button-color)',
-                },
-              }}
-              variant="contained"
-              onClick={() => {
-                setOpenExport(true);
-              }}
-              startIcon={<GetAppIcon />}
-            >
-              Export
-            </Button>
-          </Box>
+                  <Typography id="total" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
+                    {peer.length}
+                  </Typography>
+                )}
+                <Typography variant="body2" color="var(--table-title-text-color)">
+                  number of peers
+                </Typography>
+              </Box>
+              <Box className={styles.navigation}></Box>
+              <Total className={styles.navigationIcon} />
+            </Box>
+          </Card>
         </Box>
-        <Box sx={{ display: 'flex', mb: '3rem' }}>
-          <Box sx={{ width: '33.33%', mr: '1.6rem' }}>
-            <Card className={styles.navigationWrapper}>
-              <Box className={styles.navigationContent}>
-                <Box>
-                  <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
-                    Total
+        <Box sx={{ width: '33.33%', mr: '1.6rem' }}>
+          <Card className={styles.navigationWrapper}>
+            <Box className={styles.navigationContent}>
+              <Box>
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+                  Git Version
+                </Typography>
+                {isLoading ? (
+                  <Skeleton data-testid="cluster-loading" width="2rem" />
+                ) : (
+                  <Typography id="git-version" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
+                    {gitVersionCount}
                   </Typography>
-                  {isLoading ? (
-                    <Skeleton data-testid="cluster-loading" width="2rem" />
-                  ) : (
-                    <Typography id="total" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
-                      {peer.length}
-                    </Typography>
-                  )}
-                  <Typography variant="body2" color="var(--table-title-text-color)">
-                    number of peers
-                  </Typography>
-                </Box>
-                <Box className={styles.navigation}></Box>
-                <Box component="img" className={styles.navigationIcon} src="/icons/cluster/peer/total.svg" />
+                )}
+                <Typography variant="body2" color="var(--table-title-text-color)">
+                  number of git versions
+                </Typography>
               </Box>
-            </Card>
-          </Box>
-          <Box sx={{ width: '33.33%', mr: '1.6rem' }}>
-            <Card className={styles.navigationWrapper}>
-              <Box className={styles.navigationContent}>
-                <Box>
-                  <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
-                    Git Version
-                  </Typography>
-                  {isLoading ? (
-                    <Skeleton data-testid="cluster-loading" width="2rem" />
-                  ) : (
-                    <Typography id="git-version" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
-                      {gitVersionCount}
-                    </Typography>
-                  )}
-                  <Typography variant="body2" color="var(--table-title-text-color)">
-                    number of git versions
-                  </Typography>
-                </Box>
-                <Box className={styles.navigation} />
-                <Box component="img" className={styles.navigationIcon} src="/icons/cluster/peer/git-versions.svg" />
-              </Box>
-            </Card>
-          </Box>
-          <Box sx={{ width: '33.33%' }}>
-            <Card className={styles.navigationWrapper}>
-              <Box className={styles.navigationContent}>
-                <Box>
-                  <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
-                    Git Commit
-                  </Typography>
-                  {isLoading ? (
-                    <Skeleton data-testid="cluster-loading" width="2rem" />
-                  ) : (
-                    <Typography id="git-commit" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
-                      {gitCommitCount}
-                    </Typography>
-                  )}
-                  <Typography variant="body2" color="var(--table-title-text-color)">
-                    number of git commits
-                  </Typography>
-                </Box>
-                <Box className={styles.navigation} />
-                <Box component="img" className={styles.navigationIcon} src="/icons/cluster/peer/git-commits.svg" />
-              </Box>
-            </Card>
-          </Box>
+              <Box className={styles.navigation} />
+              <GitVersion className={styles.navigationIcon} />
+            </Box>
+          </Card>
         </Box>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-          <Box className={styles.visualizationWrapper}>
-            <Box className={styles.dashboard}>
-              <Card className={styles.barContainer}>
-                <Box className={styles.barTitle}>
+        <Box sx={{ width: '33.33%' }}>
+          <Card className={styles.navigationWrapper}>
+            <Box className={styles.navigationContent}>
+              <Box>
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+                  Git Commit
+                </Typography>
+                {isLoading ? (
+                  <Skeleton data-testid="cluster-loading" width="2rem" />
+                ) : (
+                  <Typography id="git-commit" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
+                    {gitCommitCount}
+                  </Typography>
+                )}
+                <Typography variant="body2" color="var(--table-title-text-color)">
+                  number of git commits
+                </Typography>
+              </Box>
+              <Box className={styles.navigation} />
+              <GitCommit className={styles.navigationIcon} />
+            </Box>
+          </Card>
+        </Box>
+      </Box>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+        <Box className={styles.visualizationWrapper}>
+          <Box className={styles.dashboard}>
+            <Card className={styles.barContainer}>
+              <Box className={styles.barTitle}>
+                <Box>
+                  <Typography variant="subtitle1" component="span" sx={{ fontFamily: 'mabry-bold' }}>
+                    Peer Statistics&nbsp;
+                  </Typography>
+                  <Typography variant="subtitle1" component="span" sx={{ fontFamily: 'mabry-bold', color: '#8a8a8a' }}>
+                    by Git Version
+                  </Typography>
+                </Box>
+                <MuiTooltip title="Number of peer under different git version" placement="top">
+                  <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
+                </MuiTooltip>
+              </Box>
+              <Box className={styles.barContent}>
+                <Bar options={barOptions} data={gitVersionBar} />
+              </Box>
+            </Card>
+            <Card className={styles.doughnutContainer}>
+              <Box>
+                <Box className={styles.doughnutTitle}>
                   <Box>
-                    <Typography variant="subtitle1" component="span" sx={{ fontFamily: 'mabry-bold' }}>
+                    <Typography variant="subtitle2" component="span" sx={{ fontFamily: 'mabry-bold' }}>
                       Peer Statistics&nbsp;
                     </Typography>
                     <Typography
-                      variant="subtitle1"
+                      variant="subtitle2"
                       component="span"
                       sx={{ fontFamily: 'mabry-bold', color: '#8a8a8a' }}
                     >
                       by Git Version
                     </Typography>
                   </Box>
-                  <MuiTooltip title="Number of peer under different git version" placement="top">
+                  <MuiTooltip title="Number of peer and active proportion under different git version" placement="top">
                     <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                   </MuiTooltip>
                 </Box>
-                <Box className={styles.barContent}>
-                  <Bar options={barOptions} data={gitVersionBar} />
+                <Divider className={styles.divider} />
+                <Box className={styles.pieWrapper}>
+                  <Pie data={gitVersionDoughnut} options={doughnutOptions} />
                 </Box>
-              </Card>
-              <Card className={styles.doughnutContainer}>
-                <Box>
-                  <Box className={styles.doughnutTitle}>
-                    <Box>
-                      <Typography variant="subtitle2" component="span" sx={{ fontFamily: 'mabry-bold' }}>
-                        Peer Statistics&nbsp;
-                      </Typography>
-                      <Typography
-                        variant="subtitle2"
-                        component="span"
-                        sx={{ fontFamily: 'mabry-bold', color: '#8a8a8a' }}
-                      >
-                        by Git Version
-                      </Typography>
-                    </Box>
-                    <MuiTooltip
-                      title="Number of peer and active proportion under different git version"
-                      placement="top"
-                    >
-                      <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
-                    </MuiTooltip>
+              </Box>
+              <Box className={styles.activeContainer}>
+                <Active className={styles.activeIcon} />
+                <Box sx={{ width: '100%' }}>
+                  <Box className={styles.activeContent}>
+                    <Typography variant="subtitle2" fontFamily="mabry-light">
+                      Active
+                    </Typography>
+                    <Typography id="git-version-active" variant="subtitle1" fontFamily="mabry-bold">
+                      {isLoading ? <Skeleton width="2rem" /> : gitVersionActive ? `${gitVersionActive}%` : '0'}
+                    </Typography>
                   </Box>
-                  <Divider className={styles.divider} />
-                  <Box className={styles.pieWrapper}>
-                    <Pie data={gitVersionDoughnut} options={doughnutOptions} />
-                  </Box>
+                  <LinearProgress
+                    sx={{
+                      bgcolor: '#e0e0e0',
+                      '& .MuiLinearProgress-bar': {
+                        bgcolor: 'var(--description-color)',
+                      },
+                    }}
+                    variant="determinate"
+                    value={gitVersionActive ? gitVersionActive : 0}
+                  />
                 </Box>
-                <Box className={styles.activeContainer}>
-                  <Box component="img" className={styles.activeIcon} src="/icons/cluster/peer/active.svg" />
-                  <Box sx={{ width: '100%' }}>
-                    <Box className={styles.activeContent}>
-                      <Typography variant="subtitle2" fontFamily="mabry-light">
-                        Active
-                      </Typography>
-                      <Typography id="git-version-active" variant="subtitle1" fontFamily="mabry-bold">
-                        {isLoading ? <Skeleton width="2rem" /> : gitVersionActive ? `${gitVersionActive}%` : '0'}
-                      </Typography>
-                    </Box>
-                    <LinearProgress
-                      sx={{
-                        bgcolor: '#e0e0e0',
-                        '& .MuiLinearProgress-bar': {
-                          bgcolor: 'var(--description-color)',
-                        },
-                      }}
-                      variant="determinate"
-                      value={gitVersionActive ? gitVersionActive : 0}
-                    />
-                  </Box>
-                </Box>
-              </Card>
+              </Box>
+            </Card>
+          </Box>
+        </Box>
+        <Box className={styles.visualizationWrapperCommit}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: '1rem' }}>
+            <Box>
+              <FormControl sx={{ width: '10rem' }} size="small">
+                <InputLabel id="git-version-select">Git Version</InputLabel>
+                <Select
+                  id="git-version-select"
+                  value={selectedGitCommitByVersion}
+                  label="changeGitCommit"
+                  onChange={(e) => {
+                    setSelectedGitGitCommitByVersion(e.target.value);
+                  }}
+                >
+                  <Typography variant="body2" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
+                    Filter by git version
+                  </Typography>
+                  <Divider />
+                  <MenuItem key="All" value="All">
+                    All
+                  </MenuItem>
+                  {selectedGitVersions.map((item) => (
+                    <MenuItem key={item} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Box>
           </Box>
-          <Box className={styles.visualizationWrapperCommit}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: '1rem' }}>
-              <Box>
-                <FormControl sx={{ width: '10rem' }} size="small">
-                  <InputLabel id="git-version-select">Git Version</InputLabel>
-                  <Select
-                    id="git-version-select"
-                    value={selectedGitCommitByVersion}
-                    label="changeGitCommit"
-                    onChange={(e) => {
-                      setSelectedGitGitCommitByVersion(e.target.value);
-                    }}
-                  >
-                    <Typography variant="body2" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
-                      Filter by git version
-                    </Typography>
-                    <Divider />
-                    <MenuItem key="All" value="All">
-                      All
-                    </MenuItem>
-                    {selectedGitVersions.map((item) => (
-                      <MenuItem key={item} value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+          <Box className={styles.dashboard}>
+            <Card className={styles.barContainer}>
+              <Box className={styles.barTitle}>
+                <Box>
+                  <Typography variant="subtitle1" component="span" sx={{ fontFamily: 'mabry-bold' }}>
+                    Peer Statistics&nbsp;
+                  </Typography>
+                  <Typography variant="subtitle1" component="span" sx={{ fontFamily: 'mabry-bold', color: '#8a8a8a' }}>
+                    by Git Commit
+                  </Typography>
+                </Box>
+                <MuiTooltip title="Number of peer under different git commit" placement="top">
+                  <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
+                </MuiTooltip>
               </Box>
-            </Box>
-            <Box className={styles.dashboard}>
-              <Card className={styles.barContainer}>
-                <Box className={styles.barTitle}>
+              <Box className={styles.barContent}>
+                <Bar options={barOptions} data={gitCommitBar} />
+              </Box>
+            </Card>
+            <Card className={styles.doughnutContainer}>
+              <Box>
+                <Box className={styles.doughnutTitle}>
                   <Box>
-                    <Typography variant="subtitle1" component="span" sx={{ fontFamily: 'mabry-bold' }}>
+                    <Typography variant="subtitle2" component="span" sx={{ fontFamily: 'mabry-bold' }}>
                       Peer Statistics&nbsp;
                     </Typography>
                     <Typography
-                      variant="subtitle1"
+                      variant="subtitle2"
                       component="span"
                       sx={{ fontFamily: 'mabry-bold', color: '#8a8a8a' }}
                     >
                       by Git Commit
                     </Typography>
                   </Box>
-                  <MuiTooltip title="Number of peer under different git commit" placement="top">
+                  <MuiTooltip title="Number of peer and active proportion under different git commit" placement="top">
                     <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                   </MuiTooltip>
                 </Box>
-                <Box className={styles.barContent}>
-                  <Bar options={barOptions} data={gitCommitBar} />
+                <Divider className={styles.divider} />
+                <Box className={styles.pieWrapper}>
+                  <Pie data={gitCommitDoughnut} options={doughnutOptions} />
                 </Box>
-              </Card>
-              <Card className={styles.doughnutContainer}>
-                <Box>
-                  <Box className={styles.doughnutTitle}>
-                    <Box>
-                      <Typography variant="subtitle2" component="span" sx={{ fontFamily: 'mabry-bold' }}>
-                        Peer Statistics&nbsp;
-                      </Typography>
-                      <Typography
-                        variant="subtitle2"
-                        component="span"
-                        sx={{ fontFamily: 'mabry-bold', color: '#8a8a8a' }}
-                      >
-                        by Git Commit
-                      </Typography>
-                    </Box>
-                    <MuiTooltip title="Number of peer and active proportion under different git commit" placement="top">
-                      <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
-                    </MuiTooltip>
+              </Box>
+              <Box className={styles.activeContainer}>
+                <Active className={styles.activeIcon} />
+                <Box sx={{ width: '100%' }}>
+                  <Box className={styles.activeContent}>
+                    <Typography variant="subtitle2" fontFamily="mabry-light">
+                      Active
+                    </Typography>
+                    <Typography id="git-commit-active" variant="subtitle1" fontFamily="mabry-bold">
+                      {isLoading ? <Skeleton width="2rem" /> : gitCommitActive ? `${gitCommitActive}%` : '0'}
+                    </Typography>
                   </Box>
-                  <Divider className={styles.divider} />
-                  <Box className={styles.pieWrapper}>
-                    <Pie data={gitCommitDoughnut} options={doughnutOptions} />
-                  </Box>
+                  <LinearProgress
+                    sx={{
+                      bgcolor: '#e0e0e0',
+                      '& .MuiLinearProgress-bar': {
+                        bgcolor: 'var(--description-color)',
+                      },
+                    }}
+                    variant="determinate"
+                    value={gitCommitActive}
+                  />
                 </Box>
-                <Box className={styles.activeContainer}>
-                  <Box component="img" className={styles.activeIcon} src="/icons/cluster/peer/active.svg" />
-                  <Box sx={{ width: '100%' }}>
-                    <Box className={styles.activeContent}>
-                      <Typography variant="subtitle2" fontFamily="mabry-light">
-                        Active
-                      </Typography>
-                      <Typography id="git-commit-active" variant="subtitle1" fontFamily="mabry-bold">
-                        {isLoading ? <Skeleton width="2rem" /> : gitCommitActive ? `${gitCommitActive}%` : '0'}
-                      </Typography>
-                    </Box>
-                    <LinearProgress
-                      sx={{
-                        bgcolor: '#e0e0e0',
-                        '& .MuiLinearProgress-bar': {
-                          bgcolor: 'var(--description-color)',
-                        },
-                      }}
-                      variant="determinate"
-                      value={gitCommitActive}
-                    />
-                  </Box>
-                </Box>
-              </Card>
-            </Box>
+              </Box>
+            </Card>
           </Box>
         </Box>
-        <Dialog
-          open={openExport}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          sx={{
-            '& .MuiDialog-paper': {
-              minWidth: '32rem',
-            },
-          }}
-        >
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '1rem' }}>
+      </Box>
+      <Dialog
+        open={openExport}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{
+          '& .MuiDialog-paper': {
+            minWidth: '32rem',
+          },
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '1rem' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Export className={styles.exportIcon} />
+            <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
+              Export
+            </Typography>
+          </Box>
+          <IconButton
+            aria-label="close"
+            id="close-export"
+            onClick={() => {
+              setOpenExport(false);
+              setExportSelectedVersion('All');
+              setExportSelectedCommit('All');
+            }}
+            sx={{
+              color: (theme) => theme.palette.grey[500],
+              p: 0,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Divider />
+        <DialogContent>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
+              pb: '1rem',
+            }}
+          >
+            <ExportFile className={styles.exportFileICon} />
+            <Typography variant="subtitle1" fontFamily="mabry-bold">
+              Export Your Data With Fun
+            </Typography>
+          </Box>
+          <Box
+            noValidate
+            component="form"
+            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '1rem' }}
+          >
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box component="img" className={styles.exportIcon} src="/icons/cluster/peer/export.svg" />
-              <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
-                Export
-              </Typography>
+              <FormControl sx={{ width: '14rem' }} size="small">
+                <InputLabel id="git-version-label">Git Version</InputLabel>
+                <Select
+                  id="export-git-version"
+                  value={exportSelectedVersion}
+                  label="changeGitVersion"
+                  onChange={(e) => setExportSelectedVersion(e.target.value)}
+                >
+                  <Typography variant="body1" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
+                    Filter by git version
+                  </Typography>
+                  <Divider />
+                  <MenuItem id="all" key="All" value="All">
+                    All
+                  </MenuItem>
+                  {exportSelectedGitVersion.map((item) => (
+                    <MenuItem id={`select-${item}`} key={item} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl sx={{ width: '14rem', ml: '1rem' }} size="small">
+                <InputLabel id="git-commit-label">Git Commit</InputLabel>
+                <Select
+                  id="export-git-commit"
+                  value={exportSelectedCommit}
+                  label="changeGitCommit"
+                  onChange={(e) => setExportSelectedCommit(e.target.value)}
+                >
+                  <Typography variant="body1" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
+                    Filter by git commit
+                  </Typography>
+                  <Divider />
+                  <MenuItem key="All" value="All">
+                    All
+                  </MenuItem>
+                  {exportSelectedGitCommit.map((item) => (
+                    <MenuItem id={`select-${item}`} key={item} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Box>
-            <IconButton
-              aria-label="close"
-              id="close-export"
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '2rem' }}>
+            <CancelLoadingButton
+              id="cancel"
+              loading={loadingButton}
               onClick={() => {
                 setOpenExport(false);
                 setExportSelectedVersion('All');
                 setExportSelectedCommit('All');
               }}
-              sx={{
-                color: (theme) => theme.palette.grey[500],
-                p: 0,
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
+            />
+            <SavelLoadingButton
+              loading={loadingButton}
+              endIcon={<CheckCircleIcon />}
+              id="save"
+              text="Save"
+              onClick={ExportCSV}
+            />
           </Box>
-          <Divider />
-          <DialogContent>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'column',
-                pb: '1rem',
-              }}
-            >
-              <Box component="img" sx={{ width: '2.8rem', pb: '0.8rem' }} src="/icons/cluster/peer/export-file.svg" />
-              <Typography variant="subtitle1" fontFamily="mabry-bold">
-                Export Your Data With Fun
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={openRefresh}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{
+          '& .MuiDialog-paper': {
+            minWidth: '34rem',
+          },
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '1rem' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <RefreshDialog className={styles.exportIcon} />
+            <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
+              Refresh
+            </Typography>
+          </Box>
+          <IconButton
+            aria-label="close"
+            id="close-delete-icon"
+            onClick={() => {
+              setOpenRefresh(false);
+            }}
+            sx={{
+              color: (theme) => theme.palette.grey[500],
+              p: 0,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Divider />
+        <DialogContent>
+          <Box display="flex" alignItems="flex-start" pb="1rem">
+            <DeleteWarning className={styles.deleteWarning} />
+            <Box>
+              <Typography variant="body1" fontFamily="mabry-bold" component="span" sx={{ color: '#D81E06' }}>
+                WARNING:&nbsp;
+              </Typography>
+              <Typography variant="body1" component="span" sx={{ color: '#D81E06' }}>
+                This action CANNOT be undone.
               </Typography>
             </Box>
-            <Box
-              noValidate
-              component="form"
-              sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '1rem' }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <FormControl sx={{ width: '14rem' }} size="small">
-                  <InputLabel id="git-version-label">Git Version</InputLabel>
-                  <Select
-                    id="export-git-version"
-                    value={exportSelectedVersion}
-                    label="changeGitVersion"
-                    onChange={(e) => setExportSelectedVersion(e.target.value)}
-                  >
-                    <Typography variant="body1" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
-                      Filter by git version
-                    </Typography>
-                    <Divider />
-                    <MenuItem id="all" key="All" value="All">
-                      All
-                    </MenuItem>
-                    {exportSelectedGitVersion.map((item) => (
-                      <MenuItem id={`select-${item}`} key={item} value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <FormControl sx={{ width: '14rem', ml: '1rem' }} size="small">
-                  <InputLabel id="git-commit-label">Git Commit</InputLabel>
-                  <Select
-                    id="export-git-commit"
-                    value={exportSelectedCommit}
-                    label="changeGitCommit"
-                    onChange={(e) => setExportSelectedCommit(e.target.value)}
-                  >
-                    <Typography variant="body1" fontFamily="mabry-bold" sx={{ ml: '1rem', mt: '0.4rem', mb: '0.4rem' }}>
-                      Filter by git commit
-                    </Typography>
-                    <Divider />
-                    <MenuItem key="All" value="All">
-                      All
-                    </MenuItem>
-                    {exportSelectedGitCommit.map((item) => (
-                      <MenuItem id={`select-${item}`} key={item} value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '2rem' }}>
-              <CancelLoadingButton
-                id="cancel"
-                loading={loadingButton}
-                onClick={() => {
-                  setOpenExport(false);
-                  setExportSelectedVersion('All');
-                  setExportSelectedCommit('All');
-                }}
-              />
-              <SavelLoadingButton
-                loading={loadingButton}
-                endIcon={<CheckCircleIcon />}
-                id="save"
-                text="Save"
-                onClick={ExportCSV}
-              />
-            </Box>
-          </DialogContent>
-        </Dialog>
-        <Dialog
-          open={openRefresh}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          sx={{
-            '& .MuiDialog-paper': {
-              minWidth: '34rem',
-            },
-          }}
-        >
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '1rem' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box component="img" className={styles.exportIcon} src="/icons/cluster/peer/refresh-dialog.svg" />
-              <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
-                Refresh
-              </Typography>
-            </Box>
-            <IconButton
-              aria-label="close"
-              id="close-delete-icon"
+          </Box>
+          The peer data will be forced to refresh.
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '2rem' }}>
+            <CancelLoadingButton
+              id="cancel"
+              loading={loadingButton}
               onClick={() => {
                 setOpenRefresh(false);
               }}
-              sx={{
-                color: (theme) => theme.palette.grey[500],
-                p: 0,
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
+            />
+            <SavelLoadingButton
+              loading={loadingButton}
+              endIcon={<CheckCircleIcon />}
+              id="save"
+              text="Save"
+              onClick={handleRefresh}
+            />
           </Box>
-          <Divider />
-
-          <DialogContent>
-            <Box display="flex" alignItems="flex-start" pb="1rem">
-              <Box
-                component="img"
-                src="/icons/cluster/delete-warning.svg"
-                sx={{ width: '1.4rem', height: '1.4rem', pr: '0.2rem' }}
-              />
-              <Box>
-                <Typography variant="body1" fontFamily="mabry-bold" component="span" sx={{ color: '#D81E06' }}>
-                  WARNING:&nbsp;
-                </Typography>
-                <Typography variant="body1" component="span" sx={{ color: '#D81E06' }}>
-                  This action CANNOT be undone.
-                </Typography>
-              </Box>
-            </Box>
-            The peer data will be forced to refresh.
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '2rem' }}>
-              <CancelLoadingButton
-                id="cancel"
-                loading={loadingButton}
-                onClick={() => {
-                  setOpenRefresh(false);
-                }}
-              />
-              <SavelLoadingButton
-                loading={loadingButton}
-                endIcon={<CheckCircleIcon />}
-                id="save"
-                text="Save"
-                onClick={handleRefresh}
-              />
-            </Box>
-          </DialogContent>
-        </Dialog>
-      </Box>
-    </ThemeProvider>
+        </DialogContent>
+      </Dialog>
+    </Box>
   );
 }

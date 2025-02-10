@@ -15,17 +15,21 @@ import Tabs from '@mui/material/Tabs';
 import Tab, { TabProps } from '@mui/material/Tab';
 import { createContext, useEffect, useState } from 'react';
 import { getCluster, getClusterResponse } from '../../lib/api';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#2e8f79',
-    },
-  },
-  typography: {
-    fontFamily: 'mabry-light,sans-serif',
-  },
-});
+import { ReactComponent as TabCluster } from '../../assets/images/cluster/tab-cluster.svg';
+import { ReactComponent as TabScheduler } from '../../assets/images/cluster/scheduler/tab-scheduler.svg';
+import { ReactComponent as TabSeedPeer } from '../../assets/images/cluster/seed-peer/tab-seed-peer.svg';
+import { ReactComponent as TabPeer } from '../../assets/images/cluster/peer/tab-peer.svg';
+import styles from './show.module.css';
+// const theme = createTheme({
+//   palette: {
+//     primary: {
+//       main: '#2e8f79',
+//     },
+//   },
+//   typography: {
+//     fontFamily: 'mabry-light,sans-serif',
+//   },
+// });
 
 interface MyContextType {
   cluster: getClusterResponse;
@@ -148,14 +152,14 @@ export default function NavTabs() {
       },
       fontWeight: theme.typography.fontWeightRegular,
       marginRight: theme.spacing(1),
-      color: 'rgba(0, 0, 0, 0.85)',
+      // color: 'rgba(0, 0, 0, 0.85)',
       fontSize: '0.9rem',
       '&:hover': {
         color: 'primary',
         opacity: 1,
       },
       '&.Mui-selected': {
-        color: '#000',
+        // color: '#000',
         fontFamily: 'mabry-bold',
       },
     }),
@@ -171,28 +175,28 @@ export default function NavTabs() {
   const tabList = [
     {
       id: 'tab-cluster',
-      icon: <Box component="img" sx={{ width: '1.3rem' }} src="/icons/cluster/tab-cluster.svg" />,
+      icon: <TabCluster className={styles.tableIcon} />,
       label: 'Cluster',
       component: Link,
       to: `/clusters/${params.id}`,
     },
     {
       id: 'tab-cluster',
-      icon: <Box component="img" sx={{ width: '1.3rem' }} src="/icons/cluster/scheduler/tab-scheduler.svg" />,
+      icon: <TabScheduler className={styles.tableIcon} />,
       label: 'Schedulers',
       component: Link,
       to: `/clusters/${params.id}/schedulers`,
     },
     {
       id: 'tab-cluster',
-      icon: <Box component="img" sx={{ width: '1.3rem' }} src="/icons/cluster/seed-peer/tab-seed-peer.svg" />,
+      icon: <TabSeedPeer className={styles.tableIcon} />,
       label: 'Seed Peers',
       component: Link,
       to: `/clusters/${params.id}/seed-peers`,
     },
     {
       id: 'tab-cluster',
-      icon: <Box component="img" sx={{ width: '1.3rem' }} src="/icons/cluster/peer/tab-peer.svg" />,
+      icon: <TabPeer className={styles.tableIcon} />,
       label: 'Peers',
       component: Link,
       to: `/clusters/${params.id}/peers`,
@@ -209,49 +213,45 @@ export default function NavTabs() {
 
   return (
     <MyContext.Provider value={{ cluster, isLoading }}>
-      <ThemeProvider theme={theme}>
-        <Snackbar
-          open={errorMessage}
-          autoHideDuration={3000}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        >
-          <Alert id="errorMessage" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-            {errorMessageText}
-          </Alert>
-        </Snackbar>
-        <Breadcrumbs
-          separator={
-            <Box
-              sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
-            />
-          }
-          aria-label="breadcrumb"
-          sx={{ mb: '1rem' }}
-        >
-          <RouterLink underline="hover" component={Link} color="text.primary" to={`/clusters`}>
-            clusters
-          </RouterLink>
-          <RouterLink component={Link} underline="hover" color="text.primary" to={`clusters/${params.id}`}>
-            {cluster?.name || '-'}
-          </RouterLink>
-          {location.pathname.split('/')[3] && (
-            <Typography color="inherit">{location.pathname.split('/')[3]}</Typography>
-          )}
-        </Breadcrumbs>
-        <AntTabs
-          value={value}
-          onChange={handleChange}
-          aria-label="nav tabs example"
-          sx={{ mb: '2rem' }}
-          scrollButtons="auto"
-        >
-          {tabList.map((item) => {
-            return <AntTab {...item} />;
-          })}
-        </AntTabs>
-        <Outlet />
-      </ThemeProvider>
+      <Snackbar
+        open={errorMessage}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert id="errorMessage" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          {errorMessageText}
+        </Alert>
+      </Snackbar>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '1rem' }}
+      >
+        <RouterLink underline="hover" component={Link} color="text.primary" to={`/clusters`}>
+          clusters
+        </RouterLink>
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`clusters/${params.id}`}>
+          {cluster?.name || '-'}
+        </RouterLink>
+        {location.pathname.split('/')[3] && <Typography color="inherit">{location.pathname.split('/')[3]}</Typography>}
+      </Breadcrumbs>
+      <AntTabs
+        value={value}
+        onChange={handleChange}
+        aria-label="nav tabs example"
+        sx={{ mb: '2rem' }}
+        scrollButtons="auto"
+      >
+        {tabList.map((item) => {
+          return <AntTab {...item} />;
+        })}
+      </AntTabs>
+      <Outlet />
     </MyContext.Provider>
   );
 }

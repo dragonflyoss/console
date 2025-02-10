@@ -31,6 +31,12 @@
   width: 2.8rem;
   height: 2.8rem;
   margin-right: 1rem;
+  color: var(--button-color);
+}
+
+.copyIcon {
+  width: 1.4rem;
+  height: 1.4rem;
 }
 
 .updateClusterIcon {
@@ -42,6 +48,7 @@
 .deleteClusterIcon {
   width: 6rem;
   height: 6rem;
+  color: var(--hover-button-text-color);
 }
 
 .className {
@@ -116,6 +123,7 @@
 .scopesIcon {
   width: 1.6rem;
   height: 1.6rem;
+  color: var(--button-color);
 }
 
 .totalContainer {
@@ -304,4 +312,5 @@
   width: 1.6rem;
   height: 1.6rem;
   margin-right: 0.3rem;
+  color: var(--palette-background-paper);
 }

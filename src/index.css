@@ -10,12 +10,12 @@
 
 :root {
   --button-color: #1c293a;
+  --button-text-color: #ffffff;
+  --hover-button-text-color: #1d3048;
   --description-color: #2e8f79;
   --save-color: #1c293a;
-  --save-size-color: #ffffff;
   --save-hover-corlor: #555555;
   --calcel-color: #979797;
-  --calcel-size-color: #000000;
   --calcel-hover-corlor: #f4f3f6;
   --button-loading-color: #dedede;
   --button-loading-size-color: #000000;
@@ -23,13 +23,15 @@
   --table-title-color: #f4f6f8;
   --title-light-color: #7a7a7a;
   --menu-background-color: rgba(0, 167, 111, 0.1);
+  --menu-selected-background-color: #ffffff;
   --hover-menu-background-color: rgba(0, 167, 111, 0.2);
   --menu-color: #00a76f;
   --table-title-text-color: #637381;
+  --palette-common-white: #ffffff;
   --palette-background-paper: #ffffff;
   --no-data-color: 145 158 171;
   --palette-text-disabled: #919eab;
-  --text---palette-text-secondary: #637381;
+  --text-palette-text-secondary: #637381;
   --palette-divider: rgba(145 158 171 / 0.4);
   --palette-background-neutral: #f4f6f8;
   --palette-background-inactive: rgb(145 158 171 / 0.16);
@@ -38,6 +40,28 @@
   --palette-action-hover: rgba(145 158 171 / 0.08);
   --delete-button-color: #d42536;
   --delete-button-hover-color: #d42537b8;
+  --header-background-color: 249 250 251;
+  --card-box-shadow: rgba(145, 158, 171, 0.3) 0px 0px 2px 0px, rgba(145, 158, 171, 0.2) 0px 2px 24px -4px;
+  --table-color: #919eab;
+  --palette-background-menu: rgba(255, 255, 255, 0.9);
+  --palette-menu-shadow: 0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;
+}
+
+[data-theme='dark'] body {
+  background-color: #141a21;
+  --palette-background-paper: #1c252e;
+  --button-color: #ffffff;
+  --button-text-color: #1c293a;
+  --hover-button-text-color: #e3e3e3;
+  --palette-card-hover-background-color: #1b2e3e;
+  --card-box-shadow: none;
+  --table-title-color: #28323d;
+  --table-title-text-color: #919eab;
+  --menu-selected-background-color: rgba(145 158 171 / 0.08);
+  --calcel-hover-corlor: #a1a0a2;
+  --palette-background-menu: rgba(28, 37, 46, 0.9);
+  --palette-detail-lable-color: #a1a0a2;
+  --palette-menu-shadow: none;
 }
 
 body {

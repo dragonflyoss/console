@@ -26,3 +26,13 @@
   background-color: var(--menu-background-color) !important;
   margin-bottom: 1rem;
 }
+
+.copyIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.deleteIcon {
+  width: 6rem;
+  height: 6rem;
+}

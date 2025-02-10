@@ -418,7 +418,7 @@ export default function Users() {
                         left: '-6.5rem',
                         '& .MuiMenu-paper': {
                           boxShadow:
-                            '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d',
+                            'var(--palette-menu-shadow)',
                         },
                         '& .MuiMenu-list': {
                           p: 0,

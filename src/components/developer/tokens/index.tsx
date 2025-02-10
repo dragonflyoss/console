@@ -25,6 +25,10 @@ import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
 import { CancelLoadingButton, DeleteLoadingButton } from '../../loading-button';
 import Card from '../../card';
 import styles from './index.module.css';
+import { ReactComponent as Done } from '../../../assets/images/tokens/done.svg';
+import { ReactComponent as Copy } from '../../../assets/images/tokens/copy.svg';
+import { ReactComponent as IcContent } from '../../../assets/images/cluster/scheduler/ic-content.svg';
+import { ReactComponent as Delete } from '../../../assets/images/cluster/delete.svg';
 
 export default function PersonalAccessTokens() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -174,7 +178,7 @@ export default function PersonalAccessTokens() {
         aria-label="breadcrumb"
         sx={{ mb: '1rem' }}
       >
-        <Typography color="#1C293A">developer</Typography>
+        <Typography color="text.primary">developer</Typography>
         <Typography color="inherit">personal access tokens</Typography>
       </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -182,10 +186,9 @@ export default function PersonalAccessTokens() {
         <Button
           size="small"
           sx={{
-            '&.MuiButton-root': {
-              backgroundColor: 'var(--button-color)',
-              color: '#fff',
-            },
+            background: 'var(--button-color)',
+            color: 'var(--button-text-color)',
+            ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
           }}
           variant="contained"
           onClick={() => {
@@ -196,7 +199,7 @@ export default function PersonalAccessTokens() {
           Add Personal access tokens
         </Button>
       </Box>
-      <Typography variant="subtitle2" mb="1.5rem" mt="1rem" color="var(--text---palette-text-secondary)">
+      <Typography variant="subtitle2" mb="1.5rem" mt="1rem" color="var(--text-palette-text-secondary)">
         Tokens you have generated that can be used to access the Dragonfly API.
       </Typography>
       {showCopyColumn ? (
@@ -226,15 +229,10 @@ export default function PersonalAccessTokens() {
                 disableTouchListener
                 title="copied!"
               >
-                <Box
-                  component="img"
-                  id="done"
-                  sx={{ width: '1.2rem', height: '1.2rem' }}
-                  src="/icons/tokens/done.svg"
-                />
+                <Done id="schedulerClusterDoneIcon" className={styles.copyIcon} />
               </Tooltip>
             ) : (
-              <Box component="img" id="copy" sx={{ width: '1.2rem', height: '1.2rem' }} src="/icons/tokens/copy.svg" />
+              <Copy id="schedulerClusterIDCopyIcon" className={styles.copyIcon} />
             )}
           </IconButton>
         </Card>
@@ -261,7 +259,7 @@ export default function PersonalAccessTokens() {
         </Card>
       ) : allTokens.length === 0 ? (
         <Card className={styles.noData}>
-          <Box component="img" className={styles.nodataIcon} src="/icons/cluster/scheduler/ic-content.svg" />
+          <IcContent className={styles.nodataIcon} />
           <Typography id="no-scheduler" variant="h6" className={styles.nodataText}>
             You don't have any tokens.
           </Typography>
@@ -304,10 +302,9 @@ export default function PersonalAccessTokens() {
                         size="small"
                         id={`delete-token-${item?.id}`}
                         sx={{
-                          '&.MuiButton-root': {
-                            backgroundColor: 'var(--button-color)',
-                            color: '#fff',
-                          },
+                          background: 'var(--button-color)',
+                          color: 'var(--button-text-color)',
+                          ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
                         }}
                         variant="contained"
                         onClick={() => {
@@ -360,10 +357,9 @@ export default function PersonalAccessTokens() {
                         size="small"
                         id={`delete-token-${item?.id}`}
                         sx={{
-                          '&.MuiButton-root': {
-                            backgroundColor: 'var(--button-color)',
-                            color: '#fff',
-                          },
+                          background: 'var(--button-color)',
+                          color: 'var(--button-text-color)',
+                          ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
                         }}
                         variant="contained"
                         onClick={() => {
@@ -411,7 +407,7 @@ export default function PersonalAccessTokens() {
       >
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Box component="img" sx={{ width: '6rem', height: '6rem' }} src="/icons/cluster/delete.svg" />
+            <Delete className={styles.deleteIcon} />
             <Typography fontFamily="mabry-bold" pt="1rem">
               Are you sure you want to delete this token?
             </Typography>

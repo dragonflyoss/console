@@ -19,7 +19,17 @@ import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import { useContext, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { MyContext } from './show';
-import { CancelLoadingButton, DeleteLoadingButton, SavelLoadingButton } from '../loading-button';
+import { ReactComponent as InformationCluster } from '../../assets/images/cluster/information-cluster.svg';
+import { ReactComponent as Done } from '../../assets/images/tokens/done.svg';
+import { ReactComponent as Copy } from '../../assets/images/tokens/copy.svg';
+import { ReactComponent as Edit } from '../../assets/images/user/edit.svg';
+import { ReactComponent as Location } from '../../assets/images/cluster/location.svg';
+import { ReactComponent as IDC } from '../../assets/images/cluster/idc.svg';
+import { ReactComponent as Total } from '../../assets/images/cluster/total.svg';
+import { ReactComponent as CIDRs } from '../../assets/images/cluster/cidrs.svg';
+import { ReactComponent as Hostnames } from '../../assets/images/cluster/hostnames.svg';
+import { ReactComponent as Delete } from '../../assets/images/cluster/delete.svg';
+import { CancelLoadingButton, DeleteLoadingButton } from '../loading-button';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -109,6 +119,7 @@ export default function Information() {
       }
     }
   };
+
   return (
     <Box>
       <Snackbar
@@ -145,14 +156,13 @@ export default function Information() {
             variant="contained"
             className={styles.updateButton}
             sx={{
-              '&.MuiButton-root': {
-                backgroundColor: 'var(--button-color)',
-                color: '#fff',
-              },
+              background: 'var(--button-color)',
+              color: 'var(--button-text-color)',
+              ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
               mr: '1.5rem',
             }}
           >
-            <Box component="img" className={styles.updateClusterIcon} src="/icons/user/edit.svg" />
+            <Edit className={styles.updateClusterIcon} />
             Update
           </Button>
           <Button
@@ -164,10 +174,9 @@ export default function Information() {
             }}
             className={styles.deleteButton}
             sx={{
-              '&.MuiButton-root': {
-                backgroundColor: 'var(--button-color)',
-                color: '#fff',
-              },
+              background: 'var(--button-color)',
+              color: 'var(--button-text-color)',
+              ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
             }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
@@ -178,12 +187,12 @@ export default function Information() {
       <Box>
         <Card className={styles.informationWrapper}>
           <Box className={styles.classNameWrapper}>
-            <Box component="img" className={styles.clusterIcon} src="/icons/cluster/information-cluster.svg" />
+            <InformationCluster className={styles.clusterIcon} />
             <Box>
               <Typography id="name" variant="h6" component="div" className={styles.className}>
                 {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster.name || '-'}
               </Typography>
-              <Typography id="description" variant="body2" component="div" color="var(--text---palette-text-secondary)">
+              <Typography id="description" variant="body2" component="div" color="var(--text-palette-text-secondary)">
                 {isLoading ? <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} /> : cluster?.bio || '-'}
               </Typography>
             </Box>
@@ -257,6 +266,7 @@ export default function Information() {
                     sx={{
                       width: '1.2rem',
                       height: '1.2rem',
+                      p: 0,
                     }}
                     onClick={() => {
                       copyClusterID('schedulerClusterID', cluster?.scheduler_cluster_id || 0);
@@ -276,15 +286,10 @@ export default function Information() {
                         title="copied!"
                         id="schedulerClusterIDTooltip"
                       >
-                        <Box
-                          component="img"
-                          id="schedulerClusterIDCopyIcon"
-                          sx={{ width: '1rem', height: '1rem' }}
-                          src="/icons/tokens/done.svg"
-                        />
+                        <Done id="schedulerClusterDoneIcon" className={styles.copyIcon} />
                       </MuiTooltip>
                     ) : (
-                      <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/copy.svg" />
+                      <Copy id="schedulerClusterIDCopyIcon" className={styles.copyIcon} />
                     )}
                   </IconButton>
                 )}
@@ -325,6 +330,7 @@ export default function Information() {
                     sx={{
                       width: '1.2rem',
                       height: '1.2rem',
+                      p: 0,
                     }}
                     onClick={() => {
                       copyClusterID('seedPeerClusterID', cluster?.seed_peer_cluster_id || 0);
@@ -343,15 +349,10 @@ export default function Information() {
                         title="copied!"
                         id="seedPeerClusterIDTooltip"
                       >
-                        <Box
-                          component="img"
-                          id="seedPeerClusterIDCopyIcon"
-                          sx={{ width: '1rem', height: '1rem' }}
-                          src="/icons/tokens/done.svg"
-                        />
+                        <Done id="schedulerClusterDoneIcon" className={styles.copyIcon} />
                       </MuiTooltip>
                     ) : (
-                      <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/copy.svg" />
+                      <Copy id="schedulerClusterIDCopyIcon" />
                     )}
                   </IconButton>
                 )}
@@ -399,7 +400,7 @@ export default function Information() {
             <Card className={styles.cidrsContainer}>
               <Box className={styles.scopesTitle}>
                 <Box className={styles.locationTitle}>
-                  <Box component="img" className={styles.scopesIcon} src="/icons/cluster/location.svg" />
+                  <Location className={styles.scopesIcon} />
                   <Typography variant="body2" component="div" className={styles.scopesLable}>
                     Location
                   </Typography>
@@ -432,7 +433,7 @@ export default function Information() {
             <Card className={styles.cidrsContainer}>
               <Box className={styles.scopesTitle}>
                 <Box className={styles.cidrsTitle}>
-                  <Box component="img" className={styles.scopesIcon} src="/icons/cluster/idc.svg" />
+                  <IDC className={styles.scopesIcon} />
                   <Typography variant="body2" component="p" className={styles.scopesLable}>
                     IDC
                   </Typography>
@@ -444,7 +445,7 @@ export default function Information() {
                   </MuiTooltip>
                 </Box>
                 <Paper id="idc-total" elevation={0} className={styles.totalContainer}>
-                  <Box component="img" className={styles.totalIcon} src="/icons/cluster/total.svg" />
+                  <Total className={styles.totalIcon} />
                   <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
                     {`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`}
                   </Typography>
@@ -527,7 +528,7 @@ export default function Information() {
                 <DialogContent dividers className={styles.idcDialogContainer}>
                   {cluster?.scopes?.idc.split('|').map((item: any, id: any) => (
                     <Paper key={id} elevation={0} className={styles.idcDialogContent}>
-                      <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/idc.svg" />
+                      <IDC className={styles.cidrsIcon} />
                       <MuiTooltip title={item} placement="top">
                         <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
                           {item}
@@ -541,7 +542,7 @@ export default function Information() {
             <Card className={styles.cidrsContainer}>
               <Box className={styles.scopesTitle}>
                 <Box className={styles.cidrsTitle}>
-                  <Box component="img" className={styles.scopesIcon} src="/icons/cluster/cidrs.svg" />
+                  <CIDRs className={styles.scopesIcon} />
                   <Typography variant="body2" component="div" className={styles.scopesLable}>
                     CIDRs
                   </Typography>
@@ -553,7 +554,7 @@ export default function Information() {
                   </MuiTooltip>
                 </Box>
                 <Paper id="cidrs-total" elevation={0} className={styles.totalContainer}>
-                  <Box component="img" className={styles.totalIcon} src="/icons/cluster/total.svg" />
+                  <Total className={styles.totalIcon} />
                   <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
                     {`Total: ${cluster?.scopes?.cidrs?.length || 0}`}
                   </Typography>
@@ -641,7 +642,7 @@ export default function Information() {
               <DialogContent dividers className={styles.cidrsDialogContainer}>
                 {cluster?.scopes?.cidrs?.map((item: any, id: any) => (
                   <Paper key={id} elevation={0} className={styles.cidrsDialogContent}>
-                    <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/cidrs.svg" />
+                    <CIDRs className={styles.cidrsIcon} />
                     <MuiTooltip title={item} placement="top">
                       <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
                         {item}
@@ -654,7 +655,7 @@ export default function Information() {
             <Card className={styles.cidrsContainer}>
               <Box className={styles.scopesTitle}>
                 <Box className={styles.cidrsTitle}>
-                  <Box component="img" className={styles.scopesIcon} src="/icons/cluster/hostnames.svg" />
+                  <Hostnames className={styles.scopesIcon} />
                   <Typography variant="body2" component="div" className={styles.scopesLable}>
                     Hostnames
                   </Typography>
@@ -668,7 +669,7 @@ export default function Information() {
                   </MuiTooltip>
                 </Box>
                 <Paper id="hostnames-total" elevation={0} className={styles.totalContainer}>
-                  <Box component="img" className={styles.totalIcon} src="/icons/cluster/total.svg" />
+                  <Total className={styles.totalIcon} />
                   <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
                     {`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`}
                   </Typography>
@@ -756,7 +757,7 @@ export default function Information() {
               <DialogContent dividers className={styles.cidrsDialogContainer}>
                 {cluster?.scopes?.hostnames?.map((item: any, id: any) => (
                   <Paper key={id} elevation={0} className={styles.cidrsDialogContent}>
-                    <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/hostnames.svg" />
+                    <Hostnames className={styles.cidrsIcon} />
                     <MuiTooltip title={item} placement="top">
                       <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
                         {item}
@@ -889,7 +890,7 @@ export default function Information() {
       >
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Box component="img" className={styles.deleteClusterIcon} src="/icons/cluster/delete.svg" />
+            <Delete className={styles.deleteClusterIcon} />
             <Typography pt="1rem">Are you sure you want to delet this cluster?</Typography>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>

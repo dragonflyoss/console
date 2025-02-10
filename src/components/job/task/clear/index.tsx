@@ -808,7 +808,11 @@ export default function Clear() {
                           </Box>
                           <Button
                             size="small"
-                            sx={{ background: 'var(--button-color)' }}
+                            sx={{
+                              background: 'var(--button-color)',
+                              color: 'var(--button-text-color)',
+                              ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                            }}
                             variant="contained"
                             onClick={(event) => {
                               event.stopPropagation();
@@ -972,7 +976,7 @@ export default function Clear() {
                         </Box>
                       </Card>
                       {totalPage > 1 ? (
-                        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+                        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
                           <Pagination
                             id={`pagination-${index}`}
                             count={totalPage}

@@ -223,7 +223,7 @@
 
 .menuItem:hover {
   background-color: var(--button-color) !important;
-  color: var(--save-size-color);
+  color: var(--button-text-color);
 }
 
 .menuItemIcon {
@@ -231,5 +231,11 @@
 }
 
 .menuItem:hover .menuItemIcon {
-  color: var(--save-size-color);
+  color: var(--button-text-color);
+}
+
+.tableIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  color: var(--table-color);
 }

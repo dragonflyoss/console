@@ -70,6 +70,11 @@
   justify-content: center;
 }
 
+.featuresHeaderIcon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
 .featuresIconWrapper {
   width: 2.4rem;
   height: 2.4rem;
@@ -97,8 +102,7 @@
 }
 
 .menu {
-  background-image: url(../../../../public/images/menu/cyan-blur.png), url(../../../../public/images/menu/red-blur.png);
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: var(--palette-background-menu);
   background-repeat: no-repeat, no-repeat;
   padding: 0.2rem;
   background-size: 50%, 50%;
@@ -106,7 +110,7 @@
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
   outline: 0px;
   background-position: right top, left bottom;
-  border-radius: 10px;
+  border-radius: 0.6rem;
   overflow: inherit;
 }
 
@@ -368,4 +372,40 @@
   border-color: var(--palette-divider);
   border-style: dashed;
   margin: 0;
+}
+
+.deleteInactiveInstances {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.deleteInactiveHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.deleteIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: 0.4rem;
+}
+
+.inactiveTotalIcon {
+  width: 0.6rem;
+  height: 0.6rem;
+}
+
+.deleteWarning {
+  width: 1.4rem;
+  height: 1.4rem;
+  padding-right: 0.2rem;
+}
+
+.failureIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-right: 0.4rem;
 }

@@ -55,17 +55,6 @@ export default function NewPreheat() {
 
   const navigate = useNavigate();
 
-  const theme = createTheme({
-    palette: {
-      secondary: {
-        main: '#1c293a',
-      },
-    },
-    typography: {
-      fontFamily: 'mabry-light,sans-serif',
-    },
-  });
-
   useEffect(() => {
     (async function () {
       try {
@@ -374,7 +363,7 @@ export default function NewPreheat() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -436,14 +425,7 @@ export default function NewPreheat() {
                 />
               </Tooltip>
             </Box>
-            <FormControl
-              className={styles.textField}
-              margin="normal"
-              required
-              size="small"
-              color="secondary"
-              error={clusterError}
-            >
+            <FormControl className={styles.textField} margin="normal" required size="small" error={clusterError}>
               <InputLabel id="select-clusters">Clusters</InputLabel>
               <Select
                 labelId="select-clusters"
@@ -491,7 +473,7 @@ export default function NewPreheat() {
               </Tooltip>
             </Box>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-              <FormControl className={styles.textField} margin="normal" required size="small" color="secondary">
+              <FormControl className={styles.textField} margin="normal" required size="small">
                 <InputLabel id="scope">Scope</InputLabel>
                 <Select
                   id="select-scope"
@@ -699,6 +681,6 @@ export default function NewPreheat() {
           </Box>
         </FormControl>
       </Box>
-    </ThemeProvider>
+    </Box>
   );
 }

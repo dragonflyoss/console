@@ -53,7 +53,7 @@
 }
 
 .menu {
-  background-image: url(../../../public/images/menu/cyan-blur.png), url(../../../public/images/menu/red-blur.png);
+  background-image: url(../../assets/images/menu/cyan-blur.png), url(../../assets/images/menu/red-blur.png);
   background-color: rgba(255, 255, 255, 0.9);
   background-repeat: no-repeat, no-repeat;
   padding: 0.2rem;
@@ -68,7 +68,7 @@
 
 .detailTitle {
   padding-left: 0.8rem;
-  color: var(--text---palette-text-secondary);
+  color: var(--text-palette-text-secondary);
 }
 
 .detailContent {

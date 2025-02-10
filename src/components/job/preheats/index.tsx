@@ -26,6 +26,11 @@ import { DEFAULT_PAGE_SIZE } from '../../../lib/constants';
 import { getBJTDatetime, useQuery } from '../../../lib/utils';
 import styles from './index.module.css';
 import Card from '../../card';
+import { ReactComponent as IcContent } from '../../../assets/images/cluster/scheduler/ic-content.svg';
+import { ReactComponent as Success } from '../../../assets/images/job/preheat/success.svg';
+import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
+import { ReactComponent as Pending } from '../../../assets/images/job/preheat/pending.svg';
+import { ReactComponent as Detail } from '../../../assets/images/job/preheat/detail.svg';
 
 export default function Preheats() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -41,17 +46,6 @@ export default function Preheats() {
   const navigate = useNavigate();
   const query = useQuery();
   const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
-
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#1C293A',
-      },
-    },
-    typography: {
-      fontFamily: 'mabry-light,sans-serif',
-    },
-  });
 
   useEffect(() => {
     (async function () {
@@ -143,7 +137,7 @@ export default function Preheats() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
@@ -163,7 +157,7 @@ export default function Preheats() {
         aria-label="breadcrumb"
         sx={{ mb: '1rem' }}
       >
-        <Typography color="text.primary">jobs</Typography>
+        <Typography>jobs</Typography>
         <Typography color="inherit">preheats</Typography>
       </Breadcrumbs>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '2rem' }}>
@@ -171,10 +165,9 @@ export default function Preheats() {
         <Button
           size="small"
           sx={{
-            '&.MuiButton-root': {
-              backgroundColor: 'var(--button-color)',
-              color: '#fff',
-            },
+            background: 'var(--button-color)',
+            color: 'var(--button-text-color)',
+            ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
           }}
           startIcon={<AddIcon />}
           variant="contained"
@@ -247,7 +240,7 @@ export default function Preheats() {
           </Box>
         ) : allPreheats.length === 0 ? (
           <Box className={styles.noData}>
-            <Box component="img" className={styles.nodataIcon} src="/icons/cluster/scheduler/ic-content.svg" />
+            <IcContent className={styles.nodataIcon} />
             <Typography id="no-preheat" variant="h6" className={styles.nodataText}>
               You don't have any preheat tasks.
             </Typography>
@@ -261,26 +254,11 @@ export default function Preheats() {
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
                         {item.result.state === 'SUCCESS' ? (
-                          <Box
-                            id={`SUCCESS-${item.id}`}
-                            component="img"
-                            sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/job/preheat/success.svg"
-                          />
+                          <Success id={`SUCCESS-${item.id}`} className={styles.statusIcon} />
                         ) : item.result.state === 'FAILURE' ? (
-                          <Box
-                            id={`FAILURE-${item.id}`}
-                            component="img"
-                            sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/job/preheat/failure.svg"
-                          />
+                          <Failure id={`FAILURE-${item.id}`} className={styles.statusIcon} />
                         ) : (
-                          <Box
-                            id={`PENDING-${item.id}`}
-                            component="img"
-                            sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/job/preheat/pending.svg"
-                          />
+                          <Pending id={`PENDING-${item.id}`} className={styles.statusIcon} />
                         )}
                         <Box
                           sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
@@ -308,11 +286,7 @@ export default function Preheats() {
                           underline="hover"
                           sx={{ color: 'var(--description-color)' }}
                         >
-                          <Box
-                            component="img"
-                            sx={{ width: '2rem', height: '2rem' }}
-                            src="/icons/job/preheat/detail.svg"
-                          />
+                          <Detail className={styles.detailIcon} />
                         </RouterLink>
                       </Box>
                     </Box>
@@ -328,26 +302,11 @@ export default function Preheats() {
                   <Box key={item.id} id={`list-${item.id}`} sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                     <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '60%' }}>
                       {item.result.state === 'SUCCESS' ? (
-                        <Box
-                          id={`SUCCESS-${item.id}`}
-                          component="img"
-                          sx={{ width: '1.3rem', height: '1.3rem' }}
-                          src="/icons/job/preheat/success.svg"
-                        />
+                        <Success id={`SUCCESS-${item.id}`} className={styles.statusIcon} />
                       ) : item.result.state === 'FAILURE' ? (
-                        <Box
-                          id={`FAILURE-${item.id}`}
-                          component="img"
-                          sx={{ width: '1.3rem', height: '1.3rem' }}
-                          src="/icons/job/preheat/failure.svg"
-                        />
+                        <Failure id={`FAILURE-${item.id}`} className={styles.statusIcon} />
                       ) : (
-                        <Box
-                          id={`PENDING-${item.id}`}
-                          component="img"
-                          sx={{ width: '1.3rem', height: '1.3rem' }}
-                          src="/icons/job/preheat/pending.svg"
-                        />
+                        <Pending id={`PENDING-${item.id}`} className={styles.statusIcon} />
                       )}
                       <Box
                         sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
@@ -375,11 +334,7 @@ export default function Preheats() {
                         underline="hover"
                         sx={{ color: 'var(--description-color)' }}
                       >
-                        <Box
-                          component="img"
-                          sx={{ width: '2rem', height: '2rem' }}
-                          src="/icons/job/preheat/detail.svg"
-                        />
+                        <Detail className={styles.detailIcon} />
                       </RouterLink>
                     </Box>
                   </Box>
@@ -389,7 +344,7 @@ export default function Preheats() {
         )}
       </Card>
       {preheatTotalPages > 1 ? (
-        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
           <Pagination
             count={preheatTotalPages}
             page={preheatPage}
@@ -398,7 +353,6 @@ export default function Preheats() {
               navigate(`/jobs/preheats${newPage > 1 ? `?page=${newPage}` : ''}`);
             }}
             boundaryCount={1}
-            color="primary"
             size="small"
             id="preheat-pagination"
           />
@@ -406,6 +360,6 @@ export default function Preheats() {
       ) : (
         <></>
       )}
-    </ThemeProvider>
+    </Box>
   );
 }

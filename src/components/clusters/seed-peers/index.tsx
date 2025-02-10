@@ -66,20 +66,38 @@ import Card from '../../card';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { ReactComponent as Total } from '../../../assets/images/cluster/peer/total.svg';
+import { ReactComponent as Active } from '../../../assets/images/cluster/scheduler/active.svg';
+import { ReactComponent as Inactive } from '../../../assets/images/cluster/scheduler/inactive.svg';
+import { ReactComponent as SelectCard } from '../../../assets/images/cluster/scheduler/card.svg';
+import { ReactComponent as SelectTable } from '../../../assets/images/cluster/scheduler/table.svg';
+import { ReactComponent as ID } from '../../../assets/images/cluster/id.svg';
+import { ReactComponent as Status } from '../../../assets/images/cluster/status.svg';
+import { ReactComponent as IP } from '../../../assets/images/cluster/ip.svg';
+import { ReactComponent as Type } from '../../../assets/images/cluster/seed-peer/type.svg';
+import { ReactComponent as Port } from '../../../assets/images/cluster/seed-peer/port.svg';
+import { ReactComponent as DownloadPort } from '../../../assets/images/cluster/seed-peer/download-port.svg';
+import { ReactComponent as Delete } from '../../../assets/images/cluster/delete.svg';
+import { ReactComponent as IcContent } from '../../../assets/images/cluster/scheduler/ic-content.svg';
+import { ReactComponent as InactiveTotal } from '../../../assets/images/cluster/inactive-total.svg';
+import { ReactComponent as DeleteWarning } from '../../../assets/images/cluster/delete-warning.svg';
+import { ReactComponent as DeleteInactive } from '../../../assets/images/cluster/delete-inactive.svg';
+import { ReactComponent as DeleteInactiveError } from '../../../assets/images/cluster/delete-inactive-error.svg';
+import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1C293A',
-    },
-    secondary: {
-      main: '#2E8F79',
-    },
-  },
-  typography: {
-    fontFamily: 'mabry-light,sans-serif',
-  },
-});
+// const theme = createTheme({
+//   palette: {
+//     primary: {
+//       main: '#1C293A',
+//     },
+//     secondary: {
+//       main: '#2E8F79',
+//     },
+//   },
+//   typography: {
+//     fontFamily: 'mabry-light,sans-serif',
+//   },
+// });
 
 function CircularProgressWithLabel(props: LinearProgressProps & { value: number }) {
   return (
@@ -505,7 +523,7 @@ export default function ShowCluster() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -540,10 +558,9 @@ export default function ShowCluster() {
             }}
             className={styles.deleteButton}
             sx={{
-              '&.MuiButton-root': {
-                backgroundColor: 'var(--button-color)',
-                color: '#fff',
-              },
+              background: 'var(--button-color)',
+              color: 'var(--button-text-color)',
+              ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
             }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
@@ -563,25 +580,9 @@ export default function ShowCluster() {
           position: 'absolute',
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-            p: '1rem',
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <Box
-              component="img"
-              src="/icons/cluster/delete.svg"
-              sx={{ width: '1.8rem', height: '1.8rem', mr: '0.4rem' }}
-            />
+        <Box className={styles.deleteInactiveInstances}>
+          <Box className={styles.deleteInactiveHeader}>
+            <Delete className={styles.deleteIcon} />
             <Typography variant="h6" component="div" fontFamily="mabry-bold">
               Delete inactive instances
             </Typography>
@@ -634,11 +635,7 @@ export default function ShowCluster() {
                                 number of deleted seed peers
                               </Typography>
                             </Box>
-                            <Box
-                              component="img"
-                              className={styles.headerErrorIcon}
-                              src="/icons/cluster/delete-inactive.svg"
-                            />
+                            <DeleteInactive className={styles.headerErrorIcon} />
                           </Paper>
                           <Paper variant="outlined" className={styles.headerContainer}>
                             <Box>
@@ -654,11 +651,7 @@ export default function ShowCluster() {
                                 number of delete error
                               </Typography>
                             </Box>
-                            <Box
-                              component="img"
-                              className={styles.headerErrorIcon}
-                              src="/icons/cluster/delete-inactive-error.svg"
-                            />
+                            <DeleteInactiveError className={styles.headerErrorIcon} />
                           </Paper>
                         </Box>
                         <Paper variant="outlined" className={styles.deleteInactiveWrapper}>
@@ -694,11 +687,7 @@ export default function ShowCluster() {
                               id="inactive-header"
                             >
                               <Box display="flex" alignItems="center">
-                                <Box
-                                  component="img"
-                                  sx={{ width: '1.2rem', height: '1.2rem', mr: '0.4rem' }}
-                                  src="/icons/job/preheat/failure.svg"
-                                />
+                                <Failure className={styles.failureIcon} />
                                 <Typography variant="body2" fontFamily="mabry-bold">
                                   Error log
                                 </Typography>
@@ -738,10 +727,9 @@ export default function ShowCluster() {
                       size="small"
                       onClick={handleReset}
                       sx={{
-                        '&.MuiButton-root': {
-                          backgroundColor: 'var(--button-color)',
-                          color: '#fff',
-                        },
+                        background: 'var(--button-color)',
+                        color: 'var(--button-text-color)',
+                        ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
                       }}
                     >
                       Cancel
@@ -769,11 +757,7 @@ export default function ShowCluster() {
                           alignItems: 'center',
                         }}
                       >
-                        <Box
-                          component="img"
-                          sx={{ width: '0.6rem', height: '0.6rem' }}
-                          src="/icons/cluster/inactive-total.svg"
-                        />
+                        <InactiveTotal className={styles.inactiveTotalIcon} />
                         <Typography
                           id="seedPeerTotal"
                           variant="caption"
@@ -897,11 +881,7 @@ export default function ShowCluster() {
                 ) : activeStep === 1 ? (
                   <Box>
                     <Box display="flex" alignItems="flex-start" pb="1rem">
-                      <Box
-                        component="img"
-                        src="/icons/cluster/delete-warning.svg"
-                        sx={{ width: '1.4rem', height: '1.4rem', pr: '0.2rem' }}
-                      />
+                      <DeleteWarning className={styles.deleteWarning} />
                       <Box>
                         <Typography
                           variant="body1"
@@ -952,7 +932,8 @@ export default function ShowCluster() {
                     sx={{
                       '&.MuiButton-root': {
                         backgroundColor: activeStep === 0 ? '' : 'var(--button-color)',
-                        color: '#fff',
+                        color: 'var(--button-text-color)',
+                        ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
                       },
                     }}
                   >
@@ -990,7 +971,8 @@ export default function ShowCluster() {
                             Array.isArray(seedPeerInactive) && seedPeerInactive.length === 0
                               ? ''
                               : 'var(--button-color)',
-                          color: '#fff',
+                          color: 'var(--button-text-color)',
+                          ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
                         },
                       }}
                     >
@@ -1028,7 +1010,7 @@ export default function ShowCluster() {
             </Box>
           </Box>
           <Box className={styles.navigation} />
-          <Box component="img" className={styles.navigationIcon} src="/icons/cluster/peer/total.svg" />
+          <Total className={styles.navigationIcon} />
         </Card>
         <Card className={styles.activeHeader}>
           <Box sx={{ display: 'flex', width: '70%' }}>
@@ -1053,7 +1035,7 @@ export default function ShowCluster() {
             </Box>
           </Box>
           <Box className={styles.navigation} />
-          <Box component="img" className={styles.navigationIcon} src="/icons/cluster/scheduler/active.svg" />
+          <Active className={styles.navigationIcon} />
         </Card>
         <Card className={styles.activeHeader}>
           <Box sx={{ display: 'flex' }}>
@@ -1078,7 +1060,7 @@ export default function ShowCluster() {
             </Box>
           </Box>
           <Box className={styles.navigation} />
-          <Box component="img" className={styles.navigationIcon} src="/icons/cluster/scheduler/inactive.svg" />
+          <Inactive className={styles.navigationIcon} />
         </Card>
       </Box>
       <Box className={styles.searchContainer}>
@@ -1132,7 +1114,7 @@ export default function ShowCluster() {
           />
         </Stack>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper' }}>
+          <List component="nav" aria-label="Device settings">
             <ListItemButton
               id="lock-button"
               aria-haspopup="listbox"
@@ -1159,6 +1141,12 @@ export default function ShowCluster() {
               role: 'listbox',
             }}
             sx={{
+              '& .MuiMenu-paper': {
+                boxShadow: 'var(--palette-menu-shadow);',
+                backgroundImage:
+                  'url(../../../assets/images/menu/cyan-blur.png), url(../../../assets/images/menu/red-blur.png)',
+                borderRadius: '0.6rem',
+              },
               '& .MuiMenu-list': {
                 p: 0,
                 width: '10rem',
@@ -1194,10 +1182,10 @@ export default function ShowCluster() {
               aria-label="text alignment"
             >
               <ToggleButton id="card" value="card" aria-label="centered">
-                <Box component="img" src="/icons/cluster/scheduler/card.svg" />
+                <SelectCard />
               </ToggleButton>
               <ToggleButton id="table" value="table" aria-label="left aligned">
-                <Box component="img" src="/icons/cluster/scheduler/table.svg" />
+                <SelectTable />
               </ToggleButton>
             </StyledToggleButtonGroup>
           </Paper>
@@ -1210,7 +1198,7 @@ export default function ShowCluster() {
               <Box className={styles.clusterListContent}>
                 <Box p="1.2rem 1.2rem 0 1.2rem">
                   <Box display="flex" mb="0.5rem">
-                    <img className={styles.idIcon} src="/icons/cluster/id.svg" alt="" />
+                    <ID className={styles.idIcon} />
                     <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
                   </Box>
                   <Typography variant="h6" mb="0.5rem" className={styles.nameText}>
@@ -1270,8 +1258,7 @@ export default function ShowCluster() {
                         }}
                         sx={{
                           '& .MuiMenu-paper': {
-                            boxShadow:
-                              '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d',
+                            boxShadow: 'var(--palette-menu-shadow)',
                           },
                           '& .MuiMenu-list': {
                             p: 0,
@@ -1315,7 +1302,7 @@ export default function ShowCluster() {
                         </Box>
                       </Menu>
                       <Box display="flex">
-                        <img className={styles.idIcon} src="/icons/cluster/id.svg" alt="" />
+                        <ID className={styles.idIcon} />{' '}
                         {isLoading ? (
                           <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
                         ) : (
@@ -1329,6 +1316,7 @@ export default function ShowCluster() {
                           component={Link}
                           to={`/clusters/${params.id}/seed-peers/${item?.id}`}
                           underline="hover"
+                          color="inherit"
                         >
                           <Typography
                             id={`card-hostname-${item.host_name}`}
@@ -1341,7 +1329,7 @@ export default function ShowCluster() {
                         </RouterLink>
                       </MuiTooltip>
                       <Box sx={{ display: 'flex', width: '50%', alignItems: 'center' }}>
-                        <Box component="img" className={styles.statusIcon} src="/icons/cluster/status.svg" />
+                        <Status className={styles.statusIcon} />
                         <Chip
                           label={_.upperFirst(item?.state) || ''}
                           size="small"
@@ -1371,29 +1359,25 @@ export default function ShowCluster() {
                     <Box p="1.5rem">
                       <Box className={styles.cardContent}>
                         <Box className={styles.portContainer}>
-                          <Box component="img" className={styles.portIcon} src="/icons/cluster/ip.svg" />
+                          <IP className={styles.portIcon} />
                           <Typography id={`card-ip-${item.id}`} variant="caption" sx={{ color: '#919EAB' }}>
                             {item.ip}
                           </Typography>
                         </Box>
                         <Box className={styles.portContainer}>
-                          <Box component="img" className={styles.portIcon} src="/icons/cluster/seed-peer/type.svg" />
+                          <Type className={styles.portIcon} />
                           <Typography id={`card-type-${item.id}`} variant="caption" sx={{ color: '#919EAB' }}>
                             {_.upperFirst(item?.type) || ''}
                           </Typography>
                         </Box>
                         <Box className={styles.portContainer}>
-                          <Box component="img" className={styles.portIcon} src="/icons/cluster/seed-peer/port.svg" />
+                          <Port className={styles.portIcon} />
                           <Typography id={`card-port-${item.id}`} variant="caption" sx={{ color: '#919EAB' }}>
                             {_.upperFirst(item?.port) || ''}
                           </Typography>
                         </Box>
                         <Box className={styles.portContainer}>
-                          <Box
-                            component="img"
-                            className={styles.portIcon}
-                            src="/icons/cluster/seed-peer/download-port.svg"
-                          />
+                          <DownloadPort className={styles.portIcon} />
                           <Typography id={`card-download-port-${item.id}`} variant="caption" sx={{ color: '#919EAB' }}>
                             {_.upperFirst(item?.download_port) || ''}
                           </Typography>
@@ -1405,7 +1389,7 @@ export default function ShowCluster() {
             </Box>
           ) : (
             <Card className={styles.noData}>
-              <Box component="img" className={styles.nodataIcon} src="/icons/cluster/scheduler/ic-content.svg" />
+              <IcContent className={styles.nodataIcon} />ƒ
               <Typography id="no-seed-peer" variant="h6" className={styles.nodataText}>
                 You don't have seed peer cluster.
               </Typography>
@@ -1540,7 +1524,7 @@ export default function ShowCluster() {
                                 component={Link}
                                 to={`/clusters/${params.id}/seed-peers/${item?.id}`}
                                 underline="hover"
-                                sx={{ color: 'var(--description-color)' }}
+                                color="inherit"
                               >
                                 {item?.host_name}
                               </RouterLink>
@@ -1578,17 +1562,16 @@ export default function ShowCluster() {
                             </TableCell>
                             <TableCell align="center">
                               <IconButton
+                                id={`operation-${item?.id}`}
                                 onClick={(event: any) => {
                                   setSeedPeerAnchorElement(event.currentTarget);
                                   setSeedPeerSelectedRow(item);
                                   setSeedPeerSelectedID(item.id);
                                 }}
                                 size="small"
-                                id={`operation-${item?.id}`}
                                 aria-controls={Boolean(seedPeerAnchorElement) ? item?.host_name : undefined}
                                 aria-haspopup="true"
                                 aria-expanded={Boolean(seedPeerAnchorElement) ? 'true' : undefined}
-                                sx={{ position: 'relative' }}
                               >
                                 <MoreVertIcon color="action" />
                               </IconButton>
@@ -1597,17 +1580,24 @@ export default function ShowCluster() {
                                 id={seedPeerSelectedRow?.host_name}
                                 open={Boolean(seedPeerAnchorElement)}
                                 onClose={handleClose}
+                                anchorOrigin={{
+                                  vertical: 'bottom',
+                                  horizontal: 'right',
+                                }}
+                                transformOrigin={{
+                                  vertical: 'top',
+                                  horizontal: 'right',
+                                }}
                                 sx={{
-                                  position: 'absolute',
-                                  left: '-4.5rem',
-
                                   '& .MuiMenu-paper': {
-                                    boxShadow:
-                                      '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d',
+                                    boxShadow: 'var(--palette-menu-shadow);',
+                                    backgroundImage:
+                                      'url(../../../assets/images/menu/cyan-blur.png), url(../../../assets/images/menu/red-blur.png)',
+                                    borderRadius: '0.6rem',
                                   },
                                   '& .MuiMenu-list': {
-                                    p: 0,
-                                    width: '9rem',
+                                    width: '11rem',
+                                    p: '0',
                                   },
                                 }}
                               >
@@ -1665,7 +1655,7 @@ export default function ShowCluster() {
       >
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Box component="img" className={styles.deleteClusterIcon} src="/icons/cluster/delete.svg" />
+            <Delete className={styles.deleteClusterIcon} />
             <Typography fontFamily="mabry-bold" pt="1rem">
               Are you sure you want to delet this seed peer?
             </Typography>
@@ -1690,7 +1680,7 @@ export default function ShowCluster() {
         </DialogContent>
       </Dialog>
       {seedPeerTotalPages > 1 ? (
-        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
           <Pagination
             count={seedPeerTotalPages}
             page={seedPeerPage}
@@ -1713,7 +1703,7 @@ export default function ShowCluster() {
 
               navigate(`${location.pathname}${queryString}`);
             }}
-            color="primary"
+            // color="primary"
             size="small"
             id="seed-peer-pagination"
           />
@@ -1721,6 +1711,6 @@ export default function ShowCluster() {
       ) : (
         <></>
       )}
-    </ThemeProvider>
+    </Box>
   );
 }

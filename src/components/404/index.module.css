@@ -1,7 +1,7 @@
 .container {
   height: 100vh;
   overflow: hidden;
-  background: url(../../../public/images/404/background-image.png);
+  background: url(../../assets/images/404/background-image.png);
 }
 
 .content {

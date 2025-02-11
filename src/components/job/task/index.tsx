@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab, { TabProps } from '@mui/material/Tab';
 import { useEffect } from 'react';
+import { ReactComponent as Clear } from '../../../assets/images/job/task/clear-cache.svg';
 
 const theme = createTheme({
   palette: {

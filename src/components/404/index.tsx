@@ -30,7 +30,6 @@ export default function NotFound() {
             width: '12rem',
             '&.MuiButton-root': {
               backgroundColor: 'var(--button-color)',
-              color: '#fff',
             },
           }}
           onClick={() => {

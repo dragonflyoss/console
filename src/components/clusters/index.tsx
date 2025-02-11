@@ -287,7 +287,7 @@ export default function Clusters() {
                     </Box>
                   </Grid>
                 </Box>
-                <Statistics />
+                <Statistics className={styles.statistics} />
               </Box>
             </Box>
           </Card>
@@ -327,7 +327,7 @@ export default function Clusters() {
                     </Box>
                   </Grid>
                 </Box>
-                <Statistics />
+                <Statistics className={styles.statistics} />
               </Box>
             </Box>
           </Card>
@@ -367,7 +367,7 @@ export default function Clusters() {
                     </Box>
                   </Grid>
                 </Box>
-                <Statistics />
+                <Statistics className={styles.statistics} />
               </Box>
             </Box>
           </Card>
@@ -565,10 +565,6 @@ export default function Clusters() {
                           id={`show-cluster-${item.id}`}
                           className={styles.buttonContent}
                           sx={{
-                            '&.MuiButton-root': {
-                              backgroundColor: '#fff',
-                              p: 0,
-                            },
                             p: 0,
                           }}
                           onClick={() => {

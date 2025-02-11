@@ -22,13 +22,17 @@
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
   padding: 0.8rem 2rem;
   z-index: 1100;
-  border-bottom: 1px solid rgba(58, 58, 58, 0.12);
+  border-bottom: 1px solid var(--palette-divider);
 }
 
 .main {
   flex-grow: 1;
   background-color: transparent;
-  padding-left: 18rem !important;
+
+  -webkit-box-flex: 1;
+  overflow: auto;
+  min-height: 100%;
+  /* height: 100vh; */
 }
 
 .navigationBarContainer {
@@ -41,6 +45,55 @@
   flex-direction: column;
   z-index: 1101;
   border-right: 1px solid rgba(145, 158, 171, 0.12);
+}
+
+.navigationBar {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  /* height: 100vh; */
+  position: fixed;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 1101;
+  border-right: 1px solid var(--palette-divider);
+  background-color: var(--palette-background);
+}
+
+.compactLayout {
+  position: absolute;
+  right: -0.8rem;
+  top: 1rem;
+}
+
+.expandIcon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.shrinkMenuContainer {
+  display: inline-flex;
+  -webkit-box-align: center;
+  align-items: center;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  justify-content: center;
+}
+
+.shrinkMenuText {
+  margin-top: 0.3rem !important;
+}
+
+.shrinkChevronRightOutlinedIcon {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: inline-flex;
+  margin: 0px;
+  top: 11px;
+  right: 6px;
 }
 
 .title {
@@ -58,14 +111,24 @@
 .github {
   width: 1.8rem;
   height: 1.8rem;
-  color: var(--button-color);
+  color: var(--palette-secondary-dark);
 }
 
 .menuIcon {
   width: 1.6rem;
   height: 1.6rem;
-  display: block;
-  color: var(--button-color);
+  color: var(--palette-text-secondary);
+}
+
+.selectedMenuIcon {
+  width: 1.6rem;
+  height: 1.6rem;
+  color: var(--description-color);
+}
+
+.menuText {
+  font-family: 'mabry-bold' !important;
+  margin-left: 0.4rem !important;
 }
 
 .menuSelectedIcon {
@@ -77,7 +140,7 @@
 .avatar {
   width: 2.4rem !important;
   height: 2.4rem !important;
-  background: var(--button-color) !important;
+  background: var(--palette-secondary-dark) !important;
   position: relative;
 
   margin-left: 0.5rem;
@@ -96,13 +159,9 @@
   float: right;
 }
 
-.menuText {
-  font-family: 'mabry-bold' !important;
-}
-
 .profileMenu {
   background-image: url(../../assets/images/menu/cyan-blur.png), url(../../assets/images/menu/red-blur.png);
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: var(--palette-background-menu);
   background-repeat: no-repeat, no-repeat;
   padding: 0.2rem;
   background-size: 50%, 50%;
@@ -110,7 +169,7 @@
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
   outline: 0px;
   background-position: right top, left bottom;
-  border-radius: 10px;
+  border-radius: var(--menu-border-radius);
   overflow: inherit;
   min-width: 8rem;
 }
@@ -143,7 +202,7 @@
 }
 
 .pageContainer {
-  position: relative;
+  height: 100vh;
   width: 100%;
 }
 
@@ -151,11 +210,4 @@
   width: 100%;
   position: absolute;
   top: 0;
-}
-
-.header {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0px;
-  left: auto;
 }

@@ -6,7 +6,10 @@ import { createContext, useEffect, useMemo, useState } from 'react';
 export const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 function App() {
-  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const [mode, setMode] = useState<'light' | 'dark'>(() => {
+    const dataTheme = localStorage.getItem('data-theme');
+    return (dataTheme as 'light' | 'dark') || 'light';
+  });
 
   const colorMode = useMemo(
     () => ({
@@ -19,6 +22,8 @@ function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', mode);
+
+    localStorage.setItem('data-theme', mode);
   }, [mode]);
 
   const theme = useMemo(

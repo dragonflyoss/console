@@ -9,8 +9,10 @@
 }
 
 :root {
+  color: #1c293a;
   --button-color: #1c293a;
   --button-text-color: #ffffff;
+  --palette-secondary-dark: #1c293a;
   --hover-button-text-color: #1d3048;
   --description-color: #2e8f79;
   --save-color: #1c293a;
@@ -45,14 +47,23 @@
   --table-color: #919eab;
   --palette-background-menu: rgba(255, 255, 255, 0.9);
   --palette-menu-shadow: 0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;
+  --palette-text-secondary: #000000;
+  --palette-background-rotation: #f6f7f9;
+  --palette-background: #f4f6f8;
+  --menu-border-radius: 0.6rem;
 }
 
 [data-theme='dark'] body {
+  color: rgba(255, 255, 255, 0.7) !important;
   background-color: #141a21;
+  --palette-background: #141a21;
+  --palette-secondary-dark: #ececec;
+  --description-color: #00a76f;
   --palette-background-paper: #1c252e;
-  --button-color: #ffffff;
-  --button-text-color: #1c293a;
-  --hover-button-text-color: #e3e3e3;
+  --palette-text-secondary: #919eab;
+  --button-color: #00a76f;
+  --button-text-color: #ffffff;
+  --hover-button-text-color: #08c385;
   --palette-card-hover-background-color: #1b2e3e;
   --card-box-shadow: none;
   --table-title-color: #28323d;
@@ -62,9 +73,11 @@
   --palette-background-menu: rgba(28, 37, 46, 0.9);
   --palette-detail-lable-color: #a1a0a2;
   --palette-menu-shadow: none;
+  --palette-background-rotation: #1c252e;
 }
 
 body {
+  margin: 0;
   font-family: 'mabry-light' !important;
 }
 

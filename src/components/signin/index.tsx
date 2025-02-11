@@ -15,6 +15,7 @@ import styles from './index.module.css';
 import { Alert, Backdrop, Snackbar, Link as RouterLink, Button } from '@mui/material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { setPageTitle } from '../../lib/utils';
+import { ReactComponent as Login } from '../../assets/images/login/login.svg';
 
 export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -93,14 +94,14 @@ export default function SignIn() {
     setPageTitle(location.pathname);
   }, [location]);
 
-  const theme = createTheme({
-    palette: {
-      secondary: {
-        contrastText: '#fff',
-        main: '#2E8F79',
-      },
-    },
-  });
+  // const theme = createTheme({
+  //   palette: {
+  //     secondary: {
+  //       contrastText: '#fff',
+  //       main: '#2E8F79',
+  //     },
+  //   },
+  // });
 
   const changeValidate = (value: string, data: any) => {
     const { setError, validate } = data;
@@ -175,87 +176,95 @@ export default function SignIn() {
           backgroundColor: 'rgba(0,0,0,0.3)',
         }}
       >
-        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
+        {/* <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" /> */}
       </Backdrop>
       <Grid item xs={6}>
         <Rotation />
       </Grid>
       <Grid item xs={6} className={styles.container}>
-        <ThemeProvider theme={theme}>
-          <Container component="main" maxWidth="xs">
-            <CssBaseline />
-            <Box
-              sx={{
-                marginTop: '5rem',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <Box component="img" className={styles.logo} src="/images/login/login.svg" />
-              <Typography variant="h4" gutterBottom>
-                Welcome back!
-              </Typography>
-              <Typography variant="body1" gutterBottom fontFamily="mabry-light,sans-serif">
-                Through which you can easily configure clusters and view cluster information.
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                mt: '0.2rem',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <Box component="form" onSubmit={handleSubmit} noValidate>
-                {formList.map((item) => (
-                  <TextField
-                    margin="normal"
-                    color="success"
-                    required
-                    fullWidth
-                    key={item.formProps.name}
-                    {...item.formProps}
-                  />
-                ))}
-                <Button type="submit" fullWidth variant="contained" color="secondary" sx={{ mt: '1.4rem' }}>
-                  <Typography variant="button">Sign In</Typography>
-                </Button>
-                <Box className={styles.separationLineContainer}>
-                  <Typography component="span" className={styles.separationLine}></Typography>
-                  <Typography component="span" className={styles.text}>
-                    or
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: '5rem',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Login className={styles.logo} />
+            <Typography variant="h4" gutterBottom>
+              Welcome back!
+            </Typography>
+            <Typography variant="body1" gutterBottom fontFamily="mabry-light,sans-serif">
+              Through which you can easily configure clusters and view cluster information.
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              mt: '0.2rem',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Box component="form" onSubmit={handleSubmit} noValidate>
+              {formList.map((item) => (
+                <TextField
+                  margin="normal"
+                  color="success"
+                  required
+                  fullWidth
+                  key={item.formProps.name}
+                  {...item.formProps}
+                />
+              ))}
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  mt: '1.4rem',
+                  background: 'var(--description-color)',
+                  color: 'var(--button-text-color)',
+                  ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                }}
+              >
+                <Typography variant="button">Sign In</Typography>
+              </Button>
+              <Box className={styles.separationLineContainer}>
+                <Typography component="span" className={styles.separationLine}></Typography>
+                <Typography component="span" className={styles.text}>
+                  or
+                </Typography>
+                <Typography component="span" className={styles.separationLine}></Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <Grid>
+                  <Typography component="span" fontFamily="-moz-initial">
+                    New to Dragnfly?
                   </Typography>
-                  <Typography component="span" className={styles.separationLine}></Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Grid>
-                    <Typography component="span" fontFamily="-moz-initial">
-                      New to Dragnfly?
-                    </Typography>
-                    <RouterLink
-                      underline="hover"
-                      component={Link}
-                      to="/signup"
-                      onClick={() => {
-                        setPageLoding(true);
-                      }}
-                      sx={{ color: '#2E8F79', ml: '0.4rem' }}
-                    >
-                      <Typography component="span">Create an account.</Typography>
-                    </RouterLink>
-                  </Grid>
-                </Box>
+                  <RouterLink
+                    underline="hover"
+                    component={Link}
+                    to="/signup"
+                    onClick={() => {
+                      setPageLoding(true);
+                    }}
+                    sx={{ color: '#2E8F79', ml: '0.4rem' }}
+                  >
+                    <Typography component="span">Create an account.</Typography>
+                  </RouterLink>
+                </Grid>
               </Box>
             </Box>
-          </Container>
-        </ThemeProvider>
+          </Box>
+        </Container>
       </Grid>
     </Grid>
   );

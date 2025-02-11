@@ -1758,7 +1758,7 @@ export default function ShowCluster() {
                       sx={{
                         '&.MuiLoadingButton-root': {
                           backgroundColor: 'var(--delete-button-color)',
-                          color: '#fff',
+                          color: 'var(--button-text-color)',
                           borderColor: 'var(--save-color)',
                         },
                       }}

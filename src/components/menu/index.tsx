@@ -31,15 +31,17 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { ColorModeContext } from '../../App';
 import { ReactComponent as Cluster } from '../../assets/images/cluster/cluster.svg';
-import { ReactComponent as SelectedCluster } from '../../assets/images/cluster/selected-cluster.svg';
-import { ReactComponent as Developer } from '../../assets/images/tokens/developer.svg';
-import { ReactComponent as SelectedDeveloper } from '../../assets/images/tokens/selected-developer.svg';
-import { ReactComponent as Job } from '../../assets/images/job/preheat/job.svg';
-import { ReactComponent as SelectedJob } from '../../assets/images/job/preheat/selected-job.svg';
-import { ReactComponent as User } from '../../assets/images/user/user.svg';
-import { ReactComponent as SelectedUser } from '../../assets/images/user/selected-user.svg';
+import { ReactComponent as SelectedCluster } from '../../assets/images/menu/selected-cluster.svg';
+import { ReactComponent as Developer } from '../../assets/images/menu/developer.svg';
+import { ReactComponent as SelectedDeveloper } from '../../assets/images/menu/selected-developer.svg';
+import { ReactComponent as Job } from '../../assets/images/menu/job.svg';
+import { ReactComponent as SelectedJob } from '../../assets/images/menu/selected-job.svg';
+import { ReactComponent as User } from '../../assets/images/menu/user.svg';
+import { ReactComponent as SelectedUser } from '../../assets/images/menu/selected-user.svg';
 import { ReactComponent as Logo } from '../../assets/images/header/logo.svg';
 import { ReactComponent as Github } from '../../assets/images/header/github.svg';
+import { ReactComponent as Expand } from '../../assets/images/menu/expand.svg';
+import { ReactComponent as Closure } from '../../assets/images/menu/closure.svg';
 
 interface MyContextType {
   user: getUserResponse;
@@ -67,18 +69,6 @@ export const MyContext = createContext<MyContextType>({
   },
 });
 
-const Main = styled('div')(({ theme }) => ({
-  flexGrow: 1,
-  overflow: 'auto',
-  paddingBottom: theme.spacing(8),
-  [theme.breakpoints.up('lg')]: {
-    paddingTop: '1.5rem',
-    paddingLeft: theme.spacing(4),
-    paddingRight: theme.spacing(4),
-  },
-  fontFamily: 'mabry-light,sans-serif',
-}));
-
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   borderRadius: 5,
   [`&.${linearProgressClasses.colorPrimary}`]: {
@@ -88,6 +78,18 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     borderRadius: 3,
     backgroundColor: 'var(--description-color)',
   },
+}));
+
+const Main = styled('div')(({ theme }) => ({
+  flexGrow: 1,
+  overflow: 'auto',
+  paddingBottom: theme.spacing(8),
+  [theme.breakpoints.up('lg')]: {
+    paddingTop: '1.5rem',
+
+    paddingRight: theme.spacing(4),
+  },
+  fontFamily: 'mabry-light,sans-serif',
 }));
 
 export default function Layout(props: any) {
@@ -113,7 +115,12 @@ export default function Layout(props: any) {
   const [expandDeveloper, setExpandDeveloper] = useState(false);
   const [expandJob, setExpandJob] = useState(false);
   const [progress, setProgress] = useState(0);
-
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [expandedMenu, setExpandedMenu] = useState<any | null>(null);
+  const [compactLayout, setCompactLayout] = useState(() => {
+    const storedValue = localStorage.getItem('compactLayout');
+    return storedValue === 'true';
+  });
   const openProfile = Boolean(anchorElement);
   const location = useLocation();
   const navigate = useNavigate();
@@ -127,6 +134,11 @@ export default function Layout(props: any) {
         setPageLoding(true);
         setProgress(0);
 
+        // const instance = localStorage.getItem('compactLayout');
+
+        // if (instance) {
+        //   setCompactLayout(instance === 'true');
+        // }
         const interval = setInterval(() => {
           setProgress((prev) => {
             if (prev >= 30) {
@@ -176,6 +188,15 @@ export default function Layout(props: any) {
     }
   }, [location.pathname, navigate, location.state?.firstLogin]);
 
+  const handleMouseLeave = () => {
+    setAnchorEl(null);
+    setExpandedMenu(null);
+  };
+
+  useEffect(() => {
+    localStorage.setItem('compactLayout', compactLayout ? 'true' : 'false');
+  }, [compactLayout]);
+
   const handleUserUpdate = (newUser: getUserResponse) => {
     setUser(newUser);
   };
@@ -186,14 +207,14 @@ export default function Layout(props: any) {
       href: '/clusters',
       text: 'Cluster',
       icon: <Cluster className={styles.menuIcon} />,
-      selectedIcon: <SelectedCluster className={styles.menuIcon} />,
+      selectedIcon: <SelectedCluster className={styles.selectedMenuIcon} />,
     },
     {
       label: 'developer',
       href: '/tokens',
       text: 'Developer',
       icon: <Developer className={styles.menuIcon} />,
-      selectedIcon: <SelectedDeveloper className={styles.menuIcon} />,
+      selectedIcon: <SelectedDeveloper className={styles.selectedMenuIcon} />,
       expand: expandDeveloper,
       setExpand: setExpandDeveloper,
       menuProps: [
@@ -209,7 +230,7 @@ export default function Layout(props: any) {
       href: '/jobs',
       text: 'Job',
       icon: <Job className={styles.menuIcon} />,
-      selectedIcon: <SelectedJob className={styles.menuIcon} />,
+      selectedIcon: <SelectedJob className={styles.selectedMenuIcon} />,
       expand: expandJob,
       setExpand: setExpandJob,
       menuProps: [
@@ -233,7 +254,7 @@ export default function Layout(props: any) {
       href: '/users',
       text: 'User',
       icon: <User className={styles.menuIcon} />,
-      selectedIcon: <SelectedUser className={styles.menuIcon} />,
+      selectedIcon: <SelectedUser className={styles.selectedMenuIcon} />,
     });
   }
 
@@ -256,6 +277,7 @@ export default function Layout(props: any) {
     if (reason === 'clickaway') {
       return;
     }
+
     setFirstLogin(false);
     setErrorMessage(false);
   };
@@ -311,7 +333,6 @@ export default function Layout(props: any) {
                   }}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    {/* {theme.palette.mode} */}
                     <IconButton onClick={colorMode.toggleColorMode} color="inherit">
                       {theme.palette.mode === 'dark' ? (
                         <Brightness7Icon sx={{ width: '1.8rem', height: '1.8rem' }} />
@@ -345,16 +366,26 @@ export default function Layout(props: any) {
                   onClose={() => {
                     setAnchorElement(null);
                   }}
+                  // sx={{
+                  //   position: 'absolute',
+                  //   top: '0',
+                  //   right: '-2rem',
+                  //   '& .MuiMenu-paper': {
+                  //     boxShadow: 'var(--palette-menu-shadow);',
+                  //   },
+                  //   '& .MuiMenu-list': {
+                  //     p: 0,
+                  //     minWidth: '8rem',
+                  //   },
+
                   sx={{
-                    position: 'absolute',
-                    top: '0',
-                    right: '-2rem',
                     '& .MuiMenu-paper': {
                       boxShadow: 'var(--palette-menu-shadow);',
+                      borderRadius: 'var(--menu-border-radius);',
                     },
                     '& .MuiMenu-list': {
-                      p: 0,
                       minWidth: '8rem',
+                      p: '0',
                     },
                   }}
                 >
@@ -407,16 +438,20 @@ export default function Layout(props: any) {
             <Box className={styles.container}>
               <CssBaseline />
               <Box className={styles.navigationBarContainer}>
-                <Grid sx={{ pl: '1rem', pr: '1rem' }}>
+                {compactLayout ? (
                   <List component="nav" aria-label="main mailbox folders">
-                    {menu.map((items) =>
-                      items?.menuProps ? (
-                        <Box key={items.href} className={styles.menu}>
+                    {menu.map((items, index) => {
+                      return items?.menuProps ? (
+                        <>
                           <ListItemButton
+                            className={styles.menu}
+                            key={index}
                             selected={(location.pathname.split('/')[1] || '') === items.label}
-                            onClick={() => {
-                              items?.setExpand(!items?.expand);
+                            onClick={(event: any) => {
+                              setAnchorEl(event.currentTarget);
+                              setExpandedMenu(items.label);
                             }}
+                            // onMouseLeave={handleMouseLeave}
                             sx={{
                               '&.Mui-selected': {
                                 backgroundColor: 'var(--menu-background-color)',
@@ -426,53 +461,69 @@ export default function Layout(props: any) {
                                 backgroundColor: 'var(--hover-menu-background-color)',
                                 color: 'var(--description-color)',
                               },
-                              height: '2.6rem',
+                              height: '4rem',
+                              width: '5.4rem',
                               borderRadius: '0.2rem',
+                              m: '0.4rem',
+                              color: 'var(--palette-text-secondary)',
+                              justifyContent: 'center',
+                              position: 'relative',
                             }}
                           >
-                            {(location.pathname.split('/')[1] || '') === items.label ? items.selectedIcon : items.icon}
-                            <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
-                              {items.text}
-                            </Typography>
-                            {items.expand ? <ExpandMore /> : <ChevronRightOutlinedIcon />}
+                            <ChevronRightOutlinedIcon className={styles.shrinkChevronRightOutlinedIcon} />
+                            <Box className={styles.shrinkMenuContainer}>
+                              {(location.pathname.split('/')[1] || '') === items.label
+                                ? items.selectedIcon
+                                : items.icon}
+                              <Typography variant="caption" display="block" className={styles.shrinkMenuText}>
+                                {items.text}
+                              </Typography>
+                            </Box>
                           </ListItemButton>
-                          <Collapse in={items.expand} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                              {items.menuProps?.map((item) => {
-                                return (
-                                  <ListItemButton
-                                    className={styles.expandMenu}
-                                    selected={(location.pathname.split('/')[2] || '') === item.label}
-                                    component={Link}
-                                    to={item.href || ''}
-                                    sx={{
-                                      '&.Mui-selected': {
-                                        backgroundColor: 'var(--menu-selected-background-color)',
-                                        color: 'var(--description-color)',
-                                      },
-                                      '&.Mui-selected:hover': {
-                                        backgroundColor: 'var(--menu-selected-background-color)',
-                                        color: 'var(--description-color)',
-                                      },
-                                      height: '2.4rem',
-                                      borderRadius: '0.2rem',
-                                      pl: '1rem',
-                                      mt: '0.8rem',
+                          {items?.menuProps && expandedMenu === items.label && (
+                            <Menu
+                              anchorEl={anchorEl}
+                              id={items.label}
+                              open={Boolean(anchorEl)}
+                              onClose={handleMouseLeave}
+                              anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'right',
+                              }}
+                              sx={{
+                                '& .MuiMenu-paper': {
+                                  boxShadow: 'var(--palette-menu-shadow);',
+                                  borderRadius: '0.6rem',
+                                },
+                                '& .MuiMenu-list': {
+                                  width: '8rem',
+                                  p: '0',
+                                },
+                              }}
+                            >
+                              <Box className={styles.profileMenu}>
+                                {items.menuProps.map((subItem) => (
+                                  <MenuItem
+                                    sx={{ borderRadius: 'var(--menu-border-radius);' }}
+                                    key={subItem.label}
+                                    onClick={() => {
+                                      setAnchorEl(null);
+                                      setExpandedMenu(null);
                                     }}
+                                    component={Link}
+                                    to={subItem.href}
                                   >
-                                    <Typography variant="body1" sx={{ fontFamily: 'mabry-bold', ml: '2rem' }}>
-                                      {item.text}
-                                    </Typography>
-                                  </ListItemButton>
-                                );
-                              })}
-                            </List>
-                          </Collapse>
-                        </Box>
+                                    {subItem.text}
+                                  </MenuItem>
+                                ))}
+                              </Box>
+                            </Menu>
+                          )}
+                        </>
                       ) : (
                         <ListItemButton
                           className={styles.menu}
-                          key={items.href}
+                          key={index}
                           selected={(location.pathname.split('/')[1] || '') === items.label}
                           component={Link}
                           to={items.href}
@@ -485,24 +536,147 @@ export default function Layout(props: any) {
                               backgroundColor: 'var(--hover-menu-background-color)',
                               color: 'var(--description-color)',
                             },
-                            height: '2.6rem',
+                            height: '4rem',
+                            width: '5.4rem',
                             borderRadius: '0.2rem',
-                            mb: '0.4rem',
-                            mt: '0.4rem',
+                            m: '0.4rem',
+                            color: 'var(--palette-text-secondary)',
+                            justifyContent: 'center',
                           }}
                         >
-                          {(location.pathname.split('/')[1] || '') === items.label ? items.selectedIcon : items.icon}
-                          <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold', ml: '0.4rem' }}>
-                            {items.text}
-                          </Typography>
+                          <Box className={styles.shrinkMenuContainer}>
+                            {(location.pathname.split('/')[1] || '') === items.label ? items.selectedIcon : items.icon}
+                            <Typography variant="caption" display="block" className={styles.shrinkMenuText}>
+                              {items.text}
+                            </Typography>
+                          </Box>
                         </ListItemButton>
-                      ),
-                    )}
+                      );
+                    })}
                   </List>
-                </Grid>
+                ) : (
+                  <Grid sx={{ pl: '1rem', pr: '1rem' }}>
+                    <List component="nav" aria-label="main mailbox folders">
+                      {menu.map((items) =>
+                        items?.menuProps ? (
+                          <Box key={items.href} className={styles.menu}>
+                            <ListItemButton
+                              selected={(location.pathname.split('/')[1] || '') === items.label}
+                              onClick={() => {
+                                items?.setExpand(!items?.expand);
+                              }}
+                              sx={{
+                                '&.Mui-selected': {
+                                  backgroundColor: 'var(--menu-background-color)',
+                                  color: 'var(--description-color)',
+                                },
+                                '&.Mui-selected:hover': {
+                                  backgroundColor: 'var(--hover-menu-background-color)',
+                                  color: 'var(--description-color)',
+                                },
+                                height: '2.6rem',
+                                borderRadius: '0.2rem',
+                                color: 'var(--palette-text-secondary)',
+                              }}
+                            >
+                              {(location.pathname.split('/')[1] || '') === items.label
+                                ? items.selectedIcon
+                                : items.icon}
+                              <Typography variant="subtitle1" className={styles.menuText}>
+                                {items.text}
+                              </Typography>
+                              {items.expand ? <ExpandMore /> : <ChevronRightOutlinedIcon />}
+                            </ListItemButton>
+                            <Collapse in={items.expand} timeout="auto" unmountOnExit>
+                              <List component="div" disablePadding>
+                                {items.menuProps?.map((item) => {
+                                  return (
+                                    <ListItemButton
+                                      className={styles.expandMenu}
+                                      selected={(location.pathname.split('/')[2] || '') === item.label}
+                                      component={Link}
+                                      to={item.href || ''}
+                                      sx={{
+                                        '&.Mui-selected': {
+                                          backgroundColor: 'var(--menu-selected-background-color)',
+                                          color: 'var(--description-color)',
+                                        },
+                                        '&.Mui-selected:hover': {
+                                          backgroundColor: 'var(--menu-selected-background-color)',
+                                          color: 'var(--description-color)',
+                                        },
+                                        height: '2.4rem',
+                                        borderRadius: '0.2rem',
+                                        pl: '1rem',
+                                        mt: '0.8rem',
+                                        color: 'var(--palette-text-secondary)',
+                                      }}
+                                    >
+                                      <Typography variant="body1" sx={{ fontFamily: 'mabry-bold', ml: '2rem' }}>
+                                        {item.text}
+                                      </Typography>
+                                    </ListItemButton>
+                                  );
+                                })}
+                              </List>
+                            </Collapse>
+                          </Box>
+                        ) : (
+                          <ListItemButton
+                            className={styles.menu}
+                            key={items.href}
+                            selected={(location.pathname.split('/')[1] || '') === items.label}
+                            component={Link}
+                            to={items.href}
+                            sx={{
+                              '&.Mui-selected': {
+                                backgroundColor: 'var(--menu-background-color)',
+                                color: 'var(--description-color)',
+                              },
+                              '&.Mui-selected:hover': {
+                                backgroundColor: 'var(--hover-menu-background-color)',
+                                color: 'var(--description-color)',
+                              },
+                              height: '2.6rem',
+                              borderRadius: '0.2rem',
+                              mb: '0.4rem',
+                              mt: '0.4rem',
+                              color: 'var(--palette-text-secondary)',
+                            }}
+                          >
+                            {(location.pathname.split('/')[1] || '') === items.label ? items.selectedIcon : items.icon}
+                            <Typography variant="subtitle1" className={styles.menuText}>
+                              {items.text}
+                            </Typography>
+                          </ListItemButton>
+                        ),
+                      )}
+                    </List>
+                  </Grid>
+                )}
+                <Box className={styles.compactLayout}>
+                  <IconButton
+                    id="expand"
+                    // className={styles.compactLayout}
+                    sx={{
+                      p: 0,
+                    }}
+                    onClick={() => {
+                      setCompactLayout((e: any) => !e);
+                    }}
+                  >
+                    {compactLayout ? (
+                      <Expand className={styles.expandIcon} />
+                    ) : (
+                      <Closure className={styles.expandIcon} />
+                    )}
+                  </IconButton>
+                </Box>
               </Box>
-              <Divider orientation="vertical" flexItem sx={{ borderColor: 'rgba(145 158 171 / 0.12)' }} />
-              <Main className={styles.main}>
+              <Main
+                className={styles.main}
+                sx={{ paddingLeft: compactLayout ? '9rem !important' : '18rem !important' }}
+              >
                 <Outlet />
               </Main>
             </Box>

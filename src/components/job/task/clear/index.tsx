@@ -39,6 +39,7 @@ import SearchCircularProgress from '../../../circular-progress';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import LinkOutlinedIcon from '@mui/icons-material/LinkOutlined';
 import Card from '../../../card';
+import { ReactComponent as Success } from '../../../assets/images/job/preheat/success.svg';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {

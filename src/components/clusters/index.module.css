@@ -30,6 +30,7 @@
   position: absolute;
   left: 0.8rem;
   top: 0.3rem;
+  color: var(--description-color);
 }
 
 .clusterHeaderContainer {
@@ -75,6 +76,11 @@
 .clusterBottomIcon {
   width: 1.2rem;
   height: 1.2rem;
+  color: var(--description-color);
+}
+
+.statistics {
+  color: var(--description-color);
 }
 
 .clusterBottomContentContainer {

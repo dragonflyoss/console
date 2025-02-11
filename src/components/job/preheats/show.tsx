@@ -189,7 +189,7 @@ export default function ShowPreheat() {
                 Description
               </Typography>
             </Box>
-            <Typography id="description" variant="body1" className={styles.informationContent}>
+            <Typography id="description" variant="body1" className={styles.descriptionContent}>
               {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '2rem' }} /> : preheat?.bio || '-'}
             </Typography>
           </Box>
@@ -312,15 +312,20 @@ export default function ShowPreheat() {
                 Scope
               </Typography>
             </Box>
-            <Typography id="scope" variant="body1" className={styles.informationContent}>
+            <Box id="scope" className={styles.informationContent}>
               {isLoading ? (
                 <Skeleton data-testid="preheat-isloading" sx={{ width: '2rem' }} />
               ) : scope ? (
-                scope.label
+                <Box className={styles.scopeContent}>
+                  <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/tag-scope.svg" />
+                  <Typography variant="body2" component="div" fontFamily="mabry-bold" pl="0.2rem">
+                    {scope.label || '-'}
+                  </Typography>
+                </Box>
               ) : (
                 ''
               )}
-            </Typography>
+            </Box>
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
@@ -338,19 +343,11 @@ export default function ShowPreheat() {
               {isLoading ? (
                 <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
               ) : preheat?.args?.tag ? (
-                <Chip
-                  label={preheat.args.tag}
-                  size="small"
-                  variant="outlined"
-                  sx={{
-                    borderRadius: '0.3rem',
-                    background: 'var(--description-color)',
-                    color: '#FFFFFF',
-                    mr: '0.4rem',
-                    borderColor: 'var(--description-color)',
-                    fontWeight: 'bold',
-                  }}
-                />
+                <Box className={styles.tagContent}>
+                  <Typography variant="body2" component="div" fontFamily="mabry-bold">
+                    {preheat.args.tag || '-'}
+                  </Typography>
+                </Box>
               ) : (
                 <Typography variant="body1" className={styles.informationContent}>
                   -

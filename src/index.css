@@ -51,6 +51,8 @@
   --palette-background-rotation: #f6f7f9;
   --palette-background: #f4f6f8;
   --menu-border-radius: 0.6rem;
+  --palette-tab-border-color: #e8e8e8;
+  --palette-text-secondary: rgba(0, 0, 0, 0.54);
 }
 
 [data-theme='dark'] body {
@@ -74,6 +76,7 @@
   --palette-detail-lable-color: #a1a0a2;
   --palette-menu-shadow: none;
   --palette-background-rotation: #1c252e;
+  --palette-tab-border-color: #343536;
 }
 
 body {

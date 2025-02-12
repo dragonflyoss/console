@@ -16,16 +16,10 @@
   font-family: 'mabry-bold';
 }
 
-
 .statusIcon {
   width: 1.3rem;
   height: 1.3rem;
 }
-
-.detailIcon {
-  width: 2rem;
-  height: 2rem;
-  color: var(--button-color);
 
 .description {
   width: 90%;
@@ -47,5 +41,4 @@
   flex-direction: column;
   justify-content: space-between;
   margin-left: 0.6rem;
-
 }

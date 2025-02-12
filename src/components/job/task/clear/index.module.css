@@ -56,3 +56,19 @@
 .circularProgress {
   margin-right: 0.4rem;
 }
+
+.schedulerClusterIcon {
+  width: 0.6rem;
+  height: 0.6rem;
+}
+
+.noSearch {
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 3rem;
+}
+
+.noTask {
+  width: 30rem;
+  height: 30rem;
+}

@@ -5,18 +5,9 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab, { TabProps } from '@mui/material/Tab';
 import { useEffect } from 'react';
+import styles from './index.module.css';
 import { ReactComponent as Clear } from '../../../assets/images/job/task/clear-cache.svg';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#2e8f79',
-    },
-  },
-  typography: {
-    fontFamily: 'mabry-light,sans-serif',
-  },
-});
+import { ReactComponent as Executions } from '../../../assets/images/job/task/executions.svg';
 
 export default function NavTabs() {
   const [value, setValue] = React.useState(1);
@@ -50,27 +41,27 @@ export default function NavTabs() {
     },
     fontWeight: theme.typography.fontWeightRegular,
     marginRight: theme.spacing(1),
-    color: 'rgba(0, 0, 0, 0.85)',
+    color: 'var(--palette-text-secondary)',
     fontSize: '0.9rem',
     '&:hover': {
       color: 'primary',
       opacity: 1,
     },
     '&.Mui-selected': {
-      color: '#000',
+      color: 'var(--palette-text-secondary)',
       fontFamily: 'mabry-bold',
     },
   }));
 
   const AntTabs = styled(Tabs)({
-    borderBottom: '1px solid #e8e8e8',
+    borderBottom: '1px solid var(--palette-tab-border-color)',
     '& .MuiTabs-indicator': {
-      backgroundColor: 'primary',
+      backgroundColor: 'var(--description-color)',
     },
   });
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Breadcrumbs
         separator={
           <Box
@@ -80,8 +71,8 @@ export default function NavTabs() {
         aria-label="breadcrumb"
         sx={{ mb: '1rem' }}
       >
-        <Typography color="text.primary">jobs</Typography>
-        <Typography color="text.primary">task</Typography>
+        <Typography>jobs</Typography>
+        <Typography>task</Typography>
         {location.pathname.split('/')[3] === 'executions' ? (
           <RouterLink
             component={Link}
@@ -104,7 +95,7 @@ export default function NavTabs() {
         scrollButtons="auto"
       >
         <AntTab
-          icon={<Box component="img" sx={{ width: '1.5rem' }} src="/icons/job/task/clear-cache.svg" />}
+          icon={<Clear className={styles.tabIcon} />}
           iconPosition="start"
           label="Clear"
           component={Link}
@@ -113,7 +104,7 @@ export default function NavTabs() {
           id="tab-clear"
         />
         <AntTab
-          icon={<Box component="img" sx={{ width: '1.5rem' }} src="/icons/job/task/executions.svg" />}
+          icon={<Executions className={styles.tabIcon} />}
           iconPosition="start"
           label="Executions"
           component={Link}
@@ -122,6 +113,6 @@ export default function NavTabs() {
         />
       </AntTabs>
       <Outlet />
-    </ThemeProvider>
+    </Box>
   );
 }

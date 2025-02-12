@@ -20,6 +20,7 @@ import {
   ToggleButton,
   toggleButtonGroupClasses,
   Pagination,
+  useTheme,
 } from '@mui/material';
 import styles from './index.module.css';
 import { useEffect, useState } from 'react';
@@ -39,7 +40,10 @@ import SearchCircularProgress from '../../../circular-progress';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import LinkOutlinedIcon from '@mui/icons-material/LinkOutlined';
 import Card from '../../../card';
-import { ReactComponent as Success } from '../../../assets/images/job/preheat/success.svg';
+import { ReactComponent as SchedulerCluster } from '../../../../assets/images/job/task/scheduler-cluster.svg';
+import { ReactComponent as NoSearch } from '../../../../assets/images/job/task/no-search.svg';
+import { ReactComponent as NoTask } from '../../../../assets/images/job/task/no-task.svg';
+import { ReactComponent as DarkNoTask } from '../../../../assets/images/job/task/dark-no-task.svg';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
@@ -56,19 +60,19 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   },
 }));
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1C293A',
-    },
-    success: {
-      main: '#2e8f79',
-    },
-  },
-  typography: {
-    fontFamily: 'mabry-light,sans-serif',
-  },
-});
+// const theme = createTheme({
+//   palette: {
+//     primary: {
+//       main: '#1C293A',
+//     },
+//     success: {
+//       main: '#2e8f79',
+//     },
+//   },
+//   typography: {
+//     fontFamily: 'mabry-light,sans-serif',
+//   },
+// });
 
 export default function Clear() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -96,6 +100,7 @@ export default function Clear() {
 
   const { url, tag, application, filtered_query_params } = searchData;
   const navigate = useNavigate();
+  const theme = useTheme();
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -570,7 +575,7 @@ export default function Clear() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
@@ -603,11 +608,11 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--button-color)',
-                color: 'var(--table-title-color)',
+                backgroundColor: 'var(--save-color)',
+                color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--button-color)',
+                  backgroundColor: 'var(--save-color)',
                 },
               },
               '&:hover': {
@@ -615,6 +620,7 @@ export default function Clear() {
               },
               p: '0.3rem 0.6rem',
               width: '11.5rem',
+              color: 'var(--palette-text-secondary)',
             }}
           >
             <LinkOutlinedIcon sx={{ mr: '0.4rem' }} />
@@ -626,11 +632,11 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--button-color)',
-                color: 'var(--table-title-color)',
+                backgroundColor: 'var(--save-color)',
+                color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--button-color)',
+                  backgroundColor: 'var(--save-color)',
                 },
               },
               '&:hover': {
@@ -638,6 +644,7 @@ export default function Clear() {
               },
               p: '0.3rem 0.6rem',
               width: '11.5rem',
+              color: 'var(--palette-text-secondary)',
             }}
           >
             <AssignmentOutlinedIcon fontSize="small" sx={{ mr: '0.4rem' }} />
@@ -678,7 +685,7 @@ export default function Clear() {
                   <Typography variant="subtitle1" fontFamily="mabry-bold" component="div">
                     Optional
                   </Typography>
-                  <Paper elevation={0} sx={{ top: '2rem', backgroundColor: '#FFF' }}>
+                  <Box>
                     <Box className={styles.optionalContainer}>
                       {formList.map((item) => {
                         return (
@@ -740,7 +747,7 @@ export default function Clear() {
                         text="search"
                       />
                     </Box>
-                  </Paper>
+                  </Box>
                 </>
               ) : (
                 ''
@@ -790,11 +797,7 @@ export default function Clear() {
                                 alignItems: 'center',
                               }}
                             >
-                              <Box
-                                component="img"
-                                sx={{ width: '0.6rem', height: '0.6rem' }}
-                                src="/icons/job/task/scheduler-cluster.svg"
-                              />
+                              <SchedulerCluster className={styles.schedulerClusterIcon} />
                               <Typography
                                 id="schedulerTotal"
                                 variant="subtitle2"
@@ -997,7 +1000,7 @@ export default function Clear() {
             </>
           ) : (
             <Box id="no-task" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '6rem' }}>
-              <Box component="img" sx={{ width: '4rem', mb: '3rem' }} src="/icons/job/task/no-search.svg" />
+              <NoSearch className={styles.noSearch} />
               <Box>
                 <Typography variant="h5" component="span">
                   You don't find any results!
@@ -1015,7 +1018,11 @@ export default function Clear() {
             p: '3rem 2rem 2rem 2rem',
           }}
         >
-          <Box component="img" style={{ width: '30rem', height: '30rem' }} src="/icons/job/task/no-task.svg" />
+          {theme.palette.mode === 'light' ? (
+            <NoTask className={styles.noTask} />
+          ) : (
+            <DarkNoTask className={styles.noTask} />
+          )}
         </Box>
       )}
       <Dialog
@@ -1120,6 +1127,6 @@ export default function Clear() {
           </Box>
         </DialogContent>
       </Dialog>
-    </ThemeProvider>
+    </Box>
   );
 }

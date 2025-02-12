@@ -18,3 +18,13 @@
   display: flex;
   align-items: center;
 }
+
+.logoIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: 0.4rem;
+}
+
+.notFound {
+  width: 38rem;
+}

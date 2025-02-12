@@ -1,6 +1,8 @@
 import { Box, Typography, Grid, CssBaseline, Button } from '@mui/material';
 import styles from './index.module.css';
 import { useNavigate } from 'react-router-dom';
+import { ReactComponent as Logo } from '../../assets/images/404/logo.svg';
+import { ReactComponent as NotFoundImg } from '../../assets/images/404/404.svg';
 
 export default function NotFound() {
   const navigate = useNavigate();
@@ -8,18 +10,18 @@ export default function NotFound() {
   return (
     <Grid className={styles.container}>
       <Box className={styles.logoContainer}>
-        <Box component="img" sx={{ width: '1.8rem', height: '1.8rem', mr: '0.4rem' }} src="/images/404/logo.svg" />
-        <Typography variant="h6" sx={{ fontFamily: 'mabry-bold' }}>
+        <Logo className={styles.logoIcon} />
+        <Typography variant="h6" fontFamily="mabry-bold" color="#1c293a">
           Dragonfly
         </Typography>
       </Box>
       <CssBaseline />
       <Box className={styles.content}>
-        <Box component="img" src="/images/404/404.svg" sx={{ width: '38rem' }} />
-        <Typography variant="h4" gutterBottom mt="2rem">
+        <NotFoundImg className={styles.notFound} />
+        <Typography variant="h4" gutterBottom mt="2rem" color="#1c293a">
           Something gone wrong!
         </Typography>
-        <Typography variant="body1" fontFamily="mabry-light" mb="2rem">
+        <Typography variant="body1" fontFamily="mabry-light" mb="2rem" color="#1c293a">
           The page you were looking for doesn't exist.
         </Typography>
         <Button
@@ -28,9 +30,9 @@ export default function NotFound() {
           size="large"
           sx={{
             width: '12rem',
-            '&.MuiButton-root': {
-              backgroundColor: 'var(--button-color)',
-            },
+            background: '#1c293a',
+            color: 'var(--button-text-color)',
+            ':hover': { backgroundColor: '#1c293a' },
           }}
           onClick={() => {
             navigate(`/clusters`);

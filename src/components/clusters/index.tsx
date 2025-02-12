@@ -17,8 +17,7 @@ import {
   TextField,
   Divider,
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/Add';
+
 import {
   getSchedulers,
   getSeedPeers,
@@ -27,6 +26,8 @@ import {
   getSchedulersResponse,
   getSeedPeersResponse,
 } from '../../lib/api';
+import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add';
 import styles from './index.module.css';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { fuzzySearch, getDatetime, getPaginatedList, useQuery } from '../../lib/utils';

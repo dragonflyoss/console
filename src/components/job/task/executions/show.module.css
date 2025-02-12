@@ -32,11 +32,12 @@
 .informationTitleIcon {
   width: 1.4rem !important;
   height: 1.4rem !important;
+  color: var(--palette-detail-lable-color);
 }
 
 .informationTitleText {
   margin-left: 1rem !important;
-  color: #515151;
+  color: var(--palette-detail-lable-color);
   font-family: 'mabry-bold' !important;
 }
 
@@ -57,7 +58,7 @@
   background-color: var(--button-color);
   color: var(--button-text-color);
   border-radius: 0.4rem;
-  width: 1.6rem;
+  min-width: 1.6rem;
   height: 1.6rem;
   margin-right: 0.5rem;
   padding: 0.2rem 0.4rem;
@@ -84,4 +85,26 @@
 
 .tableRow:last-child {
   border-bottom: none;
+}
+
+.statusIcon {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.errorIcon {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.errorLogIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--button-color);
+}
+
+.IPIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding-right: 0.4rem;
 }

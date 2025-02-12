@@ -57,7 +57,7 @@
 
 [data-theme='dark'] body {
   color: rgba(255, 255, 255, 0.7) !important;
-  background-color: #141a21;
+  background-color: #141a21 !important;
   --palette-background: #141a21;
   --palette-secondary-dark: #ececec;
   --description-color: #00a76f;

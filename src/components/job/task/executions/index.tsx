@@ -23,6 +23,11 @@ import {
 } from '@mui/material';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import Card from '../../../card';
+import { ReactComponent as IcContent } from '../../../../assets/images/cluster/scheduler/ic-content.svg';
+import { ReactComponent as Success } from '../../../../assets/images/job/preheat/success.svg';
+import { ReactComponent as Failure } from '../../../../assets/images/job/preheat/failure.svg';
+import { ReactComponent as Pending } from '../../../../assets/images/job/preheat/pending.svg';
+import { ReactComponent as Detail } from '../../../../assets/images/job/preheat/detail.svg';
 
 export default function Executions() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -119,17 +124,6 @@ export default function Executions() {
     setStatus(event.target.value);
   };
 
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#1C293A',
-      },
-    },
-    typography: {
-      fontFamily: 'mabry-light,sans-serif',
-    },
-  });
-
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -139,7 +133,7 @@ export default function Executions() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
@@ -203,7 +197,7 @@ export default function Executions() {
           </Box>
         ) : executions && executions.length === 0 ? (
           <Box id="no-executions" className={styles.noData}>
-            <Box component="img" className={styles.nodataIcon} src="/icons/cluster/scheduler/ic-content.svg" />
+            <IcContent className={styles.nodataIcon} />
             <Typography variant="h6" className={styles.nodataText}>
               You don't have any executions.
             </Typography>
@@ -217,26 +211,11 @@ export default function Executions() {
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                       <Box className={styles.statusContainer}>
                         {item.result.state === 'SUCCESS' ? (
-                          <Box
-                            id={`SUCCESS-${item.id}`}
-                            component="img"
-                            sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/job/preheat/success.svg"
-                          />
+                          <Success id={`SUCCESS-${item.id}`} className={styles.stateIcon} />
                         ) : item.result.state === 'FAILURE' ? (
-                          <Box
-                            id={`FAILURE-${item.id}`}
-                            component="img"
-                            sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/job/preheat/failure.svg"
-                          />
+                          <Failure id={`FAILURE-${item.id}`} className={styles.stateIcon} />
                         ) : (
-                          <Box
-                            id={`PENDING-${item.id}`}
-                            component="img"
-                            sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/job/preheat/pending.svg"
-                          />
+                          <Pending id={`PENDING-${item.id}`} className={styles.stateIcon} />
                         )}
                         <Box
                           sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
@@ -266,11 +245,7 @@ export default function Executions() {
                           underline="hover"
                           sx={{ color: 'var(--description-color)' }}
                         >
-                          <Box
-                            component="img"
-                            sx={{ width: '2rem', height: '2rem' }}
-                            src="/icons/job/preheat/detail.svg"
-                          />
+                          <Detail className={styles.detailIcon} />
                         </RouterLink>
                       </Box>
                     </Box>
@@ -286,26 +261,11 @@ export default function Executions() {
                   <Box key={item.id} id={`list-${item.id}`} className={styles.listWrapper}>
                     <Box className={styles.statusContainer}>
                       {item.result.state === 'SUCCESS' ? (
-                        <Box
-                          id={`SUCCESS-${item.id}`}
-                          component="img"
-                          sx={{ width: '1.3rem', height: '1.3rem' }}
-                          src="/icons/job/preheat/success.svg"
-                        />
+                        <Success id={`SUCCESS-${item.id}`} className={styles.stateIcon} />
                       ) : item.result.state === 'FAILURE' ? (
-                        <Box
-                          id={`FAILURE-${item.id}`}
-                          component="img"
-                          sx={{ width: '1.3rem', height: '1.3rem' }}
-                          src="/icons/job/preheat/failure.svg"
-                        />
+                        <Failure id={`FAILURE-${item.id}`} className={styles.stateIcon} />
                       ) : (
-                        <Box
-                          id={`PENDING-${item.id}`}
-                          component="img"
-                          sx={{ width: '1.3rem', height: '1.3rem' }}
-                          src="/icons/job/preheat/pending.svg"
-                        />
+                        <Pending id={`PENDING-${item.id}`} className={styles.stateIcon} />
                       )}
                       <Box
                         sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
@@ -333,11 +293,7 @@ export default function Executions() {
                         underline="hover"
                         sx={{ color: 'var(--description-color)' }}
                       >
-                        <Box
-                          component="img"
-                          sx={{ width: '2rem', height: '2rem' }}
-                          src="/icons/job/preheat/detail.svg"
-                        />
+                        <Detail className={styles.detailIcon} />
                       </RouterLink>
                     </Box>
                   </Box>
@@ -364,6 +320,6 @@ export default function Executions() {
       ) : (
         <></>
       )}
-    </ThemeProvider>
+    </Box>
   );
 }

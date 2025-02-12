@@ -1,7 +1,14 @@
-<svg width="16" height="16" fill="none" class="anim-rotate mr-3 flex-shrink-0 ml-1" xmlns="http://www.w3.org/2000/svg">
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
     <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 0 0" to="360 0 0" dur="0.8s"
         repeatCount="indefinite" />
-    <path opacity=".5" d="M8 15A7 7 0 108 1a7 7 0 000 14v0z" stroke="#DBAB0A" stroke-width="2"></path>
-    <path d="M15 8a7 7 0 01-7 7" stroke="#DBAB0A" stroke-width="2"></path>
-    <path d="M8 12a4 4 0 100-8 4 4 0 000 8z" fill="#DBAB0A"></path>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path
+            d="M9,17 C13.418278,17 17,13.418278 17,9 C17,4.581722 13.418278,1 9,1 C4.581722,1 1,4.581722 1,9 C1,13.418278 4.581722,17 9,17 L9,17 Z"
+            id="路径" stroke="#DBAB0A" stroke-width="2" opacity="0.5"></path>
+        <path d="M17,9 C17,13.418278 13.418278,17 9,17" id="路径" stroke="#DBAB0A" stroke-width="2"></path>
+        <path
+            d="M9,13.5714286 C11.5247303,13.5714286 13.5714286,11.5247303 13.5714286,9 C13.5714286,6.47526972 11.5247303,4.42857143 9,4.42857143 C6.47526972,4.42857143 4.42857143,6.47526972 4.42857143,9 C4.42857143,11.5247303 6.47526972,13.5714286 9,13.5714286 Z"
+            id="路径" fill="#DBAB0A" fill-rule="nonzero"></path>
+    </g>
 </svg>

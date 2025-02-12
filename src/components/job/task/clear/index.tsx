@@ -44,6 +44,8 @@ import { ReactComponent as SchedulerCluster } from '../../../../assets/images/jo
 import { ReactComponent as NoSearch } from '../../../../assets/images/job/task/no-search.svg';
 import { ReactComponent as NoTask } from '../../../../assets/images/job/task/no-task.svg';
 import { ReactComponent as DarkNoTask } from '../../../../assets/images/job/task/dark-no-task.svg';
+import { ReactComponent as Delete } from '../../../../assets/images/cluster/delete.svg';
+import { ReactComponent as DeleteWarning } from '../../../../assets/images/cluster/delete-warning.svg';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
@@ -1050,11 +1052,7 @@ export default function Clear() {
               alignItems: 'center',
             }}
           >
-            <Box
-              component="img"
-              src="/icons/cluster/delete.svg"
-              sx={{ width: '1.8rem', height: '1.8rem', mr: '0.4rem' }}
-            />
+            <Delete className={styles.deleteIcon} />
             <Typography variant="h6" component="div" fontFamily="mabry-bold">
               Delete
             </Typography>
@@ -1075,11 +1073,7 @@ export default function Clear() {
         <DialogContent>
           <Box component="form" onSubmit={handleDeleteTask}>
             <Box display="flex" alignItems="flex-start" pb="1rem">
-              <Box
-                component="img"
-                src="/icons/cluster/delete-warning.svg"
-                sx={{ width: '1.4rem', height: '1.4rem', pr: '0.2rem' }}
-              />
+              <DeleteWarning className={styles.deleteWarningIcon} />
               <Box>
                 <Typography
                   variant="body1"

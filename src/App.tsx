@@ -31,6 +31,9 @@ function App() {
       createTheme({
         palette: {
           mode,
+          primary: {
+            main: '#1C293A',
+          },
         },
       }),
     [mode],

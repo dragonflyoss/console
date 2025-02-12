@@ -23,7 +23,7 @@
 }
 
 .hostnameTitle {
-  color: #515155;
+  color: var(--table-title-text-color);
 }
 
 .filterInput {
@@ -71,4 +71,16 @@
 .noTask {
   width: 30rem;
   height: 30rem;
+}
+
+.deleteIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: 0.4rem;
+}
+
+.deleteWarningIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  padding-right: 0.2rem;
 }

@@ -143,32 +143,30 @@ export default function NavTabs() {
     setValue(newValue);
   };
 
-  const AntTab = styled((props: StyledTabProps) => <Tab disableRipple iconPosition="start" {...props} />)(
-    ({ theme }) => ({
-      textTransform: 'none',
+  const AntTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} />)(({ theme }) => ({
+    textTransform: 'none',
+    minWidth: 0,
+    [theme.breakpoints.up('sm')]: {
       minWidth: 0,
-      [theme.breakpoints.up('sm')]: {
-        minWidth: 0,
-      },
-      fontWeight: theme.typography.fontWeightRegular,
-      marginRight: theme.spacing(1),
-      // color: 'rgba(0, 0, 0, 0.85)',
-      fontSize: '0.9rem',
-      '&:hover': {
-        color: 'primary',
-        opacity: 1,
-      },
-      '&.Mui-selected': {
-        // color: '#000',
-        fontFamily: 'mabry-bold',
-      },
-    }),
-  );
+    },
+    fontWeight: theme.typography.fontWeightRegular,
+    marginRight: theme.spacing(1),
+    color: 'var(--palette-text-secondary)',
+    fontSize: '0.9rem',
+    '&:hover': {
+      color: 'primary',
+      opacity: 1,
+    },
+    '&.Mui-selected': {
+      color: 'var(--palette-text-secondary)',
+      fontFamily: 'mabry-bold',
+    },
+  }));
 
   const AntTabs = styled(Tabs)({
-    borderBottom: '1px solid #e8e8e8',
+    borderBottom: '1px solid var(--palette-tab-border-color)',
     '& .MuiTabs-indicator': {
-      backgroundColor: 'primary',
+      backgroundColor: 'var(--description-color)',
     },
   });
 
@@ -232,10 +230,10 @@ export default function NavTabs() {
         aria-label="breadcrumb"
         sx={{ mb: '1rem' }}
       >
-        <RouterLink underline="hover" component={Link} color="text.primary" to={`/clusters`}>
+        <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters`}>
           clusters
         </RouterLink>
-        <RouterLink component={Link} underline="hover" color="text.primary" to={`clusters/${params.id}`}>
+        <RouterLink component={Link} underline="hover" color="inherit" to={`clusters/${params.id}`}>
           {cluster?.name || '-'}
         </RouterLink>
         {location.pathname.split('/')[3] && <Typography color="inherit">{location.pathname.split('/')[3]}</Typography>}
@@ -248,7 +246,7 @@ export default function NavTabs() {
         scrollButtons="auto"
       >
         {tabList.map((item) => {
-          return <AntTab {...item} />;
+          return <AntTab iconPosition="start" {...item} />;
         })}
       </AntTabs>
       <Outlet />

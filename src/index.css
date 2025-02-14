@@ -10,6 +10,7 @@
 
 :root {
   color: #1c293a;
+  --palette-color: #1c293a;
   --button-color: #1c293a;
   --button-text-color: #ffffff;
   --palette-secondary-dark: #1c293a;
@@ -53,11 +54,13 @@
   --menu-border-radius: 0.6rem;
   --palette-tab-border-color: #e8e8e8;
   --palette-text-secondary: rgba(0, 0, 0, 0.54);
+  --palette-grey-500Channel: 145 158 171;
 }
 
 [data-theme='dark'] body {
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: rgba(255, 255, 255, 0.7);
   background-color: #141a21 !important;
+  --palette-color: rgba(255, 255, 255, 0.7);
   --palette-background: #141a21;
   --palette-secondary-dark: #ececec;
   --description-color: #00a76f;

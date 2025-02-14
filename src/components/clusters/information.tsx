@@ -189,7 +189,7 @@ export default function Information() {
           <Box className={styles.classNameWrapper}>
             <InformationCluster className={styles.clusterIcon} />
             <Box>
-              <Typography id="name" variant="h6" component="div" className={styles.className}>
+              <Typography id="name" variant="h6" component="div" className={styles.name}>
                 {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster.name || '-'}
               </Typography>
               <Typography id="description" variant="body2" component="div" color="var(--text-palette-text-secondary)">
@@ -231,7 +231,6 @@ export default function Information() {
                 </Typography>
               </Box>
             </Box>
-
             <Box className={styles.clusterWrap}>
               <Box className={styles.clusterTitle}>
                 <Typography variant="body2" component="div" className={styles.configLable}>

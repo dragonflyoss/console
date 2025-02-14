@@ -1,4 +1,43 @@
-.textField {
-  width: 18rem;
-  margin: 1rem !important;
+.container {
+  /* flex-flow: wrap;
+  min-width: 0px;
+  box-sizing: border-box; */
+  display: flex;
+  gap: calc(3 * 0.5rem) calc(3 * 0.5rem);
+  align-items: flex-start;
+}
+
+.textField:nth-child(3) {
+  grid-column: span 2;
+}
+
+.formData {
+  width: 65%;
+}
+
+.textFieldContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: calc(1.5rem);
+  padding: 1.5rem;
+}
+
+.uploadWrapper {
+  width: 35%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  flex-direction: column;
+}
+
+.uploadText {
+  text-align: center;
+  padding-top: 1rem;
+}
+
+.submitWrapper {
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-end;
 }

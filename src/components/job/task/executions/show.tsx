@@ -300,13 +300,7 @@ export default function ShowExecutions() {
                 ) : (
                   <Pending id="pending-icon" className={styles.statusIcon} />
                 )}
-                <Typography
-                  variant="body2"
-                  fontFamily="mabry-bold"
-                  sx={{
-                    color: '#FFF',
-                  }}
-                >
+                <Typography variant="body2" fontFamily="mabry-bold">
                   {executions?.result?.state}
                 </Typography>
                 {executions.result.state === 'FAILURE' ? (

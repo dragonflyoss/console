@@ -6,13 +6,37 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
-import { Alert, Backdrop, Box, Grid, InputAdornment, Snackbar, Link as RouterLink, Divider } from '@mui/material';
+import {
+  Alert,
+  Backdrop,
+  Box,
+  Grid,
+  InputAdornment,
+  Snackbar,
+  Link as RouterLink,
+  Divider,
+  styled,
+} from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { matchIsValidTel, MuiTelInput } from 'mui-tel-input';
 import styles from './new.module.css';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import Card from '../card';
 
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 export default function NewUser() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
@@ -118,7 +142,7 @@ export default function NewUser() {
       setError: setBioError,
 
       validate: (value: string) => {
-        const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+        const reg = /^.{0,1000}$/;
         return reg.test(value);
       },
     },
@@ -132,18 +156,23 @@ export default function NewUser() {
         error: phoneError,
         helperText: phoneError ? 'Phone is invalid or already taken.' : '',
         value: { value },
-        // defaultCountry: 'FR',
         onChange: (newValue: any) => {
-          //   changeValidate(e.target.value, formList[1]);
-
           setValue(newValue);
+
+          const { setError } = formList[3];
+
+          setError(
+            !matchIsValidTel(newValue, {
+              onlyCountries: ['FR', 'BE', 'CN', 'US', 'CA', 'JP', 'KR', 'TW', 'HK', 'MO', 'SG', 'MY', 'TH', 'VN'],
+            }),
+          );
         },
       },
       syncError: false,
       setError: setPhoneError,
 
       validate: (value: string) => {
-        const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+        const reg = /^(\d{3})[- ]?(\d{3})[- ]?(\d{4})$/;
         return reg.test(value);
       },
     },
@@ -158,14 +187,14 @@ export default function NewUser() {
         helperText: locationError ? 'Email is invalid or already taken.' : '',
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, formList[1]);
+          changeValidate(e.target.value, formList[4]);
         },
       },
       syncError: false,
       setError: setLocationError,
 
       validate: (value: string) => {
-        const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+        const reg = /^[A-Za-z0-9]{0,100}$/;
         return reg.test(value);
       },
     },
@@ -194,7 +223,7 @@ export default function NewUser() {
         },
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, formList[2], () => {
+          changeValidate(e.target.value, formList[5], () => {
             setPassword(e.target.value);
           });
         },
@@ -235,7 +264,7 @@ export default function NewUser() {
         },
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, formList[3]);
+          changeValidate(e.target.value, formList[6]);
         },
       },
 
@@ -284,40 +313,89 @@ export default function NewUser() {
       <Typography variant="h5">Create User</Typography>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: '1rem' }}>
-        <Grid sx={{ display: 'flex', flexWrap: 'wrap' }}>
-          {formList.map((item) =>
-            item.formProps.id === 'phone' ? (
-              <MuiTelInput
-                defaultCountry="CN"
-                color="success"
-                size="small"
-                key={item.formProps.name}
-                {...item.formProps}
-                value={value}
-                className={styles.textField}
+        <Box className={styles.container}>
+          <Card className={styles.uploadWrapper}>
+            <IconButton
+              component="label"
+              tabIndex={-1}
+              sx={{
+                // display: 'flex',
+                // alignItems: 'center',
+                // flexDirection: 'column',
+                // justifyContent: 'center',
+                width: '10rem',
+                height: '10rem',
+                borderRadius: '50%',
+                border: '1px dashed rgba(var(--no-data-color)/0.2)',
+                padding: '0.5rem',
+              }}
+            >
+              <VisuallyHiddenInput type="file" />
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  //   border: '1px dashed rgba(var(--no-data-color)/0.2)',
+                  backgroundColor: 'rgba(var(--palette-grey-500Channel)/0.08)',
+                }}
+              >
+                <CameraAltIcon />
+                <Typography variant="body2" display="block" mt="0.5rem">
+                  upload photo
+                </Typography>
+              </Box>
+            </IconButton>
+            <Box className={styles.uploadText}>
+              <Typography variant="body2" display="span">
+                Allowed *.jpeg, *.jpg, *.png, *.gif
+              </Typography>
+
+              <Typography variant="body2" display="span">
+                max size of 3 Mb
+              </Typography>
+            </Box>
+          </Card>
+          <Card className={styles.formData}>
+            <Box className={styles.textFieldContainer}>
+              {formList.map((item) =>
+                item.formProps.id === 'phone' ? (
+                  <MuiTelInput
+                    defaultCountry="CN"
+                    color="success"
+                    size="small"
+                    key={item.formProps.name}
+                    {...item.formProps}
+                    value={value}
+                    className={styles.textField}
+                  />
+                ) : (
+                  <TextField
+                    color="success"
+                    size="small"
+                    key={item.formProps.name}
+                    className={styles.textField}
+                    {...item.formProps}
+                  />
+                ),
+              )}
+            </Box>
+            <Box className={styles.submitWrapper}>
+              <CancelLoadingButton
+                id="cancel"
+                loading={loadingButton}
+                onClick={() => {
+                  //   setLoadingButton(true);
+                  navigate(`/users`);
+                }}
               />
-            ) : (
-              <TextField
-                color="success"
-                size="small"
-                key={item.formProps.name}
-                className={styles.textField}
-                {...item.formProps}
-              />
-            ),
-          )}
-        </Grid>
-        <Divider sx={{ mt: '1rem', mb: '2rem' }} />
-        <Box>
-          <CancelLoadingButton
-            id="cancel"
-            loading={loadingButton}
-            onClick={() => {
-              //   setLoadingButton(true);
-              navigate(`/users`);
-            }}
-          />
-          <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />
+              <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />
+            </Box>
+          </Card>
         </Box>
       </Box>
     </Box>

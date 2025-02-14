@@ -16,6 +16,8 @@ const Card: React.FC<CardProps> = ({ children, className, id }) => {
         borderRadius: '0.8rem',
         transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)',
         zIndex: 0,
+        color: 'var(--palette-color)',
+        backgroundImage: 'none',
       }}
       id={id}
       className={className}

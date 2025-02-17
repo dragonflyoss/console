@@ -397,7 +397,7 @@ export default function Users() {
                       aria-haspopup="true"
                       sx={{ position: 'relative' }}
                     >
-                      <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                      <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                     </IconButton>
                     <Menu
                       anchorEl={anchorElement}

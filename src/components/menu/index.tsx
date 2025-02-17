@@ -39,9 +39,9 @@ import { ReactComponent as SelectedJob } from '../../assets/images/menu/selected
 import { ReactComponent as User } from '../../assets/images/menu/user.svg';
 import { ReactComponent as SelectedUser } from '../../assets/images/menu/selected-user.svg';
 import { ReactComponent as Logo } from '../../assets/images/header/logo.svg';
-import { ReactComponent as Github } from '../../assets/images/header/github.svg';
 import { ReactComponent as Expand } from '../../assets/images/menu/expand.svg';
 import { ReactComponent as Closure } from '../../assets/images/menu/closure.svg';
+import HeaderLayout from '../dark-layout';
 
 interface MyContextType {
   user: getUserResponse;
@@ -125,9 +125,6 @@ export default function Layout(props: any) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const theme = useTheme();
-  const colorMode = useContext(ColorModeContext);
-
   useEffect(() => {
     (async function () {
       try {
@@ -193,9 +190,9 @@ export default function Layout(props: any) {
     setExpandedMenu(null);
   };
 
-  // useEffect(() => {
-  //   localStorage.setItem('compactLayout', compactLayout ? 'true' : 'false');
-  // }, [compactLayout]);
+  useEffect(() => {
+    localStorage.setItem('compactLayout', compactLayout ? 'true' : 'false');
+  }, [compactLayout]);
 
   const handleUserUpdate = (newUser: getUserResponse) => {
     setUser(newUser);
@@ -317,24 +314,95 @@ export default function Layout(props: any) {
           <main>{props.children}</main>
         ) : (
           <Box className={styles.container}>
-            <CssBaseline />
             <Box className={styles.navigationBarContainer}>
               {compactLayout ? (
-                <List component="nav" aria-label="main mailbox folders">
-                  <RouterLink href="/clusters" color="inherit" underline="none" className={styles.shrinkTitle}>
-                    <Logo className={styles.logo} />
-                  </RouterLink>
-                  {menu.map((items, index) => {
-                    return items?.menuProps ? (
-                      <>
+                <Grid sx={{ width: '6rem' }}>
+                  <List component="nav" aria-label="main mailbox folders">
+                    <RouterLink href="/clusters" color="inherit" underline="none" className={styles.shrinkTitle}>
+                      <Logo className={styles.logo} />
+                    </RouterLink>
+                    {menu.map((items, index) => {
+                      return items?.menuProps ? (
+                        <>
+                          <ListItemButton
+                            key={index}
+                            selected={(location.pathname.split('/')[1] || '') === items.label}
+                            onClick={(event: any) => {
+                              setAnchorEl(event.currentTarget);
+                              setExpandedMenu(items.label);
+                            }}
+                            sx={{
+                              '&.Mui-selected': {
+                                backgroundColor: 'var(--menu-background-color)',
+                                color: 'var(--description-color)',
+                              },
+                              '&.Mui-selected:hover': {
+                                backgroundColor: 'var(--hover-menu-background-color)',
+                                color: 'var(--description-color)',
+                              },
+                              height: '4rem',
+                              width: '5rem',
+                              borderRadius: '0.2rem',
+                              m: '0.4rem',
+                              color: 'var(--palette-text-secondary)',
+                              justifyContent: 'center',
+                              position: 'relative',
+                            }}
+                          >
+                            <ChevronRightOutlinedIcon className={styles.shrinkChevronRightOutlinedIcon} />
+                            <Box className={styles.shrinkMenuContainer}>
+                              {items.icon}
+                              <Typography variant="caption" display="block" className={styles.shrinkMenuText}>
+                                {items.text}
+                              </Typography>
+                            </Box>
+                          </ListItemButton>
+                          {items?.menuProps && expandedMenu === items.label && (
+                            <Menu
+                              anchorEl={anchorEl}
+                              id={items.label}
+                              open={Boolean(anchorEl)}
+                              onClose={handleMouseLeave}
+                              anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'right',
+                              }}
+                              sx={{
+                                '& .MuiMenu-paper': {
+                                  boxShadow: 'var(--palette-menu-shadow);',
+                                  borderRadius: '0.6rem',
+                                },
+                                '& .MuiMenu-list': {
+                                  width: '8rem',
+                                  p: '0',
+                                },
+                              }}
+                            >
+                              <Box className={styles.profileMenu}>
+                                {items.menuProps.map((subItem) => (
+                                  <MenuItem
+                                    sx={{ borderRadius: 'var(--menu-border-radius)' }}
+                                    key={subItem.label}
+                                    onClick={() => {
+                                      setAnchorEl(null);
+                                      setExpandedMenu(null);
+                                    }}
+                                    component={Link}
+                                    to={subItem.href}
+                                  >
+                                    {subItem.text}
+                                  </MenuItem>
+                                ))}
+                              </Box>
+                            </Menu>
+                          )}
+                        </>
+                      ) : (
                         <ListItemButton
-                          className={styles.menu}
                           key={index}
                           selected={(location.pathname.split('/')[1] || '') === items.label}
-                          onClick={(event: any) => {
-                            setAnchorEl(event.currentTarget);
-                            setExpandedMenu(items.label);
-                          }}
+                          component={Link}
+                          to={items.href}
                           sx={{
                             '&.Mui-selected': {
                               backgroundColor: 'var(--menu-background-color)',
@@ -345,15 +413,13 @@ export default function Layout(props: any) {
                               color: 'var(--description-color)',
                             },
                             height: '4rem',
-                            width: '5.4rem',
+                            width: '5rem',
                             borderRadius: '0.2rem',
                             m: '0.4rem',
                             color: 'var(--palette-text-secondary)',
                             justifyContent: 'center',
-                            position: 'relative',
                           }}
                         >
-                          <ChevronRightOutlinedIcon className={styles.shrinkChevronRightOutlinedIcon} />
                           <Box className={styles.shrinkMenuContainer}>
                             {items.icon}
                             <Typography variant="caption" display="block" className={styles.shrinkMenuText}>
@@ -361,82 +427,12 @@ export default function Layout(props: any) {
                             </Typography>
                           </Box>
                         </ListItemButton>
-                        {items?.menuProps && expandedMenu === items.label && (
-                          <Menu
-                            anchorEl={anchorEl}
-                            id={items.label}
-                            open={Boolean(anchorEl)}
-                            onClose={handleMouseLeave}
-                            anchorOrigin={{
-                              vertical: 'bottom',
-                              horizontal: 'right',
-                            }}
-                            sx={{
-                              '& .MuiMenu-paper': {
-                                boxShadow: 'var(--palette-menu-shadow);',
-                                borderRadius: '0.6rem',
-                              },
-                              '& .MuiMenu-list': {
-                                width: '8rem',
-                                p: '0',
-                              },
-                            }}
-                          >
-                            <Box className={styles.profileMenu}>
-                              {items.menuProps.map((subItem) => (
-                                <MenuItem
-                                  sx={{ borderRadius: 'var(--menu-border-radius);' }}
-                                  key={subItem.label}
-                                  onClick={() => {
-                                    setAnchorEl(null);
-                                    setExpandedMenu(null);
-                                  }}
-                                  component={Link}
-                                  to={subItem.href}
-                                >
-                                  {subItem.text}
-                                </MenuItem>
-                              ))}
-                            </Box>
-                          </Menu>
-                        )}
-                      </>
-                    ) : (
-                      <ListItemButton
-                        className={styles.menu}
-                        key={index}
-                        selected={(location.pathname.split('/')[1] || '') === items.label}
-                        component={Link}
-                        to={items.href}
-                        sx={{
-                          '&.Mui-selected': {
-                            backgroundColor: 'var(--menu-background-color)',
-                            color: 'var(--description-color)',
-                          },
-                          '&.Mui-selected:hover': {
-                            backgroundColor: 'var(--hover-menu-background-color)',
-                            color: 'var(--description-color)',
-                          },
-                          height: '4rem',
-                          width: '5.4rem',
-                          borderRadius: '0.2rem',
-                          m: '0.4rem',
-                          color: 'var(--palette-text-secondary)',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Box className={styles.shrinkMenuContainer}>
-                          {items.icon}
-                          <Typography variant="caption" display="block" className={styles.shrinkMenuText}>
-                            {items.text}
-                          </Typography>
-                        </Box>
-                      </ListItemButton>
-                    );
-                  })}
-                </List>
+                      );
+                    })}
+                  </List>
+                </Grid>
               ) : (
-                <Grid sx={{ pl: '1rem', pr: '1rem' }}>
+                <Grid sx={{ width: '16rem' }}>
                   <List component="nav" aria-label="main mailbox folders">
                     <RouterLink href="/clusters" color="inherit" underline="none" className={styles.title}>
                       <Logo className={styles.logo} />
@@ -464,6 +460,8 @@ export default function Layout(props: any) {
                               height: '2.6rem',
                               borderRadius: '0.2rem',
                               color: 'var(--palette-text-secondary)',
+                              m: '0.6rem 0.8rem',
+                              p: '0,2rem',
                             }}
                           >
                             {items.icon}
@@ -477,7 +475,6 @@ export default function Layout(props: any) {
                               {items.menuProps?.map((item) => {
                                 return (
                                   <ListItemButton
-                                    className={styles.expandMenu}
                                     selected={(location.pathname.split('/')[2] || '') === item.label}
                                     component={Link}
                                     to={item.href || ''}
@@ -492,8 +489,8 @@ export default function Layout(props: any) {
                                       },
                                       height: '2.4rem',
                                       borderRadius: '0.2rem',
-                                      pl: '1rem',
-                                      mt: '0.8rem',
+                                      m: '0.6rem 0.8rem',
+                                      p: '0,2rem',
                                       color: 'var(--palette-text-secondary)',
                                     }}
                                   >
@@ -508,7 +505,6 @@ export default function Layout(props: any) {
                         </Box>
                       ) : (
                         <ListItemButton
-                          className={styles.menu}
                           key={items.href}
                           selected={(location.pathname.split('/')[1] || '') === items.label}
                           component={Link}
@@ -524,9 +520,9 @@ export default function Layout(props: any) {
                             },
                             height: '2.6rem',
                             borderRadius: '0.2rem',
-                            mb: '0.4rem',
-                            mt: '0.4rem',
                             color: 'var(--palette-text-secondary)',
+                            m: '0.6rem 0.8rem',
+                            p: '0,2rem',
                           }}
                         >
                           {items.icon}
@@ -542,7 +538,6 @@ export default function Layout(props: any) {
               <Box className={styles.compactLayout}>
                 <IconButton
                   id="expand"
-                  // className={styles.compactLayout}
                   sx={{
                     p: 0,
                   }}
@@ -554,11 +549,7 @@ export default function Layout(props: any) {
                 </IconButton>
               </Box>
             </Box>
-            <Box
-              component="main"
-              className={styles.main}
-              sx={{ paddingLeft: compactLayout ? '7rem !important' : '16rem !important' }}
-            >
+            <Box className={styles.layout} sx={{ paddingLeft: compactLayout ? '6rem !important' : '16rem !important' }}>
               <header className={styles.header}>
                 <Box sx={{ display: 'flex' }}>
                   <Box
@@ -569,18 +560,7 @@ export default function Layout(props: any) {
                     }}
                   >
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <IconButton onClick={colorMode.toggleColorMode} color="inherit">
-                        {theme.palette.mode === 'dark' ? (
-                          <Brightness7Icon sx={{ width: '1.8rem', height: '1.8rem' }} />
-                        ) : (
-                          <Brightness4Icon sx={{ width: '1.8rem', height: '1.8rem' }} />
-                        )}
-                      </IconButton>
-                      <a href="https://github.com/dragonflyoss/dragonfly" rel="noopener" target="_blank">
-                        <IconButton>
-                          <Github className={styles.github} />
-                        </IconButton>
-                      </a>
+                      <HeaderLayout />
                       <Avatar
                         className={styles.avatar}
                         src={user?.avatar}
@@ -638,7 +618,6 @@ export default function Layout(props: any) {
                           m: '0.2rem 0',
                         }}
                       />
-
                       <MenuItem
                         id="profile-menu"
                         onClick={() => {
@@ -650,7 +629,7 @@ export default function Layout(props: any) {
                         <ListItemIcon>
                           <PersonAdd fontSize="small" className={styles.menuItemIcon} />
                         </ListItemIcon>
-                        <Typography variant="body2" className={styles.menuText}>
+                        <Typography variant="body2" className={styles.avatarMenu}>
                           Profile
                         </Typography>
                       </MenuItem>
@@ -658,7 +637,7 @@ export default function Layout(props: any) {
                         <ListItemIcon>
                           <Logout fontSize="small" className={styles.menuItemIcon} />
                         </ListItemIcon>
-                        <Typography variant="body2" className={styles.menuText}>
+                        <Typography variant="body2" className={styles.avatarMenu}>
                           Logout
                         </Typography>
                       </MenuItem>
@@ -666,9 +645,10 @@ export default function Layout(props: any) {
                   </Menu>
                 </Box>
               </header>
-              <Box sx={{ padding: '1rem 2rem' }}>
+              <CssBaseline />
+              <main className={styles.main}>
                 <Outlet />
-              </Box>
+              </main>
             </Box>
           </Box>
         )}

@@ -1,3 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" class="icon" viewBox="0 0 1024 1024">
-    <path fill="#e4e5e5" d="M0 512a512 512 0 1 0 1024 0A512 512 0 1 0 0 512Z" />
+    <path fill="currentColor" d="M0 512a512 512 0 1 0 1024 0A512 512 0 1 0 0 512Z" />
 </svg>

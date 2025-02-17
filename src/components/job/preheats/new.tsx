@@ -13,8 +13,7 @@ import {
   MenuItem,
   Checkbox,
   ListItemText,
-  createTheme,
-  ThemeProvider,
+  Link as RouterLink,
   FormHelperText,
   Grid,
   Chip,
@@ -23,12 +22,13 @@ import {
   Alert,
   Paper,
   SelectChangeEvent,
+  Breadcrumbs,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ClearIcon from '@mui/icons-material/Clear';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createJob, getClusters } from '../../../lib/api';
 import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './new.module.css';
@@ -387,6 +387,21 @@ export default function NewPreheat() {
       <Typography variant="h5" fontFamily="mabry-bold">
         Create Preheat
       </Typography>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mt: '1rem', mb: '2rem' }}
+      >
+        <Typography color="text.primary">Job</Typography>
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/developer/personal-access-tokens`}>
+          Preheats
+        </RouterLink>
+        <Typography color="inherit">New preheat</Typography>
+      </Breadcrumbs>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <FormControl fullWidth>
@@ -497,68 +512,69 @@ export default function NewPreheat() {
                 </Select>
               </FormControl>
               {argsForm.map((item) => {
-                return (
-                  <>
-                    {item.id === 'filteredQueryParams' ? (
-                      <Autocomplete
-                        freeSolo
-                        multiple
-                        disableClearable
-                        {...item.filterFormProps}
-                        size="small"
-                        className={styles.filterInput}
-                        renderInput={(params) => (
-                          <TextField
-                            margin="normal"
-                            {...params}
-                            InputProps={{
-                              ...params.InputProps,
-                              endAdornment: (
-                                <>
-                                  {params.InputProps.endAdornment}
-                                  <Tooltip
-                                    title={
-                                      'By setting the filter parameter, you can specify the file type of the resource that needs to be preheated. The filter is used to generate a unique preheat task and filter unnecessary query parameters in the URL, separated by & characters.'
-                                    }
-                                    placement="top"
-                                  >
-                                    <HelpIcon
-                                      color="disabled"
-                                      sx={{
-                                        width: '0.8rem',
-                                        height: '0.8rem',
-                                        mr: '0.3rem',
-                                        ':hover': { color: 'var(--description-color)' },
-                                      }}
-                                    />
-                                  </Tooltip>
-                                </>
-                              ),
-                            }}
-                            color="success"
-                            {...item.formProps}
-                          />
-                        )}
-                      />
-                    ) : item.formProps.id === 'tag' ? (
-                      <TextField
-                        color="success"
-                        margin="normal"
-                        size="small"
-                        {...item.formProps}
-                        sx={{ marginLeft: '1rem' }}
-                        className={styles.textField}
-                      />
-                    ) : (
-                      <TextField
-                        color="success"
-                        margin="normal"
-                        size="small"
-                        {...item.formProps}
-                        className={styles.filterInput}
-                      />
-                    )}
-                  </>
+                return item.id === 'filteredQueryParams' ? (
+                  <Box key={item.formProps.id} sx={{ width: '100%' }}>
+                    <Autocomplete
+                      freeSolo
+                      multiple
+                      disableClearable
+                      {...item.filterFormProps}
+                      size="small"
+                      className={styles.filterInput}
+                      renderInput={(params) => (
+                        <TextField
+                          margin="normal"
+                          {...params}
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <>
+                                {params.InputProps.endAdornment}
+                                <Tooltip
+                                  title={
+                                    'By setting the filter parameter, you can specify the file type of the resource that needs to be preheated. The filter is used to generate a unique preheat task and filter unnecessary query parameters in the URL, separated by & characters.'
+                                  }
+                                  placement="top"
+                                >
+                                  <HelpIcon
+                                    color="disabled"
+                                    sx={{
+                                      width: '0.8rem',
+                                      height: '0.8rem',
+                                      mr: '0.3rem',
+                                      ':hover': { color: 'var(--description-color)' },
+                                    }}
+                                  />
+                                </Tooltip>
+                              </>
+                            ),
+                          }}
+                          color="success"
+                          {...item.formProps}
+                        />
+                      )}
+                    />
+                  </Box>
+                ) : item.formProps.id === 'tag' ? (
+                  <TextField
+                    key={item.formProps.id}
+                    color="success"
+                    margin="normal"
+                    size="small"
+                    {...item.formProps}
+                    sx={{ marginLeft: '1rem' }}
+                    className={styles.textField}
+                  />
+                ) : (
+                  <Box key={item.formProps.id} sx={{ width: '100%' }}>
+                    <TextField
+                      color="success"
+                      margin="normal"
+                      size="small"
+                      {...item.formProps}
+                      className={styles.filterInput}
+                    />
+                  </Box>
                 );
               })}
             </Box>

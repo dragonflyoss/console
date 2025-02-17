@@ -21,6 +21,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import Card from '../card';
+import { ReactComponent as Information } from '../../assets/images/cluster/information-cluster.svg';
 
 export default function EditCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -704,11 +705,7 @@ export default function EditCluster() {
       <Typography variant="h5">Update Cluster</Typography>
       <Divider sx={{ mt: '1rem', mb: '1rem' }} />
       <Card className={styles.header}>
-        <Box
-          component="img"
-          src="/icons/cluster/information-cluster.svg"
-          sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }}
-        />
+        <Information className={styles.informationIcon} />
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography component="span" variant="body1" fontFamily="mabry-bold">

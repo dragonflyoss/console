@@ -32,7 +32,7 @@ function App() {
         palette: {
           mode,
           primary: {
-            main: '#1C293A',
+            main: mode === 'light' ? '#1C293A' : 'rgba(255, 255, 255, 0.7)',
           },
         },
       }),

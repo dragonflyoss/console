@@ -441,7 +441,7 @@ export default function Peer() {
       </Snackbar>
       <Box className={styles.header}>
         <Box className={styles.headerTitle}>
-          <Typography variant="h6" fontFamily="mabry-bold" pr="0.4rem">
+          <Typography variant="h5" pr="0.4rem">
             Peers
           </Typography>
           <MuiTooltip

@@ -64,7 +64,7 @@ export default function Preheats() {
         setPreheatTotalPages(jobs.total_page || 1);
 
         const states = jobs.data.filter(
-          (obj) => obj.result.state !== 'SUCCESS' && obj.result.state !== 'FAILURE',
+          (obj) => obj?.result?.state !== 'SUCCESS' && obj?.result?.state !== 'FAILURE',
         ).length;
 
         states === 0 ? setShouldPoll(false) : setShouldPoll(true);
@@ -95,7 +95,7 @@ export default function Preheats() {
             setPreheatTotalPages(jobs.total_page || 1);
 
             const states = jobs.data.filter(
-              (obj) => obj.result.state !== 'SUCCESS' && obj.result.state !== 'FAILURE',
+              (obj) => obj?.result?.state !== 'SUCCESS' && obj?.result?.state !== 'FAILURE',
             ).length;
 
             states === 0 ? setShouldPoll(false) : setShouldPoll(true);
@@ -149,19 +149,7 @@ export default function Preheats() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Breadcrumbs
-        separator={
-          <Box
-            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
-          />
-        }
-        aria-label="breadcrumb"
-        sx={{ mb: '1rem' }}
-      >
-        <Typography>jobs</Typography>
-        <Typography color="inherit">preheats</Typography>
-      </Breadcrumbs>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '2rem' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '1rem' }}>
         <Typography variant="h5">Preheats</Typography>
         <Button
           size="small"
@@ -179,6 +167,18 @@ export default function Preheats() {
           add preheat
         </Button>
       </Box>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '2rem' }}
+      >
+        <Typography color="text.primary">Job</Typography>
+        <Typography color="inherit">Preheats</Typography>
+      </Breadcrumbs>
       <Card>
         <Box
           sx={{
@@ -254,12 +254,12 @@ export default function Preheats() {
                   <Box key={item.id} id={`list-${item.id}`}>
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                       <Box className={styles.information}>
-                        {item.result.state === 'SUCCESS' ? (
+                        {item?.result?.state === 'SUCCESS' ? (
                           <Success id={`SUCCESS-${item.id}`} className={styles.statusIcon} />
-                        ) : item.result.state === 'FAILURE' ? (
+                        ) : item?.result?.state === 'FAILURE' ? (
                           <Failure id={`FAILURE-${item.id}`} className={styles.statusIcon} />
                         ) : (
-                          <Pending id={`PENDING-${item.id}`} className={styles.statusIcon} />
+                          <Pending id={`PENDING-${item.id}`} className={styles.pendingIcon} />
                         )}
                         <Box className={styles.informationContent}>
                           <Typography id={`id-${item?.id}`} variant="body1" fontFamily="mabry-bold">
@@ -308,12 +308,12 @@ export default function Preheats() {
                 ) : (
                   <Box key={item.id} id={`list-${item.id}`} sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                     <Box className={styles.information}>
-                      {item.result.state === 'SUCCESS' ? (
+                      {item?.result?.state === 'SUCCESS' ? (
                         <Success id={`SUCCESS-${item.id}`} className={styles.statusIcon} />
-                      ) : item.result.state === 'FAILURE' ? (
+                      ) : item?.result?.state === 'FAILURE' ? (
                         <Failure id={`FAILURE-${item.id}`} className={styles.statusIcon} />
                       ) : (
-                        <Pending id={`PENDING-${item.id}`} className={styles.statusIcon} />
+                        <Pending id={`PENDING-${item.id}`} className={styles.pendingIcon} />
                       )}
                       <Box className={styles.informationContent}>
                         <Typography id={`id-${item?.id}`} variant="body1" fontFamily="mabry-bold">
@@ -366,6 +366,7 @@ export default function Preheats() {
               navigate(`/jobs/preheats${newPage > 1 ? `?page=${newPage}` : ''}`);
             }}
             boundaryCount={1}
+            color="primary"
             size="small"
             id="preheat-pagination"
           />

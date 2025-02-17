@@ -545,9 +545,7 @@ export default function ShowCluster() {
         </Alert>
       </Snackbar>
       <Box className={styles.openDeleteInactiveDialog}>
-        <Typography variant="h6" fontFamily="mabry-bold">
-          Seed Peers
-        </Typography>
+        <Typography variant="h5">Seed Peers</Typography>
         <MuiTooltip title="Delete inactive seed peers." placement="top">
           <Button
             variant="contained"
@@ -1159,7 +1157,12 @@ export default function ShowCluster() {
               </Typography>
               <Divider sx={{ mb: '0.2rem' }} />
               {statusList.map((item, index) => (
-                <MenuItem key={item.name} value={item.name} onClick={() => handleMenuItemClick(item)}>
+                <MenuItem
+                  className={styles.menuItem}
+                  key={item.name}
+                  value={item.name}
+                  onClick={() => handleMenuItemClick(item)}
+                >
                   {item.lable}
                 </MenuItem>
               ))}
@@ -1241,7 +1244,7 @@ export default function ShowCluster() {
                         aria-expanded={Boolean(seedPeerAnchorElement) ? 'true' : undefined}
                         className={styles.moreVertIcon}
                       >
-                        <MoreVertIcon color="action" />
+                        <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                       </IconButton>
                       <Menu
                         anchorEl={seedPeerAnchorElement}
@@ -1258,16 +1261,20 @@ export default function ShowCluster() {
                         }}
                         sx={{
                           '& .MuiMenu-paper': {
-                            boxShadow: 'var(--palette-menu-shadow)',
+                            boxShadow: 'var(--palette-menu-shadow);',
+                            backgroundImage:
+                              'url(../../../assets/images/menu/cyan-blur.png), url(../../../assets/images/menu/red-blur.png)',
+                            borderRadius: '0.6rem',
                           },
                           '& .MuiMenu-list': {
-                            p: 0,
                             width: '9rem',
+                            p: '0',
                           },
                         }}
                       >
                         <Box className={styles.menu}>
                           <MenuItem
+                            className={styles.menuItem}
                             id={`view-${seedPeerSelectedRow?.host_name}`}
                             onClick={() => {
                               navigate(`/clusters/${params.id}/seed-peers/${seedPeerSelectedRow?.id}`);
@@ -1282,6 +1289,7 @@ export default function ShowCluster() {
                             </Typography>
                           </MenuItem>
                           <MenuItem
+                            className={styles.menuItem}
                             id={`delete-${seedPeerSelectedRow?.host_name}`}
                             onClick={() => {
                               openHandleSeedPeer(seedPeerSelectedRow);
@@ -1573,7 +1581,7 @@ export default function ShowCluster() {
                                 aria-haspopup="true"
                                 aria-expanded={Boolean(seedPeerAnchorElement) ? 'true' : undefined}
                               >
-                                <MoreVertIcon color="action" />
+                                <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                               </IconButton>
                               <Menu
                                 anchorEl={seedPeerAnchorElement}
@@ -1603,6 +1611,7 @@ export default function ShowCluster() {
                               >
                                 <Box className={styles.menu}>
                                   <MenuItem
+                                    className={styles.menuItem}
                                     id={`view-${seedPeerSelectedRow?.host_name}`}
                                     onClick={() => {
                                       navigate(`/clusters/${params.id}/seed-peers/${seedPeerSelectedRow?.id}`);
@@ -1617,6 +1626,7 @@ export default function ShowCluster() {
                                     </Typography>
                                   </MenuItem>
                                   <MenuItem
+                                    className={styles.menuItem}
                                     id={`delete-${seedPeerSelectedRow?.host_name}`}
                                     onClick={() => {
                                       openHandleSeedPeer(seedPeerSelectedRow);
@@ -1703,7 +1713,7 @@ export default function ShowCluster() {
 
               navigate(`${location.pathname}${queryString}`);
             }}
-            // color="primary"
+            color="primary"
             size="small"
             id="seed-peer-pagination"
           />

@@ -27,3 +27,10 @@
 .argsWrapper:nth-child(n + 3) {
   width: 100%;
 }
+
+.argsWrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: calc(1.5rem);
+  padding: 1.5rem;
+}

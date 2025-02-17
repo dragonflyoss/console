@@ -606,9 +606,7 @@ export default function ShowCluster() {
         </Alert>
       </Snackbar>
       <Box className={styles.openDeleteInactiveDialog}>
-        <Typography variant="h6" fontFamily="mabry-bold">
-          Schedulers
-        </Typography>
+        <Typography variant="h5">Schedulers</Typography>
         <MuiTooltip title="Delete inactive schedulers." placement="top">
           <Button
             variant="contained"
@@ -802,7 +800,12 @@ export default function ShowCluster() {
               </Typography>
               <Divider sx={{ mb: '0.2rem' }} />
               {statusList.map((item, index) => (
-                <MenuItem key={item.name} value={item.name} onClick={() => handleMenuItemClick(item)}>
+                <MenuItem
+                  className={styles.menuItem}
+                  key={item.name}
+                  value={item.name}
+                  onClick={() => handleMenuItemClick(item)}
+                >
                   {item.lable}
                 </MenuItem>
               ))}
@@ -884,7 +887,7 @@ export default function ShowCluster() {
                         aria-expanded={Boolean(schedulerAnchorElement) ? 'true' : undefined}
                         className={styles.moreVertIcon}
                       >
-                        <MoreVertIcon color="action" />
+                        <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                       </IconButton>
                       <Menu
                         anchorEl={schedulerAnchorElement}
@@ -914,6 +917,7 @@ export default function ShowCluster() {
                       >
                         <Box className={styles.menu}>
                           <MenuItem
+                            className={styles.menuItem}
                             id={`view-${schedulerSelectedRow?.id}`}
                             onClick={() => {
                               navigate(`/clusters/${params.id}/schedulers/${schedulerSelectedRow?.id}`);
@@ -929,6 +933,7 @@ export default function ShowCluster() {
                           </MenuItem>
                           {schedulerFeatures && schedulerFeatures.length > 0 ? (
                             <MenuItem
+                              className={styles.menuItem}
                               id={`edit-${schedulerSelectedRow?.id}`}
                               onClick={() => {
                                 setOpenSchedulerEditFeatures(true);
@@ -946,6 +951,7 @@ export default function ShowCluster() {
                             ''
                           )}
                           <MenuItem
+                            className={styles.menuItem}
                             id={`delete-${schedulerSelectedRow?.id}`}
                             onClick={() => {
                               openHandleScheduler(schedulerSelectedRow);
@@ -1236,7 +1242,7 @@ export default function ShowCluster() {
                               aria-haspopup="true"
                               aria-expanded={Boolean(schedulerAnchorElement) ? 'true' : undefined}
                             >
-                              <MoreVertIcon color="action" />
+                              <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                             </IconButton>
                             <Menu
                               anchorEl={schedulerAnchorElement}
@@ -1266,6 +1272,7 @@ export default function ShowCluster() {
                             >
                               <Box className={styles.menu}>
                                 <MenuItem
+                                  className={styles.menuItem}
                                   id={`view-${schedulerSelectedRow?.host_name}`}
                                   onClick={() => {
                                     navigate(`/clusters/${params.id}/schedulers/${schedulerSelectedRow?.id}`);

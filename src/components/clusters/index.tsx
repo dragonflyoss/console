@@ -40,15 +40,19 @@ import Card from '../card';
 import debounce from 'lodash/debounce';
 import SearchCircularProgress from '../circular-progress';
 import { ReactComponent as Round } from '../../assets/images/cluster/round.svg';
-import { ReactComponent as Cluster } from '../../assets/images/cluster/cluster.svg';
+// import { ReactComponent as Cluster } from '../../assets/images/cluster/cluster.svg';
 import { ReactComponent as Default } from '../../assets/images/cluster/default.svg';
 import { ReactComponent as Statistics } from '../../assets/images/cluster/peer/statistics.svg';
-import { ReactComponent as Scheduler } from '../../assets/images/cluster/scheduler.svg';
-import { ReactComponent as SeedPeer } from '../../assets/images/cluster/seed-peer.svg';
+// import { ReactComponent as Scheduler } from '../../assets/images/cluster/scheduler.svg';
+// import { ReactComponent as SeedPeer } from '../../assets/images/cluster/seed-peer.svg';
 import { ReactComponent as Active } from '../../assets/images/cluster/active.svg';
 import { ReactComponent as ClusterID } from '../../assets/images/cluster/id.svg';
 import { ReactComponent as IcContent } from '../../assets/images/cluster/scheduler/ic-content.svg';
 import { ReactComponent as NoCluster } from '../../assets/images/cluster/no-cluster.svg';
+
+import { ReactComponent as Cluster } from '../../assets/images/cluster/tab-cluster.svg';
+import { ReactComponent as Scheduler } from '../../assets/images/cluster/scheduler/tab-scheduler.svg';
+import { ReactComponent as SeedPeer } from '../../assets/images/cluster/seed-peer/tab-seed-peer.svg';
 
 // const theme = createTheme({
 //   // palette: {

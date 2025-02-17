@@ -16,8 +16,9 @@ import {
   Link as RouterLink,
   Divider,
   styled,
+  Breadcrumbs,
 } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { matchIsValidTel, MuiTelInput } from 'mui-tel-input';
 import styles from './new.module.css';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
@@ -25,6 +26,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import Card from '../card';
+import { signUp } from '../../lib/api';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -52,10 +54,11 @@ export default function NewUser() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
-  const [value, setValue] = useState('');
+  const [phone, setPhone] = useState('');
 
   const navigate = useNavigate();
   const location = useLocation();
+
   const changeValidate = (value: string, data: any, cb?: () => void) => {
     const { setError, validate } = data;
     setError(!validate(value));
@@ -69,14 +72,17 @@ export default function NewUser() {
       setShowConfirmPassword((show) => !show);
     }
   };
-  const handleChange = (newValue: string) => {
-    matchIsValidTel(newValue, {
-      onlyCountries: [], // optional,
-      excludedCountries: [], // optional
-      continents: [], // optional
-    }); // true | false
 
-    setValue(newValue);
+  const handleChange = (newValue: string, data: any, cb?: () => void) => {
+    setPhone(newValue);
+    const { setError } = data;
+    setError(
+      !matchIsValidTel(newValue, {
+        onlyCountries: ['FR', 'BE', 'CN', 'US', 'CA', 'JP', 'KR', 'TW', 'HK', 'MO', 'SG', 'MY', 'TH', 'VN'],
+      }),
+    );
+
+    cb && cb();
   };
 
   const formList = [
@@ -86,6 +92,7 @@ export default function NewUser() {
         label: 'Account',
         autoComplete: 'family-name',
         id: 'account',
+        required: true,
         placeholder: 'Enter your account',
         error: accountError,
         helperText: accountError ? 'Fill in the characters, the length is 3-10.' : '',
@@ -130,9 +137,9 @@ export default function NewUser() {
         label: 'Description',
         autoComplete: 'bio',
         id: 'bio',
-        placeholder: 'Enter your email',
+        placeholder: 'Enter your description',
         error: bioError,
-        helperText: bioError ? 'Email is invalid or already taken.' : '',
+        helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',
 
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[2]);
@@ -148,33 +155,20 @@ export default function NewUser() {
     },
     {
       formProps: {
-        name: 'Phone',
-        label: 'phone',
+        name: 'phone',
+        label: 'Phone',
         autoComplete: 'phone',
         id: 'phone',
         placeholder: 'Enter your phone',
         error: phoneError,
-        helperText: phoneError ? 'Phone is invalid or already taken.' : '',
-        value: { value },
+        helperText: phoneError ? 'Enter a valid phone number.' : '',
+        value: phone,
         onChange: (newValue: any) => {
-          setValue(newValue);
-
-          const { setError } = formList[3];
-
-          setError(
-            !matchIsValidTel(newValue, {
-              onlyCountries: ['FR', 'BE', 'CN', 'US', 'CA', 'JP', 'KR', 'TW', 'HK', 'MO', 'SG', 'MY', 'TH', 'VN'],
-            }),
-          );
+          handleChange(newValue, formList[3]);
         },
       },
       syncError: false,
       setError: setPhoneError,
-
-      validate: (value: string) => {
-        const reg = /^(\d{3})[- ]?(\d{3})[- ]?(\d{4})$/;
-        return reg.test(value);
-      },
     },
     {
       formProps: {
@@ -184,7 +178,7 @@ export default function NewUser() {
         id: 'location',
         placeholder: 'Enter your location',
         error: locationError,
-        helperText: locationError ? 'Email is invalid or already taken.' : '',
+        helperText: locationError ? 'Fill in the characters, the length is 0-100.' : '',
 
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[4]);
@@ -203,6 +197,7 @@ export default function NewUser() {
         name: 'password',
         label: 'Password',
         id: 'password',
+        required: true,
         placeholder: 'Enter your password',
         autoComplete: 'new-password',
         helperText: passwordError ? `At least 8-16 characters, with at least 1 lowercase letter and 1 number.` : '',
@@ -241,6 +236,7 @@ export default function NewUser() {
         name: 'confirmPassword',
         label: 'ConfirmPassword',
         id: 'confirmPassword',
+        required: true,
         type: showConfirmPassword ? 'text' : 'password',
         autoComplete: 'new-password',
         placeholder: 'Repeat your new password',
@@ -287,7 +283,57 @@ export default function NewUser() {
     setErrorMessage(false);
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    const account = event.currentTarget.elements.account.value;
+    const password = event.currentTarget.elements.password.value;
+    const email = event.currentTarget.elements.email.value;
+    const phone = event.currentTarget.elements.phone.value;
+    const location = event.currentTarget.elements.location.value;
+    const bio = event.currentTarget.elements.bio.value;
+
+    const data = new FormData(event.currentTarget);
+
+    formList.forEach((item) => {
+      const value = data.get(item.formProps.name);
+
+      if (item.validate) {
+        item.setError(!item.validate(value as string));
+        item.syncError = !item.validate(value as string);
+      } else {
+        item.setError(
+          !matchIsValidTel(phone, {
+            onlyCountries: ['FR', 'BE', 'CN', 'US', 'CA', 'JP', 'KR', 'TW', 'HK', 'MO', 'SG', 'MY', 'TH', 'VN'],
+          }),
+        );
+
+        item.syncError = !matchIsValidTel(phone, {
+          onlyCountries: ['FR', 'BE', 'CN', 'US', 'CA', 'JP', 'KR', 'TW', 'HK', 'MO', 'SG', 'MY', 'TH', 'VN'],
+        });
+      }
+    });
+
+    const canSubmit = Boolean(!formList.filter((item) => item.syncError).length);
+
+    if (canSubmit) {
+      try {
+        await signUp({
+          name: account,
+          password: password,
+          email: email,
+          bio: bio,
+          phone: phone,
+          location: location,
+        });
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(true);
+          setErrorMessageText(error.message);
+        }
+      }
+    }
+  };
+
   return (
     <Box>
       <Snackbar
@@ -310,9 +356,22 @@ export default function NewUser() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography variant="h5">Create User</Typography>
-      <Divider sx={{ mt: 2, mb: 2 }} />
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: '1rem' }}>
+      <Typography variant="h5">Create a new user</Typography>
+      <Breadcrumbs
+        sx={{ m: '1rem 0' }}
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+      >
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/user`}>
+          User
+        </RouterLink>
+        <Typography color="inherit">New user</Typography>
+      </Breadcrumbs>
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: '2rem' }}>
         <Box className={styles.container}>
           <Card className={styles.uploadWrapper}>
             <IconButton
@@ -370,7 +429,7 @@ export default function NewUser() {
                     size="small"
                     key={item.formProps.name}
                     {...item.formProps}
-                    value={value}
+                    // value={phone}
                     className={styles.textField}
                   />
                 ) : (

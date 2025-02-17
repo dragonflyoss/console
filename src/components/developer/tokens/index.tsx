@@ -169,19 +169,7 @@ export default function PersonalAccessTokens() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Breadcrumbs
-        separator={
-          <Box
-            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
-          />
-        }
-        aria-label="breadcrumb"
-        sx={{ mb: '1rem' }}
-      >
-        <Typography color="text.primary">developer</Typography>
-        <Typography color="inherit">personal access tokens</Typography>
-      </Breadcrumbs>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: '1rem' }}>
         <Typography variant="h5">Personal access tokens</Typography>
         <Button
           size="small"
@@ -199,6 +187,18 @@ export default function PersonalAccessTokens() {
           Add Personal access tokens
         </Button>
       </Box>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '1rem' }}
+      >
+        <Typography color="text.primary">developer</Typography>
+        <Typography color="inherit">personal access tokens</Typography>
+      </Breadcrumbs>
       <Typography variant="subtitle2" mb="1.5rem" mt="1rem" color="var(--text-palette-text-secondary)">
         Tokens you have generated that can be used to access the Dragonfly API.
       </Typography>
@@ -385,12 +385,7 @@ export default function PersonalAccessTokens() {
               setTokensPage(newPage);
               navigate(`/developer/personal-access-tokens${newPage > 1 ? `?page=${newPage}` : ''}`);
             }}
-            sx={{
-              '& .Mui-selected': {
-                backgroundColor: 'var(--button-color)!important',
-                color: '#FFF',
-              },
-            }}
+            color="primary"
             size="small"
           />
         </Box>

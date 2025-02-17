@@ -9,13 +9,14 @@ import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import Rotation from '../rotation';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { signIn } from '../../lib/api';
 import styles from './index.module.css';
-import { Alert, Backdrop, Snackbar, Link as RouterLink, Button } from '@mui/material';
+import { Alert, Backdrop, Snackbar, Link as RouterLink, Button, useTheme } from '@mui/material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { setPageTitle } from '../../lib/utils';
 import { ReactComponent as Login } from '../../assets/images/login/login.svg';
+import HeaderLayout from '../dark-layout';
 
 export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -182,6 +183,9 @@ export default function SignIn() {
         <Rotation />
       </Grid>
       <Grid item xs={6} className={styles.container}>
+        <Box className={styles.header}>
+          <HeaderLayout />
+        </Box>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <Box

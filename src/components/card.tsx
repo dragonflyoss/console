@@ -18,6 +18,7 @@ const Card: React.FC<CardProps> = ({ children, className, id }) => {
         zIndex: 0,
         color: 'var(--palette-color)',
         backgroundImage: 'none',
+        overflow: 'hidden',
       }}
       id={id}
       className={className}

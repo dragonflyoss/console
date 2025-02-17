@@ -594,7 +594,7 @@ export default function Clear() {
           display: 'inline-flex',
           flexWrap: 'wrap',
           mb: '2rem',
-          backgroundColor: '#EEEEEE',
+          backgroundColor: '#e9e9e9',
         })}
       >
         <StyledToggleButtonGroup

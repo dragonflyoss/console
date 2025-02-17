@@ -141,6 +141,8 @@ export default function ShowPreheat() {
           {errorMessageText}
         </Alert>
       </Snackbar>
+      <Typography variant="h5">Preheat</Typography>
+
       <Breadcrumbs
         separator={
           <Box
@@ -148,7 +150,7 @@ export default function ShowPreheat() {
           />
         }
         aria-label="breadcrumb"
-        sx={{ mb: '1rem' }}
+        sx={{ mb: '2rem', mt: '1rem' }}
       >
         <Typography>jobs</Typography>
         <RouterLink component={Link} underline="hover" color="inherit" to={`/jobs/preheats`}>
@@ -156,9 +158,6 @@ export default function ShowPreheat() {
         </RouterLink>
         <Typography>{preheat?.id || '-'}</Typography>
       </Breadcrumbs>
-      <Typography variant="h5" mb="2rem">
-        Preheat
-      </Typography>
       <Box width="100%">
         <Card className={styles.container}>
           <Box className={styles.informationContainer}>
@@ -232,7 +231,7 @@ export default function ShowPreheat() {
                     ) : preheat.result.state === 'FAILURE' ? (
                       <></>
                     ) : (
-                      <Pending className={styles.statusIcon} />
+                      <Pending className={styles.pendingIcon} />
                     )}
                     <Typography
                       variant="body2"

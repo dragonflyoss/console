@@ -290,6 +290,7 @@ export default function ShowExecutions() {
                       : executions?.result.state === 'FAILURE'
                       ? '#D42536'
                       : '#DBAB0A',
+                  color: 'var(var(--button-text-color)',
                 }}
                 id="status"
               >

@@ -8,6 +8,13 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 7rem;
+  position: relative;
+}
+
+.header {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
 
 .logo {

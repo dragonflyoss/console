@@ -239,3 +239,20 @@
   height: 1.4rem;
   color: var(--table-color);
 }
+
+.descriptionIcon {
+  width: 1rem !important ;
+  height: 1rem !important;
+  color: rgb(188, 188, 188);
+  margin-left: 0.4rem;
+}
+
+.descriptionIcon:hover {
+  color: var(--description-color);
+}
+
+.headerTitle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}

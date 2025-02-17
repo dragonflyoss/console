@@ -7,6 +7,7 @@ import {
   Link as RouterLink,
   Snackbar,
   Alert,
+  Tooltip,
 } from '@mui/material';
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import * as React from 'react';
@@ -19,6 +20,7 @@ import { ReactComponent as TabCluster } from '../../assets/images/cluster/tab-cl
 import { ReactComponent as TabScheduler } from '../../assets/images/cluster/scheduler/tab-scheduler.svg';
 import { ReactComponent as TabSeedPeer } from '../../assets/images/cluster/seed-peer/tab-seed-peer.svg';
 import { ReactComponent as TabPeer } from '../../assets/images/cluster/peer/tab-peer.svg';
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import styles from './show.module.css';
 // const theme = createTheme({
 //   palette: {
@@ -149,9 +151,10 @@ export default function NavTabs() {
     [theme.breakpoints.up('sm')]: {
       minWidth: 0,
     },
+    minHeight: '3.5rem',
     fontWeight: theme.typography.fontWeightRegular,
-    marginRight: theme.spacing(1),
     color: 'var(--palette-text-secondary)',
+    padding: '0 1rem',
     fontSize: '0.9rem',
     '&:hover': {
       color: 'primary',
@@ -211,6 +214,36 @@ export default function NavTabs() {
 
   return (
     <MyContext.Provider value={{ cluster, isLoading }}>
+      {/* <Box className={styles.headerTitle}>
+        <Typography variant="h5" fontFamily="mabry-bold">
+          {location.pathname.split('/')[3] === 'schedulers'
+            ? 'Schedulers'
+            : location.pathname.split('/')[3] === 'seed-peers'
+            ? 'Seed Peers'
+            : location.pathname.split('/')[3] === 'peers'
+            ? 'Peers'
+            : 'Cluster'}
+        </Typography>
+        <Tooltip
+          title={
+            <Typography variant="body2">
+              Peer statistics are only supported in the Rust client, refer to&nbsp;
+              <RouterLink
+                underline="hover"
+                href="https://github.com/dragonflyoss/client"
+                target="_blank"
+                style={{ color: 'var(--menu-color)' }}
+              >
+                dragonflyoss/client
+              </RouterLink>
+              .
+            </Typography>
+          }
+          placement="top"
+        >
+          <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
+        </Tooltip>
+      </Box> */}
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
@@ -230,12 +263,17 @@ export default function NavTabs() {
         aria-label="breadcrumb"
         sx={{ mb: '1rem' }}
       >
-        <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters`}>
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/clusters`}>
           clusters
         </RouterLink>
-        <RouterLink component={Link} underline="hover" color="inherit" to={`clusters/${params.id}`}>
-          {cluster?.name || '-'}
-        </RouterLink>
+        {location.pathname.split('/')[3] ? (
+          <RouterLink component={Link} underline="hover" color="text.primary" to={`clusters/${params.id}`}>
+            {cluster?.name || '-'}
+          </RouterLink>
+        ) : (
+          <Typography color="inherit"> {cluster?.name || '-'}</Typography>
+        )}
+
         {location.pathname.split('/')[3] && <Typography color="inherit">{location.pathname.split('/')[3]}</Typography>}
       </Breadcrumbs>
       <AntTabs

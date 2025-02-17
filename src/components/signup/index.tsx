@@ -15,6 +15,7 @@ import styles from './index.module.css';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { setPageTitle } from '../../lib/utils';
 import { ReactComponent as Login } from '../../assets/images/login/login.svg';
+import HeaderLayout from '../dark-layout';
 
 export default function SignUp() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -241,6 +242,9 @@ export default function SignUp() {
         <Rotation />
       </Grid>
       <Grid item xs={6} className={styles.container}>
+        <Box className={styles.header}>
+          <HeaderLayout />
+        </Box>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <Box

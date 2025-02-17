@@ -16,10 +16,12 @@ import {
   Tooltip,
   FormGroup,
   InputLabel,
+  Breadcrumbs,
+  Link as RouterLink,
 } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { formatDate, getExpiredTime } from '../../../lib/utils';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createTokens } from '../../../lib/api';
 import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -208,8 +210,22 @@ export default function CreateTokens() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-
       <Typography variant="h5">Create personal access token</Typography>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ m: '1rem 0' }}
+      >
+        <Typography color="text.primary">developer</Typography>
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/developer/personal-access-tokens`}>
+          personal access tokens
+        </RouterLink>
+        <Typography color="inherit">New token</Typography>
+      </Breadcrumbs>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <FormControl fullWidth>
@@ -269,9 +285,6 @@ export default function CreateTokens() {
                 onChange={handleSelectExpiredTime}
                 sx={{
                   width: '10rem',
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'var(--button-color)',
-                  },
                 }}
               >
                 <MenuItem value={7}>7 days</MenuItem>
@@ -313,7 +326,7 @@ export default function CreateTokens() {
                     }
                   />
                 </Box>
-                <Typography variant="body2" color="rgb(82 82 82 / 87%)" ml="1rem">
+                <Typography variant="body2" color="var(--text-palette-text-secondary)" ml="1rem">
                   Full control of preheating, it's used for preheating of harbor.
                 </Typography>
               </Box>
@@ -332,7 +345,7 @@ export default function CreateTokens() {
                     }
                   />
                 </Box>
-                <Typography variant="body2" color="rgb(82 82 82 / 87%)" ml="1rem">
+                <Typography variant="body2" color="var(--text-palette-text-secondary)" ml="1rem">
                   Full control of job. If you need to call preheat job through open API, it is recommended to use
                   preheat job.
                 </Typography>
@@ -352,7 +365,7 @@ export default function CreateTokens() {
                     }
                   />
                 </Box>
-                <Typography variant="body2" color="rgb(82 82 82 / 87%)" ml="1rem">
+                <Typography variant="body2" color="var(--text-palette-text-secondary)" ml="1rem">
                   Full control of cluster.
                 </Typography>
               </Box>

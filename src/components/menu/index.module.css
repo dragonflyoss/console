@@ -1,6 +1,8 @@
 .container {
   display: flex;
-  flex-direction: row;
+  flex: 1 1 auto;
+  min-height: 100%;
+  flex-direction: column;
 }
 
 .header {
@@ -22,17 +24,19 @@
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
   padding: 0.8rem 2rem;
   z-index: 1100;
-  border-bottom: 1px solid var(--palette-divider);
+}
+
+.layout {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
 }
 
 .main {
-  flex-grow: 1;
-  background-color: transparent;
-  font-family: 'mabry-light,sans-serif';
-  -webkit-box-flex: 1;
-  /* padding-top: 1.5rem; */
-  min-height: 100%;
-  /* height: 100vh; */
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 1rem 2rem;
 }
 
 .navigationBarContainer {
@@ -44,7 +48,8 @@
   display: flex;
   flex-direction: column;
   z-index: 1101;
-  border-right: 1px solid rgba(145, 158, 171, 0.12);
+  /* border-right: 1px solid var(--palette-divider); */
+  background-color: var(--palette-background-paper);
 }
 
 .navigationBar {
@@ -68,8 +73,9 @@
 }
 
 .expandIcon {
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--palette-secondary-dark);
 }
 
 .shrinkMenuContainer {
@@ -83,6 +89,7 @@
 
 .shrinkMenuText {
   margin-top: 0.3rem !important;
+  font-family: 'mabry-bold' !important;
 }
 
 .shrinkChevronRightOutlinedIcon {
@@ -97,7 +104,7 @@
 }
 
 .title {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   padding: 1rem;
 }
@@ -114,6 +121,15 @@
   height: 2rem;
 
   color: var(--button-color);
+}
+
+.githubContainer {
+  z-index: 9;
+  right: 20px;
+  bottom: 20px;
+  width: 44px;
+  height: 44px;
+  position: fixed;
 }
 
 .github {
@@ -136,7 +152,11 @@
 
 .menuText {
   font-family: 'mabry-bold' !important;
-  margin-left: 0.4rem !important;
+  margin-left: 0.6rem !important;
+}
+
+.avatarMenu {
+  font-family: 'mabry-bold' !important;
 }
 
 .menuSelectedIcon {
@@ -149,22 +169,15 @@
   width: 2.4rem !important;
   height: 2.4rem !important;
   background: var(--palette-secondary-dark) !important;
-  position: relative;
-
+  /* position: relative; */
   margin-left: 0.5rem;
 }
 
 .menu {
-  padding-top: 0.4rem;
-  padding-bottom: 0.4rem;
-  width: 14rem;
-}
-
-.expandMenu {
-  padding-top: 0.4rem;
-  padding-bottom: 0.4rem;
-  width: 14rem;
-  float: right;
+  /* padding-top: 0.4rem;
+  padding-bottom: 0.4rem; */
+  /* width: 15rem; */
+  margin: '0.4rem 0.8rem' !important;
 }
 
 .profileMenu {
@@ -193,7 +206,7 @@
 .menuAvatar {
   width: 3rem !important;
   height: 3rem !important;
-  background: var(--button-color) !important;
+  /* background: var(--button-color) !important; */
 }
 
 .menuUserName {
@@ -218,4 +231,5 @@
   width: 100%;
   position: absolute;
   top: 0;
+  z-index: 1200;
 }

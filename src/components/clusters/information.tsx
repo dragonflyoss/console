@@ -143,9 +143,7 @@ export default function Information() {
         </Alert>
       </Snackbar>
       <Box className={styles.container}>
-        <Typography variant="h6" fontFamily="mabry-bold">
-          Cluster
-        </Typography>
+        <Typography variant="h5">Cluster</Typography>
         <Box>
           <Button
             id="update"
@@ -503,7 +501,7 @@ export default function Information() {
                           setOpenIDC(true);
                         }}
                       >
-                        <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                        <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                       </IconButton>
                     ) : (
                       <></>
@@ -615,7 +613,7 @@ export default function Information() {
                             setOpenCIDRs(true);
                           }}
                         >
-                          <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                          <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                         </IconButton>
                       ) : (
                         <></>
@@ -730,7 +728,7 @@ export default function Information() {
                             setOpenHostnames(true);
                           }}
                         >
-                          <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                          <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                         </IconButton>
                       ) : (
                         <></>

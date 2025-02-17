@@ -39,9 +39,10 @@ export default function NavTabs() {
     [theme.breakpoints.up('sm')]: {
       minWidth: 0,
     },
+    minHeight: '3.5rem',
     fontWeight: theme.typography.fontWeightRegular,
-    marginRight: theme.spacing(1),
     color: 'var(--palette-text-secondary)',
+    padding: '0 1rem',
     fontSize: '0.9rem',
     '&:hover': {
       color: 'primary',

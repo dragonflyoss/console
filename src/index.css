@@ -8,8 +8,9 @@
   src: url('../public/fonts/MabryPro-Bold.ttf') format('woff');
 }
 
-:root {
+body {
   color: #1c293a;
+  background-color: #f9fafb !important;
   --palette-color: #1c293a;
   --button-color: #1c293a;
   --button-text-color: #ffffff;
@@ -48,14 +49,20 @@
   --table-color: #919eab;
   --palette-background-menu: rgba(255, 255, 255, 0.9);
   --palette-menu-shadow: 0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;
-  --palette-text-secondary: #000000;
+  /* --palette-text-secondary: #000000; */
   --palette-background-rotation: #f6f7f9;
   --palette-background: #f4f6f8;
-  --menu-border-radius: 0.6rem;
+  --menu-border-radius: 0.4rem;
   --palette-tab-border-color: #e8e8e8;
-  --palette-text-secondary: rgba(0, 0, 0, 0.54);
+  --palette-text-secondary: rgba(0, 0, 0, 0.7);
   --palette-grey-500Channel: 145 158 171;
+  --palette-grey-400Channel: #e4e5e5;
+  --palette-grey-yellow: #dbab0a;
 }
+
+/* [data-theme='light'] body {
+  background-color: #f9fafb !important;
+} */
 
 [data-theme='dark'] body {
   color: rgba(255, 255, 255, 0.7);
@@ -70,16 +77,19 @@
   --button-text-color: #ffffff;
   --hover-button-text-color: #08c385;
   --palette-card-hover-background-color: #1b2e3e;
-  --card-box-shadow: none;
+  --card-box-shadow: 0 0 2px 0 rgba(0 0 0 / 0.2), 0 12px 24px -4px rgba(0 0 0 / 0.12);
   --table-title-color: #28323d;
   --table-title-text-color: #919eab;
   --menu-selected-background-color: rgba(145 158 171 / 0.08);
-  --calcel-hover-corlor: #a1a0a2;
+  --calcel-hover-corlor: #141a21;
   --palette-background-menu: rgba(28, 37, 46, 0.9);
   --palette-detail-lable-color: #a1a0a2;
   --palette-menu-shadow: none;
   --palette-background-rotation: #1c252e;
   --palette-tab-border-color: #343536;
+  --palette-grey-400Channel: #b6b8b8;
+  --palette-grey-yellow: #ececec;
+  --text-palette-text-secondary: rgb(138, 151, 162);
 }
 
 body {

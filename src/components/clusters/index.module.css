@@ -12,6 +12,7 @@
 .clusterSmallCircleIcon {
   width: 0.4rem;
   height: 0.4rem;
+  color: var(--palette-grey-400Channel);
 }
 
 .button {
@@ -22,15 +23,16 @@
 .clusterBigCircleIcon {
   width: 2rem;
   height: 2rem;
+  color: var(--palette-grey-400Channel);
 }
 
 .clusterIcon {
   width: 1.8rem;
   height: 1.8rem;
   position: absolute;
-  left: 0.8rem;
+  left: 1rem;
   top: 0.3rem;
-  color: var(--description-color);
+  color: var(--button-color);
 }
 
 .clusterHeaderContainer {

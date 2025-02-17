@@ -31,6 +31,14 @@ import { MyContext } from '../menu/index';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import Card from '../card';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
+import { ReactComponent as Name } from '../../assets/images/profile/name.svg';
+import { ReactComponent as ID } from '../../assets/images/profile/id.svg';
+import { ReactComponent as Email } from '../../assets/images/profile/email.svg';
+import { ReactComponent as Location } from '../../assets/images/profile/location.svg';
+import { ReactComponent as Phone } from '../../assets/images/profile/phone.svg';
+import { ReactComponent as CreatedAt } from '../../assets/images/profile/created-at.svg';
+import { ReactComponent as ChangePassword } from '../../assets/images/user/change-password.svg';
+import { ReactComponent as Edit } from '../../assets/images/user/edit.svg';
 
 export default function Profile() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -86,32 +94,32 @@ export default function Profile() {
     {
       name: 'id',
       label: 'ID',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/id.svg" />,
+      icon: <ID className={styles.userIcon} />,
     },
     {
       name: 'name',
       label: 'Name',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/name.svg" />,
+      icon: <Name className={styles.userIcon} />,
     },
     {
       name: 'email',
       label: 'Email',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/email.svg" />,
+      icon: <Email className={styles.userIcon} />,
     },
     {
       name: 'location',
       label: 'Location',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/location.svg" />,
+      icon: <Location className={styles.userIcon} />,
     },
     {
       name: 'phone',
       label: 'Phone',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/phone.svg" />,
+      icon: <Phone className={styles.userIcon} />,
     },
     {
       name: 'created_at',
       label: 'Created At',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/created-at.svg" />,
+      icon: <CreatedAt className={styles.userIcon} />,
     },
   ];
 
@@ -557,7 +565,7 @@ export default function Profile() {
                   {users?.name || '-'}
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', pt: '0.3rem' }}>
-                  <Box component="img" className={styles.userIcon} src="/icons/user/location.svg" />
+                  <Location className={styles.userIcon} />
                   <Typography variant="body2" component="div" ml="0.5rem" color="#919EAB" fontFamily="mabry-bold">
                     {location || '-'}
                   </Typography>
@@ -576,11 +584,7 @@ export default function Profile() {
                   setShowMyProfile(false);
                 }}
               >
-                <Box
-                  component="img"
-                  sx={{ width: '1.4rem', height: '1.4rem', mr: '0.4rem' }}
-                  src="/icons/user/change-password.svg"
-                />
+                <ChangePassword className={styles.editIcon} />
                 Change Password
               </Button>
             </Box>
@@ -629,11 +633,7 @@ export default function Profile() {
                   setShowPersonalInformation(false);
                 }}
               >
-                <Box
-                  component="img"
-                  sx={{ width: '1.4rem', height: '1.4rem', mr: '0.4rem' }}
-                  src="/icons/user/edit.svg"
-                />
+                <Edit className={styles.editIcon} />
                 Edit
               </Button>
             </Grid>

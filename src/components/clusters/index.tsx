@@ -17,8 +17,7 @@ import {
   TextField,
   Divider,
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/Add';
+
 import {
   getSchedulers,
   getSeedPeers,
@@ -27,6 +26,8 @@ import {
   getSchedulersResponse,
   getSeedPeersResponse,
 } from '../../lib/api';
+import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add';
 import styles from './index.module.css';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { fuzzySearch, getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
@@ -38,29 +39,32 @@ import { MAX_PAGE_SIZE } from '../../lib/constants';
 import Card from '../card';
 import debounce from 'lodash/debounce';
 import SearchCircularProgress from '../circular-progress';
+import { ReactComponent as Round } from '../../assets/images/cluster/round.svg';
+// import { ReactComponent as Cluster } from '../../assets/images/cluster/cluster.svg';
+import { ReactComponent as Default } from '../../assets/images/cluster/default.svg';
+import { ReactComponent as Statistics } from '../../assets/images/cluster/peer/statistics.svg';
+// import { ReactComponent as Scheduler } from '../../assets/images/cluster/scheduler.svg';
+// import { ReactComponent as SeedPeer } from '../../assets/images/cluster/seed-peer.svg';
+import { ReactComponent as Active } from '../../assets/images/cluster/active.svg';
+import { ReactComponent as ClusterID } from '../../assets/images/cluster/id.svg';
+import { ReactComponent as IcContent } from '../../assets/images/cluster/scheduler/ic-content.svg';
+import { ReactComponent as NoCluster } from '../../assets/images/cluster/no-cluster.svg';
 
-const theme = createTheme({
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 900,
-      lg: 1135,
-      xl: 1441,
-    },
-  },
-  palette: {
-    secondary: {
-      main: '#2E8F79',
-    },
-    primary: {
-      main: '#1C293A',
-    },
-  },
-  typography: {
-    fontFamily: 'mabry-light,sans-serif',
-  },
-});
+import { ReactComponent as Cluster } from '../../assets/images/cluster/tab-cluster.svg';
+import { ReactComponent as Scheduler } from '../../assets/images/cluster/scheduler/tab-scheduler.svg';
+import { ReactComponent as SeedPeer } from '../../assets/images/cluster/seed-peer/tab-seed-peer.svg';
+
+// const theme = createTheme({
+//   // palette: {
+//   //   secondary: {},
+//   //   primary: {
+//   //     main: '#1C293A',
+//   //   },
+//   // },
+//   typography: {
+//     fontFamily: 'mabry-light,sans-serif',
+//   },
+// });
 
 export default function Clusters() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -209,7 +213,7 @@ export default function Clusters() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={errorMessage}
         autoHideDuration={30000}
@@ -229,14 +233,16 @@ export default function Clusters() {
           }
           aria-label="breadcrumb"
         >
-          <Typography variant="h5" color="text.primary">
-            Cluster
-          </Typography>
+          <Typography variant="h5">Cluster</Typography>
         </Breadcrumbs>
         <Button
           id="create-cluster"
           size="small"
-          sx={{ background: 'var(--button-color)' }}
+          sx={{
+            background: 'var(--button-color)',
+            color: 'var(--button-text-color)',
+            ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+          }}
           variant="contained"
           onClick={() => {
             navigate(`/clusters/new`);
@@ -252,9 +258,9 @@ export default function Clusters() {
             <Box p="1.2rem">
               <Box display="flex">
                 <Box className={styles.clusterIconContainer}>
-                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/icons/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterIcon} src="/icons/cluster/cluster.svg" />
+                  <Round className={styles.clusterSmallCircleIcon} />
+                  <Round className={styles.clusterBigCircleIcon} />
+                  <Cluster className={styles.clusterIcon} />
                 </Box>
                 <Typography variant="h6" className={styles.clusterIconTitle}>
                   Cluster
@@ -273,7 +279,7 @@ export default function Clusters() {
                     <Typography variant="subtitle2">number of clusters</Typography>
                   </Box>
                   <Grid className={styles.clusterBottomContainer}>
-                    <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/default.svg" />
+                    <Default className={styles.clusterBottomIcon} />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span id="default-clusters" className={styles.clusterBottomContent}>
                         {isLoading ? (
@@ -286,7 +292,7 @@ export default function Clusters() {
                     </Box>
                   </Grid>
                 </Box>
-                <Box component="img" src="/icons/cluster/peer/statistics.svg" />
+                <Statistics className={styles.statistics} />
               </Box>
             </Box>
           </Card>
@@ -296,9 +302,9 @@ export default function Clusters() {
             <Box p="1.2rem">
               <Box display="flex">
                 <Box className={styles.clusterIconContainer}>
-                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/icons/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterIcon} src="/icons/cluster/scheduler.svg" />
+                  <Round className={styles.clusterSmallCircleIcon} />
+                  <Round className={styles.clusterBigCircleIcon} />
+                  <Scheduler className={styles.clusterIcon} />
                 </Box>
                 <Typography variant="h6" className={styles.clusterIconTitle}>
                   Scheduler
@@ -313,7 +319,7 @@ export default function Clusters() {
                     <Typography variant="subtitle2">number of schedulers</Typography>
                   </Box>
                   <Grid className={styles.clusterBottomContainer}>
-                    <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/active.svg" />
+                    <Active className={styles.clusterBottomIcon} />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span id="active-schedulers" className={styles.clusterBottomContent}>
                         {isLoading ? (
@@ -326,7 +332,7 @@ export default function Clusters() {
                     </Box>
                   </Grid>
                 </Box>
-                <Box component="img" src="/icons/cluster/peer/statistics.svg" />
+                <Statistics className={styles.statistics} />
               </Box>
             </Box>
           </Card>
@@ -336,9 +342,9 @@ export default function Clusters() {
             <Box p="1.2rem">
               <Box display="flex">
                 <Box className={styles.clusterIconContainer}>
-                  <Box component="img" className={styles.clusterSmallCircleIcon} src="/icons/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterBigCircleIcon} src="/icons/cluster/round.svg" />
-                  <Box component="img" className={styles.clusterIcon} src="/icons/cluster/seed-peer.svg" />
+                  <Round className={styles.clusterSmallCircleIcon} />
+                  <Round className={styles.clusterBigCircleIcon} />
+                  <SeedPeer className={styles.clusterIcon} />
                 </Box>
                 <Typography variant="h6" className={styles.seedPseerIconTitle}>
                   Seed Peer
@@ -353,7 +359,7 @@ export default function Clusters() {
                     <Typography variant="subtitle2">number of seed peers</Typography>
                   </Box>
                   <Grid className={styles.clusterBottomContainer}>
-                    <Box component="img" className={styles.clusterBottomIcon} src="/icons/cluster/active.svg" />
+                    <Active className={styles.clusterBottomIcon} />
                     <Box className={styles.clusterBottomContentContainer}>
                       <span id="active-seed-peer" className={styles.clusterBottomContent}>
                         {isLoading ? (
@@ -366,7 +372,7 @@ export default function Clusters() {
                     </Box>
                   </Grid>
                 </Box>
-                <Box component="img" src="/icons/cluster/peer/statistics.svg" />
+                <Statistics className={styles.statistics} />
               </Box>
             </Box>
           </Card>
@@ -431,7 +437,7 @@ export default function Clusters() {
               <Box className={styles.clusterListContent}>
                 <Box p="1.2rem 1.2rem 0 1.2rem">
                   <Box display="flex" mb="0.5rem">
-                    <img className={styles.idIcon} src="/icons/cluster/id.svg" alt="" />
+                    <ClusterID className={styles.idIcon} />
                     <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
                   </Box>
                   <Typography variant="h6" mb="0.5rem" className={styles.nameText}>
@@ -461,14 +467,14 @@ export default function Clusters() {
           </Box>
         ) : Array.isArray(clusterCount) && clusterCount.length === 0 ? (
           <Card className={styles.noData}>
-            <Box component="img" className={styles.nodataIcon} src="/icons/cluster/scheduler/ic-content.svg" />
+            <IcContent className={styles.nodataIcon} />
             <Typography variant="h6" className={styles.nodataText}>
               You have no clusters.
             </Typography>
           </Card>
         ) : Array.isArray(allClusters) && allClusters.length === 0 ? (
           <Box id="no-clusters" className={styles.noClusterContainer}>
-            <Box component="img" className={styles.noClusterIcon} src="/icons/cluster/no-cluster.svg" />
+            <NoCluster className={styles.noClusterIcon} />
             <Box fontSize="1.2rem">
               No results for&nbsp;
               <Typography variant="h6" component="span">
@@ -484,7 +490,7 @@ export default function Clusters() {
                   <Box className={styles.clusterListContent}>
                     <Box p="1.2rem 1.2rem 0 1.2rem">
                       <Box display="flex" mb="0.5rem">
-                        <img className={styles.idIcon} src="/icons/cluster/id.svg" alt="" />
+                        <ClusterID className={styles.idIcon} />
                         {clusterIsLoading ? (
                           <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
                         ) : (
@@ -564,10 +570,6 @@ export default function Clusters() {
                           id={`show-cluster-${item.id}`}
                           className={styles.buttonContent}
                           sx={{
-                            '&.MuiButton-root': {
-                              backgroundColor: '#fff',
-                              p: 0,
-                            },
                             p: 0,
                           }}
                           onClick={() => {
@@ -585,7 +587,7 @@ export default function Clusters() {
         )}
       </Box>
       {totalPages > 1 ? (
-        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
           <Pagination
             count={totalPages}
             page={clusterPage}
@@ -611,6 +613,6 @@ export default function Clusters() {
       ) : (
         <></>
       )}
-    </ThemeProvider>
+    </Box>
   );
 }

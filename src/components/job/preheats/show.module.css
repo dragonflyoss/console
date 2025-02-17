@@ -8,6 +8,13 @@
   margin-right: 0.4rem;
 }
 
+.pendingIcon {
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-right: 0.4rem;
+  color: var(--button-text-color);
+}
+
 .informationContainer {
   display: flex;
   align-items: flex-start;
@@ -23,11 +30,12 @@
 .informationTitleIcon {
   width: 1.4rem !important;
   height: 1.4rem !important;
+  color: var(--palette-detail-lable-color);
 }
 
 .informationTitleText {
   margin-left: 1rem !important;
-  color: #515151;
+  color: var(--palette-detail-lable-color);
   font-family: 'mabry-bold' !important;
 }
 
@@ -85,7 +93,7 @@
   align-items: center;
   justify-content: center;
   background-color: var(--button-color);
-  color: var(--save-size-color);
+  color: var(--button-text-color);
   border-radius: 0.3rem;
   min-width: 1.6rem;
   margin-right: 0.5rem;
@@ -96,7 +104,7 @@
   display: inline-flex;
   align-items: center;
   background-color: var(--button-color);
-  color: var(--save-size-color);
+  color: var(--scopes-icon-color);
   border-radius: 0.3rem;
   min-width: 1.6rem;
   margin-right: 0.5rem;
@@ -106,7 +114,7 @@
 .tagContent {
   display: inline-flex;
   background-color: var(--description-color);
-  color: var(--save-size-color);
+  color: var(--scopes-icon-color);
   border-radius: 0.3rem;
   min-width: 1.6rem;
   padding: 0.2rem 0.4rem;
@@ -118,4 +126,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-style: italic;
+}
+
+.errorIcon {
+  width: 1.3rem;
+  height: 1.3rem;
 }

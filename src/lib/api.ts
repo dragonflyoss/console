@@ -178,6 +178,9 @@ interface signUpRequset {
   name: string;
   password: string;
   email: string;
+  bio?: string;
+  location?: string;
+  phone?: string;
 }
 
 interface signUpResponse {

@@ -15,6 +15,7 @@ import ShowSeedPeer from '../components/clusters/seed-peers/show';
 import Peers from '../components/clusters/peers';
 import Profile from '../components/profile';
 import Users from '../components/users';
+import NewUser from '../components/users/new';
 import Tokens from '../components/developer/tokens';
 import NewTokens from '../components/developer/tokens/new';
 import EditTokens from '../components/developer/tokens/edit';
@@ -81,6 +82,7 @@ function Main() {
           <Route path="/jobs/task/executions/:id" element={<ShowTask />} />
         </Route>
         {isRoot && <Route path="/users" element={<Users />} />}
+        <Route path="/users/new" element={<NewUser />} />
       </Route>
     </Routes>
   );

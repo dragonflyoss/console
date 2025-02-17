@@ -116,6 +116,13 @@
 
 .exportIcon {
   width: 1.8rem;
+  height: 1.8rem;
+}
+
+.exportFileICon {
+  width: 2.8rem;
+  height: 2.8rem;
+  margin-bottom: 0.8rem;
 }
 
 .featuresIconWrapper {
@@ -164,4 +171,16 @@
   align-items: center;
   justify-content: center;
   padding: 1rem 2rem;
+}
+
+.refreshIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--button-text-color);
+}
+
+.deleteWarning {
+  width: 1.4rem;
+  height: 1.4rem;
+  padding-right: 0.2rem;
 }

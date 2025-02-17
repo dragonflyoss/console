@@ -16,6 +16,17 @@
   font-family: 'mabry-bold';
 }
 
+.statusIcon {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.pendingIcon {
+  width: 1.3rem;
+  height: 1.3rem;
+  color: #dbab0a;
+}
+
 .description {
   width: 90%;
   overflow: hidden;
@@ -36,4 +47,10 @@
   flex-direction: column;
   justify-content: space-between;
   margin-left: 0.6rem;
+}
+
+.detailIcon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--button-color);
 }

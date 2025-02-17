@@ -17,6 +17,15 @@ import styles from './show.module.css';
 import _ from 'lodash';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import Card from '../../card';
+import { ReactComponent as ID } from '../../../assets/images/cluster/scheduler/scheduler-id.svg';
+import { ReactComponent as Hostname } from '../../../assets/images/cluster/scheduler/hostname.svg';
+import { ReactComponent as ClusterID } from '../../../assets/images/cluster/scheduler/cluster-id.svg';
+import { ReactComponent as IP } from '../../../assets/images/cluster/scheduler/scheduler-ip.svg';
+import { ReactComponent as Status } from '../../../assets/images/cluster/scheduler/status.svg';
+import { ReactComponent as Features } from '../../../assets/images/cluster/scheduler/features.svg';
+import { ReactComponent as Port } from '../../../assets/images/cluster/scheduler/port.svg';
+import { ReactComponent as CreatedAt } from '../../../assets/images/cluster/scheduler/created-at.svg';
+import { ReactComponent as UpdatedAt } from '../../../assets/images/cluster/scheduler/updated-at.svg';
 
 export default function Schedulers() {
   const [isLoading, setIsLoading] = useState(false);
@@ -119,7 +128,7 @@ export default function Schedulers() {
       <Card className={styles.container}>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/scheduler-id.svg" />
+            <ID className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               ID
             </Typography>
@@ -130,7 +139,7 @@ export default function Schedulers() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/hostname.svg" />
+            <Hostname className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Hostname
             </Typography>
@@ -143,7 +152,7 @@ export default function Schedulers() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/cluster-id.svg" />
+            <ClusterID className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Cluster ID
             </Typography>
@@ -160,7 +169,7 @@ export default function Schedulers() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/scheduler-ip.svg" />
+            <IP className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               IP
             </Typography>
@@ -171,7 +180,7 @@ export default function Schedulers() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/status.svg" />
+            <Status className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Status
             </Typography>
@@ -202,7 +211,7 @@ export default function Schedulers() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/features.svg" />
+            <Features className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Features
             </Typography>
@@ -234,7 +243,7 @@ export default function Schedulers() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/port.svg" />
+            <Port className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Port
             </Typography>
@@ -245,7 +254,7 @@ export default function Schedulers() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/created-at.svg" />
+            <CreatedAt className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Created At
             </Typography>
@@ -267,7 +276,7 @@ export default function Schedulers() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/updated-at.svg" />
+            <UpdatedAt className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Updated At
             </Typography>

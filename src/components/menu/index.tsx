@@ -314,6 +314,7 @@ export default function Layout(props: any) {
           <main>{props.children}</main>
         ) : (
           <Box className={styles.container}>
+            <CssBaseline />
             <Box className={styles.navigationBarContainer}>
               {compactLayout ? (
                 <Grid sx={{ width: '6rem' }}>
@@ -325,6 +326,7 @@ export default function Layout(props: any) {
                       return items?.menuProps ? (
                         <>
                           <ListItemButton
+                            id={items.label}
                             key={index}
                             selected={(location.pathname.split('/')[1] || '') === items.label}
                             onClick={(event: any) => {
@@ -359,8 +361,8 @@ export default function Layout(props: any) {
                           </ListItemButton>
                           {items?.menuProps && expandedMenu === items.label && (
                             <Menu
-                              anchorEl={anchorEl}
                               id={items.label}
+                              anchorEl={anchorEl}
                               open={Boolean(anchorEl)}
                               onClose={handleMouseLeave}
                               anchorOrigin={{
@@ -390,7 +392,9 @@ export default function Layout(props: any) {
                                     component={Link}
                                     to={subItem.href}
                                   >
-                                    {subItem.text}
+                                    <Typography variant="body2" className={styles.avatarMenu}>
+                                      {subItem.text}
+                                    </Typography>
                                   </MenuItem>
                                 ))}
                               </Box>
@@ -399,6 +403,7 @@ export default function Layout(props: any) {
                         </>
                       ) : (
                         <ListItemButton
+                          id={items.label}
                           key={index}
                           selected={(location.pathname.split('/')[1] || '') === items.label}
                           component={Link}
@@ -442,7 +447,7 @@ export default function Layout(props: any) {
                     </RouterLink>
                     {menu.map((items) =>
                       items?.menuProps ? (
-                        <Box key={items.href} className={styles.menu}>
+                        <Box id={items.label} key={items.href} className={styles.menu}>
                           <ListItemButton
                             selected={(location.pathname.split('/')[1] || '') === items.label}
                             onClick={() => {
@@ -460,8 +465,7 @@ export default function Layout(props: any) {
                               height: '2.6rem',
                               borderRadius: '0.2rem',
                               color: 'var(--palette-text-secondary)',
-                              m: '0.6rem 0.8rem',
-                              p: '0,2rem',
+                              m: '0.8rem',
                             }}
                           >
                             {items.icon}
@@ -489,8 +493,8 @@ export default function Layout(props: any) {
                                       },
                                       height: '2.4rem',
                                       borderRadius: '0.2rem',
-                                      m: '0.6rem 0.8rem',
-                                      p: '0,2rem',
+                                      m: '0.8rem',
+
                                       color: 'var(--palette-text-secondary)',
                                     }}
                                   >
@@ -505,6 +509,7 @@ export default function Layout(props: any) {
                         </Box>
                       ) : (
                         <ListItemButton
+                          id={items.label}
                           key={items.href}
                           selected={(location.pathname.split('/')[1] || '') === items.label}
                           component={Link}
@@ -521,8 +526,7 @@ export default function Layout(props: any) {
                             height: '2.6rem',
                             borderRadius: '0.2rem',
                             color: 'var(--palette-text-secondary)',
-                            m: '0.6rem 0.8rem',
-                            p: '0,2rem',
+                            m: '0.8rem',
                           }}
                         >
                           {items.icon}
@@ -539,7 +543,14 @@ export default function Layout(props: any) {
                 <IconButton
                   id="expand"
                   sx={{
-                    p: 0,
+                    backgroundColor: 'var(--palette-background-rotation)',
+                    border: '1px solid  rgba(var(--palette-dark-500Channel)/0.3)',
+                    width: '1.8rem',
+                    height: '1.8rem',
+                    p: '0.2rem',
+                    ':hover': {
+                      backgroundColor: 'var(--palette-background--hover-rotation)',
+                    },
                   }}
                   onClick={() => {
                     setCompactLayout((e: any) => !e);
@@ -561,13 +572,41 @@ export default function Layout(props: any) {
                   >
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <HeaderLayout />
-                      <Avatar
-                        className={styles.avatar}
-                        src={user?.avatar}
-                        onClick={(event: any) => {
-                          setAnchorElement(event.currentTarget);
+                      <IconButton
+                        sx={{
+                          position: 'relative',
+                          transition: 'transform 0.6s ease',
+                          '&:hover': {
+                            transform: 'scale(1.07)',
+                          },
                         }}
-                      />
+                      >
+                        <Box
+                          sx={{
+                            background: 'conic-gradient( #73bafb, #ffd666, #73bafb)',
+                            width: '2.8rem',
+                            height: '2.8rem',
+                            animation: 'rotate 4s linear infinite',
+                            '@keyframes rotate': {
+                              '0%': {
+                                transform: 'rotate(0deg)',
+                              },
+                              '100%': {
+                                transform: 'rotate(360deg)',
+                              },
+                            },
+                            position: 'absolute',
+                            borderRadius: '50%',
+                          }}
+                        />
+                        <Avatar
+                          className={styles.avatar}
+                          src={user?.avatar}
+                          onClick={(event: any) => {
+                            setAnchorElement(event.currentTarget);
+                          }}
+                        />
+                      </IconButton>
                     </Box>
                   </Box>
                   <Menu
@@ -645,7 +684,6 @@ export default function Layout(props: any) {
                   </Menu>
                 </Box>
               </header>
-              <CssBaseline />
               <main className={styles.main}>
                 <Outlet />
               </main>

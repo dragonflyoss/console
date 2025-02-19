@@ -79,7 +79,7 @@
   width: 2.4rem;
   height: 2.4rem;
   border-radius: 50%;
-  background-color: #fbfbfb;
+  background-color: var(--palette-white-500Channel);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -90,7 +90,7 @@
   width: 1.8rem;
   height: 1.8rem;
   border-radius: 50%;
-  background-color: #efefef;
+  background-color: var(--palette-white-400Channel);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,6 +99,7 @@
 .featuresIcon {
   width: 1rem;
   height: 1rem;
+  color: var(--hover-button-text-color);
 }
 
 .menu {
@@ -201,6 +202,11 @@
   text-overflow: ellipsis;
   display: flex;
   align-items: center;
+}
+
+.schedulerInactiveTable {
+  font-family: 'mabry-bold';
+  color: var(var(--table-title-text-color));
 }
 
 .schedulerInactiveHeaderIP {
@@ -358,13 +364,17 @@
   position: absolute;
 }
 
-.tableHeader {
-  color: var(--table-title-text-color);
-  font-family: 'mabry-bold' !important;
-}
-
 .tableRow {
   border-bottom: dashed var(--palette-divider);
+}
+
+.tableHeader {
+  border-color: var(--palette-divider) !important;
+}
+
+.tableHeaderText {
+  color: var(--table-title-text-color);
+  font-family: 'mabry-bold' !important;
 }
 
 .tableRow:last-child {

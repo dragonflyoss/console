@@ -72,6 +72,7 @@ export default function SeedPeer() {
           {errorMessageText}
         </Alert>
       </Snackbar>
+      <Typography variant="h5">Seed-Peer</Typography>
       <Breadcrumbs
         separator={
           <Box
@@ -79,7 +80,7 @@ export default function SeedPeer() {
           />
         }
         aria-label="breadcrumb"
-        sx={{ mb: '1rem' }}
+        sx={{ mb: '2rem', mt: '1rem' }}
       >
         <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters`}>
           clusters
@@ -92,9 +93,6 @@ export default function SeedPeer() {
         </RouterLink>
         <Typography color="text.primary">{seedPeer?.host_name || '-'}</Typography>
       </Breadcrumbs>
-      <Typography variant="h6" sx={{ p: '1rem 0 2rem 0', fontFamily: 'mabry-bold' }}>
-        Seed-Peer
-      </Typography>
       <Card className={styles.container}>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
@@ -179,9 +177,11 @@ export default function SeedPeer() {
                 variant="outlined"
                 sx={{
                   borderRadius: '0.25rem',
-                  backgroundColor: seedPeer?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                  backgroundColor:
+                    seedPeer?.state === 'active' ? 'var(--description-color)' : 'var(--palette-dark-300Channel)',
                   color: seedPeer?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
-                  borderColor: seedPeer?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                  borderColor:
+                    seedPeer?.state === 'active' ? 'var(--description-color)' : 'var(--palette-dark-300Channel)',
                   fontWeight: 'bold',
                 }}
               />

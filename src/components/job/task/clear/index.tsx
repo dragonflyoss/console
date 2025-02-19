@@ -216,8 +216,12 @@ export default function Clear() {
             placement="top"
           >
             <HelpIcon
-              color="disabled"
-              sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+              sx={{
+                color: 'var(--palette-grey-300Channel)',
+                width: '0.8rem',
+                height: '0.8rem',
+                ':hover': { color: 'var(--description-color)' },
+              }}
             />
           </Tooltip>
         ),
@@ -248,8 +252,12 @@ export default function Clear() {
         InputProps: (
           <Tooltip title={'Caller application which is used for statistics and access control.'} placement="top">
             <HelpIcon
-              color="disabled"
-              sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+              sx={{
+                color: 'var(--palette-grey-300Channel)',
+                width: '0.8rem',
+                height: '0.8rem',
+                ':hover': { color: 'var(--description-color)' },
+              }}
             />
           </Tooltip>
         ),
@@ -622,7 +630,7 @@ export default function Clear() {
               },
               p: '0.3rem 0.6rem',
               width: '11.5rem',
-              color: 'var(--palette-text-secondary)',
+              color: 'var(--palette-dark-400Channel)',
             }}
           >
             <LinkOutlinedIcon sx={{ mr: '0.4rem' }} />
@@ -646,7 +654,7 @@ export default function Clear() {
               },
               p: '0.3rem 0.6rem',
               width: '11.5rem',
-              color: 'var(--palette-text-secondary)',
+              color: 'var(--palette-dark-400Channel)',
             }}
           >
             <AssignmentOutlinedIcon fontSize="small" sx={{ mr: '0.4rem' }} />
@@ -704,8 +712,8 @@ export default function Clear() {
                                   placement="top"
                                 >
                                   <HelpIcon
-                                    color="disabled"
                                     sx={{
+                                      color: 'var(--palette-grey-300Channel)',
                                       width: '0.8rem',
                                       height: '0.8rem',
                                       mr: '0.3rem',

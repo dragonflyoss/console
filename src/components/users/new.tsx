@@ -1,5 +1,4 @@
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import { SetStateAction, useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
@@ -366,7 +365,7 @@ export default function NewUser() {
         }
         aria-label="breadcrumb"
       >
-        <RouterLink component={Link} underline="hover" color="text.primary" to={`/user`}>
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/users`}>
           User
         </RouterLink>
         <Typography color="inherit">New user</Typography>
@@ -456,6 +455,45 @@ export default function NewUser() {
             </Box>
           </Card>
         </Box>
+
+        {/* <Divider sx={{ mt: 2, mb: 2 }} />
+        <Box className={styles.form}>
+          {formList.map((item) =>
+            item.formProps.id === 'phone' ? (
+              <MuiTelInput
+                defaultCountry="CN"
+                color="success"
+                size="small"
+                key={item.formProps.name}
+                {...item.formProps}
+                // value={phone}
+                className={styles.input}
+                fullWidth
+              />
+            ) : (
+              <TextField
+                color="success"
+                size="small"
+                key={item.formProps.name}
+                className={styles.input}
+                {...item.formProps}
+                fullWidth
+              />
+            ),
+          )}
+        </Box>
+        <Divider sx={{ mt: 2, mb: 2 }} />
+        <Box sx={{ display: 'flex', mt: '2rem' }}>
+          <CancelLoadingButton
+            id="cancel"
+            loading={loadingButton}
+            onClick={() => {
+              //   setLoadingButton(true);
+              navigate(`/users`);
+            }}
+          />
+          <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />
+        </Box> */}
       </Box>
     </Box>
   );

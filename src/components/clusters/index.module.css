@@ -27,12 +27,12 @@
 }
 
 .clusterIcon {
-  width: 1.8rem;
-  height: 1.8rem;
+  width: 1.6rem;
+  height: 1.6rem;
   position: absolute;
   left: 1rem;
   top: 0.3rem;
-  color: var(--button-color);
+  color: var(--palette-grey-200Channel);
 }
 
 .clusterHeaderContainer {
@@ -138,6 +138,12 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 1rem;
+}
+
+.arrowCircleRightIcon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--button-color);
 }
 
 .buttonContent {

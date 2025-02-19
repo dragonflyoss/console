@@ -19,6 +19,7 @@ import {
   Tooltip as MuiTooltip,
   IconButton,
   Link,
+  useTheme,
 } from '@mui/material';
 import {
   Chart as ChartJS,
@@ -55,6 +56,7 @@ import { ReactComponent as GitCommit } from '../../../assets/images/cluster/peer
 import { ReactComponent as Active } from '../../../assets/images/cluster/peer/active.svg';
 import { ReactComponent as Export } from '../../../assets/images/cluster/peer/export.svg';
 import { ReactComponent as ExportFile } from '../../../assets/images/cluster/peer/export-file.svg';
+import { ColorModeContext } from '../../../App';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 Chart.defaults.font.family = 'mabry-light';
@@ -85,6 +87,9 @@ export default function Peer() {
   const [disabled, setDisabled] = useState(false);
 
   const { cluster } = useContext(MyContext);
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
+
   useEffect(() => {
     (async function () {
       try {
@@ -233,8 +238,8 @@ export default function Peer() {
     datasets: [
       {
         data: gitVersion.map((item) => item.count),
-        backgroundColor: 'rgb(46,143,121)',
-        borderColor: 'rgb(46,143,121)',
+        backgroundColor: theme.palette.mode === 'dark' ? '#00a76f' : 'rgb(46,143,121)',
+        borderColor: theme.palette.mode === 'dark' ? '#00a76f' : 'rgb(46,143,121)',
         borderWidth: 1,
         borderRadius: 5,
         barPercentage: 0.6,
@@ -242,20 +247,25 @@ export default function Peer() {
     ],
   };
 
+  const doughnutBackgroundColor = [
+    'rgb(46,143,121)',
+    'rgba(46,143,121,0.8)',
+    'rgba(46,143,121,0.6)',
+    'rgba(46,143,121,0.4)',
+    'rgba(46,143,121,0.2)',
+  ];
+
+  const darkDoughnutBackgroundColor = ['#00a76f', '#28C08D', '#4ABE97', '#67C0A2', '#95CFBB'];
+
   const gitVersionDoughnut = {
     labels: gitVersion.map((item) => item.name),
     datasets: [
       {
         label: 'Git Version',
         data: gitVersion.map((item) => item.count),
-        backgroundColor: [
-          'rgb(46,143,121)',
-          'rgba(46,143,121,0.8)',
-          'rgba(46,143,121,0.6)',
-          'rgba(46,143,121,0.4)',
-          'rgba(46,143,121,0.2)',
-        ],
+        backgroundColor: theme.palette.mode === 'dark' ? darkDoughnutBackgroundColor : doughnutBackgroundColor,
         borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.6)',
       },
     ],
   };
@@ -265,8 +275,8 @@ export default function Peer() {
     datasets: [
       {
         data: gitCommit.map((item) => item.count),
-        backgroundColor: 'rgb(46,143,121)',
-        borderColor: 'rgb(46,143,121)',
+        backgroundColor: theme.palette.mode === 'dark' ? '#00a76f' : 'rgb(46,143,121)',
+        borderColor: theme.palette.mode === 'dark' ? '#00a76f' : 'rgb(46,143,121)',
         borderWidth: 1,
         borderRadius: 5,
         barPercentage: 0.6,
@@ -280,14 +290,9 @@ export default function Peer() {
       {
         label: 'Git Commit',
         data: gitCommit.map((item) => item.count),
-        backgroundColor: [
-          'rgb(46,143,121)',
-          'rgba(46,143,121,0.8)',
-          'rgba(46,143,121,0.6)',
-          'rgba(46,143,121,0.4)',
-          'rgba(46,143,121,0.2)',
-        ],
+        backgroundColor: theme.palette.mode === 'dark' ? darkDoughnutBackgroundColor : doughnutBackgroundColor,
         borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.6)',
       },
     ],
   };
@@ -514,7 +519,7 @@ export default function Peer() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
                   Total
                 </Typography>
                 {isLoading ? (
@@ -537,7 +542,7 @@ export default function Peer() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
                   Git Version
                 </Typography>
                 {isLoading ? (
@@ -560,7 +565,7 @@ export default function Peer() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
                   Git Commit
                 </Typography>
                 {isLoading ? (

@@ -177,7 +177,7 @@ export default function Preheats() {
         sx={{ mb: '2rem' }}
       >
         <Typography color="text.primary">Job</Typography>
-        <Typography color="inherit">Preheats</Typography>
+        <Typography color="inherit">Preheat</Typography>
       </Breadcrumbs>
       <Card>
         <Box

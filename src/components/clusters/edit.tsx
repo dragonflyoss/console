@@ -156,7 +156,7 @@ export default function EditCluster() {
               }
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -206,8 +206,8 @@ export default function EditCluster() {
             placement="top"
           >
             <HelpIcon
-              color="disabled"
               sx={{
+                color: 'var(--palette-grey-300Channel)',
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
@@ -269,8 +269,8 @@ export default function EditCluster() {
             placement="top"
           >
             <HelpIcon
-              color="disabled"
               sx={{
+                color: 'var(--palette-grey-300Channel)',
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
@@ -333,8 +333,8 @@ export default function EditCluster() {
             placement="top"
           >
             <HelpIcon
-              color="disabled"
               sx={{
+                color: 'var(--palette-grey-300Channel)',
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
@@ -386,7 +386,7 @@ export default function EditCluster() {
               title={`If other peers download from the seed peer, the load of the seed peer will increase. When the load limit of the seed peer is reached, the scheduler will no longer schedule other peers to download from the seed peer until the it has the free load.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -427,7 +427,7 @@ export default function EditCluster() {
               }
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -468,7 +468,7 @@ export default function EditCluster() {
               title={`The maximum number of parents that the scheduler can schedule for download peer.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -510,7 +510,7 @@ export default function EditCluster() {
               title={`The scheduler will randomly select the  number of parents from all the parents according to the filter parent limit and evaluate the optimal parents in selecting parents for the peer to download task. The number of optimal parent is the scheduling parent limit.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -551,7 +551,7 @@ export default function EditCluster() {
               title={`The rate limit(requests per second) for job Open API, default value is 10.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -740,7 +740,7 @@ export default function EditCluster() {
               Information
             </Typography>
             <Tooltip title="The information of cluster." placement="top">
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           <Box className={styles.defaultContainer}>
@@ -762,7 +762,7 @@ export default function EditCluster() {
               title="When peer does not find a matching cluster based on scopes, the default cluster will be used."
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           {informationForm.map((item) => (
@@ -783,7 +783,7 @@ export default function EditCluster() {
             the scope."
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           <Grid className={styles.scopesContainer}>
@@ -822,7 +822,7 @@ export default function EditCluster() {
               Config
             </Typography>
             <Tooltip title=" The configuration for P2P downloads." placement="top">
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           <Grid className={styles.configContainer}>
@@ -845,7 +845,7 @@ export default function EditCluster() {
             loading={loadingButton}
             onClick={() => {
               setLoadingButton(true);
-              navigate(`/clusters/${id}`);
+              navigate(`/clusters/${params.id}`);
             }}
           />
           <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />

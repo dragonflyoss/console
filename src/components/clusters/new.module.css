@@ -49,6 +49,7 @@
 .descriptionIcon {
   width: 0.8rem !important ;
   height: 0.8rem !important;
+  color: 'var(--palette-grey-300Channel)';
 }
 
 .descriptionIcon:hover {

@@ -33,7 +33,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { fuzzySearch, getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MAX_PAGE_SIZE } from '../../lib/constants';
 import Card from '../card';
@@ -49,7 +49,7 @@ import { ReactComponent as Active } from '../../assets/images/cluster/active.svg
 import { ReactComponent as ClusterID } from '../../assets/images/cluster/id.svg';
 import { ReactComponent as IcContent } from '../../assets/images/cluster/scheduler/ic-content.svg';
 import { ReactComponent as NoCluster } from '../../assets/images/cluster/no-cluster.svg';
-
+import { ReactComponent as ArrowCircleRightIcon } from '../../assets/images/cluster/arrow-circle-right.svg';
 import { ReactComponent as Cluster } from '../../assets/images/cluster/tab-cluster.svg';
 import { ReactComponent as Scheduler } from '../../assets/images/cluster/scheduler/tab-scheduler.svg';
 import { ReactComponent as SeedPeer } from '../../assets/images/cluster/seed-peer/tab-seed-peer.svg';
@@ -225,16 +225,7 @@ export default function Clusters() {
         </Alert>
       </Snackbar>
       <Box className={styles.clusterTitle}>
-        <Breadcrumbs
-          separator={
-            <Box
-              sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
-            />
-          }
-          aria-label="breadcrumb"
-        >
-          <Typography variant="h5">Cluster</Typography>
-        </Breadcrumbs>
+        <Typography variant="h5">Cluster</Typography>
         <Button
           id="create-cluster"
           size="small"
@@ -540,7 +531,7 @@ export default function Clusters() {
                           id={`default-cluster-${item.id || 0}`}
                           sx={{
                             height: '1.4rem',
-                            background: item.is_default ? 'var(--description-color)' : 'var(--button-color)',
+                            background: item.is_default ? 'var(--description-color)' : 'var(--palette-dark-300Channel)',
                             color: item.is_default ? '#FFFFFF' : '#FFFFFF',
                             display: 'inline-flex',
                             alignItems: 'center',
@@ -576,7 +567,7 @@ export default function Clusters() {
                             navigate(`/clusters/${item.id}`);
                           }}
                         >
-                          <ArrowCircleRightIcon fontSize="large" sx={{ color: 'var(--button-color)' }} />
+                          <ArrowCircleRightIcon className={styles.arrowCircleRightIcon} />
                         </IconButton>
                       </Box>
                     </Box>

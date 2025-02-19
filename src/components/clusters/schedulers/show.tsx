@@ -102,6 +102,7 @@ export default function Schedulers() {
           {errorMessageText}
         </Alert>
       </Snackbar>
+      <Typography variant="h5">Scheduler</Typography>
       <Breadcrumbs
         separator={
           <Box
@@ -109,7 +110,7 @@ export default function Schedulers() {
           />
         }
         aria-label="breadcrumb"
-        sx={{ mb: '1rem' }}
+        sx={{ mb: '2rem', mt: '1rem' }}
       >
         <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters`}>
           clusters
@@ -122,9 +123,6 @@ export default function Schedulers() {
         </RouterLink>
         <Typography color="text.primary">{scheduler?.host_name || '-'}</Typography>
       </Breadcrumbs>
-      <Typography variant="h6" sx={{ p: '1rem 0 2rem 0', fontFamily: 'mabry-bold' }}>
-        Scheduler
-      </Typography>
       <Card className={styles.container}>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
@@ -196,9 +194,11 @@ export default function Schedulers() {
                 id="status"
                 sx={{
                   borderRadius: '0.25rem',
-                  backgroundColor: scheduler?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                  backgroundColor:
+                    scheduler?.state === 'active' ? 'var(--description-color)' : 'var(--palette-dark-300Channel)',
                   color: scheduler?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
-                  borderColor: scheduler?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                  borderColor:
+                    scheduler?.state === 'active' ? 'var(--description-color)' : 'var(--palette-dark-300Channel)',
                   fontWeight: 'bold',
                 }}
               />

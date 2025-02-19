@@ -1,4 +1,4 @@
-import { Breadcrumbs, createTheme, styled, ThemeProvider, Typography, Link as RouterLink } from '@mui/material';
+import { Breadcrumbs, styled, Typography, Link as RouterLink } from '@mui/material';
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import * as React from 'react';
 import Box from '@mui/material/Box';
@@ -39,17 +39,19 @@ export default function NavTabs() {
     [theme.breakpoints.up('sm')]: {
       minWidth: 0,
     },
-    minHeight: '3.5rem',
+    minHeight: '3rem',
     fontWeight: theme.typography.fontWeightRegular,
-    color: 'var(--palette-text-secondary)',
-    padding: '0 1rem',
+    color: 'var(--palette-grey-tab)',
+    padding: '0',
+    marginRight: '2rem',
     fontSize: '0.9rem',
+    fontFamily: 'mabry-bold',
     '&:hover': {
       color: 'primary',
       opacity: 1,
     },
     '&.Mui-selected': {
-      color: 'var(--palette-text-secondary)',
+      color: 'var(--description-color)',
       fontFamily: 'mabry-bold',
     },
   }));
@@ -72,8 +74,8 @@ export default function NavTabs() {
         aria-label="breadcrumb"
         sx={{ mb: '1rem' }}
       >
-        <Typography>jobs</Typography>
-        <Typography>task</Typography>
+        <Typography color="text.primary">Job</Typography>
+        <Typography color="text.primary">Task</Typography>
         {location.pathname.split('/')[3] === 'executions' ? (
           <RouterLink
             component={Link}
@@ -81,12 +83,12 @@ export default function NavTabs() {
             color={breadcrumbsColor === 5 ? 'text.primary' : 'inherit'}
             to={`/jobs/task/executions`}
           >
-            executions
+            Executions
           </RouterLink>
         ) : (
-          <Typography color="inherit">{location.pathname.split('/')[3]}</Typography>
+          <Typography color="inherit">Clear</Typography>
         )}
-        {params?.id ? <Typography color="inherit"> {params?.id}</Typography> : ''}
+        {params?.id ? <Typography color="inherit">{params?.id || '-'}</Typography> : ''}
       </Breadcrumbs>
       <AntTabs
         value={value}

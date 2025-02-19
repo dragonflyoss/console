@@ -1,6 +1,7 @@
 .userIcon {
   width: 1.6rem;
   height: 1.6rem;
+  color: var(--palette-detail-lable-color);
 }
 
 .profileContainer {
@@ -24,7 +25,7 @@
 .avatarContent {
   width: 5rem !important;
   height: 5rem !important;
-  background-color: var(--button-color) !important;
+  background: var(--palette-secondary-dark) !important;
 }
 
 .informationHeader {
@@ -44,10 +45,6 @@
   padding-bottom: 1rem;
 }
 
-.editIcon {
-  color: var(--palette-text-disabled);
-}
-
 .informationLable {
   width: 30%;
   display: flex;
@@ -58,6 +55,13 @@
   margin-left: 1rem !important;
   color: var(--palette-detail-lable-color);
   font-family: 'mabry-bold' !important;
+}
+
+.textFieldIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-right: 0.4rem;
+  color: var(--text-palette-text-secondary);
 }
 
 .editIcon {

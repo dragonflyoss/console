@@ -42,6 +42,7 @@
 .detailIcon {
   width: 1.4rem;
   height: 1.4rem;
+  color: var(--text-palette-text-secondary);
 }
 
 .menuItemIcon {
@@ -87,4 +88,8 @@
 
 .tableRow:last-child {
   border-bottom: none;
+}
+
+.tableHeaderText {
+  border-color: var(--palette-divider) !important;
 }

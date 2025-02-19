@@ -277,28 +277,28 @@ export default function Users() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
             <TableRow>
-              <TableCell align="center"></TableCell>
-              <TableCell align="center">
+              <TableCell className={styles.tableHeaderText} align="center"></TableCell>
+              <TableCell align="center" className={styles.tableHeaderText}>
                 <Typography variant="subtitle1" className={styles.tableHeader}>
                   Name
                 </Typography>
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="center" className={styles.tableHeaderText}>
                 <Typography variant="subtitle1" className={styles.tableHeader}>
                   Email
                 </Typography>
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="center" className={styles.tableHeaderText}>
                 <Typography variant="subtitle1" className={styles.tableHeader}>
                   Location
                 </Typography>
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="center" className={styles.tableHeaderText}>
                 <Typography variant="subtitle1" className={styles.tableHeader}>
                   State
                 </Typography>
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="center" className={styles.tableHeaderText}>
                 <Typography variant="subtitle1" className={styles.tableHeader}>
                   Operation
                 </Typography>
@@ -380,9 +380,11 @@ export default function Users() {
                       variant="outlined"
                       sx={{
                         borderRadius: '0.2rem',
-                        backgroundColor: item?.state === 'enable' ? 'var( --description-color)' : 'var(--button-color)',
+                        backgroundColor:
+                          item?.state === 'enable' ? 'var( --description-color)' : 'var(--palette-dark-300Channel)',
                         color: item?.state === 'enable' ? '#FFFFFF' : '#FFFFFF',
-                        borderColor: item?.state === 'enable' ? 'var( --description-color)' : 'var(--button-color)',
+                        borderColor:
+                          item?.state === 'enable' ? 'var( --description-color)' : 'var(--palette-dark-300Channel)',
                         fontWeight: 'bold',
                       }}
                     />

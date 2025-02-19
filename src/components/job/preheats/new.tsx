@@ -85,8 +85,12 @@ export default function NewPreheat() {
           endAdornment: (
             <Tooltip title={'Preheat description.'} placement="top">
               <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                sx={{
+                  color: 'var(--palette-grey-300Channel)',
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  ':hover': { color: 'var(--description-color)' },
+                }}
               />
             </Tooltip>
           ),
@@ -126,8 +130,12 @@ export default function NewPreheat() {
               placement="top"
             >
               <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                sx={{
+                  color: 'var(--palette-grey-300Channel)',
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  ':hover': { color: 'var(--description-color)' },
+                }}
               />
             </Tooltip>
           ),
@@ -158,8 +166,12 @@ export default function NewPreheat() {
           endAdornment: (
             <Tooltip title={'URL address used to specify the resource to be preheat.'} placement="top">
               <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                sx={{
+                  color: 'var(--palette-grey-300Channel)',
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  ':hover': { color: 'var(--description-color)' },
+                }}
               />
             </Tooltip>
           ),
@@ -398,7 +410,7 @@ export default function NewPreheat() {
       >
         <Typography color="text.primary">Job</Typography>
         <RouterLink component={Link} underline="hover" color="text.primary" to={`/developer/personal-access-tokens`}>
-          Preheats
+          Preheat
         </RouterLink>
         <Typography color="inherit">New preheat</Typography>
       </Breadcrumbs>
@@ -412,8 +424,12 @@ export default function NewPreheat() {
               </Typography>
               <Tooltip title=" The information of preheat." placement="top">
                 <HelpIcon
-                  color="disabled"
-                  sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                  sx={{
+                    color: 'var(--palette-grey-300Channel)',
+                    width: '0.8rem',
+                    height: '0.8rem',
+                    ':hover': { color: 'var(--description-color)' },
+                  }}
                 />
               </Tooltip>
             </Box>
@@ -435,8 +451,12 @@ export default function NewPreheat() {
               </Typography>
               <Tooltip title="Used for clusters that need to be preheating." placement="top">
                 <HelpIcon
-                  color="disabled"
-                  sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                  sx={{
+                    color: 'var(--palette-grey-300Channel)',
+                    width: '0.8rem',
+                    height: '0.8rem',
+                    ':hover': { color: 'var(--description-color)' },
+                  }}
                 />
               </Tooltip>
             </Box>
@@ -482,8 +502,12 @@ export default function NewPreheat() {
               </Typography>
               <Tooltip title="Args used to pass additional configuration options to the preheat task." placement="top">
                 <HelpIcon
-                  color="disabled"
-                  sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                  sx={{
+                    color: 'var(--palette-grey-300Channel)',
+                    width: '0.8rem',
+                    height: '0.8rem',
+                    ':hover': { color: 'var(--description-color)' },
+                  }}
                 />
               </Tooltip>
             </Box>
@@ -537,8 +561,8 @@ export default function NewPreheat() {
                                   placement="top"
                                 >
                                   <HelpIcon
-                                    color="disabled"
                                     sx={{
+                                      color: 'var(--palette-grey-300Channel)',
                                       width: '0.8rem',
                                       height: '0.8rem',
                                       mr: '0.3rem',
@@ -586,8 +610,12 @@ export default function NewPreheat() {
                   </Typography>
                   <Tooltip title="Add headers for preheat request." placement="top">
                     <HelpIcon
-                      color="disabled"
-                      sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                      sx={{
+                        color: 'var(--palette-grey-300Channel)',
+                        width: '0.8rem',
+                        height: '0.8rem',
+                        ':hover': { color: 'var(--description-color)' },
+                      }}
                     />
                   </Tooltip>
                 </Box>

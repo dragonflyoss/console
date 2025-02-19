@@ -632,7 +632,7 @@ export default function ShowCluster() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
                   Total
                 </Typography>
                 {isLoading ? (
@@ -657,7 +657,7 @@ export default function ShowCluster() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
                   Active
                 </Typography>
                 {isLoading ? (
@@ -682,7 +682,7 @@ export default function ShowCluster() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
                   Inactive
                 </Typography>
                 {isLoading ? (
@@ -818,6 +818,7 @@ export default function ShowCluster() {
               border: `1px solid var(--palette-action-hover)`,
               flexWrap: 'wrap',
               ml: '1rem',
+              backgroundColor: 'var(--palette-background-paper)',
             })}
           >
             <StyledToggleButtonGroup
@@ -982,7 +983,6 @@ export default function ShowCluster() {
                           component={Link}
                           to={`/clusters/${params.id}/schedulers/${item?.id}`}
                           underline="hover"
-                          color="inherit"
                         >
                           <Typography
                             id={`card-hostname-${item.host_name}`}
@@ -1075,38 +1075,38 @@ export default function ShowCluster() {
           <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
             <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
               <TableRow>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" className={styles.tableHeader}>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
                     ID
                   </Typography>
                 </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" className={styles.tableHeader}>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
                     Hostname
                   </Typography>
                 </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" className={styles.tableHeader}>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
                     IP
                   </Typography>
                 </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" className={styles.tableHeader}>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
                     Port
                   </Typography>
                 </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" className={styles.tableHeader}>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
                     Status
                   </Typography>
                 </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" className={styles.tableHeader}>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
                     Features
                   </Typography>
                 </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" className={styles.tableHeader}>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
                     Operation
                   </Typography>
                 </TableCell>
@@ -1200,10 +1200,14 @@ export default function ShowCluster() {
                               sx={{
                                 borderRadius: '0.2rem',
                                 backgroundColor:
-                                  item?.state === 'active' ? 'var(--description-color)' : 'var(--save-color)',
+                                  item?.state === 'active'
+                                    ? 'var(--description-color)'
+                                    : 'var(--palette-dark-300Channel)',
                                 color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
                                 borderColor:
-                                  item?.state === 'active' ? 'var(--description-color)' : 'var(--save-color)',
+                                  item?.state === 'active'
+                                    ? 'var(--description-color)'
+                                    : 'var(--palette-dark-300Channel)',
                                 fontWeight: 'bold',
                               }}
                             />
@@ -1219,10 +1223,10 @@ export default function ShowCluster() {
                                     variant="outlined"
                                     sx={{
                                       borderRadius: '0.2rem',
-                                      background: 'var(--save-color)',
+                                      background: 'var(--palette-dark-300Channel)',
                                       color: '#FFFFFF',
                                       m: '0 0.4rem',
-                                      borderColor: 'var(--save-color)',
+                                      borderColor: 'var(--palette-dark-300Channel)',
                                       fontWeight: 'bold',
                                     }}
                                   />
@@ -1574,32 +1578,17 @@ export default function ShowCluster() {
                     <Box>
                       <ListSubheader color="inherit" className={styles.schedulerInactiveListTitle}>
                         <Box className={styles.schedulerInactiveHeaderID}>
-                          <Typography
-                            variant="body2"
-                            fontFamily="mabry-bold"
-                            color="var(--table-title-text-color)"
-                            component="div"
-                          >
+                          <Typography variant="body2" className={styles.schedulerInactiveTable} component="div">
                             ID
                           </Typography>
                         </Box>
                         <Box className={styles.schedulerInactiveHeaderHostname}>
-                          <Typography
-                            variant="body2"
-                            fontFamily="mabry-bold"
-                            color="var(--table-title-text-color)"
-                            component="div"
-                          >
+                          <Typography variant="body2" className={styles.schedulerInactiveTable} component="div">
                             Hostname
                           </Typography>
                         </Box>
                         <Box className={styles.schedulerInactiveHeaderIP}>
-                          <Typography
-                            variant="body2"
-                            fontFamily="mabry-bold"
-                            color="var(--table-title-text-color)"
-                            component="div"
-                          >
+                          <Typography variant="body2" className={styles.schedulerInactiveTable} component="div">
                             IP
                           </Typography>
                         </Box>
@@ -1878,7 +1867,7 @@ export default function ShowCluster() {
                 <Typography component="div" variant="body2" fontFamily="mabry-bold">
                   Schedule
                 </Typography>
-                <Typography component="div" variant="caption" color="rgb(82 82 82 / 87%)">
+                <Typography component="div" variant="caption" color="var(--text-palette-text-secondary)">
                   If schedule feature is enabled, the scheduler can schedule download tasks.
                 </Typography>
               </Box>
@@ -1904,7 +1893,7 @@ export default function ShowCluster() {
                 <Typography component="div" variant="body2" fontFamily="mabry-bold">
                   Preheat
                 </Typography>
-                <Typography component="div" variant="caption" color="rgb(82 82 82 / 87%)">
+                <Typography component="div" variant="caption" color="var(--text-palette-text-secondary)">
                   If preheat feature is enabled, the scheduler can execute preheating job.
                 </Typography>
               </Box>

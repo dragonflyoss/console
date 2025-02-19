@@ -1,4 +1,3 @@
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -187,7 +186,6 @@ export default function SignIn() {
           <HeaderLayout />
         </Box>
         <Container component="main" maxWidth="xs">
-          <CssBaseline />
           <Box
             sx={{
               marginTop: '5rem',

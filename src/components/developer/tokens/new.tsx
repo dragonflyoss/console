@@ -58,8 +58,12 @@ export default function CreateTokens() {
           endAdornment: (
             <Tooltip title={`What’s this token for?`} placement="top">
               <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                sx={{
+                  color: 'var(--palette-grey-300Channel)',
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  ':hover': { color: 'var(--description-color)' },
+                }}
               />
             </Tooltip>
           ),
@@ -92,8 +96,12 @@ export default function CreateTokens() {
           endAdornment: (
             <Tooltip title={'Personal access token description.'} placement="top">
               <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                sx={{
+                  color: 'var(--palette-grey-300Channel)',
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  ':hover': { color: 'var(--description-color)' },
+                }}
               />
             </Tooltip>
           ),
@@ -220,9 +228,9 @@ export default function CreateTokens() {
         aria-label="breadcrumb"
         sx={{ m: '1rem 0' }}
       >
-        <Typography color="text.primary">developer</Typography>
+        <Typography color="text.primary">Developer</Typography>
         <RouterLink component={Link} underline="hover" color="text.primary" to={`/developer/personal-access-tokens`}>
-          personal access tokens
+          Personal access tokens
         </RouterLink>
         <Typography color="inherit">New token</Typography>
       </Breadcrumbs>
@@ -235,8 +243,12 @@ export default function CreateTokens() {
             </Typography>
             <Tooltip title="  The information of personal access token." placement="top">
               <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                sx={{
+                  color: 'var(--palette-grey-300Channel)',
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  ':hover': { color: 'var(--description-color)' },
+                }}
               />
             </Tooltip>
           </Box>
@@ -267,12 +279,16 @@ export default function CreateTokens() {
             </Typography>
             <Tooltip title="Expiration of personal access token." placement="top">
               <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                sx={{
+                  color: 'var(--palette-grey-300Channel)',
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  ':hover': { color: 'var(--description-color)' },
+                }}
               />
             </Tooltip>
           </Box>
-          <FormControl size="small">
+          <FormControl size="small" color="success">
             <InputLabel required id="demo-simple-select-label">
               Expiration
             </InputLabel>
@@ -304,8 +320,12 @@ export default function CreateTokens() {
             </Typography>
             <Tooltip title="Scopes define the access for personal tokens." placement="top">
               <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                sx={{
+                  color: 'var(--palette-grey-300Channel)',
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  ':hover': { color: 'var(--description-color)' },
+                }}
               />
             </Tooltip>
           </Box>

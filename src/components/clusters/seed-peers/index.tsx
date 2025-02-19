@@ -741,7 +741,7 @@ export default function ShowCluster() {
               <Fragment>
                 {activeStep === 0 ? (
                   <Card>
-                    <Box className={styles.schedulerInactiveCountWrapper}>
+                    <Box className={styles.seedPeerInactiveCountWrapper}>
                       <Typography fontFamily="mabry-bold" variant="subtitle1" component="div">
                         Seed peers
                       </Typography>
@@ -770,19 +770,19 @@ export default function ShowCluster() {
                     </Box>
                     <Box>
                       <hr className={styles.divider} />
-                      <ListSubheader color="inherit" className={styles.schedulerInactiveListTitle}>
-                        <Box className={styles.schedulerInactiveHeaderID}>
-                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                      <ListSubheader color="inherit" className={styles.seedPeerInactiveListTitle}>
+                        <Box className={styles.seedPeerInactiveHeaderID}>
+                          <Typography variant="body2" className={styles.seedPeerInactiveTableHeaderText}>
                             ID
                           </Typography>
                         </Box>
-                        <Box className={styles.schedulerInactiveHeaderHostname}>
-                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                        <Box className={styles.seedPeerInactiveHeaderHostname}>
+                          <Typography variant="body2" className={styles.seedPeerInactiveTableHeaderText}>
                             Hostname
                           </Typography>
                         </Box>
-                        <Box className={styles.schedulerInactiveHeaderIP}>
-                          <Typography variant="body2" fontFamily="mabry-bold" color="#515155" component="div">
+                        <Box className={styles.seedPeerInactiveHeaderIP}>
+                          <Typography variant="body2" className={styles.seedPeerInactiveTableHeaderText}>
                             IP
                           </Typography>
                         </Box>
@@ -792,7 +792,7 @@ export default function ShowCluster() {
                         <List
                           sx={{
                             width: '100%',
-                            bgcolor: 'background.paper',
+                            bgcolor: 'background.Card',
                             overflow: 'auto',
                             maxHeight: 300,
                             padding: '0',
@@ -803,13 +803,9 @@ export default function ShowCluster() {
                             seedPeerInactive.map((item, index) => {
                               return index !== seedPeerInactive.length - 1 ? (
                                 <Box key={item.id}>
-                                  <ListItem className={styles.schedulerInactiveList}>
+                                  <ListItem className={styles.seedPeerInactiveList}>
                                     <MuiTooltip title={item.id || '-'} placement="top">
-                                      <Typography
-                                        variant="body2"
-                                        component="div"
-                                        className={styles.schedulerInactiveID}
-                                      >
+                                      <Typography variant="body2" component="div" className={styles.seedPeerInactiveID}>
                                         {item.id}
                                       </Typography>
                                     </MuiTooltip>
@@ -817,17 +813,13 @@ export default function ShowCluster() {
                                       <Typography
                                         variant="body2"
                                         component="div"
-                                        className={styles.schedulerInactiveHostname}
+                                        className={styles.seedPeerInactiveHostname}
                                       >
                                         {item.host_name}
                                       </Typography>
                                     </MuiTooltip>
                                     <MuiTooltip title={item.ip || '-'} placement="top">
-                                      <Typography
-                                        variant="body2"
-                                        component="div"
-                                        className={styles.schedulerInactiveIP}
-                                      >
+                                      <Typography variant="body2" component="div" className={styles.seedPeerInactiveIP}>
                                         {item.ip}
                                       </Typography>
                                     </MuiTooltip>
@@ -836,13 +828,9 @@ export default function ShowCluster() {
                                 </Box>
                               ) : (
                                 <Box key={item.id}>
-                                  <ListItem className={styles.schedulerInactiveList}>
+                                  <ListItem className={styles.seedPeerInactiveList}>
                                     <MuiTooltip title={item.id || '-'} placement="top">
-                                      <Typography
-                                        variant="body2"
-                                        component="div"
-                                        className={styles.schedulerInactiveID}
-                                      >
+                                      <Typography variant="body2" component="div" className={styles.seedPeerInactiveID}>
                                         {item.id}
                                       </Typography>
                                     </MuiTooltip>
@@ -850,17 +838,13 @@ export default function ShowCluster() {
                                       <Typography
                                         variant="body2"
                                         component="div"
-                                        className={styles.schedulerInactiveHostname}
+                                        className={styles.seedPeerInactiveHostname}
                                       >
                                         {item.host_name}
                                       </Typography>
                                     </MuiTooltip>
                                     <MuiTooltip title={item.ip || '-'} placement="top">
-                                      <Typography
-                                        variant="body2"
-                                        component="div"
-                                        className={styles.schedulerInactiveIP}
-                                      >
+                                      <Typography variant="body2" component="div" className={styles.seedPeerInactiveIP}>
                                         {item.ip}
                                       </Typography>
                                     </MuiTooltip>
@@ -987,7 +971,7 @@ export default function ShowCluster() {
         <Card className={styles.seedPeerHeader}>
           <Box sx={{ display: 'flex', width: '70%' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+              <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
                 Total
               </Typography>
               <Box>
@@ -1013,7 +997,7 @@ export default function ShowCluster() {
         <Card className={styles.activeHeader}>
           <Box sx={{ display: 'flex', width: '70%' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+              <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
                 Active
               </Typography>
               <Box>
@@ -1038,7 +1022,7 @@ export default function ShowCluster() {
         <Card className={styles.activeHeader}>
           <Box sx={{ display: 'flex' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+              <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
                 Inactive
               </Typography>
               <Box>
@@ -1175,6 +1159,7 @@ export default function ShowCluster() {
               border: `1px solid var(--palette-action-hover)`,
               flexWrap: 'wrap',
               ml: '1rem',
+              backgroundColor: 'var(--palette-background-paper)',
             })}
           >
             <StyledToggleButtonGroup
@@ -1324,7 +1309,6 @@ export default function ShowCluster() {
                           component={Link}
                           to={`/clusters/${params.id}/seed-peers/${item?.id}`}
                           underline="hover"
-                          color="inherit"
                         >
                           <Typography
                             id={`card-hostname-${item.host_name}`}
@@ -1397,7 +1381,7 @@ export default function ShowCluster() {
             </Box>
           ) : (
             <Card className={styles.noData}>
-              <IcContent className={styles.nodataIcon} />ƒ
+              <IcContent className={styles.nodataIcon} />
               <Typography id="no-seed-peer" variant="h6" className={styles.nodataText}>
                 You don't have seed peer cluster.
               </Typography>
@@ -1410,48 +1394,48 @@ export default function ShowCluster() {
             <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="seed-peer-table">
               <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
                 <TableRow>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
                       ID
                     </Typography>
                   </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
                       Hostname
                     </Typography>
                   </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
                       IP
                     </Typography>
                   </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
                       Port
                     </Typography>
                   </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
                       Download Port
                     </Typography>
                   </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
                       Object Storage Port
                     </Typography>
                   </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
                       Type
                     </Typography>
                   </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
                       Status
                     </Typography>
                   </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
                       Operation
                     </Typography>
                   </TableCell>
@@ -1532,7 +1516,7 @@ export default function ShowCluster() {
                                 component={Link}
                                 to={`/clusters/${params.id}/seed-peers/${item?.id}`}
                                 underline="hover"
-                                color="inherit"
+                                color="var(--description-color)"
                               >
                                 {item?.host_name}
                               </RouterLink>
@@ -1560,10 +1544,14 @@ export default function ShowCluster() {
                                 sx={{
                                   borderRadius: '0.2rem',
                                   backgroundColor:
-                                    item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                                    item?.state === 'active'
+                                      ? 'var(--description-color)'
+                                      : 'var(--palette-dark-300Channel)',
                                   color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
                                   borderColor:
-                                    item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                                    item?.state === 'active'
+                                      ? 'var(--description-color)'
+                                      : 'var(--palette-dark-300Channel)',
                                   fontWeight: 'bold',
                                 }}
                               />

@@ -1,6 +1,6 @@
-<svg t="1739270956049" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2875"
-    width="200" height="200">
-    <path
-        d="M512 51.2c254.4896 0 460.8 206.3104 460.8 460.8s-206.3104 460.8-460.8 460.8S51.2 766.4896 51.2 512 257.5104 51.2 512 51.2z m-61.2608 225.4848l-54.3232 54.272L577.4336 512l-180.992 181.0176 54.272 54.2976L686.08 512l-235.3152-235.3152z"
-        p-id="2876" fill="currentColor"></path>
+<svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1i1g2q3" focusable="false" aria-hidden="true"
+    viewBox="0 0 24 24">
+    <path fill="currentColor"
+        d="M10 19a1 1 0 0 1-.64-.23a1 1 0 0 1-.13-1.41L13.71 12L9.39 6.63a1 1 0 0 1 .15-1.41a1 1 0 0 1 1.46.15l4.83 6a1 1 0 0 1 0 1.27l-5 6A1 1 0 0 1 10 19">
+    </path>
 </svg>

@@ -12,7 +12,7 @@ interface cancelLoadingButtonProps extends ButtonProps {
 export const CancelLoadingButton: React.FC<cancelLoadingButtonProps> = ({ loading, onClick, id, ...rest }) => (
   <LoadingButton
     loading={loading}
-    endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
+    endIcon={<CancelIcon sx={{ color: 'var(--palette-secondary-dark)' }} />}
     size="small"
     variant="outlined"
     type="reset"
@@ -20,17 +20,18 @@ export const CancelLoadingButton: React.FC<cancelLoadingButtonProps> = ({ loadin
     id={id}
     sx={{
       '&.MuiLoadingButton-root': {
-        color: 'var(--button-color)',
-        borderColor: 'var(--button-color)',
+        color: 'var(--palette-secondary-dark)',
+        borderColor: 'var(--palette-secondary-dark)',
+        backgroundColor: 'var(--calcel-background-color)',
       },
       ':hover': {
-        backgroundColor: 'var(--palette-background-paper)',
-        borderColor: 'var(--button-color)',
+        backgroundColor: 'var(--calcel-hover-corlor)',
+        borderColor: 'var(--palette-secondary-dark)',
       },
       '&.MuiLoadingButton-loading': {
         backgroundColor: 'var(--button-loading-color)',
         color: 'var(--button-loading-size-color)',
-        borderColor: 'var(--button-loading-color)',
+        // borderColor: 'var(--button-loading-color)',
       },
       mr: '1rem',
       width: '7rem',

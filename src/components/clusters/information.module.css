@@ -48,7 +48,7 @@
 .deleteClusterIcon {
   width: 6rem;
   height: 6rem;
-  color: var(--hover-button-text-color);
+  /* color: var(--hover-button-text-color); */
 }
 
 .name {
@@ -86,6 +86,7 @@
 .descriptionIcon {
   width: 0.9rem !important ;
   height: 0.9rem !important;
+  color: #919eab;
 }
 
 .descriptionIcon:hover {
@@ -228,7 +229,7 @@
   align-items: center;
   justify-content: center;
   margin-top: 0.4rem;
-  padding: 0.5rem;
+  padding: 0.2rem 0.4rem;
 }
 
 .cidrsText {
@@ -274,43 +275,36 @@
 }
 
 .idcDialogContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  gap: calc(1.5rem);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .cidrsDialogContent {
-  width: 45%;
   background-color: #f7f7f8 !important;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   padding: 0.4rem 0.8rem;
-  margin-bottom: 0.8rem;
-  margin-right: 0.5rem;
-  margin-left: 0.5rem;
 }
 
 .cidrsDialogContainer {
-  display: flex;
-  flex-wrap: wrap;
+  gap: calc(1.5rem);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .idcDialogContent {
-  width: 45%;
   background-color: #f7f7f8 !important;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   padding: 0.4rem 0.8rem;
-  margin-bottom: 0.8rem;
-  margin-right: 0.5rem;
-  margin-left: 0.5rem;
 }
 
 .cidrsIcon {
   width: 1.6rem;
   height: 1.6rem;
   margin-right: 0.3rem;
-  color: var(--palette-background-paper);
+  color: var(--save-color);
 }

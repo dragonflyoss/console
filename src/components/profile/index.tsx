@@ -35,6 +35,7 @@ import { ReactComponent as Name } from '../../assets/images/profile/name.svg';
 import { ReactComponent as ID } from '../../assets/images/profile/id.svg';
 import { ReactComponent as Email } from '../../assets/images/profile/email.svg';
 import { ReactComponent as Location } from '../../assets/images/profile/location.svg';
+import { ReactComponent as MyProfileLocation } from '../../assets/images/user/location.svg';
 import { ReactComponent as Phone } from '../../assets/images/profile/phone.svg';
 import { ReactComponent as CreatedAt } from '../../assets/images/profile/created-at.svg';
 import { ReactComponent as ChangePassword } from '../../assets/images/user/change-password.svg';
@@ -145,7 +146,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <DescriptionIcon className={styles.editIcon} />:
+              <DescriptionIcon className={styles.textFieldIcon} />:
             </InputAdornment>
           ),
         },
@@ -178,7 +179,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <LocalPhoneIcon className={styles.editIcon} />:
+              <LocalPhoneIcon className={styles.textFieldIcon} />:
             </InputAdornment>
           ),
         },
@@ -210,7 +211,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <LocationOnIcon className={styles.editIcon} />:
+              <LocationOnIcon className={styles.textFieldIcon} />:
             </InputAdornment>
           ),
         },
@@ -243,7 +244,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <EmailIcon className={styles.editIcon} />:
+              <EmailIcon className={styles.textFieldIcon} />:
             </InputAdornment>
           ),
         },
@@ -279,7 +280,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <VpnKeyIcon className={styles.editIcon} />
+              <VpnKeyIcon className={styles.textFieldIcon} />
             </InputAdornment>
           ),
 
@@ -292,9 +293,9 @@ export default function Profile() {
               edge="end"
             >
               {showOldPassword ? (
-                <Visibility className={styles.editIcon} />
+                <Visibility className={styles.textFieldIcon} />
               ) : (
-                <VisibilityOff className={styles.editIcon} />
+                <VisibilityOff className={styles.textFieldIcon} />
               )}
             </IconButton>
           ),
@@ -330,7 +331,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <LockIcon className={styles.editIcon} />
+              <LockIcon className={styles.textFieldIcon} />
             </InputAdornment>
           ),
           endAdornment: (
@@ -342,9 +343,9 @@ export default function Profile() {
               edge="end"
             >
               {showNewPassword ? (
-                <Visibility className={styles.editIcon} />
+                <Visibility className={styles.textFieldIcon} />
               ) : (
-                <VisibilityOff className={styles.editIcon} />
+                <VisibilityOff className={styles.textFieldIcon} />
               )}
             </IconButton>
           ),
@@ -375,7 +376,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <LockIcon className={styles.editIcon} />
+              <LockIcon className={styles.textFieldIcon} />
             </InputAdornment>
           ),
 
@@ -388,9 +389,9 @@ export default function Profile() {
               edge="end"
             >
               {showConfirmPassword ? (
-                <Visibility className={styles.editIcon} />
+                <Visibility className={styles.textFieldIcon} />
               ) : (
-                <VisibilityOff className={styles.editIcon} />
+                <VisibilityOff className={styles.textFieldIcon} />
               )}
             </IconButton>
           ),
@@ -565,7 +566,7 @@ export default function Profile() {
                   {users?.name || '-'}
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', pt: '0.3rem' }}>
-                  <Location className={styles.userIcon} />
+                  <MyProfileLocation className={styles.userIcon} />
                   <Typography variant="body2" component="div" ml="0.5rem" color="#919EAB" fontFamily="mabry-bold">
                     {location || '-'}
                   </Typography>
@@ -577,7 +578,8 @@ export default function Profile() {
                 size="small"
                 sx={{
                   background: 'var(--button-color)',
-                  ':hover': { background: 'var(--button-color)' },
+                  color: 'var(--button-text-color)',
+                  ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
                 }}
                 variant="contained"
                 onClick={() => {
@@ -627,7 +629,8 @@ export default function Profile() {
                 variant="contained"
                 sx={{
                   background: 'var(--button-color)',
-                  ':hover': { background: 'var(--button-color)' },
+                  color: 'var(--button-text-color)',
+                  ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
                 }}
                 onClick={() => {
                   setShowPersonalInformation(false);

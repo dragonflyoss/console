@@ -12,7 +12,14 @@ const HeaderLayout = () => {
 
   return (
     <>
-      <IconButton onClick={colorMode.toggleColorMode} color="inherit">
+      <IconButton
+        sx={{
+          ':hover': {
+            backgroundColor: 'rgba(218 218 218 / 40%)',
+          },
+        }}
+        onClick={colorMode.toggleColorMode}
+      >
         {theme.palette.mode === 'dark' ? <Dark className={styles.github} /> : <Light className={styles.github} />}
       </IconButton>
       <Link
@@ -21,7 +28,13 @@ const HeaderLayout = () => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <IconButton>
+        <IconButton
+          sx={{
+            ':hover': {
+              backgroundColor: 'rgba(218 218 218 / 40%)',
+            },
+          }}
+        >
           <Github className={styles.github} />
         </IconButton>
       </Link>

@@ -1,15 +1,15 @@
-.schedulerInactiveCountWrapper {
+.seedPeerInactiveCountWrapper {
   display: flex;
   align-items: center;
   padding: 0.8rem 1rem;
 }
 
-.schedulerInactiveList {
+.seedPeerInactiveList {
   display: flex;
   padding: 0.8rem 1rem !important;
 }
 
-.schedulerInactiveListTitle {
+.seedPeerInactiveListTitle {
   display: flex;
   padding: 0.8rem 1rem;
   background-color: var(--table-title-color) !important;
@@ -56,6 +56,7 @@
   width: 3rem;
   height: 3rem;
   margin-right: '0.5rem';
+  color: var(var(--palette-detail-lable-color));
 }
 
 .headerErrorIcon {
@@ -126,7 +127,7 @@
   margin-bottom: 2rem;
 }
 
-.schedulerInactiveHeaderID {
+.seedPeerInactiveHeaderID {
   width: 20%;
   white-space: nowrap;
   overflow: hidden;
@@ -135,7 +136,7 @@
   align-items: center;
 }
 
-.schedulerInactiveHeaderHostname {
+.seedPeerInactiveHeaderHostname {
   width: 50%;
   white-space: nowrap;
   overflow: hidden;
@@ -144,7 +145,12 @@
   align-items: center;
 }
 
-.schedulerInactiveHeaderIP {
+.seedPeerInactiveTableHeaderText {
+  font-family: 'mabry-bold';
+  color: var(var(--table-title-text-color));
+}
+
+.seedPeerInactiveHeaderIP {
   width: 25%;
   white-space: nowrap;
   overflow: hidden;
@@ -153,7 +159,7 @@
   align-items: center;
 }
 
-.schedulerInactiveID {
+.seedPeerInactiveID {
   display: flex;
   align-items: center;
   width: 20%;
@@ -162,7 +168,7 @@
   text-overflow: ellipsis;
 }
 
-.schedulerInactiveHostname {
+.seedPeerInactiveHostname {
   width: 50%;
   white-space: nowrap;
   overflow: hidden;
@@ -170,7 +176,7 @@
   padding-right: 1rem;
 }
 
-.schedulerInactiveIP {
+.seedPeerInactiveIP {
   width: 25%;
   white-space: nowrap;
   overflow: hidden;
@@ -326,6 +332,10 @@
 }
 
 .tableHeader {
+  border-color: var(--palette-divider) !important;
+}
+
+.tableHeaderText {
   color: var(--table-title-text-color);
   font-family: 'mabry-bold' !important;
 }

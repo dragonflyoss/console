@@ -196,8 +196,8 @@ export default function PersonalAccessTokens() {
         aria-label="breadcrumb"
         sx={{ mb: '1rem' }}
       >
-        <Typography color="text.primary">developer</Typography>
-        <Typography color="inherit">personal access tokens</Typography>
+        <Typography color="text.primary">Developer</Typography>
+        <Typography color="inherit">Personal access tokens</Typography>
       </Breadcrumbs>
       <Typography variant="subtitle2" mb="1.5rem" mt="1rem" color="var(--text-palette-text-secondary)">
         Tokens you have generated that can be used to access the Dragonfly API.

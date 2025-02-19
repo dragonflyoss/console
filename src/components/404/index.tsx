@@ -1,4 +1,4 @@
-import { Box, Typography, Grid, CssBaseline, Button } from '@mui/material';
+import { Box, Typography, Grid, Button } from '@mui/material';
 import styles from './index.module.css';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Logo } from '../../assets/images/404/logo.svg';
@@ -15,7 +15,6 @@ export default function NotFound() {
           Dragonfly
         </Typography>
       </Box>
-      <CssBaseline />
       <Box className={styles.content}>
         <NotFoundImg className={styles.notFound} />
         <Typography variant="h4" gutterBottom mt="2rem" color="#1c293a">

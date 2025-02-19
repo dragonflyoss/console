@@ -8,6 +8,7 @@ import {
   Snackbar,
   Alert,
   Tooltip,
+  colors,
 } from '@mui/material';
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import * as React from 'react';
@@ -151,17 +152,19 @@ export default function NavTabs() {
     [theme.breakpoints.up('sm')]: {
       minWidth: 0,
     },
-    minHeight: '3.5rem',
+    minHeight: '3rem',
     fontWeight: theme.typography.fontWeightRegular,
-    color: 'var(--palette-text-secondary)',
-    padding: '0 1rem',
+    color: 'var(--palette-grey-tab)',
+    padding: '0',
+    marginRight: '2rem',
+    fontFamily: 'mabry-bold',
     fontSize: '0.9rem',
     '&:hover': {
       color: 'primary',
       opacity: 1,
     },
     '&.Mui-selected': {
-      color: 'var(--palette-text-secondary)',
+      color: 'var(--description-color)',
       fontFamily: 'mabry-bold',
     },
   }));

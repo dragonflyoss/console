@@ -142,7 +142,6 @@ export default function ShowPreheat() {
         </Alert>
       </Snackbar>
       <Typography variant="h5">Preheat</Typography>
-
       <Breadcrumbs
         separator={
           <Box
@@ -152,9 +151,9 @@ export default function ShowPreheat() {
         aria-label="breadcrumb"
         sx={{ mb: '2rem', mt: '1rem' }}
       >
-        <Typography>jobs</Typography>
-        <RouterLink component={Link} underline="hover" color="inherit" to={`/jobs/preheats`}>
-          preheats
+        <Typography color="text.primary">Job</Typography>
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/jobs/preheats`}>
+          Preheat
         </RouterLink>
         <Typography>{preheat?.id || '-'}</Typography>
       </Breadcrumbs>
@@ -487,7 +486,7 @@ export default function ShowPreheat() {
                     aria-controls="panel1d-content"
                     id="panel1d-header"
                   >
-                    <Box display="flex">
+                    <Box display="flex" alignItems="center">
                       <Failure className={styles.statusIcon} />
                       <Typography variant="body2" fontFamily="mabry-bold" sx={{ color: '#d0d7de' }}>
                         Preheat

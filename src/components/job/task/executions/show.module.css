@@ -92,6 +92,13 @@
   height: 1.3rem;
 }
 
+.pendingIcon {
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-right: 0.4rem;
+  color: var(--button-text-color);
+}
+
 .errorIcon {
   width: 1.3rem;
   height: 1.3rem;

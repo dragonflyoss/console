@@ -299,9 +299,15 @@ export default function ShowExecutions() {
                 ) : executions?.result?.state === 'FAILURE' ? (
                   <></>
                 ) : (
-                  <Pending id="pending-icon" className={styles.statusIcon} />
+                  <Pending id="pending-icon" className={styles.pendingIcon} />
                 )}
-                <Typography variant="body2" fontFamily="mabry-bold">
+                <Typography
+                  variant="body2"
+                  fontFamily="mabry-bold"
+                  sx={{
+                    color: '#FFF',
+                  }}
+                >
                   {executions?.result?.state}
                 </Typography>
                 {executions.result.state === 'FAILURE' ? (

@@ -343,7 +343,7 @@ export default function Layout(props: any) {
                                 color: 'var(--description-color)',
                               },
                               height: '4rem',
-                              width: '5rem',
+
                               borderRadius: '0.2rem',
                               m: '0.4rem',
                               color: 'var(--palette-text-secondary)',
@@ -383,6 +383,7 @@ export default function Layout(props: any) {
                               <Box className={styles.profileMenu}>
                                 {items.menuProps.map((subItem) => (
                                   <MenuItem
+                                    id={subItem.label}
                                     sx={{ borderRadius: 'var(--menu-border-radius)' }}
                                     key={subItem.label}
                                     onClick={() => {
@@ -418,7 +419,7 @@ export default function Layout(props: any) {
                               color: 'var(--description-color)',
                             },
                             height: '4rem',
-                            width: '5rem',
+
                             borderRadius: '0.2rem',
                             m: '0.4rem',
                             color: 'var(--palette-text-secondary)',
@@ -437,9 +438,9 @@ export default function Layout(props: any) {
                   </List>
                 </Grid>
               ) : (
-                <Grid sx={{ width: '16rem' }}>
+                <Grid sx={{ width: '17rem', p: '0 1rem' }}>
                   <List component="nav" aria-label="main mailbox folders">
-                    <RouterLink href="/clusters" color="inherit" underline="none" className={styles.title}>
+                    <RouterLink id="dragonfly" href="/" color="inherit" underline="none" className={styles.title}>
                       <Logo className={styles.logo} />
                       <Typography variant="h6" sx={{ fontFamily: 'mabry-bold', ml: '0.8rem' }}>
                         Dragonfly
@@ -447,8 +448,9 @@ export default function Layout(props: any) {
                     </RouterLink>
                     {menu.map((items) =>
                       items?.menuProps ? (
-                        <Box id={items.label} key={items.href} className={styles.menu}>
+                        <Box key={items.href} className={styles.menu}>
                           <ListItemButton
+                            id={items.label}
                             selected={(location.pathname.split('/')[1] || '') === items.label}
                             onClick={() => {
                               items?.setExpand(!items?.expand);
@@ -465,7 +467,7 @@ export default function Layout(props: any) {
                               height: '2.6rem',
                               borderRadius: '0.2rem',
                               color: 'var(--palette-text-secondary)',
-                              m: '0.8rem',
+                              m: '0.8rem 0',
                             }}
                           >
                             {items.icon}
@@ -479,6 +481,7 @@ export default function Layout(props: any) {
                               {items.menuProps?.map((item) => {
                                 return (
                                   <ListItemButton
+                                    id={item.label}
                                     selected={(location.pathname.split('/')[2] || '') === item.label}
                                     component={Link}
                                     to={item.href || ''}
@@ -493,12 +496,11 @@ export default function Layout(props: any) {
                                       },
                                       height: '2.4rem',
                                       borderRadius: '0.2rem',
-                                      m: '0.8rem',
-
+                                      m: '0.2rem 0',
                                       color: 'var(--palette-text-secondary)',
                                     }}
                                   >
-                                    <Typography variant="body1" sx={{ fontFamily: 'mabry-bold', ml: '2rem' }}>
+                                    <Typography variant="body1" sx={{ fontFamily: 'mabry-bold', ml: '2.2rem' }}>
                                       {item.text}
                                     </Typography>
                                   </ListItemButton>
@@ -526,7 +528,7 @@ export default function Layout(props: any) {
                             height: '2.6rem',
                             borderRadius: '0.2rem',
                             color: 'var(--palette-text-secondary)',
-                            m: '0.8rem',
+                            m: '0.8rem 0',
                           }}
                         >
                           {items.icon}
@@ -541,12 +543,11 @@ export default function Layout(props: any) {
               )}
               <Box className={styles.compactLayout}>
                 <IconButton
-                  id="expand"
                   sx={{
                     backgroundColor: 'var(--palette-background-rotation)',
                     border: '1px solid  rgba(var(--palette-dark-500Channel)/0.3)',
-                    width: '1.8rem',
-                    height: '1.8rem',
+                    width: '1.6rem',
+                    height: '1.6rem',
                     p: '0.2rem',
                     ':hover': {
                       backgroundColor: 'var(--palette-background--hover-rotation)',
@@ -556,11 +557,15 @@ export default function Layout(props: any) {
                     setCompactLayout((e: any) => !e);
                   }}
                 >
-                  {compactLayout ? <Expand className={styles.expandIcon} /> : <Closure className={styles.expandIcon} />}
+                  {compactLayout ? (
+                    <Expand id="expand" className={styles.expandIcon} />
+                  ) : (
+                    <Closure id="closure" className={styles.expandIcon} />
+                  )}
                 </IconButton>
               </Box>
             </Box>
-            <Box className={styles.layout} sx={{ paddingLeft: compactLayout ? '6rem !important' : '16rem !important' }}>
+            <Box className={styles.layout} sx={{ paddingLeft: compactLayout ? '6rem !important' : '17rem !important' }}>
               <header className={styles.header}>
                 <Box sx={{ display: 'flex' }}>
                   <Box
@@ -573,6 +578,7 @@ export default function Layout(props: any) {
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <HeaderLayout />
                       <IconButton
+                        id="unfold-more"
                         sx={{
                           position: 'relative',
                           transition: 'transform 0.6s ease',
@@ -616,18 +622,6 @@ export default function Layout(props: any) {
                     onClose={() => {
                       setAnchorElement(null);
                     }}
-                    // sx={{
-                    //   position: 'absolute',
-                    //   top: '0',
-                    //   right: '-2rem',
-                    //   '& .MuiMenu-paper': {
-                    //     boxShadow: 'var(--palette-menu-shadow);',
-                    //   },
-                    //   '& .MuiMenu-list': {
-                    //     p: 0,
-                    //     minWidth: '8rem',
-                    //   },
-
                     sx={{
                       '& .MuiMenu-paper': {
                         boxShadow: 'var(--palette-menu-shadow);',

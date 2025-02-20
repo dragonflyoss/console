@@ -268,7 +268,7 @@ describe('Clusters', () => {
 
       cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '5');
 
-      cy.get('#clusters').children().should('have.length', 1);
+      cy.get('#clustersCard').children().should('have.length', 1);
 
       cy.get('#cluster-name-37').should('have.text', 'cluster-37');
 
@@ -384,7 +384,7 @@ describe('Clusters', () => {
       cy.get('#free-solo-demo').type('cluster-47');
 
       // No clusters card.
-      cy.get('#clusters').should('not.exist');
+      cy.get('#clustersCard').should('not.exist');
 
       // Pagination has been hidden.
       cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');

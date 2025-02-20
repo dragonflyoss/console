@@ -60,17 +60,6 @@ import { ReactComponent as Location } from '../../assets/images/user/location.sv
 import { ReactComponent as CreatedAt } from '../../assets/images/user/created-at.svg';
 import { ReactComponent as UpdatedAt } from '../../assets/images/user/updated-at.svg';
 
-// const theme = createTheme({
-//   palette: {
-//     primary: {
-//       main: '#1C293A',
-//     },
-//   },
-//   typography: {
-//     fontFamily: 'mabry-light,sans-serif',
-//   },
-// });
-
 export default function Users() {
   const [isLoading, setIsLoading] = useState(true);
   const [successMessage, setSuccessMessage] = useState(false);
@@ -550,6 +539,7 @@ export default function Users() {
                 User Detail
               </Typography>
               <IconButton
+                id="closure-user-detail"
                 onClick={() => {
                   setUserDetail(false);
                   setSwitchUser(false);
@@ -557,7 +547,7 @@ export default function Users() {
                   setDetailIsLoading(true);
                 }}
               >
-                <ClearOutlinedIcon sx={{ color: 'var(--button-color)' }} />
+                <ClearOutlinedIcon sx={{ color: 'var(--palette-secondary-dark)' }} />
               </IconButton>
             </Box>
             <Divider

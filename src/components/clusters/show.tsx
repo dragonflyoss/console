@@ -267,7 +267,7 @@ export default function NavTabs() {
         sx={{ mb: '1rem' }}
       >
         <RouterLink component={Link} underline="hover" color="text.primary" to={`/clusters`}>
-          clusters
+          Cluster
         </RouterLink>
         {location.pathname.split('/')[3] ? (
           <RouterLink component={Link} underline="hover" color="text.primary" to={`clusters/${params.id}`}>
@@ -276,8 +276,15 @@ export default function NavTabs() {
         ) : (
           <Typography color="inherit"> {cluster?.name || '-'}</Typography>
         )}
-
-        {location.pathname.split('/')[3] && <Typography color="inherit">{location.pathname.split('/')[3]}</Typography>}
+        {location.pathname.split('/')[3] && (
+          <Typography color="inherit">
+            {location.pathname.split('/')[3] === 'schedulers'
+              ? 'Schedulers'
+              : location.pathname.split('/')[3] === 'seed-peers'
+              ? 'Seed Peers'
+              : 'Peers'}
+          </Typography>
+        )}
       </Breadcrumbs>
       <AntTabs
         value={value}

@@ -27,7 +27,7 @@ describe('Create token', () => {
     cy.visit('/developer/personal-access-tokens');
 
     // Click the `ADD PERSONAL ACCESS TOKENS` button.
-    cy.get('.css-1qdyvok > .MuiButtonBase-root').click();
+    cy.get('#new-tokens-button').click();
 
     // Then I see that the current page is the developer/personal-access-tokens/new!
     cy.url().should('include', '/developer/personal-access-tokens/new');

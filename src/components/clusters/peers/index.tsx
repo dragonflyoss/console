@@ -238,9 +238,8 @@ export default function Peer() {
     datasets: [
       {
         data: gitVersion.map((item) => item.count),
-        backgroundColor: theme.palette.mode === 'dark' ? '#00a76f' : 'rgb(46,143,121)',
-        borderColor: theme.palette.mode === 'dark' ? '#00a76f' : 'rgb(46,143,121)',
-        borderWidth: 1,
+        backgroundColor: theme.palette.mode === 'dark' ? '#01A76F' : 'rgb(46,143,121)',
+
         borderRadius: 5,
         barPercentage: 0.6,
       },
@@ -255,7 +254,7 @@ export default function Peer() {
     'rgba(46,143,121,0.2)',
   ];
 
-  const darkDoughnutBackgroundColor = ['#00a76f', '#28C08D', '#4ABE97', '#67C0A2', '#95CFBB'];
+  const darkDoughnutBackgroundColor = ['#004B50', '#007868', '#01A76F', '#5BE49B', '#C8FAD6'];
 
   const gitVersionDoughnut = {
     labels: gitVersion.map((item) => item.name),
@@ -264,7 +263,7 @@ export default function Peer() {
         label: 'Git Version',
         data: gitVersion.map((item) => item.count),
         backgroundColor: theme.palette.mode === 'dark' ? darkDoughnutBackgroundColor : doughnutBackgroundColor,
-        borderWidth: 1,
+        borderWidth: 0,
         borderColor: 'rgba(255, 255, 255, 0.6)',
       },
     ],
@@ -275,9 +274,8 @@ export default function Peer() {
     datasets: [
       {
         data: gitCommit.map((item) => item.count),
-        backgroundColor: theme.palette.mode === 'dark' ? '#00a76f' : 'rgb(46,143,121)',
-        borderColor: theme.palette.mode === 'dark' ? '#00a76f' : 'rgb(46,143,121)',
-        borderWidth: 1,
+        backgroundColor: theme.palette.mode === 'dark' ? '#01A76F' : 'rgb(46,143,121)',
+        borderWidth: 0,
         borderRadius: 5,
         barPercentage: 0.6,
       },
@@ -291,7 +289,7 @@ export default function Peer() {
         label: 'Git Commit',
         data: gitCommit.map((item) => item.count),
         backgroundColor: theme.palette.mode === 'dark' ? darkDoughnutBackgroundColor : doughnutBackgroundColor,
-        borderWidth: 1,
+        borderWidth: 0,
         borderColor: 'rgba(255, 255, 255, 0.6)',
       },
     ],
@@ -523,7 +521,7 @@ export default function Peer() {
                   Total
                 </Typography>
                 {isLoading ? (
-                  <Skeleton data-testid="cluster-loading" width="2rem" />
+                  <Skeleton height={40} data-testid="cluster-loading" width="2rem" />
                 ) : (
                   <Typography id="total" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
                     {peer.length}
@@ -546,7 +544,7 @@ export default function Peer() {
                   Git Version
                 </Typography>
                 {isLoading ? (
-                  <Skeleton data-testid="cluster-loading" width="2rem" />
+                  <Skeleton height={40} data-testid="cluster-loading" width="2rem" />
                 ) : (
                   <Typography id="git-version" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
                     {gitVersionCount}
@@ -569,7 +567,7 @@ export default function Peer() {
                   Git Commit
                 </Typography>
                 {isLoading ? (
-                  <Skeleton data-testid="cluster-loading" width="2rem" />
+                  <Skeleton height={40} data-testid="cluster-loading" width="2rem" />
                 ) : (
                   <Typography id="git-commit" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
                     {gitCommitCount}

@@ -44,12 +44,12 @@
   background-position: center;
   height: 100%;
   position: fixed;
-  max-width: 16rem;
+  /* max-width: 16rem; */
   display: flex;
   flex-direction: column;
   z-index: 1101;
   border-right: 1px solid rgba(var(--palette-dark-500Channel) / 0.2);
-  background-color: var(--palette-background-paper);
+  background-color: var(--palette-background-menu-paper);
 }
 
 .navigationBar {
@@ -68,13 +68,13 @@
 
 .compactLayout {
   position: absolute;
-  right: -0.9rem;
+  right: -0.8rem;
   top: 1.2rem;
 }
 
 .expandIcon {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.4rem;
+  height: 1.4rem;
   color: var(--palette-secondary-dark);
 }
 
@@ -106,7 +106,7 @@
 .title {
   display: inline-flex;
   align-items: center;
-  padding: 1rem;
+  padding: 1.8rem 1rem 1rem 1rem;
 }
 
 .shrinkTitle {

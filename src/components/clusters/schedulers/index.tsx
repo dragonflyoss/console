@@ -1387,7 +1387,7 @@ export default function ShowCluster() {
         <Box className={styles.deleteInactiveInstances}>
           <Box className={styles.deleteInactiveHeader}>
             <Delete className={styles.deleteIcon} />
-            <Typography variant="h6" component="div" fontFamily="mabry-bold">
+            <Typography variant="h6" component="div" id="delete-inactive-instances-title" fontFamily="mabry-bold">
               Delete inactive instances
             </Typography>
           </Box>

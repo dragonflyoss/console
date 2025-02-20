@@ -228,10 +228,10 @@ export default function Schedulers() {
                   variant="outlined"
                   sx={{
                     borderRadius: '0.25rem',
-                    background: 'var(--button-color)',
+                    background: 'var(--palette-dark-300Channel)',
                     color: '#FFFFFF',
                     mr: '0.4rem',
-                    borderColor: 'var(--button-color)',
+                    borderColor: 'var(--palette-dark-300Channel)',
                     fontWeight: 'bold',
                   }}
                 />

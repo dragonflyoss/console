@@ -141,7 +141,9 @@ export default function ShowPreheat() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography variant="h5">Preheat</Typography>
+      <Typography variant="h5" id="preheat-title">
+        Preheat
+      </Typography>
       <Breadcrumbs
         separator={
           <Box
@@ -230,7 +232,7 @@ export default function ShowPreheat() {
                     ) : preheat.result.state === 'FAILURE' ? (
                       <></>
                     ) : (
-                      <Pending className={styles.pendingIcon} />
+                      <Pending id="pending-icon" className={styles.pendingIcon} />
                     )}
                     <Typography
                       variant="body2"

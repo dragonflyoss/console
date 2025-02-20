@@ -13,6 +13,7 @@ const HeaderLayout = () => {
   return (
     <>
       <IconButton
+        id="mode"
         sx={{
           ':hover': {
             backgroundColor: 'rgba(218 218 218 / 40%)',
@@ -23,6 +24,7 @@ const HeaderLayout = () => {
         {theme.palette.mode === 'dark' ? <Dark className={styles.github} /> : <Light className={styles.github} />}
       </IconButton>
       <Link
+        id="github"
         underline="hover"
         href="https://github.com/dragonflyoss/dragonfly"
         target="_blank"

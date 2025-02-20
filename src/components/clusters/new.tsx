@@ -2,6 +2,7 @@ import {
   Alert,
   Autocomplete,
   Box,
+  Breadcrumbs,
   Checkbox,
   Chip,
   Divider,
@@ -11,14 +12,16 @@ import {
   TextField,
   Tooltip,
   Typography,
+  Link as RouterLink,
 } from '@mui/material';
 import styles from './new.module.css';
 import { useState } from 'react';
 import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createCluster } from '../../lib/api';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
+import Card from '../card';
 
 export default function NewCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -654,9 +657,26 @@ export default function NewCluster() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography variant="h5">Create Cluster</Typography>
+      <Typography variant="h5" mb="1rem">
+        Create Cluster
+      </Typography>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '2rem', mt: '1rem' }}
+      >
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/clusters`}>
+          Cluster
+        </RouterLink>
+        <Typography color="inherit">New cluster</Typography>
+      </Breadcrumbs>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Box component="form" onSubmit={handleSubmit} noValidate>
+        {/* <Card className={styles.card}></Card> */}
         <Box className={styles.container}>
           <Box className={styles.informationTitle}>
             <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">

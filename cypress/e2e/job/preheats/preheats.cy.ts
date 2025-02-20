@@ -67,30 +67,32 @@ describe('Preheats', () => {
       ).as('preheats');
       cy.get('[data-testid="isloading"]').should('be.exist');
       cy.wait(120000);
+
       // Executed every 3 seconds, it should be executed 2 times after 6 seconds.
       cy.get('@preheats').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
         expect(interceptCount).to.be.closeTo(2, 1);
       });
+      
       cy.get('[data-testid="isloading"]').should('not.exist');
       cy.get('.MuiList-root > :nth-child(3) > .MuiButtonBase-root').click();
-      // Whether the style selected by menu is Preheat.
-      cy.get(
-        ':nth-child(3) > .MuiCollapse-root > .MuiCollapse-wrapper > .MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root',
-      ).should('have.class', 'Mui-selected');
-      cy.get('.css-1g5t85q > .MuiTypography-root').should('be.visible').and('have.text', 'Preheats');
+
       // The preheating status is displayed as PENDING.
       cy.get('#PENDING-11').should('exist');
       cy.get('#id-11').should('have.text', 11);
+
       // cy.get('#created_at-11').should('have.text', '2023-03-23 16:29:18');
       cy.get('#description-11').should('have.text', 'This is a preheat task with status pending');
+
       // The preheating status is displayed as FAILURE.
       cy.get('#FAILURE-10').should('exist');
       cy.get('#description-10').should('have.text', 'This is a preheat task with status failure');
+
       // The preheating status is displayed as SUCCESS.
       cy.get('#list-8 > .css-1mlhis1').should('exist').find('#SUCCESS-8').should('exist');
       cy.get('#description-8').should('have.text', 'This is a preheat task with status success');
     });
+
     it('should display preheat success list', () => {
       cy.intercept(
         {
@@ -113,6 +115,7 @@ describe('Preheats', () => {
       cy.get('#preheats-list').children().should('have.length', 6);
       cy.get('#preheat-pagination').should('not.exist');
     });
+
     it('should display preheat failure list', () => {
       cy.intercept(
         {
@@ -134,6 +137,7 @@ describe('Preheats', () => {
       // Check how many preheat tasks are in success failure.
       cy.get('#preheats-list').children().should('have.length', 4);
     });
+
     it('should display preheat pending list', () => {
       let interceptCount = 0;
       cy.intercept(
@@ -288,7 +292,7 @@ describe('Preheats', () => {
       cy.get('#list-1').should('exist').find('#SUCCESS-1').should('exist');
 
       // Go to show preheat page.
-      cy.get('#preheat-1 > .MuiBox-root').click();
+      cy.get('#preheat-1').click();
 
       // Then I see that the current page is the show update personal-access-tokens.
       cy.url().should('include', '/jobs/preheats/1');

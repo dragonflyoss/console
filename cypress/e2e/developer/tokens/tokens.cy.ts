@@ -25,12 +25,7 @@ describe('Tokens', () => {
 
   it('when data is loaded', () => {
     cy.get('[data-testid="isloading"]').should('be.exist');
-    cy.get('.css-1qdyvok > .MuiTypography-root').should('have.text', 'Personal access tokens');
-
-    cy.get('.MuiList-root > :nth-child(2) > .MuiButtonBase-root > .MuiTypography-root').click();
-
-    // Whether the style selected by menu is Personal access tokens.
-    cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').should('have.class', 'Mui-selected');
+    cy.get('#token-title').should('have.text', 'Personal access tokens');
 
     // Show token name.
     cy.get('#root-11').should('be.visible').and('have.text', 'root-11');
@@ -120,9 +115,9 @@ describe('Tokens', () => {
       cy.get('#tokens-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
       // Show token name.
-      cy.get('.MuiTypography-inherit').should('be.visible').and('have.text', 'root-1');
+      cy.get('#root-1').should('be.visible').and('have.text', 'root-1');
 
-      cy.get('span.css-189ppmh-MuiTypography-root').should('be.visible').and('have.text', 'Thu, Dec 1 2033.');
+      cy.get('#expired-at-1').should('be.visible').and('have.text', 'Thu, Dec 1 2033.');
     });
 
     it('when you click refresh, the paginated results and page numbers remain unchanged.', () => {

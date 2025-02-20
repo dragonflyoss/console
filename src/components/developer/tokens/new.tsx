@@ -288,7 +288,7 @@ export default function CreateTokens() {
               />
             </Tooltip>
           </Box>
-          <FormControl size="small" color="success">
+          <FormControl size="small">
             <InputLabel required id="demo-simple-select-label">
               Expiration
             </InputLabel>

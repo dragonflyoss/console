@@ -32,32 +32,36 @@ describe('Menu', () => {
     });
 
     it('should navigate to the tokens page', () => {
-      cy.get('.MuiList-root > :nth-child(2) > .MuiButtonBase-root').click();
-      cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').click();
+      cy.get('#developer').click();
+      cy.get('#personal-access-tokens').click();
 
       // Then I see that the current page is the tokens!
       cy.url().should('include', '/developer/personal-access-tokens');
 
       // The selected menu is tokens.
-      cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').should('have.class', 'Mui-selected');
+      cy.get('#personal-access-tokens').should('have.class', 'Mui-selected');
+
+      cy.get('#dragonfly').click();
+      // Then I see that the current page is the clusters!
+      cy.url().should('include', '/clusters');
     });
 
     it('should navigate to the preheats page and task page', () => {
-      cy.get('.MuiList-root > :nth-child(3) > .MuiButtonBase-root').click();
-      cy.get('[href="/jobs/preheats"]').click();
+      cy.get('#jobs').click();
+      cy.get('#preheats').click();
 
       // Then I see that the current page is the preheats!
       cy.url().should('include', '/jobs/preheats');
 
       // The selected menu is preheats.
-      cy.get('[href="/jobs/preheats"]').should('have.class', 'Mui-selected');
+      cy.get('#preheats').should('have.class', 'Mui-selected');
 
-      cy.get('[href="/jobs/task/clear"]').click();
+      cy.get('#task').click();
 
       // Then I see that the current page is the task!
       cy.url().should('include', '/jobs/task/clear');
 
-      cy.get('[href="/jobs/task/clear"]').should('have.class', 'Mui-selected');
+      cy.get('#task').should('have.class', 'Mui-selected');
     });
   });
 
@@ -114,46 +118,42 @@ describe('Menu', () => {
     });
 
     it('should navigate to the tokens page', () => {
-      cy.get('.MuiList-root > :nth-child(2) > .MuiButtonBase-root').click();
-      cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').click();
+      cy.get('#developer').click();
+      cy.get('#personal-access-tokens').click();
 
       // Then I see that the current page is the tokens!
       cy.url().should('include', '/developer/personal-access-tokens');
 
       // The selected menu is tokens.
-      cy.get('.MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root').should('have.class', 'Mui-selected');
+      cy.get('#personal-access-tokens').should('have.class', 'Mui-selected');
     });
 
     it('should navigate to the preheats page and task page', () => {
-      cy.get('.MuiList-root > :nth-child(3) > .MuiButtonBase-root').click();
-      cy.get('[href="/jobs/preheats"]').click();
-
-      // Show page loading.
-      cy.get('#page-loading').should('be.visible');
+      cy.get('#jobs').click();
+      cy.get('#preheats').click();
 
       // Then I see that the current page is the preheats!
       cy.url().should('include', '/jobs/preheats');
 
       // The selected menu is preheats.
-      cy.get('[href="/jobs/preheats"]').should('have.class', 'Mui-selected');
+      cy.get('#preheats').should('have.class', 'Mui-selected');
 
-      cy.get('[href="/jobs/task/clear"]').click();
+      cy.get('#task').click();
 
       // Then I see that the current page is the task!
       cy.url().should('include', '/jobs/task/clear');
 
-      // The selected menu is task.
-      cy.get('[href="/jobs/task/clear"]').should('have.class', 'Mui-selected');
+      cy.get('#task').should('have.class', 'Mui-selected');
     });
 
     it('should navigate to the users page', () => {
-      cy.get('[href="/users"]').click();
+      cy.get('#users').click();
 
       // Then I see that the current page is the users!
       cy.url().should('include', '/users');
 
       // The selected menu is users.
-      cy.get('[href="/users"]').should('have.class', 'Mui-selected');
+      cy.get('#users').should('have.class', 'Mui-selected');
     });
 
     it('should navigate to the profile page', () => {
@@ -165,6 +165,42 @@ describe('Menu', () => {
 
       // Then I see that the current page is the profile!
       cy.url().should('include', '/profile');
+    });
+
+    it('The menu should be smaller', () => {
+      // The menu should be smaller.
+      cy.get('#closure').should('exist').click();
+      cy.get('#expand').should('exist');
+      cy.get('#closure').should('not.exist');
+
+      // Go to tokens page.
+      cy.get('#developer').click();
+
+      cy.get('#personal-access-tokens').click();
+
+      // Then I see that the current page is the tokens!
+      cy.url().should('include', '/developer/personal-access-tokens');
+
+      // Go to jobs page.
+      cy.get('#jobs').click();
+      cy.get('#preheats').click();
+
+      // Then I see that the current page is the preheats!
+      cy.url().should('include', '/jobs/preheats');
+
+      // Go to task page.
+      cy.get('#jobs').click();
+      cy.get('#task').click();
+
+      // Then I see that the current page is the task!
+      cy.url().should('include', '/jobs/task/clear');
+
+      // Go to user page.
+
+      cy.get('#users').click();
+
+      // Then I see that the current page is the users!
+      cy.url().should('include', '/users');
     });
 
     it('can logout', () => {
@@ -216,6 +252,10 @@ describe('Menu', () => {
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
       cy.get('.MuiAlert-message').should('not.exist');
+    });
+
+    it('should jump to GitHub', () => {
+      cy.get('#github').should('have.attr', 'href').and('include', 'https://github.com/dragonflyoss/dragonfly');
     });
   });
 });

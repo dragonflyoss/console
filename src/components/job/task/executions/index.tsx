@@ -215,7 +215,7 @@ export default function Executions() {
                         ) : item.result.state === 'FAILURE' ? (
                           <Failure id={`FAILURE-${item.id}`} className={styles.stateIcon} />
                         ) : (
-                          <Pending id={`PENDING-${item.id}`} className={styles.stateIcon} />
+                          <Pending id={`PENDING-${item.id}`} className={styles.pendingIcon} />
                         )}
                         <Box
                           sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
@@ -265,7 +265,7 @@ export default function Executions() {
                       ) : item.result.state === 'FAILURE' ? (
                         <Failure id={`FAILURE-${item.id}`} className={styles.stateIcon} />
                       ) : (
-                        <Pending id={`PENDING-${item.id}`} className={styles.stateIcon} />
+                        <Pending id={`PENDING-${item.id}`} className={styles.pendingIcon} />
                       )}
                       <Box
                         sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}

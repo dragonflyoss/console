@@ -152,6 +152,7 @@ export default function Preheats() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '1rem' }}>
         <Typography variant="h5">Preheats</Typography>
         <Button
+          id="new-preheat"
           size="small"
           sx={{
             background: 'var(--button-color)',

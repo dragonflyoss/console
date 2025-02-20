@@ -404,7 +404,7 @@ export default function NewUser() {
               >
                 <CameraAltIcon />
                 <Typography variant="body2" display="block" mt="0.5rem">
-                  upload photo
+                  Upload photo
                 </Typography>
               </Box>
             </IconButton>

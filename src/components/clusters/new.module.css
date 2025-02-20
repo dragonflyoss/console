@@ -55,3 +55,14 @@
 .descriptionIcon:hover {
   color: var(--description-color);
 }
+
+.card {
+  padding: 2rem;
+  margin: auto;
+  width: 60%;
+}
+
+.buttonContainer {
+  margin: auto;
+  width: 60%;
+}

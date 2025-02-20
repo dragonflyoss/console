@@ -170,8 +170,11 @@ export default function PersonalAccessTokens() {
         </Alert>
       </Snackbar>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: '1rem' }}>
-        <Typography variant="h5">Personal access tokens</Typography>
+        <Typography variant="h5" id="token-title">
+          Personal access tokens
+        </Typography>
         <Button
+          id="new-tokens-button"
           size="small"
           sx={{
             background: 'var(--button-color)',
@@ -229,10 +232,10 @@ export default function PersonalAccessTokens() {
                 disableTouchListener
                 title="copied!"
               >
-                <Done id="schedulerClusterDoneIcon" className={styles.copyIcon} />
+                <Done id="done" className={styles.copyIcon} />
               </Tooltip>
             ) : (
-              <Copy id="schedulerClusterIDCopyIcon" className={styles.copyIcon} />
+              <Copy id="copy" className={styles.copyIcon} />
             )}
           </IconButton>
         </Card>

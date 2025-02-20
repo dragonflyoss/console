@@ -12,13 +12,15 @@ import {
   Tooltip,
   Typography,
   Skeleton,
+  Breadcrumbs,
+  Link as RouterLink,
 } from '@mui/material';
 import styles from './edit.module.css';
 import HelpIcon from '@mui/icons-material/Help';
 import { useEffect, useState } from 'react';
 import { getCluster, updateCluster, getClusterResponse } from '../../lib/api';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import Card from '../card';
 import { ReactComponent as Information } from '../../assets/images/cluster/information-cluster.svg';
@@ -703,6 +705,23 @@ export default function EditCluster() {
         </Alert>
       </Snackbar>
       <Typography variant="h5">Update Cluster</Typography>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '2rem', mt: '1rem' }}
+      >
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/clusters`}>
+          Cluster
+        </RouterLink>
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/clusters/${params.id}`}>
+          {cluster?.name}
+        </RouterLink>
+        <Typography color="inherit">Edit cluster</Typography>
+      </Breadcrumbs>
       <Divider sx={{ mt: '1rem', mb: '1rem' }} />
       <Card className={styles.header}>
         <Information className={styles.informationIcon} />

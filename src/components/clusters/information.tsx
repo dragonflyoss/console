@@ -346,10 +346,10 @@ export default function Information() {
                         title="copied!"
                         id="seedPeerClusterIDTooltip"
                       >
-                        <Done id="schedulerClusterDoneIcon" className={styles.copyIcon} />
+                        <Done id="seedPeerClusterDoneIcon" className={styles.copyIcon} />
                       </MuiTooltip>
                     ) : (
-                      <Copy id="schedulerClusterIDCopyIcon" />
+                      <Copy id="seedPeerClusterIDCopyIcon" />
                     )}
                   </IconButton>
                 )}

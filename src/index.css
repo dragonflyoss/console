@@ -35,6 +35,7 @@ body {
   --table-title-text-color: #637381;
   --palette-common-white: #ffffff;
   --palette-background-paper: #ffffff;
+  --palette-background-menu-paper: #ffffff;
   --no-data-color: 145 158 171;
   --palette-text-disabled: #919eab;
   --text-palette-text-secondary: #637381;
@@ -59,7 +60,7 @@ body {
   --palette-grey-500Channel: 145 158 171;
   --palette-grey-400Channel: #ececec;
   --palette-grey-300Channel: rgba(0, 0, 0, 0.198);
-  --palette-grey-200Channel: #6c7783;
+  --palette-grey-200Channel: #919eab;
   --palette-grey-yellow: #dbab0a;
   --palette-grey-tab: #6b7681;
   --palette-white-light: #fbfbfb;
@@ -67,7 +68,7 @@ body {
   --palette-white-400Channel: #efefef;
   --palette-dark-500Channel: 134 134 134;
   --palette-dark-400Channel: rgba(0, 0, 0, 0.7);
-  --palette-dark-300Channel: #1C293A;
+  --palette-dark-300Channel: #1c293a;
 }
 
 /* [data-theme='light'] body {
@@ -84,17 +85,18 @@ body {
   --palette-secondary-dark: #ececec;
   --description-color: #00a76f;
   --palette-background-paper: #1c252e;
+  --palette-background-menu-paper: 141a21;
   --palette-text-secondary: #919eab;
   --palette-grey-tab: #919eab;
   --button-color: #00a76f;
   --button-text-color: #ffffff;
   --hover-button-text-color: #08c385;
-  --palette-card-hover-background-color: #152838;
+  --palette-card-hover-background-color: #1c293ae3;
   --card-box-shadow: 0 0 2px 0 rgba(0 0 0 / 0.2), 0 12px 24px -4px rgba(0 0 0 / 0.12);
   --table-title-color: #28323d;
   --table-divider-color: #d3d5d6;
   --table-title-text-color: #919eab;
-  --menu-selected-background-color: #1c252e;
+  --menu-selected-background-color: #141a21;
   --calcel-hover-corlor: rgba(145 158 171 / 0.3);
   --calcel-background-color: rgba(145 158 171 / 0.2);
   --palette-background-menu: rgba(28, 37, 46, 0.9);

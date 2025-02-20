@@ -56,7 +56,7 @@ describe('Seed peer', () => {
   it('click the hostname', () => {
     cy.visit('/clusters/1/seed-peers');
 
-    cy.get(':nth-child(4) > .MuiButtonBase-root').click();
+    cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
 
     cy.get('#card-hostname-seed-peer-10').should('have.text', 'seed-peer-10');
     cy.get('#card-hostname-seed-peer-10').click();
@@ -196,7 +196,7 @@ describe('Seed peer', () => {
       cy.get('#type').should('contain', '-');
 
       // Show Start.
-      cy.get(':nth-child(6) > .css-1ltbflq-MuiTypography-root').should('contain', '-');
+      cy.get(':nth-child(6) > .css-crgmm0-MuiTypography-root').should('contain', '-');
 
       // Show Created At.
       cy.get('#created-at').should('contain', '-');
@@ -260,7 +260,7 @@ describe('Seed peer', () => {
       cy.get('#type').should('contain', '-');
 
       // Show Start.
-      cy.get(':nth-child(6) > .css-1ltbflq-MuiTypography-root').should('contain', '-');
+      cy.get(':nth-child(6) > .css-crgmm0-MuiTypography-root').should('contain', '-');
 
       // Show Created At.
       cy.get('#created-at').should('contain', '-');

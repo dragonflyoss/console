@@ -324,6 +324,8 @@ export default function NewUser() {
           phone: phone,
           location: location,
         });
+        
+        navigate(`/users`);
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);

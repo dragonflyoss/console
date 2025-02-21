@@ -246,7 +246,7 @@ export default function Users() {
           User
         </Typography>
         <Button
-          id="create-cluster"
+          id="create-user"
           size="small"
           sx={{
             background: 'var(--button-color)',

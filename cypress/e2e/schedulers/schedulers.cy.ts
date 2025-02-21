@@ -97,7 +97,7 @@ describe('Schedulers', () => {
         .should('be.visible')
         .and('have.text', 'Active')
         .and('have.css', 'background-color', 'rgba(0, 167, 111, 0.1)');
-      cy.get(':nth-child(4) > .MuiButtonBase-root').click();
+      cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
       cy.get('#card-hostname-scheduler-41').should('be.visible').and('have.text', 'scheduler-41');
       // Show status.
       cy.get('#card-state-41')
@@ -615,7 +615,7 @@ describe('Schedulers', () => {
 
       cy.get('[value="inactive"]').click();
 
-      cy.get(':nth-child(4) > .MuiButtonBase-root').click();
+     cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
 
       cy.get('#operation-10').click();
 
@@ -792,7 +792,7 @@ describe('Schedulers', () => {
       // Close delete inactive schedulers.
       cy.get('#close-delete-icon').click();
       cy.get('#delete-all-inactive-instances').click();
-      cy.get('.css-pbbh6n > .css-70qvj9 > .MuiTypography-root').should('have.text', 'Delete inactive instances');
+      cy.get('#delete-inactive-instances-title').should('have.text', 'Delete inactive instances');
       cy.get('#schedulerTotal').should('have.text', '0 inactive');
       cy.get('#back-button').should('be.disabled');
       // Check next button.
@@ -869,7 +869,7 @@ describe('Schedulers', () => {
       }
 
       cy.get('#delete-all-inactive-instances').click();
-      cy.get('.css-pbbh6n > .css-70qvj9 > .MuiTypography-root').should('have.text', 'Delete inactive instances');
+      cy.get('#delete-inactive-instances-title').should('have.text', 'Delete inactive instances');
       cy.get('#schedulerTotal').should('have.text', '34 inactive');
       cy.get('#back-button').should('be.disabled');
       cy.get('#next-button').should('not.be.disabled');

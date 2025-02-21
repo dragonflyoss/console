@@ -31,6 +31,15 @@ import { MyContext } from '../menu/index';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import Card from '../card';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
+import { ReactComponent as Name } from '../../assets/images/profile/name.svg';
+import { ReactComponent as ID } from '../../assets/images/profile/id.svg';
+import { ReactComponent as Email } from '../../assets/images/profile/email.svg';
+import { ReactComponent as Location } from '../../assets/images/profile/location.svg';
+import { ReactComponent as MyProfileLocation } from '../../assets/images/user/location.svg';
+import { ReactComponent as Phone } from '../../assets/images/profile/phone.svg';
+import { ReactComponent as CreatedAt } from '../../assets/images/profile/created-at.svg';
+import { ReactComponent as ChangePassword } from '../../assets/images/user/change-password.svg';
+import { ReactComponent as Edit } from '../../assets/images/user/edit.svg';
 
 export default function Profile() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -86,32 +95,32 @@ export default function Profile() {
     {
       name: 'id',
       label: 'ID',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/id.svg" />,
+      icon: <ID className={styles.userIcon} />,
     },
     {
       name: 'name',
       label: 'Name',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/name.svg" />,
+      icon: <Name className={styles.userIcon} />,
     },
     {
       name: 'email',
       label: 'Email',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/email.svg" />,
+      icon: <Email className={styles.userIcon} />,
     },
     {
       name: 'location',
       label: 'Location',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/location.svg" />,
+      icon: <Location className={styles.userIcon} />,
     },
     {
       name: 'phone',
       label: 'Phone',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/phone.svg" />,
+      icon: <Phone className={styles.userIcon} />,
     },
     {
       name: 'created_at',
       label: 'Created At',
-      icon: <Box component="img" className={styles.userIcon} src="/icons/profile/created-at.svg" />,
+      icon: <CreatedAt className={styles.userIcon} />,
     },
   ];
 
@@ -137,7 +146,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <DescriptionIcon className={styles.editIcon} />:
+              <DescriptionIcon className={styles.textFieldIcon} />:
             </InputAdornment>
           ),
         },
@@ -170,7 +179,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <LocalPhoneIcon className={styles.editIcon} />:
+              <LocalPhoneIcon className={styles.textFieldIcon} />:
             </InputAdornment>
           ),
         },
@@ -202,7 +211,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <LocationOnIcon className={styles.editIcon} />:
+              <LocationOnIcon className={styles.textFieldIcon} />:
             </InputAdornment>
           ),
         },
@@ -235,7 +244,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <EmailIcon className={styles.editIcon} />:
+              <EmailIcon className={styles.textFieldIcon} />:
             </InputAdornment>
           ),
         },
@@ -271,7 +280,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <VpnKeyIcon className={styles.editIcon} />
+              <VpnKeyIcon className={styles.textFieldIcon} />
             </InputAdornment>
           ),
 
@@ -284,9 +293,9 @@ export default function Profile() {
               edge="end"
             >
               {showOldPassword ? (
-                <Visibility className={styles.editIcon} />
+                <Visibility className={styles.textFieldIcon} />
               ) : (
-                <VisibilityOff className={styles.editIcon} />
+                <VisibilityOff className={styles.textFieldIcon} />
               )}
             </IconButton>
           ),
@@ -322,7 +331,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <LockIcon className={styles.editIcon} />
+              <LockIcon className={styles.textFieldIcon} />
             </InputAdornment>
           ),
           endAdornment: (
@@ -334,9 +343,9 @@ export default function Profile() {
               edge="end"
             >
               {showNewPassword ? (
-                <Visibility className={styles.editIcon} />
+                <Visibility className={styles.textFieldIcon} />
               ) : (
-                <VisibilityOff className={styles.editIcon} />
+                <VisibilityOff className={styles.textFieldIcon} />
               )}
             </IconButton>
           ),
@@ -367,7 +376,7 @@ export default function Profile() {
         InputProps: {
           startAdornment: (
             <InputAdornment position="start">
-              <LockIcon className={styles.editIcon} />
+              <LockIcon className={styles.textFieldIcon} />
             </InputAdornment>
           ),
 
@@ -380,9 +389,9 @@ export default function Profile() {
               edge="end"
             >
               {showConfirmPassword ? (
-                <Visibility className={styles.editIcon} />
+                <Visibility className={styles.textFieldIcon} />
               ) : (
-                <VisibilityOff className={styles.editIcon} />
+                <VisibilityOff className={styles.textFieldIcon} />
               )}
             </IconButton>
           ),
@@ -557,7 +566,7 @@ export default function Profile() {
                   {users?.name || '-'}
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', pt: '0.3rem' }}>
-                  <Box component="img" className={styles.userIcon} src="/icons/user/location.svg" />
+                  <MyProfileLocation className={styles.userIcon} />
                   <Typography variant="body2" component="div" ml="0.5rem" color="#919EAB" fontFamily="mabry-bold">
                     {location || '-'}
                   </Typography>
@@ -569,18 +578,15 @@ export default function Profile() {
                 size="small"
                 sx={{
                   background: 'var(--button-color)',
-                  ':hover': { background: 'var(--button-color)' },
+                  color: 'var(--button-text-color)',
+                  ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
                 }}
                 variant="contained"
                 onClick={() => {
                   setShowMyProfile(false);
                 }}
               >
-                <Box
-                  component="img"
-                  sx={{ width: '1.4rem', height: '1.4rem', mr: '0.4rem' }}
-                  src="/icons/user/change-password.svg"
-                />
+                <ChangePassword className={styles.editIcon} />
                 Change Password
               </Button>
             </Box>
@@ -623,17 +629,14 @@ export default function Profile() {
                 variant="contained"
                 sx={{
                   background: 'var(--button-color)',
-                  ':hover': { background: 'var(--button-color)' },
+                  color: 'var(--button-text-color)',
+                  ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
                 }}
                 onClick={() => {
                   setShowPersonalInformation(false);
                 }}
               >
-                <Box
-                  component="img"
-                  sx={{ width: '1.4rem', height: '1.4rem', mr: '0.4rem' }}
-                  src="/icons/user/edit.svg"
-                />
+                <Edit className={styles.editIcon} />
                 Edit
               </Button>
             </Grid>

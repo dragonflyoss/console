@@ -15,11 +15,21 @@ import Dialog from '@mui/material/Dialog';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import styles from './information.module.css';
 import Card from '../card';
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import HelpIcon from '@mui/icons-material/Help';
 import { useContext, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { MyContext } from './show';
-import { CancelLoadingButton, DeleteLoadingButton, SavelLoadingButton } from '../loading-button';
+import { ReactComponent as InformationCluster } from '../../assets/images/cluster/information-cluster.svg';
+import { ReactComponent as Done } from '../../assets/images/tokens/done.svg';
+import { ReactComponent as Copy } from '../../assets/images/tokens/copy.svg';
+import { ReactComponent as Edit } from '../../assets/images/user/edit.svg';
+import { ReactComponent as Location } from '../../assets/images/cluster/location.svg';
+import { ReactComponent as IDC } from '../../assets/images/cluster/idc.svg';
+import { ReactComponent as Total } from '../../assets/images/cluster/total.svg';
+import { ReactComponent as CIDRs } from '../../assets/images/cluster/cidrs.svg';
+import { ReactComponent as Hostnames } from '../../assets/images/cluster/hostnames.svg';
+import { ReactComponent as Delete } from '../../assets/images/cluster/delete.svg';
+import { CancelLoadingButton, DeleteLoadingButton } from '../loading-button';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -109,6 +119,7 @@ export default function Information() {
       }
     }
   };
+
   return (
     <Box>
       <Snackbar
@@ -132,9 +143,7 @@ export default function Information() {
         </Alert>
       </Snackbar>
       <Box className={styles.container}>
-        <Typography variant="h6" fontFamily="mabry-bold">
-          Cluster
-        </Typography>
+        <Typography variant="h5">Cluster</Typography>
         <Box>
           <Button
             id="update"
@@ -145,14 +154,13 @@ export default function Information() {
             variant="contained"
             className={styles.updateButton}
             sx={{
-              '&.MuiButton-root': {
-                backgroundColor: 'var(--button-color)',
-                color: '#fff',
-              },
+              background: 'var(--button-color)',
+              color: 'var(--button-text-color)',
+              ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
               mr: '1.5rem',
             }}
           >
-            <Box component="img" className={styles.updateClusterIcon} src="/icons/user/edit.svg" />
+            <Edit className={styles.updateClusterIcon} />
             Update
           </Button>
           <Button
@@ -164,10 +172,9 @@ export default function Information() {
             }}
             className={styles.deleteButton}
             sx={{
-              '&.MuiButton-root': {
-                backgroundColor: 'var(--button-color)',
-                color: '#fff',
-              },
+              background: 'var(--button-color)',
+              color: 'var(--button-text-color)',
+              ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
             }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
@@ -178,12 +185,12 @@ export default function Information() {
       <Box>
         <Card className={styles.informationWrapper}>
           <Box className={styles.classNameWrapper}>
-            <Box component="img" className={styles.clusterIcon} src="/icons/cluster/information-cluster.svg" />
+            <InformationCluster className={styles.clusterIcon} />
             <Box>
-              <Typography id="name" variant="h6" component="div" className={styles.className}>
+              <Typography id="name" variant="h6" component="div" className={styles.name}>
                 {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster.name || '-'}
               </Typography>
-              <Typography id="description" variant="body2" component="div" color="var(--text---palette-text-secondary)">
+              <Typography id="description" variant="body2" component="div" color="var(--text-palette-text-secondary)">
                 {isLoading ? <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} /> : cluster?.bio || '-'}
               </Typography>
             </Box>
@@ -198,7 +205,7 @@ export default function Information() {
                   title="When peer does not find a matching cluster based on scopes, the default cluster will be used."
                   placement="top"
                 >
-                  <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                  <HelpIcon className={styles.descriptionIcon} />
                 </MuiTooltip>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -206,7 +213,7 @@ export default function Information() {
                   sx={{
                     width: '0.8rem',
                     height: '0.8rem',
-                    backgroundColor: cluster.is_default ? 'var(--description-color)' : 'var(--button-color)',
+                    backgroundColor: cluster.is_default ? 'var(--description-color)' : 'var(--palette-dark-300Channel)',
                     borderRadius: '0.2rem',
                     mr: '0.5rem',
                   }}
@@ -222,7 +229,6 @@ export default function Information() {
                 </Typography>
               </Box>
             </Box>
-
             <Box className={styles.clusterWrap}>
               <Box className={styles.clusterTitle}>
                 <Typography variant="body2" component="div" className={styles.configLable}>
@@ -232,7 +238,7 @@ export default function Information() {
                   title="When the scheduler is deployed, the schedulerClusterID must be filled with this scheduler cluster ID in scheduler configuration. In this way, the scheduler will become the scheduling service of this cluster."
                   placement="top"
                 >
-                  <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                  <HelpIcon className={styles.descriptionIcon} />
                 </MuiTooltip>
               </Box>
               <Box className={styles.schedulerClusterID}>
@@ -257,6 +263,7 @@ export default function Information() {
                     sx={{
                       width: '1.2rem',
                       height: '1.2rem',
+                      p: 0,
                     }}
                     onClick={() => {
                       copyClusterID('schedulerClusterID', cluster?.scheduler_cluster_id || 0);
@@ -276,15 +283,10 @@ export default function Information() {
                         title="copied!"
                         id="schedulerClusterIDTooltip"
                       >
-                        <Box
-                          component="img"
-                          id="schedulerClusterIDCopyIcon"
-                          sx={{ width: '1rem', height: '1rem' }}
-                          src="/icons/tokens/done.svg"
-                        />
+                        <Done id="schedulerClusterDoneIcon" className={styles.copyIcon} />
                       </MuiTooltip>
                     ) : (
-                      <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/copy.svg" />
+                      <Copy id="schedulerClusterIDCopyIcon" className={styles.copyIcon} />
                     )}
                   </IconButton>
                 )}
@@ -299,7 +301,7 @@ export default function Information() {
                   title="When the seed peer is deployed, the clusterID must be filled with this seed peer cluster ID in scheduler configuration. In this way, the seed peer will become the seed peer service of this cluster."
                   placement="top"
                 >
-                  <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                  <HelpIcon className={styles.descriptionIcon} />
                 </MuiTooltip>
               </Box>
               <Box className={styles.schedulerClusterID}>
@@ -325,6 +327,7 @@ export default function Information() {
                     sx={{
                       width: '1.2rem',
                       height: '1.2rem',
+                      p: 0,
                     }}
                     onClick={() => {
                       copyClusterID('seedPeerClusterID', cluster?.seed_peer_cluster_id || 0);
@@ -343,15 +346,10 @@ export default function Information() {
                         title="copied!"
                         id="seedPeerClusterIDTooltip"
                       >
-                        <Box
-                          component="img"
-                          id="seedPeerClusterIDCopyIcon"
-                          sx={{ width: '1rem', height: '1rem' }}
-                          src="/icons/tokens/done.svg"
-                        />
+                        <Done id="seedPeerClusterDoneIcon" className={styles.copyIcon} />
                       </MuiTooltip>
                     ) : (
-                      <Box component="img" sx={{ width: '1rem', height: '1rem' }} src="/icons/tokens/copy.svg" />
+                      <Copy id="seedPeerClusterIDCopyIcon" />
                     )}
                   </IconButton>
                 )}
@@ -363,7 +361,7 @@ export default function Information() {
                   Create At
                 </Typography>
                 <MuiTooltip title="Cluster name." placement="top">
-                  <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                  <HelpIcon className={styles.descriptionIcon} />
                 </MuiTooltip>
               </Box>
               <Typography id="name" variant="body2" component="div" className={styles.clusterContent}>
@@ -382,7 +380,7 @@ export default function Information() {
                   peers in the scope."
               placement="top"
             >
-              <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </MuiTooltip>
           </Box>
           <Box className={styles.configTitle}>
@@ -390,7 +388,7 @@ export default function Information() {
               Config
             </Typography>
             <MuiTooltip title="The configuration for P2P downloads." placement="top">
-              <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </MuiTooltip>
           </Box>
         </Box>
@@ -399,7 +397,7 @@ export default function Information() {
             <Card className={styles.cidrsContainer}>
               <Box className={styles.scopesTitle}>
                 <Box className={styles.locationTitle}>
-                  <Box component="img" className={styles.scopesIcon} src="/icons/cluster/location.svg" />
+                  <Location className={styles.scopesIcon} />
                   <Typography variant="body2" component="div" className={styles.scopesLable}>
                     Location
                   </Typography>
@@ -407,7 +405,7 @@ export default function Information() {
                     title={`The cluster needs to serve all peers in the location. When the location in the peer configuration matches the location in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. It separated by "|", for example "area|country|province|city".`}
                     placement="top"
                   >
-                    <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                    <HelpIcon className={styles.descriptionIcon} />
                   </MuiTooltip>
                 </Box>
               </Box>
@@ -432,7 +430,7 @@ export default function Information() {
             <Card className={styles.cidrsContainer}>
               <Box className={styles.scopesTitle}>
                 <Box className={styles.cidrsTitle}>
-                  <Box component="img" className={styles.scopesIcon} src="/icons/cluster/idc.svg" />
+                  <IDC className={styles.scopesIcon} />
                   <Typography variant="body2" component="p" className={styles.scopesLable}>
                     IDC
                   </Typography>
@@ -440,11 +438,11 @@ export default function Information() {
                     title={`The cluster needs to serve all peers in the IDC. When the IDC in the peer configuration matches the IDC in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. IDC has higher priority than location in the scopes.`}
                     placement="top"
                   >
-                    <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                    <HelpIcon className={styles.descriptionIcon} />
                   </MuiTooltip>
                 </Box>
                 <Paper id="idc-total" elevation={0} className={styles.totalContainer}>
-                  <Box component="img" className={styles.totalIcon} src="/icons/cluster/total.svg" />
+                  <Total className={styles.totalIcon} />
                   <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
                     {`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`}
                   </Typography>
@@ -503,7 +501,7 @@ export default function Information() {
                           setOpenIDC(true);
                         }}
                       >
-                        <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                        <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                       </IconButton>
                     ) : (
                       <></>
@@ -527,7 +525,7 @@ export default function Information() {
                 <DialogContent dividers className={styles.idcDialogContainer}>
                   {cluster?.scopes?.idc.split('|').map((item: any, id: any) => (
                     <Paper key={id} elevation={0} className={styles.idcDialogContent}>
-                      <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/idc.svg" />
+                      <IDC className={styles.cidrsIcon} />
                       <MuiTooltip title={item} placement="top">
                         <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
                           {item}
@@ -541,7 +539,7 @@ export default function Information() {
             <Card className={styles.cidrsContainer}>
               <Box className={styles.scopesTitle}>
                 <Box className={styles.cidrsTitle}>
-                  <Box component="img" className={styles.scopesIcon} src="/icons/cluster/cidrs.svg" />
+                  <CIDRs className={styles.scopesIcon} />
                   <Typography variant="body2" component="div" className={styles.scopesLable}>
                     CIDRs
                   </Typography>
@@ -549,11 +547,11 @@ export default function Information() {
                     title={`The cluster needs to serve all peers in the CIDRs. The advertise IP will be reported in the peer configuration when the peer is started, and if the advertise IP is empty in the peer configuration, peer will automatically get expose IP as advertise IP. When advertise IP of the peer matches the CIDRs in cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. CIDRs has higher priority than IDC in the scopes. CIDRs has higher priority than IDC in the scopes. CIDRs has priority equal to hostname in the scopes.`}
                     placement="top"
                   >
-                    <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                    <HelpIcon className={styles.descriptionIcon} />
                   </MuiTooltip>
                 </Box>
                 <Paper id="cidrs-total" elevation={0} className={styles.totalContainer}>
-                  <Box component="img" className={styles.totalIcon} src="/icons/cluster/total.svg" />
+                  <Total className={styles.totalIcon} />
                   <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
                     {`Total: ${cluster?.scopes?.cidrs?.length || 0}`}
                   </Typography>
@@ -615,7 +613,7 @@ export default function Information() {
                             setOpenCIDRs(true);
                           }}
                         >
-                          <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                          <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                         </IconButton>
                       ) : (
                         <></>
@@ -641,7 +639,7 @@ export default function Information() {
               <DialogContent dividers className={styles.cidrsDialogContainer}>
                 {cluster?.scopes?.cidrs?.map((item: any, id: any) => (
                   <Paper key={id} elevation={0} className={styles.cidrsDialogContent}>
-                    <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/cidrs.svg" />
+                    <CIDRs className={styles.cidrsIcon} />
                     <MuiTooltip title={item} placement="top">
                       <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
                         {item}
@@ -654,7 +652,7 @@ export default function Information() {
             <Card className={styles.cidrsContainer}>
               <Box className={styles.scopesTitle}>
                 <Box className={styles.cidrsTitle}>
-                  <Box component="img" className={styles.scopesIcon} src="/icons/cluster/hostnames.svg" />
+                  <Hostnames className={styles.scopesIcon} />
                   <Typography variant="body2" component="div" className={styles.scopesLable}>
                     Hostnames
                   </Typography>
@@ -664,11 +662,11 @@ export default function Information() {
                     }
                     placement="top"
                   >
-                    <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                    <HelpIcon className={styles.descriptionIcon} />
                   </MuiTooltip>
                 </Box>
                 <Paper id="hostnames-total" elevation={0} className={styles.totalContainer}>
-                  <Box component="img" className={styles.totalIcon} src="/icons/cluster/total.svg" />
+                  <Total className={styles.totalIcon} />
                   <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
                     {`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`}
                   </Typography>
@@ -730,7 +728,7 @@ export default function Information() {
                             setOpenHostnames(true);
                           }}
                         >
-                          <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                          <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                         </IconButton>
                       ) : (
                         <></>
@@ -756,7 +754,7 @@ export default function Information() {
               <DialogContent dividers className={styles.cidrsDialogContainer}>
                 {cluster?.scopes?.hostnames?.map((item: any, id: any) => (
                   <Paper key={id} elevation={0} className={styles.cidrsDialogContent}>
-                    <Box component="img" className={styles.cidrsIcon} src="/icons/cluster/hostnames.svg" />
+                    <Hostnames className={styles.cidrsIcon} />
                     <MuiTooltip title={item} placement="top">
                       <Typography variant="body2" component="div" className={styles.cidrsText} alignSelf="center">
                         {item}
@@ -777,7 +775,7 @@ export default function Information() {
                   title="If other peers download from the seed peer, the load of the seed peer will increase. When the load limit of the seed peer is reached, the scheduler will no longer schedule other peers to download from the seed peer until the it has the free load.	seed_peer_cluster_config.load_limit"
                   placement="top"
                 >
-                  <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                  <HelpIcon className={styles.descriptionIcon} />
                 </MuiTooltip>
               </Box>
               {isLoading ? (
@@ -799,7 +797,7 @@ export default function Information() {
                   title={`If other peers download from the peer, the load of the peer will increase. When the load limit of the peer is reached, the scheduler will no longer schedule other peers to download from the peer until the it has the free load.`}
                   placement="top"
                 >
-                  <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                  <HelpIcon className={styles.descriptionIcon} />
                 </MuiTooltip>
               </Box>
               {isLoading ? (
@@ -821,7 +819,7 @@ export default function Information() {
                   title="The maximum number of parents that the scheduler can schedule for download peer."
                   placement="top"
                 >
-                  <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                  <HelpIcon className={styles.descriptionIcon} />
                 </MuiTooltip>
               </Box>
               {isLoading ? (
@@ -843,7 +841,7 @@ export default function Information() {
                   title="The scheduler will randomly select the  number of parents from all the parents according to the filter parent limit and evaluate the optimal parents in selecting parents for the peer to download task. The number of optimal parent is the scheduling parent limit."
                   placement="top"
                 >
-                  <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                  <HelpIcon className={styles.descriptionIcon} />
                 </MuiTooltip>
               </Box>
               {isLoading ? (
@@ -865,7 +863,7 @@ export default function Information() {
                   title="The rate limit(requests per second) for job Open API, default value is 10."
                   placement="top"
                 >
-                  <HelpOutlineOutlinedIcon color="disabled" className={styles.descriptionIcon} />
+                  <HelpIcon className={styles.descriptionIcon} />
                 </MuiTooltip>
               </Box>
               {isLoading ? (
@@ -889,7 +887,7 @@ export default function Information() {
       >
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Box component="img" className={styles.deleteClusterIcon} src="/icons/cluster/delete.svg" />
+            <Delete className={styles.deleteClusterIcon} />
             <Typography pt="1rem">Are you sure you want to delet this cluster?</Typography>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>

@@ -116,32 +116,14 @@
 
 .exportIcon {
   width: 1.8rem;
-}
-
-.featuresIconWrapper {
-  width: 2.4rem;
-  height: 2.4rem;
-  border-radius: 50%;
-  background-color: #fbfbfb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 0.6rem;
-}
-
-.featuresIconContainer {
-  width: 1.8rem;
   height: 1.8rem;
-  border-radius: 50%;
-  background-color: #efefef;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.featuresIcon {
-  width: 1.2rem;
-  height: 1.2rem;
+.exportFileICon {
+  width: 2.8rem;
+  height: 2.8rem;
+  margin-bottom: 0.8rem;
+  color: var(--palette-color);
 }
 
 .divider {
@@ -164,4 +146,16 @@
   align-items: center;
   justify-content: center;
   padding: 1rem 2rem;
+}
+
+.refreshIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--button-text-color);
+}
+
+.deleteWarning {
+  width: 1.4rem;
+  height: 1.4rem;
+  padding-right: 0.2rem;
 }

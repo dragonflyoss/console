@@ -147,7 +147,7 @@ describe('Users', () => {
       cy.get('#updated-at').should('contain', '2023-11-06 06:09:04');
 
       // closure user details.
-      cy.get('.MuiListSubheader-root > .MuiButtonBase-root').click();
+      cy.get('#closure-user-detail').click();
 
       cy.get('#action-jack').click();
 
@@ -375,7 +375,7 @@ describe('Users', () => {
       // Check the current page number.
       cy.get('#user-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
-      cy.get('[href="/clusters"]').click();
+      cy.get('#clusters').click();
 
       // Then I see that the current page is the show update personal-access-tokens.
       cy.url().should('include', '/clusters');

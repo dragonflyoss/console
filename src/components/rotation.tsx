@@ -1,4 +1,4 @@
-import { Box, Grid, MobileStepper, ThemeProvider, createTheme, useTheme } from '@mui/material';
+import { Grid, MobileStepper, useTheme } from '@mui/material';
 import { useState } from 'react';
 import { autoPlay } from 'react-swipeable-views-utils';
 import SwipeableViews from 'react-swipeable-views';
@@ -12,7 +12,6 @@ import { ReactComponent as DarkMilestones } from '../assets/images/login/dark-mi
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 export default function Rotation() {
-  // const [imageList] = useState(rotationChart);
   const [imageIndex, setImageIndex] = useState(0);
   const theme = useTheme();
 
@@ -52,12 +51,7 @@ export default function Rotation() {
 
   return (
     <Grid sx={{ backgroundColor: 'var(--palette-background-rotation)' }}>
-      <AutoPlaySwipeableViews
-        // axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={imageIndex}
-        onChangeIndex={handleStepChange}
-        enableMouseEvents
-      >
+      <AutoPlaySwipeableViews index={imageIndex} onChangeIndex={handleStepChange} enableMouseEvents>
         {theme.palette.mode === 'light'
           ? rotationChart.map((step, index) => {
               return (
@@ -77,6 +71,7 @@ export default function Rotation() {
       <MobileStepper
         sx={{
           width: '50%',
+          p: 0,
           height: '6%',
           display: 'flex',
           alignItems: 'flex-start',

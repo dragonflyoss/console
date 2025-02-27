@@ -7,13 +7,13 @@
             <circle id="椭圆形" stroke="#ADADAD" stroke-width="0.6" cx="395.7" cy="403.599449" r="249.7"></circle>
             <circle id="椭圆形" stroke="#ADADAD" stroke-width="0.6" cx="396.7" cy="403.599449" r="174.7"></circle>
             <circle id="椭圆形" stroke="#ADADAD" stroke-width="0.6" cx="395.7" cy="401.599449" r="99.7"></circle>
-            <polygon id="三角形" fill="#141A21" fill-rule="nonzero"
+            <polygon id="三角形" fill="#161b23" fill-rule="nonzero"
                 transform="translate(173.5599, 647.7445) rotate(37) translate(-173.5599, -647.7445)"
                 points="173.559885 570.24447 266.559885 725.24447 80.5598852 725.24447"></polygon>
-            <polygon id="三角形" fill="#141A21" fill-rule="nonzero"
+            <polygon id="三角形" fill="#161b23" fill-rule="nonzero"
                 transform="translate(401.2235, 97.1085) rotate(-179) translate(-401.2235, -97.1085)"
                 points="401.223509 1.60852869 494.223509 192.608529 308.223509 192.608529"></polygon>
-            <polygon id="三角形" fill="#141A21" fill-rule="nonzero"
+            <polygon id="三角形" fill="#161b23" fill-rule="nonzero"
                 transform="translate(662.7, 531.0995) rotate(-57) translate(-662.7, -531.0995)"
                 points="662.699992 420.599453 755.699992 641.599453 569.699992 641.599453"></polygon>
             <g transform="translate(358.7, 361.5995)" fill="#B7B7B7" fill-rule="nonzero" id="形状">

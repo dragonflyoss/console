@@ -1,6 +1,5 @@
 import Main from './layouts/main';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { amber, deepOrange, grey } from '@mui/material/colors';
 import { createContext, useEffect, useMemo, useState } from 'react';
 
 export const ColorModeContext = createContext({ toggleColorMode: () => {} });

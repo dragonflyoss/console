@@ -213,7 +213,7 @@ export default function EditCluster() {
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
-                ':hover': { color: 'var(--description-color)' },
+                ':hover': { color: 'var(--palette--description-color)' },
               }}
             />
           </Tooltip>
@@ -276,7 +276,7 @@ export default function EditCluster() {
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
-                ':hover': { color: 'var(--description-color)' },
+                ':hover': { color: 'var(--palette--description-color)' },
               }}
             />
           </Tooltip>
@@ -340,7 +340,7 @@ export default function EditCluster() {
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
-                ':hover': { color: 'var(--description-color)' },
+                ':hover': { color: 'var(--palette--description-color)' },
               }}
             />
           </Tooltip>
@@ -770,7 +770,7 @@ export default function EditCluster() {
                   onChange={(event: { target: { checked: any } }) => {
                     setCluster({ ...cluster, is_default: event.target.checked });
                   }}
-                  sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }}
+                  sx={{ '&.MuiCheckbox-root': { color: 'var(--palette--button-color)' } }}
                 />
               }
               label="Set cluster as your default cluster"

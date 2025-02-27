@@ -177,9 +177,9 @@ export default function PersonalAccessTokens() {
           id="new-tokens-button"
           size="small"
           sx={{
-            background: 'var(--button-color)',
-            color: 'var(--button-text-color)',
-            ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+            background: 'var(--palette--button-color)',
+            color: 'var(--palette--button-text-color)',
+            ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
           }}
           variant="contained"
           onClick={() => {
@@ -202,7 +202,7 @@ export default function PersonalAccessTokens() {
         <Typography color="text.primary">Developer</Typography>
         <Typography color="inherit">Personal access tokens</Typography>
       </Breadcrumbs>
-      <Typography variant="subtitle2" mb="1.5rem" mt="1rem" color="var(--text-palette-text-secondary)">
+      <Typography variant="subtitle2" mb="1.5rem" mt="1rem" color="var(--palette--text-palette-text-secondary)">
         Tokens you have generated that can be used to access the Dragonfly API.
       </Typography>
       {showCopyColumn ? (
@@ -283,7 +283,7 @@ export default function PersonalAccessTokens() {
                           component={Link}
                           to={`/developer/personal-access-tokens/${item?.id}`}
                           underline="hover"
-                          sx={{ color: 'var(--description-color)' }}
+                          sx={{ color: 'var(--palette--description-color)' }}
                         >
                           {item.name}
                         </RouterLink>
@@ -305,9 +305,9 @@ export default function PersonalAccessTokens() {
                         size="small"
                         id={`delete-token-${item?.id}`}
                         sx={{
-                          background: 'var(--button-color)',
-                          color: 'var(--button-text-color)',
-                          ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                          background: 'var(--palette--button-color)',
+                          color: 'var(--palette--button-text-color)',
+                          ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                         }}
                         variant="contained"
                         onClick={() => {
@@ -321,7 +321,7 @@ export default function PersonalAccessTokens() {
                   <Divider
                     sx={{
                       borderStyle: 'dashed',
-                      borderColor: 'var(--palette-divider)',
+                      borderColor: 'var(--palette--palette-divider)',
                       borderWidth: '0px 0px thin',
                     }}
                   />
@@ -338,7 +338,7 @@ export default function PersonalAccessTokens() {
                           component={Link}
                           to={`/developer/personal-access-tokens/${item?.id}`}
                           underline="hover"
-                          sx={{ color: 'var(--description-color)' }}
+                          sx={{ color: 'var(--palette--description-color)' }}
                         >
                           {item.name}
                         </RouterLink>
@@ -360,9 +360,9 @@ export default function PersonalAccessTokens() {
                         size="small"
                         id={`delete-token-${item?.id}`}
                         sx={{
-                          background: 'var(--button-color)',
-                          color: 'var(--button-text-color)',
-                          ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                          background: 'var(--palette--button-color)',
+                          color: 'var(--palette--button-text-color)',
+                          ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                         }}
                         variant="contained"
                         onClick={() => {

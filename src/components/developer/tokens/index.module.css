@@ -5,8 +5,8 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-color: rgba(var(--no-data-color) / 0.04) !important;
-  border: dashed 1px rgba(var(--no-data-color) / 0.08);
+  background-color: rgba(var(--palette--no-data-color) / 0.04) !important;
+  border: dashed 1px rgba(var(--palette--no-data-color) / 0.08);
 }
 
 .nodataIcon {
@@ -23,7 +23,7 @@
   display: flex;
   align-items: center;
   padding: 0.8rem;
-  background-color: var(--menu-background-color) !important;
+  background-color: var(--palette--menu-background-color) !important;
   margin-bottom: 1rem;
 }
 

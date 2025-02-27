@@ -7,7 +7,6 @@ import {
   Grid,
   IconButton,
   InputAdornment,
-  Paper,
   Snackbar,
   TextField,
   Typography,
@@ -577,9 +576,9 @@ export default function Profile() {
               <Button
                 size="small"
                 sx={{
-                  background: 'var(--button-color)',
-                  color: 'var(--button-text-color)',
-                  ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                  background: 'var(--palette--button-color)',
+                  color: 'var(--palette--button-text-color)',
+                  ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                 }}
                 variant="contained"
                 onClick={() => {
@@ -628,9 +627,9 @@ export default function Profile() {
                 size="small"
                 variant="contained"
                 sx={{
-                  background: 'var(--button-color)',
-                  color: 'var(--button-text-color)',
-                  ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                  background: 'var(--palette--button-color)',
+                  color: 'var(--palette--button-text-color)',
+                  ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                 }}
                 onClick={() => {
                   setShowPersonalInformation(false);
@@ -643,7 +642,7 @@ export default function Profile() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />

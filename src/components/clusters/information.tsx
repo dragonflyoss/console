@@ -154,9 +154,9 @@ export default function Information() {
             variant="contained"
             className={styles.updateButton}
             sx={{
-              background: 'var(--button-color)',
-              color: 'var(--button-text-color)',
-              ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+              background: 'var(--palette--button-color)',
+              color: 'var(--palette--button-text-color)',
+              ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
               mr: '1.5rem',
             }}
           >
@@ -172,9 +172,9 @@ export default function Information() {
             }}
             className={styles.deleteButton}
             sx={{
-              background: 'var(--button-color)',
-              color: 'var(--button-text-color)',
-              ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+              background: 'var(--palette--button-color)',
+              color: 'var(--palette--button-text-color)',
+              ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
             }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
@@ -190,7 +190,7 @@ export default function Information() {
               <Typography id="name" variant="h6" component="div" className={styles.name}>
                 {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster.name || '-'}
               </Typography>
-              <Typography id="description" variant="body2" component="div" color="var(--text-palette-text-secondary)">
+              <Typography id="description" variant="body2" component="div" color="var(--palette--text-palette-text-secondary)">
                 {isLoading ? <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} /> : cluster?.bio || '-'}
               </Typography>
             </Box>
@@ -213,7 +213,7 @@ export default function Information() {
                   sx={{
                     width: '0.8rem',
                     height: '0.8rem',
-                    backgroundColor: cluster.is_default ? 'var(--description-color)' : 'var(--palette-dark-300Channel)',
+                    backgroundColor: cluster.is_default ? 'var(--palette--description-color)' : 'var(--palette-dark-300Channel)',
                     borderRadius: '0.2rem',
                     mr: '0.5rem',
                   }}
@@ -443,7 +443,7 @@ export default function Information() {
                 </Box>
                 <Paper id="idc-total" elevation={0} className={styles.totalContainer}>
                   <Total className={styles.totalIcon} />
-                  <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
+                  <Typography variant="body2" component="div" color="var(--palette--description-color)" pl="0.3rem">
                     {`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`}
                   </Typography>
                 </Paper>
@@ -552,7 +552,7 @@ export default function Information() {
                 </Box>
                 <Paper id="cidrs-total" elevation={0} className={styles.totalContainer}>
                   <Total className={styles.totalIcon} />
-                  <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
+                  <Typography variant="body2" component="div" color="var(--palette--description-color)" pl="0.3rem">
                     {`Total: ${cluster?.scopes?.cidrs?.length || 0}`}
                   </Typography>
                 </Paper>
@@ -667,7 +667,7 @@ export default function Information() {
                 </Box>
                 <Paper id="hostnames-total" elevation={0} className={styles.totalContainer}>
                   <Total className={styles.totalIcon} />
-                  <Typography variant="body2" component="div" color="var(--description-color)" pl="0.3rem">
+                  <Typography variant="body2" component="div" color="var(--palette--description-color)" pl="0.3rem">
                     {`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`}
                   </Typography>
                 </Paper>

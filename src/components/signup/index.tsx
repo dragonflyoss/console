@@ -3,7 +3,6 @@ import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
@@ -242,7 +241,7 @@ export default function SignUp() {
       </Grid>
       <Grid item xs={6} className={styles.container}>
         <Box className={styles.header}>
-          <HeaderLayout />
+          <HeaderLayout className={styles.headerContent} />
         </Box>
         <Container component="main" maxWidth="xs">
           <Box
@@ -278,9 +277,9 @@ export default function SignUp() {
                 variant="contained"
                 sx={{
                   mt: '1.4rem',
-                  background: 'var(--description-color)',
-                  color: 'var(--button-text-color)',
-                  ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                  background: 'var(--palette--description-color)',
+                  color: 'var(--palette--button-text-color)',
+                  ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                 }}
               >
                 <Typography variant="button">Sign Up</Typography>

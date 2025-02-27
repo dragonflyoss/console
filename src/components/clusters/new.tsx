@@ -21,7 +21,6 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Link, useNavigate } from 'react-router-dom';
 import { createCluster } from '../../lib/api';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
-import Card from '../card';
 
 export default function NewCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -175,7 +174,7 @@ export default function NewCluster() {
                   width: '0.8rem',
                   height: '0.8rem',
                   mr: '0.3rem',
-                  ':hover': { color: 'var(--description-color)' },
+                  ':hover': { color: 'var(--palette--description-color)' },
                 }}
               />
             </Tooltip>
@@ -241,7 +240,7 @@ export default function NewCluster() {
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
-                ':hover': { color: 'var(--description-color)' },
+                ':hover': { color: 'var(--palette--description-color)' },
               }}
             />
           </Tooltip>
@@ -305,7 +304,7 @@ export default function NewCluster() {
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
-                ':hover': { color: 'var(--description-color)' },
+                ':hover': { color: 'var(--palette--description-color)' },
               }}
             />
           </Tooltip>
@@ -688,7 +687,7 @@ export default function NewCluster() {
           </Box>
           <Box className={styles.defaultContainer}>
             <FormControlLabel
-              control={<Checkbox sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }} />}
+              control={<Checkbox sx={{ '&.MuiCheckbox-root': { color: 'var(--palette--button-color)' } }} />}
               label="Set cluster as your default cluster"
               name="isDefault"
               sx={{ '&.MuiFormControlLabel-root': { mr: '0.6rem' } }}

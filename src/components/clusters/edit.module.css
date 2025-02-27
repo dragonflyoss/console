@@ -66,12 +66,12 @@
 }
 
 .descriptionIcon:hover {
-  color: var(--description-color);
+  color: var(--palette--description-color);
 }
 
 .informationIcon {
   width: 2.6rem;
   height: 2.6rem;
   margin-right: 1rem;
-  color: var(--button-color);
+  color: var(--palette--button-color);
 }

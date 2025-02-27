@@ -30,7 +30,7 @@ export default function NotFound() {
           sx={{
             width: '12rem',
             background: '#1c293a',
-            color: 'var(--button-text-color)',
+            color: 'var(--palette--button-text-color)',
             ':hover': { backgroundColor: '#1c293a' },
           }}
           onClick={() => {

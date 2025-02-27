@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Paper,
   Typography,
   Divider,
   FormControl,
@@ -11,8 +10,6 @@ import {
   Dialog,
   DialogContent,
   LinearProgress,
-  createTheme,
-  ThemeProvider,
   Skeleton,
   Snackbar,
   Alert,
@@ -455,7 +452,7 @@ export default function Peer() {
                   underline="hover"
                   href="https://github.com/dragonflyoss/client"
                   target="_blank"
-                  style={{ color: 'var(--menu-color)' }}
+                  style={{ color: 'var(--palette--menu-color)' }}
                 >
                   dragonflyoss/client
                 </Link>
@@ -473,12 +470,12 @@ export default function Peer() {
             disabled={disabled}
             size="small"
             sx={{
-              background: 'var(--button-color)',
+              background: 'var(--palette--button-color)',
               ':hover': {
-                backgroundColor: 'var(--button-color)',
-                borderColor: 'var(--button-color)',
+                backgroundColor: 'var(--palette--button-color)',
+                borderColor: 'var(--palette--button-color)',
               },
-              color: 'var(--button-text-color)',
+              color: 'var(--palette--button-text-color)',
               mr: '1rem',
             }}
             variant="contained"
@@ -495,12 +492,12 @@ export default function Peer() {
             id="export"
             size="small"
             sx={{
-              background: 'var(--button-color)',
+              background: 'var(--palette--button-color)',
               ':hover': {
-                backgroundColor: 'var(--button-color)',
-                borderColor: 'var(--button-color)',
+                backgroundColor: 'var(--palette--button-color)',
+                borderColor: 'var(--palette--button-color)',
               },
-              color: 'var(--button-text-color)',
+              color: 'var(--palette--button-text-color)',
             }}
             variant="contained"
             onClick={() => {
@@ -517,7 +514,7 @@ export default function Peer() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
                   Total
                 </Typography>
                 {isLoading ? (
@@ -527,7 +524,7 @@ export default function Peer() {
                     {peer.length}
                   </Typography>
                 )}
-                <Typography variant="body2" color="var(--table-title-text-color)">
+                <Typography variant="body2" color="var(--palette--table-title-text-color)">
                   number of peers
                 </Typography>
               </Box>
@@ -540,7 +537,7 @@ export default function Peer() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
                   Git Version
                 </Typography>
                 {isLoading ? (
@@ -550,7 +547,7 @@ export default function Peer() {
                     {gitVersionCount}
                   </Typography>
                 )}
-                <Typography variant="body2" color="var(--table-title-text-color)">
+                <Typography variant="body2" color="var(--palette--table-title-text-color)">
                   number of git versions
                 </Typography>
               </Box>
@@ -563,7 +560,7 @@ export default function Peer() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
                   Git Commit
                 </Typography>
                 {isLoading ? (
@@ -573,7 +570,7 @@ export default function Peer() {
                     {gitCommitCount}
                   </Typography>
                 )}
-                <Typography variant="body2" color="var(--table-title-text-color)">
+                <Typography variant="body2" color="var(--palette--table-title-text-color)">
                   number of git commits
                 </Typography>
               </Box>
@@ -643,7 +640,7 @@ export default function Peer() {
                     sx={{
                       bgcolor: '#e0e0e0',
                       '& .MuiLinearProgress-bar': {
-                        bgcolor: 'var(--description-color)',
+                        bgcolor: 'var(--palette--description-color)',
                       },
                     }}
                     variant="determinate"
@@ -741,7 +738,7 @@ export default function Peer() {
                     sx={{
                       bgcolor: '#e0e0e0',
                       '& .MuiLinearProgress-bar': {
-                        bgcolor: 'var(--description-color)',
+                        bgcolor: 'var(--palette--description-color)',
                       },
                     }}
                     variant="determinate"
@@ -889,7 +886,7 @@ export default function Peer() {
         <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '1rem' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <RefreshDialog className={styles.exportIcon} />
-            <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
+            <Typography id="refresh-title" variant="h6" fontFamily="mabry-bold" pl="0.5rem">
               Refresh
             </Typography>
           </Box>

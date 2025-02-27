@@ -67,7 +67,7 @@ export default function UpdateTokens() {
                   color: 'var(--palette-grey-300Channel)',
                   width: '0.8rem',
                   height: '0.8rem',
-                  ':hover': { color: 'var(--description-color)' },
+                  ':hover': { color: 'var(--palette--description-color)' },
                 }}
               />
             </Tooltip>
@@ -265,7 +265,7 @@ export default function UpdateTokens() {
                   color: 'var(--palette-grey-300Channel)',
                   width: '0.8rem',
                   height: '0.8rem',
-                  ':hover': { color: 'var(--description-color)' },
+                  ':hover': { color: 'var(--palette--description-color)' },
                 }}
               />
             </Tooltip>
@@ -290,7 +290,7 @@ export default function UpdateTokens() {
                   color: 'var(--palette-grey-300Channel)',
                   width: '0.8rem',
                   height: '0.8rem',
-                  ':hover': { color: 'var(--description-color)' },
+                  ':hover': { color: 'var(--palette--description-color)' },
                 }}
               />
             </Tooltip>
@@ -332,7 +332,7 @@ export default function UpdateTokens() {
                   color: 'var(--palette-grey-300Channel)',
                   width: '0.8rem',
                   height: '0.8rem',
-                  ':hover': { color: 'var(--description-color)' },
+                  ':hover': { color: 'var(--palette--description-color)' },
                 }}
               />
             </Tooltip>
@@ -349,12 +349,12 @@ export default function UpdateTokens() {
                         onChange={(event: any) => {
                           setPreheat(event.target.checked);
                         }}
-                        sx={{ color: 'var(--button-color)!important' }}
+                        sx={{ color: 'var(--palette--button-color)!important' }}
                       />
                     }
                   />
                 </Box>
-                <Typography variant="body2" color="var(--text-palette-text-secondary)" ml="1rem">
+                <Typography variant="body2" color="var(--palette--text-palette-text-secondary)" ml="1rem">
                   Full control of preheating, it's used for preheating of harbor.
                 </Typography>
               </Box>
@@ -368,12 +368,12 @@ export default function UpdateTokens() {
                         onChange={(event: any) => {
                           setJob(event.target.checked);
                         }}
-                        sx={{ color: 'var(--button-color)!important' }}
+                        sx={{ color: 'var(--palette--button-color)!important' }}
                       />
                     }
                   />
                 </Box>
-                <Typography variant="body2" color="var(--text-palette-text-secondary)" ml="1rem">
+                <Typography variant="body2" color="var(--palette--text-palette-text-secondary)" ml="1rem">
                   Full control of job. If you need to call preheat job through open API, it is recommended to use
                   preheat job.
                 </Typography>
@@ -388,12 +388,12 @@ export default function UpdateTokens() {
                         onChange={(event: any) => {
                           setCluster(event.target.checked);
                         }}
-                        sx={{ color: 'var(--button-color)!important' }}
+                        sx={{ color: 'var(--palette--button-color)!important' }}
                       />
                     }
                   />
                 </Box>
-                <Typography variant="body2" color="var(--text-palette-text-secondary)" ml="1rem">
+                <Typography variant="body2" color="var(--palette--text-palette-text-secondary)" ml="1rem">
                   Full control of cluster.
                 </Typography>
               </Box>

@@ -38,29 +38,6 @@ export default function Schedulers() {
   const pathSegments = location.pathname.split('/');
   const clusterID = pathSegments[pathSegments.length - 3];
 
-  const schedulerLabel = [
-    {
-      label: 'Port',
-      name: 'port',
-    },
-    {
-      label: 'State',
-      name: 'state',
-    },
-    {
-      label: 'Features',
-      name: 'features',
-    },
-    {
-      label: 'Created At',
-      name: 'created_at',
-    },
-    {
-      label: 'Updated At',
-      name: 'updated_at',
-    },
-  ];
-
   useEffect(() => {
     (async function () {
       try {
@@ -195,10 +172,14 @@ export default function Schedulers() {
                 sx={{
                   borderRadius: '0.25rem',
                   backgroundColor:
-                    scheduler?.state === 'active' ? 'var(--description-color)' : 'var(--palette-dark-300Channel)',
+                    scheduler?.state === 'active'
+                      ? 'var(--palette--description-color)'
+                      : 'var(--palette-dark-300Channel)',
                   color: scheduler?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
                   borderColor:
-                    scheduler?.state === 'active' ? 'var(--description-color)' : 'var(--palette-dark-300Channel)',
+                    scheduler?.state === 'active'
+                      ? 'var(--palette--description-color)'
+                      : 'var(--palette-dark-300Channel)',
                   fontWeight: 'bold',
                 }}
               />

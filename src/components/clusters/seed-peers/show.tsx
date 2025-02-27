@@ -1,4 +1,3 @@
-import Paper from '@mui/material/Paper';
 import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getSeedPeer, getSeedPeerResponse } from '../../../lib/api';
@@ -178,10 +177,14 @@ export default function SeedPeer() {
                 sx={{
                   borderRadius: '0.25rem',
                   backgroundColor:
-                    seedPeer?.state === 'active' ? 'var(--description-color)' : 'var(--palette-dark-300Channel)',
+                    seedPeer?.state === 'active'
+                      ? 'var(--palette--description-color)'
+                      : 'var(--palette-dark-300Channel)',
                   color: seedPeer?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
                   borderColor:
-                    seedPeer?.state === 'active' ? 'var(--description-color)' : 'var(--palette-dark-300Channel)',
+                    seedPeer?.state === 'active'
+                      ? 'var(--palette--description-color)'
+                      : 'var(--palette-dark-300Channel)',
                   fontWeight: 'bold',
                 }}
               />

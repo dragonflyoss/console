@@ -1,15 +1,4 @@
-import {
-  Breadcrumbs,
-  createTheme,
-  styled,
-  ThemeProvider,
-  Typography,
-  Link as RouterLink,
-  Snackbar,
-  Alert,
-  Tooltip,
-  colors,
-} from '@mui/material';
+import { Breadcrumbs, styled, Typography, Link as RouterLink, Snackbar, Alert } from '@mui/material';
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import * as React from 'react';
 import Box from '@mui/material/Box';
@@ -21,18 +10,7 @@ import { ReactComponent as TabCluster } from '../../assets/images/cluster/tab-cl
 import { ReactComponent as TabScheduler } from '../../assets/images/cluster/scheduler/tab-scheduler.svg';
 import { ReactComponent as TabSeedPeer } from '../../assets/images/cluster/seed-peer/tab-seed-peer.svg';
 import { ReactComponent as TabPeer } from '../../assets/images/cluster/peer/tab-peer.svg';
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import styles from './show.module.css';
-// const theme = createTheme({
-//   palette: {
-//     primary: {
-//       main: '#2e8f79',
-//     },
-//   },
-//   typography: {
-//     fontFamily: 'mabry-light,sans-serif',
-//   },
-// });
 
 interface MyContextType {
   cluster: getClusterResponse;
@@ -164,7 +142,7 @@ export default function NavTabs() {
       opacity: 1,
     },
     '&.Mui-selected': {
-      color: 'var(--description-color)',
+      color: 'var(--palette--description-color)',
       fontFamily: 'mabry-bold',
     },
   }));
@@ -172,7 +150,7 @@ export default function NavTabs() {
   const AntTabs = styled(Tabs)({
     borderBottom: '1px solid var(--palette-tab-border-color)',
     '& .MuiTabs-indicator': {
-      backgroundColor: 'var(--description-color)',
+      backgroundColor: 'var(--palette--description-color)',
     },
   });
 
@@ -235,7 +213,7 @@ export default function NavTabs() {
                 underline="hover"
                 href="https://github.com/dragonflyoss/client"
                 target="_blank"
-                style={{ color: 'var(--menu-color)' }}
+                style={{ color: 'var(--palette--menu-color)' }}
               >
                 dragonflyoss/client
               </RouterLink>

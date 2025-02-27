@@ -31,7 +31,7 @@
   width: 2.8rem;
   height: 2.8rem;
   margin-right: 1rem;
-  color: var(--button-color);
+  color: var(--palette--button-color);
 }
 
 .copyIcon {
@@ -48,7 +48,6 @@
 .deleteClusterIcon {
   width: 6rem;
   height: 6rem;
-  /* color: var(--hover-button-text-color); */
 }
 
 .name {
@@ -90,17 +89,17 @@
 }
 
 .descriptionIcon:hover {
-  color: var(--description-color);
+  color: var(--palette--description-color);
 }
 
 .configLable {
-  color: var(--table-title-text-color);
+  color: var(--palette--table-title-text-color);
   margin-right: 0.2rem !important;
   font-family: 'mabry-bold' !important;
 }
 
 .scopesLable {
-  color: var(--button-color) !important;
+  color: var(--palette--button-color) !important;
   font-family: 'mabry-bold' !important;
   margin-right: 0.2rem !important;
   padding-left: 0.4rem;
@@ -124,14 +123,14 @@
 .scopesIcon {
   width: 1.6rem;
   height: 1.6rem;
-  color: var(--button-color);
+  color: var(--palette--button-color);
 }
 
 .totalContainer {
   display: flex;
   align-items: center;
   padding: 0.3rem;
-  background-color: var(--menu-background-color) !important;
+  background-color: var(--palette--menu-background-color) !important;
 }
 
 .totalIcon {
@@ -306,5 +305,5 @@
   width: 1.6rem;
   height: 1.6rem;
   margin-right: 0.3rem;
-  color: var(--save-color);
+  color: var(--palette--save-color);
 }

@@ -114,6 +114,7 @@ export default function NewUser() {
         label: 'Email',
         autoComplete: 'email',
         id: 'email',
+        required: true,
         placeholder: 'Enter your email',
         error: emailError,
         helperText: emailError ? 'Email is invalid or already taken.' : '',
@@ -324,7 +325,7 @@ export default function NewUser() {
           phone: phone,
           location: location,
         });
-        
+
         navigate(`/users`);
       } catch (error) {
         if (error instanceof Error) {
@@ -373,7 +374,7 @@ export default function NewUser() {
         <Typography color="inherit">New user</Typography>
       </Breadcrumbs>
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: '2rem' }}>
-        <Box className={styles.container}>
+        {/* <Box className={styles.container}>
           <Card className={styles.uploadWrapper}>
             <IconButton
               component="label"
@@ -386,7 +387,7 @@ export default function NewUser() {
                 width: '10rem',
                 height: '10rem',
                 borderRadius: '50%',
-                border: '1px dashed rgba(var(--no-data-color)/0.2)',
+                border: '1px dashed rgba(var(--palette--no-data-color)/0.2)',
                 padding: '0.5rem',
               }}
             >
@@ -400,7 +401,7 @@ export default function NewUser() {
                   width: '100%',
                   height: '100%',
                   borderRadius: '50%',
-                  //   border: '1px dashed rgba(var(--no-data-color)/0.2)',
+                  //   border: '1px dashed rgba(var(--palette--no-data-color)/0.2)',
                   backgroundColor: 'rgba(var(--palette-grey-500Channel)/0.08)',
                 }}
               >
@@ -456,9 +457,9 @@ export default function NewUser() {
               <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />
             </Box>
           </Card>
-        </Box>
+        </Box> */}
 
-        {/* <Divider sx={{ mt: 2, mb: 2 }} />
+        <Divider sx={{ mt: 2, mb: 2 }} />
         <Box className={styles.form}>
           {formList.map((item) =>
             item.formProps.id === 'phone' ? (
@@ -495,7 +496,7 @@ export default function NewUser() {
             }}
           />
           <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />
-        </Box> */}
+        </Box>
       </Box>
     </Box>
   );

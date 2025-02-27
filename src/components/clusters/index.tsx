@@ -40,31 +40,16 @@ import Card from '../card';
 import debounce from 'lodash/debounce';
 import SearchCircularProgress from '../circular-progress';
 import { ReactComponent as Round } from '../../assets/images/cluster/round.svg';
-// import { ReactComponent as Cluster } from '../../assets/images/cluster/cluster.svg';
 import { ReactComponent as Default } from '../../assets/images/cluster/default.svg';
 import { ReactComponent as Statistics } from '../../assets/images/cluster/peer/statistics.svg';
-// import { ReactComponent as Scheduler } from '../../assets/images/cluster/scheduler.svg';
-// import { ReactComponent as SeedPeer } from '../../assets/images/cluster/seed-peer.svg';
 import { ReactComponent as Active } from '../../assets/images/cluster/active.svg';
 import { ReactComponent as ClusterID } from '../../assets/images/cluster/id.svg';
 import { ReactComponent as IcContent } from '../../assets/images/cluster/scheduler/ic-content.svg';
 import { ReactComponent as NoCluster } from '../../assets/images/cluster/no-cluster.svg';
 import { ReactComponent as ArrowCircleRightIcon } from '../../assets/images/cluster/arrow-circle-right.svg';
-import { ReactComponent as Cluster } from '../../assets/images/cluster/tab-cluster.svg';
-import { ReactComponent as Scheduler } from '../../assets/images/cluster/scheduler/tab-scheduler.svg';
-import { ReactComponent as SeedPeer } from '../../assets/images/cluster/seed-peer/tab-seed-peer.svg';
-
-// const theme = createTheme({
-//   // palette: {
-//   //   secondary: {},
-//   //   primary: {
-//   //     main: '#1C293A',
-//   //   },
-//   // },
-//   typography: {
-//     fontFamily: 'mabry-light,sans-serif',
-//   },
-// });
+import { ReactComponent as Cluster } from '../../assets/images/cluster/cluster.svg';
+import { ReactComponent as Scheduler } from '../../assets/images/cluster/scheduler.svg';
+import { ReactComponent as SeedPeer } from '../../assets/images/cluster/seed-peer.svg';
 
 export default function Clusters() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -230,9 +215,9 @@ export default function Clusters() {
           id="create-cluster"
           size="small"
           sx={{
-            background: 'var(--button-color)',
-            color: 'var(--button-text-color)',
-            ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+            background: 'var(--palette--button-color)',
+            color: 'var(--palette--button-text-color)',
+            ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
           }}
           variant="contained"
           onClick={() => {
@@ -517,7 +502,7 @@ export default function Clusters() {
                     <Divider
                       sx={{
                         borderStyle: 'dashed',
-                        borderColor: 'var(--palette-divider)',
+                        borderColor: 'var(--palette--palette-divider)',
                         borderWidth: '0px 0px thin',
                         m: '1rem 0',
                       }}
@@ -531,7 +516,9 @@ export default function Clusters() {
                           id={`default-cluster-${item.id || 0}`}
                           sx={{
                             height: '1.4rem',
-                            background: item.is_default ? 'var(--description-color)' : 'var(--palette-dark-300Channel)',
+                            background: item.is_default
+                              ? 'var(--palette--description-color)'
+                              : 'var(--palette-dark-300Channel)',
                             color: item.is_default ? '#FFFFFF' : '#FFFFFF',
                             display: 'inline-flex',
                             alignItems: 'center',

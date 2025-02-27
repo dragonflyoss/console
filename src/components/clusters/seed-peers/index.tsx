@@ -1,5 +1,4 @@
 import Paper from '@mui/material/Paper';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
   Alert,
   Box,
@@ -84,20 +83,6 @@ import { ReactComponent as DeleteWarning } from '../../../assets/images/cluster/
 import { ReactComponent as DeleteInactive } from '../../../assets/images/cluster/delete-inactive.svg';
 import { ReactComponent as DeleteInactiveError } from '../../../assets/images/cluster/delete-inactive-error.svg';
 import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
-
-// const theme = createTheme({
-//   palette: {
-//     primary: {
-//       main: '#1C293A',
-//     },
-//     secondary: {
-//       main: '#2E8F79',
-//     },
-//   },
-//   typography: {
-//     fontFamily: 'mabry-light,sans-serif',
-//   },
-// });
 
 function CircularProgressWithLabel(props: LinearProgressProps & { value: number }) {
   return (
@@ -556,9 +541,9 @@ export default function ShowCluster() {
             }}
             className={styles.deleteButton}
             sx={{
-              background: 'var(--button-color)',
-              color: 'var(--button-text-color)',
-              ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+              background: 'var(--palette--button-color)',
+              color: 'var(--palette--button-text-color)',
+              ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
             }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
@@ -725,9 +710,9 @@ export default function ShowCluster() {
                       size="small"
                       onClick={handleReset}
                       sx={{
-                        background: 'var(--button-color)',
-                        color: 'var(--button-text-color)',
-                        ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                        background: 'var(--palette--button-color)',
+                        color: 'var(--palette--button-text-color)',
+                        ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                       }}
                     >
                       Cancel
@@ -869,11 +854,15 @@ export default function ShowCluster() {
                           variant="body1"
                           fontFamily="mabry-bold"
                           component="span"
-                          sx={{ color: 'var(--delete-button-color)' }}
+                          sx={{ color: 'var(--palette--delete-button-color)' }}
                         >
                           WARNING:&nbsp;
                         </Typography>
-                        <Typography variant="body1" component="span" sx={{ color: 'var(--delete-button-color)' }}>
+                        <Typography
+                          variant="body1"
+                          component="span"
+                          sx={{ color: 'var(--palette--delete-button-color)' }}
+                        >
                           This action CANNOT be undone.
                         </Typography>
                       </Box>
@@ -913,9 +902,9 @@ export default function ShowCluster() {
                     onClick={handleBack}
                     sx={{
                       '&.MuiButton-root': {
-                        backgroundColor: activeStep === 0 ? '' : 'var(--button-color)',
-                        color: 'var(--button-text-color)',
-                        ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                        backgroundColor: activeStep === 0 ? '' : 'var(--palette--button-color)',
+                        color: 'var(--palette--button-text-color)',
+                        ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                       },
                     }}
                   >
@@ -931,9 +920,9 @@ export default function ShowCluster() {
                       id="save-delete"
                       sx={{
                         '&.MuiLoadingButton-root': {
-                          backgroundColor: 'var(--delete-button-color)',
+                          backgroundColor: 'var(--palette--delete-button-color)',
                           color: '#fff',
-                          borderColor: 'var(--save-color)',
+                          borderColor: 'var(--palette--save-color)',
                         },
                       }}
                     >
@@ -952,9 +941,9 @@ export default function ShowCluster() {
                           backgroundColor:
                             Array.isArray(seedPeerInactive) && seedPeerInactive.length === 0
                               ? ''
-                              : 'var(--button-color)',
-                          color: 'var(--button-text-color)',
-                          ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                              : 'var(--palette--button-color)',
+                          color: 'var(--palette--button-text-color)',
+                          ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                         },
                       }}
                     >
@@ -971,7 +960,7 @@ export default function ShowCluster() {
         <Card className={styles.seedPeerHeader}>
           <Box sx={{ display: 'flex', width: '70%' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
+              <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
                 Total
               </Typography>
               <Box>
@@ -985,7 +974,7 @@ export default function ShowCluster() {
                   </Typography>
                 )}
 
-                <Typography variant="body2" color="var(--table-title-text-color)">
+                <Typography variant="body2" color="var(--palette--table-title-text-color)">
                   number of seed peers
                 </Typography>
               </Box>
@@ -997,7 +986,7 @@ export default function ShowCluster() {
         <Card className={styles.activeHeader}>
           <Box sx={{ display: 'flex', width: '70%' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
+              <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
                 Active
               </Typography>
               <Box>
@@ -1010,7 +999,7 @@ export default function ShowCluster() {
                     {numberOfActiveSeedPeers}
                   </Typography>
                 )}
-                <Typography variant="body2" color="var(--table-title-text-color)">
+                <Typography variant="body2" color="var(--palette--table-title-text-color)">
                   number of active seed peers
                 </Typography>
               </Box>
@@ -1022,7 +1011,7 @@ export default function ShowCluster() {
         <Card className={styles.activeHeader}>
           <Box sx={{ display: 'flex' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
+              <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
                 Inactive
               </Typography>
               <Box>
@@ -1035,7 +1024,7 @@ export default function ShowCluster() {
                     {numberOfInactiveSeedPeers}
                   </Typography>
                 )}
-                <Typography variant="body2" color="var(--table-title-text-color)">
+                <Typography variant="body2" color="var(--palette--table-title-text-color)">
                   number of inactive seed peers
                 </Typography>
               </Box>
@@ -1124,9 +1113,7 @@ export default function ShowCluster() {
             }}
             sx={{
               '& .MuiMenu-paper': {
-                boxShadow: 'var(--palette-menu-shadow);',
-                backgroundImage:
-                  'url(../../../assets/images/menu/cyan-blur.png), url(../../../assets/images/menu/red-blur.png)',
+                boxShadow: 'var(--palette-menu-shadow)',
                 borderRadius: '0.6rem',
               },
               '& .MuiMenu-list': {
@@ -1199,7 +1186,7 @@ export default function ShowCluster() {
                 <Divider
                   sx={{
                     borderStyle: 'dashed',
-                    borderColor: 'var(--palette-divider)',
+                    borderColor: 'var(--palette--palette-divider)',
                     borderWidth: '0px 0px thin',
                     m: '1rem 0',
                   }}
@@ -1246,9 +1233,7 @@ export default function ShowCluster() {
                         }}
                         sx={{
                           '& .MuiMenu-paper': {
-                            boxShadow: 'var(--palette-menu-shadow);',
-                            backgroundImage:
-                              'url(../../../assets/images/menu/cyan-blur.png), url(../../../assets/images/menu/red-blur.png)',
+                            boxShadow: 'var(--custom-shadows-dropdown)',
                             borderRadius: '0.6rem',
                           },
                           '& .MuiMenu-list': {
@@ -1282,12 +1267,12 @@ export default function ShowCluster() {
                             }}
                           >
                             <ListItemIcon>
-                              <DeleteIcon fontSize="small" sx={{ color: 'var(--delete-button-color)' }} />
+                              <DeleteIcon fontSize="small" sx={{ color: 'var(--palette--delete-button-color)' }} />
                             </ListItemIcon>
                             <Typography
                               variant="body1"
                               className={styles.menuText}
-                              sx={{ color: 'var(--delete-button-color)' }}
+                              sx={{ color: 'var(--palette--delete-button-color)' }}
                             >
                               Delete
                             </Typography>
@@ -1331,10 +1316,12 @@ export default function ShowCluster() {
                             borderRadius: '0.2rem',
                             backgroundColor:
                               item?.state === 'active'
-                                ? 'var(--menu-background-color)'
+                                ? 'var(--palette--menu-background-color)'
                                 : 'var(--palette-background-inactive)',
                             color:
-                              item?.state === 'active' ? 'var(--description-color)' : 'var(--table-title-text-color)',
+                              item?.state === 'active'
+                                ? 'var(--palette--description-color)'
+                                : 'var(--palette--table-title-text-color)',
                             border: 0,
                             fontFamily: 'mabry-bold',
                           }}
@@ -1344,7 +1331,7 @@ export default function ShowCluster() {
                     <Divider
                       sx={{
                         borderStyle: 'dashed',
-                        borderColor: 'var(--palette-divider)',
+                        borderColor: 'var(--palette--palette-divider)',
                         borderWidth: '0px 0px thin',
                       }}
                     />
@@ -1392,7 +1379,7 @@ export default function ShowCluster() {
         <Card>
           <Box width="100%">
             <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="seed-peer-table">
-              <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
+              <TableHead sx={{ backgroundColor: 'var(--palette--table-title-color)' }}>
                 <TableRow>
                   <TableCell align="center" className={styles.tableHeader}>
                     <Typography variant="subtitle1" className={styles.tableHeaderText}>
@@ -1516,7 +1503,7 @@ export default function ShowCluster() {
                                 component={Link}
                                 to={`/clusters/${params.id}/seed-peers/${item?.id}`}
                                 underline="hover"
-                                color="var(--description-color)"
+                                color="var(--palette--description-color)"
                               >
                                 {item?.host_name}
                               </RouterLink>
@@ -1545,12 +1532,12 @@ export default function ShowCluster() {
                                   borderRadius: '0.2rem',
                                   backgroundColor:
                                     item?.state === 'active'
-                                      ? 'var(--description-color)'
+                                      ? 'var(--palette--description-color)'
                                       : 'var(--palette-dark-300Channel)',
                                   color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
                                   borderColor:
                                     item?.state === 'active'
-                                      ? 'var(--description-color)'
+                                      ? 'var(--palette--description-color)'
                                       : 'var(--palette-dark-300Channel)',
                                   fontWeight: 'bold',
                                 }}
@@ -1586,9 +1573,7 @@ export default function ShowCluster() {
                                 }}
                                 sx={{
                                   '& .MuiMenu-paper': {
-                                    boxShadow: 'var(--palette-menu-shadow);',
-                                    backgroundImage:
-                                      'url(../../../assets/images/menu/cyan-blur.png), url(../../../assets/images/menu/red-blur.png)',
+                                    boxShadow: 'var(--custom-shadows-dropdown)',
                                     borderRadius: '0.6rem',
                                   },
                                   '& .MuiMenu-list': {
@@ -1622,12 +1607,15 @@ export default function ShowCluster() {
                                     }}
                                   >
                                     <ListItemIcon>
-                                      <DeleteIcon fontSize="small" sx={{ color: 'var(--delete-button-color)' }} />
+                                      <DeleteIcon
+                                        fontSize="small"
+                                        sx={{ color: 'var(--palette--delete-button-color)' }}
+                                      />
                                     </ListItemIcon>
                                     <Typography
                                       variant="body2"
                                       className={styles.menuText}
-                                      sx={{ color: 'var(--delete-button-color)' }}
+                                      sx={{ color: 'var(--palette--delete-button-color)' }}
                                     >
                                       Delete
                                     </Typography>

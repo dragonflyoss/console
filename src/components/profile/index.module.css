@@ -61,12 +61,12 @@
   width: 1.4rem;
   height: 1.4rem;
   margin-right: 0.4rem;
-  color: var(--text-palette-text-secondary);
+  color: var(--palette--text-palette-text-secondary);
 }
 
 .editIcon {
   width: 1.4rem;
   height: 1.4rem;
   margin-right: 0.4rem;
-  color: var(--scopes-icon-color);
+  color: var(--palette--scopes-icon-color);
 }

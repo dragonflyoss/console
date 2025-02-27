@@ -3,14 +3,30 @@ import seedPeers from '../../fixtures/seed-peers/seed-peers.json';
 import schedulers from '../../fixtures/schedulers/schedulers.json';
 
 describe('Menu', () => {
+  beforeEach(() => {
+    cy.viewport(1440, 1080);
+  });
+
   it('user not signin', () => {
     // redirect when not signin.
     cy.visit('/');
 
     // Then I see that the current page is the signin!
     cy.url().should('include', '/signin');
+  });
 
-    cy.viewport(1440, 1080);
+  it('should switch to dark mode', () => {
+    cy.guestSignin();
+    cy.visit('/');
+
+    cy.get('#light').should('exist');
+
+    cy.get('#mode').click();
+
+    // Dark mode should show a different icon.
+    cy.get('#light').should('not.exist');
+
+    cy.get('#dark').should('exist');
   });
 
   describe('try to signin as guest user', () => {

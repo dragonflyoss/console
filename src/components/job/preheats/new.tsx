@@ -89,7 +89,7 @@ export default function NewPreheat() {
                   color: 'var(--palette-grey-300Channel)',
                   width: '0.8rem',
                   height: '0.8rem',
-                  ':hover': { color: 'var(--description-color)' },
+                  ':hover': { color: 'var(--palette--description-color)' },
                 }}
               />
             </Tooltip>
@@ -134,7 +134,7 @@ export default function NewPreheat() {
                   color: 'var(--palette-grey-300Channel)',
                   width: '0.8rem',
                   height: '0.8rem',
-                  ':hover': { color: 'var(--description-color)' },
+                  ':hover': { color: 'var(--palette--description-color)' },
                 }}
               />
             </Tooltip>
@@ -170,7 +170,7 @@ export default function NewPreheat() {
                   color: 'var(--palette-grey-300Channel)',
                   width: '0.8rem',
                   height: '0.8rem',
-                  ':hover': { color: 'var(--description-color)' },
+                  ':hover': { color: 'var(--palette--description-color)' },
                 }}
               />
             </Tooltip>
@@ -428,7 +428,7 @@ export default function NewPreheat() {
                     color: 'var(--palette-grey-300Channel)',
                     width: '0.8rem',
                     height: '0.8rem',
-                    ':hover': { color: 'var(--description-color)' },
+                    ':hover': { color: 'var(--palette--description-color)' },
                   }}
                 />
               </Tooltip>
@@ -455,7 +455,7 @@ export default function NewPreheat() {
                     color: 'var(--palette-grey-300Channel)',
                     width: '0.8rem',
                     height: '0.8rem',
-                    ':hover': { color: 'var(--description-color)' },
+                    ':hover': { color: 'var(--palette--description-color)' },
                   }}
                 />
               </Tooltip>
@@ -485,7 +485,7 @@ export default function NewPreheat() {
                     <Checkbox
                       id={`cluster-${item.id}`}
                       size="small"
-                      sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }}
+                      sx={{ '&.MuiCheckbox-root': { color: 'var(--palette--button-color)' } }}
                       checked={clusterName.indexOf(item.name) > -1}
                     />
                     <ListItemText primary={item.name} />
@@ -506,7 +506,7 @@ export default function NewPreheat() {
                     color: 'var(--palette-grey-300Channel)',
                     width: '0.8rem',
                     height: '0.8rem',
-                    ':hover': { color: 'var(--description-color)' },
+                    ':hover': { color: 'var(--palette--description-color)' },
                   }}
                 />
               </Tooltip>
@@ -566,7 +566,7 @@ export default function NewPreheat() {
                                       width: '0.8rem',
                                       height: '0.8rem',
                                       mr: '0.3rem',
-                                      ':hover': { color: 'var(--description-color)' },
+                                      ':hover': { color: 'var(--palette--description-color)' },
                                     }}
                                   />
                                 </Tooltip>
@@ -614,7 +614,7 @@ export default function NewPreheat() {
                         color: 'var(--palette-grey-300Channel)',
                         width: '0.8rem',
                         height: '0.8rem',
-                        ':hover': { color: 'var(--description-color)' },
+                        ':hover': { color: 'var(--palette--description-color)' },
                       }}
                     />
                   </Tooltip>
@@ -665,15 +665,15 @@ export default function NewPreheat() {
                         setheaders(newheaders);
                       }}
                     >
-                      <ClearIcon sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--button-color)' }} />
+                      <ClearIcon sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--palette--button-color)' }} />
                     </IconButton>
                   </Grid>
                 ))}
                 <Button
                   sx={{
                     '&.MuiButton-root': {
-                      backgroundColor: 'var(--description-color)',
-                      borderColor: 'var(--description-color)',
+                      backgroundColor: 'var(--palette--description-color)',
+                      borderColor: 'var(--palette--description-color)',
                       color: '#FFF',
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -695,8 +695,8 @@ export default function NewPreheat() {
               <Button
                 sx={{
                   '&.MuiButton-root': {
-                    backgroundColor: 'var(--description-color)',
-                    borderColor: 'var(--description-color)',
+                    backgroundColor: 'var(--palette--description-color)',
+                    borderColor: 'var(--palette--description-color)',
                     color: '#FFF',
                   },
                   width: '8rem',

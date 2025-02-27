@@ -155,9 +155,9 @@ export default function Preheats() {
           id="new-preheat"
           size="small"
           sx={{
-            background: 'var(--button-color)',
-            color: 'var(--button-text-color)',
-            ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+            background: 'var(--palette--button-color)',
+            color: 'var(--palette--button-text-color)',
+            ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
           }}
           startIcon={<AddIcon />}
           variant="contained"
@@ -184,7 +184,7 @@ export default function Preheats() {
         <Box
           sx={{
             p: '0.8rem',
-            backgroundColor: 'var(--table-title-color)',
+            backgroundColor: 'var(--palette--table-title-color)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -292,7 +292,7 @@ export default function Preheats() {
                           id={`preheat-${item?.id}`}
                           to={`/jobs/preheats/${item?.id}`}
                           underline="hover"
-                          sx={{ color: 'var(--description-color)' }}
+                          sx={{ color: 'var(--palette--description-color)' }}
                         >
                           <Detail className={styles.detailIcon} />
                         </RouterLink>
@@ -301,7 +301,7 @@ export default function Preheats() {
                     <Divider
                       sx={{
                         borderStyle: 'dashed',
-                        borderColor: 'var(--palette-divider)',
+                        borderColor: 'var(--palette--palette-divider)',
                         borderWidth: '0px 0px thin',
                       }}
                     />
@@ -346,7 +346,7 @@ export default function Preheats() {
                         id={`preheat-${item?.id}`}
                         to={`/jobs/preheats/${item?.id}`}
                         underline="hover"
-                        sx={{ color: 'var(--description-color)' }}
+                        sx={{ color: 'var(--palette--description-color)' }}
                       >
                         <Detail className={styles.detailIcon} />
                       </RouterLink>

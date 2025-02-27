@@ -12,7 +12,7 @@
 .seedPeerInactiveListTitle {
   display: flex;
   padding: 0.8rem 1rem;
-  background-color: var(--table-title-color) !important;
+  background-color: var(--palette--table-title-color) !important;
 }
 
 .noInactiveScheduler {
@@ -71,11 +71,11 @@
 }
 
 .menu {
+  background-image: url(../../../assets/images/menu/cyan-blur.png), url(../../../assets/images/menu/red-blur.png);
   background-color: var(--palette-background-menu);
   background-repeat: no-repeat, no-repeat;
   padding: 0.2rem;
   background-size: 50%, 50%;
-  box-shadow: rgba(145, 158, 171, 0.24) 0px 0px 2px 0px, rgba(145, 158, 171, 0.24) -20px 20px 40px -4px;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
   outline: 0px;
   background-position: right top, left bottom;
@@ -88,7 +88,7 @@
 }
 
 .menuItemIcon {
-  color: var(--button-color);
+  color: var(--palette--button-color);
 }
 
 .menuText {
@@ -147,7 +147,7 @@
 
 .seedPeerInactiveTableHeaderText {
   font-family: 'mabry-bold';
-  color: var(var(--table-title-text-color));
+  color: var(var(--palette--table-title-text-color));
 }
 
 .seedPeerInactiveHeaderIP {
@@ -296,8 +296,8 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-color: rgba(var(--no-data-color) / 0.04) !important;
-  border: dashed 1px rgba(var(--no-data-color) / 0.08);
+  background-color: rgba(var(--palette--no-data-color) / 0.04) !important;
+  border: dashed 1px rgba(var(--palette--no-data-color) / 0.08);
 }
 
 .nodataIcon {
@@ -332,16 +332,16 @@
 }
 
 .tableHeader {
-  border-color: var(--palette-divider) !important;
+  border-color: var(--palette--palette-divider) !important;
 }
 
 .tableHeaderText {
-  color: var(--table-title-text-color);
+  color: var(--palette--table-title-text-color);
   font-family: 'mabry-bold' !important;
 }
 
 .tableRow {
-  border-bottom: dashed var(--palette-divider);
+  border-bottom: dashed var(--palette--palette-divider);
 }
 
 .tableRow:last-child {
@@ -350,7 +350,7 @@
 
 .divider {
   border-width: 0px 0px thin;
-  border-color: var(--palette-divider);
+  border-color: var(--palette--palette-divider);
   border-style: dashed;
   margin: 0;
 }

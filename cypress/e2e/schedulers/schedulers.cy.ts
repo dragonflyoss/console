@@ -65,17 +65,22 @@ describe('Schedulers', () => {
 
       // Show idloading.
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
+
       // Show hostname.
       cy.get('#hostname-scheduler-7').should('be.visible').and('contain', 'scheduler-7');
+
       // Show ip.
       cy.get('#ip-7').should('be.visible').and('contain', '30.44.98.202');
+
       // Show state.
       cy.get('#state-7')
         .should('be.visible')
         .and('contain', 'Active')
         .and('have.css', 'background-color', 'rgb(46, 143, 121)');
+
       // Show features.
       cy.get('#features-7').should('be.visible').and('contain', 'Schedule');
+
       // Show scheduler-5 information.
       cy.get('#hostname-scheduler-5').should('be.visible').and('contain', 'scheduler-5');
       cy.get('#ip-5').should('be.visible').and('contain', '20.14.28.202');
@@ -84,6 +89,14 @@ describe('Schedulers', () => {
         .should('be.visible')
         .and('contain', 'Inactive')
         .and('have.css', 'background-color', 'rgb(28, 41, 58)');
+
+      // Click scheduler-18 operation button.
+      cy.get('#operation-18').click();
+
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .schedulers_menu__mxj5m > #view-scheduler-18').click();
+
+      // Then I see that the current page is the scheduler 18.
+      cy.url().should('include', 'clusters/1/schedulers/18');
     });
 
     it('can display schedulers card', () => {
@@ -615,7 +628,7 @@ describe('Schedulers', () => {
 
       cy.get('[value="inactive"]').click();
 
-     cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
+      cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
 
       cy.get('#operation-10').click();
 

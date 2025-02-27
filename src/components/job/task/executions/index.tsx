@@ -243,7 +243,7 @@ export default function Executions() {
                           id={`execution-${item?.id}`}
                           to={`/jobs/task/executions/${item?.id}`}
                           underline="hover"
-                          sx={{ color: 'var(--description-color)' }}
+                          sx={{ color: 'var(--palette--description-color)' }}
                         >
                           <Detail className={styles.detailIcon} />
                         </RouterLink>
@@ -252,7 +252,7 @@ export default function Executions() {
                     <Divider
                       sx={{
                         borderStyle: 'dashed',
-                        borderColor: 'var(--palette-divider)',
+                        borderColor: 'var(--palette--palette-divider)',
                         borderWidth: '0px 0px thin',
                       }}
                     />
@@ -291,7 +291,7 @@ export default function Executions() {
                         id={`execution-${item?.id}`}
                         to={`/jobs/task/executions/${item?.id}`}
                         underline="hover"
-                        sx={{ color: 'var(--description-color)' }}
+                        sx={{ color: 'var(--palette--description-color)' }}
                       >
                         <Detail className={styles.detailIcon} />
                       </RouterLink>

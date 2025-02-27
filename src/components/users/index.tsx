@@ -4,7 +4,6 @@ import {
   Box,
   Alert,
   Avatar,
-  Breadcrumbs,
   Chip,
   Dialog,
   DialogContent,
@@ -28,8 +27,6 @@ import {
   ListItem,
   List,
   Pagination,
-  ThemeProvider,
-  createTheme,
   MenuItem,
   Menu,
   ListItemIcon,
@@ -37,7 +34,6 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole, getUsersResponse } from '../../lib/api';
-import { makeStyles } from '@mui/styles';
 import { getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
 import AddIcon from '@mui/icons-material/Add';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -249,9 +245,9 @@ export default function Users() {
           id="create-user"
           size="small"
           sx={{
-            background: 'var(--button-color)',
-            color: 'var(--button-text-color)',
-            ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+            background: 'var(--palette--button-color)',
+            color: 'var(--palette--button-text-color)',
+            ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
           }}
           variant="contained"
           onClick={() => {
@@ -264,7 +260,7 @@ export default function Users() {
       </Box>
       <Card>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
+          <TableHead sx={{ backgroundColor: 'var(--palette--table-title-color)' }}>
             <TableRow>
               <TableCell className={styles.tableHeaderText} align="center"></TableCell>
               <TableCell align="center" className={styles.tableHeaderText}>
@@ -347,7 +343,7 @@ export default function Users() {
                         alt="Remy Sharp"
                         sx={{
                           '&.MuiAvatar-root': {
-                            background: 'var(--button-color)',
+                            background: 'var(--palette--button-color)',
                             color: '#fff',
                           },
                         }}
@@ -370,10 +366,10 @@ export default function Users() {
                       sx={{
                         borderRadius: '0.2rem',
                         backgroundColor:
-                          item?.state === 'enable' ? 'var( --description-color)' : 'var(--palette-dark-300Channel)',
+                          item?.state === 'enable' ? 'var( --palette--description-color)' : 'var(--palette-dark-300Channel)',
                         color: item?.state === 'enable' ? '#FFFFFF' : '#FFFFFF',
                         borderColor:
-                          item?.state === 'enable' ? 'var( --description-color)' : 'var(--palette-dark-300Channel)',
+                          item?.state === 'enable' ? 'var( --palette--description-color)' : 'var(--palette-dark-300Channel)',
                         fontWeight: 'bold',
                       }}
                     />
@@ -495,7 +491,7 @@ export default function Users() {
                       id="role-root"
                       sx={{
                         '&.MuiRadio-root': {
-                          color: 'var(--button-color)',
+                          color: 'var(--palette--button-color)',
                         },
                       }}
                     />
@@ -509,7 +505,7 @@ export default function Users() {
                       id="role-guest"
                       sx={{
                         '&.MuiRadio-root': {
-                          color: 'var(--button-color)',
+                          color: 'var(--palette--button-color)',
                         },
                       }}
                     />
@@ -553,7 +549,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
@@ -571,7 +567,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
@@ -593,7 +589,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
@@ -614,10 +610,10 @@ export default function Users() {
                     variant="outlined"
                     sx={{
                       borderRadius: '0.2rem',
-                      background: 'var(--button-color)',
+                      background: 'var(--palette--button-color)',
                       color: '#FFFFFF',
                       mr: '0.4rem',
-                      borderColor: 'var(--button-color)',
+                      borderColor: 'var(--palette--button-color)',
                       fontWeight: 'bold',
                     }}
                   />
@@ -631,7 +627,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
@@ -655,7 +651,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
@@ -677,7 +673,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
@@ -703,7 +699,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
@@ -733,7 +729,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />

@@ -176,14 +176,14 @@ export default function SignIn() {
           backgroundColor: 'rgba(0,0,0,0.3)',
         }}
       >
-        {/* <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" /> */}
+        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
       </Backdrop>
       <Grid item xs={6}>
         <Rotation />
       </Grid>
       <Grid item xs={6} className={styles.container}>
         <Box className={styles.header}>
-          <HeaderLayout />
+          <HeaderLayout className={styles.headerContent} />
         </Box>
         <Container component="main" maxWidth="xs">
           <Box
@@ -226,9 +226,9 @@ export default function SignIn() {
                 variant="contained"
                 sx={{
                   mt: '1.4rem',
-                  background: 'var(--description-color)',
-                  color: 'var(--button-text-color)',
-                  ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                  background: 'var(--palette--description-color)',
+                  color: 'var(--palette--button-text-color)',
+                  ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                 }}
               >
                 <Typography variant="button">Sign In</Typography>

@@ -53,7 +53,7 @@
 }
 
 .descriptionIcon:hover {
-  color: var(--description-color);
+  color: var(--palette--description-color);
 }
 
 .card {

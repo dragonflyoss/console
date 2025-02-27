@@ -222,16 +222,16 @@
 }
 
 .menuItem:hover {
-  background-color: var(--button-color) !important;
-  color: var(--button-text-color);
+  background-color: var(--palette--button-color) !important;
+  color: var(--palette--button-text-color);
 }
 
 .menuItemIcon {
-  color: var(--button-color);
+  color: var(--palette--button-color);
 }
 
 .menuItem:hover .menuItemIcon {
-  color: var(--button-text-color);
+  color: var(--palette--button-text-color);
 }
 
 .tableIcon {
@@ -248,7 +248,7 @@
 }
 
 .descriptionIcon:hover {
-  color: var(--description-color);
+  color: var(--palette--description-color);
 }
 
 .headerTitle {

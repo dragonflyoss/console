@@ -11,8 +11,6 @@ import {
   Alert,
   Tooltip,
   Divider,
-  createTheme,
-  ThemeProvider,
   TextField,
   styled,
   Autocomplete,
@@ -61,20 +59,6 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     borderLeft: '1px solid transparent',
   },
 }));
-
-// const theme = createTheme({
-//   palette: {
-//     primary: {
-//       main: '#1C293A',
-//     },
-//     success: {
-//       main: '#2e8f79',
-//     },
-//   },
-//   typography: {
-//     fontFamily: 'mabry-light,sans-serif',
-//   },
-// });
 
 export default function Clear() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -220,7 +204,7 @@ export default function Clear() {
                 color: 'var(--palette-grey-300Channel)',
                 width: '0.8rem',
                 height: '0.8rem',
-                ':hover': { color: 'var(--description-color)' },
+                ':hover': { color: 'var(--palette--description-color)' },
               }}
             />
           </Tooltip>
@@ -256,7 +240,7 @@ export default function Clear() {
                 color: 'var(--palette-grey-300Channel)',
                 width: '0.8rem',
                 height: '0.8rem',
-                ':hover': { color: 'var(--description-color)' },
+                ':hover': { color: 'var(--palette--description-color)' },
               }}
             />
           </Tooltip>
@@ -602,7 +586,7 @@ export default function Clear() {
           display: 'inline-flex',
           flexWrap: 'wrap',
           mb: '2rem',
-          backgroundColor: '#e9e9e9',
+          backgroundColor: 'var(--palette-dark-200Channel)',
         })}
       >
         <StyledToggleButtonGroup
@@ -618,11 +602,11 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--save-color)',
+                backgroundColor: 'var(--palette--save-color)',
                 color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--save-color)',
+                  backgroundColor: 'var(--palette--save-color)',
                 },
               },
               '&:hover': {
@@ -642,11 +626,11 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--save-color)',
+                backgroundColor: 'var(--palette--save-color)',
                 color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--save-color)',
+                  backgroundColor: 'var(--palette--save-color)',
                 },
               },
               '&:hover': {
@@ -678,6 +662,7 @@ export default function Clear() {
                 borderRadius: '0.2rem',
                 width: optional ? '45rem' : '36rem',
                 position: 'absolute',
+                backgroundColor: 'var(--palette-background-menu-paper)',
               }}
             >
               <TextField
@@ -717,7 +702,7 @@ export default function Clear() {
                                       width: '0.8rem',
                                       height: '0.8rem',
                                       mr: '0.3rem',
-                                      ':hover': { color: 'var(--description-color)' },
+                                      ':hover': { color: 'var(--palette--description-color)' },
                                     }}
                                   />
                                 </Tooltip>
@@ -823,9 +808,9 @@ export default function Clear() {
                           <Button
                             size="small"
                             sx={{
-                              background: 'var(--button-color)',
-                              color: 'var(--button-text-color)',
-                              ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                              background: 'var(--palette--button-color)',
+                              color: 'var(--palette--button-text-color)',
+                              ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                             }}
                             variant="contained"
                             onClick={(event) => {
@@ -844,7 +829,7 @@ export default function Clear() {
                             p: '1rem 0.8rem',
                             display: 'flex',
                             alignItems: 'center',
-                            backgroundColor: 'var(--table-title-color)',
+                            backgroundColor: 'var(--palette--table-title-color)',
                           }}
                         >
                           <Box width="20%" sx={{ display: 'flex', alignItems: 'center' }}>
@@ -909,13 +894,13 @@ export default function Clear() {
                                         borderRadius: '0.2rem',
                                         backgroundColor:
                                           item?.host_type === 'super'
-                                            ? 'var( --description-color)'
-                                            : 'var(--button-color)',
+                                            ? 'var( --palette--description-color)'
+                                            : 'var(--palette--button-color)',
                                         color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
                                         borderColor:
                                           item?.host_type === 'super'
-                                            ? 'var( --description-color)'
-                                            : 'var(--button-color)',
+                                            ? 'var( --palette--description-color)'
+                                            : 'var(--palette--button-color)',
                                         fontWeight: 'bold',
                                       }}
                                     />
@@ -965,13 +950,13 @@ export default function Clear() {
                                       borderRadius: '0.2rem',
                                       backgroundColor:
                                         item?.host_type === 'super'
-                                          ? 'var( --description-color)'
-                                          : 'var(--button-color)',
+                                          ? 'var( --palette--description-color)'
+                                          : 'var(--palette--button-color)',
                                       color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
                                       borderColor:
                                         item?.host_type === 'super'
-                                          ? 'var( --description-color)'
-                                          : 'var(--button-color)',
+                                          ? 'var( --palette--description-color)'
+                                          : 'var(--palette--button-color)',
                                       fontWeight: 'bold',
                                     }}
                                   />
@@ -1029,9 +1014,9 @@ export default function Clear() {
           }}
         >
           {theme.palette.mode === 'light' ? (
-            <NoTask className={styles.noTask} />
+            <NoTask id="no-task-image" className={styles.noTask} />
           ) : (
-            <DarkNoTask className={styles.noTask} />
+            <DarkNoTask id="dark-no-task-image" className={styles.noTask} />
           )}
         </Box>
       )}
@@ -1087,11 +1072,11 @@ export default function Clear() {
                   variant="body1"
                   fontFamily="mabry-bold"
                   component="span"
-                  sx={{ color: 'var(--delete-button-color)' }}
+                  sx={{ color: 'var(--palette--delete-button-color)' }}
                 >
                   WARNING:&nbsp;
                 </Typography>
-                <Typography variant="body1" component="span" sx={{ color: 'var(--delete-button-color)' }}>
+                <Typography variant="body1" component="span" sx={{ color: 'var(--palette--delete-button-color)' }}>
                   This action CANNOT be undone.
                 </Typography>
               </Box>

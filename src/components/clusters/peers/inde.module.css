@@ -101,7 +101,7 @@
 
 .linearProgress {
   width: 100%;
-  color: var(--description-color);
+  color: var(--palette--description-color);
 }
 
 .descriptionIcon {
@@ -111,7 +111,7 @@
 }
 
 .descriptionIcon:hover {
-  color: var(--description-color);
+  color: var(--palette--description-color);
 }
 
 .exportIcon {
@@ -128,7 +128,7 @@
 
 .divider {
   border-width: 0px 0px thin;
-  border-color: var(--palette-divider) !important;
+  border-color: var(--palette--palette-divider) !important;
   border-style: dashed !important;
 }
 
@@ -151,7 +151,7 @@
 .refreshIcon {
   width: 1.2rem;
   height: 1.2rem;
-  color: var(--button-text-color);
+  color: var(--palette--button-text-color);
 }
 
 .deleteWarning {

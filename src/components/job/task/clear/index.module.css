@@ -23,7 +23,7 @@
 }
 
 .hostnameTitle {
-  color: var(--table-title-text-color);
+  color: var(--palette--table-title-text-color);
 }
 
 .filterInput {

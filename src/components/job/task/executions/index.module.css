@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--table-title-color);
+  background-color: var(--palette--table-title-color);
 }
 
 .listWrapper {
@@ -66,5 +66,5 @@
 .detailIcon {
   width: 2rem;
   height: 2rem;
-  color: var(--button-color);
+  color: var(--palette--button-color);
 }

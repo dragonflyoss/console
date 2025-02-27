@@ -105,20 +105,6 @@ import { ReactComponent as Features } from '../../../assets/images/cluster/featu
 import { ReactComponent as Preheat } from '../../../assets/images/cluster/preheat.svg';
 import { ReactComponent as Schedule } from '../../../assets/images/cluster/scheduler.svg';
 
-// const theme = createTheme({
-//   // palette: {
-//   //   primary: {
-//   //     main: '#1C293A',
-//   //   },
-//   //   secondary: {
-//   //     main: '#2E8F79',
-//   //   },
-//   // },
-//   typography: {
-//     fontFamily: 'mabry-light,sans-serif',
-//   },
-// });
-
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 Chart.defaults.font.family = 'mabry-light';
 
@@ -141,6 +127,7 @@ function CircularProgressWithLabel(props: LinearProgressProps & { value: number 
     </Box>
   );
 }
+
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
     margin: theme.spacing(0.5),
@@ -617,9 +604,9 @@ export default function ShowCluster() {
             }}
             className={styles.deleteButton}
             sx={{
-              background: 'var(--button-color)',
-              color: 'var(--button-text-color)',
-              ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+              background: 'var(--palette--button-color)',
+              color: 'var(--palette--button-text-color)',
+              ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
             }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
@@ -632,7 +619,7 @@ export default function ShowCluster() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
                   Total
                 </Typography>
                 {isLoading ? (
@@ -644,7 +631,7 @@ export default function ShowCluster() {
                     {schedulerCount.length}
                   </Typography>
                 )}
-                <Typography variant="body2" color="var(--table-title-text-color)">
+                <Typography variant="body2" color="var(--palette--table-title-text-color)">
                   number of schedulers
                 </Typography>
               </Box>
@@ -657,7 +644,7 @@ export default function ShowCluster() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
                   Active
                 </Typography>
                 {isLoading ? (
@@ -669,7 +656,7 @@ export default function ShowCluster() {
                     {numberOfActiveSchedulers}
                   </Typography>
                 )}
-                <Typography variant="body2" color="var(--table-title-text-color)">
+                <Typography variant="body2" color="var(--palette--table-title-text-color)">
                   number of active schedulers
                 </Typography>
               </Box>
@@ -682,7 +669,7 @@ export default function ShowCluster() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--table-title-text-color)">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
                   Inactive
                 </Typography>
                 {isLoading ? (
@@ -694,7 +681,7 @@ export default function ShowCluster() {
                     {numberOfInactiveSchedulers}
                   </Typography>
                 )}
-                <Typography variant="body2" color="var(--table-title-text-color)">
+                <Typography variant="body2" color="var(--palette--table-title-text-color)">
                   number of inactive schedulers
                 </Typography>
               </Box>
@@ -783,9 +770,7 @@ export default function ShowCluster() {
             }}
             sx={{
               '& .MuiMenu-paper': {
-                boxShadow: 'var(--palette-menu-shadow);',
-                backgroundImage:
-                  'url(../../../assets/images/menu/cyan-blur.png), url(../../../assets/images/menu/red-blur.png)',
+                boxShadow: 'var(--palette-menu-shadow)',
                 borderRadius: '0.6rem',
               },
               '& .MuiMenu-list': {
@@ -858,7 +843,7 @@ export default function ShowCluster() {
                 <Divider
                   sx={{
                     borderStyle: 'dashed',
-                    borderColor: 'var(--palette-divider)',
+                    borderColor: 'var(--palette--palette-divider)',
                     borderWidth: '0px 0px thin',
                     m: '1rem 0',
                   }}
@@ -905,9 +890,7 @@ export default function ShowCluster() {
                         }}
                         sx={{
                           '& .MuiMenu-paper': {
-                            boxShadow: 'var(--palette-menu-shadow);',
-                            backgroundImage:
-                              'url(../../../assets/images/menu/cyan-blur.png), url(../../../assets/images/menu/red-blur.png)',
+                            boxShadow: 'var(--custom-shadows-dropdown)',
                             borderRadius: '0.6rem',
                           },
                           '& .MuiMenu-list': {
@@ -960,9 +943,13 @@ export default function ShowCluster() {
                             }}
                           >
                             <ListItemIcon>
-                              <DeleteIcon fontSize="small" sx={{ color: 'var(--delete-button-color)' }} />
+                              <DeleteIcon fontSize="small" sx={{ color: 'var(--palette--delete-button-color)' }} />
                             </ListItemIcon>
-                            <Typography variant="body2" className={styles.menuText} color="var(--delete-button-color)">
+                            <Typography
+                              variant="body2"
+                              className={styles.menuText}
+                              color="var(--palette--delete-button-color)"
+                            >
                               Delete
                             </Typography>
                           </MenuItem>
@@ -1005,10 +992,12 @@ export default function ShowCluster() {
                             borderRadius: '0.2rem',
                             backgroundColor:
                               item?.state === 'active'
-                                ? 'var(--menu-background-color)'
+                                ? 'var(--palette--menu-background-color)'
                                 : 'var(--palette-background-inactive)',
                             color:
-                              item?.state === 'active' ? 'var(--description-color)' : 'var(--table-title-text-color)',
+                              item?.state === 'active'
+                                ? 'var(--palette--description-color)'
+                                : 'var(--palette--table-title-text-color)',
                             border: 0,
                             fontFamily: 'mabry-bold',
                           }}
@@ -1018,7 +1007,7 @@ export default function ShowCluster() {
                     <Divider
                       sx={{
                         borderStyle: 'dashed',
-                        borderColor: 'var(--palette-divider)',
+                        borderColor: 'var(--palette--palette-divider)',
                         borderWidth: '0px 0px thin',
                       }}
                     />
@@ -1047,7 +1036,7 @@ export default function ShowCluster() {
                                   sx={{
                                     borderRadius: '0.2rem',
                                     background: 'var(--palette-background-inactive)',
-                                    color: 'var(--table-title-text-color)',
+                                    color: 'var(--palette--table-title-text-color)',
                                     mr: '0.4rem',
                                     border: '0',
                                     fontFamily: 'mabry-bold',
@@ -1073,7 +1062,7 @@ export default function ShowCluster() {
       ) : (
         <Card>
           <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
-            <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
+            <TableHead sx={{ backgroundColor: 'var(--palette--table-title-color)' }}>
               <TableRow>
                 <TableCell align="center" className={styles.tableHeader}>
                   <Typography variant="subtitle1" className={styles.tableHeaderText}>
@@ -1180,7 +1169,7 @@ export default function ShowCluster() {
                               component={Link}
                               to={`/clusters/${params.id}/schedulers/${item?.id}`}
                               underline="hover"
-                              sx={{ color: 'var(--description-color)' }}
+                              sx={{ color: 'var(--palette--description-color)' }}
                             >
                               {item?.host_name}
                             </RouterLink>
@@ -1201,12 +1190,12 @@ export default function ShowCluster() {
                                 borderRadius: '0.2rem',
                                 backgroundColor:
                                   item?.state === 'active'
-                                    ? 'var(--description-color)'
+                                    ? 'var(--palette--description-color)'
                                     : 'var(--palette-dark-300Channel)',
                                 color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
                                 borderColor:
                                   item?.state === 'active'
-                                    ? 'var(--description-color)'
+                                    ? 'var(--palette--description-color)'
                                     : 'var(--palette-dark-300Channel)',
                                 fontWeight: 'bold',
                               }}
@@ -1263,9 +1252,7 @@ export default function ShowCluster() {
                               }}
                               sx={{
                                 '& .MuiMenu-paper': {
-                                  boxShadow: 'var(--palette-menu-shadow);',
-                                  backgroundImage:
-                                    'url(../../../assets/images/menu/cyan-blur.png), url(../../../assets/images/menu/red-blur.png)',
+                                  boxShadow: 'var(--custom-shadows-dropdown)',
                                   borderRadius: '0.6rem',
                                 },
                                 '& .MuiMenu-list': {
@@ -1318,12 +1305,15 @@ export default function ShowCluster() {
                                   }}
                                 >
                                   <ListItemIcon>
-                                    <DeleteIcon fontSize="small" sx={{ color: 'var(--delete-button-color)' }} />
+                                    <DeleteIcon
+                                      fontSize="small"
+                                      sx={{ color: 'var(--palette--delete-button-color)' }}
+                                    />
                                   </ListItemIcon>
                                   <Typography
                                     variant="body2"
                                     className={styles.menuText}
-                                    color="var(--delete-button-color)"
+                                    color="var(--palette--delete-button-color)"
                                   >
                                     Delete
                                   </Typography>
@@ -1435,7 +1425,11 @@ export default function ShowCluster() {
                               <Typography component="div" variant="h5" fontFamily="mabry-bold">
                                 {deleteInactiveSchedulerSuccessful || '0'}
                               </Typography>
-                              <Typography color="var(--table-title-text-color)" component="div" variant="subtitle2">
+                              <Typography
+                                color="var(--palette--table-title-text-color)"
+                                component="div"
+                                variant="subtitle2"
+                              >
                                 number of deleted schedulers
                               </Typography>
                             </Box>
@@ -1531,9 +1525,9 @@ export default function ShowCluster() {
                       size="small"
                       onClick={handleReset}
                       sx={{
-                        background: 'var(--button-color)',
-                        color: 'var(--button-text-color)',
-                        ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                        background: 'var(--palette--button-color)',
+                        color: 'var(--palette--button-text-color)',
+                        ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                       }}
                     >
                       Cancel
@@ -1691,11 +1685,15 @@ export default function ShowCluster() {
                           variant="body1"
                           fontFamily="mabry-bold"
                           component="span"
-                          sx={{ color: 'var(--delete-button-color)' }}
+                          sx={{ color: 'var(--palette--delete-button-color)' }}
                         >
                           WARNING:&nbsp;
                         </Typography>
-                        <Typography variant="body1" component="span" sx={{ color: 'var(--delete-button-color)' }}>
+                        <Typography
+                          variant="body1"
+                          component="span"
+                          sx={{ color: 'var(--palette--delete-button-color)' }}
+                        >
                           This action CANNOT be undone.
                         </Typography>
                       </Box>
@@ -1735,9 +1733,9 @@ export default function ShowCluster() {
                     onClick={handleBack}
                     sx={{
                       '&.MuiButton-root': {
-                        backgroundColor: activeStep === 0 ? '' : 'var(--button-color)',
-                        color: 'var(--button-text-color)',
-                        ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                        backgroundColor: activeStep === 0 ? '' : 'var(--palette--button-color)',
+                        color: 'var(--palette--button-text-color)',
+                        ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                       },
                     }}
                   >
@@ -1753,9 +1751,9 @@ export default function ShowCluster() {
                       id="save-delete"
                       sx={{
                         '&.MuiLoadingButton-root': {
-                          backgroundColor: 'var(--delete-button-color)',
-                          color: 'var(--button-text-color)',
-                          borderColor: 'var(--save-color)',
+                          backgroundColor: 'var(--palette--delete-button-color)',
+                          color: 'var(--palette--button-text-color)',
+                          borderColor: 'var(--palette--save-color)',
                         },
                       }}
                     >
@@ -1774,9 +1772,9 @@ export default function ShowCluster() {
                           backgroundColor:
                             Array.isArray(schedulerInactive) && schedulerInactive.length === 0
                               ? ''
-                              : 'var(--button-color)',
-                          color: 'var(--button-text-color)',
-                          ':hover': { backgroundColor: 'var(--hover-button-text-color)' },
+                              : 'var(--palette--button-color)',
+                          color: 'var(--palette--button-text-color)',
+                          ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                         },
                       }}
                     >
@@ -1867,7 +1865,7 @@ export default function ShowCluster() {
                 <Typography component="div" variant="body2" fontFamily="mabry-bold">
                   Schedule
                 </Typography>
-                <Typography component="div" variant="caption" color="var(--text-palette-text-secondary)">
+                <Typography component="div" variant="caption" color="var(--palette--text-palette-text-secondary)">
                   If schedule feature is enabled, the scheduler can schedule download tasks.
                 </Typography>
               </Box>
@@ -1893,7 +1891,7 @@ export default function ShowCluster() {
                 <Typography component="div" variant="body2" fontFamily="mabry-bold">
                   Preheat
                 </Typography>
-                <Typography component="div" variant="caption" color="var(--text-palette-text-secondary)">
+                <Typography component="div" variant="caption" color="var(--palette--text-palette-text-secondary)">
                   If preheat feature is enabled, the scheduler can execute preheating job.
                 </Typography>
               </Box>

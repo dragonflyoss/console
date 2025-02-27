@@ -51,7 +51,7 @@ export default function NavTabs() {
       opacity: 1,
     },
     '&.Mui-selected': {
-      color: 'var(--description-color)',
+      color: 'var(--palette--description-color)',
       fontFamily: 'mabry-bold',
     },
   }));
@@ -59,7 +59,7 @@ export default function NavTabs() {
   const AntTabs = styled(Tabs)({
     borderBottom: '1px solid var(--palette-tab-border-color)',
     '& .MuiTabs-indicator': {
-      backgroundColor: 'var(--description-color)',
+      backgroundColor: 'var(--palette--description-color)',
     },
   });
 

@@ -1,29 +1,33 @@
 .container {
   display: flex;
   flex: 1 1 auto;
-  min-height: 100%;
   flex-direction: column;
 }
 
 .header {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   width: 100%;
   box-sizing: border-box;
   flex-shrink: 0;
   position: sticky;
+  position: -webkit-sticky;
+  position: -moz-sticky;
   top: 0px;
   left: auto;
   right: 0px;
-  color: inherit;
-  background-image: none;
-  backdrop-filter: blur(8px);
-  background-color: hsla(0, 0%, 100%, -0.4);
-  box-shadow: none;
-  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  color: rgba(255, 255, 255, 0.8);
+  background-color: hsl(214deg 34.88% 16.86%);
   padding: 0.8rem 2rem;
-  z-index: 1100;
+  z-index: 1101;
+  overflow-y: hidden;
+}
+
+.headerContent {
+  width: 2rem;
+  height: 2rem;
+  color: #ececec;
 }
 
 .layout {
@@ -36,7 +40,8 @@
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  padding: 0.5rem 2.5rem;
+  padding: 1.5rem 2.5rem;
+  overflow-y: auto !important;
 }
 
 .navigationBarContainer {
@@ -44,38 +49,38 @@
   background-position: center;
   height: 100%;
   position: fixed;
-  /* max-width: 16rem; */
   display: flex;
   flex-direction: column;
-  z-index: 1101;
+  z-index: 1100;
   border-right: 1px solid rgba(var(--palette-dark-500Channel) / 0.2);
-  background-color: var(--palette-background-menu-paper);
-}
-
-.navigationBar {
-  position: relative;
-  background-size: cover;
-  background-position: center;
-  /* height: 100vh; */
-  position: fixed;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  z-index: 1101;
-  border-right: 1px solid var(--palette-divider);
-  background-color: var(--palette-background);
+  background-color: var(--palette-color-neutral-200);
 }
 
 .compactLayout {
   position: absolute;
-  right: -0.8rem;
-  top: 1.2rem;
+  right: -0.4rem;
+  top: 1.5rem;
 }
 
 .expandIcon {
-  width: 1.4rem;
-  height: 1.4rem;
+  width: 0.6rem;
+  height: 0.6rem;
   color: var(--palette-secondary-dark);
+}
+
+.shrinkMenu {
+  background-color: var(--palette-background-menu);
+  background-image: url(../../assets/images/menu/cyan-blur.png), url(../../assets/images/menu/red-blur.png);
+  background-repeat: no-repeat, no-repeat;
+  padding: 0.2rem;
+  background-size: 50%, 50%;
+  box-shadow: var(--custom-sidebar-shadows-dropdown);
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  outline: 0px;
+  background-position: right top, left bottom;
+  border-radius: var(--menu-border-radius);
+  overflow: inherit;
+  min-width: 10rem;
 }
 
 .shrinkMenuContainer {
@@ -106,7 +111,6 @@
 .title {
   display: inline-flex;
   align-items: center;
-  padding: 1.8rem 1rem 1rem 1rem;
 }
 
 .shrinkTitle {
@@ -119,8 +123,7 @@
 .logo {
   width: 2rem;
   height: 2rem;
-
-  color: var(--button-color);
+  color: #00a76f;
 }
 
 .githubContainer {
@@ -141,13 +144,12 @@
 .menuIcon {
   width: 1.6rem;
   height: 1.6rem;
-  /* color: var(--palette-text-secondary); */
 }
 
 .selectedMenuIcon {
   width: 1.6rem;
   height: 1.6rem;
-  color: var(--description-color);
+  color: var(--palette--description-color);
 }
 
 .menuText {
@@ -167,35 +169,23 @@
 }
 
 .avatar {
-  width: 2.4rem !important;
-  height: 2.4rem !important;
-  background: var(--palette-secondary-dark) !important;
-  /* position: relative; */
-  /* margin-left: 0.5rem; */
-  /* #73BAFB #FFD666 */
-  /* background-color: conic-gradient(#73bafb, #ffd666, #73bafb); */
-}
-
-.menu {
-  /* padding-top: 0.4rem;
-  padding-bottom: 0.4rem; */
-  /* width: 15rem; */
-  margin: '0.4rem 0.8rem' !important;
+  width: 1.7rem !important;
+  height: 1.7rem !important;
+  background: var(--palette--button-text-color) !important;
 }
 
 .profileMenu {
-  background-image: url(../../assets/images/menu/cyan-blur.png), url(../../assets/images/menu/red-blur.png);
   background-color: var(--palette-background-menu);
+  background-image: url(../../assets/images/menu/cyan-blur.png), url(../../assets/images/menu/red-blur.png);
   background-repeat: no-repeat, no-repeat;
   padding: 0.2rem;
   background-size: 50%, 50%;
-  box-shadow: rgba(145, 158, 171, 0.24) 0px 0px 2px 0px, rgba(145, 158, 171, 0.24) -20px 20px 40px -4px;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
   outline: 0px;
   background-position: right top, left bottom;
   border-radius: var(--menu-border-radius);
   overflow: inherit;
-  min-width: 8rem;
+  min-width: 10rem;
 }
 
 .avatarContainer {
@@ -224,12 +214,12 @@
 }
 
 .menuItemIcon {
-  color: var(--button-color);
+  color: var(--palette--button-color);
 }
 
 .pageContainer {
+  overflow-y: auto;
   height: 100vh;
-  width: 100%;
 }
 
 .pageloading {

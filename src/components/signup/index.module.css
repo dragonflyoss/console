@@ -17,11 +17,17 @@
   right: 1rem;
 }
 
+.headerContent {
+  width: 2rem;
+  height: 2rem;
+  color: var(--palette-secondary-dark);
+}
+
 .logo {
   width: 3rem;
   height: 3rem;
   margin-bottom: 1rem;
-  color: var(--description-color);
+  color: var(--palette--description-color);
 }
 
 .separationLineContainer {

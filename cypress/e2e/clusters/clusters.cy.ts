@@ -43,7 +43,7 @@ describe('Clusters', () => {
     );
 
     cy.visit('/clusters');
-    cy.viewport(1440, 1080);
+    cy.viewport(1440, 1480);
   });
 
   describe('when data is loaded', () => {

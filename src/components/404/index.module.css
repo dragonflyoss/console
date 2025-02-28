@@ -1,7 +1,7 @@
 .container {
   height: 100vh;
   overflow: hidden;
-  background: url(../../../public/images/404/background-image.png);
+  background: url(../../assets/images/404/background-image.png);
 }
 
 .content {
@@ -17,4 +17,14 @@
   padding-top: 1rem;
   display: flex;
   align-items: center;
+}
+
+.logoIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: 0.4rem;
+}
+
+.notFound {
+  width: 38rem;
 }

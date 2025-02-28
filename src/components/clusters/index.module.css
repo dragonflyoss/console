@@ -12,16 +12,18 @@
 .clusterSmallCircleIcon {
   width: 0.4rem;
   height: 0.4rem;
+  color: var(--palette-grey-400Channel);
 }
 
 .button {
-  background-color: var(--button-color);
+  background-color: var(--palette--button-color);
   border-radius: 0;
 }
 
 .clusterBigCircleIcon {
   width: 2rem;
   height: 2rem;
+  color: var(--palette-grey-400Channel);
 }
 
 .clusterIcon {
@@ -30,6 +32,7 @@
   position: absolute;
   left: 0.8rem;
   top: 0.3rem;
+  color: var(--palette-grey-200Channel);
 }
 
 .clusterHeaderContainer {
@@ -75,6 +78,11 @@
 .clusterBottomIcon {
   width: 1.2rem;
   height: 1.2rem;
+  color: var(--palette--description-color);
+}
+
+.statistics {
+  color: var(--palette--description-color);
 }
 
 .clusterBottomContentContainer {
@@ -89,7 +97,7 @@
 .clusterBottomContentMsg {
   font-size: 1rem;
   margin-left: 0.4rem;
-  color: var(--table-title-text-color);
+  color: var(--palette--table-title-text-color);
 }
 
 .searchContainer {
@@ -101,20 +109,17 @@
   width: 23rem;
 }
 
-/* .clusterListContent {
-  padding: 1.6rem;
-} */
-
 .nameText {
   font-family: 'mabry-bold' !important;
 }
 
 .idText {
-  color: var(--table-title-text-color);
+  color: var(--palette--table-title-text-color);
 }
 
 .idIcon {
   width: 1.8rem;
+  height: 1.8rem;
   padding-right: 0.5rem;
 }
 
@@ -129,6 +134,12 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 1rem;
+}
+
+.arrowCircleRightIcon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--palette--button-color);
 }
 
 .buttonContent {
@@ -206,8 +217,8 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-color: rgba(var(--no-data-color) / 0.04) !important;
-  border: dashed 1px rgba(var(--no-data-color) / 0.08);
+  background-color: rgba(var(--palette--no-data-color) / 0.04) !important;
+  border: dashed 1px rgba(var(--palette--no-data-color) / 0.08);
 }
 
 .nodataIcon {

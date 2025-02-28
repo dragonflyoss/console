@@ -222,14 +222,37 @@
 }
 
 .menuItem:hover {
-  background-color: var(--button-color) !important;
-  color: var(--save-size-color);
+  background-color: var(--palette--button-color) !important;
+  color: var(--palette--button-text-color);
 }
 
 .menuItemIcon {
-  color: var(--button-color);
+  color: var(--palette--button-color);
 }
 
 .menuItem:hover .menuItemIcon {
-  color: var(--save-size-color);
+  color: var(--palette--button-text-color);
+}
+
+.tableIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  /* color: var(--table-color); */
+}
+
+.descriptionIcon {
+  width: 1rem !important ;
+  height: 1rem !important;
+  color: rgb(188, 188, 188);
+  margin-left: 0.4rem;
+}
+
+.descriptionIcon:hover {
+  color: var(--palette--description-color);
+}
+
+.headerTitle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
 }

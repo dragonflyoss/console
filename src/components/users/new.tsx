@@ -284,6 +284,7 @@ export default function NewUser() {
   };
 
   const handleSubmit = async (event: any) => {
+    setLoadingButton(true);
     event.preventDefault();
     const account = event.currentTarget.elements.account.value;
     const password = event.currentTarget.elements.password.value;
@@ -325,14 +326,17 @@ export default function NewUser() {
           phone: phone,
           location: location,
         });
-
+        setLoadingButton(false);
         navigate(`/users`);
       } catch (error) {
         if (error instanceof Error) {
+          setLoadingButton(false);
           setErrorMessage(true);
           setErrorMessageText(error.message);
         }
       }
+    } else {
+      setLoadingButton(false);
     }
   };
 
@@ -374,91 +378,6 @@ export default function NewUser() {
         <Typography color="inherit">New user</Typography>
       </Breadcrumbs>
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: '2rem' }}>
-        {/* <Box className={styles.container}>
-          <Card className={styles.uploadWrapper}>
-            <IconButton
-              component="label"
-              tabIndex={-1}
-              sx={{
-                // display: 'flex',
-                // alignItems: 'center',
-                // flexDirection: 'column',
-                // justifyContent: 'center',
-                width: '10rem',
-                height: '10rem',
-                borderRadius: '50%',
-                border: '1px dashed rgba(var(--palette--no-data-color)/0.2)',
-                padding: '0.5rem',
-              }}
-            >
-              <VisuallyHiddenInput type="file" />
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '50%',
-                  //   border: '1px dashed rgba(var(--palette--no-data-color)/0.2)',
-                  backgroundColor: 'rgba(var(--palette-grey-500Channel)/0.08)',
-                }}
-              >
-                <CameraAltIcon />
-                <Typography variant="body2" display="block" mt="0.5rem">
-                  Upload photo
-                </Typography>
-              </Box>
-            </IconButton>
-            <Box className={styles.uploadText}>
-              <Typography variant="body2" display="span">
-                Allowed *.jpeg, *.jpg, *.png, *.gif
-              </Typography>
-
-              <Typography variant="body2" display="span">
-                max size of 3 Mb
-              </Typography>
-            </Box>
-          </Card>
-          <Card className={styles.formData}>
-            <Box className={styles.textFieldContainer}>
-              {formList.map((item) =>
-                item.formProps.id === 'phone' ? (
-                  <MuiTelInput
-                    defaultCountry="CN"
-                    color="success"
-                    size="small"
-                    key={item.formProps.name}
-                    {...item.formProps}
-                    // value={phone}
-                    className={styles.textField}
-                  />
-                ) : (
-                  <TextField
-                    color="success"
-                    size="small"
-                    key={item.formProps.name}
-                    className={styles.textField}
-                    {...item.formProps}
-                  />
-                ),
-              )}
-            </Box>
-            <Box className={styles.submitWrapper}>
-              <CancelLoadingButton
-                id="cancel"
-                loading={loadingButton}
-                onClick={() => {
-                  //   setLoadingButton(true);
-                  navigate(`/users`);
-                }}
-              />
-              <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />
-            </Box>
-          </Card>
-        </Box> */}
-
         <Divider sx={{ mt: 2, mb: 2 }} />
         <Box className={styles.form}>
           {formList.map((item) =>
@@ -469,7 +388,6 @@ export default function NewUser() {
                 size="small"
                 key={item.formProps.name}
                 {...item.formProps}
-                // value={phone}
                 className={styles.input}
                 fullWidth
               />
@@ -491,7 +409,6 @@ export default function NewUser() {
             id="cancel"
             loading={loadingButton}
             onClick={() => {
-              //   setLoadingButton(true);
               navigate(`/users`);
             }}
           />

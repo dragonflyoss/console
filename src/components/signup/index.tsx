@@ -13,6 +13,7 @@ import styles from './index.module.css';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { setPageTitle } from '../../lib/utils';
 import { ReactComponent as Login } from '../../assets/images/login/login.svg';
+import { ReactComponent as PageLoading } from '../../assets/images/login/page-loading.svg';
 import HeaderLayout from '../dark-layout';
 
 export default function SignUp() {
@@ -234,7 +235,7 @@ export default function SignUp() {
           backgroundColor: 'rgba(0,0,0,0.3)',
         }}
       >
-        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
+        <PageLoading className={styles.pageLoading} />
       </Backdrop>
       <Grid item xs={6}>
         <Rotation />

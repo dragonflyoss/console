@@ -3,18 +3,18 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import Rotation from '../rotation';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { signIn } from '../../lib/api';
 import styles from './index.module.css';
-import { Alert, Backdrop, Snackbar, Link as RouterLink, Button, useTheme } from '@mui/material';
+import { Alert, Backdrop, Snackbar, Link as RouterLink, Button } from '@mui/material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { setPageTitle } from '../../lib/utils';
 import { ReactComponent as Login } from '../../assets/images/login/login.svg';
+import { ReactComponent as PageLoading } from '../../assets/images/login/page-loading.svg';
 import HeaderLayout from '../dark-layout';
 
 export default function SignIn() {
@@ -94,15 +94,6 @@ export default function SignIn() {
     setPageTitle(location.pathname);
   }, [location]);
 
-  // const theme = createTheme({
-  //   palette: {
-  //     secondary: {
-  //       contrastText: '#fff',
-  //       main: '#2E8F79',
-  //     },
-  //   },
-  // });
-
   const changeValidate = (value: string, data: any) => {
     const { setError, validate } = data;
     setError(!validate(value));
@@ -176,7 +167,7 @@ export default function SignIn() {
           backgroundColor: 'rgba(0,0,0,0.3)',
         }}
       >
-        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
+        <PageLoading className={styles.pageLoading} />
       </Backdrop>
       <Grid item xs={6}>
         <Rotation />

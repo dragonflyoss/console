@@ -3,6 +3,11 @@
   overflow: hidden;
 }
 
+.pageLoading {
+  width: 4rem;
+  height: 4rem;
+}
+
 .container {
   display: flex;
   align-items: center;
@@ -17,7 +22,7 @@
   right: 1rem;
 }
 
-.headerContent{
+.headerContent {
   width: 2rem;
   height: 2rem;
   color: var(--palette-secondary-dark);

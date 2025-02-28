@@ -168,6 +168,35 @@
   display: block;
 }
 
+.avatarButton {
+  position: relative;
+  transition: transform 0.6s easel;
+  margin-left: 0.3rem;
+  padding: 0.3rem;
+}
+
+.avatarButton:hover {
+  transform: scale(1.1);
+}
+
+.avatarWrapper {
+  background: conic-gradient(#73bafb, #ffd666, #73bafb);
+  width: 2rem;
+  height: 2rem;
+  animation: rotate 4s linear infinite;
+  position: absolute;
+  border-radius: 50%;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .avatar {
   width: 1.7rem !important;
   height: 1.7rem !important;

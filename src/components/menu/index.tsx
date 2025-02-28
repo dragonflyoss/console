@@ -300,61 +300,26 @@ export default function Layout(props: any) {
                   Dragonfly
                 </Typography>
               </RouterLink>
-              <Box sx={{ display: 'flex' }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    justifyContent: 'space-between',
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <HeaderLayout className={styles.headerContent} />
+                <IconButton
+                  id="unfold-more"
+                  className={styles.avatarButton}
+                  onClick={(event: any) => {
+                    setAnchorElement(event.currentTarget);
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <HeaderLayout className={styles.headerContent} />
-                    <IconButton
-                      id="unfold-more"
-                      sx={{
-                        position: 'relative',
-                        transition: 'transform 0.6s ease',
-                        '&:hover': {
-                          transform: 'scale(1.07)',
-                        },
-                        ml: '0.3rem',
-                        p: '0.3rem',
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          background: 'conic-gradient( #73bafb, #ffd666, #73bafb)',
-                          width: '2rem',
-                          height: '2rem',
-                          animation: 'rotate 4s linear infinite',
-                          '@keyframes rotate': {
-                            '0%': {
-                              transform: 'rotate(0deg)',
-                            },
-                            '100%': {
-                              transform: 'rotate(360deg)',
-                            },
-                          },
-                          position: 'absolute',
-                          borderRadius: '50%',
-                        }}
-                      />
-                      <Avatar
-                        className={styles.avatar}
-                        src={user?.avatar}
-                        onClick={(event: any) => {
-                          setAnchorElement(event.currentTarget);
-                        }}
-                        sx={{
-                          '& .MuiAvatar-fallback': {
-                            color: '#1c293a',
-                          },
-                        }}
-                      />
-                    </IconButton>
-                  </Box>
-                </Box>
+                  <Box className={styles.avatarWrapper} />
+                  <Avatar
+                    className={styles.avatar}
+                    src={user?.avatar}
+                    sx={{
+                      '& .MuiAvatar-fallback': {
+                        color: '#1c293a',
+                      },
+                    }}
+                  />
+                </IconButton>
                 <Menu
                   anchorEl={anchorElement}
                   id="account-menu"
@@ -449,69 +414,67 @@ export default function Layout(props: any) {
                     <List component="nav" aria-label="main mailbox folders">
                       {menu.map((items, index) => {
                         return items?.menuProps ? (
-                          <>
-                            <ListItemButton
-                              id={items.label}
-                              key={index}
-                              selected={(location.pathname.split('/')[1] || '') === items.label}
-                              onMouseEnter={(event: any) => {
-                                setExpandedMenu(items.label);
-                              }}
-                              sx={{
-                                '&.Mui-selected': {
-                                  backgroundColor: 'var(--palette--menu-background-color)',
-                                  color: 'var(--palette--description-color)',
-                                },
-                                '&.Mui-selected:hover': {
-                                  backgroundColor: 'var(--palette--hover-menu-background-color)',
-                                  color: 'var(--palette--description-color)',
-                                },
-                                height: '4rem',
-                                borderRadius: '0.2rem',
-                                m: '0.4rem',
-                                color: 'var(--palette-text-secondary)',
-                                justifyContent: 'center',
-                                position: 'relative !important',
-                              }}
-                            >
-                              <ChevronRightOutlinedIcon className={styles.shrinkChevronRightOutlinedIcon} />
-                              <Box className={styles.shrinkMenuContainer}>
-                                {items.icon}
-                                <Typography variant="caption" display="block" className={styles.shrinkMenuText}>
-                                  {items.text}
-                                </Typography>
+                          <ListItemButton
+                            id={items.label}
+                            key={index}
+                            selected={(location.pathname.split('/')[1] || '') === items.label}
+                            onMouseEnter={() => {
+                              setExpandedMenu(items.label);
+                            }}
+                            sx={{
+                              '&.Mui-selected': {
+                                backgroundColor: 'var(--palette--menu-background-color)',
+                                color: 'var(--palette--description-color)',
+                              },
+                              '&.Mui-selected:hover': {
+                                backgroundColor: 'var(--palette--hover-menu-background-color)',
+                                color: 'var(--palette--description-color)',
+                              },
+                              height: '4rem',
+                              borderRadius: '0.2rem',
+                              m: '0.4rem',
+                              color: 'var(--palette-text-secondary)',
+                              justifyContent: 'center',
+                              position: 'relative !important',
+                            }}
+                          >
+                            <ChevronRightOutlinedIcon className={styles.shrinkChevronRightOutlinedIcon} />
+                            <Box className={styles.shrinkMenuContainer}>
+                              {items.icon}
+                              <Typography variant="caption" display="block" className={styles.shrinkMenuText}>
+                                {items.text}
+                              </Typography>
+                            </Box>
+                            {items?.menuProps && expandedMenu === items.label && (
+                              <Box
+                                id={items.label}
+                                key={items.label}
+                                onMouseLeave={handleMouseLeave}
+                                sx={{
+                                  position: 'absolute ',
+                                  left: '91px',
+                                }}
+                                className={styles.shrinkMenu}
+                              >
+                                {items.menuProps.map((subItem) => (
+                                  <MenuItem
+                                    id={subItem.label}
+                                    sx={{ borderRadius: 'var(--menu-border-radius)' }}
+                                    key={subItem.label}
+                                    onClick={() => {
+                                      setExpandedMenu(null);
+                                    }}
+                                    component={Link}
+                                    to={subItem.href}
+                                  >
+                                    <Typography variant="body2" className={styles.avatarMenu}>
+                                      {subItem.text}
+                                    </Typography>
+                                  </MenuItem>
+                                ))}
                               </Box>
-                              {items?.menuProps && expandedMenu === items.label && (
-                                <Box
-                                  id={items.label}
-                                  key={items.label}
-                                  onMouseLeave={handleMouseLeave}
-                                  sx={{
-                                    position: 'absolute ',
-                                    left: '6rem',
-                                  }}
-                                  className={styles.shrinkMenu}
-                                >
-                                  {items.menuProps.map((subItem) => (
-                                    <MenuItem
-                                      id={subItem.label}
-                                      sx={{ borderRadius: 'var(--menu-border-radius)' }}
-                                      key={subItem.label}
-                                      onClick={() => {
-                                        setExpandedMenu(null);
-                                      }}
-                                      component={Link}
-                                      to={subItem.href}
-                                    >
-                                      <Typography variant="body2" className={styles.avatarMenu}>
-                                        {subItem.text}
-                                      </Typography>
-                                    </MenuItem>
-                                  ))}
-                                </Box>
-                              )}
-                            </ListItemButton>
-                          </>
+                            )}
+                          </ListItemButton>
                         ) : (
                           <ListItemButton
                             id={items.label}
@@ -651,6 +614,7 @@ export default function Layout(props: any) {
                 )}
               </Box>
               <Box
+                onMouseEnter={handleMouseLeave}
                 className={styles.layout}
                 sx={{ paddingLeft: compactLayout ? '6rem !important' : '15rem !important' }}
               >

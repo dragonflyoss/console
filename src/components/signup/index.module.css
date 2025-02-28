@@ -3,6 +3,11 @@
   overflow: hidden;
 }
 
+.pageLoading {
+  width: 4rem;
+  height: 4rem;
+}
+
 .container {
   display: flex;
   align-items: center;

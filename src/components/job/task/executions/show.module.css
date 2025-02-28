@@ -41,10 +41,6 @@
   font-family: 'mabry-bold' !important;
 }
 
-.statusIcon {
-  margin-right: 0.2rem;
-}
-
 .schedulerClustersID {
   width: 70%;
   display: flex;
@@ -88,8 +84,9 @@
 }
 
 .statusIcon {
-  width: 1.3rem;
-  height: 1.3rem;
+  margin-right: 0.5rem;
+  width: 1rem !important;
+  height: 1rem !important;
 }
 
 .pendingIcon {

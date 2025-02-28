@@ -99,7 +99,7 @@
 .featuresIcon {
   width: 1rem;
   height: 1rem;
-  color: var(--palette--hover-button-text-color);
+  color: var(--palette--save-color);
 }
 
 .menu {

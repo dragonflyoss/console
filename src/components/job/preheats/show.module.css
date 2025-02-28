@@ -3,10 +3,9 @@
 }
 
 .statusIcon {
-  width: 1.3rem !important;
-  height: 1.3rem !important;
-  margin-right: 0.4rem;
-  
+  margin-right: 0.5rem;
+  width: 1rem !important;
+  height: 1rem !important;
 }
 
 .pendingIcon {

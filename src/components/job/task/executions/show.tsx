@@ -221,14 +221,8 @@ export default function ShowExecutions() {
                 aria-controls="panel1d-content"
                 id="panel1d-header"
               >
-                <Box display="flex">
-                  {/* <ErrorLog id="error-log-icon" className={styles.errorIcon} />
-                  <Box
-                    component="img"
-                    sx={{ width: '1.2rem', height: '1.2rem', mr: '0.4rem' }}
-                    src="/icons/job/preheat/failure.svg"
-                  /> */}
-
+                <Box display="flex" alignItems="center">
+                  <Failure id="error-log-icon" className={styles.statusIcon} />
                   <Typography variant="body2" fontFamily="mabry-bold" sx={{ color: '#d0d7de' }}>
                     Error log
                   </Typography>
@@ -593,10 +587,14 @@ export default function ShowExecutions() {
                                 sx={{
                                   borderRadius: '0.2rem',
                                   backgroundColor:
-                                    item?.host_type === 'super' ? 'var( --palette--description-color)' : 'var(--palette--button-color)',
+                                    item?.host_type === 'super'
+                                      ? 'var( --palette--description-color)'
+                                      : 'var(--palette--button-color)',
                                   color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
                                   borderColor:
-                                    item?.host_type === 'super' ? 'var( --palette--description-color)' : 'var(--palette--button-color)',
+                                    item?.host_type === 'super'
+                                      ? 'var( --palette--description-color)'
+                                      : 'var(--palette--button-color)',
                                   fontWeight: 'bold',
                                 }}
                               />

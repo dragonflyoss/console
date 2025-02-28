@@ -236,7 +236,6 @@ export default function Peer() {
       {
         data: gitVersion.map((item) => item.count),
         backgroundColor: theme.palette.mode === 'dark' ? '#01A76F' : 'rgb(46,143,121)',
-
         borderRadius: 5,
         barPercentage: 0.6,
       },
@@ -251,7 +250,7 @@ export default function Peer() {
     'rgba(46,143,121,0.2)',
   ];
 
-  const darkDoughnutBackgroundColor = ['#004B50', '#007868', '#01A76F', '#5BE49B', '#C8FAD6'];
+  const darkDoughnutBackgroundColor = ['#01A76F', '#5BE49B', '#C8FAD6', '#004B50', '#007868'];
 
   const gitVersionDoughnut = {
     labels: gitVersion.map((item) => item.name),

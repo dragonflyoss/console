@@ -4,7 +4,6 @@ import {
   Box,
   Alert,
   Avatar,
-  Breadcrumbs,
   Chip,
   Dialog,
   DialogContent,
@@ -14,7 +13,6 @@ import {
   FormLabel,
   IconButton,
   ListItemAvatar,
-  ListSubheader,
   Radio,
   RadioGroup,
   Skeleton,
@@ -29,16 +27,15 @@ import {
   ListItem,
   List,
   Pagination,
-  ThemeProvider,
-  createTheme,
   MenuItem,
   Menu,
   ListItemIcon,
+  Button,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole, getUsersResponse } from '../../lib/api';
-import { makeStyles } from '@mui/styles';
 import { getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
+import AddIcon from '@mui/icons-material/Add';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import styles from './index.module.css';
 import _ from 'lodash';
@@ -49,44 +46,15 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import PersonIcon from '@mui/icons-material/Person';
 import Card from '../card';
-
-const useStyles = makeStyles((theme: any) => ({
-  tableRow: {
-    '&$selected': {
-      backgroundColor: 'var(--button-color)',
-    },
-  },
-  hover: {
-    backgroundColor: theme.palette.action.hover,
-  },
-  selected: {},
-  tableCell: {
-    color: theme.palette.text.primary,
-  },
-
-  selectedTableCell: {
-    color: '#fff',
-  },
-  selectedTableAvatar: {
-    color: 'var(--button-color)!important',
-    backgroundColor: '#fff!important',
-  },
-  selectedButton: {
-    color: 'var(--button-color)!important',
-    backgroundColor: '#fff!important',
-  },
-}));
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1C293A',
-    },
-  },
-  typography: {
-    fontFamily: 'mabry-light,sans-serif',
-  },
-});
+import { ReactComponent as Role } from '../../assets/images/user/role.svg';
+import { ReactComponent as UserID } from '../../assets/images/user/id.svg';
+import { ReactComponent as Name } from '../../assets/images/user/name.svg';
+import { ReactComponent as DetailRole } from '../../assets/images/user/detail-role.svg';
+import { ReactComponent as Email } from '../../assets/images/user/email.svg';
+import { ReactComponent as Phone } from '../../assets/images/user/phone.svg';
+import { ReactComponent as Location } from '../../assets/images/user/location.svg';
+import { ReactComponent as CreatedAt } from '../../assets/images/user/created-at.svg';
+import { ReactComponent as UpdatedAt } from '../../assets/images/user/updated-at.svg';
 
 export default function Users() {
   const [isLoading, setIsLoading] = useState(true);
@@ -117,7 +85,6 @@ export default function Users() {
   const [updateRole, setUpdatelRole] = useState('');
   const [anchorElement, setAnchorElement] = useState(null);
 
-  const classes = useStyles();
   const navigate = useNavigate();
   const query = useQuery();
   const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
@@ -249,7 +216,7 @@ export default function Users() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -270,44 +237,53 @@ export default function Users() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Breadcrumbs
-        separator={
-          <Box
-            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
-          />
-        }
-        sx={{ mb: '2rem' }}
-      >
-        <Typography variant="h5" fontFamily="mabry-bold" color="text.primary">
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '2rem' }}>
+        <Typography variant="h5" fontFamily="mabry-bold">
           User
         </Typography>
-      </Breadcrumbs>
+        <Button
+          id="create-user"
+          size="small"
+          sx={{
+            background: 'var(--palette--button-color)',
+            color: 'var(--palette--button-text-color)',
+            ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
+          }}
+          variant="contained"
+          onClick={() => {
+            navigate(`/users/new`);
+          }}
+        >
+          <AddIcon fontSize="small" sx={{ mr: '0.4rem' }} />
+          Add User
+        </Button>
+      </Box>
       <Card>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
+          <TableHead sx={{ backgroundColor: 'var(--palette--table-title-color)' }}>
             <TableRow>
-              <TableCell align="center"></TableCell>
-              <TableCell align="center">
+              <TableCell className={styles.tableHeaderText} align="center"></TableCell>
+              <TableCell align="center" className={styles.tableHeaderText}>
                 <Typography variant="subtitle1" className={styles.tableHeader}>
                   Name
                 </Typography>
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="center" className={styles.tableHeaderText}>
                 <Typography variant="subtitle1" className={styles.tableHeader}>
                   Email
                 </Typography>
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="center" className={styles.tableHeaderText}>
                 <Typography variant="subtitle1" className={styles.tableHeader}>
                   Location
                 </Typography>
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="center" className={styles.tableHeaderText}>
                 <Typography variant="subtitle1" className={styles.tableHeader}>
                   State
                 </Typography>
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="center" className={styles.tableHeaderText}>
                 <Typography variant="subtitle1" className={styles.tableHeader}>
                   Operation
                 </Typography>
@@ -367,7 +343,7 @@ export default function Users() {
                         alt="Remy Sharp"
                         sx={{
                           '&.MuiAvatar-root': {
-                            background: 'var(--button-color)',
+                            background: 'var(--palette--button-color)',
                             color: '#fff',
                           },
                         }}
@@ -376,7 +352,7 @@ export default function Users() {
                     </Box>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="body1" fontFamily="mabry-bold" color="text.primary">
+                    <Typography variant="body1" fontFamily="mabry-bold">
                       {item?.name || '-'}
                     </Typography>
                   </TableCell>
@@ -389,9 +365,11 @@ export default function Users() {
                       variant="outlined"
                       sx={{
                         borderRadius: '0.2rem',
-                        backgroundColor: item?.state === 'enable' ? 'var( --description-color)' : 'var(--button-color)',
+                        backgroundColor:
+                          item?.state === 'enable' ? 'var( --palette--description-color)' : 'var(--palette-dark-300Channel)',
                         color: item?.state === 'enable' ? '#FFFFFF' : '#FFFFFF',
-                        borderColor: item?.state === 'enable' ? 'var( --description-color)' : 'var(--button-color)',
+                        borderColor:
+                          item?.state === 'enable' ? 'var( --palette--description-color)' : 'var(--palette-dark-300Channel)',
                         fontWeight: 'bold',
                       }}
                     />
@@ -406,7 +384,7 @@ export default function Users() {
                       aria-haspopup="true"
                       sx={{ position: 'relative' }}
                     >
-                      <MoreVertIcon sx={{ color: 'var(--button-color)' }} />
+                      <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                     </IconButton>
                     <Menu
                       anchorEl={anchorElement}
@@ -417,8 +395,8 @@ export default function Users() {
                         position: 'absolute',
                         left: '-6.5rem',
                         '& .MuiMenu-paper': {
-                          boxShadow:
-                            '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d',
+                          boxShadow: 'var(--palette-menu-shadow);',
+                          borderRadius: 'var(--menu-border-radius);',
                         },
                         '& .MuiMenu-list': {
                           p: 0,
@@ -494,7 +472,7 @@ export default function Users() {
       >
         <DialogContent>
           <Box className={styles.changeRoleContainer}>
-            <Box component="img" className={styles.roleIcon} src="/icons/user/role.svg" />
+            <Role className={styles.roleIcon} />
             <FormControl>
               <FormLabel color="success" id="demo-controlled-radio-buttons-group"></FormLabel>
               <RadioGroup
@@ -513,7 +491,7 @@ export default function Users() {
                       id="role-root"
                       sx={{
                         '&.MuiRadio-root': {
-                          color: 'var(--button-color)',
+                          color: 'var(--palette--button-color)',
                         },
                       }}
                     />
@@ -527,7 +505,7 @@ export default function Users() {
                       id="role-guest"
                       sx={{
                         '&.MuiRadio-root': {
-                          color: 'var(--button-color)',
+                          color: 'var(--palette--button-color)',
                         },
                       }}
                     />
@@ -552,11 +530,12 @@ export default function Users() {
       <Drawer anchor="right" open={userDetail} onClose={closeAllPopups}>
         <Box role="presentation" sx={{ width: 350 }}>
           <List>
-            <ListSubheader component="div" color="inherit" className={styles.detailWrapper}>
+            <Box className={styles.detailWrapper}>
               <Typography variant="h6" fontFamily="mabry-bold">
                 User Detail
               </Typography>
               <IconButton
+                id="closure-user-detail"
                 onClick={() => {
                   setUserDetail(false);
                   setSwitchUser(false);
@@ -564,19 +543,19 @@ export default function Users() {
                   setDetailIsLoading(true);
                 }}
               >
-                <ClearOutlinedIcon sx={{ color: 'var(--button-color)' }} />
+                <ClearOutlinedIcon sx={{ color: 'var(--palette-secondary-dark)' }} />
               </IconButton>
-            </ListSubheader>
+            </Box>
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/icons/user/id.svg" />
+                <UserID className={styles.detailIcon} />
                 <Typography variant="body2" className={styles.detailTitle}>
                   ID
                 </Typography>
@@ -588,13 +567,13 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/icons/user/name.svg" />
+                <Name className={styles.detailIcon} />
                 <Typography variant="body2" className={styles.detailTitle}>
                   Name
                 </Typography>
@@ -610,13 +589,13 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/icons/user/detail-role.svg" />
+                <DetailRole className={styles.detailIcon} />
                 <Typography variant="body2" className={styles.detailTitle}>
                   Role
                 </Typography>
@@ -631,10 +610,10 @@ export default function Users() {
                     variant="outlined"
                     sx={{
                       borderRadius: '0.2rem',
-                      background: 'var(--button-color)',
+                      background: 'var(--palette--button-color)',
                       color: '#FFFFFF',
                       mr: '0.4rem',
-                      borderColor: 'var(--button-color)',
+                      borderColor: 'var(--palette--button-color)',
                       fontWeight: 'bold',
                     }}
                   />
@@ -648,13 +627,13 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/icons/user/email.svg" />
+                <Email className={styles.detailIcon} />
                 <Typography variant="body2" className={styles.detailTitle}>
                   Email
                 </Typography>
@@ -672,13 +651,13 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/icons/user/phone.svg" />
+                <Phone className={styles.detailIcon} />
                 <Typography variant="body2" className={styles.detailTitle}>
                   Phone
                 </Typography>
@@ -694,13 +673,13 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/icons/user/location.svg" />
+                <Location className={styles.detailIcon} />
                 <Typography variant="body2" className={styles.detailTitle}>
                   Location
                 </Typography>
@@ -720,13 +699,13 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/icons/user/created-at.svg" />
+                <CreatedAt className={styles.detailIcon} />
                 <Typography variant="body2" className={styles.detailTitle}>
                   Created At
                 </Typography>
@@ -750,13 +729,13 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette-divider)',
+                borderColor: 'var(--palette--palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
-                <Box component="img" className={styles.detailIcon} src="/icons/user/updated-at.svg" />
+                <UpdatedAt className={styles.detailIcon} />
                 <Typography variant="body2" className={styles.detailTitle}>
                   Updated At
                 </Typography>
@@ -780,6 +759,6 @@ export default function Users() {
           </List>
         </Box>
       </Drawer>
-    </ThemeProvider>
+    </Box>
   );
 }

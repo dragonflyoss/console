@@ -43,12 +43,12 @@ describe('Executions', () => {
     // Show isloading.
     cy.get('[data-testid="isloading"]').should('be.exist');
 
-    cy.get('#execution-9 > .MuiBox-root').click();
+    cy.get('#execution-9').click();
 
     cy.url().should('include', '/jobs/task/executions/9');
 
     // Check for breadcrumb.
-    cy.get('.MuiBreadcrumbs-ol').should('exist').and('contain', 'executions').and('contain', '9');
+    cy.get('.MuiBreadcrumbs-ol').should('exist').and('contain', 'Executions').and('contain', '9');
 
     cy.get('.MuiBreadcrumbs-ol > :nth-child(5) > .MuiTypography-root').click();
 

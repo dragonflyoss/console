@@ -3,17 +3,36 @@
   overflow: hidden;
 }
 
+.pageLoading {
+  width: 4rem;
+  height: 4rem;
+}
+
 .container {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 7rem;
+  position: relative;
+}
+
+.header {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.headerContent {
+  width: 2rem;
+  height: 2rem;
+  color: var(--palette-secondary-dark);
 }
 
 .logo {
   width: 3rem;
   height: 3rem;
   margin-bottom: 1rem;
+  color: var(--palette--description-color);
 }
 
 .separationLineContainer {

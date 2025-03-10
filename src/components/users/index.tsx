@@ -676,44 +676,6 @@ export default function Users() {
                   }}
                 />
               </Box>
-              {/* <Card className={styles.featuresEdit}></Card> */}
-              {/* <RadioGroup
-                aria-labelledby="demo-controlled-radio-buttons-group"
-                name="controlled-radio-buttons-group"
-                value={updateRole}
-                onChange={(e: any) => {
-                  setUpdatelRole(e.target.value);
-                }}
-              >
-                <FormControlLabel
-                  value="root"
-                  control={
-                    <Radio
-                      id="role-root"
-                      sx={{
-                        '&.MuiRadio-root': {
-                          color: 'var(--palette--button-color)',
-                        },
-                      }}
-                    />
-                  }
-                  label="root"
-                />
-                <FormControlLabel
-                  value="guest"
-                  control={
-                    <Radio
-                      id="role-guest"
-                      sx={{
-                        '&.MuiRadio-root': {
-                          color: 'var(--palette--button-color)',
-                        },
-                      }}
-                    />
-                  }
-                  label="guest"
-                />
-              </RadioGroup> */}
             </FormControl>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>

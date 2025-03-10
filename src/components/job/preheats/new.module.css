@@ -34,3 +34,11 @@
   gap: calc(1.5rem);
   padding: 1.5rem;
 }
+
+.headersWrapper {
+  padding: 1rem;
+  width: 37rem;
+  margin-top: 1rem;
+  border-radius: 0.25rem !important;
+  background-color: var(--palette-background-paper) !important;
+}

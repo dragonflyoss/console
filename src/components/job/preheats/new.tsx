@@ -34,6 +34,7 @@ import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './new.module.css';
 import AddIcon from '@mui/icons-material/Add';
 import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
+import Card from '../../card';
 
 export default function NewPreheat() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -603,7 +604,7 @@ export default function NewPreheat() {
               })}
             </Box>
             {headers.length > 0 ? (
-              <Paper id="header" variant="outlined" sx={{ p: '1rem', width: '37rem', mt: '1rem' }}>
+              <Paper variant="outlined" id="header" className={styles.headersWrapper}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography variant="body1" fontFamily="mabry-bold" mr="0.4rem">
                     Headers

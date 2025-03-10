@@ -31,16 +31,21 @@ import {
   Menu,
   ListItemIcon,
   Button,
+  Stack,
+  Autocomplete,
+  TextField,
+  Paper,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
 import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole, getUsersResponse } from '../../lib/api';
-import { getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
+import { fuzzySearch, getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
 import AddIcon from '@mui/icons-material/Add';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import styles from './index.module.css';
-import _ from 'lodash';
+import _, { debounce } from 'lodash';
 import { ROLE_ROOT, ROLE_GUEST, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../lib/constants';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
@@ -55,6 +60,9 @@ import { ReactComponent as Phone } from '../../assets/images/user/phone.svg';
 import { ReactComponent as Location } from '../../assets/images/user/location.svg';
 import { ReactComponent as CreatedAt } from '../../assets/images/user/created-at.svg';
 import { ReactComponent as UpdatedAt } from '../../assets/images/user/updated-at.svg';
+import { ReactComponent as Root } from '../../assets/images/user/root.svg';
+import { ReactComponent as Guest } from '../../assets/images/user/guest.svg';
+import SearchCircularProgress from '../circular-progress';
 
 export default function Users() {
   const [isLoading, setIsLoading] = useState(true);
@@ -71,6 +79,7 @@ export default function Users() {
   const [userTotalPages, setUserTotalPages] = useState<number>(1);
   const [users, setUsers] = useState<getUsersResponse[]>([]);
   const [allUsers, setAllUsers] = useState<getUsersResponse[]>([]);
+  const [userCount, setUserCount] = useState<getUsersResponse[]>([]);
   const [user, setUser] = useState({
     id: 0,
     email: '',
@@ -84,10 +93,14 @@ export default function Users() {
   const [detailRole, setDetailRole] = useState('');
   const [updateRole, setUpdatelRole] = useState('');
   const [anchorElement, setAnchorElement] = useState(null);
+  const [searchUser, setSearchUser] = useState('');
+  const [searchIconISLodaing, setSearchIconISLodaing] = useState(false);
 
   const navigate = useNavigate();
   const query = useQuery();
   const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
+  const search = query.get('search') ? (query.get('search') as string) : '';
+  const location = useLocation();
 
   useEffect(() => {
     (async function () {
@@ -98,6 +111,7 @@ export default function Users() {
         const user = await getUsers({ page: 1, per_page: MAX_PAGE_SIZE });
 
         setUsers(user);
+        setUserCount(user);
         setIsLoading(false);
       } catch (error) {
         if (error instanceof Error) {
@@ -110,11 +124,16 @@ export default function Users() {
   }, [userPage, page]);
 
   useEffect(() => {
-    const totalPage = Math.ceil(users.length / DEFAULT_PAGE_SIZE);
-    const currentPageData = getPaginatedList(users, userPage, DEFAULT_PAGE_SIZE);
+    if (Array.isArray(users) && users.length > 0) {
+      const totalPage = Math.ceil(users.length / DEFAULT_PAGE_SIZE);
+      const currentPageData = getPaginatedList(users, userPage, DEFAULT_PAGE_SIZE);
 
-    setUserTotalPages(totalPage || 1);
-    setAllUsers(currentPageData);
+      setUserTotalPages(totalPage || 1);
+      setAllUsers(currentPageData);
+    } else if (users === null || users) {
+      setUserTotalPages(1);
+      setAllUsers([]);
+    }
   }, [users, userPage]);
 
   const handleChange = async (row: any) => {
@@ -215,6 +234,41 @@ export default function Users() {
     setErrorMessage(false);
   };
 
+  const debounced = useMemo(
+    () =>
+      debounce(async (currentSearch) => {
+        if (currentSearch && userCount.length > 0) {
+          const user = fuzzySearch(currentSearch, userCount);
+
+          setUsers(user);
+          setSearchIconISLodaing(false);
+        } else if (currentSearch === '' && userCount.length > 0) {
+          setUsers(userCount);
+          setSearchIconISLodaing(false);
+        }
+      }, 500),
+    [userCount],
+  );
+
+  const handleInputChange = useCallback(
+    (newSearch: any) => {
+      setSearchUser(newSearch);
+      setSearchIconISLodaing(true);
+      debounced(newSearch);
+
+      const queryString = newSearch ? `?search=${newSearch}` : '';
+      navigate(`${location.pathname}${queryString}`);
+    },
+    [debounced, location.pathname, navigate],
+  );
+
+  useEffect(() => {
+    if (search) {
+      setSearchUser(search);
+      debounced(search);
+    }
+  }, [search, debounced]);
+
   return (
     <Box>
       <Snackbar
@@ -257,6 +311,58 @@ export default function Users() {
           <AddIcon fontSize="small" sx={{ mr: '0.4rem' }} />
           Add User
         </Button>
+      </Box>
+      <Box className={styles.searchWrapper}>
+        <Stack spacing={2} sx={{ width: '20rem' }}>
+          <Autocomplete
+            color="secondary"
+            id="free-solo-demo"
+            size="small"
+            freeSolo
+            inputValue={searchUser}
+            onInputChange={(_event, newInputValue) => {
+              handleInputChange(newInputValue);
+            }}
+            options={(Array.isArray(allUsers) && allUsers.map((option) => option?.name)) || ['']}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                sx={{ padding: 0 }}
+                label="Search"
+                InputProps={{
+                  ...params.InputProps,
+                  startAdornment: searchIconISLodaing ? (
+                    <Box
+                      sx={{
+                        width: '2.2rem',
+                        height: '2.2rem',
+                        pl: '0.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <SearchCircularProgress />
+                    </Box>
+                  ) : (
+                    <Box
+                      sx={{
+                        width: '2.2rem',
+                        height: '2.2rem',
+                        pl: '0.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <SearchIcon sx={{ color: '#919EAB' }} />
+                    </Box>
+                  ),
+                }}
+              />
+            )}
+          />
+        </Stack>
       </Box>
       <Card>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -366,10 +472,14 @@ export default function Users() {
                       sx={{
                         borderRadius: '0.2rem',
                         backgroundColor:
-                          item?.state === 'enable' ? 'var( --palette--description-color)' : 'var(--palette-dark-300Channel)',
+                          item?.state === 'enable'
+                            ? 'var( --palette--description-color)'
+                            : 'var(--palette-dark-300Channel)',
                         color: item?.state === 'enable' ? '#FFFFFF' : '#FFFFFF',
                         borderColor:
-                          item?.state === 'enable' ? 'var( --palette--description-color)' : 'var(--palette-dark-300Channel)',
+                          item?.state === 'enable'
+                            ? 'var( --palette--description-color)'
+                            : 'var(--palette-dark-300Channel)',
                         fontWeight: 'bold',
                       }}
                     />
@@ -465,18 +575,109 @@ export default function Users() {
       <Dialog
         open={switchUser}
         onClose={closeAllPopups}
-        maxWidth="xs"
         fullWidth
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        maxWidth="sm"
       >
         <DialogContent>
           <Box className={styles.changeRoleContainer}>
-            <Role className={styles.roleIcon} />
             <FormControl>
-              <FormLabel color="success" id="demo-controlled-radio-buttons-group"></FormLabel>
-              <RadioGroup
-                row
+              <FormLabel id="demo-controlled-radio-buttons-group">Select user permissions</FormLabel>
+              <Box
+                sx={{
+                  backgroundColor:
+                    updateRole === 'root' ? 'var(--palette-green-500Channel)' : 'var(--palette-background-paper)',
+                  boxShadow: 'var(--palette--card-box-shadow)',
+                  transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+                  borderRadius: '0.8rem',
+                  border: 'solid',
+                  zIndex: 0,
+                  color: 'var(--palette-color)',
+                  backgroundImage: 'none',
+                  overflow: 'hidden',
+                  borderWidth: '1px',
+                  borderColor:
+                    updateRole === 'root' ? 'var(--palette--description-color)' : 'var(--palette-background-paper)',
+                }}
+                className={styles.featuresEdit}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', width: '90%' }}>
+                  <Box pr="0.7rem">
+                    <Root className={styles.featuresIcon} />
+                  </Box>
+                  <Box width="90%">
+                    <Typography variant="body2" fontFamily="mabry-bold">
+                      Root
+                    </Typography>
+                    <Typography component="div" className={styles.roleText} variant="caption">
+                      The root user is the super user of the system and has the highest authority.
+                    </Typography>
+                  </Box>
+                </Box>
+                <Radio
+                  value="root"
+                  id="role-root"
+                  name="radio-buttons"
+                  checked={updateRole === 'root'}
+                  sx={{
+                    '&.Mui-checked': {
+                      color: 'var(--palette--description-color)',
+                    },
+                  }}
+                  onChange={(e: any) => {
+                    setUpdatelRole(e.target.value);
+                  }}
+                />
+              </Box>
+              <Box
+                sx={{
+                  backgroundColor:
+                    updateRole === 'guest' ? 'var(--palette-green-500Channel)' : 'var(--palette-background-paper)',
+                  boxShadow: 'var(--palette--card-box-shadow)',
+                  transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+                  borderRadius: '0.8rem',
+                  border: 'solid',
+                  zIndex: 0,
+                  color: 'var(--palette-color)',
+                  backgroundImage: 'none',
+                  overflow: 'hidden',
+                  borderWidth: '1px',
+                  borderColor:
+                    updateRole === 'guest' ? 'var(--palette--description-color)' : 'var(--palette-background-paper)',
+                }}
+                className={styles.featuresEdit}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', width: '90%' }}>
+                  <Box pr="0.7rem">
+                    <Guest className={styles.featuresIcon} />
+                  </Box>
+                  <Box width="90%">
+                    <Typography variant="body2" fontFamily="mabry-bold">
+                      Guest
+                    </Typography>
+                    <Typography component="div" className={styles.roleText} variant="caption">
+                      The guest user has limited permissions and is intended for general user access.
+                    </Typography>
+                  </Box>
+                </Box>
+                <Radio
+                  value="guest"
+                  id="role-guest"
+                  name="radio-buttons"
+                  checked={updateRole === 'guest'}
+                  sx={{
+                    '&.Mui-checked': {
+                      color: 'var(--palette--description-color)',
+                    },
+                  }}
+                  onChange={(e: any) => {
+                    setUpdatelRole(e.target.value);
+                  }}
+                />
+              </Box>
+              {/* <Card className={styles.featuresEdit}></Card> */}
+              {/* <RadioGroup
                 aria-labelledby="demo-controlled-radio-buttons-group"
                 name="controlled-radio-buttons-group"
                 value={updateRole}
@@ -512,7 +713,7 @@ export default function Users() {
                   }
                   label="guest"
                 />
-              </RadioGroup>
+              </RadioGroup> */}
             </FormControl>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>

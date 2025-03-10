@@ -333,7 +333,7 @@ export default function Layout(props: any) {
                       borderRadius: 'var(--menu-border-radius);',
                     },
                     '& .MuiMenu-list': {
-                      minWidth: '8rem',
+                      width: '13rem',
                       p: '0',
                     },
                   }}

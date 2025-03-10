@@ -38,6 +38,7 @@ import { ReactComponent as CreatedAt } from '../../../assets/images/job/preheat/
 import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
 import { ReactComponent as Pending } from '../../../assets/images/job/preheat/pending.svg';
 import { ReactComponent as ErrorLog } from '../../../assets/images/job/preheat/error-log.svg';
+import { ReactComponent as TagScope } from '../../../assets/images/job/preheat/tag-scope.svg';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -317,7 +318,7 @@ export default function ShowPreheat() {
                 <Skeleton data-testid="preheat-isloading" sx={{ width: '2rem' }} />
               ) : scope ? (
                 <Box className={styles.scopeContent}>
-                  <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/tag-scope.svg" />
+                  <TagScope className={styles.informationTitleIcon} />
                   <Typography variant="body2" component="div" fontFamily="mabry-bold" pl="0.2rem">
                     {scope.label || '-'}
                   </Typography>

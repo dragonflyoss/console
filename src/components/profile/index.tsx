@@ -1,13 +1,19 @@
 import {
   Alert,
   Box,
+  Breadcrumbs,
   Button,
   Chip,
   Divider,
   Grid,
   IconButton,
   InputAdornment,
+  Paper,
   Snackbar,
+  styled,
+  Tab,
+  TabProps,
+  Tabs,
   TextField,
   Typography,
 } from '@mui/material';
@@ -39,6 +45,42 @@ import { ReactComponent as Phone } from '../../assets/images/profile/phone.svg';
 import { ReactComponent as CreatedAt } from '../../assets/images/profile/created-at.svg';
 import { ReactComponent as ChangePassword } from '../../assets/images/user/change-password.svg';
 import { ReactComponent as Edit } from '../../assets/images/user/edit.svg';
+import { ReactComponent as UserID } from '../../assets/images/user/id.svg';
+import TabPanel from '@mui/lab/TabPanel';
+import { TabContext } from '@mui/lab';
+import _ from 'lodash';
+import { matchIsValidTel, MuiTelInput } from 'mui-tel-input';
+
+type StyledTabProps = Omit<TabProps, 'component'> & {};
+
+const AntTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} />)(({ theme }) => ({
+  textTransform: 'none',
+  minWidth: 0,
+  [theme.breakpoints.up('sm')]: {
+    minWidth: 0,
+  },
+  minHeight: '3rem',
+  fontWeight: theme.typography.fontWeightRegular,
+  color: 'var(--palette-grey-tab)',
+  padding: '0',
+  marginRight: '2rem',
+  fontSize: '0.9rem',
+  fontFamily: 'mabry-bold',
+  '&:hover': {
+    color: 'primary',
+    opacity: 1,
+  },
+  '&.Mui-selected': {
+    color: 'var(--palette--description-color)',
+    fontFamily: 'mabry-bold',
+  },
+}));
+
+const AntTabs = styled(Tabs)({
+  '& .MuiTabs-indicator': {
+    backgroundColor: 'var(--palette--description-color)',
+  },
+});
 
 export default function Profile() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -57,9 +99,9 @@ export default function Profile() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [passwordLoadingButton, setPasswordLoadingButton] = useState(false);
   const [personalLoadingButton, setPersonalLoadingButton] = useState(false);
-  const [showMyProfile, setShowMyProfile] = useState(true);
   const [showPersonalInformation, setShowPersonalInformation] = useState(true);
-  const [location, setLocation] = useState('');
+  const [phone, setPhone] = useState('');
+  const [value, setValue] = useState('1');
 
   const [users, setUsers] = useState<getUserResponse>({
     id: 0,
@@ -85,10 +127,22 @@ export default function Profile() {
 
   useEffect(() => {
     setUsers(user);
-    setLocation(user?.location);
+    setPhone(user.phone);
   }, [user]);
 
   const { old_password, new_password } = password;
+
+  const handleChangePhone = (newValue: string, data: any, cb?: () => void) => {
+    setPhone(newValue);
+    const { setError } = data;
+    setError(
+      !matchIsValidTel(newValue, {
+        onlyCountries: ['FR', 'BE', 'CN', 'US', 'CA', 'JP', 'KR', 'TW', 'HK', 'MO', 'SG', 'MY', 'TH', 'VN'],
+      }),
+    );
+
+    cb && cb();
+  };
 
   const userLable = [
     {
@@ -165,14 +219,14 @@ export default function Profile() {
         label: 'Phone',
         name: 'phone',
         autoComplete: 'family-name',
-        value: users.phone,
+        value: phone,
         placeholder: 'Enter your Phone',
         helperText: phoneError ? 'Invalid phone number.' : '',
         error: phoneError,
 
         onChange: (e: any) => {
-          setUsers({ ...users, phone: e.target.value });
-          changeValidate(e.target.value, profileForm[1]);
+          // setUsers({ ...users, phone: e.target.value });
+          handleChangePhone(e, profileForm[1]);
         },
 
         InputProps: {
@@ -185,11 +239,6 @@ export default function Profile() {
       },
       syncError: false,
       setError: setPhoneError,
-
-      validate: (value: string) => {
-        const reg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$|^$/;
-        return reg.test(value);
-      },
     },
     {
       formProps: {
@@ -430,8 +479,20 @@ export default function Profile() {
 
     profileForm.forEach((item) => {
       const value = data.get(item.formProps.name);
-      item.setError(!item.validate(value as string));
-      item.syncError = !item.validate(value as string);
+      if (item.validate) {
+        item.setError(!item.validate(value as string));
+        item.syncError = !item.validate(value as string);
+      } else {
+        item.setError(
+          !matchIsValidTel(phone, {
+            onlyCountries: ['FR', 'BE', 'CN', 'US', 'CA', 'JP', 'KR', 'TW', 'HK', 'MO', 'SG', 'MY', 'TH', 'VN'],
+          }),
+        );
+
+        item.syncError = !matchIsValidTel(phone, {
+          onlyCountries: ['FR', 'BE', 'CN', 'US', 'CA', 'JP', 'KR', 'TW', 'HK', 'MO', 'SG', 'MY', 'TH', 'VN'],
+        });
+      }
     });
 
     const canSubmit = Boolean(!profileForm.filter((item) => item.syncError).length);
@@ -440,7 +501,7 @@ export default function Profile() {
       bio: users.bio,
       email: users.email,
       location: users.location,
-      phone: users.phone,
+      phone: phone,
     };
 
     if (canSubmit) {
@@ -469,7 +530,6 @@ export default function Profile() {
 
   const cancelHandlePersonalInformation = async () => {
     setUsers(user);
-    setLocation(user?.location);
     setShowPersonalInformation(true);
   };
 
@@ -515,7 +575,6 @@ export default function Profile() {
   };
 
   const cancelChangePassword = () => {
-    setShowMyProfile(true);
     setPassword({ ...password, old_password: '', new_password: '' });
   };
 
@@ -528,8 +587,12 @@ export default function Profile() {
     setErrorMessage(false);
   };
 
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+
   return (
-    <Box>
+    <Box p="0 2rem">
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -550,28 +613,226 @@ export default function Profile() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography id="my-profile" sx={{ mb: '2rem', fontFamily: 'mabry-bold' }} variant="h6">
+      <Typography variant="h5" mb="1rem">
         My Profile
       </Typography>
-      <Card className={styles.profileContainer}>
-        {showMyProfile ? (
-          <Box className={styles.avatarContainer}>
-            <Box display="flex" alignItems="center">
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '2rem' }}
+      >
+        <Typography color="text.primary">Profile</Typography>
+        <Typography color="inherit">{user?.name || '-'}</Typography>
+      </Breadcrumbs>
+      <TabContext value={value}>
+        <Card className={styles.profileContainer}>
+          <Box className={styles.profileImage}>
+            <Box className={styles.profileContent}>
               <Stack direction="row" spacing={2}>
                 <Avatar alt="Remy Sharp" src={users?.avatar} className={styles.avatarContent} />
               </Stack>
-              <Box sx={{ pl: '1rem' }}>
-                <Typography id="name-title" variant="h5">
+              <Box sx={{ pl: '1.4rem', pt: '1.4rem' }}>
+                <Typography id="name-title" variant="h5" color="#919EAB">
                   {users?.name || '-'}
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', pt: '0.3rem' }}>
-                  <MyProfileLocation className={styles.userIcon} />
-                  <Typography variant="body2" component="div" ml="0.5rem" color="#919EAB" fontFamily="mabry-bold">
-                    {location || '-'}
-                  </Typography>
-                </Box>
+                <Paper
+                  elevation={0}
+                  id="state"
+                  sx={{
+                    height: '1.4rem',
+                    background:
+                      users?.state === 'enable'
+                        ? 'var( --palette--description-color)'
+                        : 'var(--palette-dark-300Channel)',
+                    color: '#FFFFFF',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '0.4rem',
+                    mt: '0.2rem',
+                  }}
+                >
+                  <Typography variant="body2">{_.upperFirst(users?.state) || ''}</Typography>
+                </Paper>
               </Box>
             </Box>
+          </Box>
+          <Box className={styles.tabs}>
+            <AntTabs value={value} onChange={handleChange} aria-label="nav tabs example" scrollButtons="auto">
+              <AntTab
+                icon={<UserID className={styles.tabIcon} />}
+                key="1"
+                iconPosition="start"
+                label="Profile"
+                sx={{ textTransform: 'none' }}
+                id="tab-profile"
+                value="1"
+                onClick={cancelChangePassword}
+              />
+              <AntTab
+                icon={<VpnKeyIcon className={styles.tabIcon} />}
+                key="2"
+                iconPosition="start"
+                label="Password"
+                id="tab-password"
+                value="2"
+              />
+            </AntTabs>
+          </Box>
+        </Card>
+        <TabPanel value="1" key="1" sx={{ p: 0 }}>
+          <Card>
+            {showPersonalInformation ? (
+              <Box>
+                <Grid className={styles.informationHeader}>
+                  <Typography variant="subtitle1" fontFamily="mabry-bold">
+                    About me
+                  </Typography>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    sx={{
+                      background: 'var(--palette--button-color)',
+                      color: 'var(--palette--button-text-color)',
+                      ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
+                    }}
+                    onClick={() => {
+                      setShowPersonalInformation(false);
+                    }}
+                  >
+                    <Edit className={styles.editIcon} />
+                    Edit
+                  </Button>
+                </Grid>
+                <Divider
+                  sx={{
+                    borderStyle: 'dashed',
+                    borderColor: 'var(--palette--palette-divider)',
+                    borderWidth: '0px 0px thin',
+                  }}
+                />
+                <Box sx={{ p: '1.5rem 2rem 0 2rem' }}>
+                  <Typography id="description" variant="subtitle1" component="div" pb="1.5rem">
+                    {user?.bio || '-'}
+                  </Typography>
+                  <Typography variant="subtitle1" fontFamily="mabry-bold">
+                    Personal Details
+                  </Typography>
+                </Box>
+                <Box className={styles.informationContainer}>
+                  {userLable.map((item) => {
+                    return (
+                      <Box className={styles.informationContent} key={item.name}>
+                        <Box display="flex" alignItems="center">
+                          <Box className={styles.informationLable}>
+                            {item.icon}
+                            <Typography component="div" variant="body1" className={styles.informationLableText}>
+                              {item.label}
+                            </Typography>
+                          </Box>
+                          <Box ml="0.6rem">
+                            {item.name === 'created_at' ? (
+                              users?.[item.name] ? (
+                                <Chip
+                                  id={item.name}
+                                  avatar={<MoreTimeIcon />}
+                                  label={getDatetime(users?.[item.name]) || '-'}
+                                  variant="outlined"
+                                  size="small"
+                                />
+                              ) : (
+                                <Typography id={item.name} component="div" variant="body1" fontFamily="mabry-bold">
+                                  -
+                                </Typography>
+                              )
+                            ) : (
+                              <Typography id={item.name} component="div" variant="body1" fontFamily="mabry-bold">
+                                {users?.[item?.name as keyof typeof users] || '-'}
+                              </Typography>
+                            )}
+                          </Box>
+                        </Box>
+                      </Box>
+                    );
+                  })}
+                </Box>
+              </Box>
+            ) : (
+              <Box p="2rem">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" mb="1rem">
+                  Update Personal Information
+                </Typography>
+                <Box component="form" onSubmit={handlePersonalInformation} noValidate>
+                  {profileForm.map((item) =>
+                    item.formProps.id === 'phone' ? (
+                      <MuiTelInput
+                        defaultCountry="CN"
+                        color="success"
+                        size="small"
+                        key={item.formProps.name}
+                        {...item.formProps}
+                        className={styles.textField}
+                      />
+                    ) : (
+                      <TextField
+                        key={item.formProps.name}
+                        size="small"
+                        margin="dense"
+                        color="success"
+                        variant="outlined"
+                        {...item.formProps}
+                        className={styles.textField}
+                      />
+                    ),
+                  )}
+                  <Box mt="2rem">
+                    <CancelLoadingButton
+                      id="cancel"
+                      loading={personalLoadingButton}
+                      onClick={cancelHandlePersonalInformation}
+                    />
+                    <SavelLoadingButton
+                      loading={personalLoadingButton}
+                      endIcon={<CheckCircleIcon />}
+                      id="save"
+                      text="Save"
+                    />
+                  </Box>
+                </Box>
+              </Box>
+            )}
+          </Card>
+        </TabPanel>
+        <TabPanel value="2" key="2" sx={{ p: 0 }}>
+          <Card className={styles.passwordWrapper}>
+            <Grid onSubmit={handleChangePassword} component="form" noValidate>
+              <Typography variant="subtitle1" id="change-password-title" fontFamily="mabry-bold" mb="1rem">
+                Change Password
+              </Typography>
+              {passwordForm.map((item) => (
+                <Box key={item.formProps.name}>
+                  <TextField size="small" margin="normal" color="success" fullWidth required {...item.formProps} />
+                </Box>
+              ))}
+              <Box mt="2rem" display="flex" justifyContent="flex-end">
+                <SavelLoadingButton
+                  loading={passwordLoadingButton}
+                  endIcon={<CheckCircleIcon />}
+                  id="change-password"
+                  text="Save"
+                />
+              </Box>
+            </Grid>
+          </Card>
+        </TabPanel>
+      </TabContext>
+      {/* <Card className={styles.profileContainer}>
+        {showMyProfile ? (
+          <Box className={styles.avatarContainer}>
             <Box sx={{ justifyContent: 'flex-end' }}>
               <Button
                 size="small"
@@ -591,7 +852,7 @@ export default function Profile() {
             </Box>
           </Box>
         ) : (
-          <Grid sx={{ width: '40rem' }} onSubmit={handleChangePassword} component="form" noValidate>
+          <Grid onSubmit={handleChangePassword} component="form" noValidate>
             <Typography variant="subtitle1" fontFamily="mabry-bold" mb="1rem">
               Change Password
             </Typography>
@@ -615,118 +876,7 @@ export default function Profile() {
             </Box>
           </Grid>
         )}
-      </Card>
-      <Card>
-        {showPersonalInformation ? (
-          <Box>
-            <Grid className={styles.informationHeader}>
-              <Typography variant="subtitle1" fontFamily="mabry-bold">
-                About me
-              </Typography>
-              <Button
-                size="small"
-                variant="contained"
-                sx={{
-                  background: 'var(--palette--button-color)',
-                  color: 'var(--palette--button-text-color)',
-                  ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
-                }}
-                onClick={() => {
-                  setShowPersonalInformation(false);
-                }}
-              >
-                <Edit className={styles.editIcon} />
-                Edit
-              </Button>
-            </Grid>
-            <Divider
-              sx={{
-                borderStyle: 'dashed',
-                borderColor: 'var(--palette--palette-divider)',
-                borderWidth: '0px 0px thin',
-              }}
-            />
-            <Box sx={{ p: '1.5rem 2rem 0 2rem' }}>
-              <Typography id="description" variant="subtitle1" component="div" pb="1.5rem">
-                {user?.bio || '-'}
-              </Typography>
-              <Typography variant="subtitle1" fontFamily="mabry-bold">
-                Personal Details
-              </Typography>
-            </Box>
-            <Box className={styles.informationContainer}>
-              {userLable.map((item) => {
-                return (
-                  <Box className={styles.informationContent} key={item.name}>
-                    <Box display="flex" alignItems="center">
-                      <Box className={styles.informationLable}>
-                        {item.icon}
-                        <Typography component="div" variant="body1" className={styles.informationLableText}>
-                          {item.label}
-                        </Typography>
-                      </Box>
-                      <Box ml="0.6rem">
-                        {item.name === 'created_at' ? (
-                          users?.[item.name] ? (
-                            <Chip
-                              id={item.name}
-                              avatar={<MoreTimeIcon />}
-                              label={getDatetime(users?.[item.name]) || '-'}
-                              variant="outlined"
-                              size="small"
-                            />
-                          ) : (
-                            <Typography id={item.name} component="div" variant="body1" fontFamily="mabry-bold">
-                              -
-                            </Typography>
-                          )
-                        ) : (
-                          <Typography id={item.name} component="div" variant="body1" fontFamily="mabry-bold">
-                            {users?.[item?.name as keyof typeof users] || '-'}
-                          </Typography>
-                        )}
-                      </Box>
-                    </Box>
-                  </Box>
-                );
-              })}
-            </Box>
-          </Box>
-        ) : (
-          <Box p="2rem">
-            <Typography variant="subtitle1" fontFamily="mabry-bold" mb="1rem">
-              Update Personal Information
-            </Typography>
-            <Box component="form" onSubmit={handlePersonalInformation} noValidate>
-              {profileForm.map((item) => (
-                <Box key={item.formProps.name}>
-                  <TextField
-                    size="small"
-                    margin="dense"
-                    color="success"
-                    variant="outlined"
-                    {...item.formProps}
-                    className={styles.textField}
-                  />
-                </Box>
-              ))}
-              <Box mt="2rem">
-                <CancelLoadingButton
-                  id="cancel"
-                  loading={personalLoadingButton}
-                  onClick={cancelHandlePersonalInformation}
-                />
-                <SavelLoadingButton
-                  loading={personalLoadingButton}
-                  endIcon={<CheckCircleIcon />}
-                  id="save"
-                  text="Save"
-                />
-              </Box>
-            </Box>
-          </Box>
-        )}
-      </Card>
+      </Card> */}
     </Box>
   );
 }

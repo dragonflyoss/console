@@ -1,7 +1,6 @@
 import {
   Alert,
   Box,
-  Breadcrumbs,
   Button,
   Chip,
   Grid,
@@ -31,9 +30,7 @@ import AddIcon from '@mui/icons-material/Add';
 import styles from './index.module.css';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { fuzzySearch, getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MAX_PAGE_SIZE } from '../../lib/constants';
 import Card from '../card';

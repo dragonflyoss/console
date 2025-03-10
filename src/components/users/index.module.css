@@ -1,7 +1,6 @@
 .changeRoleContainer {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .roleIcon {
@@ -92,4 +91,55 @@
 
 .tableHeaderText {
   border-color: var(--palette--palette-divider) !important;
+}
+
+.searchWrapper {
+  display: flex;
+  margin-bottom: 2rem;
+}
+
+.featuresEdit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem;
+  margin-top: 1rem;
+}
+
+/* .featuresEdit:nth-last-child(2n) {
+  margin-top: 1rem;
+} */
+
+/* .featuresIconWrapper {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  background-color: var(--palette-white-500Channel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.6rem;
+}
+
+.featuresIconContainer {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background-color: var(--palette-white-400Channel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+.featuresIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--palette-secondary-dark);
+}
+
+.roleText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--palette--text-palette-text-secondary);
 }

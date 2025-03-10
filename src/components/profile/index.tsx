@@ -807,7 +807,7 @@ export default function Profile() {
         </TabPanel>
         <TabPanel value="2" key="2" sx={{ p: 0 }}>
           <Card className={styles.passwordWrapper}>
-            <Grid onSubmit={handleChangePassword} component="form" noValidate>
+            <Grid onSubmit={handleChangePassword} component="form" noValidate width="40rem">
               <Typography variant="subtitle1" id="change-password-title" fontFamily="mabry-bold" mb="1rem">
                 Change Password
               </Typography>
@@ -816,7 +816,12 @@ export default function Profile() {
                   <TextField size="small" margin="normal" color="success" fullWidth required {...item.formProps} />
                 </Box>
               ))}
-              <Box mt="2rem" display="flex" justifyContent="flex-end">
+              <Box mt="2rem">
+                <CancelLoadingButton
+                  id="cancel-change-password"
+                  loading={passwordLoadingButton}
+                  onClick={cancelChangePassword}
+                />
                 <SavelLoadingButton
                   loading={passwordLoadingButton}
                   endIcon={<CheckCircleIcon />}

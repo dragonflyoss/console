@@ -328,8 +328,21 @@ describe('Profile', () => {
           });
       });
 
-      // Click change password button.
+      // Click change password tab.
       cy.get('#tab-password').click();
+
+      cy.get('#oldPassword').type('dragonfly1');
+      cy.get('#newPassword').type('dragonfly2');
+      cy.get('#confirmNewPassword').type('dragonfly2');
+
+      // Click cancel password button.
+      cy.get('#cancel-change-password').click();
+
+      // Input should be cleared.
+      cy.get('#oldPassword').should('have.value', '');
+      cy.get('#newPassword').should('have.value', '');
+      cy.get('#confirmNewPassword').should('have.value', '');
+
       cy.get('#oldPassword').type('dragonfly1');
       cy.get('#newPassword').type('dragonfly2');
       cy.get('#confirmNewPassword').type('dragonfly2');
@@ -341,7 +354,7 @@ describe('Profile', () => {
       cy.url().should('include', 'signin');
     });
 
-    it('click the `CANCEL button', () => {
+    it('click the Profile tab', () => {
       // Click change password button.
       cy.get('#tab-password').click();
       cy.get('#change-password-title').should('be.visible').and('have.text', 'Change Password');

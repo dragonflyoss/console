@@ -107,6 +107,13 @@
   padding: 2rem;
 }
 
+.passwordTextField {
+  width: 50rem;
+  max-width: 28rem;
+  margin-top: 0.8rem !important;
+  margin-bottom: 0.8rem !important;
+}
+
 .tabIcon {
   width: 1.5rem;
   height: 1.5rem;

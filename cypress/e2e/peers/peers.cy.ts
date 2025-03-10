@@ -250,8 +250,6 @@ describe('Peers', () => {
   });
 
   describe('refresh', () => {
-    beforeEach(() => {});
-
     it('can refresh peers and return new data', () => {
       cy.get('#total').should('have.text', 10);
       cy.get('#git-version').should('have.text', 4);
@@ -261,7 +259,7 @@ describe('Peers', () => {
 
       // Click refresh button.
       cy.get('#refresh').click();
-      cy.get('.css-70qvj9 > .MuiTypography-root').should('be.visible').and('have.text', 'Refresh');
+      cy.get('#refresh-title').should('be.visible').and('have.text', 'Refresh');
 
       cy.get('#cancel').click();
       cy.get('#refresh').click();
@@ -316,7 +314,7 @@ describe('Peers', () => {
 
       // Click refresh button.
       cy.get('#refresh').click();
-      cy.get('.css-70qvj9 > .MuiTypography-root').should('be.visible').and('have.text', 'Refresh');
+      cy.get('#refresh-title').should('be.visible').and('have.text', 'Refresh');
 
       cy.intercept(
         {
@@ -355,7 +353,7 @@ describe('Peers', () => {
 
       // Click refresh button.
       cy.get('#refresh').click();
-      cy.get('.css-70qvj9 > .MuiTypography-root').should('be.visible').and('have.text', 'Refresh');
+      cy.get('#refresh-title').should('be.visible').and('have.text', 'Refresh');
 
       cy.get('#cancel').click();
       cy.get('#refresh').click();

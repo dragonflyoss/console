@@ -13,7 +13,7 @@ const SearchCircularProgress: React.FC<CardProps> = (props: CircularProgressProp
         sx={(theme) => ({
           color: '#DAF9F2',
           ...theme.applyStyles('dark', {
-            color: 'var(--description-color)',
+            color: 'var(--palette--description-color)',
           }),
         })}
         size={20}
@@ -25,7 +25,7 @@ const SearchCircularProgress: React.FC<CardProps> = (props: CircularProgressProp
         variant="indeterminate"
         disableShrink
         sx={(theme) => ({
-          color: 'var(--description-color)',
+          color: 'var(--palette--description-color)',
           animationDuration: '550ms',
           position: 'absolute',
           left: 0,

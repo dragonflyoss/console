@@ -46,7 +46,7 @@ describe('Create preheat', () => {
 
   it('can create preheat', () => {
     cy.visit('/jobs/preheats');
-    cy.get('.css-1g5t85q > .MuiButtonBase-root').click();
+    cy.get('#new-preheat').click();
 
     cy.url().should('include', '/jobs/preheats/new');
 

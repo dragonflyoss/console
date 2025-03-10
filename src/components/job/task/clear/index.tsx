@@ -11,8 +11,6 @@ import {
   Alert,
   Tooltip,
   Divider,
-  createTheme,
-  ThemeProvider,
   TextField,
   styled,
   Autocomplete,
@@ -20,6 +18,7 @@ import {
   ToggleButton,
   toggleButtonGroupClasses,
   Pagination,
+  useTheme,
 } from '@mui/material';
 import styles from './index.module.css';
 import { useEffect, useState } from 'react';
@@ -39,6 +38,12 @@ import SearchCircularProgress from '../../../circular-progress';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import LinkOutlinedIcon from '@mui/icons-material/LinkOutlined';
 import Card from '../../../card';
+import { ReactComponent as SchedulerCluster } from '../../../../assets/images/job/task/scheduler-cluster.svg';
+import { ReactComponent as NoSearch } from '../../../../assets/images/job/task/no-search.svg';
+import { ReactComponent as NoTask } from '../../../../assets/images/job/task/no-task.svg';
+import { ReactComponent as DarkNoTask } from '../../../../assets/images/job/task/dark-no-task.svg';
+import { ReactComponent as Delete } from '../../../../assets/images/cluster/delete.svg';
+import { ReactComponent as DeleteWarning } from '../../../../assets/images/cluster/delete-warning.svg';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
@@ -54,20 +59,6 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     borderLeft: '1px solid transparent',
   },
 }));
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1C293A',
-    },
-    success: {
-      main: '#2e8f79',
-    },
-  },
-  typography: {
-    fontFamily: 'mabry-light,sans-serif',
-  },
-});
 
 export default function Clear() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -95,6 +86,7 @@ export default function Clear() {
 
   const { url, tag, application, filtered_query_params } = searchData;
   const navigate = useNavigate();
+  const theme = useTheme();
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -208,8 +200,12 @@ export default function Clear() {
             placement="top"
           >
             <HelpIcon
-              color="disabled"
-              sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+              sx={{
+                color: 'var(--palette-grey-300Channel)',
+                width: '0.8rem',
+                height: '0.8rem',
+                ':hover': { color: 'var(--palette--description-color)' },
+              }}
             />
           </Tooltip>
         ),
@@ -240,8 +236,12 @@ export default function Clear() {
         InputProps: (
           <Tooltip title={'Caller application which is used for statistics and access control.'} placement="top">
             <HelpIcon
-              color="disabled"
-              sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+              sx={{
+                color: 'var(--palette-grey-300Channel)',
+                width: '0.8rem',
+                height: '0.8rem',
+                ':hover': { color: 'var(--palette--description-color)' },
+              }}
             />
           </Tooltip>
         ),
@@ -569,7 +569,7 @@ export default function Clear() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
@@ -586,7 +586,7 @@ export default function Clear() {
           display: 'inline-flex',
           flexWrap: 'wrap',
           mb: '2rem',
-          backgroundColor: '#EEEEEE',
+          backgroundColor: 'var(--palette-dark-200Channel)',
         })}
       >
         <StyledToggleButtonGroup
@@ -602,11 +602,11 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--button-color)',
-                color: 'var(--table-title-color)',
+                backgroundColor: 'var(--palette--save-color)',
+                color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--button-color)',
+                  backgroundColor: 'var(--palette--save-color)',
                 },
               },
               '&:hover': {
@@ -614,6 +614,7 @@ export default function Clear() {
               },
               p: '0.3rem 0.6rem',
               width: '11.5rem',
+              color: 'var(--palette-dark-400Channel)',
             }}
           >
             <LinkOutlinedIcon sx={{ mr: '0.4rem' }} />
@@ -625,11 +626,11 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--button-color)',
-                color: 'var(--table-title-color)',
+                backgroundColor: 'var(--palette--save-color)',
+                color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--button-color)',
+                  backgroundColor: 'var(--palette--save-color)',
                 },
               },
               '&:hover': {
@@ -637,6 +638,7 @@ export default function Clear() {
               },
               p: '0.3rem 0.6rem',
               width: '11.5rem',
+              color: 'var(--palette-dark-400Channel)',
             }}
           >
             <AssignmentOutlinedIcon fontSize="small" sx={{ mr: '0.4rem' }} />
@@ -660,6 +662,7 @@ export default function Clear() {
                 borderRadius: '0.2rem',
                 width: optional ? '45rem' : '36rem',
                 position: 'absolute',
+                backgroundColor: 'var(--palette-background-menu-paper)',
               }}
             >
               <TextField
@@ -677,7 +680,7 @@ export default function Clear() {
                   <Typography variant="subtitle1" fontFamily="mabry-bold" component="div">
                     Optional
                   </Typography>
-                  <Paper elevation={0} sx={{ top: '2rem', backgroundColor: '#FFF' }}>
+                  <Box>
                     <Box className={styles.optionalContainer}>
                       {formList.map((item) => {
                         return (
@@ -694,12 +697,12 @@ export default function Clear() {
                                   placement="top"
                                 >
                                   <HelpIcon
-                                    color="disabled"
                                     sx={{
+                                      color: 'var(--palette-grey-300Channel)',
                                       width: '0.8rem',
                                       height: '0.8rem',
                                       mr: '0.3rem',
-                                      ':hover': { color: 'var(--description-color)' },
+                                      ':hover': { color: 'var(--palette--description-color)' },
                                     }}
                                   />
                                 </Tooltip>
@@ -739,7 +742,7 @@ export default function Clear() {
                         text="search"
                       />
                     </Box>
-                  </Paper>
+                  </Box>
                 </>
               ) : (
                 ''
@@ -789,11 +792,7 @@ export default function Clear() {
                                 alignItems: 'center',
                               }}
                             >
-                              <Box
-                                component="img"
-                                sx={{ width: '0.6rem', height: '0.6rem' }}
-                                src="/icons/job/task/scheduler-cluster.svg"
-                              />
+                              <SchedulerCluster className={styles.schedulerClusterIcon} />
                               <Typography
                                 id="schedulerTotal"
                                 variant="subtitle2"
@@ -808,7 +807,11 @@ export default function Clear() {
                           </Box>
                           <Button
                             size="small"
-                            sx={{ background: 'var(--button-color)' }}
+                            sx={{
+                              background: 'var(--palette--button-color)',
+                              color: 'var(--palette--button-text-color)',
+                              ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
+                            }}
                             variant="contained"
                             onClick={(event) => {
                               event.stopPropagation();
@@ -826,7 +829,7 @@ export default function Clear() {
                             p: '1rem 0.8rem',
                             display: 'flex',
                             alignItems: 'center',
-                            backgroundColor: 'var(--table-title-color)',
+                            backgroundColor: 'var(--palette--table-title-color)',
                           }}
                         >
                           <Box width="20%" sx={{ display: 'flex', alignItems: 'center' }}>
@@ -891,13 +894,13 @@ export default function Clear() {
                                         borderRadius: '0.2rem',
                                         backgroundColor:
                                           item?.host_type === 'super'
-                                            ? 'var( --description-color)'
-                                            : 'var(--button-color)',
+                                            ? 'var( --palette--description-color)'
+                                            : 'var(--palette--button-color)',
                                         color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
                                         borderColor:
                                           item?.host_type === 'super'
-                                            ? 'var( --description-color)'
-                                            : 'var(--button-color)',
+                                            ? 'var( --palette--description-color)'
+                                            : 'var(--palette--button-color)',
                                         fontWeight: 'bold',
                                       }}
                                     />
@@ -947,13 +950,13 @@ export default function Clear() {
                                       borderRadius: '0.2rem',
                                       backgroundColor:
                                         item?.host_type === 'super'
-                                          ? 'var( --description-color)'
-                                          : 'var(--button-color)',
+                                          ? 'var( --palette--description-color)'
+                                          : 'var(--palette--button-color)',
                                       color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
                                       borderColor:
                                         item?.host_type === 'super'
-                                          ? 'var( --description-color)'
-                                          : 'var(--button-color)',
+                                          ? 'var( --palette--description-color)'
+                                          : 'var(--palette--button-color)',
                                       fontWeight: 'bold',
                                     }}
                                   />
@@ -972,7 +975,7 @@ export default function Clear() {
                         </Box>
                       </Card>
                       {totalPage > 1 ? (
-                        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+                        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
                           <Pagination
                             id={`pagination-${index}`}
                             count={totalPage}
@@ -992,7 +995,7 @@ export default function Clear() {
             </>
           ) : (
             <Box id="no-task" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '6rem' }}>
-              <Box component="img" sx={{ width: '4rem', mb: '3rem' }} src="/icons/job/task/no-search.svg" />
+              <NoSearch className={styles.noSearch} />
               <Box>
                 <Typography variant="h5" component="span">
                   You don't find any results!
@@ -1010,7 +1013,11 @@ export default function Clear() {
             p: '3rem 2rem 2rem 2rem',
           }}
         >
-          <Box component="img" style={{ width: '30rem', height: '30rem' }} src="/icons/job/task/no-task.svg" />
+          {theme.palette.mode === 'light' ? (
+            <NoTask id="no-task-image" className={styles.noTask} />
+          ) : (
+            <DarkNoTask id="dark-no-task-image" className={styles.noTask} />
+          )}
         </Box>
       )}
       <Dialog
@@ -1038,11 +1045,7 @@ export default function Clear() {
               alignItems: 'center',
             }}
           >
-            <Box
-              component="img"
-              src="/icons/cluster/delete.svg"
-              sx={{ width: '1.8rem', height: '1.8rem', mr: '0.4rem' }}
-            />
+            <Delete className={styles.deleteIcon} />
             <Typography variant="h6" component="div" fontFamily="mabry-bold">
               Delete
             </Typography>
@@ -1063,21 +1066,17 @@ export default function Clear() {
         <DialogContent>
           <Box component="form" onSubmit={handleDeleteTask}>
             <Box display="flex" alignItems="flex-start" pb="1rem">
-              <Box
-                component="img"
-                src="/icons/cluster/delete-warning.svg"
-                sx={{ width: '1.4rem', height: '1.4rem', pr: '0.2rem' }}
-              />
+              <DeleteWarning className={styles.deleteWarningIcon} />
               <Box>
                 <Typography
                   variant="body1"
                   fontFamily="mabry-bold"
                   component="span"
-                  sx={{ color: 'var(--delete-button-color)' }}
+                  sx={{ color: 'var(--palette--delete-button-color)' }}
                 >
                   WARNING:&nbsp;
                 </Typography>
-                <Typography variant="body1" component="span" sx={{ color: 'var(--delete-button-color)' }}>
+                <Typography variant="body1" component="span" sx={{ color: 'var(--palette--delete-button-color)' }}>
                   This action CANNOT be undone.
                 </Typography>
               </Box>
@@ -1115,6 +1114,6 @@ export default function Clear() {
           </Box>
         </DialogContent>
       </Dialog>
-    </ThemeProvider>
+    </Box>
   );
 }

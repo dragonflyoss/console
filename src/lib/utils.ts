@@ -125,7 +125,7 @@ export const exportCSVFile = (headers: Header[], items: getPeersResponse[], file
   }
 };
 
-export const fuzzySearch = (keyword: string, data: getClustersResponse[]) => {
+export const fuzzySearch = (keyword: string, data: any[]) => {
   if (!data || !Array.isArray(data)) return [];
 
   return data.filter((item) => item.name && typeof item.name === 'string' && item.name.includes(keyword));

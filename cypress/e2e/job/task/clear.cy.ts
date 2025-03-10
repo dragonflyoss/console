@@ -16,6 +16,18 @@ describe('Clear', () => {
   it('when no data is loaded', () => {
     cy.get('#no-task').should('not.exist');
 
+    cy.get('#light').should('exist');
+    cy.get('#no-task-image').should('exist');
+
+    cy.get('#mode').click();
+
+    // Dark mode should show a different no-task-image.
+    cy.get('#light').should('not.exist');
+    cy.get('#no-task-image').should('not.exist');
+
+    cy.get('#dark').should('exist');
+    cy.get('#dark-no-task-image').should('exist');
+
     cy.intercept(
       {
         method: 'post',
@@ -311,10 +323,6 @@ describe('Clear', () => {
           });
         },
       );
-
-      // Preheat API error response after three seconds.
-      cy.wait(60000);
-
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
 

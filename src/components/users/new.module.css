@@ -1,7 +1,4 @@
 .container {
-  /* flex-flow: wrap;
-  min-width: 0px;
-  box-sizing: border-box; */
   display: flex;
   gap: calc(3 * 0.5rem) calc(3 * 0.5rem);
   align-items: flex-start;
@@ -49,8 +46,7 @@
 }
 
 .input {
-  width: 20rem !important;
-  /* max-width: 25rem; */
+  width: 22rem !important;
   margin-top: 1rem !important;
   margin-bottom: 1rem !important;
   margin-right: 1rem !important;

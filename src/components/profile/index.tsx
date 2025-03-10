@@ -40,10 +40,8 @@ import { ReactComponent as Name } from '../../assets/images/profile/name.svg';
 import { ReactComponent as ID } from '../../assets/images/profile/id.svg';
 import { ReactComponent as Email } from '../../assets/images/profile/email.svg';
 import { ReactComponent as Location } from '../../assets/images/profile/location.svg';
-import { ReactComponent as MyProfileLocation } from '../../assets/images/user/location.svg';
 import { ReactComponent as Phone } from '../../assets/images/profile/phone.svg';
 import { ReactComponent as CreatedAt } from '../../assets/images/profile/created-at.svg';
-import { ReactComponent as ChangePassword } from '../../assets/images/user/change-password.svg';
 import { ReactComponent as Edit } from '../../assets/images/user/edit.svg';
 import { ReactComponent as UserID } from '../../assets/images/user/id.svg';
 import TabPanel from '@mui/lab/TabPanel';
@@ -766,7 +764,7 @@ export default function Profile() {
                 <Typography variant="subtitle1" fontFamily="mabry-bold" mb="1rem">
                   Update Personal Information
                 </Typography>
-                <Box component="form" onSubmit={handlePersonalInformation} noValidate>
+                <Box component="form" onSubmit={handlePersonalInformation} noValidate className={styles.profileForm}>
                   {profileForm.map((item) =>
                     item.formProps.id === 'phone' ? (
                       <MuiTelInput
@@ -830,53 +828,6 @@ export default function Profile() {
           </Card>
         </TabPanel>
       </TabContext>
-      {/* <Card className={styles.profileContainer}>
-        {showMyProfile ? (
-          <Box className={styles.avatarContainer}>
-            <Box sx={{ justifyContent: 'flex-end' }}>
-              <Button
-                size="small"
-                sx={{
-                  background: 'var(--palette--button-color)',
-                  color: 'var(--palette--button-text-color)',
-                  ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
-                }}
-                variant="contained"
-                onClick={() => {
-                  setShowMyProfile(false);
-                }}
-              >
-                <ChangePassword className={styles.editIcon} />
-                Change Password
-              </Button>
-            </Box>
-          </Box>
-        ) : (
-          <Grid onSubmit={handleChangePassword} component="form" noValidate>
-            <Typography variant="subtitle1" fontFamily="mabry-bold" mb="1rem">
-              Change Password
-            </Typography>
-            {passwordForm.map((item) => (
-              <Box key={item.formProps.name}>
-                <TextField size="small" margin="normal" color="success" fullWidth required {...item.formProps} />
-              </Box>
-            ))}
-            <Box mt="2rem">
-              <CancelLoadingButton
-                id="cancel-change-password"
-                loading={passwordLoadingButton}
-                onClick={cancelChangePassword}
-              />
-              <SavelLoadingButton
-                loading={passwordLoadingButton}
-                endIcon={<CheckCircleIcon />}
-                id="change-password"
-                text="Save"
-              />
-            </Box>
-          </Grid>
-        )}
-      </Card> */}
     </Box>
   );
 }

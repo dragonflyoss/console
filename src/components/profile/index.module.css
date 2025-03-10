@@ -6,7 +6,6 @@
 
 .profileContainer {
   margin-bottom: 2rem;
-  /* padding: 2rem; */
   position: relative;
   height: 250px;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -30,8 +29,6 @@
   z-index: 10;
   position: absolute;
   display: inline-flex;
-  /* align-items: center; */
-  /* flex-direction: row; */
 }
 
 .tabs {
@@ -113,4 +110,9 @@
 .tabIcon {
   width: 1.5rem;
   height: 1.5rem;
+}
+
+.profileForm {
+  display: flex;
+  flex-direction: column;
 }

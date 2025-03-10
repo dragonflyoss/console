@@ -56,14 +56,14 @@ describe('Profile', () => {
     cy.get('#name').should('be.visible').and('have.text', 'root');
     cy.get('#email').should('be.visible').and('have.text', 'root@example.com');
     cy.get('#location').should('be.visible').and('have.text', 'Hangzhou');
-    cy.get('#phone').should('be.visible').and('have.text', 1234567890);
+    cy.get('#phone').should('be.visible').and('have.text', '+86 153 1234 5678');
     cy.get('#created_at').should('be.visible').and('have.text', '2023-11-06 06:09:04');
 
     // Check Update Personal Information form.
     cy.get('.MuiGrid-root > .MuiButtonBase-root').click();
 
     cy.get('#bio').should('have.value', 'I am root');
-    cy.get('#phone').should('have.value', 1234567890);
+    cy.get('#phone').should('have.value', '+86 153 1234 5678');
     cy.get('#location').should('have.value', 'Hangzhou');
     cy.get('#email').should('have.value', 'root@example.com');
   });
@@ -98,7 +98,7 @@ describe('Profile', () => {
     cy.get('.MuiGrid-root > .MuiButtonBase-root').click();
 
     cy.get('#bio').should('have.value', '');
-    cy.get('#phone').should('have.value', '');
+    cy.get('#phone').should('have.value', '+86');
     cy.get('#location').should('have.value', '');
     cy.get('#email').should('have.value', '');
   });
@@ -123,7 +123,7 @@ describe('Profile', () => {
     cy.get('.MuiGrid-root > .MuiButtonBase-root').click();
 
     cy.get('#bio').should('have.value', '');
-    cy.get('#phone').should('have.value', '');
+    cy.get('#phone').should('have.value', '+86');
     cy.get('#location').should('have.value', '');
     cy.get('#email').should('have.value', '');
   });
@@ -182,7 +182,7 @@ describe('Profile', () => {
       cy.get('#location').should('be.visible').and('have.text', 'Shanghai');
 
       // Check if profile phone is updated.
-      cy.get('#phone').should('be.visible').and('have.text', 15123456789);
+      cy.get('#phone').should('be.visible').and('have.text', '+86 153 1234 5678');
     });
 
     it('click the `CANCEL button', () => {
@@ -276,7 +276,7 @@ describe('Profile', () => {
 
       // Should display message phone the validation error.
       cy.get('#phone').clear();
-      cy.get('#phone').type('1234567890');
+      cy.get('#phone').type('+86 153 1234 123123');
 
       // Show verification error message.
       cy.get('#phone-helper-text').should('be.visible').and('have.text', 'Invalid phone number.');
@@ -284,7 +284,7 @@ describe('Profile', () => {
       cy.get('.css-1033rfx > .MuiTypography-root').should('exist').and('have.text', 'Update Personal Information');
 
       cy.get('#phone').clear();
-      cy.get('#phone').type('15123456789');
+      cy.get('#phone').type('+86 151 2345 6789');
 
       // Verification passed.
       cy.get('#phone-helper-text').should('not.exist');

@@ -21,7 +21,6 @@ import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import { useState, useEffect, useContext } from 'react';
 import { updateUser, getUser, updatePassword, signOut, getUserResponse } from '../../lib/api';
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -44,6 +43,7 @@ import { ReactComponent as Phone } from '../../assets/images/profile/phone.svg';
 import { ReactComponent as CreatedAt } from '../../assets/images/profile/created-at.svg';
 import { ReactComponent as Edit } from '../../assets/images/user/edit.svg';
 import { ReactComponent as UserID } from '../../assets/images/user/id.svg';
+import { ReactComponent as DetailRole } from '../../assets/images/user/detail-role.svg';
 import TabPanel from '@mui/lab/TabPanel';
 import { TabContext } from '@mui/lab';
 import _ from 'lodash';
@@ -77,6 +77,7 @@ const AntTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} /
 const AntTabs = styled(Tabs)({
   '& .MuiTabs-indicator': {
     backgroundColor: 'var(--palette--description-color)',
+    borderRadius: '1rem',
   },
 });
 
@@ -119,7 +120,7 @@ export default function Profile() {
     new_password: '',
   });
 
-  const { user, handleUserUpdate } = useContext(MyContext);
+  const { user, handleUserUpdate, role } = useContext(MyContext);
 
   const navigate = useNavigate();
 
@@ -622,10 +623,14 @@ export default function Profile() {
           <Box className={styles.profileImage}>
             <Box className={styles.profileContent}>
               <Stack direction="row" spacing={2}>
-                <Avatar alt="Remy Sharp" src={users?.avatar} className={styles.avatarContent} />
+                <Avatar
+                  alt="Remy Sharp"
+                  src="https://gips0.baidu.com/it/u=1113807624,3912186733&fm=3042&app=3042&f=JPEG&wm=1,baiduai,0,0,13,9&wmo=0,0&w=1280&h=720"
+                  className={styles.avatarContent}
+                />
               </Stack>
               <Box sx={{ pl: '1.4rem', pt: '1.4rem' }}>
-                <Typography id="name-title" variant="h5" color="#919EAB">
+                <Typography id="name-title" variant="h5" color="#FFFFFF">
                   {users?.name || '-'}
                 </Typography>
                 <Paper
@@ -633,19 +638,17 @@ export default function Profile() {
                   id="state"
                   sx={{
                     height: '1.4rem',
-                    background:
-                      users?.state === 'enable'
-                        ? 'var( --palette--description-color)'
-                        : 'var(--palette-dark-300Channel)',
+                    borderRadius: '0.2rem',
+                    background: 'var(--palette--description-color)',
                     color: '#FFFFFF',
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     padding: '0.4rem',
-                    mt: '0.2rem',
+                    mt: '0.4rem',
                   }}
                 >
-                  <Typography variant="body2">{_.upperFirst(users?.state) || ''}</Typography>
+                  <Typography variant="body1">{role || ''}</Typography>
                 </Paper>
               </Box>
             </Box>
@@ -666,7 +669,7 @@ export default function Profile() {
                 icon={<VpnKeyIcon className={styles.tabIcon} />}
                 key="2"
                 iconPosition="start"
-                label="Password"
+                label="Security"
                 id="tab-password"
                 value="2"
               />
@@ -678,7 +681,7 @@ export default function Profile() {
             {showPersonalInformation ? (
               <Box>
                 <Grid className={styles.informationHeader}>
-                  <Typography variant="subtitle1" fontFamily="mabry-bold">
+                  <Typography variant="h6" fontFamily="mabry-bold">
                     About me
                   </Typography>
                   <Button
@@ -705,11 +708,8 @@ export default function Profile() {
                   }}
                 />
                 <Box sx={{ p: '1.5rem 2rem 0 2rem' }}>
-                  <Typography id="description" variant="subtitle1" component="div" pb="1.5rem">
+                  <Typography id="description" variant="subtitle1" component="div">
                     {user?.bio || '-'}
-                  </Typography>
-                  <Typography variant="subtitle1" fontFamily="mabry-bold">
-                    Personal Details
                   </Typography>
                 </Box>
                 <Box className={styles.informationContainer}>
@@ -739,7 +739,7 @@ export default function Profile() {
                                 </Typography>
                               )
                             ) : (
-                              <Typography id={item.name} component="div" variant="body1" fontFamily="mabry-bold">
+                              <Typography id={item.name} component="div" variant="body1">
                                 {users?.[item?.name as keyof typeof users] || '-'}
                               </Typography>
                             )}

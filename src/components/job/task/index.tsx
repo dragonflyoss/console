@@ -60,6 +60,7 @@ export default function NavTabs() {
     borderBottom: '1px solid var(--palette-tab-border-color)',
     '& .MuiTabs-indicator': {
       backgroundColor: 'var(--palette--description-color)',
+      borderRadius: '1rem',
     },
   });
 

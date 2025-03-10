@@ -2,6 +2,7 @@
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
+  height: calc(100vh - 4.5rem);
 }
 
 .header {
@@ -22,6 +23,7 @@
   padding: 0.8rem 2rem;
   z-index: 1101;
   overflow-y: hidden;
+  height: 4.5rem;
 }
 
 .headerContent {
@@ -52,13 +54,13 @@
   display: flex;
   flex-direction: column;
   z-index: 1100;
-  border-right: 1px solid rgba(var(--palette-dark-500Channel) / 0.2);
+  border-right: 1px solid rgba(var(--palette-dark-500Channel) / 0.08);
   background-color: var(--palette-color-neutral-200);
 }
 
 .compactLayout {
   position: absolute;
-  right: -0.4rem;
+  right: -0.45rem;
   top: 1.5rem;
 }
 
@@ -222,7 +224,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 0.8rem 1.6rem;
+  padding: 0.8rem;
 }
 
 .menuAvatar {
@@ -238,6 +240,10 @@
 }
 
 .menuUserEmail {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   padding-top: 0.6rem;
   color: var(--palette-color);
 }

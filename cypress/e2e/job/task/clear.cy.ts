@@ -323,10 +323,6 @@ describe('Clear', () => {
           });
         },
       );
-
-      // Preheat API error response after three seconds.
-      cy.wait(60000);
-
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
 

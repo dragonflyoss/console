@@ -13,6 +13,7 @@ import {
   Snackbar,
   Typography,
   Link as RouterLink,
+  Tooltip,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -327,13 +328,21 @@ export default function Layout(props: any) {
                   onClose={() => {
                     setAnchorElement(null);
                   }}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
                   sx={{
                     '& .MuiMenu-paper': {
                       boxShadow: 'var(--palette-menu-shadow);',
                       borderRadius: 'var(--menu-border-radius);',
                     },
                     '& .MuiMenu-list': {
-                      width: '13rem',
+                      width: '14rem',
                       p: '0',
                     },
                   }}
@@ -344,9 +353,11 @@ export default function Layout(props: any) {
                       <Typography variant="body1" className={styles.menuUserName}>
                         {user?.name}
                       </Typography>
-                      <Typography variant="body1" className={styles.menuUserEmail}>
-                        {user?.email || '-'}
-                      </Typography>
+                      <Tooltip title={user?.email || '-'} placement="top">
+                        <Typography variant="body1" className={styles.menuUserEmail}>
+                          {user?.email || '-'}
+                        </Typography>
+                      </Tooltip>
                     </Box>
                     <Divider
                       sx={{
@@ -360,9 +371,9 @@ export default function Layout(props: any) {
                       id="profile-menu"
                       onClick={() => {
                         setAnchorElement(null);
-
                         navigate('/profile');
                       }}
+                      sx={{ borderRadius: 'var(--menu-border-radius)' }}
                     >
                       <ListItemIcon>
                         <PersonAdd fontSize="small" className={styles.menuItemIcon} />
@@ -371,7 +382,11 @@ export default function Layout(props: any) {
                         Profile
                       </Typography>
                     </MenuItem>
-                    <MenuItem id="logout-menu" onClick={handleLogout}>
+                    <MenuItem
+                      sx={{ borderRadius: 'var(--menu-border-radius)' }}
+                      id="logout-menu"
+                      onClick={handleLogout}
+                    >
                       <ListItemIcon>
                         <Logout fontSize="small" className={styles.menuItemIcon} />
                       </ListItemIcon>
@@ -389,7 +404,7 @@ export default function Layout(props: any) {
                   <IconButton
                     sx={{
                       backgroundColor: 'var(--palette-background-rotation)',
-                      border: '1px solid  rgba(var(--palette-dark-500Channel)/0.3)',
+                      border: '1px solid  rgba(var(--palette-dark-500Channel)/0.08)',
                       width: '0.8rem',
                       height: '2rem',
                       p: '0',

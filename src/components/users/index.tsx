@@ -9,12 +9,10 @@ import {
   DialogContent,
   Drawer,
   FormControl,
-  FormControlLabel,
   FormLabel,
   IconButton,
   ListItemAvatar,
   Radio,
-  RadioGroup,
   Skeleton,
   Snackbar,
   Tooltip,
@@ -34,9 +32,9 @@ import {
   Stack,
   Autocomplete,
   TextField,
-  Paper,
 } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import { getUserRoles, getUsers, getUser, deleteUserRole, putUserRole, getUsersResponse } from '../../lib/api';
 import { fuzzySearch, getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
@@ -575,47 +573,62 @@ export default function Users() {
       <Dialog
         open={switchUser}
         onClose={closeAllPopups}
-        fullWidth
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        maxWidth="sm"
+        sx={{
+          '& .MuiDialog-paper': {
+            minWidth: '37rem',
+          },
+        }}
       >
+        <Box className={styles.editRoleHeader}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Role className={styles.editRoleHeaderIcon} />
+            <Typography variant="h6" fontFamily="mabry-bold" pl="0.7rem">
+              Role
+            </Typography>
+          </Box>
+          <IconButton
+            aria-label="close"
+            id="close-delete-icon"
+            onClick={closeAllPopups}
+            sx={{
+              color: (theme) => theme.palette.grey[500],
+              p: '0.2rem',
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Divider />
         <DialogContent>
           <Box className={styles.changeRoleContainer}>
             <FormControl>
-              <FormLabel id="demo-controlled-radio-buttons-group">Select user permissions</FormLabel>
               <Box
                 sx={{
-                  backgroundColor:
-                    updateRole === 'root' ? 'var(--palette-green-500Channel)' : 'var(--palette-background-paper)',
-                  boxShadow: 'var(--palette--card-box-shadow)',
-                  transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)',
-                  borderRadius: '0.8rem',
-                  border: 'solid',
-                  zIndex: 0,
-                  color: 'var(--palette-color)',
-                  backgroundImage: 'none',
-                  overflow: 'hidden',
-                  borderWidth: '1px',
                   borderColor:
                     updateRole === 'root' ? 'var(--palette--description-color)' : 'var(--palette-background-paper)',
                 }}
-                className={styles.featuresEdit}
+                className={styles.roleEdit}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', width: '90%' }}>
-                  <Box pr="0.7rem">
-                    <Root className={styles.featuresIcon} />
-                  </Box>
-                  <Box width="90%">
+                <Box className={styles.roleContainer}>
+                  <Root className={styles.roleIcon} />
+                  <Box pl="0.7rem">
                     <Typography variant="body2" fontFamily="mabry-bold">
                       Root
                     </Typography>
-                    <Typography component="div" className={styles.roleText} variant="caption">
-                      The root user is the super user of the system and has the highest authority.
-                    </Typography>
+                    <Tooltip
+                      title="The root user is the super user of the system and has the highest authority."
+                      placement="top"
+                    >
+                      <Typography component="div" className={styles.roleText} variant="caption">
+                        The root user is the super user of the system and has the highest authority.
+                      </Typography>
+                    </Tooltip>
                   </Box>
                 </Box>
                 <Radio
+                  size="small"
                   value="root"
                   id="role-root"
                   name="radio-buttons"
@@ -632,36 +645,29 @@ export default function Users() {
               </Box>
               <Box
                 sx={{
-                  backgroundColor:
-                    updateRole === 'guest' ? 'var(--palette-green-500Channel)' : 'var(--palette-background-paper)',
-                  boxShadow: 'var(--palette--card-box-shadow)',
-                  transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)',
-                  borderRadius: '0.8rem',
-                  border: 'solid',
-                  zIndex: 0,
-                  color: 'var(--palette-color)',
-                  backgroundImage: 'none',
-                  overflow: 'hidden',
-                  borderWidth: '1px',
                   borderColor:
                     updateRole === 'guest' ? 'var(--palette--description-color)' : 'var(--palette-background-paper)',
                 }}
-                className={styles.featuresEdit}
+                className={styles.roleEdit}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', width: '90%' }}>
-                  <Box pr="0.7rem">
-                    <Guest className={styles.featuresIcon} />
-                  </Box>
-                  <Box width="90%">
+                <Box className={styles.roleContainer}>
+                  <Guest className={styles.roleIcon} />
+                  <Box pl="0.7rem">
                     <Typography variant="body2" fontFamily="mabry-bold">
                       Guest
                     </Typography>
-                    <Typography component="div" className={styles.roleText} variant="caption">
-                      The guest user has limited permissions and is intended for general user access.
-                    </Typography>
+                    <Tooltip
+                      title="The guest user has limited permissions and is intended for general user access."
+                      placement="top"
+                    >
+                      <Typography component="div" className={styles.roleText} variant="caption">
+                        The guest user has limited permissions and is intended for general user access.
+                      </Typography>
+                    </Tooltip>
                   </Box>
                 </Box>
                 <Radio
+                  size="small"
                   value="guest"
                   id="role-guest"
                   name="radio-buttons"

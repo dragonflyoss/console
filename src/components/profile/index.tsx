@@ -223,16 +223,7 @@ export default function Profile() {
         error: phoneError,
 
         onChange: (e: any) => {
-          // setUsers({ ...users, phone: e.target.value });
           handleChangePhone(e, profileForm[1]);
-        },
-
-        InputProps: {
-          startAdornment: (
-            <InputAdornment position="start">
-              <LocalPhoneIcon className={styles.textFieldIcon} />:
-            </InputAdornment>
-          ),
         },
       },
       syncError: false,

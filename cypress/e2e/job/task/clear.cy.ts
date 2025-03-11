@@ -323,6 +323,13 @@ describe('Clear', () => {
           });
         },
       );
+
+      // Executed every 1 minute and once after 1 minute.
+      cy.get('@cache').then(() => {
+        expect(interceptCount).to.be.greaterThan(0);
+        expect(interceptCount).to.be.closeTo(2, 1);
+      });
+
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
 

@@ -623,11 +623,7 @@ export default function Profile() {
           <Box className={styles.profileImage}>
             <Box className={styles.profileContent}>
               <Stack direction="row" spacing={2}>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://gips0.baidu.com/it/u=1113807624,3912186733&fm=3042&app=3042&f=JPEG&wm=1,baiduai,0,0,13,9&wmo=0,0&w=1280&h=720"
-                  className={styles.avatarContent}
-                />
+                <Avatar alt="Remy Sharp" src={user?.avatar} className={styles.avatarContent} />
               </Stack>
               <Box sx={{ pl: '1.4rem', pt: '1.4rem' }}>
                 <Typography id="name-title" variant="h5" color="#FFFFFF">

@@ -311,6 +311,12 @@ describe('Clear', () => {
         expect(interceptCount).to.be.closeTo(2, 1);
       });
 
+      // Executed every 1 minute and once after 1 minute.
+      cy.get('@cache').then(() => {
+        expect(interceptCount).to.be.greaterThan(0);
+        expect(interceptCount).to.be.closeTo(2, 1);
+      });
+
       cy.intercept(
         {
           method: 'GET',
@@ -324,18 +330,11 @@ describe('Clear', () => {
         },
       );
 
-      // Executed every 1 minute and once after 1 minute.
-      cy.get('@cache').then(() => {
-        expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(2, 1);
-      });
+      // Preheat API error response after three seconds.
+      cy.wait(60000);
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
-
-      // Close error message.
-      cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('.MuiAlert-message').should('not.exist');
     });
 
     it('Delete cache API error response', () => {

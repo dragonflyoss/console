@@ -238,31 +238,10 @@ describe('Create token', () => {
     // Then I see that the current page is the developer/personal-access-tokens/new!
     cy.url().should('include', '/developer/personal-access-tokens/new');
 
-    cy.get(
-      ':nth-child(1) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).click();
-
-    // Check if the preheat checkbox is checked.
-    cy.get(':nth-child(1) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input')
-      .should('be.checked')
-      .check({ force: true });
-
-    cy.get(
-      ':nth-child(2) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).click();
-
     // Check if the job checkbox is checked.
-    cy.get(':nth-child(2) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input')
-      .should('be.checked')
-      .check({ force: true });
-
-    cy.get(
-      ':nth-child(3) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).click();
+    cy.get('#job').should('be.checked').check({ force: true });
 
     // Check if the cluster checkbox is checked.
-    cy.get(':nth-child(3) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input')
-      .should('be.checked')
-      .check({ force: true });
+    cy.get('#cluster').should('be.checked').check({ force: true });
   });
 });

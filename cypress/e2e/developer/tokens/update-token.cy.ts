@@ -46,20 +46,11 @@ describe('Update token', () => {
     // Check the token description.
     cy.get('#bio').should('have.value', 'root-11 token, used to control of cluster');
 
-    // Check that the preheat checkbox.
-    cy.get(
-      ':nth-child(1) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).should('not.be.checked');
-
     // Check that the job checkbox.
-    cy.get(
-      ':nth-child(2) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).should('not.be.checked');
+    cy.get('#job').should('not.be.checked');
 
     // Check that the cluster checkbox.
-    cy.get(':nth-child(3) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input')
-      .should('be.checked')
-      .check({ force: true });
+    cy.get('#cluster').should('be.checked').check({ force: true });
   });
 
   it('when no data is loaded', () => {
@@ -85,20 +76,11 @@ describe('Update token', () => {
     // Check the token description.
     cy.get('#bio').should('have.value', '');
 
-    // Check that the preheat checkbox.
-    cy.get(
-      ':nth-child(1) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).should('not.be.checked');
-
     // Check that the job checkbox.
-    cy.get(
-      ':nth-child(2) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).should('not.be.checked');
+    cy.get('#job').should('not.be.checked');
 
     // Check that the cluster checkbox.
-    cy.get(
-      ':nth-child(3) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).should('not.be.checked');
+    cy.get('#cluster').should('not.be.checked');
   });
 
   it('can update token', () => {
@@ -114,7 +96,7 @@ describe('Update token', () => {
             name: 'root-11',
             bio: 'update root-11',
             token: 'ODhlMjFkY2UtM2Y1ZS00ZTVmLThkMzYtMzE2MzhiNmQxODlj',
-            scopes: ['preheat'],
+            scopes: ['cluster'],
             state: 'active',
             expired_at: '2033-12-03T06:33:27.032Z',
             user_id: 1,
@@ -143,23 +125,10 @@ describe('Update token', () => {
     cy.get('#demo-simple-select').click();
     cy.get('[data-value="3650"]').click();
 
-    cy.get(
-      ':nth-child(1) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).click();
-
-    // Check if the preheat checkbox is checked.
-    cy.get(':nth-child(1) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input')
-      .should('be.checked')
-      .check({ force: true });
-
-    cy.get(
-      ':nth-child(3) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).click();
+    cy.get('#cluster').click();
 
     // Check if the cluster checkbox is checked.
-    cy.get(
-      ':nth-child(3) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).should('not.be.checked');
+    cy.get('#cluster').should('not.be.checked');
 
     cy.intercept(
       {
@@ -318,19 +287,10 @@ describe('Update token', () => {
     // Verification passed.
     cy.get('#bio-helper-text').should('not.exist');
 
-    // Check that the preheat checkbox.
-    cy.get(':nth-child(1) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input')
-      .should('not.be.checked')
-      .check({ force: true });
-
     // Check that the job checkbox.
-    cy.get(':nth-child(2) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input')
-      .should('not.be.checked')
-      .check({ force: true });
+    cy.get('#job').should('not.be.checked').check({ force: true });
 
     // Check that the cluster checkbox.
-    cy.get(':nth-child(3) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input')
-      .should('be.checked')
-      .check({ force: true });
+    cy.get('#cluster').should('be.checked').check({ force: true });
   });
 });

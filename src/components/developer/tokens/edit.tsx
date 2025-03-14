@@ -50,7 +50,6 @@ export default function UpdateTokens() {
   const [selectedTime, setSelectedTime] = useState('');
   const [expiredTime, setExpiredTime] = useState('');
   const [expiredTimeError, setExpiredTimeError] = useState(false);
-  const [preheat, setPreheat] = useState(false);
   const [job, setJob] = useState(false);
   const [cluster, setCluster] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
@@ -108,7 +107,6 @@ export default function UpdateTokens() {
           const tokens = await getToken(params?.id);
           setTokens(tokens);
           setExpiredTime(tokens.expired_at);
-          setPreheat(tokens.scopes.includes('preheat'));
           setJob(tokens.scopes.includes('job'));
           setCluster(tokens.scopes.includes('cluster'));
           setIsLoading(false);
@@ -140,7 +138,7 @@ export default function UpdateTokens() {
     setLoadingButton(true);
     event.preventDefault();
 
-    const scopes = [preheat ? 'preheat' : '', job ? 'job' : '', cluster ? 'cluster' : ''];
+    const scopes = [job ? 'job' : '', cluster ? 'cluster' : ''];
     const filteredScopes = scopes.filter((item) => item !== '');
 
     const data = new FormData(event.currentTarget);
@@ -324,29 +322,11 @@ export default function UpdateTokens() {
                 <Box display="flex" alignItems="center">
                   <Box width="10%">
                     <FormControlLabel
-                      label="preheat"
-                      control={
-                        <Checkbox
-                          checked={preheat}
-                          onChange={(event: any) => {
-                            setPreheat(event.target.checked);
-                          }}
-                          sx={{ color: 'var(--button-color)!important' }}
-                        />
-                      }
-                    />
-                  </Box>
-                  <Typography variant="body2" color="rgb(82 82 82 / 87%)" ml="1rem">
-                    Full control of preheating, it's used for preheating of harbor.
-                  </Typography>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <Box width="10%">
-                    <FormControlLabel
                       label="job"
                       control={
                         <Checkbox
                           checked={job}
+                          id="job"
                           onChange={(event: any) => {
                             setJob(event.target.checked);
                           }}
@@ -366,6 +346,7 @@ export default function UpdateTokens() {
                       label="cluster"
                       control={
                         <Checkbox
+                          id="cluster"
                           checked={cluster}
                           onChange={(event: any) => {
                             setCluster(event.target.checked);

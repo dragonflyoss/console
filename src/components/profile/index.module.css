@@ -7,7 +7,7 @@
 .profileContainer {
   margin-bottom: 2rem;
   position: relative;
-  height: 14rem;
+  height: 13rem;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   border-radius: 16px;
@@ -15,8 +15,8 @@
 }
 
 .profileImage {
-  background-image: linear-gradient(0deg, rgba(0 75 80 / 0.8), rgba(0 75 80 / 0.8)),
-    url(../../assets/images/profile/cover-4.webp);
+  background-image: linear-gradient(0deg, rgba(0 75 80 / 0.2), rgba(0 75 80 / 0.4)),
+    url(../../assets/images/profile/cover.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;

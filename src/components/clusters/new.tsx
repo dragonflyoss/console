@@ -237,6 +237,7 @@ export default function NewCluster() {
           >
             <HelpIcon
               sx={{
+                color: 'var(--palette-grey-300Channel)',
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
@@ -301,6 +302,7 @@ export default function NewCluster() {
           >
             <HelpIcon
               sx={{
+                color: 'var(--palette-grey-300Channel)',
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',

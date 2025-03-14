@@ -15,7 +15,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { setPageTitle } from '../../lib/utils';
 import { ReactComponent as Login } from '../../assets/images/login/login.svg';
 import { ReactComponent as PageLoading } from '../../assets/images/login/page-loading.svg';
-import HeaderLayout from '../dark-layout';
+import { GithubLayout, HeaderLayout } from '../dark-layout';
 
 export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -173,9 +173,7 @@ export default function SignIn() {
         <Rotation />
       </Grid>
       <Grid item xs={6} className={styles.container}>
-        <Box className={styles.header}>
-          <HeaderLayout className={styles.headerContent} />
-        </Box>
+        <HeaderLayout className={styles.header} />
         <Container component="main" maxWidth="xs">
           <Box
             sx={{
@@ -254,6 +252,21 @@ export default function SignIn() {
                     <Typography component="span">Create an account.</Typography>
                   </RouterLink>
                 </Grid>
+              </Box>
+              <Box sx={{ textAlign: 'right', paddingTop: '1rem' }}>
+                <RouterLink
+                  id="github"
+                  underline="hover"
+                  href="https://github.com/dragonflyoss/dragonfly"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => {
+                    setPageLoding(true);
+                  }}
+                  sx={{ color: '#2E8F79' }}
+                >
+                  <Typography component="span"> More info...</Typography>
+                </RouterLink>
               </Box>
             </Box>
           </Box>

@@ -4,7 +4,12 @@
   color: var(--palette-secondary-dark);
 }
 
-.container {
-  display: flex;
-  align-items: center;
+.icon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.darkModeIcon {
+  width: 1.2rem;
+  height: 1.2rem;
 }

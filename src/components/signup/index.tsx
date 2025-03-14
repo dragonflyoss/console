@@ -14,7 +14,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { setPageTitle } from '../../lib/utils';
 import { ReactComponent as Login } from '../../assets/images/login/login.svg';
 import { ReactComponent as PageLoading } from '../../assets/images/login/page-loading.svg';
-import HeaderLayout from '../dark-layout';
+import { GithubLayout, HeaderLayout } from '../dark-layout';
 
 export default function SignUp() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -241,9 +241,7 @@ export default function SignUp() {
         <Rotation />
       </Grid>
       <Grid item xs={6} className={styles.container}>
-        <Box className={styles.header}>
-          <HeaderLayout className={styles.headerContent} />
-        </Box>
+        <HeaderLayout className={styles.header} />
         <Container component="main" maxWidth="xs">
           <Box
             sx={{

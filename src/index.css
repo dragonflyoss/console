@@ -10,10 +10,11 @@
 
 body {
   color: #1c293a !important;
+
   background-color: #ffffff !important;
   --palette--description-color: #2e8f79;
   --palette-color: #1c293a;
-  --palette--button-text-color: #ffffff;
+  --palette--button-text-color: #fff;
   --palette--button-color: #1c293a;
   --palette-secondary-dark: #1c293a;
   --palette--hover-button-text-color: #1d3048;
@@ -22,19 +23,27 @@ body {
   --palette--button-loading-color: #dedede;
   --palette--button-loading-size-color: #000000;
   --palette--save-color: #1c293a;
-  --palette--calcel-hover-corlor: #f4f3f6;
+  --palette--calcel-hover-corlor: #f7f7f7;
   --palette--calcel-background-color: rgb(255, 255, 255);
   --palette--scopes-icon-color: #edeff2;
   --palette--table-title-color: #f4f6f8;
   --palette--table-title-text-color: #637381;
+  --palette-main-background-paper: #ffffff;
   --palette--menu-color: #00a76f;
-  --palette--menu-background-color: rgba(0, 167, 111, 0.1);
-  --palette--hover-menu-background-color: rgba(0, 167, 111, 0.2);
-  --palette-background-menu-paper: #ffffff;
+  --palette-sidebar-menu-background-color: #1c293a;
+  --palette--menu-background-color: #ffffff;
+  --palette-sidebar-expand-background-color: #ffffff;
+  --palette--hover-menu-background-color: #f9f9f9;
+  --palette-background-menu-paper: #fff;
+  --palette-header-background-color: #f9fafb;
+  --palette-sidebar-background-color: #f7f7f7;
+  --palette-sidebar-menu-color: #676d7a;
+  --paletteexpandable-sidebar-navigation: #dddddd;
   --menu-border-radius: 0.4rem;
   --palette-background-menu: rgba(255, 255, 255);
-  --palette-common-white: #ffffff;
-  --palette-background-paper: #ffffff;
+  --palette-common-white: #fff;
+  --palette-background-paper: #fff;
+  --palette-sidebar-user-background-paper: #fff;
   --palette--no-data-color: 145 158 171;
   --palette-text-disabled: #919eab;
   --palette--text-palette-text-secondary: #637381;
@@ -44,13 +53,16 @@ body {
   --palette-detail-lable-color: #515151;
   --palette-action-hover: rgba(145 158 171 / 0.08);
   --palette-background-rotation: #f6f7f9;
-  --palette-background--hover-rotation: #ededef;
+  --palette-background--hover-rotation: #e7e8ea;
   --palette-tab-border-color: #e8e8e8;
   --palette-text-secondary: #1c293a;
+  --palette-grey-600Channel: #e4e5e6;
   --palette-grey-500Channel: 145 158 171;
   --palette-grey-400Channel: #e4e5e5;
   --palette-grey-300Channel: rgba(0, 0, 0, 0.198);
   --palette-grey-200Channel: #1c293a;
+  --palette-grey-100Channel: rgb(232, 232, 232);
+  /* --palette-grey-100Channel: #4b4e51; */
   --palette-grey-tab: #6b7681;
   --palette-white-500Channel: #f7f7f7;
   --palette-white-400Channel: #efefef;
@@ -60,8 +72,9 @@ body {
   --palette-dark-200Channel: #e9e9e9;
   --palette-green-500Channel: rgb(237, 247, 237);
   --palette-color-neutral-200: #e8e8e8;
+  --palette--main-box-shadow: 0 0.125rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.245rem -1.0625rem #0000004d;
   --palette--card-box-shadow: rgba(145, 158, 171, 0.3) 0px 0px 2px 0px, rgba(145, 158, 171, 0.2) 0px 2px 24px -4px;
-  --palette-menu-shadow: 0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;
+  --palette-menu-shadow: 0 0.02rem 0.08rem 0.004rem #32325d6b, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;
   --custom-shadows-dropdown: 0 0 2px 0 rgba(145 158 171 / 0.24), 2px 5px 0px -5px rgba(145 158 171 / 0.24);
   --custom-sidebar-shadows-dropdown: 0 0 2px 0 rgba(0 0 0 / 0.24), 2px 5px 0px -5px rgba(145 158 171 / 0.24);
 }
@@ -69,14 +82,24 @@ body {
 [data-theme='dark'] body {
   color: rgba(255, 255, 255, 0.8) !important;
   background-color: #161b23 !important;
+  --palette-main-background-paper: #0d121e;
   --palette-color: rgba(255, 255, 255, 0.7);
   --palette-secondary-dark: #ececec;
   --palette--description-color: #00a76f;
-  --palette-background-paper: #1c252e;
+  --palette-background-paper: #1f2430;
+  --palette-sidebar-user-background-paper: #161b23;
   --palette-background-menu-paper: #161b23;
   --palette-menu-shadow: none;
+  --palette--menu-background-color: #2a2f3b;
+  --palette-sidebar-expand-background-color: #2a2f3b;
+  --palette--hover-menu-background-color: #2d323d;
   --palette-background-menu: rgba(28, 37, 46);
   --palette-text-secondary: #919eab;
+  --palette-header-background-color: #161b23;
+  --palette-sidebar-menu-background-color: rgba(255, 255, 255, 0.8);
+  --palette-sidebar-background-color: #1f2430;
+  --palette-sidebar-menu-color: rgba(255, 255, 255, 0.8);
+  --paletteexpandable-sidebar-navigation: #303540;
   --palette-grey-tab: #919eab;
   --palette--button-text-color: rgba(255, 255, 255, 0.8);
   --palette--button-color: #00a76f;
@@ -84,16 +107,18 @@ body {
   --palette--save-color: #161b23;
   --palette--calcel-hover-corlor: rgba(145 158 171 / 0.3);
   --palette--calcel-background-color: rgba(145 158 171 / 0.2);
-  --palette-card-hover-background-color: #1c293ae3;
+  --palette-card-hover-background-color: #1a202d;
   --palette--table-title-color: #28323d;
   --palette--table-title-text-color: #919eab;
   --palette-detail-lable-color: #a1a0a2;
-  --palette-background-rotation: #1c252e;
+  --palette-background-rotation: #1f2430;
   --palette-background--hover-rotation: #25303c;
   --palette-tab-border-color: #343536;
-  --palette-grey-400Channel: #3e3e3e;
+  --palette-grey-600Channel: #2a2f3b;
+  --palette-grey-400Channel: #474747;
   --palette-grey-300Channel: #c6c6c6;
   --palette-grey-200Channel: rgba(255, 255, 255, 0.7);
+  --palette-grey-100Channel: #4b4e51;
   --palette-white-500Channel: #e8e8e8;
   --palette-white-400Channel: #d1d1d1;
   --palette-dark-500Channel: 145 158 171;
@@ -101,7 +126,8 @@ body {
   --palette-dark-300Channel: #5d5f61;
   --palette-dark-200Channel: #28323d;
   --palette-green-500Channel: rgb(12, 19, 13);
-  --palette-color-neutral-200: #1c252e;
+  --palette-color-neutral-200: #1f2430;
+  --palette--main-box-shadow: rgb(255 255 255 / 23%) 0px 0px 0px 0px, rgb(202 204 206 / 32%) 0px 1px 1px -3px;
   --custom-shadows-dropdown: 0 0 1px 0 rgb(93 94 95 / 20%), 1px 2px 0px -2px rgb(103 108 112 / 24%);
   --custom-sidebar-shadows-dropdown: 0 0 2px 0 rgba(0 0 0 / 0.34), -20px 20px 40px -4px rgba(0 0 0 / 0.24);
   --palette--card-box-shadow: 0 0 2px 0 rgba(0 0 0 / 0.2), 0 12px 24px -4px rgba(0 0 0 / 0.12);

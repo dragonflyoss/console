@@ -1,5 +1,4 @@
 import Paper from '@mui/material/Paper';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
   Alert,
   Box,
@@ -86,20 +85,25 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import Card from '../../card';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1C293A',
-    },
-    secondary: {
-      main: '#2E8F79',
-    },
-  },
-  typography: {
-    fontFamily: 'mabry-light,sans-serif',
-  },
-});
+import { ReactComponent as Total } from '../../../assets/images/cluster/peer/total.svg';
+import { ReactComponent as Active } from '../../../assets/images/cluster/scheduler/active.svg';
+import { ReactComponent as Inactive } from '../../../assets/images/cluster/scheduler/inactive.svg';
+import { ReactComponent as SelectCard } from '../../../assets/images/cluster/scheduler/card.svg';
+import { ReactComponent as SelectTable } from '../../../assets/images/cluster/scheduler/table.svg';
+import { ReactComponent as ID } from '../../../assets/images/cluster/id.svg';
+import { ReactComponent as Status } from '../../../assets/images/cluster/status.svg';
+import { ReactComponent as IP } from '../../../assets/images/cluster/ip.svg';
+import { ReactComponent as CardFeatures } from '../../../assets/images/cluster/card-features.svg';
+import { ReactComponent as Delete } from '../../../assets/images/cluster/delete.svg';
+import { ReactComponent as IcContent } from '../../../assets/images/cluster/scheduler/ic-content.svg';
+import { ReactComponent as InactiveTotal } from '../../../assets/images/cluster/inactive-total.svg';
+import { ReactComponent as DeleteWarning } from '../../../assets/images/cluster/delete-warning.svg';
+import { ReactComponent as DeleteInactive } from '../../../assets/images/cluster/delete-inactive.svg';
+import { ReactComponent as DeleteInactiveError } from '../../../assets/images/cluster/delete-inactive-error.svg';
+import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
+import { ReactComponent as Features } from '../../../assets/images/cluster/features.svg';
+import { ReactComponent as Preheat } from '../../../assets/images/cluster/preheat.svg';
+import { ReactComponent as Schedule } from '../../../assets/images/cluster/scheduler.svg';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 Chart.defaults.font.family = 'mabry-light';
@@ -123,6 +127,7 @@ function CircularProgressWithLabel(props: LinearProgressProps & { value: number 
     </Box>
   );
 }
+
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
     margin: theme.spacing(0.5),
@@ -566,7 +571,7 @@ export default function ShowCluster() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -588,9 +593,7 @@ export default function ShowCluster() {
         </Alert>
       </Snackbar>
       <Box className={styles.openDeleteInactiveDialog}>
-        <Typography variant="h6" fontFamily="mabry-bold">
-          Schedulers
-        </Typography>
+        <Typography variant="h5">Schedulers</Typography>
         <MuiTooltip title="Delete inactive schedulers." placement="top">
           <Button
             variant="contained"
@@ -601,10 +604,9 @@ export default function ShowCluster() {
             }}
             className={styles.deleteButton}
             sx={{
-              '&.MuiButton-root': {
-                backgroundColor: 'var(--button-color)',
-                color: '#fff',
-              },
+              background: 'var(--palette--button-color)',
+              color: 'var(--palette--button-text-color)',
+              ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
             }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
@@ -617,7 +619,7 @@ export default function ShowCluster() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
                   Total
                 </Typography>
                 {isLoading ? (
@@ -629,12 +631,12 @@ export default function ShowCluster() {
                     {schedulerCount.length}
                   </Typography>
                 )}
-                <Typography variant="body2" color="var(--table-title-text-color)">
+                <Typography variant="body2" color="var(--palette--table-title-text-color)">
                   number of schedulers
                 </Typography>
               </Box>
               <Box className={styles.navigation} />
-              <Box component="img" className={styles.navigationIcon} src="/icons/cluster/peer/total.svg" />
+              <Total className={styles.navigationIcon} />
             </Box>
           </Card>
         </Box>
@@ -642,7 +644,7 @@ export default function ShowCluster() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
                   Active
                 </Typography>
                 {isLoading ? (
@@ -654,12 +656,12 @@ export default function ShowCluster() {
                     {numberOfActiveSchedulers}
                   </Typography>
                 )}
-                <Typography variant="body2" color="var(--table-title-text-color)">
+                <Typography variant="body2" color="var(--palette--table-title-text-color)">
                   number of active schedulers
                 </Typography>
               </Box>
               <Box className={styles.navigation} />
-              <Box component="img" className={styles.navigationIcon} src="/icons/cluster/scheduler/active.svg" />
+              <Active className={styles.navigationIcon} />
             </Box>
           </Card>
         </Box>
@@ -667,7 +669,7 @@ export default function ShowCluster() {
           <Card className={styles.navigationWrapper}>
             <Box className={styles.navigationContent}>
               <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="#637381">
+                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
                   Inactive
                 </Typography>
                 {isLoading ? (
@@ -679,12 +681,12 @@ export default function ShowCluster() {
                     {numberOfInactiveSchedulers}
                   </Typography>
                 )}
-                <Typography variant="body2" color="var(--table-title-text-color)">
+                <Typography variant="body2" color="var(--palette--table-title-text-color)">
                   number of inactive schedulers
                 </Typography>
               </Box>
               <Box className={styles.navigation} />
-              <Box component="img" className={styles.navigationIcon} src="/icons/cluster/scheduler/inactive.svg" />
+              <Inactive className={styles.navigationIcon} />
             </Box>
           </Card>
         </Box>
@@ -740,7 +742,7 @@ export default function ShowCluster() {
           />
         </Stack>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper' }}>
+          <List component="nav" aria-label="Device settings">
             <ListItemButton
               id="lock-button"
               aria-haspopup="listbox"
@@ -767,6 +769,10 @@ export default function ShowCluster() {
               role: 'listbox',
             }}
             sx={{
+              '& .MuiMenu-paper': {
+                boxShadow: 'var(--palette-menu-shadow)',
+                borderRadius: '0.6rem',
+              },
               '& .MuiMenu-list': {
                 p: 0,
                 width: '10rem',
@@ -779,7 +785,12 @@ export default function ShowCluster() {
               </Typography>
               <Divider sx={{ mb: '0.2rem' }} />
               {statusList.map((item, index) => (
-                <MenuItem key={item.name} value={item.name} onClick={() => handleMenuItemClick(item)}>
+                <MenuItem
+                  className={styles.menuItem}
+                  key={item.name}
+                  value={item.name}
+                  onClick={() => handleMenuItemClick(item)}
+                >
                   {item.lable}
                 </MenuItem>
               ))}
@@ -792,6 +803,7 @@ export default function ShowCluster() {
               border: `1px solid var(--palette-action-hover)`,
               flexWrap: 'wrap',
               ml: '1rem',
+              backgroundColor: 'var(--palette-background-paper)',
             })}
           >
             <StyledToggleButtonGroup
@@ -802,10 +814,10 @@ export default function ShowCluster() {
               aria-label="text alignment"
             >
               <ToggleButton id="card" value="card" aria-label="centered">
-                <Box component="img" src="/icons/cluster/scheduler/card.svg" />
+                <SelectCard />
               </ToggleButton>
               <ToggleButton id="table" value="table" aria-label="left aligned">
-                <Box component="img" src="/icons/cluster/scheduler/table.svg" />
+                <SelectTable />
               </ToggleButton>
             </StyledToggleButtonGroup>
           </Paper>
@@ -818,7 +830,7 @@ export default function ShowCluster() {
               <Box className={styles.clusterListContent}>
                 <Box p="1.2rem 1.2rem 0 1.2rem">
                   <Box display="flex" mb="0.5rem">
-                    <img className={styles.idIcon} src="/icons/cluster/id.svg" alt="" />
+                    <ID className={styles.idIcon} />
                     <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
                   </Box>
                   <Typography variant="h6" mb="0.5rem" className={styles.nameText}>
@@ -831,7 +843,7 @@ export default function ShowCluster() {
                 <Divider
                   sx={{
                     borderStyle: 'dashed',
-                    borderColor: 'var(--palette-divider)',
+                    borderColor: 'var(--palette--palette-divider)',
                     borderWidth: '0px 0px thin',
                     m: '1rem 0',
                   }}
@@ -861,7 +873,7 @@ export default function ShowCluster() {
                         aria-expanded={Boolean(schedulerAnchorElement) ? 'true' : undefined}
                         className={styles.moreVertIcon}
                       >
-                        <MoreVertIcon color="action" />
+                        <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                       </IconButton>
                       <Menu
                         anchorEl={schedulerAnchorElement}
@@ -878,18 +890,18 @@ export default function ShowCluster() {
                         }}
                         sx={{
                           '& .MuiMenu-paper': {
-                            boxShadow:
-                              '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
+                            boxShadow: 'var(--custom-shadows-dropdown)',
+                            borderRadius: '0.6rem',
                           },
                           '& .MuiMenu-list': {
-                            p: 0,
                             width: '11rem',
+                            p: '0',
                           },
-                          right: 0,
                         }}
                       >
                         <Box className={styles.menu}>
                           <MenuItem
+                            className={styles.menuItem}
                             id={`view-${schedulerSelectedRow?.id}`}
                             onClick={() => {
                               navigate(`/clusters/${params.id}/schedulers/${schedulerSelectedRow?.id}`);
@@ -905,6 +917,7 @@ export default function ShowCluster() {
                           </MenuItem>
                           {schedulerFeatures && schedulerFeatures.length > 0 ? (
                             <MenuItem
+                              className={styles.menuItem}
                               id={`edit-${schedulerSelectedRow?.id}`}
                               onClick={() => {
                                 setOpenSchedulerEditFeatures(true);
@@ -922,6 +935,7 @@ export default function ShowCluster() {
                             ''
                           )}
                           <MenuItem
+                            className={styles.menuItem}
                             id={`delete-${schedulerSelectedRow?.id}`}
                             onClick={() => {
                               openHandleScheduler(schedulerSelectedRow);
@@ -929,16 +943,20 @@ export default function ShowCluster() {
                             }}
                           >
                             <ListItemIcon>
-                              <DeleteIcon fontSize="small" sx={{ color: 'var(--delete-button-color)' }} />
+                              <DeleteIcon fontSize="small" sx={{ color: 'var(--palette--delete-button-color)' }} />
                             </ListItemIcon>
-                            <Typography variant="body2" className={styles.menuText} color="var(--delete-button-color)">
+                            <Typography
+                              variant="body2"
+                              className={styles.menuText}
+                              color="var(--palette--delete-button-color)"
+                            >
                               Delete
                             </Typography>
                           </MenuItem>
                         </Box>
                       </Menu>
                       <Box display="flex">
-                        <img className={styles.idIcon} src="/icons/cluster/id.svg" alt="" />
+                        <ID className={styles.idIcon} />
                         {isLoading ? (
                           <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
                         ) : (
@@ -964,7 +982,7 @@ export default function ShowCluster() {
                         </RouterLink>
                       </MuiTooltip>
                       <Box sx={{ display: 'flex', width: '50%', alignItems: 'center' }}>
-                        <Box component="img" className={styles.statusIcon} src="/icons/cluster/status.svg" />
+                        <Status className={styles.statusIcon} />
                         <Chip
                           label={_.upperFirst(item?.state) || ''}
                           size="small"
@@ -974,10 +992,12 @@ export default function ShowCluster() {
                             borderRadius: '0.2rem',
                             backgroundColor:
                               item?.state === 'active'
-                                ? 'var(--menu-background-color)'
+                                ? 'var(--palette--menu-background-color)'
                                 : 'var(--palette-background-inactive)',
                             color:
-                              item?.state === 'active' ? 'var(--description-color)' : 'var(--table-title-text-color)',
+                              item?.state === 'active'
+                                ? 'var(--palette--description-color)'
+                                : 'var(--palette--table-title-text-color)',
                             border: 0,
                             fontFamily: 'mabry-bold',
                           }}
@@ -987,14 +1007,14 @@ export default function ShowCluster() {
                     <Divider
                       sx={{
                         borderStyle: 'dashed',
-                        borderColor: 'var(--palette-divider)',
+                        borderColor: 'var(--palette--palette-divider)',
                         borderWidth: '0px 0px thin',
                       }}
                     />
                     <Box p="1.5rem">
                       <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: '1rem' }}>
-                          <Box component="img" className={styles.statusIcon} src="/icons/cluster/ip.svg" />
+                          <IP className={styles.statusIcon} />
                           <Typography
                             id={`card-ip-${item.id}`}
                             variant="caption"
@@ -1004,7 +1024,7 @@ export default function ShowCluster() {
                           </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', width: '100%', alignItems: 'center' }}>
-                          <Box component="img" className={styles.statusIcon} src="/icons/cluster/card-features.svg" />
+                          <CardFeatures className={styles.statusIcon} />
                           <Box className={styles.features} id={`card-features-${item.id}`}>
                             {Array.isArray(item.features) &&
                               item.features.map((features: string, id: any) => (
@@ -1016,7 +1036,7 @@ export default function ShowCluster() {
                                   sx={{
                                     borderRadius: '0.2rem',
                                     background: 'var(--palette-background-inactive)',
-                                    color: 'var(--table-title-text-color)',
+                                    color: 'var(--palette--table-title-text-color)',
                                     mr: '0.4rem',
                                     border: '0',
                                     fontFamily: 'mabry-bold',
@@ -1032,7 +1052,7 @@ export default function ShowCluster() {
             </Box>
           ) : (
             <Card className={styles.noData}>
-              <Box component="img" className={styles.nodataIcon} src="/icons/cluster/scheduler/ic-content.svg" />
+              <IcContent className={styles.nodataIcon} />
               <Typography id="no-scheduler" variant="h6" className={styles.nodataText}>
                 You don't have scheduler cluster.
               </Typography>
@@ -1041,270 +1061,277 @@ export default function ShowCluster() {
         </Box>
       ) : (
         <Card>
-          <Box width="100%">
-            <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
-              <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
-                <TableRow>
+          <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
+            <TableHead sx={{ backgroundColor: 'var(--palette--table-title-color)' }}>
+              <TableRow>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    ID
+                  </Typography>
+                </TableCell>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    Hostname
+                  </Typography>
+                </TableCell>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    IP
+                  </Typography>
+                </TableCell>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    Port
+                  </Typography>
+                </TableCell>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    Status
+                  </Typography>
+                </TableCell>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    Features
+                  </Typography>
+                </TableCell>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    Operation
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody id="scheduler-table-body" sx={{ border: 'none' }}>
+              {isLoading ? (
+                <TableRow
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 },
+                  }}
+                >
                   <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
-                      ID
-                    </Typography>
+                    <Skeleton data-testid="isloading" />
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
-                      Hostname
-                    </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton data-testid="isloading" width="4rem" />
+                    </Box>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
-                      IP
-                    </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton data-testid="isloading" width="4rem" />
+                    </Box>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
-                      Port
-                    </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton data-testid="isloading" width="2rem" />
+                    </Box>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
-                      Status
-                    </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton data-testid="isloading" width="3.5rem" height="2.6rem" />
+                    </Box>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
-                      Features
-                    </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton data-testid="isloading" width="3.8rem" height="2.8rem" />
+                    </Box>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="subtitle1" className={styles.tableHeader}>
-                      Operation
-                    </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton data-testid="isloading" width="2.5rem" height="2.5rem" />
+                    </Box>
                   </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody id="scheduler-table-body" sx={{ border: 'none' }}>
-                {isLoading ? (
-                  <TableRow
-                    sx={{
-                      '&:last-child td, &:last-child th': { border: 0 },
-                    }}
-                  >
-                    <TableCell align="center">
-                      <Skeleton data-testid="isloading" />
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Skeleton data-testid="isloading" width="4rem" />
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Skeleton data-testid="isloading" width="4rem" />
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Skeleton data-testid="isloading" width="2rem" />
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Skeleton data-testid="isloading" width="3.5rem" height="2.6rem" />
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Skeleton data-testid="isloading" width="3.8rem" height="2.8rem" />
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Skeleton data-testid="isloading" width="2.5rem" height="2.5rem" />
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ) : allSchedulers.length === 0 ? (
-                  <TableCell id="no-scheduler-table" colSpan={9} align="center" sx={{ border: 0 }}>
-                    You don't have scheduler cluster.
-                  </TableCell>
-                ) : (
-                  <>
-                    {Array.isArray(allSchedulers) &&
-                      allSchedulers.map((item: any) => {
-                        return (
-                          <TableRow
-                            key={item?.id}
-                            selected={schedulerSelectedRow === item}
-                            sx={{
-                              '&:last-child td, &:last-child th': { border: 0 },
-                              ':hover': { backgroundColor: 'var(--palette-action-hover)' },
-                            }}
-                            className={styles.tableRow}
-                          >
-                            <TableCell align="center" id={`id-${item?.id}`}>
-                              {item?.id}
-                            </TableCell>
-                            <TableCell align="center" id={`hostname-${item?.host_name}`}>
-                              <RouterLink
-                                component={Link}
-                                to={`/clusters/${params.id}/schedulers/${item?.id}`}
-                                underline="hover"
-                                sx={{ color: 'var(--description-color)' }}
-                              >
-                                {item?.host_name}
-                              </RouterLink>
-                            </TableCell>
-                            <TableCell align="center" id={`ip-${item?.id}`}>
-                              {item?.ip}
-                            </TableCell>
-                            <TableCell align="center" id={`port-${item?.port}`}>
-                              {item?.port}
-                            </TableCell>
-                            <TableCell align="center">
-                              <Chip
-                                id={`state-${item?.id}`}
-                                label={_.upperFirst(item?.state) || ''}
-                                size="small"
-                                variant="outlined"
-                                sx={{
-                                  borderRadius: '0.2rem',
-                                  backgroundColor:
-                                    item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                                  color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
-                                  borderColor:
-                                    item?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
-                                  fontWeight: 'bold',
-                                }}
-                              />
-                            </TableCell>
-                            <TableCell align="center" id={`features-${item?.id}`}>
-                              <Box className={styles.features}>
-                                {Array.isArray(item.features) &&
-                                  item.features.map((features: string, id: any) => (
-                                    <Chip
-                                      key={id}
-                                      label={_.upperFirst(features) || ''}
-                                      size="small"
-                                      variant="outlined"
-                                      sx={{
-                                        borderRadius: '0.2rem',
-                                        background: 'var(--button-color)',
-                                        color: '#FFFFFF',
-                                        m: '0 0.4rem',
-                                        borderColor: 'var(--button-color)',
-                                        fontWeight: 'bold',
-                                      }}
-                                    />
-                                  ))}
-                              </Box>
-                            </TableCell>
-                            <TableCell align="center">
-                              <IconButton
-                                id={`operation-${item?.id}`}
-                                onClick={(event: any) => {
-                                  setSchedulerAnchorElement(event.currentTarget);
-                                  setSchedulerSelectedRow(item);
-                                  setSchedulerSelectedID(item.id);
-                                }}
-                                size="small"
-                                aria-controls={Boolean(schedulerAnchorElement) ? item?.host_name : undefined}
-                                aria-haspopup="true"
-                                aria-expanded={Boolean(schedulerAnchorElement) ? 'true' : undefined}
-                              >
-                                <MoreVertIcon color="action" />
-                              </IconButton>
-                              <Menu
-                                anchorEl={schedulerAnchorElement}
-                                id={schedulerSelectedRow?.host_name}
-                                open={Boolean(schedulerAnchorElement)}
-                                onClose={handleClose}
-                                anchorOrigin={{
-                                  vertical: 'bottom',
-                                  horizontal: 'right',
-                                }}
-                                transformOrigin={{
-                                  vertical: 'top',
-                                  horizontal: 'right',
-                                }}
-                                sx={{
-                                  '& .MuiMenu-paper': {
-                                    boxShadow:
-                                      '0 0.075rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;',
-                                  },
-                                  '& .MuiMenu-list': {
-                                    p: 0,
-                                    width: '11rem',
-                                  },
-                                }}
-                              >
-                                <Box className={styles.menu}>
-                                  <MenuItem
-                                    id={`view-${schedulerSelectedRow?.host_name}`}
-                                    onClick={() => {
-                                      navigate(`/clusters/${params.id}/schedulers/${schedulerSelectedRow?.id}`);
-                                      setSchedulerAnchorElement(null);
+              ) : allSchedulers.length === 0 ? (
+                <TableCell id="no-scheduler-table" colSpan={9} align="center" sx={{ border: 0 }}>
+                  You don't have scheduler cluster.
+                </TableCell>
+              ) : (
+                <>
+                  {Array.isArray(allSchedulers) &&
+                    allSchedulers.map((item: any) => {
+                      return (
+                        <TableRow
+                          key={item?.id}
+                          selected={schedulerSelectedRow === item}
+                          sx={{
+                            '&:last-child td, &:last-child th': { border: 0 },
+                            ':hover': { backgroundColor: 'var(--palette-action-hover)' },
+                          }}
+                          className={styles.tableRow}
+                        >
+                          <TableCell align="center" id={`id-${item?.id}`}>
+                            {item?.id}
+                          </TableCell>
+                          <TableCell align="center" id={`hostname-${item?.host_name}`}>
+                            <RouterLink
+                              color="inherit"
+                              component={Link}
+                              to={`/clusters/${params.id}/schedulers/${item?.id}`}
+                              underline="hover"
+                              sx={{ color: 'var(--palette--description-color)' }}
+                            >
+                              {item?.host_name}
+                            </RouterLink>
+                          </TableCell>
+                          <TableCell align="center" id={`ip-${item?.id}`}>
+                            {item?.ip}
+                          </TableCell>
+                          <TableCell align="center" id={`port-${item?.port}`}>
+                            {item?.port}
+                          </TableCell>
+                          <TableCell align="center">
+                            <Chip
+                              id={`state-${item?.id}`}
+                              label={_.upperFirst(item?.state) || ''}
+                              size="small"
+                              variant="outlined"
+                              sx={{
+                                borderRadius: '0.2rem',
+                                backgroundColor:
+                                  item?.state === 'active'
+                                    ? 'var(--palette--description-color)'
+                                    : 'var(--palette-dark-300Channel)',
+                                color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
+                                borderColor:
+                                  item?.state === 'active'
+                                    ? 'var(--palette--description-color)'
+                                    : 'var(--palette-dark-300Channel)',
+                                fontWeight: 'bold',
+                              }}
+                            />
+                          </TableCell>
+                          <TableCell align="center" id={`features-${item?.id}`}>
+                            <Box className={styles.features}>
+                              {Array.isArray(item.features) &&
+                                item.features.map((features: string, id: any) => (
+                                  <Chip
+                                    key={id}
+                                    label={_.upperFirst(features) || ''}
+                                    size="small"
+                                    variant="outlined"
+                                    sx={{
+                                      borderRadius: '0.2rem',
+                                      background: 'var(--palette-dark-300Channel)',
+                                      color: '#FFFFFF',
+                                      m: '0 0.4rem',
+                                      borderColor: 'var(--palette-dark-300Channel)',
+                                      fontWeight: 'bold',
                                     }}
-                                  >
-                                    <ListItemIcon>
-                                      <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
-                                    </ListItemIcon>
-                                    <Typography variant="body2" className={styles.menuText}>
-                                      View
-                                    </Typography>
-                                  </MenuItem>
-                                  {schedulerFeatures && schedulerFeatures.length > 0 ? (
-                                    <MenuItem
-                                      className={styles.menuItem}
-                                      id={`edit-${schedulerSelectedRow?.host_name}`}
-                                      onClick={() => {
-                                        setOpenSchedulerEditFeatures(true);
-                                        setSchedulerAnchorElement(null);
-                                      }}
-                                    >
-                                      <ListItemIcon>
-                                        <ModeEditIcon fontSize="small" className={styles.menuItemIcon} />
-                                      </ListItemIcon>
-                                      <Typography variant="body2" className={styles.menuText}>
-                                        Edit Features
-                                      </Typography>
-                                    </MenuItem>
-                                  ) : (
-                                    ''
-                                  )}
+                                  />
+                                ))}
+                            </Box>
+                          </TableCell>
+                          <TableCell align="center">
+                            <IconButton
+                              id={`operation-${item?.id}`}
+                              onClick={(event: any) => {
+                                setSchedulerAnchorElement(event.currentTarget);
+                                setSchedulerSelectedRow(item);
+                                setSchedulerSelectedID(item.id);
+                              }}
+                              size="small"
+                              aria-controls={Boolean(schedulerAnchorElement) ? item?.host_name : undefined}
+                              aria-haspopup="true"
+                              aria-expanded={Boolean(schedulerAnchorElement) ? 'true' : undefined}
+                            >
+                              <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
+                            </IconButton>
+                            <Menu
+                              anchorEl={schedulerAnchorElement}
+                              id={schedulerSelectedRow?.host_name}
+                              open={Boolean(schedulerAnchorElement)}
+                              onClose={handleClose}
+                              anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'right',
+                              }}
+                              transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                              }}
+                              sx={{
+                                '& .MuiMenu-paper': {
+                                  boxShadow: 'var(--custom-shadows-dropdown)',
+                                  borderRadius: '0.6rem',
+                                },
+                                '& .MuiMenu-list': {
+                                  width: '11rem',
+                                  p: '0',
+                                },
+                              }}
+                            >
+                              <Box className={styles.menu}>
+                                <MenuItem
+                                  className={styles.menuItem}
+                                  id={`view-${schedulerSelectedRow?.host_name}`}
+                                  onClick={() => {
+                                    navigate(`/clusters/${params.id}/schedulers/${schedulerSelectedRow?.id}`);
+                                    setSchedulerAnchorElement(null);
+                                  }}
+                                >
+                                  <ListItemIcon>
+                                    <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
+                                  </ListItemIcon>
+                                  <Typography variant="body2" className={styles.menuText}>
+                                    View
+                                  </Typography>
+                                </MenuItem>
+                                {schedulerFeatures && schedulerFeatures.length > 0 ? (
                                   <MenuItem
                                     className={styles.menuItem}
-                                    id={`delete-${schedulerSelectedRow?.host_name}`}
+                                    id={`edit-${schedulerSelectedRow?.host_name}`}
                                     onClick={() => {
-                                      openHandleScheduler(schedulerSelectedRow);
+                                      setOpenSchedulerEditFeatures(true);
                                       setSchedulerAnchorElement(null);
                                     }}
                                   >
                                     <ListItemIcon>
-                                      <DeleteIcon fontSize="small" sx={{ color: 'var(--delete-button-color)' }} />
+                                      <ModeEditIcon fontSize="small" className={styles.menuItemIcon} />
                                     </ListItemIcon>
-                                    <Typography
-                                      variant="body2"
-                                      className={styles.menuText}
-                                      color="var(--delete-button-color)"
-                                    >
-                                      Delete
+                                    <Typography variant="body2" className={styles.menuText}>
+                                      Edit Features
                                     </Typography>
                                   </MenuItem>
-                                </Box>
-                              </Menu>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                  </>
-                )}
-              </TableBody>
-            </Table>
-          </Box>
+                                ) : (
+                                  ''
+                                )}
+                                <MenuItem
+                                  className={styles.menuItem}
+                                  id={`delete-${schedulerSelectedRow?.host_name}`}
+                                  onClick={() => {
+                                    openHandleScheduler(schedulerSelectedRow);
+                                    setSchedulerAnchorElement(null);
+                                  }}
+                                >
+                                  <ListItemIcon>
+                                    <DeleteIcon
+                                      fontSize="small"
+                                      sx={{ color: 'var(--palette--delete-button-color)' }}
+                                    />
+                                  </ListItemIcon>
+                                  <Typography
+                                    variant="body2"
+                                    className={styles.menuText}
+                                    color="var(--palette--delete-button-color)"
+                                  >
+                                    Delete
+                                  </Typography>
+                                </MenuItem>
+                              </Box>
+                            </Menu>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </>
+              )}
+            </TableBody>
+          </Table>
         </Card>
       )}
       {schedulerTotalPages > 1 ? (
-        <Box id="pagination" display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+        <Box id="pagination" display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
           <Pagination
             count={schedulerTotalPages}
             page={schedulerPage}
@@ -1347,26 +1374,10 @@ export default function ShowCluster() {
           position: 'absolute',
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-            p: '1rem',
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <Box
-              component="img"
-              src="/icons/cluster/delete.svg"
-              sx={{ width: '1.8rem', height: '1.8rem', mr: '0.4rem' }}
-            />
-            <Typography variant="h6" component="div" fontFamily="mabry-bold">
+        <Box className={styles.deleteInactiveInstances}>
+          <Box className={styles.deleteInactiveHeader}>
+            <Delete className={styles.deleteIcon} />
+            <Typography variant="h6" component="div" id="delete-inactive-instances-title" fontFamily="mabry-bold">
               Delete inactive instances
             </Typography>
           </Box>
@@ -1414,15 +1425,15 @@ export default function ShowCluster() {
                               <Typography component="div" variant="h5" fontFamily="mabry-bold">
                                 {deleteInactiveSchedulerSuccessful || '0'}
                               </Typography>
-                              <Typography color="var(--table-title-text-color)" component="div" variant="subtitle2">
+                              <Typography
+                                color="var(--palette--table-title-text-color)"
+                                component="div"
+                                variant="subtitle2"
+                              >
                                 number of deleted schedulers
                               </Typography>
                             </Box>
-                            <Box
-                              component="img"
-                              className={styles.headerErrorIcon}
-                              src="/icons/cluster/delete-inactive.svg"
-                            />
+                            <DeleteInactive className={styles.headerErrorIcon} />
                           </Card>
                           <Card className={styles.headerContainer}>
                             <Box>
@@ -1438,11 +1449,7 @@ export default function ShowCluster() {
                                 number of delete error
                               </Typography>
                             </Box>
-                            <Box
-                              component="img"
-                              className={styles.headerErrorIcon}
-                              src="/icons/cluster/delete-inactive-error.svg"
-                            />
+                            <DeleteInactiveError className={styles.headerErrorIcon} />
                           </Card>
                         </Box>
                         <Paper variant="outlined" className={styles.deleteInactiveWrapper}>
@@ -1478,11 +1485,7 @@ export default function ShowCluster() {
                               id="inactive-header"
                             >
                               <Box display="flex" alignItems="center">
-                                <Box
-                                  component="img"
-                                  sx={{ width: '1.2rem', height: '1.2rem', mr: '0.4rem' }}
-                                  src="/icons/job/preheat/failure.svg"
-                                />
+                                <Failure className={styles.failureIcon} />
                                 <Typography variant="body2" fontFamily="mabry-bold">
                                   Error log
                                 </Typography>
@@ -1522,10 +1525,9 @@ export default function ShowCluster() {
                       size="small"
                       onClick={handleReset}
                       sx={{
-                        '&.MuiButton-root': {
-                          backgroundColor: 'var(--button-color)',
-                          color: '#fff',
-                        },
+                        background: 'var(--palette--button-color)',
+                        color: 'var(--palette--button-text-color)',
+                        ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                       }}
                     >
                       Cancel
@@ -1553,11 +1555,7 @@ export default function ShowCluster() {
                           alignItems: 'center',
                         }}
                       >
-                        <Box
-                          component="img"
-                          sx={{ width: '0.6rem', height: '0.6rem' }}
-                          src="/icons/cluster/inactive-total.svg"
-                        />
+                        <InactiveTotal className={styles.inactiveTotalIcon} />
                         <Typography
                           id="schedulerTotal"
                           variant="caption"
@@ -1574,32 +1572,17 @@ export default function ShowCluster() {
                     <Box>
                       <ListSubheader color="inherit" className={styles.schedulerInactiveListTitle}>
                         <Box className={styles.schedulerInactiveHeaderID}>
-                          <Typography
-                            variant="body2"
-                            fontFamily="mabry-bold"
-                            color="var(--table-title-text-color)"
-                            component="div"
-                          >
+                          <Typography variant="body2" className={styles.schedulerInactiveTable} component="div">
                             ID
                           </Typography>
                         </Box>
                         <Box className={styles.schedulerInactiveHeaderHostname}>
-                          <Typography
-                            variant="body2"
-                            fontFamily="mabry-bold"
-                            color="var(--table-title-text-color)"
-                            component="div"
-                          >
+                          <Typography variant="body2" className={styles.schedulerInactiveTable} component="div">
                             Hostname
                           </Typography>
                         </Box>
                         <Box className={styles.schedulerInactiveHeaderIP}>
-                          <Typography
-                            variant="body2"
-                            fontFamily="mabry-bold"
-                            color="var(--table-title-text-color)"
-                            component="div"
-                          >
+                          <Typography variant="body2" className={styles.schedulerInactiveTable} component="div">
                             IP
                           </Typography>
                         </Box>
@@ -1696,21 +1679,21 @@ export default function ShowCluster() {
                 ) : activeStep === 1 ? (
                   <Box>
                     <Box display="flex" alignItems="flex-start" pb="1rem">
-                      <Box
-                        component="img"
-                        src="/icons/cluster/delete-warning.svg"
-                        sx={{ width: '1.4rem', height: '1.4rem', pr: '0.2rem' }}
-                      />
+                      <DeleteWarning className={styles.deleteWarning} />
                       <Box>
                         <Typography
                           variant="body1"
                           fontFamily="mabry-bold"
                           component="span"
-                          sx={{ color: 'var(--delete-button-color)' }}
+                          sx={{ color: 'var(--palette--delete-button-color)' }}
                         >
                           WARNING:&nbsp;
                         </Typography>
-                        <Typography variant="body1" component="span" sx={{ color: 'var(--delete-button-color)' }}>
+                        <Typography
+                          variant="body1"
+                          component="span"
+                          sx={{ color: 'var(--palette--delete-button-color)' }}
+                        >
                           This action CANNOT be undone.
                         </Typography>
                       </Box>
@@ -1750,8 +1733,9 @@ export default function ShowCluster() {
                     onClick={handleBack}
                     sx={{
                       '&.MuiButton-root': {
-                        backgroundColor: activeStep === 0 ? '' : 'var(--button-color)',
-                        color: '#fff',
+                        backgroundColor: activeStep === 0 ? '' : 'var(--palette--button-color)',
+                        color: 'var(--palette--button-text-color)',
+                        ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                       },
                     }}
                   >
@@ -1767,9 +1751,9 @@ export default function ShowCluster() {
                       id="save-delete"
                       sx={{
                         '&.MuiLoadingButton-root': {
-                          backgroundColor: 'var(--delete-button-color)',
-                          color: '#fff',
-                          borderColor: 'var(--save-color)',
+                          backgroundColor: 'var(--palette--delete-button-color)',
+                          color: 'var(--palette--button-text-color)',
+                          borderColor: 'var(--palette--save-color)',
                         },
                       }}
                     >
@@ -1788,8 +1772,9 @@ export default function ShowCluster() {
                           backgroundColor:
                             Array.isArray(schedulerInactive) && schedulerInactive.length === 0
                               ? ''
-                              : 'var(--button-color)',
-                          color: '#fff',
+                              : 'var(--palette--button-color)',
+                          color: 'var(--palette--button-text-color)',
+                          ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
                         },
                       }}
                     >
@@ -1810,7 +1795,7 @@ export default function ShowCluster() {
       >
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Box component="img" className={styles.deleteClusterIcon} src="/icons/cluster/delete.svg" />
+            <Delete className={styles.deleteClusterIcon} />
             <Typography fontFamily="mabry-bold" pt="1rem">
               Are you sure you want to delet this scheduler?
             </Typography>
@@ -1847,7 +1832,7 @@ export default function ShowCluster() {
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '0.8rem 1rem' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box component="img" sx={{ width: '1.6rem' }} src="/icons/cluster/features.svg" />
+            <Features className={styles.featuresHeaderIcon} />
             <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
               Featrues
             </Typography>
@@ -1873,14 +1858,14 @@ export default function ShowCluster() {
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box className={styles.featuresIconWrapper}>
                 <Box className={styles.featuresIconContainer}>
-                  <Box component="img" className={styles.featuresIcon} src="/icons/cluster/scheduler.svg" />
+                  <Schedule className={styles.featuresIcon} />
                 </Box>
               </Box>
               <Box>
                 <Typography component="div" variant="body2" fontFamily="mabry-bold">
                   Schedule
                 </Typography>
-                <Typography component="div" variant="caption" color="rgb(82 82 82 / 87%)">
+                <Typography component="div" variant="caption" color="var(--palette--text-palette-text-secondary)">
                   If schedule feature is enabled, the scheduler can schedule download tasks.
                 </Typography>
               </Box>
@@ -1899,14 +1884,14 @@ export default function ShowCluster() {
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box className={styles.featuresIconWrapper}>
                 <Box className={styles.featuresIconContainer}>
-                  <Box component="img" className={styles.featuresIcon} src="/icons/cluster/preheat.svg" />
+                  <Preheat className={styles.featuresIcon} />
                 </Box>
               </Box>
               <Box>
                 <Typography component="div" variant="body2" fontFamily="mabry-bold">
                   Preheat
                 </Typography>
-                <Typography component="div" variant="caption" color="rgb(82 82 82 / 87%)">
+                <Typography component="div" variant="caption" color="var(--palette--text-palette-text-secondary)">
                   If preheat feature is enabled, the scheduler can execute preheating job.
                 </Typography>
               </Box>
@@ -1940,6 +1925,6 @@ export default function ShowCluster() {
           </Box>
         </DialogContent>
       </Dialog>
-    </ThemeProvider>
+    </Box>
   );
 }

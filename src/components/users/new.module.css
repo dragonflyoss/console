@@ -1,0 +1,57 @@
+.container {
+  display: flex;
+  gap: calc(3 * 0.5rem) calc(3 * 0.5rem);
+  align-items: flex-start;
+}
+
+.textField:nth-child(3) {
+  grid-column: span 2;
+}
+
+.formData {
+  width: 65%;
+  padding: 2rem 1.5rem;
+}
+
+.textFieldContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: calc(1.5rem);
+}
+
+.uploadWrapper {
+  width: 35%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
+  flex-direction: column;
+}
+
+.uploadText {
+  text-align: center;
+  padding-top: 2rem;
+}
+
+.submitWrapper {
+  padding-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  width: 70%;
+}
+
+.input {
+  width: 20rem !important;
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+  margin-right: 1rem !important;
+}
+
+.input:nth-child(3) {
+  width: 41rem !important;
+}

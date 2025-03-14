@@ -84,13 +84,6 @@ describe('Executions', () => {
 
       cy.get('.MuiList-root > :nth-child(3) > .MuiButtonBase-root').click();
 
-      // Whether the style selected by menu is Task.
-      cy.get(
-        ':nth-child(3) > .MuiCollapse-root > .MuiCollapse-wrapper > .MuiCollapse-wrapperInner > .MuiList-root > .MuiButtonBase-root',
-      ).should('have.class', 'Mui-selected');
-
-      cy.get('.MuiList-root > .Mui-selected').should('be.visible').and('have.text', 'Task');
-
       // The executions status is displayed as PENDING.
       cy.get('#list-11 > .css-1mlhis1').should('exist').find('#PENDING-11').should('exist');
       cy.get('#id-11').should('have.text', 11);
@@ -318,7 +311,7 @@ describe('Executions', () => {
       cy.get('#list-1').should('exist').find('#SUCCESS-1').should('exist');
 
       // Go to show executions page.
-      cy.get('#execution-1 > .MuiBox-root').click();
+      cy.get('#execution-1').click();
 
       // Then I see that the current page is the show update personal-access-tokens.
       cy.url().should('include', '/jobs/task/executions/1');

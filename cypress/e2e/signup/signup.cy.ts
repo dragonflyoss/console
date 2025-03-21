@@ -98,7 +98,7 @@ describe('Signup', () => {
   });
 
   it('click the `Sign in` button', () => {
-    cy.get('sign-in').click();
+    cy.get('#sign-in').click();
 
     // Then I see that the current page is the signin!
     cy.url().should('include', '/signin');

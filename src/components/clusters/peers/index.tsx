@@ -236,7 +236,7 @@ export default function Peer() {
     datasets: [
       {
         data: gitVersion.map((item) => item.count),
-        backgroundColor: theme.palette.mode === 'dark' ? '#01A76F' : 'rgb(46,143,121)',
+        backgroundColor: theme.palette.mode === 'dark' ? '#01A76F' : 'rgb(31, 125, 83)',
         borderRadius: 5,
         barPercentage: 0.6,
       },
@@ -244,11 +244,11 @@ export default function Peer() {
   };
 
   const doughnutBackgroundColor = [
-    'rgb(46,143,121)',
-    'rgba(46,143,121,0.8)',
-    'rgba(46,143,121,0.6)',
-    'rgba(46,143,121,0.4)',
-    'rgba(46,143,121,0.2)',
+    'rgb(31, 125, 83)',
+    'rgba(31, 125, 83,0.8)',
+    'rgba(31, 125, 83,0.6)',
+    'rgba(31, 125, 83,0.4)',
+    'rgba(31, 125, 83,0.2)',
   ];
 
   const darkDoughnutBackgroundColor = ['#01A76F', '#5BE49B', '#C8FAD6', '#004B50', '#007868'];
@@ -271,7 +271,7 @@ export default function Peer() {
     datasets: [
       {
         data: gitCommit.map((item) => item.count),
-        backgroundColor: theme.palette.mode === 'dark' ? '#01A76F' : 'rgb(46,143,121)',
+        backgroundColor: theme.palette.mode === 'dark' ? '#01A76F' : 'rgb(31, 125, 83)',
         borderWidth: 0,
         borderRadius: 5,
         barPercentage: 0.6,

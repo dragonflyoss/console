@@ -19,14 +19,23 @@ describe('Menu', () => {
     cy.guestSignin();
     cy.visit('/');
 
-    cy.get('#light').should('exist');
+    // Click the Toggle Dark button.
+    cy.get('#dark').click();
 
-    cy.get('#mode').click();
+    cy.get('.Mui-selected').invoke('text').should('contain', 'Dark');
 
-    // Dark mode should show a different icon.
-    cy.get('#light').should('not.exist');
+    cy.get('.Mui-selected').invoke('text').should('not.contain', 'Light');
 
-    cy.get('#dark').should('exist');
+    cy.get('#main').should('have.css', 'background-color', 'rgb(31, 36, 48)');
+
+    // Click the Toggle Light button.
+    cy.get('#light').click();
+
+    cy.get('.Mui-selected').invoke('text').should('not.contain', 'Dark');
+
+    cy.get('.Mui-selected').invoke('text').should('contain', 'Light');
+
+    cy.get('#main').should('have.css', 'background-color', 'rgb(244, 246, 248)');
   });
 
   describe('try to signin as guest user', () => {
@@ -268,10 +277,6 @@ describe('Menu', () => {
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
       cy.get('.MuiAlert-message').should('not.exist');
-    });
-
-    it('should jump to GitHub', () => {
-      cy.get('#github').should('have.attr', 'href').and('include', 'https://github.com/dragonflyoss/dragonfly');
     });
   });
 });

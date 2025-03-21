@@ -1,6 +1,5 @@
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { SetStateAction, useEffect, useState } from 'react';
+import { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -22,22 +21,8 @@ import { matchIsValidTel, MuiTelInput } from 'mui-tel-input';
 import styles from './new.module.css';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import Card from '../card';
 import { signUp } from '../../lib/api';
 
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1,
-});
 export default function NewUser() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
@@ -56,7 +41,6 @@ export default function NewUser() {
   const [phone, setPhone] = useState('');
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   const changeValidate = (value: string, data: any, cb?: () => void) => {
     const { setError, validate } = data;
@@ -372,10 +356,12 @@ export default function NewUser() {
         }
         aria-label="breadcrumb"
       >
-        <RouterLink component={Link} underline="hover" color="text.primary" to={`/users`}>
+        <RouterLink variant="body2" component={Link} underline="hover" color="text.primary" to={`/users`}>
           User
         </RouterLink>
-        <Typography color="inherit">New user</Typography>
+        <Typography variant="body2" color="inherit">
+          New user
+        </Typography>
       </Breadcrumbs>
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: '2rem' }}>
         <Divider sx={{ mt: 2, mb: 2 }} />

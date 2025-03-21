@@ -2,26 +2,8 @@
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  height: 100vh;
   background-color: var(--palette-sidebar-background-color);
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  width: 100%;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  position: sticky;
-  position: -webkit-sticky;
-  position: -moz-sticky;
-  top: 0px;
-  left: auto;
-  right: 0px;
-  padding: 0.8rem 2rem;
-  z-index: 1100;
-  overflow-y: hidden;
+  height: 100vh;
 }
 
 .layout {
@@ -36,13 +18,11 @@
   flex: 1 1 auto;
   flex-direction: column;
   padding: 1.5rem 2rem;
-  margin: 1rem;
+  margin: 0.8rem 0.8rem 0.8rem 1.2rem;
   overflow-y: auto !important;
   background-color: var(--palette-main-background-paper);
-  box-shadow: var(--palette--card-box-shadow);
-  border-radius: 0.8rem;
-  /* borderRadius: '0.8rem',
-  transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)', */
+  box-shadow: var(--palette-card-box-shadow);
+  border-radius: 0.6rem;
 }
 
 .navigationBarContainer {
@@ -53,58 +33,50 @@
   display: flex;
   flex-direction: column;
   z-index: 1101;
-  /* border-right: 1px solid rgba(var(--palette-dark-500Channel) / 0.12); */
   background-color: var(--palette-sidebar-background-color);
 }
 
 .sidebarTitle {
-  padding: 2rem 0 1rem 0.6rem;
+  padding: 1.5rem 0 1rem 0.3rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.compactLayout {
-  position: absolute;
-  right: -0.8rem;
-  top: 2.2rem;
-  /* border-radius: 50%; */
-  /* background-color: var(--palette-sidebar-expand-background-color); */
-}
-
 .expandIcon {
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1rem;
+  height: 1rem;
+  color: var(--palette-sidebar-menu-color);
 }
 
 .liMenu {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.6rem;
 }
 
 .shrinkLiMenu {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.6rem;
   align-items: center;
 }
 
 .sidebarExpand {
-  width: 0.7rem;
-  height: 0.7rem;
+  width: 0.6rem;
+  height: 0.6rem;
 }
 
-.ssse {
+.list {
   margin-left: 1.25rem !important;
   padding-left: 0.75rem !important;
   padding-top: 0.8rem !important;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.6rem;
 }
 
-.ssse:before {
+.list:before {
   top: 0px;
   left: 0px;
   width: 2px;
@@ -115,7 +87,7 @@
   bottom: calc(36px - 2px - 12px / 2);
 }
 
-.eee:before {
+.expandable:before {
   left: 0px;
   content: '';
   position: absolute;
@@ -141,80 +113,30 @@
   min-width: 10rem;
 }
 
-.shrinkMenuText {
-  margin-top: 0.3rem !important;
-  font-family: 'mabry-bold' !important;
-}
-
-.shrinkChevronRightOutlinedIcon {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-  display: inline-flex;
-  margin: 0px;
-  top: 11px;
-  right: 0px;
-}
-
 .title {
   display: inline-flex;
   align-items: center;
 }
 
-.shrinkTitle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-}
-
 .logo {
-  width: 2rem;
-  height: 2rem;
-}
-
-/* .githubContainer {
-  z-index: 9;
-  right: 1.5rem;
-  bottom: 1.5rem;
-  width: 2rem;
-  height: 2rem;
-  position: absolute;
-} */
-
-.github {
   width: 1.8rem;
   height: 1.8rem;
-  color: var(--palette-secondary-dark);
-  margin-bottom: 1rem;
+  color: var(--palette-description-color);
 }
 
 .menuIcon {
-  width: 1.2rem;
-  height: 1.2rem;
-}
-
-.selectedMenuIcon {
-  width: 1.6rem;
-  height: 1.6rem;
-  color: var(--palette--description-color);
+  width: 1rem;
+  height: 1rem;
 }
 
 .menuText {
   font-family: 'mabry-bold' !important;
-  margin-left: 0.7rem !important;
+  margin-left: 0.5rem !important;
 }
 
 .avatarMenu {
   font-family: 'mabry-bold' !important;
   color: var(--palette-color);
-}
-
-.menuSelectedIcon {
-  width: 1.6rem;
-  height: 1.6rem;
-  display: block;
 }
 
 .avatarButton {
@@ -230,8 +152,8 @@
 
 .avatarWrapper {
   background: conic-gradient(#73bafb, #ffd666, #73bafb);
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.7rem;
+  height: 2.7rem;
   animation: rotate 4s linear infinite;
   position: absolute;
   border-radius: 50%;
@@ -247,9 +169,9 @@
 }
 
 .avatar {
-  width: 2.2rem !important;
-  height: 2.2rem !important;
-  background: var(--palette--button-text-color) !important;
+  width: 2.35rem !important;
+  height: 2.35rem !important;
+  background: var(--palette-secondary-dark) !important;
 }
 
 .profileMenu {
@@ -293,11 +215,11 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   padding-top: 0.6rem;
-  color: var(--palette-color);
+  color: var(--palette-text-palette-text-secondary);
 }
 
 .menuItemIcon {
-  color: var(--palette--button-color);
+  color: var(--palette-button-color);
 }
 
 .pageContainer {
@@ -313,8 +235,8 @@
 }
 
 .sidebarUser {
-  padding: 0.4rem 0.6rem;
-  margin-bottom: 2rem;
+  padding: 0.4rem 0.6rem 0.4rem 0.7rem;
+  margin-bottom: 0.8rem;
   display: flex;
   align-items: center;
   position: relative;
@@ -322,7 +244,7 @@
 }
 
 .shrinkSidebarUser {
-  padding-bottom: 2rem;
+  padding-bottom: 0.8rem;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -18,7 +18,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.2rem 1rem;
+  padding: 0.2rem 0rem 0.7rem 1rem;
 }
 
 .detailContentWrap {
@@ -41,11 +41,11 @@
 .detailIcon {
   width: 1.4rem;
   height: 1.4rem;
-  color: var(--palette--table-title-text-color);
+  color: var(--palette-table-title-text-color);
 }
 
 .menuItemIcon {
-  color: var(--palette--button-color);
+  color: var(--palette-button-color);
   width: 2rem;
 }
 
@@ -59,7 +59,6 @@
   background-repeat: no-repeat, no-repeat;
   padding: 0.2rem;
   background-size: 50%, 50%;
-  box-shadow: var(--custom-shadows-dropdown);
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
   outline: 0px;
   background-position: right top, left bottom;
@@ -69,7 +68,7 @@
 
 .detailTitle {
   padding-left: 0.8rem;
-  color: var(--palette--table-title-text-color);
+  color: var(--palette-table-title-text-color);
 }
 
 .detailContent {
@@ -77,12 +76,12 @@
 }
 
 .tableHeader {
-  color: var(--palette--table-title-text-color);
+  color: var(--palette-table-title-text-color);
   font-family: 'mabry-bold' !important;
 }
 
 .tableRow {
-  border-bottom: dashed var(--palette--palette-divider);
+  border-bottom: dashed var(--palette-palette-divider);
 }
 
 .tableRow:last-child {
@@ -90,7 +89,7 @@
 }
 
 .tableHeaderText {
-  border-color: var(--palette--palette-divider) !important;
+  border-color: var(--palette-palette-divider) !important;
 }
 
 .searchWrapper {
@@ -112,7 +111,7 @@
 .editRoleHeaderIcon {
   width: 2rem;
   height: 2rem;
-  color: var(--palette--button-color);
+  color: var(--palette-button-color);
 }
 
 .roleEdit {
@@ -121,9 +120,9 @@
   justify-content: space-between;
   padding: 0.6rem;
   background-color: var(--palette-background-paper);
-  box-shadow: var(--palette--card-box-shadow);
+  box-shadow: var(--palette-card-box-shadow);
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 0.8rem;
+  border-radius: 0.6rem;
   border: solid;
   color: var(--palette-color);
   overflow: hidden;
@@ -144,5 +143,5 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--palette--text-palette-text-secondary);
+  color: var(--palette-text-palette-text-secondary);
 }

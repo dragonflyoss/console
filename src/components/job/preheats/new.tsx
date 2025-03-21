@@ -90,7 +90,7 @@ export default function NewPreheat() {
                   color: 'var(--palette-grey-300Channel)',
                   width: '0.8rem',
                   height: '0.8rem',
-                  ':hover': { color: 'var(--palette--description-color)' },
+                  ':hover': { color: 'var(--palette-description-color)' },
                 }}
               />
             </Tooltip>
@@ -135,7 +135,7 @@ export default function NewPreheat() {
                   color: 'var(--palette-grey-300Channel)',
                   width: '0.8rem',
                   height: '0.8rem',
-                  ':hover': { color: 'var(--palette--description-color)' },
+                  ':hover': { color: 'var(--palette-description-color)' },
                 }}
               />
             </Tooltip>
@@ -171,7 +171,7 @@ export default function NewPreheat() {
                   color: 'var(--palette-grey-300Channel)',
                   width: '0.8rem',
                   height: '0.8rem',
-                  ':hover': { color: 'var(--palette--description-color)' },
+                  ':hover': { color: 'var(--palette-description-color)' },
                 }}
               />
             </Tooltip>
@@ -263,7 +263,7 @@ export default function NewPreheat() {
   };
 
   const headersValueValidate = (value: any) => {
-    const regex = /^.{1,1000}$/;
+    const regex = /^.{1,10000}$/;
     return regex.test(value);
   };
 
@@ -407,13 +407,15 @@ export default function NewPreheat() {
           />
         }
         aria-label="breadcrumb"
-        sx={{ mt: '1rem', mb: '2rem' }}
+        sx={{ mt: '1rem' }}
       >
         <Typography color="text.primary">Job</Typography>
         <RouterLink component={Link} underline="hover" color="text.primary" to={`/developer/personal-access-tokens`}>
           Preheat
         </RouterLink>
-        <Typography color="inherit">New preheat</Typography>
+        <Typography variant="body2" color="inherit">
+          New preheat
+        </Typography>
       </Breadcrumbs>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Box component="form" onSubmit={handleSubmit} noValidate>
@@ -429,7 +431,7 @@ export default function NewPreheat() {
                     color: 'var(--palette-grey-300Channel)',
                     width: '0.8rem',
                     height: '0.8rem',
-                    ':hover': { color: 'var(--palette--description-color)' },
+                    ':hover': { color: 'var(--palette-description-color)' },
                   }}
                 />
               </Tooltip>
@@ -456,7 +458,7 @@ export default function NewPreheat() {
                     color: 'var(--palette-grey-300Channel)',
                     width: '0.8rem',
                     height: '0.8rem',
-                    ':hover': { color: 'var(--palette--description-color)' },
+                    ':hover': { color: 'var(--palette-description-color)' },
                   }}
                 />
               </Tooltip>
@@ -486,7 +488,7 @@ export default function NewPreheat() {
                     <Checkbox
                       id={`cluster-${item.id}`}
                       size="small"
-                      sx={{ '&.MuiCheckbox-root': { color: 'var(--palette--button-color)' } }}
+                      sx={{ '&.MuiCheckbox-root': { color: 'var(--palette-button-color)' } }}
                       checked={clusterName.indexOf(item.name) > -1}
                     />
                     <ListItemText primary={item.name} />
@@ -507,13 +509,13 @@ export default function NewPreheat() {
                     color: 'var(--palette-grey-300Channel)',
                     width: '0.8rem',
                     height: '0.8rem',
-                    ':hover': { color: 'var(--palette--description-color)' },
+                    ':hover': { color: 'var(--palette-description-color)' },
                   }}
                 />
               </Tooltip>
             </Box>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-              <FormControl className={styles.textField} margin="normal" required size="small">
+              <FormControl className={styles.textField} margin="normal" color="success" required size="small">
                 <InputLabel id="scope">Scope</InputLabel>
                 <Select
                   id="select-scope"
@@ -567,7 +569,7 @@ export default function NewPreheat() {
                                       width: '0.8rem',
                                       height: '0.8rem',
                                       mr: '0.3rem',
-                                      ':hover': { color: 'var(--palette--description-color)' },
+                                      ':hover': { color: 'var(--palette-description-color)' },
                                     }}
                                   />
                                 </Tooltip>
@@ -615,7 +617,7 @@ export default function NewPreheat() {
                         color: 'var(--palette-grey-300Channel)',
                         width: '0.8rem',
                         height: '0.8rem',
-                        ':hover': { color: 'var(--palette--description-color)' },
+                        ':hover': { color: 'var(--palette-description-color)' },
                       }}
                     />
                   </Tooltip>
@@ -645,7 +647,7 @@ export default function NewPreheat() {
                       multiline
                       maxRows={3}
                       error={!headersValueValidate(item.value)}
-                      helperText={!headersValueValidate(item.value) && 'Fill in the characters, the length is 1-1000.'}
+                      helperText={!headersValueValidate(item.value) && 'Fill in the characters, the length is 1-10000.'}
                       className={styles.headersValueInput}
                       value={item.value}
                       onChange={(event) => {
@@ -666,15 +668,15 @@ export default function NewPreheat() {
                         setheaders(newheaders);
                       }}
                     >
-                      <ClearIcon sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--palette--button-color)' }} />
+                      <ClearIcon sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--palette-button-color)' }} />
                     </IconButton>
                   </Grid>
                 ))}
                 <Button
                   sx={{
                     '&.MuiButton-root': {
-                      backgroundColor: 'var(--palette--description-color)',
-                      borderColor: 'var(--palette--description-color)',
+                      backgroundColor: 'var(--palette-description-color)',
+                      borderColor: 'var(--palette-description-color)',
                       color: '#FFF',
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -696,8 +698,8 @@ export default function NewPreheat() {
               <Button
                 sx={{
                   '&.MuiButton-root': {
-                    backgroundColor: 'var(--palette--description-color)',
-                    borderColor: 'var(--palette--description-color)',
+                    backgroundColor: 'var(--palette-description-color)',
+                    borderColor: 'var(--palette-description-color)',
                     color: '#FFF',
                   },
                   width: '8rem',

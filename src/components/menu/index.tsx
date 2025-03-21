@@ -21,29 +21,23 @@ import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import { ListItemButton, ListItemIcon } from '@mui/material';
 import { createContext, useEffect, useState } from 'react';
-import { ExpandMore, Logout, PersonAdd } from '@mui/icons-material';
-import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
+import { Logout, PersonAdd } from '@mui/icons-material';
 import { getUserRoles, getUser, signOut, getUserResponse } from '../../lib/api';
 import { getJwtPayload, setPageTitle } from '../../lib/utils';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import { ROLE_ROOT, ROLE_GUEST } from '../../lib/constants';
 import { ReactComponent as Cluster } from '../../assets/images/menu/cluster.svg';
-import { ReactComponent as SelectedCluster } from '../../assets/images/menu/selected-cluster.svg';
 import { ReactComponent as Developer } from '../../assets/images/menu/developer.svg';
-import { ReactComponent as SelectedDeveloper } from '../../assets/images/menu/selected-developer.svg';
 import { ReactComponent as Job } from '../../assets/images/menu/job.svg';
-import { ReactComponent as SelectedJob } from '../../assets/images/menu/selected-job.svg';
 import { ReactComponent as User } from '../../assets/images/menu/user.svg';
-import { ReactComponent as SelectedUser } from '../../assets/images/menu/selected-user.svg';
-import { ReactComponent as Logo } from '../../assets/images/header/logo.svg';
+import { ReactComponent as Logo } from '../../assets/images/menu/logo.svg';
 import { ReactComponent as Expand } from '../../assets/images/menu/expand.svg';
 import { ReactComponent as Closure } from '../../assets/images/menu/closure.svg';
 import { ReactComponent as SidebarExpand } from '../../assets/images/menu/sidebar-expand.svg';
 import { ReactComponent as SidebarClosure } from '../../assets/images/menu/sidebar-closure.svg';
-import { HeaderLayout, ShrinkDarkMode, GithubLayout } from '../dark-layout';
-import { ReactComponent as Github } from '../../assets/images/header/github.svg';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import { HeaderLayout, ShrinkDarkMode } from '../dark-layout';
 import Card from '../card';
+import _ from 'lodash';
 
 interface MyContextType {
   user: getUserResponse;
@@ -73,12 +67,13 @@ export const MyContext = createContext<MyContextType>({
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   borderRadius: 5,
+  height: '3px',
   [`&.${linearProgressClasses.colorPrimary}`]: {
     backgroundColor: 'rgba(0, 167, 111, 0.4)',
   },
   [`& .${linearProgressClasses.bar}`]: {
     borderRadius: 3,
-    backgroundColor: 'var(--palette--description-color)',
+    backgroundColor: 'var(--palette-description-color)',
   },
 }));
 
@@ -110,7 +105,6 @@ export default function Layout(props: any) {
     const storedValue = localStorage.getItem('compactLayout');
     return storedValue === 'true';
   });
-  const [expandable, setExpandable] = useState(false);
 
   const openProfile = Boolean(anchorElement);
   const location = useLocation();
@@ -189,14 +183,12 @@ export default function Layout(props: any) {
       href: '/clusters',
       text: 'Cluster',
       icon: <Cluster className={styles.menuIcon} />,
-      selectedIcon: <SelectedCluster className={styles.selectedMenuIcon} />,
     },
     {
       label: 'developer',
       href: '/tokens',
       text: 'Developer',
       icon: <Developer className={styles.menuIcon} />,
-      selectedIcon: <SelectedDeveloper className={styles.selectedMenuIcon} />,
       expand: expandDeveloper,
       setExpand: setExpandDeveloper,
       menuProps: [
@@ -212,7 +204,6 @@ export default function Layout(props: any) {
       href: '/jobs',
       text: 'Job',
       icon: <Job className={styles.menuIcon} />,
-      selectedIcon: <SelectedJob className={styles.selectedMenuIcon} />,
       expand: expandJob,
       setExpand: setExpandJob,
       menuProps: [
@@ -236,7 +227,6 @@ export default function Layout(props: any) {
       href: '/users',
       text: 'User',
       icon: <User className={styles.menuIcon} />,
-      selectedIcon: <SelectedUser className={styles.selectedMenuIcon} />,
     });
   }
 
@@ -302,66 +292,22 @@ export default function Layout(props: any) {
             <CssBaseline />
             <Box className={styles.container}>
               <Box className={styles.navigationBarContainer}>
-                {/* {expandable ? (
-                  <Box
-                    onMouseEnter={() => {
-                      setExpandable(true);
-                    }}
-                    className={styles.compactLayout}
-                  >
-                    <IconButton
-                      sx={{
-                        width: '1.4rem',
-                        height: '1.4rem',
-                        p: '0',
-                        ':hover': {
-                          backgroundColor: 'var(--palette-background--hover-rotation)',
-                        },
-                        borderRadius: '1rem',
-                        // boxShadow: 'var(--palette--main-box-shadow)',
-                      }}
-                      onClick={() => {
-                        setCompactLayout((e: any) => !e);
-                        setExpandable(false);
-                      }}
-                    >
-                      {compactLayout ? (
-                        <Expand id="expand" className={styles.expandIcon} />
-                      ) : (
-                        <Closure id="closure" className={styles.expandIcon} />
-                      )}
-                    </IconButton>
-                  </Box>
-                ) : (
-                  ''
-                )} */}
                 {compactLayout ? (
                   <Grid
                     sx={{
                       width: '4rem',
-                      pl: '1rem',
+                      pl: '1.2rem',
                       height: '100%',
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'space-between',
                     }}
-                    onMouseEnter={() => {
-                      setExpandable(true);
-                    }}
-                    onMouseLeave={() => {
-                      setExpandable(false);
-                    }}
                   >
                     <Box>
-                      <Box sx={{ display: 'flex', justifyContent: 'center', p: '2rem 0 1rem 0' }}>
-                        {/* <RouterLink id="dragonfly" href="/" color="inherit" underline="none" className={styles.title}>
-                          <Logo className={styles.logo} />
-                        </RouterLink> */}
+                      <Box sx={{ display: 'flex', justifyContent: 'center', p: '1.5rem 0 1rem 0' }}>
                         <IconButton
-                          sx={{ color: '#7F8A9B' }}
                           onClick={() => {
                             setCompactLayout((e: any) => !e);
-                            setExpandable(false);
                           }}
                         >
                           <Expand id="expand" className={styles.expandIcon} />
@@ -379,18 +325,16 @@ export default function Layout(props: any) {
                               }}
                               sx={{
                                 '&.Mui-selected': {
-                                  backgroundColor: 'var(--palette--menu-background-color)',
-                                  color: 'var(--palette-sidebar-menu-background-color)',
-                                  boxShadow: 'var(--palette--card-box-shadow)',
+                                  backgroundColor: 'var(--palette-menu-background-color)',
+                                  color: 'var(--palette-secondary-dark)',
                                 },
                                 '&.Mui-selected:hover': {
-                                  backgroundColor: 'var(--palette--hover-menu-background-color)',
-                                  color: 'var(--palette-sidebar-menu-background-color)',
+                                  backgroundColor: 'var(--palette-hover-menu-background-color)',
+                                  color: 'var(--palette-secondary-dark)',
                                 },
                                 borderRadius: '0.6rem',
                                 color: 'var(--palette-sidebar-menu-color)',
                                 p: '0.5rem',
-                                // color: 'var(--palette-sidebar-color)',
                                 justifyContent: 'center',
                                 position: 'relative !important',
                                 width: '2.4rem',
@@ -405,7 +349,7 @@ export default function Layout(props: any) {
                                   onMouseLeave={handleMouseLeave}
                                   sx={{
                                     position: 'absolute ',
-                                    left: '57px',
+                                    left: '60px',
                                   }}
                                   className={styles.shrinkMenu}
                                 >
@@ -416,7 +360,6 @@ export default function Layout(props: any) {
                                       key={subItem.label}
                                       onClick={() => {
                                         setExpandedMenu(null);
-                                        setExpandable(false);
                                       }}
                                       component={Link}
                                       to={subItem.href}
@@ -436,16 +379,18 @@ export default function Layout(props: any) {
                               selected={(location.pathname.split('/')[1] || '') === items.label}
                               component={Link}
                               to={items.href}
+                              className={
+                                (location.pathname.split('/')[1] || '') === items.label ? styles.listButton : ''
+                              }
                               onMouseEnter={handleMouseLeave}
                               sx={{
                                 '&.Mui-selected': {
-                                  backgroundColor: 'var(--palette--menu-background-color)',
-                                  color: 'var(--palette-sidebar-menu-background-color)',
-                                  boxShadow: 'var(--palette--card-box-shadow)',
+                                  backgroundColor: 'var(--palette-menu-background-color)',
+                                  color: 'var(--palette-secondary-dark)',
                                 },
                                 '&.Mui-selected:hover': {
-                                  backgroundColor: 'var(--palette--hover-menu-background-color)',
-                                  color: 'var(--palette-sidebar-menu-background-color)',
+                                  backgroundColor: 'var(--palette-hover-menu-background-color)',
+                                  color: 'var(--palette-secondary-dark)',
                                 },
                                 borderRadius: '0.6rem',
                                 color: 'var(--palette-sidebar-menu-color)',
@@ -462,7 +407,6 @@ export default function Layout(props: any) {
                       </List>
                     </Box>
                     <Box className={styles.shrinkSidebarUser}>
-                      {/* <GithubLayout className={styles.github} /> */}
                       <ShrinkDarkMode className={styles.shrinkDarkMode} />
                       <IconButton
                         id="unfold-more"
@@ -473,15 +417,7 @@ export default function Layout(props: any) {
                         sx={{ p: '0.3rem' }}
                       >
                         <Box className={styles.avatarWrapper} />
-                        <Avatar
-                          className={styles.avatar}
-                          src={user?.avatar}
-                          sx={{
-                            '& .MuiAvatar-fallback': {
-                              color: '#1c293a',
-                            },
-                          }}
-                        />
+                        <Avatar className={styles.avatar} src={user?.avatar} />
                       </IconButton>
                       <Menu
                         anchorEl={anchorElement}
@@ -500,7 +436,7 @@ export default function Layout(props: any) {
                         }}
                         sx={{
                           '& .MuiMenu-paper': {
-                            boxShadow: 'var(--palette-menu-shadow)',
+                            boxShadow: 'var(--custom-shadows-dropdown)',
                             borderRadius: 'var(--menu-border-radius)',
                           },
                           '& .MuiMenu-list': {
@@ -524,7 +460,7 @@ export default function Layout(props: any) {
                           <Divider
                             sx={{
                               borderStyle: 'dashed',
-                              borderColor: 'var(--palette--palette-divider)',
+                              borderColor: 'var(--palette-palette-divider)',
                               borderWidth: '0px 0px thin',
                               m: '0.2rem 0',
                             }}
@@ -534,7 +470,6 @@ export default function Layout(props: any) {
                             onClick={() => {
                               setAnchorElement(null);
                               navigate('/profile');
-                              setExpandable(false);
                             }}
                             sx={{ borderRadius: 'var(--menu-border-radius)' }}
                           >
@@ -564,34 +499,26 @@ export default function Layout(props: any) {
                 ) : (
                   <Grid
                     sx={{
-                      width: '15rem',
-                      pl: '1rem',
+                      width: '13.5rem',
+                      pl: '1.2rem',
                       height: '100%',
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'space-between',
-                    }}
-                    onMouseEnter={() => {
-                      setExpandable(true);
-                    }}
-                    onMouseLeave={() => {
-                      setExpandable(false);
                     }}
                   >
                     <Box>
                       <Box className={styles.sidebarTitle}>
                         <RouterLink id="dragonfly" href="/" color="inherit" underline="none" className={styles.title}>
                           <Logo className={styles.logo} />
-                          <Typography variant="h6" sx={{ fontFamily: 'mabry-bold', ml: '0.5rem' }}>
+                          <Typography variant="h6" sx={{ fontFamily: 'mabry-bold', pl: '0.6rem' }}>
                             Dragonfly
                           </Typography>
                         </RouterLink>
                         <IconButton
                           onClick={() => {
                             setCompactLayout((e: any) => !e);
-                            setExpandable(false);
                           }}
-                          sx={{ color: '#7F8A9B' }}
                         >
                           <Closure id="closure" className={styles.expandIcon} />
                         </IconButton>
@@ -606,19 +533,20 @@ export default function Layout(props: any) {
                                 onClick={() => {
                                   items?.setExpand(!items?.expand);
                                 }}
+                                className={
+                                  (location.pathname.split('/')[1] || '') === items.label ? styles.listButton : ''
+                                }
                                 sx={{
                                   '&.Mui-selected': {
-                                    backgroundColor: 'var(--palette--menu-background-color)',
-                                    color: 'var(--palette-sidebar-menu-background-color)',
-                                    boxShadow: 'var(--palette--card-box-shadow)',
+                                    backgroundColor: 'var(--palette-menu-background-color)',
+                                    color: 'var(--palette-secondary-dark)',
                                   },
                                   '&.Mui-selected:hover': {
-                                    backgroundColor: 'var(--palette--hover-menu-background-color)',
-                                    color: 'var(--palette-sidebar-menu-background-color)',
+                                    color: 'var(--palette-secondary-dark)',
                                   },
                                   borderRadius: '0.6rem',
                                   color: 'var(--palette-sidebar-menu-color)',
-                                  p: '0.5rem 0.8rem',
+                                  p: '0.5rem 0.7rem',
                                   justifyContent: 'space-between',
                                 }}
                               >
@@ -635,28 +563,25 @@ export default function Layout(props: any) {
                                 )}
                               </ListItemButton>
                               <Collapse in={items.expand} timeout="auto" unmountOnExit sx={{ position: 'relative' }}>
-                                <List component="ul" disablePadding className={styles.ssse}>
+                                <List component="ul" disablePadding className={styles.list}>
                                   {items.menuProps?.map((item) => {
                                     return (
                                       <ListItemButton
-                                        className={styles.eee}
+                                        className={styles.expandable}
                                         id={item.label}
                                         selected={(location.pathname.split('/')[2] || '') === item.label}
                                         component={Link}
                                         to={item.href || ''}
                                         sx={{
                                           '&.Mui-selected': {
-                                            backgroundColor: 'var(--palette--menu-background-color)',
-                                            color: 'var(--palette-sidebar-menu-background-color)',
-                                            boxShadow: 'var(--palette--card-box-shadow)',
+                                            backgroundColor: 'var(--palette-menu-background-color)',
+                                            color: 'var(--palette-secondary-dark)',
                                           },
                                           '&.Mui-selected:hover': {
-                                            backgroundColor: 'var(--palette--hover-menu-background-color)',
-                                            color: 'var(--palette-sidebar-menu-background-color)',
+                                            color: 'var(--palette-secondary-dark)',
                                           },
-
                                           borderRadius: '0.6rem',
-                                          p: '0.5rem 0.8rem',
+                                          p: '0.4rem 0.7rem',
                                           color: 'var(--palette-sidebar-menu-color)',
                                         }}
                                       >
@@ -676,19 +601,20 @@ export default function Layout(props: any) {
                               selected={(location.pathname.split('/')[1] || '') === items.label}
                               component={Link}
                               to={items.href}
+                              className={
+                                (location.pathname.split('/')[1] || '') === items.label ? styles.listButton : ''
+                              }
                               sx={{
                                 '&.Mui-selected': {
-                                  backgroundColor: 'var(--palette--menu-background-color)',
-                                  color: 'var(--palette-sidebar-menu-background-color)',
-                                  boxShadow: 'var(--palette--card-box-shadow)',
+                                  backgroundColor: 'var(--palette-menu-background-color)',
+                                  color: 'var(--palette-secondary-dark)',
                                 },
                                 '&.Mui-selected:hover': {
-                                  backgroundColor: 'var(--palette--hover-menu-background-color)',
-                                  color: 'var(--palette-sidebar-menu-background-color)',
+                                  color: 'var(--palette-secondary-dark)',
                                 },
                                 borderRadius: '0.6rem',
                                 color: 'var(--palette-sidebar-menu-color)',
-                                p: '0.5rem 0.8rem',
+                                p: '0.5rem 0.7rem',
                               }}
                             >
                               {items.icon}
@@ -701,25 +627,6 @@ export default function Layout(props: any) {
                       </List>
                     </Box>
                     <Box>
-                      {/* <ListItemButton
-                        id="github"
-                        component={RouterLink}
-                        underline="hover"
-                        href="https://github.com/dragonflyoss/dragonfly"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={{
-                          borderRadius: '0.6rem',
-                          color: 'var(--palette-sidebar-menu-color)',
-                          p: '0.4rem 0.5rem',
-                          mb: '1rem',
-                        }}
-                      >
-                        <Github className={styles.menuIcon} />
-                        <Typography variant="body1" className={styles.menuText}>
-                          GitHub
-                        </Typography>
-                      </ListItemButton> */}
                       <HeaderLayout className={styles.darkMode} />
                       <Card className={styles.sidebarUser}>
                         <IconButton
@@ -731,15 +638,7 @@ export default function Layout(props: any) {
                           sx={{ p: '0.3rem' }}
                         >
                           <Box className={styles.avatarWrapper} />
-                          <Avatar
-                            className={styles.avatar}
-                            src={user?.avatar}
-                            sx={{
-                              '& .MuiAvatar-fallback': {
-                                color: '#1c293a',
-                              },
-                            }}
-                          />
+                          <Avatar className={styles.avatar} src={user?.avatar} />
                         </IconButton>
                         <Box
                           sx={{
@@ -755,7 +654,7 @@ export default function Layout(props: any) {
                               component="div"
                               variant="caption"
                               sx={{
-                                width: '9rem',
+                                width: '7.2rem',
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
@@ -765,19 +664,6 @@ export default function Layout(props: any) {
                             </Typography>
                           </Tooltip>
                         </Box>
-                        {/* <IconButton
-                          onClick={(event: any) => {
-                            setAnchorElement(event.currentTarget);
-                          }}
-                          size="small"
-                          id="unfold-more"
-                          aria-controls={openProfile ? 'account-menu' : undefined}
-                          aria-haspopup="true"
-                          aria-expanded={openProfile ? 'true' : undefined}
-                          sx={{ position: 'absolute', right: '0.1rem', top: ' 0.1rem' }}
-                        >
-                          <UnfoldMoreIcon />
-                        </IconButton> */}
                         <Menu
                           anchorEl={anchorElement}
                           id="account-menu"
@@ -795,14 +681,13 @@ export default function Layout(props: any) {
                           }}
                           sx={{
                             '& .MuiMenu-paper': {
-                              boxShadow: 'var(--palette-menu-shadow);',
+                              boxShadow: 'var(--custom-shadows-dropdown)',
                               borderRadius: 'var(--menu-border-radius);',
                             },
                             '& .MuiMenu-list': {
                               width: '14rem',
                               p: '0',
                             },
-                            // left: '3.35rem',
                           }}
                         >
                           <Box className={styles.profileMenu}>
@@ -820,7 +705,7 @@ export default function Layout(props: any) {
                             <Divider
                               sx={{
                                 borderStyle: 'dashed',
-                                borderColor: 'var(--palette--palette-divider)',
+                                borderColor: 'var(--palette-palette-divider)',
                                 borderWidth: '0px 0px thin',
                                 m: '0.2rem 0',
                               }}
@@ -830,7 +715,6 @@ export default function Layout(props: any) {
                               onClick={() => {
                                 setAnchorElement(null);
                                 navigate('/profile');
-                                setExpandable(false);
                               }}
                               sx={{ borderRadius: 'var(--menu-border-radius)' }}
                             >
@@ -861,8 +745,9 @@ export default function Layout(props: any) {
                 )}
               </Box>
               <Box
+                id="main"
                 className={styles.layout}
-                sx={{ paddingLeft: compactLayout ? '4rem !important' : '15rem !important' }}
+                sx={{ paddingLeft: compactLayout ? '4rem !important' : '13.5rem !important' }}
               >
                 <main onMouseEnter={handleMouseLeave} className={styles.main}>
                   <Outlet />

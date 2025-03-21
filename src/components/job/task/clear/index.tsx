@@ -47,7 +47,7 @@ import { ReactComponent as DeleteWarning } from '../../../../assets/images/clust
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
-    margin: theme.spacing(0.5),
+    margin: theme.spacing(0.7),
     border: 0,
     borderRadius: theme.shape.borderRadius,
     [`&.${toggleButtonGroupClasses.disabled}`]: {
@@ -56,7 +56,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   },
   [`& .${toggleButtonGroupClasses.middleButton},& .${toggleButtonGroupClasses.lastButton}`]: {
     marginLeft: -1,
-    borderLeft: '1px solid transparent',
+    border: 0,
   },
 }));
 
@@ -64,6 +64,8 @@ export default function Clear() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [searchTaskISLodaing, setSearchTaskISLodaing] = useState(false);
+  const [searchIconISLodaing, setSearchIconISLodaing] = useState(false);
   const [openDeleteTask, setOpenDeleteTask] = useState(false);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [searchTask, setSearchTask] = useState('');
@@ -94,9 +96,12 @@ export default function Clear() {
         if (searchID) {
           const job = await getTaskJob(searchID);
 
-          if (job.type === 'get_task') {
+          if (job?.type === 'get_task') {
             if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {
               setIsLoading(false);
+              setSearchIconISLodaing(false);
+              setSearchTaskISLodaing(false);
+
               setTask(job);
             } else {
               setShouldPoll(true);
@@ -108,6 +113,8 @@ export default function Clear() {
           setErrorMessage(true);
           setErrorMessageText(error.message);
           setIsLoading(false);
+          setSearchIconISLodaing(false);
+          setSearchTaskISLodaing(false);
         }
       }
     };
@@ -125,6 +132,8 @@ export default function Clear() {
               setTask(job);
               setShouldPoll(false);
               setIsLoading(false);
+              setSearchIconISLodaing(false);
+              setSearchTaskISLodaing(false);
             }
           } catch (error) {
             if (error instanceof Error) {
@@ -132,6 +141,8 @@ export default function Clear() {
               setErrorMessageText(error.message);
               setShouldPoll(false);
               setIsLoading(false);
+              setSearchIconISLodaing(false);
+              setSearchTaskISLodaing(false);
             }
           }
         };
@@ -157,7 +168,15 @@ export default function Clear() {
       helperText: urlError ? 'Fill in the characters, the length is 0-1000.' : '',
       error: urlError,
       InputProps: {
-        startAdornment: <SearchIcon className={styles.circularProgress} sx={{ color: '#919EAB' }} />,
+        startAdornment: searchIconISLodaing ? (
+          <Box className={styles.circularProgress}>
+            <SearchCircularProgress />
+          </Box>
+        ) : (
+          <Box className={styles.circularProgress}>
+            <SearchIcon sx={{ color: '#919EAB' }} />
+          </Box>
+        ),
         endAdornment: searchTask ? (
           <IconButton type="button" sx={{ p: 0 }} aria-label="search">
             <ClearIcon />
@@ -204,7 +223,7 @@ export default function Clear() {
                 color: 'var(--palette-grey-300Channel)',
                 width: '0.8rem',
                 height: '0.8rem',
-                ':hover': { color: 'var(--palette--description-color)' },
+                ':hover': { color: 'var(--palette-description-color)' },
               }}
             />
           </Tooltip>
@@ -240,7 +259,7 @@ export default function Clear() {
                 color: 'var(--palette-grey-300Channel)',
                 width: '0.8rem',
                 height: '0.8rem',
-                ':hover': { color: 'var(--palette--description-color)' },
+                ':hover': { color: 'var(--palette-description-color)' },
               }}
             />
           </Tooltip>
@@ -321,10 +340,14 @@ export default function Clear() {
       helperText: taskIDError ? 'Fill in the characters, the length is 0-1000.' : '',
       error: taskIDError,
       InputProps: {
-        startAdornment: isLoading ? (
-          <SearchCircularProgress className={styles.circularProgress} />
+        startAdornment: searchTaskISLodaing ? (
+          <Box className={styles.circularProgress}>
+            <SearchCircularProgress />
+          </Box>
         ) : (
-          <SearchIcon className={styles.circularProgress} sx={{ color: '#9BA0A6' }} />
+          <Box className={styles.circularProgress}>
+            <SearchIcon sx={{ color: '#9BA0A6' }} />
+          </Box>
         ),
         endAdornment: searchTask ? (
           <IconButton
@@ -434,6 +457,9 @@ export default function Clear() {
   };
 
   const handleSearchByTaskID = async (event: any) => {
+    setIsLoading(true);
+    setSearchTaskISLodaing(true);
+    setSearchIconISLodaing(false);
     try {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
@@ -443,7 +469,6 @@ export default function Clear() {
       taskIDList.syncError = !taskIDList.validate(taskIDValue as string);
 
       if (searchTask !== '' && !taskIDList.syncError) {
-        setIsLoading(true);
         const data = {
           args: {
             task_id: searchTask,
@@ -457,19 +482,23 @@ export default function Clear() {
         navigate('/jobs/task/clear');
         setTask(null);
         setIsLoading(false);
+        setSearchTaskISLodaing(false);
       }
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(true);
         setErrorMessageText(error.message);
         setIsLoading(false);
+        setSearchTaskISLodaing(false);
       }
     }
   };
 
   const handleSearchByURL = async (event: any) => {
+    setSearchTaskISLodaing(false);
     setLoadingButton(true);
     setIsLoading(true);
+    setSearchIconISLodaing(true);
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
@@ -525,6 +554,7 @@ export default function Clear() {
       } catch (error) {
         if (error instanceof Error) {
           setIsLoading(false);
+          setSearchIconISLodaing(false);
           setLoadingButton(false);
           setErrorMessage(true);
           setErrorMessageText(error.message);
@@ -532,6 +562,7 @@ export default function Clear() {
       }
     } else {
       setIsLoading(false);
+      setSearchIconISLodaing(false);
       setLoadingButton(false);
     }
   };
@@ -581,13 +612,14 @@ export default function Clear() {
         </Alert>
       </Snackbar>
       <Paper
-        variant="outlined"
-        sx={(theme) => ({
+        elevation={0}
+        sx={{
           display: 'inline-flex',
           flexWrap: 'wrap',
           mb: '2rem',
-          backgroundColor: 'var(--palette-dark-200Channel)',
-        })}
+          backgroundColor: 'var(--palette-grey-600Channel)',
+          borderRadius: '0.4rem',
+        }}
       >
         <StyledToggleButtonGroup
           size="small"
@@ -602,18 +634,19 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--palette--save-color)',
+                backgroundColor: 'var(--palette-save-color)',
                 color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--palette--save-color)',
+                  backgroundColor: 'var(--palette-save-color)',
                 },
               },
               '&:hover': {
                 backgroundColor: 'transparent',
               },
-              p: '0.3rem 0.6rem',
-              width: '11.5rem',
+              // textTransform: 'none',
+              p: '0.3rem 0.5rem',
+              // width: '11.5rem',
               color: 'var(--palette-dark-400Channel)',
             }}
           >
@@ -626,18 +659,19 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--palette--save-color)',
+                backgroundColor: 'var(--palette-save-color)',
                 color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--palette--save-color)',
+                  backgroundColor: 'var(--palette-save-color)',
                 },
               },
               '&:hover': {
                 backgroundColor: 'transparent',
               },
-              p: '0.3rem 0.6rem',
-              width: '11.5rem',
+              // textTransform: 'none',
+              p: '0.3rem 0.5rem',
+              // width: '11.5rem',
               color: 'var(--palette-dark-400Channel)',
             }}
           >
@@ -648,7 +682,7 @@ export default function Clear() {
       </Paper>
       {search === 'task-id' ? (
         <Box component="form" onSubmit={handleSearchByTaskID} sx={{ width: '38rem', height: '3rem' }}>
-          <TextField fullWidth size="small" {...taskIDList.formProps} />
+          <TextField fullWidth variant="outlined" size="small" {...taskIDList.formProps} sx={{ p: 0 }} />
         </Box>
       ) : (
         <>
@@ -702,7 +736,7 @@ export default function Clear() {
                                       width: '0.8rem',
                                       height: '0.8rem',
                                       mr: '0.3rem',
-                                      ':hover': { color: 'var(--palette--description-color)' },
+                                      ':hover': { color: 'var(--palette-description-color)' },
                                     }}
                                   />
                                 </Tooltip>
@@ -757,14 +791,14 @@ export default function Clear() {
         </Box>
       ) : task && task?.type === 'get_task' ? (
         <Box sx={{ width: '100%', typography: 'body1', mt: '2rem' }}>
-          {peers && peers?.length > 0 ? (
+          {Array.isArray(peers) && peers?.length > 0 ? (
             <>
               <Typography variant="h6" m="1rem 0" fontFamily="mabry-bold">
                 Cache
               </Typography>
               <Box id="cache">
                 {peers.map((peer: any, index: any) => {
-                  const peerId = peer.scheduler_cluster_id;
+                  const peerId = peer?.scheduler_cluster_id;
                   const totalPage = Math.ceil(peer?.peers.length / 5);
                   const taskPage = taskPages[peerId] || 1;
                   const currentPageData = getPaginatedList(peer?.peers, taskPage, 5);
@@ -808,9 +842,9 @@ export default function Clear() {
                           <Button
                             size="small"
                             sx={{
-                              background: 'var(--palette--button-color)',
-                              color: 'var(--palette--button-text-color)',
-                              ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
+                              background: 'var(--palette-button-color)',
+                              color: 'var(--palette-button-text-color)',
+                              ':hover': { backgroundColor: 'var(--palette-hover-button-text-color)' },
                             }}
                             variant="contained"
                             onClick={(event) => {
@@ -829,7 +863,7 @@ export default function Clear() {
                             p: '1rem 0.8rem',
                             display: 'flex',
                             alignItems: 'center',
-                            backgroundColor: 'var(--palette--table-title-color)',
+                            backgroundColor: 'var(--palette-table-title-color)',
                           }}
                         >
                           <Box width="20%" sx={{ display: 'flex', alignItems: 'center' }}>
@@ -894,13 +928,13 @@ export default function Clear() {
                                         borderRadius: '0.2rem',
                                         backgroundColor:
                                           item?.host_type === 'super'
-                                            ? 'var( --palette--description-color)'
-                                            : 'var(--palette--button-color)',
+                                            ? 'var( --palette-description-color)'
+                                            : 'var(--palette-button-color)',
                                         color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
                                         borderColor:
                                           item?.host_type === 'super'
-                                            ? 'var( --palette--description-color)'
-                                            : 'var(--palette--button-color)',
+                                            ? 'var( --palette-description-color)'
+                                            : 'var(--palette-button-color)',
                                         fontWeight: 'bold',
                                       }}
                                     />
@@ -950,13 +984,13 @@ export default function Clear() {
                                       borderRadius: '0.2rem',
                                       backgroundColor:
                                         item?.host_type === 'super'
-                                          ? 'var( --palette--description-color)'
-                                          : 'var(--palette--button-color)',
+                                          ? 'var( --palette-description-color)'
+                                          : 'var(--palette-button-color)',
                                       color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
                                       borderColor:
                                         item?.host_type === 'super'
-                                          ? 'var( --palette--description-color)'
-                                          : 'var(--palette--button-color)',
+                                          ? 'var( --palette-description-color)'
+                                          : 'var(--palette-button-color)',
                                       fontWeight: 'bold',
                                     }}
                                   />
@@ -1072,11 +1106,11 @@ export default function Clear() {
                   variant="body1"
                   fontFamily="mabry-bold"
                   component="span"
-                  sx={{ color: 'var(--palette--delete-button-color)' }}
+                  sx={{ color: 'var(--palette-delete-button-color)' }}
                 >
                   WARNING:&nbsp;
                 </Typography>
-                <Typography variant="body1" component="span" sx={{ color: 'var(--palette--delete-button-color)' }}>
+                <Typography variant="body1" component="span" sx={{ color: 'var(--palette-delete-button-color)' }}>
                   This action CANNOT be undone.
                 </Typography>
               </Box>

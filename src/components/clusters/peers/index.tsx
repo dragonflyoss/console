@@ -53,6 +53,7 @@ import { ReactComponent as GitCommit } from '../../../assets/images/cluster/peer
 import { ReactComponent as Active } from '../../../assets/images/cluster/peer/active.svg';
 import { ReactComponent as Export } from '../../../assets/images/cluster/peer/export.svg';
 import { ReactComponent as ExportFile } from '../../../assets/images/cluster/peer/export-file.svg';
+import { ReactComponent as Count } from '../../../assets/images/cluster/scheduler/number.svg';
 import { ColorModeContext } from '../../../App';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
@@ -440,7 +441,7 @@ export default function Peer() {
       </Snackbar>
       <Box className={styles.header}>
         <Box className={styles.headerTitle}>
-          <Typography variant="h5" pr="0.4rem">
+          <Typography variant="h6" fontFamily="mabry-bold" pr="0.4rem">
             Peers
           </Typography>
           <MuiTooltip
@@ -451,7 +452,7 @@ export default function Peer() {
                   underline="hover"
                   href="https://github.com/dragonflyoss/client"
                   target="_blank"
-                  style={{ color: 'var(--palette--menu-color)' }}
+                  style={{ color: 'var(--palette-menu-color)' }}
                 >
                   dragonflyoss/client
                 </Link>
@@ -469,12 +470,12 @@ export default function Peer() {
             disabled={disabled}
             size="small"
             sx={{
-              background: 'var(--palette--button-color)',
+              background: 'var(--palette-button-color)',
               ':hover': {
-                backgroundColor: 'var(--palette--button-color)',
-                borderColor: 'var(--palette--button-color)',
+                backgroundColor: 'var(--palette-button-color)',
+                borderColor: 'var(--palette-button-color)',
               },
-              color: 'var(--palette--button-text-color)',
+              color: 'var(--palette-button-text-color)',
               mr: '1rem',
             }}
             variant="contained"
@@ -491,12 +492,12 @@ export default function Peer() {
             id="export"
             size="small"
             sx={{
-              background: 'var(--palette--button-color)',
+              background: 'var(--palette-button-color)',
               ':hover': {
-                backgroundColor: 'var(--palette--button-color)',
-                borderColor: 'var(--palette--button-color)',
+                backgroundColor: 'var(--palette-button-color)',
+                borderColor: 'var(--palette-button-color)',
               },
-              color: 'var(--palette--button-text-color)',
+              color: 'var(--palette-button-text-color)',
             }}
             variant="contained"
             onClick={() => {
@@ -508,76 +509,85 @@ export default function Peer() {
           </Button>
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', mb: '3rem' }}>
-        <Box sx={{ width: '33.33%', mr: '1.6rem' }}>
-          <Card className={styles.navigationWrapper}>
-            <Box className={styles.navigationContent}>
-              <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
-                  Total
+      <Box className={styles.navigationContainer}>
+        <Card className={styles.navigationWrapper}>
+          <Box className={styles.navigationContent}>
+            <Box>
+              <Typography variant="subtitle2" fontFamily="mabry-bold" color="var(--palette-table-title-text-color)">
+                Total
+              </Typography>
+              {isLoading ? (
+                <Skeleton height={40} data-testid="cluster-loading" width="2rem" />
+              ) : (
+                <Typography id="total" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
+                  {peer.length}
                 </Typography>
-                {isLoading ? (
-                  <Skeleton height={40} data-testid="cluster-loading" width="2rem" />
-                ) : (
-                  <Typography id="total" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
-                    {peer.length}
-                  </Typography>
-                )}
-                <Typography variant="body2" color="var(--palette--table-title-text-color)">
+              )}
+              <Box className={styles.navigationCount}>
+                <span className={styles.navigationCountIcon}>
+                  <Count />
+                </span>
+                <Typography variant="body2" color="var(--palette-table-title-text-color)">
                   number of peers
                 </Typography>
               </Box>
-              <Box className={styles.navigation}></Box>
-              <Total className={styles.navigationIcon} />
             </Box>
-          </Card>
-        </Box>
-        <Box sx={{ width: '33.33%', mr: '1.6rem' }}>
-          <Card className={styles.navigationWrapper}>
-            <Box className={styles.navigationContent}>
-              <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
-                  Git Version
+            <Box className={styles.navigation}></Box>
+            <Total className={styles.navigationIcon} />
+          </Box>
+        </Card>
+        <Card className={styles.navigationWrapper}>
+          <Box className={styles.navigationContent}>
+            <Box>
+              <Typography variant="subtitle2" fontFamily="mabry-bold" color="var(--palette-table-title-text-color)">
+                Git Version
+              </Typography>
+              {isLoading ? (
+                <Skeleton height={40} data-testid="cluster-loading" width="2rem" />
+              ) : (
+                <Typography id="git-version" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
+                  {gitVersionCount}
                 </Typography>
-                {isLoading ? (
-                  <Skeleton height={40} data-testid="cluster-loading" width="2rem" />
-                ) : (
-                  <Typography id="git-version" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
-                    {gitVersionCount}
-                  </Typography>
-                )}
-                <Typography variant="body2" color="var(--palette--table-title-text-color)">
+              )}
+              <Box className={styles.navigationCount}>
+                <span className={styles.navigationCountIcon}>
+                  <Count />
+                </span>
+                <Typography variant="body2" color="var(--palette-table-title-text-color)">
                   number of git versions
                 </Typography>
               </Box>
-              <Box className={styles.navigation} />
-              <GitVersion className={styles.navigationIcon} />
             </Box>
-          </Card>
-        </Box>
-        <Box sx={{ width: '33.33%' }}>
-          <Card className={styles.navigationWrapper}>
-            <Box className={styles.navigationContent}>
-              <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
-                  Git Commit
+            <Box className={styles.navigation} />
+            <GitVersion className={styles.navigationIcon} />
+          </Box>
+        </Card>
+        <Card className={styles.navigationWrapper}>
+          <Box className={styles.navigationContent}>
+            <Box>
+              <Typography variant="subtitle2" fontFamily="mabry-bold" color="var(--palette-table-title-text-color)">
+                Git Commit
+              </Typography>
+              {isLoading ? (
+                <Skeleton height={40} data-testid="cluster-loading" width="2rem" />
+              ) : (
+                <Typography id="git-commit" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
+                  {gitCommitCount}
                 </Typography>
-                {isLoading ? (
-                  <Skeleton height={40} data-testid="cluster-loading" width="2rem" />
-                ) : (
-                  <Typography id="git-commit" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
-                    {gitCommitCount}
-                  </Typography>
-                )}
-                <Typography variant="body2" color="var(--palette--table-title-text-color)">
+              )}
+              <Box className={styles.navigationCount}>
+                <span className={styles.navigationCountIcon}>
+                  <Count />
+                </span>
+                <Typography variant="body2" color="var(--palette-table-title-text-color)">
                   number of git commits
                 </Typography>
               </Box>
-              <Box className={styles.navigation} />
-              <GitCommit className={styles.navigationIcon} />
             </Box>
-          </Card>
-        </Box>
+            <Box className={styles.navigation} />
+            <GitCommit className={styles.navigationIcon} />
+          </Box>
+        </Card>
       </Box>
       <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         <Box className={styles.visualizationWrapper}>
@@ -639,7 +649,7 @@ export default function Peer() {
                     sx={{
                       bgcolor: '#e0e0e0',
                       '& .MuiLinearProgress-bar': {
-                        bgcolor: 'var(--palette--description-color)',
+                        bgcolor: 'var(--palette-description-color)',
                       },
                     }}
                     variant="determinate"
@@ -737,7 +747,7 @@ export default function Peer() {
                     sx={{
                       bgcolor: '#e0e0e0',
                       '& .MuiLinearProgress-bar': {
-                        bgcolor: 'var(--palette--description-color)',
+                        bgcolor: 'var(--palette-description-color)',
                       },
                     }}
                     variant="determinate"

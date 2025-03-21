@@ -2,7 +2,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink">
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <circle id="椭圆形" fill="#B2E4C1" cx="67.5" cy="67.5" r="67.5"></circle>
-        <g id="编组" transform="translate(26, 26)" fill="#2E8F79" fill-rule="nonzero">
+        <g id="编组" transform="translate(26, 26)" fill="currentColor" fill-rule="nonzero">
             <path
                 d="M41,0 C63.6714542,0 82,18.3285458 82,41 C82,63.6714542 63.6714542,82 41,82 C18.3285458,82 0,63.6714542 0,41 C0,18.3285458 18.3285458,0 41,0 Z"
                 id="形状"></path>

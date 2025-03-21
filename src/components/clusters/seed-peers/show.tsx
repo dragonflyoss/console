@@ -178,18 +178,30 @@ export default function SeedPeer() {
                   borderRadius: '0.25rem',
                   backgroundColor:
                     seedPeer?.state === 'active'
-                      ? 'var(--palette--description-color)'
+                      ? 'var(--palette-description-color)'
                       : 'var(--palette-dark-300Channel)',
                   color: seedPeer?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
                   borderColor:
                     seedPeer?.state === 'active'
-                      ? 'var(--palette--description-color)'
+                      ? 'var(--palette-description-color)'
                       : 'var(--palette-dark-300Channel)',
                   fontWeight: 'bold',
                 }}
               />
             ) : (
-              '-'
+              <Chip
+                label={'-'}
+                size="small"
+                id="status"
+                variant="outlined"
+                sx={{
+                  borderRadius: '0.25rem',
+                  backgroundColor: 'var(--palette-description-color)',
+                  color: '#FFFFFF',
+                  borderColor: 'var(--palette-description-color)',
+                  fontWeight: 'bold',
+                }}
+              />
             )}
           </Typography>
         </Box>

@@ -152,7 +152,7 @@ export default function ShowPreheat() {
           />
         }
         aria-label="breadcrumb"
-        sx={{ mb: '2rem', mt: '1rem' }}
+        sx={{ mb: '1.5rem', mt: '1rem' }}
       >
         <Typography color="text.primary">Job</Typography>
         <RouterLink component={Link} underline="hover" color="text.primary" to={`/jobs/preheats`}>

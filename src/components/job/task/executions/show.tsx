@@ -284,7 +284,7 @@ export default function ShowExecutions() {
                       : executions?.result.state === 'FAILURE'
                       ? '#D42536'
                       : '#DBAB0A',
-                  color: 'var(var(--palette--button-text-color)',
+                  color: 'var(var(--palette-button-text-color)',
                 }}
                 id="status"
               >
@@ -392,10 +392,10 @@ export default function ShowExecutions() {
                 variant="outlined"
                 sx={{
                   borderRadius: '0.3rem',
-                  background: 'var(--palette--button-color)',
+                  background: 'var(--palette-button-color)',
                   color: '#FFFFFF',
                   mr: '0.4rem',
-                  borderColor: 'var(--palette--button-color)',
+                  borderColor: 'var(--palette-button-color)',
                   fontWeight: 'bold',
                 }}
               />
@@ -490,7 +490,7 @@ export default function ShowExecutions() {
           </Box>
           <Card>
             <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
-              <TableHead sx={{ backgroundColor: 'var(--palette--table-title-color)' }}>
+              <TableHead sx={{ backgroundColor: 'var(--palette-table-title-color)' }}>
                 <TableRow>
                   <TableCell align="center">
                     <Typography variant="subtitle1" fontFamily="mabry-bold">
@@ -588,13 +588,13 @@ export default function ShowExecutions() {
                                   borderRadius: '0.2rem',
                                   backgroundColor:
                                     item?.host_type === 'super'
-                                      ? 'var( --palette--description-color)'
-                                      : 'var(--palette--button-color)',
+                                      ? 'var( --palette-description-color)'
+                                      : 'var(--palette-button-color)',
                                   color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
                                   borderColor:
                                     item?.host_type === 'super'
-                                      ? 'var( --palette--description-color)'
-                                      : 'var(--palette--button-color)',
+                                      ? 'var( --palette-description-color)'
+                                      : 'var(--palette-button-color)',
                                   fontWeight: 'bold',
                                 }}
                               />

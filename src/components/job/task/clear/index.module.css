@@ -23,7 +23,7 @@
 }
 
 .hostnameTitle {
-  color: var(--palette--table-title-text-color);
+  color: var(--palette-table-title-text-color);
 }
 
 .filterInput {
@@ -54,7 +54,11 @@
 }
 
 .circularProgress {
-  margin-right: 0.4rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .schedulerClusterIcon {

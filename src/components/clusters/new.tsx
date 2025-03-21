@@ -174,7 +174,7 @@ export default function NewCluster() {
                   width: '0.8rem',
                   height: '0.8rem',
                   mr: '0.3rem',
-                  ':hover': { color: 'var(--palette--description-color)' },
+                  ':hover': { color: 'var(--palette-description-color)' },
                 }}
               />
             </Tooltip>
@@ -241,7 +241,7 @@ export default function NewCluster() {
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
-                ':hover': { color: 'var(--palette--description-color)' },
+                ':hover': { color: 'var(--palette-description-color)' },
               }}
             />
           </Tooltip>
@@ -306,7 +306,7 @@ export default function NewCluster() {
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
-                ':hover': { color: 'var(--palette--description-color)' },
+                ':hover': { color: 'var(--palette-description-color)' },
               }}
             />
           </Tooltip>
@@ -668,7 +668,7 @@ export default function NewCluster() {
           />
         }
         aria-label="breadcrumb"
-        sx={{ mb: '2rem', mt: '1rem' }}
+        sx={{ mt: '1rem' }}
       >
         <RouterLink component={Link} underline="hover" color="text.primary" to={`/clusters`}>
           Cluster
@@ -677,7 +677,6 @@ export default function NewCluster() {
       </Breadcrumbs>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Box component="form" onSubmit={handleSubmit} noValidate>
-        {/* <Card className={styles.card}></Card> */}
         <Box className={styles.container}>
           <Box className={styles.informationTitle}>
             <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
@@ -689,7 +688,7 @@ export default function NewCluster() {
           </Box>
           <Box className={styles.defaultContainer}>
             <FormControlLabel
-              control={<Checkbox sx={{ '&.MuiCheckbox-root': { color: 'var(--palette--button-color)' } }} />}
+              control={<Checkbox sx={{ '&.MuiCheckbox-root': { color: 'var(--palette-button-color)' } }} />}
               label="Set cluster as your default cluster"
               name="isDefault"
               sx={{ '&.MuiFormControlLabel-root': { mr: '0.6rem' } }}

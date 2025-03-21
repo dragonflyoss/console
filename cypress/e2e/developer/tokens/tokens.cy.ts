@@ -64,7 +64,7 @@ describe('Tokens', () => {
       },
     );
 
-    cy.get('.MuiPaper-root').should('be.visible').and('have.text', `You don't have any tokens.`);
+    cy.get('#no-tokens').should('be.visible').and('have.text', `You don't have any tokens.`);
   });
 
   it('should handle API error response', () => {
@@ -92,7 +92,7 @@ describe('Tokens', () => {
     cy.get('#tokens-list').should('not.exist');
 
     // Show You don't have any preheat tokens.
-    cy.get('.MuiPaper-root').should('be.visible').and('have.text', `You don't have any tokens.`);
+    cy.get('#no-tokens').should('be.visible').and('have.text', `You don't have any tokens.`);
   });
 
   describe('pagination', () => {

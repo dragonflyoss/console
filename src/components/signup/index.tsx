@@ -14,7 +14,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { setPageTitle } from '../../lib/utils';
 import { ReactComponent as Login } from '../../assets/images/login/login.svg';
 import { ReactComponent as PageLoading } from '../../assets/images/login/page-loading.svg';
-import { GithubLayout, HeaderLayout } from '../dark-layout';
+import { HeaderLayout } from '../dark-layout';
 
 export default function SignUp() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -276,9 +276,9 @@ export default function SignUp() {
                 variant="contained"
                 sx={{
                   mt: '1.4rem',
-                  background: 'var(--palette--description-color)',
-                  color: 'var(--palette--button-text-color)',
-                  ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
+                  background: 'var(--palette-description-color)',
+                  color: 'var(--palette-button-text-color)',
+                  ':hover': { backgroundColor: 'var(--palette-sign-hover-button-text-color)' },
                 }}
               >
                 <Typography variant="button">Sign Up</Typography>
@@ -300,6 +300,7 @@ export default function SignUp() {
                 <Grid>
                   <Typography component="span">Already have an account?</Typography>
                   <RouterLink
+                    id="sign-in"
                     underline="hover"
                     component={Link}
                     to="/signin"

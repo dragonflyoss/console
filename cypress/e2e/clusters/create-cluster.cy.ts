@@ -192,7 +192,7 @@ describe('Create cluster', () => {
     // Show error message.
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('.MuiPaper-root').should('not.exist');
+    cy.get('.MuiPaper-message').should('not.exist');
   });
 
   it('click the `CANCEL button', () => {

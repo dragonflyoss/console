@@ -76,7 +76,7 @@ describe('Schedulers', () => {
       cy.get('#state-7')
         .should('be.visible')
         .and('contain', 'Active')
-        .and('have.css', 'background-color', 'rgb(46, 143, 121)');
+        .and('have.css', 'background-color', 'rgb(31, 125, 83)');
 
       // Show features.
       cy.get('#features-7').should('be.visible').and('contain', 'Schedule');
@@ -88,7 +88,7 @@ describe('Schedulers', () => {
       cy.get('#state-43')
         .should('be.visible')
         .and('contain', 'Inactive')
-        .and('have.css', 'background-color', 'rgb(28, 41, 58)');
+        .and('have.css', 'background-color', 'rgb(24, 35, 15)');
 
       // Click scheduler-18 operation button.
       cy.get('#operation-18').click();

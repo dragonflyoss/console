@@ -15,7 +15,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { setPageTitle } from '../../lib/utils';
 import { ReactComponent as Login } from '../../assets/images/login/login.svg';
 import { ReactComponent as PageLoading } from '../../assets/images/login/page-loading.svg';
-import { GithubLayout, HeaderLayout } from '../dark-layout';
+import { HeaderLayout } from '../dark-layout';
 
 export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -215,9 +215,9 @@ export default function SignIn() {
                 variant="contained"
                 sx={{
                   mt: '1.4rem',
-                  background: 'var(--palette--description-color)',
-                  color: 'var(--palette--button-text-color)',
-                  ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
+                  background: 'var(--palette-description-color)',
+                  color: 'var(--palette-button-text-color)',
+                  ':hover': { backgroundColor: 'var(--palette-sign-hover-button-text-color)' },
                 }}
               >
                 <Typography variant="button">Sign In</Typography>
@@ -241,6 +241,7 @@ export default function SignIn() {
                     New to Dragnfly?
                   </Typography>
                   <RouterLink
+                    id="create-account"
                     underline="hover"
                     component={Link}
                     to="/signup"
@@ -252,21 +253,6 @@ export default function SignIn() {
                     <Typography component="span">Create an account.</Typography>
                   </RouterLink>
                 </Grid>
-              </Box>
-              <Box sx={{ textAlign: 'right', paddingTop: '1rem' }}>
-                <RouterLink
-                  id="github"
-                  underline="hover"
-                  href="https://github.com/dragonflyoss/dragonfly"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => {
-                    setPageLoding(true);
-                  }}
-                  sx={{ color: '#2E8F79' }}
-                >
-                  <Typography component="span"> More info...</Typography>
-                </RouterLink>
               </Box>
             </Box>
           </Box>

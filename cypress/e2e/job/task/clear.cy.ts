@@ -19,13 +19,15 @@ describe('Clear', () => {
     cy.get('#light').should('exist');
     cy.get('#no-task-image').should('exist');
 
-    cy.get('#mode').click();
-
+    cy.get('#dark').click();
     // Dark mode should show a different no-task-image.
-    cy.get('#light').should('not.exist');
+
+    cy.get('.Mui-selected').invoke('text').should('contain', 'Dark');
+
+    cy.get('.Mui-selected').invoke('text').should('not.contain', 'Light');
+
     cy.get('#no-task-image').should('not.exist');
 
-    cy.get('#dark').should('exist');
     cy.get('#dark-no-task-image').should('exist');
 
     cy.intercept(

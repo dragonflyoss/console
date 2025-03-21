@@ -104,6 +104,7 @@ import { ReactComponent as Failure } from '../../../assets/images/job/preheat/fa
 import { ReactComponent as Features } from '../../../assets/images/cluster/features.svg';
 import { ReactComponent as Preheat } from '../../../assets/images/cluster/preheat.svg';
 import { ReactComponent as Schedule } from '../../../assets/images/cluster/scheduler.svg';
+import { ReactComponent as Count } from '../../../assets/images/cluster/scheduler/number.svg';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 Chart.defaults.font.family = 'mabry-light';
@@ -593,7 +594,9 @@ export default function ShowCluster() {
         </Alert>
       </Snackbar>
       <Box className={styles.openDeleteInactiveDialog}>
-        <Typography variant="h5">Schedulers</Typography>
+        <Typography variant="h6" fontFamily="mabry-bold">
+          Schedulers
+        </Typography>
         <MuiTooltip title="Delete inactive schedulers." placement="top">
           <Button
             variant="contained"
@@ -604,9 +607,9 @@ export default function ShowCluster() {
             }}
             className={styles.deleteButton}
             sx={{
-              background: 'var(--palette--button-color)',
-              color: 'var(--palette--button-text-color)',
-              ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
+              background: 'var(--palette-button-color)',
+              color: 'var(--palette-button-text-color)',
+              ':hover': { backgroundColor: 'var(--palette-hover-button-text-color)' },
             }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
@@ -614,82 +617,89 @@ export default function ShowCluster() {
           </Button>
         </MuiTooltip>
       </Box>
-      <Box sx={{ display: 'flex', mb: '2rem' }}>
-        <Box sx={{ width: '33.33%', mr: '1.6rem' }}>
-          <Card className={styles.navigationWrapper}>
-            <Box className={styles.navigationContent}>
-              <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
-                  Total
+      <Box className={styles.navigationContainer}>
+        <Card className={styles.navigationWrapper}>
+          <Box>
+            <Typography variant="subtitle2" fontFamily="mabry-bold" color="var(--palette-table-title-text-color)">
+              Total
+            </Typography>
+            {isLoading ? (
+              <Box p="0.4rem 0">
+                <Skeleton height={40} data-testid="isloading" width="2rem" />
+              </Box>
+            ) : (
+              <Typography id="total" variant="h5" p="0.5rem 0">
+                {schedulerCount.length}
+              </Typography>
+            )}
+            <Box className={styles.navigationCount}>
+              <span className={styles.navigationCountIcon}>
+                <Count />
+              </span>
+              <Typography variant="body2" color="var(--palette-table-title-text-color)">
+                number of schedulers
+              </Typography>
+            </Box>
+          </Box>
+          <Box className={styles.navigation} />
+          <Total className={styles.navigationIcon} />
+        </Card>
+        <Card className={styles.navigationWrapper}>
+          <Box className={styles.navigationContent}>
+            <Box>
+              <Typography variant="subtitle2" fontFamily="mabry-bold" color="var(--palette-table-title-text-color)">
+                Active
+              </Typography>
+              {isLoading ? (
+                <Box p="0.4rem 0">
+                  <Skeleton height={40} data-testid="isloading" width="2rem" />
+                </Box>
+              ) : (
+                <Typography id="active" variant="h5" p="0.5rem 0">
+                  {numberOfActiveSchedulers}
                 </Typography>
-                {isLoading ? (
-                  <Box p="0.4rem 0">
-                    <Skeleton height={40} data-testid="isloading" width="2rem" />
-                  </Box>
-                ) : (
-                  <Typography id="total" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
-                    {schedulerCount.length}
-                  </Typography>
-                )}
-                <Typography variant="body2" color="var(--palette--table-title-text-color)">
-                  number of schedulers
+              )}
+              <Box className={styles.navigationCount}>
+                <span className={styles.navigationCountIcon}>
+                  <Count />
+                </span>
+                <Typography variant="body2" color="var(--palette-table-title-text-color)">
+                  number of active schedulers{' '}
                 </Typography>
               </Box>
-              <Box className={styles.navigation} />
-              <Total className={styles.navigationIcon} />
             </Box>
-          </Card>
-        </Box>
-        <Box sx={{ width: '33.33%', mr: '1.6rem' }}>
-          <Card className={styles.navigationWrapper}>
-            <Box className={styles.navigationContent}>
-              <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
-                  Active
+            <Box className={styles.navigation} />
+            <Active className={styles.navigationIcon} />
+          </Box>
+        </Card>
+        <Card className={styles.navigationWrapper}>
+          <Box className={styles.navigationContent}>
+            <Box>
+              <Typography variant="subtitle2" fontFamily="mabry-bold" color="var(--palette-table-title-text-color)">
+                Inactive
+              </Typography>
+              {isLoading ? (
+                <Box p="0.4rem 0">
+                  <Skeleton height={40} data-testid="isloading" width="2rem" />
+                </Box>
+              ) : (
+                <Typography id="inactive" variant="h5" p="0.5rem 0">
+                  {numberOfInactiveSchedulers}
                 </Typography>
-                {isLoading ? (
-                  <Box p="0.4rem 0">
-                    <Skeleton height={40} data-testid="isloading" width="2rem" />
-                  </Box>
-                ) : (
-                  <Typography id="active" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
-                    {numberOfActiveSchedulers}
-                  </Typography>
-                )}
-                <Typography variant="body2" color="var(--palette--table-title-text-color)">
-                  number of active schedulers
-                </Typography>
-              </Box>
-              <Box className={styles.navigation} />
-              <Active className={styles.navigationIcon} />
-            </Box>
-          </Card>
-        </Box>
-        <Box sx={{ width: '33.33%' }}>
-          <Card className={styles.navigationWrapper}>
-            <Box className={styles.navigationContent}>
-              <Box>
-                <Typography variant="subtitle1" fontFamily="mabry-bold" color="var(--palette--table-title-text-color)">
-                  Inactive
-                </Typography>
-                {isLoading ? (
-                  <Box p="0.4rem 0">
-                    <Skeleton height={40} data-testid="isloading" width="2rem" />
-                  </Box>
-                ) : (
-                  <Typography id="inactive" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
-                    {numberOfInactiveSchedulers}
-                  </Typography>
-                )}
-                <Typography variant="body2" color="var(--palette--table-title-text-color)">
+              )}
+              <Box className={styles.navigationCount}>
+                <span className={styles.navigationCountIcon}>
+                  <Count />
+                </span>
+                <Typography variant="body2" color="var(--palette-table-title-text-color)">
                   number of inactive schedulers
                 </Typography>
               </Box>
-              <Box className={styles.navigation} />
-              <Inactive className={styles.navigationIcon} />
             </Box>
-          </Card>
-        </Box>
+            <Box className={styles.navigation} />
+            <Inactive className={styles.navigationIcon} />
+          </Box>
+        </Card>
       </Box>
       <Box className={styles.searchWrapper}>
         <Stack spacing={2} sx={{ width: '20rem' }}>
@@ -770,7 +780,7 @@ export default function ShowCluster() {
             }}
             sx={{
               '& .MuiMenu-paper': {
-                boxShadow: 'var(--palette-menu-shadow)',
+                boxShadow: 'var(--custom-shadows-dropdown)',
                 borderRadius: '0.6rem',
               },
               '& .MuiMenu-list': {
@@ -828,7 +838,7 @@ export default function ShowCluster() {
           {isLoading ? (
             <Card className={styles.loadingCard}>
               <Box className={styles.clusterListContent}>
-                <Box p="1.2rem 1.2rem 0 1.2rem">
+                <Box p="1.2rem">
                   <Box display="flex" mb="0.5rem">
                     <ID className={styles.idIcon} />
                     <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
@@ -843,12 +853,11 @@ export default function ShowCluster() {
                 <Divider
                   sx={{
                     borderStyle: 'dashed',
-                    borderColor: 'var(--palette--palette-divider)',
+                    borderColor: 'var(--palette-palette-divider)',
                     borderWidth: '0px 0px thin',
-                    m: '1rem 0',
                   }}
                 />
-                <Box p="0 1.2rem 1.2rem 1.2rem">
+                <Box p="1.2rem">
                   <Skeleton data-testid="isloading" sx={{ width: '4rem', height: '1.4rem', mb: '0.8rem' }} />
                   <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
                 </Box>
@@ -859,7 +868,7 @@ export default function ShowCluster() {
               {Array.isArray(allSchedulers) &&
                 allSchedulers.map((item: any) => (
                   <Card className={styles.card}>
-                    <Box p="1.5rem 1.5rem 1rem 1.5rem" position="relative">
+                    <Box p="1.2rem" position="relative">
                       <IconButton
                         id={`operation-${item?.id}`}
                         onClick={(event: any) => {
@@ -943,12 +952,12 @@ export default function ShowCluster() {
                             }}
                           >
                             <ListItemIcon>
-                              <DeleteIcon fontSize="small" sx={{ color: 'var(--palette--delete-button-color)' }} />
+                              <DeleteIcon fontSize="small" sx={{ color: 'var(--palette-delete-button-color)' }} />
                             </ListItemIcon>
                             <Typography
                               variant="body2"
                               className={styles.menuText}
-                              color="var(--palette--delete-button-color)"
+                              color="var(--palette-delete-button-color)"
                             >
                               Delete
                             </Typography>
@@ -992,12 +1001,12 @@ export default function ShowCluster() {
                             borderRadius: '0.2rem',
                             backgroundColor:
                               item?.state === 'active'
-                                ? 'var(--palette--menu-background-color)'
+                                ? 'var(--palette-grey-background-color)'
                                 : 'var(--palette-background-inactive)',
                             color:
                               item?.state === 'active'
-                                ? 'var(--palette--description-color)'
-                                : 'var(--palette--table-title-text-color)',
+                                ? 'var(--palette-text-color)'
+                                : 'var(--palette-table-title-text-color)',
                             border: 0,
                             fontFamily: 'mabry-bold',
                           }}
@@ -1007,11 +1016,11 @@ export default function ShowCluster() {
                     <Divider
                       sx={{
                         borderStyle: 'dashed',
-                        borderColor: 'var(--palette--palette-divider)',
+                        borderColor: 'var(--palette-palette-divider)',
                         borderWidth: '0px 0px thin',
                       }}
                     />
-                    <Box p="1.5rem">
+                    <Box p="1.2rem">
                       <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: '1rem' }}>
                           <IP className={styles.statusIcon} />
@@ -1036,7 +1045,7 @@ export default function ShowCluster() {
                                   sx={{
                                     borderRadius: '0.2rem',
                                     background: 'var(--palette-background-inactive)',
-                                    color: 'var(--palette--table-title-text-color)',
+                                    color: 'var(--palette-table-title-text-color)',
                                     mr: '0.4rem',
                                     border: '0',
                                     fontFamily: 'mabry-bold',
@@ -1062,7 +1071,7 @@ export default function ShowCluster() {
       ) : (
         <Card>
           <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
-            <TableHead sx={{ backgroundColor: 'var(--palette--table-title-color)' }}>
+            <TableHead sx={{ backgroundColor: 'var(--palette-table-title-color)' }}>
               <TableRow>
                 <TableCell align="center" className={styles.tableHeader}>
                   <Typography variant="subtitle1" className={styles.tableHeaderText}>
@@ -1169,7 +1178,7 @@ export default function ShowCluster() {
                               component={Link}
                               to={`/clusters/${params.id}/schedulers/${item?.id}`}
                               underline="hover"
-                              sx={{ color: 'var(--palette--description-color)' }}
+                              sx={{ color: 'var(--palette-description-color)' }}
                             >
                               {item?.host_name}
                             </RouterLink>
@@ -1190,12 +1199,12 @@ export default function ShowCluster() {
                                 borderRadius: '0.2rem',
                                 backgroundColor:
                                   item?.state === 'active'
-                                    ? 'var(--palette--description-color)'
+                                    ? 'var(--palette-description-color)'
                                     : 'var(--palette-dark-300Channel)',
                                 color: item?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
                                 borderColor:
                                   item?.state === 'active'
-                                    ? 'var(--palette--description-color)'
+                                    ? 'var(--palette-description-color)'
                                     : 'var(--palette-dark-300Channel)',
                                 fontWeight: 'bold',
                               }}
@@ -1305,15 +1314,12 @@ export default function ShowCluster() {
                                   }}
                                 >
                                   <ListItemIcon>
-                                    <DeleteIcon
-                                      fontSize="small"
-                                      sx={{ color: 'var(--palette--delete-button-color)' }}
-                                    />
+                                    <DeleteIcon fontSize="small" sx={{ color: 'var(--palette-delete-button-color)' }} />
                                   </ListItemIcon>
                                   <Typography
                                     variant="body2"
                                     className={styles.menuText}
-                                    color="var(--palette--delete-button-color)"
+                                    color="var(--palette-delete-button-color)"
                                   >
                                     Delete
                                   </Typography>
@@ -1426,7 +1432,7 @@ export default function ShowCluster() {
                                 {deleteInactiveSchedulerSuccessful || '0'}
                               </Typography>
                               <Typography
-                                color="var(--palette--table-title-text-color)"
+                                color="var(--palette-table-title-text-color)"
                                 component="div"
                                 variant="subtitle2"
                               >
@@ -1525,9 +1531,9 @@ export default function ShowCluster() {
                       size="small"
                       onClick={handleReset}
                       sx={{
-                        background: 'var(--palette--button-color)',
-                        color: 'var(--palette--button-text-color)',
-                        ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
+                        background: 'var(--palette-button-color)',
+                        color: 'var(--palette-button-text-color)',
+                        ':hover': { backgroundColor: 'var(--palette-hover-button-text-color)' },
                       }}
                     >
                       Cancel
@@ -1685,14 +1691,14 @@ export default function ShowCluster() {
                           variant="body1"
                           fontFamily="mabry-bold"
                           component="span"
-                          sx={{ color: 'var(--palette--delete-button-color)' }}
+                          sx={{ color: 'var(--palette-delete-button-color)' }}
                         >
                           WARNING:&nbsp;
                         </Typography>
                         <Typography
                           variant="body1"
                           component="span"
-                          sx={{ color: 'var(--palette--delete-button-color)' }}
+                          sx={{ color: 'var(--palette-delete-button-color)' }}
                         >
                           This action CANNOT be undone.
                         </Typography>
@@ -1733,9 +1739,9 @@ export default function ShowCluster() {
                     onClick={handleBack}
                     sx={{
                       '&.MuiButton-root': {
-                        backgroundColor: activeStep === 0 ? '' : 'var(--palette--button-color)',
-                        color: 'var(--palette--button-text-color)',
-                        ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
+                        backgroundColor: activeStep === 0 ? '' : 'var(--palette-button-color)',
+                        color: 'var(--palette-button-text-color)',
+                        ':hover': { backgroundColor: 'var(--palette-hover-button-text-color)' },
                       },
                     }}
                   >
@@ -1751,9 +1757,9 @@ export default function ShowCluster() {
                       id="save-delete"
                       sx={{
                         '&.MuiLoadingButton-root': {
-                          backgroundColor: 'var(--palette--delete-button-color)',
-                          color: 'var(--palette--button-text-color)',
-                          borderColor: 'var(--palette--save-color)',
+                          backgroundColor: 'var(--palette-delete-button-color)',
+                          color: 'var(--palette-button-text-color)',
+                          borderColor: 'var(--palette-save-color)',
                         },
                       }}
                     >
@@ -1772,9 +1778,9 @@ export default function ShowCluster() {
                           backgroundColor:
                             Array.isArray(schedulerInactive) && schedulerInactive.length === 0
                               ? ''
-                              : 'var(--palette--button-color)',
-                          color: 'var(--palette--button-text-color)',
-                          ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
+                              : 'var(--palette-button-color)',
+                          color: 'var(--palette-button-text-color)',
+                          ':hover': { backgroundColor: 'var(--palette-hover-button-text-color)' },
                         },
                       }}
                     >
@@ -1865,7 +1871,7 @@ export default function ShowCluster() {
                 <Typography component="div" variant="body2" fontFamily="mabry-bold">
                   Schedule
                 </Typography>
-                <Typography component="div" variant="caption" color="var(--palette--text-palette-text-secondary)">
+                <Typography component="div" variant="caption" color="var(--palette-text-palette-text-secondary)">
                   If schedule feature is enabled, the scheduler can schedule download tasks.
                 </Typography>
               </Box>
@@ -1891,7 +1897,7 @@ export default function ShowCluster() {
                 <Typography component="div" variant="body2" fontFamily="mabry-bold">
                   Preheat
                 </Typography>
-                <Typography component="div" variant="caption" color="var(--palette--text-palette-text-secondary)">
+                <Typography component="div" variant="caption" color="var(--palette-text-palette-text-secondary)">
                   If preheat feature is enabled, the scheduler can execute preheating job.
                 </Typography>
               </Box>

@@ -133,7 +133,7 @@ export default function Schedulers() {
             </Typography>
           </Box>
           <Box id="cluster-id" className={styles.clusterID}>
-            <Typography component="div" variant="body2" className={styles.headerText}>
+            <Typography component="div" variant="body2" fontFamily="mabry-bold" className={styles.headerText}>
               {isLoading ? (
                 <Skeleton data-testid="isloading" sx={{ width: '8rem' }} />
               ) : (
@@ -172,14 +172,10 @@ export default function Schedulers() {
                 sx={{
                   borderRadius: '0.25rem',
                   backgroundColor:
-                    scheduler?.state === 'active'
-                      ? 'var(--palette--description-color)'
-                      : 'var(--palette-dark-300Channel)',
+                    scheduler?.state === 'active' ? 'var(--palette-text-color)' : 'var(--palette-dark-300Channel)',
                   color: scheduler?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
                   borderColor:
-                    scheduler?.state === 'active'
-                      ? 'var(--palette--description-color)'
-                      : 'var(--palette-dark-300Channel)',
+                    scheduler?.state === 'active' ? 'var(--palette-text-color)' : 'var(--palette-dark-300Channel)',
                   fontWeight: 'bold',
                 }}
               />

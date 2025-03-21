@@ -289,7 +289,7 @@ export default function Users() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '2rem' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '1.5rem' }}>
         <Typography variant="h5" fontFamily="mabry-bold">
           User
         </Typography>
@@ -297,9 +297,9 @@ export default function Users() {
           id="create-user"
           size="small"
           sx={{
-            background: 'var(--palette--button-color)',
-            color: 'var(--palette--button-text-color)',
-            ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
+            background: 'var(--palette-button-color)',
+            color: 'var(--palette-button-text-color)',
+            ':hover': { backgroundColor: 'var(--palette-hover-button-text-color)' },
           }}
           variant="contained"
           onClick={() => {
@@ -364,7 +364,7 @@ export default function Users() {
       </Box>
       <Card>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead sx={{ backgroundColor: 'var(--palette--table-title-color)' }}>
+          <TableHead sx={{ backgroundColor: 'var(--palette-table-title-color)' }}>
             <TableRow>
               <TableCell className={styles.tableHeaderText} align="center"></TableCell>
               <TableCell align="center" className={styles.tableHeaderText}>
@@ -447,8 +447,7 @@ export default function Users() {
                         alt="Remy Sharp"
                         sx={{
                           '&.MuiAvatar-root': {
-                            background: 'var(--palette--button-color)',
-                            color: '#fff',
+                            background: 'var(--palette-secondary-dark)',
                           },
                         }}
                         src={item?.avatar}
@@ -471,12 +470,12 @@ export default function Users() {
                         borderRadius: '0.2rem',
                         backgroundColor:
                           item?.state === 'enable'
-                            ? 'var( --palette--description-color)'
+                            ? 'var( --palette-description-color)'
                             : 'var(--palette-dark-300Channel)',
                         color: item?.state === 'enable' ? '#FFFFFF' : '#FFFFFF',
                         borderColor:
                           item?.state === 'enable'
-                            ? 'var( --palette--description-color)'
+                            ? 'var( --palette-description-color)'
                             : 'var(--palette-dark-300Channel)',
                         fontWeight: 'bold',
                       }}
@@ -490,7 +489,6 @@ export default function Users() {
                       }}
                       id={`action-${item?.name}`}
                       aria-haspopup="true"
-                      sx={{ position: 'relative' }}
                     >
                       <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                     </IconButton>
@@ -499,12 +497,18 @@ export default function Users() {
                       id="account-menu"
                       open={Boolean(anchorElement)}
                       onClose={closeAllPopups}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
                       sx={{
-                        position: 'absolute',
-                        left: '-6.5rem',
                         '& .MuiMenu-paper': {
-                          boxShadow: 'var(--palette-menu-shadow);',
-                          borderRadius: 'var(--menu-border-radius);',
+                          boxShadow: 'var(--custom-shadows-dropdown)',
+                          borderRadius: 'var(--menu-border-radius)',
                         },
                         '& .MuiMenu-list': {
                           p: 0,
@@ -513,6 +517,7 @@ export default function Users() {
                     >
                       <Box className={styles.menu}>
                         <MenuItem
+                          sx={{ borderRadius: 'var(--menu-border-radius)' }}
                           id={`detail-${selectedRow?.name}`}
                           onClick={() => {
                             handleChange(selectedRow);
@@ -530,6 +535,7 @@ export default function Users() {
                           <></>
                         ) : (
                           <MenuItem
+                            sx={{ borderRadius: 'var(--menu-border-radius)' }}
                             id={`edit-${selectedRow?.name}`}
                             onClick={() => {
                               openSwitchUser(selectedRow);
@@ -607,7 +613,7 @@ export default function Users() {
               <Box
                 sx={{
                   borderColor:
-                    updateRole === 'root' ? 'var(--palette--description-color)' : 'var(--palette-background-paper)',
+                    updateRole === 'root' ? 'var(--palette-description-color)' : 'var(--palette-background-paper)',
                 }}
                 className={styles.roleEdit}
               >
@@ -635,7 +641,7 @@ export default function Users() {
                   checked={updateRole === 'root'}
                   sx={{
                     '&.Mui-checked': {
-                      color: 'var(--palette--description-color)',
+                      color: 'var(--palette-description-color)',
                     },
                   }}
                   onChange={(e: any) => {
@@ -646,7 +652,7 @@ export default function Users() {
               <Box
                 sx={{
                   borderColor:
-                    updateRole === 'guest' ? 'var(--palette--description-color)' : 'var(--palette-background-paper)',
+                    updateRole === 'guest' ? 'var(--palette-description-color)' : 'var(--palette-background-paper)',
                 }}
                 className={styles.roleEdit}
               >
@@ -674,7 +680,7 @@ export default function Users() {
                   checked={updateRole === 'guest'}
                   sx={{
                     '&.Mui-checked': {
-                      color: 'var(--palette--description-color)',
+                      color: 'var(--palette-description-color)',
                     },
                   }}
                   onChange={(e: any) => {
@@ -718,7 +724,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette--palette-divider)',
+                borderColor: 'var(--palette-palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
@@ -736,7 +742,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette--palette-divider)',
+                borderColor: 'var(--palette-palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
@@ -758,7 +764,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette--palette-divider)',
+                borderColor: 'var(--palette-palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
@@ -779,10 +785,10 @@ export default function Users() {
                     variant="outlined"
                     sx={{
                       borderRadius: '0.2rem',
-                      background: 'var(--palette--button-color)',
+                      background: 'var(--palette-button-color)',
                       color: '#FFFFFF',
                       mr: '0.4rem',
-                      borderColor: 'var(--palette--button-color)',
+                      borderColor: 'var(--palette-button-color)',
                       fontWeight: 'bold',
                     }}
                   />
@@ -796,7 +802,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette--palette-divider)',
+                borderColor: 'var(--palette-palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
@@ -820,7 +826,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette--palette-divider)',
+                borderColor: 'var(--palette-palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
@@ -842,7 +848,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette--palette-divider)',
+                borderColor: 'var(--palette-palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
@@ -868,7 +874,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette--palette-divider)',
+                borderColor: 'var(--palette-palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />
@@ -898,7 +904,7 @@ export default function Users() {
             <Divider
               sx={{
                 borderStyle: 'dashed',
-                borderColor: 'var(--palette--palette-divider)',
+                borderColor: 'var(--palette-palette-divider)',
                 borderWidth: '0px 0px thin',
               }}
             />

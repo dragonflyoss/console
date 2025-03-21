@@ -13,9 +13,8 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { ReactComponent as Dark } from '../assets/images/header/dark.svg';
-import { ReactComponent as Light } from '../assets/images/header/light.svg';
-import { ReactComponent as Github } from '../assets/images/header/github.svg';
+import { ReactComponent as Dark } from '../assets/images/menu/dark.svg';
+import { ReactComponent as Light } from '../assets/images/menu/light.svg';
 import { useContext, useState } from 'react';
 import { ColorModeContext } from '../App';
 import styles from './dark-layout.module.css';
@@ -26,7 +25,7 @@ interface layoutProps {
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
-    margin: theme.spacing(0.6),
+    margin: theme.spacing(0.5),
     border: 0,
     borderRadius: theme.shape.borderRadius,
     [`&.${toggleButtonGroupClasses.disabled}`]: {
@@ -83,11 +82,11 @@ export const HeaderLayout: React.FC<layoutProps> = ({ className }) => {
               borderRadius: '1.3rem !important',
               textTransform: 'none',
               '&.Mui-selected': {
-                boxShadow: 'var(--palette--card-box-shadow)',
+                boxShadow: 'var(--palette-card-box-shadow)',
                 bgcolor: 'var(--palette-main-background-paper)',
               },
               '&.Mui-selected:hover': {
-                boxShadow: 'var(--palette--card-box-shadow)',
+                boxShadow: 'var(--palette-card-box-shadow)',
                 bgcolor: 'var(--palette-main-background-paper)',
               },
             }}
@@ -95,7 +94,7 @@ export const HeaderLayout: React.FC<layoutProps> = ({ className }) => {
             value="light"
             aria-label="left aligned"
           >
-            <Light id="light" className={styles.darkModeIcon} />
+            <Light className={styles.darkModeIcon} />
             <Typography variant="body2" pl="0.4rem" fontFamily="mabry-bold">
               Light
             </Typography>
@@ -107,13 +106,11 @@ export const HeaderLayout: React.FC<layoutProps> = ({ className }) => {
               borderRadius: '1.3rem !important',
               textTransform: 'none',
               '&.Mui-selected': {
-                // boxShadow: 'var(--palette--card-box-shadow)',
-                boxShadow: '0 0.125rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.245rem -0.0625rem #0000004d',
+                boxShadow: 'var(--palette-card-box-shadow)',
                 bgcolor: 'var(--palette-main-background-paper)',
               },
               '&.Mui-selected:hover': {
-                // boxShadow: 'var(--palette--card-box-shadow)',
-                boxShadow: '0 0.125rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.245rem -0.0625rem #0000004d',
+                boxShadow: 'var(--palette-card-box-shadow)',
                 bgcolor: 'var(--palette-main-background-paper)',
               },
             }}
@@ -121,7 +118,7 @@ export const HeaderLayout: React.FC<layoutProps> = ({ className }) => {
             value="dark"
             aria-label="centered"
           >
-            <Dark id="dark" className={styles.darkModeIcon} />
+            <Dark className={styles.darkModeIcon} />
             <Typography variant="body2" pl="0.4rem" fontFamily="mabry-bold">
               Dark
             </Typography>
@@ -161,7 +158,7 @@ export const ShrinkDarkMode: React.FC<layoutProps> = ({ className }) => {
               p: '0.4rem !important',
               textTransform: 'none',
               '&.Mui-selected': {
-                boxShadow: 'var(--palette--card-box-shadow)',
+                boxShadow: 'var(--palette-card-box-shadow)',
                 bgcolor: 'var(--palette-main-background-paper)',
               },
             }}
@@ -177,7 +174,7 @@ export const ShrinkDarkMode: React.FC<layoutProps> = ({ className }) => {
               p: '0.4rem !important',
               textTransform: 'none',
               '&.Mui-selected': {
-                boxShadow: 'var(--palette--card-box-shadow)',
+                boxShadow: 'var(--palette-card-box-shadow)',
                 bgcolor: 'var(--palette-main-background-paper)',
               },
             }}
@@ -190,31 +187,5 @@ export const ShrinkDarkMode: React.FC<layoutProps> = ({ className }) => {
         </VerticalToggleButtonGroup>
       </Paper>
     </Box>
-  );
-};
-
-export const GithubLayout: React.FC<layoutProps> = ({ className }) => {
-  const theme = useTheme();
-  const colorMode = useContext(ColorModeContext);
-
-  return (
-    <Link
-      id="github"
-      underline="hover"
-      href="https://github.com/dragonflyoss/dragonfly"
-      target="_blank"
-      rel="noopener noreferrer"
-      sx={{
-        ':hover': {
-          backgroundColor: theme.palette.mode === 'dark' ? 'rgba(218 218 218 / 40%)' : 'rgba(218 218 218 / 90%)',
-        },
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: '50%',
-      }}
-    >
-      <Github className={className} />
-    </Link>
   );
 };

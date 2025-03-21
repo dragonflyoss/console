@@ -69,14 +69,14 @@ const AntTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} /
     opacity: 1,
   },
   '&.Mui-selected': {
-    color: 'var(--palette--description-color)',
+    color: 'var(--palette-description-color)',
     fontFamily: 'mabry-bold',
   },
 }));
 
 const AntTabs = styled(Tabs)({
   '& .MuiTabs-indicator': {
-    backgroundColor: 'var(--palette--description-color)',
+    backgroundColor: 'var(--palette-description-color)',
     borderRadius: '1rem',
   },
 });
@@ -582,7 +582,7 @@ export default function Profile() {
   };
 
   return (
-    <Box p="0 2rem">
+    <Box>
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -603,21 +603,9 @@ export default function Profile() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography variant="h5" mb="1rem">
+      <Typography variant="h5" mb="2rem">
         My Profile
       </Typography>
-      <Breadcrumbs
-        separator={
-          <Box
-            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
-          />
-        }
-        aria-label="breadcrumb"
-        sx={{ mb: '2rem' }}
-      >
-        <Typography color="text.primary">Profile</Typography>
-        <Typography color="inherit">{user?.name || '-'}</Typography>
-      </Breadcrumbs>
       <TabContext value={value}>
         <Card className={styles.profileContainer}>
           <Box className={styles.profileImage}>
@@ -633,18 +621,17 @@ export default function Profile() {
                   elevation={0}
                   id="state"
                   sx={{
-                    height: '1.4rem',
                     borderRadius: '0.2rem',
-                    background: 'var(--palette--description-color)',
+                    background: 'var(--palette-description-color)',
                     color: '#FFFFFF',
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '0.4rem',
+                    padding: '0 0.4rem',
                     mt: '0.4rem',
                   }}
                 >
-                  <Typography variant="body1">{role || ''}</Typography>
+                  <Typography variant="body2">{_.upperFirst(user?.state) || ''}</Typography>
                 </Paper>
               </Box>
             </Box>
@@ -684,9 +671,9 @@ export default function Profile() {
                     size="small"
                     variant="contained"
                     sx={{
-                      background: 'var(--palette--button-color)',
-                      color: 'var(--palette--button-text-color)',
-                      ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
+                      background: 'var(--palette-button-color)',
+                      color: 'var(--palette-button-text-color)',
+                      ':hover': { backgroundColor: 'var(--palette-hover-button-text-color)' },
                     }}
                     onClick={() => {
                       setShowPersonalInformation(false);
@@ -699,7 +686,7 @@ export default function Profile() {
                 <Divider
                   sx={{
                     borderStyle: 'dashed',
-                    borderColor: 'var(--palette--palette-divider)',
+                    borderColor: 'var(--palette-palette-divider)',
                     borderWidth: '0px 0px thin',
                   }}
                 />

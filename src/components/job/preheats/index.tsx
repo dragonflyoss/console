@@ -155,9 +155,9 @@ export default function Preheats() {
           id="new-preheat"
           size="small"
           sx={{
-            background: 'var(--palette--button-color)',
-            color: 'var(--palette--button-text-color)',
-            ':hover': { backgroundColor: 'var(--palette--hover-button-text-color)' },
+            background: 'var(--palette-button-color)',
+            color: 'var(--palette-button-text-color)',
+            ':hover': { backgroundColor: 'var(--palette-hover-button-text-color)' },
           }}
           startIcon={<AddIcon />}
           variant="contained"
@@ -175,7 +175,7 @@ export default function Preheats() {
           />
         }
         aria-label="breadcrumb"
-        sx={{ mb: '2rem' }}
+        sx={{ mb: '1.5rem' }}
       >
         <Typography color="text.primary">Job</Typography>
         <Typography color="inherit">Preheat</Typography>
@@ -184,7 +184,7 @@ export default function Preheats() {
         <Box
           sx={{
             p: '0.8rem',
-            backgroundColor: 'var(--palette--table-title-color)',
+            backgroundColor: 'var(--palette-table-title-color)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -292,7 +292,7 @@ export default function Preheats() {
                           id={`preheat-${item?.id}`}
                           to={`/jobs/preheats/${item?.id}`}
                           underline="hover"
-                          sx={{ color: 'var(--palette--description-color)' }}
+                          sx={{ color: 'var(--palette-description-color)' }}
                         >
                           <Detail className={styles.detailIcon} />
                         </RouterLink>
@@ -301,7 +301,7 @@ export default function Preheats() {
                     <Divider
                       sx={{
                         borderStyle: 'dashed',
-                        borderColor: 'var(--palette--palette-divider)',
+                        borderColor: 'var(--palette-palette-divider)',
                         borderWidth: '0px 0px thin',
                       }}
                     />
@@ -346,7 +346,7 @@ export default function Preheats() {
                         id={`preheat-${item?.id}`}
                         to={`/jobs/preheats/${item?.id}`}
                         underline="hover"
-                        sx={{ color: 'var(--palette--description-color)' }}
+                        sx={{ color: 'var(--palette-description-color)' }}
                       >
                         <Detail className={styles.detailIcon} />
                       </RouterLink>

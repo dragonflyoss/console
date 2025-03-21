@@ -10,11 +10,8 @@ const SearchCircularProgress: React.FC<CardProps> = (props: CircularProgressProp
     <Box sx={{ position: 'relative', display: 'flex' }} className={className}>
       <CircularProgress
         variant="determinate"
-        sx={(theme) => ({
+        sx={() => ({
           color: '#DAF9F2',
-          ...theme.applyStyles('dark', {
-            color: 'var(--palette--description-color)',
-          }),
         })}
         size={20}
         thickness={4}
@@ -25,16 +22,13 @@ const SearchCircularProgress: React.FC<CardProps> = (props: CircularProgressProp
         variant="indeterminate"
         disableShrink
         sx={(theme) => ({
-          color: 'var(--palette--description-color)',
+          color: 'var(--palette-description-color)',
           animationDuration: '550ms',
           position: 'absolute',
           left: 0,
           [`& .${circularProgressClasses.circle}`]: {
             strokeLinecap: 'round',
           },
-          ...theme.applyStyles('dark', {
-            color: '#308fe8',
-          }),
         })}
         size={20}
         thickness={4}

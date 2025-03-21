@@ -12,7 +12,7 @@
   width: 1.3rem;
   height: 1.3rem;
   margin-right: 0.4rem;
-  color: var(--palette--button-text-color);
+  color: var(--palette-button-text-color);
 }
 
 .informationContainer {
@@ -92,8 +92,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--palette--button-color);
-  color: var(--palette--button-text-color);
+  background-color: var(--palette-button-color);
+  color: var(--palette-button-text-color);
   border-radius: 0.3rem;
   min-width: 1.6rem;
   margin-right: 0.5rem;
@@ -103,8 +103,8 @@
 .scopeContent {
   display: inline-flex;
   align-items: center;
-  background-color: var(--palette--button-color);
-  color: var(--palette--scopes-icon-color);
+  background-color: var(--palette-button-color);
+  color: var(--palette-scopes-icon-color);
   border-radius: 0.3rem;
   min-width: 1.6rem;
   margin-right: 0.5rem;
@@ -113,8 +113,8 @@
 
 .tagContent {
   display: inline-flex;
-  background-color: var(--palette--description-color);
-  color: var(--palette--scopes-icon-color);
+  background-color: var(--palette-description-color);
+  color: var(--palette-scopes-icon-color);
   border-radius: 0.3rem;
   min-width: 1.6rem;
   padding: 0.2rem 0.4rem;

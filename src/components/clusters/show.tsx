@@ -142,7 +142,7 @@ export default function NavTabs() {
       opacity: 1,
     },
     '&.Mui-selected': {
-      color: 'var(--palette--description-color)',
+      color: 'var(--palette-text-color)',
       fontFamily: 'mabry-bold',
     },
   }));
@@ -150,7 +150,7 @@ export default function NavTabs() {
   const AntTabs = styled(Tabs)({
     borderBottom: '1px solid var(--palette-tab-border-color)',
     '& .MuiTabs-indicator': {
-      backgroundColor: 'var(--palette--description-color)',
+      backgroundColor: 'var(--palette-text-color)',
       borderRadius: '1rem',
     },
   });
@@ -196,36 +196,6 @@ export default function NavTabs() {
 
   return (
     <MyContext.Provider value={{ cluster, isLoading }}>
-      {/* <Box className={styles.headerTitle}>
-        <Typography variant="h5" fontFamily="mabry-bold">
-          {location.pathname.split('/')[3] === 'schedulers'
-            ? 'Schedulers'
-            : location.pathname.split('/')[3] === 'seed-peers'
-            ? 'Seed Peers'
-            : location.pathname.split('/')[3] === 'peers'
-            ? 'Peers'
-            : 'Cluster'}
-        </Typography>
-        <Tooltip
-          title={
-            <Typography variant="body2">
-              Peer statistics are only supported in the Rust client, refer to&nbsp;
-              <RouterLink
-                underline="hover"
-                href="https://github.com/dragonflyoss/client"
-                target="_blank"
-                style={{ color: 'var(--palette--menu-color)' }}
-              >
-                dragonflyoss/client
-              </RouterLink>
-              .
-            </Typography>
-          }
-          placement="top"
-        >
-          <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
-        </Tooltip>
-      </Box> */}
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
@@ -245,18 +215,26 @@ export default function NavTabs() {
         aria-label="breadcrumb"
         sx={{ mb: '1rem' }}
       >
-        <RouterLink component={Link} underline="hover" color="text.primary" to={`/clusters`}>
+        <RouterLink variant="body1" component={Link} underline="hover" color="text.primary" to={`/clusters`}>
           Cluster
         </RouterLink>
         {location.pathname.split('/')[3] ? (
-          <RouterLink component={Link} underline="hover" color="text.primary" to={`clusters/${params.id}`}>
+          <RouterLink
+            variant="body1"
+            component={Link}
+            underline="hover"
+            color="text.primary"
+            to={`clusters/${params.id}`}
+          >
             {cluster?.name || '-'}
           </RouterLink>
         ) : (
-          <Typography color="inherit"> {cluster?.name || '-'}</Typography>
+          <Typography variant="body1" color="inherit">
+            {cluster?.name || '-'}
+          </Typography>
         )}
         {location.pathname.split('/')[3] && (
-          <Typography color="inherit">
+          <Typography variant="body1" color="inherit">
             {location.pathname.split('/')[3] === 'schedulers'
               ? 'Schedulers'
               : location.pathname.split('/')[3] === 'seed-peers'
@@ -269,7 +247,7 @@ export default function NavTabs() {
         value={value}
         onChange={handleChange}
         aria-label="nav tabs example"
-        sx={{ mb: '2rem' }}
+        sx={{ mb: '1.5rem' }}
         scrollButtons="auto"
       >
         {tabList.map((item) => {

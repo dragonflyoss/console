@@ -610,29 +610,35 @@ export default function Profile() {
         <Card className={styles.profileContainer}>
           <Box className={styles.profileImage}>
             <Box className={styles.profileContent}>
-              <Stack direction="row" spacing={2}>
+              <Box className={styles.avatarContainer}>
+                <Box className={styles.avatarWrapper} />
                 <Avatar alt="Remy Sharp" src={user?.avatar} className={styles.avatarContent} />
-              </Stack>
-              <Box sx={{ pl: '1.4rem', pt: '1.4rem' }}>
+              </Box>
+              <Box sx={{ pl: '1rem', pt: '1.4rem' }}>
                 <Typography id="name-title" variant="h5" color="#FFFFFF">
                   {users?.name || '-'}
                 </Typography>
                 <Paper
-                  elevation={0}
+                  // elevation={0}
                   id="state"
                   sx={{
                     borderRadius: '0.2rem',
-                    background: 'var(--palette-description-color)',
-                    color: '#FFFFFF',
-                    display: 'inline-flex',
-                    alignItems: 'center',
+                    // color: '#FFFFFF',
+                    // display: 'inline-flex',
+                    // alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '0 0.4rem',
+                    padding: '0.1rem 0.4rem',
                     mt: '0.4rem',
+                    // boxShadow: 'var(--palette-card-box-shadow)',
+                    background: '#18230f',
+                    color: '#FFF',
                   }}
                 >
                   <Typography variant="body2">{_.upperFirst(user?.state) || ''}</Typography>
                 </Paper>
+                {/* <Typography id="name-title" variant="body2" color="#FFFFFF">
+                  {_.upperFirst(user?.state) || ''}
+                </Typography> */}
               </Box>
             </Box>
           </Box>
@@ -721,6 +727,10 @@ export default function Profile() {
                                   -
                                 </Typography>
                               )
+                            ) : item.label === 'Name' || item?.label === 'ID' ? (
+                              <Typography id={item.name} component="div" fontFamily="mabry-bold" variant="body1">
+                                {users?.[item?.name as keyof typeof users] || '-'}
+                              </Typography>
                             ) : (
                               <Typography id={item.name} component="div" variant="body1">
                                 {users?.[item?.name as keyof typeof users] || '-'}

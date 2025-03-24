@@ -9,21 +9,21 @@
 }
 
 body {
-  color: #1c293a !important;
+  color: #18230f !important;
   background-color: rgba(255, 255, 255, 0.9) !important;
   --palette-description-color: #1f7d53;
   --palette-text-color: #1f7d53;
-  --palette-color: #1c293a;
+  --palette-color: #18230f;
   --palette-button-text-color: #fff;
   --palette-button-color: #18230f;
-  --palette-secondary-dark: #1c293a;
+  --palette-secondary-dark: #18230f;
   --palette-sign-hover-button-text-color: rgb(32, 100, 84);
   --palette-hover-button-text-color: #1d3048;
   --palette-delete-button-color: #d42536;
   --palette-delete-button-hover-color: #d42537b8;
   --palette-button-loading-color: #dedede;
   --palette-button-loading-size-color: #000000;
-  --palette-save-color: #1c293a;
+  --palette-save-color: #18230f;
   --palette-calcel-hover-corlor: #f7f7f7;
   --palette-calcel-background-color: rgb(255, 255, 255);
   --palette-scopes-icon-color: #edeff2;
@@ -31,7 +31,7 @@ body {
   --palette-table-title-text-color: #637381;
   --palette-main-background-paper: rgba(255, 255, 255, 0.9);
   --palette-menu-color: #00a76f;
-  --palette-sidebar-menu-background-color: #1c293a;
+  --palette-sidebar-menu-background-color: #18230f;
   --palette-menu-background-color: rgba(145 158 171 / 0.16);
   --palette-grey-background-color: #00a76f1a;
   --palette-sidebar-expand-background-color: rgba(255, 255, 255, 0.9);
@@ -58,12 +58,12 @@ body {
   --palette-background-rotation: #f6f7f9;
   --palette-background--hover-rotation: #e7e8ea;
   --palette-tab-border-color: #e8e8e8;
-  --palette-text-secondary: #1c293a;
+  --palette-text-secondary: #18230f;
   --palette-grey-600Channel: rgba(145 158 171 / 0.16);
   --palette-grey-500Channel: 145 158 171;
   --palette-grey-400Channel: #e4e5e5;
   --palette-grey-300Channel: rgba(0, 0, 0, 0.198);
-  --palette-grey-200Channel: #1c293a;
+  --palette-grey-200Channel: #18230f;
   --palette-grey-100Channel: rgb(232, 232, 232);
   --palette-grey-tab: #919eab;
   --palette-white-500Channel: #f7f7f7;

@@ -21,10 +21,6 @@ export default function Rotation() {
       imageURL: <Dragonfly style={{ width: '100%', height: '100vh' }} />,
     },
     {
-      label: 'Features',
-      imageURL: <Features style={{ width: '100%', height: '100vh' }} />,
-    },
-    {
       label: 'Milestones',
       imageURL: <Milestones style={{ width: '100%', height: '100vh' }} />,
     },
@@ -34,10 +30,6 @@ export default function Rotation() {
     {
       label: 'Dragonfly',
       imageURL: <DarkDragonfly style={{ width: '100%', height: '100vh' }} />,
-    },
-    {
-      label: 'Features',
-      imageURL: <DarkFeatures style={{ width: '100%', height: '100vh' }} />,
     },
     {
       label: 'Milestones',

@@ -7,7 +7,7 @@
 .profileContainer {
   margin-bottom: 2rem;
   position: relative;
-  height: 15rem;
+  height: 14rem;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   border-radius: 16px;
@@ -15,8 +15,7 @@
 }
 
 .profileImage {
-  background-image: linear-gradient(to top, #141a21 25%, rgba(0 63 80 / 0.88)),
-    url(../../assets/images/profile/cover.webp);
+  background-color: #155939;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -49,12 +48,28 @@
 }
 
 .avatarContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  position: relative;
+  transition: transform 0.6s easel;
+  margin-left: 0.3rem;
+  padding: 0.3rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: #000;
+}
+
+.avatarWrapper {
+  background-color: #fff;
+  width: 7.25rem;
+  height: 7.25rem;
+  animation: rotate 4s linear infinite;
+  position: absolute;
+  border-radius: 50%;
 }
 
 .avatarContent {
+  box-shadow: var(--palette-main-box-shadow) !important;
   width: 7rem !important;
   height: 7rem !important;
   background: var(--palette-secondary-dark) !important;

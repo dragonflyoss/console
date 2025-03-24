@@ -12,15 +12,18 @@ import {
   Tooltip,
   Typography,
   Skeleton,
+  Breadcrumbs,
+  Link as RouterLink,
 } from '@mui/material';
 import styles from './edit.module.css';
 import HelpIcon from '@mui/icons-material/Help';
 import { useEffect, useState } from 'react';
 import { getCluster, updateCluster, getClusterResponse } from '../../lib/api';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import Card from '../card';
+import { ReactComponent as Information } from '../../assets/images/cluster/information-cluster.svg';
 
 export default function EditCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -155,7 +158,7 @@ export default function EditCluster() {
               }
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -205,12 +208,12 @@ export default function EditCluster() {
             placement="top"
           >
             <HelpIcon
-              color="disabled"
               sx={{
+                color: 'var(--palette-grey-300Channel)',
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
-                ':hover': { color: 'var(--description-color)' },
+                ':hover': { color: 'var(--palette-description-color)' },
               }}
             />
           </Tooltip>
@@ -268,12 +271,12 @@ export default function EditCluster() {
             placement="top"
           >
             <HelpIcon
-              color="disabled"
               sx={{
+                color: 'var(--palette-grey-300Channel)',
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
-                ':hover': { color: 'var(--description-color)' },
+                ':hover': { color: 'var(--palette-description-color)' },
               }}
             />
           </Tooltip>
@@ -332,12 +335,12 @@ export default function EditCluster() {
             placement="top"
           >
             <HelpIcon
-              color="disabled"
               sx={{
+                color: 'var(--palette-grey-300Channel)',
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
-                ':hover': { color: 'var(--description-color)' },
+                ':hover': { color: 'var(--palette-description-color)' },
               }}
             />
           </Tooltip>
@@ -385,7 +388,7 @@ export default function EditCluster() {
               title={`If other peers download from the seed peer, the load of the seed peer will increase. When the load limit of the seed peer is reached, the scheduler will no longer schedule other peers to download from the seed peer until the it has the free load.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -426,7 +429,7 @@ export default function EditCluster() {
               }
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -467,7 +470,7 @@ export default function EditCluster() {
               title={`The maximum number of parents that the scheduler can schedule for download peer.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -509,7 +512,7 @@ export default function EditCluster() {
               title={`The scheduler will randomly select the  number of parents from all the parents according to the filter parent limit and evaluate the optimal parents in selecting parents for the peer to download task. The number of optimal parent is the scheduling parent limit.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -550,7 +553,7 @@ export default function EditCluster() {
               title={`The rate limit(requests per second) for job Open API, default value is 10.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -702,13 +705,26 @@ export default function EditCluster() {
         </Alert>
       </Snackbar>
       <Typography variant="h5">Update Cluster</Typography>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '2rem', mt: '1rem' }}
+      >
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/clusters`}>
+          Cluster
+        </RouterLink>
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/clusters/${params.id}`}>
+          {cluster?.name}
+        </RouterLink>
+        <Typography color="inherit">Edit cluster</Typography>
+      </Breadcrumbs>
       <Divider sx={{ mt: '1rem', mb: '1rem' }} />
       <Card className={styles.header}>
-        <Box
-          component="img"
-          src="/icons/cluster/information-cluster.svg"
-          sx={{ width: '2.6rem', height: '2.6rem', mr: '1rem' }}
-        />
+        <Information className={styles.informationIcon} />
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography component="span" variant="body1" fontFamily="mabry-bold">
@@ -743,7 +759,7 @@ export default function EditCluster() {
               Information
             </Typography>
             <Tooltip title="The information of cluster." placement="top">
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           <Box className={styles.defaultContainer}>
@@ -754,7 +770,7 @@ export default function EditCluster() {
                   onChange={(event: { target: { checked: any } }) => {
                     setCluster({ ...cluster, is_default: event.target.checked });
                   }}
-                  sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }}
+                  sx={{ '&.MuiCheckbox-root': { color: 'var(--palette-button-color)' } }}
                 />
               }
               label="Set cluster as your default cluster"
@@ -765,7 +781,7 @@ export default function EditCluster() {
               title="When peer does not find a matching cluster based on scopes, the default cluster will be used."
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           {informationForm.map((item) => (
@@ -786,7 +802,7 @@ export default function EditCluster() {
             the scope."
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           <Grid className={styles.scopesContainer}>
@@ -825,7 +841,7 @@ export default function EditCluster() {
               Config
             </Typography>
             <Tooltip title=" The configuration for P2P downloads." placement="top">
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           <Grid className={styles.configContainer}>
@@ -848,7 +864,7 @@ export default function EditCluster() {
             loading={loadingButton}
             onClick={() => {
               setLoadingButton(true);
-              navigate(`/clusters/${id}`);
+              navigate(`/clusters/${params.id}`);
             }}
           />
           <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />

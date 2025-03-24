@@ -12,7 +12,7 @@ interface cancelLoadingButtonProps extends ButtonProps {
 export const CancelLoadingButton: React.FC<cancelLoadingButtonProps> = ({ loading, onClick, id, ...rest }) => (
   <LoadingButton
     loading={loading}
-    endIcon={<CancelIcon sx={{ color: 'var(--button-color)' }} />}
+    endIcon={<CancelIcon sx={{ color: 'var(--palette-secondary-dark)' }} />}
     size="small"
     variant="outlined"
     type="reset"
@@ -20,17 +20,17 @@ export const CancelLoadingButton: React.FC<cancelLoadingButtonProps> = ({ loadin
     id={id}
     sx={{
       '&.MuiLoadingButton-root': {
-        color: 'var(--calcel-size-color)',
-        borderColor: 'var(--calcel-color)',
+        color: 'var(--palette-secondary-dark)',
+        borderColor: 'var(--palette-secondary-dark)',
+        backgroundColor: 'var(--palette-calcel-background-color)',
       },
       ':hover': {
-        backgroundColor: 'var(--calcel-hover-corlor)',
-        borderColor: 'var(--calcel-hover-corlor)',
+        backgroundColor: 'var(--palette-calcel-hover-corlor)',
+        borderColor: 'var(--palette-secondary-dark)',
       },
       '&.MuiLoadingButton-loading': {
-        backgroundColor: 'var(--button-loading-color)',
-        color: 'var(--button-loading-size-color)',
-        borderColor: 'var(--button-loading-color)',
+        backgroundColor: 'var(--palette-button-loading-color)',
+        color: 'var(--palette-button-loading-size-color)',
       },
       mr: '1rem',
       width: '7rem',
@@ -75,18 +75,18 @@ export const SavelLoadingButton: React.FC<saveLoadingButtonProps> = ({
       id={id}
       sx={{
         '&.MuiLoadingButton-root': {
-          backgroundColor: 'var(--save-color)',
-          color: 'var(--save-size-color)',
-          borderColor: 'var(--save-color)',
+          background: 'var(--palette-button-color)',
+          color: 'var(--palette-button-text-color)',
+          borderColor: 'var(--palette-button-color)',
         },
         ':hover': {
-          backgroundColor: 'var(--save-hover-corlor)',
-          borderColor: 'var(--save-hover-corlor)',
+          backgroundColor: 'var(--palette-hover-button-text-color)',
+          borderColor: 'var(--palette-hover-button-text-color)',
         },
         '&.MuiLoadingButton-loading': {
-          backgroundColor: 'var(--button-loading-color)',
-          color: 'var(--button-loading-size-color)',
-          borderColor: 'var(--button-loading-color)',
+          backgroundColor: 'var(--palette-button-loading-color)',
+          color: 'var(--palette-button-loading-size-color)',
+          borderColor: 'var(--palette-button-loading-color)',
         },
         width: '7rem',
       }}
@@ -123,18 +123,18 @@ export const DeleteLoadingButton: React.FC<saveLoadingButtonProps> = ({
       id={id}
       sx={{
         '&.MuiLoadingButton-root': {
-          backgroundColor: 'var(--delete-button-color)',
-          color: 'var(--save-size-color)',
-          borderColor: 'var(--delete-button-color)',
+          backgroundColor: 'var(--palette-delete-button-color)',
+          color: 'var(--palette-common-white)',
+          borderColor: 'var(--palette-delete-button-color)',
         },
         ':hover': {
-          backgroundColor: 'var(--delete-button-hover-color)',
-          borderColor: 'var(--delete-button-hover-color)',
+          backgroundColor: 'var(--palette-delete-button-hover-color)',
+          borderColor: 'var(--palette-delete-button-hover-color)',
         },
         '&.MuiLoadingButton-loading': {
-          backgroundColor: 'var(--delete-button-color)',
+          backgroundColor: 'var(--palette-delete-button-color)',
 
-          borderColor: 'var(--delete-button-color)',
+          borderColor: 'var(--palette-delete-button-color)',
         },
         width: '7rem',
       }}

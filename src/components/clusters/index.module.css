@@ -12,49 +12,47 @@
 .clusterSmallCircleIcon {
   width: 0.4rem;
   height: 0.4rem;
+  color: var(--palette-grey-400Channel);
 }
 
 .button {
-  background-color: var(--button-color);
+  background-color: var(--palette-button-color);
   border-radius: 0;
 }
 
 .clusterBigCircleIcon {
-  width: 2rem;
-  height: 2rem;
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--palette-grey-400Channel);
 }
 
 .clusterIcon {
-  width: 1.8rem;
-  height: 1.8rem;
+  width: 1.6rem;
+  height: 1.6rem;
   position: absolute;
   left: 0.8rem;
   top: 0.3rem;
+  color: var(--palette-grey-200Channel);
 }
 
 .clusterHeaderContainer {
-  display: flex;
-  margin-top: 2rem;
+  display: grid;
+  gap: calc(1.5rem);
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 1.5rem;
 }
 
 .clusterContainer {
-  width: 33.3333%;
-  margin-right: 1.6rem;
+  padding: 1rem;
 }
 
 .clusterIconTitle {
-  margin-left: 1rem !important;
-  margin-top: 0.2rem !important;
+  margin-left: 0.7rem !important;
   font-family: 'mabry-bold' !important;
 }
 
-.seedPeerContainer {
-  width: 33%;
-}
-
 .seedPseerIconTitle {
-  margin-left: 1rem !important;
-  margin-top: 0.2rem !important;
+  margin-left: 0.7rem !important;
   font-family: 'mabry-bold' !important;
 }
 
@@ -62,19 +60,25 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 0.6rem;
+  margin-top: 0.8rem;
+  margin-left: 0.6rem;
 }
 
 .clusterBottomContainer {
   display: flex;
   align-items: center;
   padding-top: 0.4rem;
-  margin-left: -0.3rem;
+  margin-left: -0.2rem;
 }
 
 .clusterBottomIcon {
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--palette-description-color);
+}
+
+.statistics {
+  color: var(--palette-description-color);
 }
 
 .clusterBottomContentContainer {
@@ -83,13 +87,13 @@
 }
 
 .clusterBottomContent {
-  margin-left: 0.8rem;
+  padding-left: 0.7rem;
+  font-family: 'mabry-bold' !important;
 }
 
 .clusterBottomContentMsg {
-  font-size: 1rem;
-  margin-left: 0.4rem;
-  color: var(--table-title-text-color);
+  padding-left: 0.4rem;
+  color: var(--palette-table-title-text-color);
 }
 
 .searchContainer {
@@ -101,21 +105,18 @@
   width: 23rem;
 }
 
-/* .clusterListContent {
-  padding: 1.6rem;
-} */
-
 .nameText {
   font-family: 'mabry-bold' !important;
 }
 
 .idText {
-  color: var(--table-title-text-color);
+  color: var(--palette-table-title-text-color);
+  padding-left: 0.4rem;
 }
 
 .idIcon {
-  width: 1.8rem;
-  padding-right: 0.5rem;
+  width: 1.4rem;
+  height: 1.4rem;
 }
 
 .descriptionText {
@@ -129,6 +130,12 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 1rem;
+}
+
+.arrowCircleRightIcon {
+  width: 1.9rem;
+  height: 1.9rem;
+  color: var(--palette-button-color);
 }
 
 .buttonContent {
@@ -206,8 +213,8 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-color: rgba(var(--no-data-color) / 0.04) !important;
-  border: dashed 1px rgba(var(--no-data-color) / 0.08);
+  background-color: rgba(var(--palette-no-data-color) / 0.04) !important;
+  border: dashed 1px rgba(var(--palette-no-data-color) / 0.08);
 }
 
 .nodataIcon {

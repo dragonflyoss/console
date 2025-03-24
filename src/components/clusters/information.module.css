@@ -31,6 +31,12 @@
   width: 2.8rem;
   height: 2.8rem;
   margin-right: 1rem;
+  color: var(--palette-button-color);
+}
+
+.copyIcon {
+  width: 1rem;
+  height: 1rem;
 }
 
 .updateClusterIcon {
@@ -44,7 +50,7 @@
   height: 6rem;
 }
 
-.className {
+.name {
   padding-bottom: 0.4rem;
   font-family: 'mabry-bold' !important;
 }
@@ -79,20 +85,21 @@
 .descriptionIcon {
   width: 0.9rem !important ;
   height: 0.9rem !important;
+  color: var(--palette-grey-300Channel);
 }
 
 .descriptionIcon:hover {
-  color: var(--description-color);
+  color: var(--palette-description-color);
 }
 
 .configLable {
-  color: var(--table-title-text-color);
+  color: var(--palette-table-title-text-color);
   margin-right: 0.2rem !important;
   font-family: 'mabry-bold' !important;
 }
 
 .scopesLable {
-  color: var(--button-color) !important;
+  color: var(--palette-button-color) !important;
   font-family: 'mabry-bold' !important;
   margin-right: 0.2rem !important;
   padding-left: 0.4rem;
@@ -116,13 +123,14 @@
 .scopesIcon {
   width: 1.6rem;
   height: 1.6rem;
+  color: var(--palette-button-color);
 }
 
 .totalContainer {
   display: flex;
   align-items: center;
   padding: 0.3rem;
-  background-color: var(--menu-background-color) !important;
+  background-color: var(--palette-grey-background-color) !important;
 }
 
 .totalIcon {
@@ -220,7 +228,7 @@
   align-items: center;
   justify-content: center;
   margin-top: 0.4rem;
-  padding: 0.5rem;
+  padding: 0.2rem 0.4rem;
 }
 
 .cidrsText {
@@ -266,42 +274,36 @@
 }
 
 .idcDialogContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  gap: calc(1.5rem);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .cidrsDialogContent {
-  width: 45%;
   background-color: #f7f7f8 !important;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   padding: 0.4rem 0.8rem;
-  margin-bottom: 0.8rem;
-  margin-right: 0.5rem;
-  margin-left: 0.5rem;
 }
 
 .cidrsDialogContainer {
-  display: flex;
-  flex-wrap: wrap;
+  gap: calc(1.5rem);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .idcDialogContent {
-  width: 45%;
   background-color: #f7f7f8 !important;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   padding: 0.4rem 0.8rem;
-  margin-bottom: 0.8rem;
-  margin-right: 0.5rem;
-  margin-left: 0.5rem;
 }
 
 .cidrsIcon {
   width: 1.6rem;
   height: 1.6rem;
   margin-right: 0.3rem;
+  color: var(--palette-save-color);
 }

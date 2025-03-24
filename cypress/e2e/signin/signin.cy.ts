@@ -136,12 +136,12 @@ describe('Signin', () => {
   });
 
   it('click the `Create an account` button', () => {
-    cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
+    cy.get('#create-account').click();
 
     // Then I see that the current page is the signup!
     cy.url().should('include', '/signup');
 
-    cy.get('.MuiTypography-inherit > .MuiTypography-root').click();
+    cy.get('#sign-in').click();
 
     // Then I see that the current page is the signin!
     cy.url().should('include', '/signin');

@@ -2,6 +2,7 @@ import {
   Alert,
   Autocomplete,
   Box,
+  Breadcrumbs,
   Checkbox,
   Chip,
   Divider,
@@ -11,12 +12,13 @@ import {
   TextField,
   Tooltip,
   Typography,
+  Link as RouterLink,
 } from '@mui/material';
 import styles from './new.module.css';
 import { useState } from 'react';
 import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createCluster } from '../../lib/api';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 
@@ -116,7 +118,7 @@ export default function NewCluster() {
               title={`The cluster needs to serve all peers in the location. When the location in the peer configuration matches the location in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. It separated by "|", for example "area|country|province|city".`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -167,12 +169,12 @@ export default function NewCluster() {
               placement="top"
             >
               <HelpIcon
-                color="disabled"
                 sx={{
+                  color: 'var(--palette-grey-300Channel)',
                   width: '0.8rem',
                   height: '0.8rem',
                   mr: '0.3rem',
-                  ':hover': { color: 'var(--description-color)' },
+                  ':hover': { color: 'var(--palette-description-color)' },
                 }}
               />
             </Tooltip>
@@ -234,12 +236,12 @@ export default function NewCluster() {
             placement="top"
           >
             <HelpIcon
-              color="disabled"
               sx={{
+                color: 'var(--palette-grey-300Channel)',
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
-                ':hover': { color: 'var(--description-color)' },
+                ':hover': { color: 'var(--palette-description-color)' },
               }}
             />
           </Tooltip>
@@ -299,12 +301,12 @@ export default function NewCluster() {
             placement="top"
           >
             <HelpIcon
-              color="disabled"
               sx={{
+                color: 'var(--palette-grey-300Channel)',
                 width: '0.8rem',
                 height: '0.8rem',
                 mr: '0.3rem',
-                ':hover': { color: 'var(--description-color)' },
+                ':hover': { color: 'var(--palette-description-color)' },
               }}
             />
           </Tooltip>
@@ -349,7 +351,7 @@ export default function NewCluster() {
               title={`If other peers download from the seed peer, the load of the seed peer will increase. When the load limit of the seed peer is reached, the scheduler will no longer schedule other peers to download from the seed peer until the it has the free load.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -386,7 +388,7 @@ export default function NewCluster() {
               }
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -421,7 +423,7 @@ export default function NewCluster() {
               title={`The maximum number of parents that the scheduler can schedule for download peer.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -457,7 +459,7 @@ export default function NewCluster() {
               title={`The scheduler will randomly select the  number of parents from all the parents according to the filter parent limit and evaluate the optimal parents in selecting parents for the peer to download task. The number of optimal parent is the scheduling parent limit.`}
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -490,7 +492,7 @@ export default function NewCluster() {
         InputProps: {
           endAdornment: (
             <Tooltip title="The rate limit(requests per second) for job Open API, default value is 10." placement="top">
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           ),
         },
@@ -656,7 +658,23 @@ export default function NewCluster() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Typography variant="h5">Create Cluster</Typography>
+      <Typography variant="h5" mb="1rem">
+        Create Cluster
+      </Typography>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mt: '1rem' }}
+      >
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/clusters`}>
+          Cluster
+        </RouterLink>
+        <Typography color="inherit">New cluster</Typography>
+      </Breadcrumbs>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <Box className={styles.container}>
@@ -665,12 +683,12 @@ export default function NewCluster() {
               Information
             </Typography>
             <Tooltip title="The information of cluster." placement="top">
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           <Box className={styles.defaultContainer}>
             <FormControlLabel
-              control={<Checkbox sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }} />}
+              control={<Checkbox sx={{ '&.MuiCheckbox-root': { color: 'var(--palette-button-color)' } }} />}
               label="Set cluster as your default cluster"
               name="isDefault"
               sx={{ '&.MuiFormControlLabel-root': { mr: '0.6rem' } }}
@@ -679,7 +697,7 @@ export default function NewCluster() {
               title="When peer does not find a matching cluster based on scopes, the default cluster will be used."
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -712,7 +730,7 @@ export default function NewCluster() {
             the scope."
               placement="top"
             >
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           <Grid className={styles.scopesContainer}>
@@ -751,7 +769,7 @@ export default function NewCluster() {
               Config
             </Typography>
             <Tooltip title=" The configuration for P2P downloads." placement="top">
-              <HelpIcon color="disabled" className={styles.descriptionIcon} />
+              <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
           <Grid sx={{ display: 'flex', flexWrap: 'wrap' }}>

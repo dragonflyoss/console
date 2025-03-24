@@ -56,7 +56,7 @@ describe('Seed peer', () => {
   it('click the hostname', () => {
     cy.visit('/clusters/1/seed-peers');
 
-    cy.get(':nth-child(4) > .MuiButtonBase-root').click();
+    cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
 
     cy.get('#card-hostname-seed-peer-10').should('have.text', 'seed-peer-10');
     cy.get('#card-hostname-seed-peer-10').click();
@@ -121,7 +121,7 @@ describe('Seed peer', () => {
       cy.get('#status')
         .should('be.visible')
         .and('contain', 'Active')
-        .and('have.css', 'background-color', 'rgb(46, 143, 121)');
+        .and('have.css', 'background-color', 'rgb(31, 125, 83)');
 
       // Show Created At.
       cy.get('#created-at').should('have.text', '2023-11-11 20:09:08');
@@ -147,7 +147,7 @@ describe('Seed peer', () => {
       cy.get('#status')
         .should('be.visible')
         .and('contain', 'Inactive')
-        .and('have.css', 'background-color', 'rgb(28, 41, 58)');
+        .and('have.css', 'background-color', 'rgb(24, 35, 15)');
     });
   });
 
@@ -196,7 +196,7 @@ describe('Seed peer', () => {
       cy.get('#type').should('contain', '-');
 
       // Show Start.
-      cy.get(':nth-child(6) > .css-1ltbflq-MuiTypography-root').should('contain', '-');
+      cy.get('#status').should('contain', '-');
 
       // Show Created At.
       cy.get('#created-at').should('contain', '-');
@@ -260,7 +260,7 @@ describe('Seed peer', () => {
       cy.get('#type').should('contain', '-');
 
       // Show Start.
-      cy.get(':nth-child(6) > .css-1ltbflq-MuiTypography-root').should('contain', '-');
+      cy.get('#status').should('contain', '-');
 
       // Show Created At.
       cy.get('#created-at').should('contain', '-');

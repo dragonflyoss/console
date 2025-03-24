@@ -9,12 +9,36 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .headerTitle {
   display: flex;
   align-items: center;
+}
+
+.navigationContainer {
+  display: grid;
+  gap: calc(1.5rem);
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 2rem;
+}
+
+.navigationCount {
+  display: flex;
+  align-items: center;
+}
+
+.navigationCountIcon {
+  background-color: rgba(34 197 94 / 0.18);
+  color: var(--palette-description-color);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
 }
 
 .navigationContent {
@@ -29,24 +53,25 @@
 }
 
 .navigation {
-  top: -3rem;
+  top: -2rem;
   width: 160px;
   z-index: -1;
   height: 160px;
-  right: -5rem;
+  right: -6rem;
   opacity: 0.12;
   border-radius: 24px;
   position: absolute;
   transform: rotate(34deg);
-  background: linear-gradient(to right, #22c55e 0%, rgba(34 197 94 / 0) 100%);
+  background: linear-gradient(to right, var(--palette-text-color) 0%, transparent 100%);
 }
 
 .navigationIcon {
-  width: 2.4rem;
-  height: 2.4rem;
-  top: 1.4rem;
-  right: 1.8rem;
+  width: 2rem;
+  height: 2rem;
+  top: 2.4rem;
+  right: 1.2rem;
   position: absolute;
+  color: var(--palette-text-color);
 }
 
 .dashboard {
@@ -91,6 +116,7 @@
   width: 1.8rem;
   height: 1.8rem;
   margin-right: 0.6rem;
+  color: var(--palette-text-color);
 }
 
 .activeContent {
@@ -101,7 +127,7 @@
 
 .linearProgress {
   width: 100%;
-  color: var(--description-color);
+  color: var(--palette-description-color);
 }
 
 .descriptionIcon {
@@ -111,42 +137,24 @@
 }
 
 .descriptionIcon:hover {
-  color: var(--description-color);
+  color: var(--palette-description-color);
 }
 
 .exportIcon {
   width: 1.8rem;
-}
-
-.featuresIconWrapper {
-  width: 2.4rem;
-  height: 2.4rem;
-  border-radius: 50%;
-  background-color: #fbfbfb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 0.6rem;
-}
-
-.featuresIconContainer {
-  width: 1.8rem;
   height: 1.8rem;
-  border-radius: 50%;
-  background-color: #efefef;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.featuresIcon {
-  width: 1.2rem;
-  height: 1.2rem;
+.exportFileICon {
+  width: 2.8rem;
+  height: 2.8rem;
+  margin-bottom: 0.8rem;
+  color: var(--palette-color);
 }
 
 .divider {
   border-width: 0px 0px thin;
-  border-color: var(--palette-divider) !important;
+  border-color: var(--palette-palette-divider) !important;
   border-style: dashed !important;
 }
 
@@ -164,4 +172,16 @@
   align-items: center;
   justify-content: center;
   padding: 1rem 2rem;
+}
+
+.refreshIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--palette-button-text-color);
+}
+
+.deleteWarning {
+  width: 1.4rem;
+  height: 1.4rem;
+  padding-right: 0.2rem;
 }

@@ -13,8 +13,7 @@ import {
   MenuItem,
   Checkbox,
   ListItemText,
-  createTheme,
-  ThemeProvider,
+  Link as RouterLink,
   FormHelperText,
   Grid,
   Chip,
@@ -23,17 +22,19 @@ import {
   Alert,
   Paper,
   SelectChangeEvent,
+  Breadcrumbs,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ClearIcon from '@mui/icons-material/Clear';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createJob, getClusters } from '../../../lib/api';
 import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './new.module.css';
 import AddIcon from '@mui/icons-material/Add';
 import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
+import Card from '../../card';
 
 export default function NewPreheat() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -54,17 +55,6 @@ export default function NewPreheat() {
   const [filterHelperText, setFilterHelperText] = useState('Fill in the characters, the length is 0-100.');
 
   const navigate = useNavigate();
-
-  const theme = createTheme({
-    palette: {
-      secondary: {
-        main: '#1c293a',
-      },
-    },
-    typography: {
-      fontFamily: 'mabry-light,sans-serif',
-    },
-  });
 
   useEffect(() => {
     (async function () {
@@ -96,8 +86,12 @@ export default function NewPreheat() {
           endAdornment: (
             <Tooltip title={'Preheat description.'} placement="top">
               <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                sx={{
+                  color: 'var(--palette-grey-300Channel)',
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  ':hover': { color: 'var(--palette-description-color)' },
+                }}
               />
             </Tooltip>
           ),
@@ -137,8 +131,12 @@ export default function NewPreheat() {
               placement="top"
             >
               <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                sx={{
+                  color: 'var(--palette-grey-300Channel)',
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  ':hover': { color: 'var(--palette-description-color)' },
+                }}
               />
             </Tooltip>
           ),
@@ -169,8 +167,12 @@ export default function NewPreheat() {
           endAdornment: (
             <Tooltip title={'URL address used to specify the resource to be preheat.'} placement="top">
               <HelpIcon
-                color="disabled"
-                sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                sx={{
+                  color: 'var(--palette-grey-300Channel)',
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  ':hover': { color: 'var(--palette-description-color)' },
+                }}
               />
             </Tooltip>
           ),
@@ -261,7 +263,7 @@ export default function NewPreheat() {
   };
 
   const headersValueValidate = (value: any) => {
-    const regex = /^.{1,1000}$/;
+    const regex = /^.{1,10000}$/;
     return regex.test(value);
   };
 
@@ -374,7 +376,7 @@ export default function NewPreheat() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
@@ -398,6 +400,23 @@ export default function NewPreheat() {
       <Typography variant="h5" fontFamily="mabry-bold">
         Create Preheat
       </Typography>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mt: '1rem' }}
+      >
+        <Typography color="text.primary">Job</Typography>
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/developer/personal-access-tokens`}>
+          Preheat
+        </RouterLink>
+        <Typography variant="body2" color="inherit">
+          New preheat
+        </Typography>
+      </Breadcrumbs>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <FormControl fullWidth>
@@ -408,8 +427,12 @@ export default function NewPreheat() {
               </Typography>
               <Tooltip title=" The information of preheat." placement="top">
                 <HelpIcon
-                  color="disabled"
-                  sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                  sx={{
+                    color: 'var(--palette-grey-300Channel)',
+                    width: '0.8rem',
+                    height: '0.8rem',
+                    ':hover': { color: 'var(--palette-description-color)' },
+                  }}
                 />
               </Tooltip>
             </Box>
@@ -431,19 +454,16 @@ export default function NewPreheat() {
               </Typography>
               <Tooltip title="Used for clusters that need to be preheating." placement="top">
                 <HelpIcon
-                  color="disabled"
-                  sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                  sx={{
+                    color: 'var(--palette-grey-300Channel)',
+                    width: '0.8rem',
+                    height: '0.8rem',
+                    ':hover': { color: 'var(--palette-description-color)' },
+                  }}
                 />
               </Tooltip>
             </Box>
-            <FormControl
-              className={styles.textField}
-              margin="normal"
-              required
-              size="small"
-              color="secondary"
-              error={clusterError}
-            >
+            <FormControl className={styles.textField} margin="normal" required size="small" error={clusterError}>
               <InputLabel id="select-clusters">Clusters</InputLabel>
               <Select
                 labelId="select-clusters"
@@ -468,7 +488,7 @@ export default function NewPreheat() {
                     <Checkbox
                       id={`cluster-${item.id}`}
                       size="small"
-                      sx={{ '&.MuiCheckbox-root': { color: 'var(--button-color)' } }}
+                      sx={{ '&.MuiCheckbox-root': { color: 'var(--palette-button-color)' } }}
                       checked={clusterName.indexOf(item.name) > -1}
                     />
                     <ListItemText primary={item.name} />
@@ -485,13 +505,17 @@ export default function NewPreheat() {
               </Typography>
               <Tooltip title="Args used to pass additional configuration options to the preheat task." placement="top">
                 <HelpIcon
-                  color="disabled"
-                  sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                  sx={{
+                    color: 'var(--palette-grey-300Channel)',
+                    width: '0.8rem',
+                    height: '0.8rem',
+                    ':hover': { color: 'var(--palette-description-color)' },
+                  }}
                 />
               </Tooltip>
             </Box>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-              <FormControl className={styles.textField} margin="normal" required size="small" color="secondary">
+              <FormControl className={styles.textField} margin="normal" color="success" required size="small">
                 <InputLabel id="scope">Scope</InputLabel>
                 <Select
                   id="select-scope"
@@ -515,81 +539,86 @@ export default function NewPreheat() {
                 </Select>
               </FormControl>
               {argsForm.map((item) => {
-                return (
-                  <>
-                    {item.id === 'filteredQueryParams' ? (
-                      <Autocomplete
-                        freeSolo
-                        multiple
-                        disableClearable
-                        {...item.filterFormProps}
-                        size="small"
-                        className={styles.filterInput}
-                        renderInput={(params) => (
-                          <TextField
-                            margin="normal"
-                            {...params}
-                            InputProps={{
-                              ...params.InputProps,
-                              endAdornment: (
-                                <>
-                                  {params.InputProps.endAdornment}
-                                  <Tooltip
-                                    title={
-                                      'By setting the filter parameter, you can specify the file type of the resource that needs to be preheated. The filter is used to generate a unique preheat task and filter unnecessary query parameters in the URL, separated by & characters.'
-                                    }
-                                    placement="top"
-                                  >
-                                    <HelpIcon
-                                      color="disabled"
-                                      sx={{
-                                        width: '0.8rem',
-                                        height: '0.8rem',
-                                        mr: '0.3rem',
-                                        ':hover': { color: 'var(--description-color)' },
-                                      }}
-                                    />
-                                  </Tooltip>
-                                </>
-                              ),
-                            }}
-                            color="success"
-                            {...item.formProps}
-                          />
-                        )}
-                      />
-                    ) : item.formProps.id === 'tag' ? (
-                      <TextField
-                        color="success"
-                        margin="normal"
-                        size="small"
-                        {...item.formProps}
-                        sx={{ marginLeft: '1rem' }}
-                        className={styles.textField}
-                      />
-                    ) : (
-                      <TextField
-                        color="success"
-                        margin="normal"
-                        size="small"
-                        {...item.formProps}
-                        className={styles.filterInput}
-                      />
-                    )}
-                  </>
+                return item.id === 'filteredQueryParams' ? (
+                  <Box key={item.formProps.id} sx={{ width: '100%' }}>
+                    <Autocomplete
+                      freeSolo
+                      multiple
+                      disableClearable
+                      {...item.filterFormProps}
+                      size="small"
+                      className={styles.filterInput}
+                      renderInput={(params) => (
+                        <TextField
+                          margin="normal"
+                          {...params}
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <>
+                                {params.InputProps.endAdornment}
+                                <Tooltip
+                                  title={
+                                    'By setting the filter parameter, you can specify the file type of the resource that needs to be preheated. The filter is used to generate a unique preheat task and filter unnecessary query parameters in the URL, separated by & characters.'
+                                  }
+                                  placement="top"
+                                >
+                                  <HelpIcon
+                                    sx={{
+                                      color: 'var(--palette-grey-300Channel)',
+                                      width: '0.8rem',
+                                      height: '0.8rem',
+                                      mr: '0.3rem',
+                                      ':hover': { color: 'var(--palette-description-color)' },
+                                    }}
+                                  />
+                                </Tooltip>
+                              </>
+                            ),
+                          }}
+                          color="success"
+                          {...item.formProps}
+                        />
+                      )}
+                    />
+                  </Box>
+                ) : item.formProps.id === 'tag' ? (
+                  <TextField
+                    key={item.formProps.id}
+                    color="success"
+                    margin="normal"
+                    size="small"
+                    {...item.formProps}
+                    sx={{ marginLeft: '1rem' }}
+                    className={styles.textField}
+                  />
+                ) : (
+                  <Box key={item.formProps.id} sx={{ width: '100%' }}>
+                    <TextField
+                      color="success"
+                      margin="normal"
+                      size="small"
+                      {...item.formProps}
+                      className={styles.filterInput}
+                    />
+                  </Box>
                 );
               })}
             </Box>
             {headers.length > 0 ? (
-              <Paper id="header" variant="outlined" sx={{ p: '1rem', width: '37rem', mt: '1rem' }}>
+              <Paper variant="outlined" id="header" className={styles.headersWrapper}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography variant="body1" fontFamily="mabry-bold" mr="0.4rem">
                     Headers
                   </Typography>
                   <Tooltip title="Add headers for preheat request." placement="top">
                     <HelpIcon
-                      color="disabled"
-                      sx={{ width: '0.8rem', height: '0.8rem', ':hover': { color: 'var(--description-color)' } }}
+                      sx={{
+                        color: 'var(--palette-grey-300Channel)',
+                        width: '0.8rem',
+                        height: '0.8rem',
+                        ':hover': { color: 'var(--palette-description-color)' },
+                      }}
                     />
                   </Tooltip>
                 </Box>
@@ -618,7 +647,7 @@ export default function NewPreheat() {
                       multiline
                       maxRows={3}
                       error={!headersValueValidate(item.value)}
-                      helperText={!headersValueValidate(item.value) && 'Fill in the characters, the length is 1-1000.'}
+                      helperText={!headersValueValidate(item.value) && 'Fill in the characters, the length is 1-10000.'}
                       className={styles.headersValueInput}
                       value={item.value}
                       onChange={(event) => {
@@ -639,15 +668,15 @@ export default function NewPreheat() {
                         setheaders(newheaders);
                       }}
                     >
-                      <ClearIcon sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--button-color)' }} />
+                      <ClearIcon sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--palette-button-color)' }} />
                     </IconButton>
                   </Grid>
                 ))}
                 <Button
                   sx={{
                     '&.MuiButton-root': {
-                      backgroundColor: 'var(--description-color)',
-                      borderColor: 'var(--description-color)',
+                      backgroundColor: 'var(--palette-description-color)',
+                      borderColor: 'var(--palette-description-color)',
                       color: '#FFF',
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -669,8 +698,8 @@ export default function NewPreheat() {
               <Button
                 sx={{
                   '&.MuiButton-root': {
-                    backgroundColor: 'var(--description-color)',
-                    borderColor: 'var(--description-color)',
+                    backgroundColor: 'var(--palette-description-color)',
+                    borderColor: 'var(--palette-description-color)',
                     color: '#FFF',
                   },
                   width: '8rem',
@@ -699,6 +728,6 @@ export default function NewPreheat() {
           </Box>
         </FormControl>
       </Box>
-    </ThemeProvider>
+    </Box>
   );
 }

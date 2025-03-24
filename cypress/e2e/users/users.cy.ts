@@ -141,13 +141,13 @@ describe('Users', () => {
       cy.get('#name').should('have.text', 'root');
       cy.get('#role').should('have.text', 'root');
       cy.get('#email').should('have.text', 'root@example.com');
-      cy.get('#phone').should('have.text', '1234567890');
+      cy.get('#phone').should('have.text', '+86 153 1234 5678');
       cy.get('#location').should('have.text', 'Hangzhou');
       cy.get('#created-at').should('contain', '2023-11-06 06:09:04');
       cy.get('#updated-at').should('contain', '2023-11-06 06:09:04');
 
       // closure user details.
-      cy.get('.MuiListSubheader-root > .MuiButtonBase-root').click();
+      cy.get('#closure-user-detail').click();
 
       cy.get('#action-jack').click();
 
@@ -177,7 +177,7 @@ describe('Users', () => {
       cy.get('#name').should('have.text', 'jack');
       cy.get('#role').should('have.text', 'guest');
       cy.get('#email').should('have.text', 'jack@example.com');
-      cy.get('#phone').should('have.text', '1234567890');
+      cy.get('#phone').should('have.text', '+86 153 1234 5678');
       cy.get('#location').should('have.text', 'Shanghai');
       cy.get('#created-at').should('contain', '2023-11-07 06:09:04');
       cy.get('.MuiList-root > :nth-child(17)').should('contain', '2023-11-07 06:09:04');
@@ -375,7 +375,7 @@ describe('Users', () => {
       // Check the current page number.
       cy.get('#user-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
-      cy.get('[href="/clusters"]').click();
+      cy.get('#clusters').click();
 
       // Then I see that the current page is the show update personal-access-tokens.
       cy.url().should('include', '/clusters');

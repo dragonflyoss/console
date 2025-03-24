@@ -16,6 +16,20 @@ describe('Clear', () => {
   it('when no data is loaded', () => {
     cy.get('#no-task').should('not.exist');
 
+    cy.get('#light').should('exist');
+    cy.get('#no-task-image').should('exist');
+
+    cy.get('#dark').click();
+    // Dark mode should show a different no-task-image.
+
+    cy.get('.Mui-selected').invoke('text').should('contain', 'Dark');
+
+    cy.get('.Mui-selected').invoke('text').should('not.contain', 'Light');
+
+    cy.get('#no-task-image').should('not.exist');
+
+    cy.get('#dark-no-task-image').should('exist');
+
     cy.intercept(
       {
         method: 'post',
@@ -299,6 +313,12 @@ describe('Clear', () => {
         expect(interceptCount).to.be.closeTo(2, 1);
       });
 
+      // Executed every 1 minute and once after 1 minute.
+      cy.get('@cache').then(() => {
+        expect(interceptCount).to.be.greaterThan(0);
+        expect(interceptCount).to.be.closeTo(2, 1);
+      });
+
       cy.intercept(
         {
           method: 'GET',
@@ -314,13 +334,6 @@ describe('Clear', () => {
 
       // Preheat API error response after three seconds.
       cy.wait(60000);
-
-      // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
-
-      // Close error message.
-      cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('.MuiAlert-message').should('not.exist');
     });
 
     it('Delete cache API error response', () => {

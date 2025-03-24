@@ -34,17 +34,18 @@ import { getBJTDatetime, getPaginatedList, useQuery } from '../../../../lib/util
 import _ from 'lodash';
 import { DEFAULT_SCHEDULER_TABLE_PAGE_SIZE } from '../../../../lib/constants';
 import Card from '../../../card';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1C293A',
-    },
-  },
-  typography: {
-    fontFamily: 'mabry-light,sans-serif',
-  },
-});
+import { ReactComponent as PreheatID } from '../../../../assets/images/job/preheat/id.svg';
+import { ReactComponent as Status } from '../../../../assets/images/job/preheat/status.svg';
+import { ReactComponent as URL } from '../../../../assets/images/job/preheat/url.svg';
+import { ReactComponent as Tag } from '../../../../assets/images/job/preheat/tag.svg';
+import { ReactComponent as CreatedAt } from '../../../../assets/images/job/preheat/created-at.svg';
+import { ReactComponent as Failure } from '../../../../assets/images/job/preheat/failure.svg';
+import { ReactComponent as Pending } from '../../../../assets/images/job/preheat/pending.svg';
+import { ReactComponent as ErrorLog } from '../../../../assets/images/job/preheat/error-log.svg';
+import { ReactComponent as TaskID } from '../../../../assets/images/job/task/task-id.svg';
+import { ReactComponent as Application } from '../../../../assets/images/job/task/type.svg';
+import { ReactComponent as IP } from '../../../../assets/images/job/task/ip.svg';
+import { ReactComponent as CheckLog } from '../../../../assets/images/job/task/error-log.svg';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -173,7 +174,7 @@ export default function ShowExecutions() {
   const errorlog = Array.from(new Set(jobStates.filter((items: string) => items !== '')));
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
@@ -220,12 +221,8 @@ export default function ShowExecutions() {
                 aria-controls="panel1d-content"
                 id="panel1d-header"
               >
-                <Box display="flex">
-                  <Box
-                    component="img"
-                    sx={{ width: '1.2rem', height: '1.2rem', mr: '0.4rem' }}
-                    src="/icons/job/preheat/failure.svg"
-                  />
+                <Box display="flex" alignItems="center">
+                  <Failure id="error-log-icon" className={styles.statusIcon} />
                   <Typography variant="body2" fontFamily="mabry-bold" sx={{ color: '#d0d7de' }}>
                     Error log
                   </Typography>
@@ -255,7 +252,7 @@ export default function ShowExecutions() {
       <Card className={styles.container}>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
-            <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/id.svg" />
+            <PreheatID className={styles.informationTitleIcon} />
             <Typography variant="body1" component="div" className={styles.informationTitleText}>
               ID
             </Typography>
@@ -266,7 +263,7 @@ export default function ShowExecutions() {
         </Box>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
-            <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/status.svg" />
+            <Status className={styles.informationTitleIcon} />
             <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Status
             </Typography>
@@ -287,6 +284,7 @@ export default function ShowExecutions() {
                       : executions?.result.state === 'FAILURE'
                       ? '#D42536'
                       : '#DBAB0A',
+                  color: 'var(var(--palette-button-text-color)',
                 }}
                 id="status"
               >
@@ -295,12 +293,7 @@ export default function ShowExecutions() {
                 ) : executions?.result?.state === 'FAILURE' ? (
                   <></>
                 ) : (
-                  <Box
-                    component="img"
-                    id="pending-icon"
-                    className={styles.statusIcon}
-                    src="/icons/job/preheat/status-pending.svg"
-                  />
+                  <Pending id="pending-icon" className={styles.pendingIcon} />
                 )}
                 <Typography
                   variant="body2"
@@ -337,12 +330,7 @@ export default function ShowExecutions() {
                           setErrorLogText(errorlog.toString() || '');
                         }}
                       >
-                        <Box
-                          id="error-log-icon"
-                          component="img"
-                          sx={{ width: '1.2rem', height: '1.2rem' }}
-                          src="/icons/job/preheat/error-log.svg"
-                        />
+                        <ErrorLog id="error-log-icon" className={styles.errorIcon} />
                       </IconButton>
                     </Tooltip>
                   </>
@@ -357,7 +345,7 @@ export default function ShowExecutions() {
         </Box>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
-            <Box component="img" className={styles.informationTitleIcon} src="/icons/job/task/task-id.svg" />
+            <TaskID className={styles.informationTitleIcon} />
             <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Task ID
             </Typography>
@@ -372,7 +360,7 @@ export default function ShowExecutions() {
         </Box>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
-            <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/url.svg" />
+            <URL className={styles.informationTitleIcon} />
             <Typography variant="body1" component="div" className={styles.informationTitleText}>
               URL
             </Typography>
@@ -389,7 +377,7 @@ export default function ShowExecutions() {
         </Box>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
-            <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/tag.svg" />
+            <Tag className={styles.informationTitleIcon} />
             <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Tag
             </Typography>
@@ -404,10 +392,10 @@ export default function ShowExecutions() {
                 variant="outlined"
                 sx={{
                   borderRadius: '0.3rem',
-                  background: 'var(--button-color)',
+                  background: 'var(--palette-button-color)',
                   color: '#FFFFFF',
                   mr: '0.4rem',
-                  borderColor: 'var(--button-color)',
+                  borderColor: 'var(--palette-button-color)',
                   fontWeight: 'bold',
                 }}
               />
@@ -420,7 +408,7 @@ export default function ShowExecutions() {
         </Box>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
-            <Box component="img" className={styles.informationTitleIcon} src="/icons/job/task/type.svg" />
+            <Application className={styles.informationTitleIcon} />
             <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Application
             </Typography>
@@ -437,7 +425,7 @@ export default function ShowExecutions() {
         </Box>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
-            <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/id.svg" />
+            <PreheatID className={styles.informationTitleIcon} />
             <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Scheduler Clusters ID
             </Typography>
@@ -460,7 +448,7 @@ export default function ShowExecutions() {
         </Box>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
-            <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/created-at.svg" />
+            <CreatedAt className={styles.informationTitleIcon} />
             <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Created At
             </Typography>
@@ -502,7 +490,7 @@ export default function ShowExecutions() {
           </Box>
           <Card>
             <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="scheduler-table">
-              <TableHead sx={{ backgroundColor: 'var(--table-title-color)' }}>
+              <TableHead sx={{ backgroundColor: 'var(--palette-table-title-color)' }}>
                 <TableRow>
                   <TableCell align="center">
                     <Typography variant="subtitle1" fontFamily="mabry-bold">
@@ -539,7 +527,7 @@ export default function ShowExecutions() {
                     </TableCell>
                     <TableCell align="center">
                       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Box component="img" className={styles.ipIcon} src="/icons/cluster/ip.svg" />
+                        <IP className={styles.informationTitleIcon} />
                         <Skeleton data-testid="scheduler-loading" width="4rem" />
                       </Box>
                     </TableCell>
@@ -585,11 +573,7 @@ export default function ShowExecutions() {
                             </TableCell>
                             <TableCell align="center">
                               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <Box
-                                  component="img"
-                                  sx={{ width: '1.5rem', mr: '0.4rem' }}
-                                  src="/icons/job/task/ip.svg"
-                                />
+                                <IP className={styles.IPIcon} />
                                 <Typography variant="body2" component="div">
                                   {item?.ip}
                                 </Typography>
@@ -603,10 +587,14 @@ export default function ShowExecutions() {
                                 sx={{
                                   borderRadius: '0.2rem',
                                   backgroundColor:
-                                    item?.host_type === 'super' ? 'var( --description-color)' : 'var(--button-color)',
+                                    item?.host_type === 'super'
+                                      ? 'var( --palette-description-color)'
+                                      : 'var(--palette-button-color)',
                                   color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
                                   borderColor:
-                                    item?.host_type === 'super' ? 'var( --description-color)' : 'var(--button-color)',
+                                    item?.host_type === 'super'
+                                      ? 'var( --palette-description-color)'
+                                      : 'var(--palette-button-color)',
                                   fontWeight: 'bold',
                                 }}
                               />
@@ -618,12 +606,7 @@ export default function ShowExecutions() {
                                   setErrorLog(true);
                                 }}
                               >
-                                <Box
-                                  id="error-log-icon"
-                                  component="img"
-                                  sx={{ width: '1.8rem', height: '1.8rem' }}
-                                  src="/icons/job/task/error-log.svg"
-                                />
+                                <CheckLog id="error-log-icon" className={styles.errorLogIcon} />
                               </IconButton>
                             </TableCell>
                           </TableRow>
@@ -635,7 +618,7 @@ export default function ShowExecutions() {
             </Table>
           </Card>
           {totalPages > 1 ? (
-            <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+            <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
               <Pagination
                 count={totalPages}
                 page={page}
@@ -655,6 +638,6 @@ export default function ShowExecutions() {
       ) : (
         <></>
       )}
-    </ThemeProvider>
+    </Box>
   );
 }

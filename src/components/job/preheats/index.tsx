@@ -27,6 +27,11 @@ import { DEFAULT_PAGE_SIZE } from '../../../lib/constants';
 import { getBJTDatetime, useQuery } from '../../../lib/utils';
 import styles from './index.module.css';
 import Card from '../../card';
+import { ReactComponent as IcContent } from '../../../assets/images/cluster/scheduler/ic-content.svg';
+import { ReactComponent as Success } from '../../../assets/images/job/preheat/success.svg';
+import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
+import { ReactComponent as Pending } from '../../../assets/images/job/preheat/pending.svg';
+import { ReactComponent as Detail } from '../../../assets/images/job/preheat/detail.svg';
 
 export default function Preheats() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -42,17 +47,6 @@ export default function Preheats() {
   const navigate = useNavigate();
   const query = useQuery();
   const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
-
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#1C293A',
-      },
-    },
-    typography: {
-      fontFamily: 'mabry-light,sans-serif',
-    },
-  });
 
   useEffect(() => {
     (async function () {
@@ -70,7 +64,7 @@ export default function Preheats() {
         setPreheatTotalPages(jobs.total_page || 1);
 
         const states = jobs.data.filter(
-          (obj) => obj.result.state !== 'SUCCESS' && obj.result.state !== 'FAILURE',
+          (obj) => obj?.result?.state !== 'SUCCESS' && obj?.result?.state !== 'FAILURE',
         ).length;
 
         states === 0 ? setShouldPoll(false) : setShouldPoll(true);
@@ -101,7 +95,7 @@ export default function Preheats() {
             setPreheatTotalPages(jobs.total_page || 1);
 
             const states = jobs.data.filter(
-              (obj) => obj.result.state !== 'SUCCESS' && obj.result.state !== 'FAILURE',
+              (obj) => obj?.result?.state !== 'SUCCESS' && obj?.result?.state !== 'FAILURE',
             ).length;
 
             states === 0 ? setShouldPoll(false) : setShouldPoll(true);
@@ -144,7 +138,7 @@ export default function Preheats() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
@@ -155,27 +149,15 @@ export default function Preheats() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Breadcrumbs
-        separator={
-          <Box
-            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
-          />
-        }
-        aria-label="breadcrumb"
-        sx={{ mb: '1rem' }}
-      >
-        <Typography color="text.primary">jobs</Typography>
-        <Typography color="inherit">preheats</Typography>
-      </Breadcrumbs>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '2rem' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '1rem' }}>
         <Typography variant="h5">Preheats</Typography>
         <Button
+          id="new-preheat"
           size="small"
           sx={{
-            '&.MuiButton-root': {
-              backgroundColor: 'var(--button-color)',
-              color: '#fff',
-            },
+            background: 'var(--palette-button-color)',
+            color: 'var(--palette-button-text-color)',
+            ':hover': { backgroundColor: 'var(--palette-hover-button-text-color)' },
           }}
           startIcon={<AddIcon />}
           variant="contained"
@@ -186,11 +168,23 @@ export default function Preheats() {
           add preheat
         </Button>
       </Box>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '1.5rem' }}
+      >
+        <Typography color="text.primary">Job</Typography>
+        <Typography color="inherit">Preheat</Typography>
+      </Breadcrumbs>
       <Card>
         <Box
           sx={{
             p: '0.8rem',
-            backgroundColor: 'var(--table-title-color)',
+            backgroundColor: 'var(--palette-table-title-color)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -248,7 +242,7 @@ export default function Preheats() {
           </Box>
         ) : allPreheats.length === 0 ? (
           <Box className={styles.noData}>
-            <Box component="img" className={styles.nodataIcon} src="/icons/cluster/scheduler/ic-content.svg" />
+            <IcContent className={styles.nodataIcon} />
             <Typography id="no-preheat" variant="h6" className={styles.nodataText}>
               You don't have any preheat tasks.
             </Typography>
@@ -261,27 +255,12 @@ export default function Preheats() {
                   <Box key={item.id} id={`list-${item.id}`}>
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                       <Box className={styles.information}>
-                        {item.result.state === 'SUCCESS' ? (
-                          <Box
-                            id={`SUCCESS-${item.id}`}
-                            component="img"
-                            sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/job/preheat/success.svg"
-                          />
-                        ) : item.result.state === 'FAILURE' ? (
-                          <Box
-                            id={`FAILURE-${item.id}`}
-                            component="img"
-                            sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/job/preheat/failure.svg"
-                          />
+                        {item?.result?.state === 'SUCCESS' ? (
+                          <Success id={`SUCCESS-${item.id}`} className={styles.statusIcon} />
+                        ) : item?.result?.state === 'FAILURE' ? (
+                          <Failure id={`FAILURE-${item.id}`} className={styles.statusIcon} />
                         ) : (
-                          <Box
-                            id={`PENDING-${item.id}`}
-                            component="img"
-                            sx={{ width: '1.3rem', height: '1.3rem' }}
-                            src="/icons/job/preheat/pending.svg"
-                          />
+                          <Pending id={`PENDING-${item.id}`} className={styles.pendingIcon} />
                         )}
                         <Box className={styles.informationContent}>
                           <Typography id={`id-${item?.id}`} variant="body1" fontFamily="mabry-bold">
@@ -313,20 +292,16 @@ export default function Preheats() {
                           id={`preheat-${item?.id}`}
                           to={`/jobs/preheats/${item?.id}`}
                           underline="hover"
-                          sx={{ color: 'var(--description-color)' }}
+                          sx={{ color: 'var(--palette-description-color)' }}
                         >
-                          <Box
-                            component="img"
-                            sx={{ width: '2rem', height: '2rem' }}
-                            src="/icons/job/preheat/detail.svg"
-                          />
+                          <Detail className={styles.detailIcon} />
                         </RouterLink>
                       </Box>
                     </Box>
                     <Divider
                       sx={{
                         borderStyle: 'dashed',
-                        borderColor: 'var(--palette-divider)',
+                        borderColor: 'var(--palette-palette-divider)',
                         borderWidth: '0px 0px thin',
                       }}
                     />
@@ -334,27 +309,12 @@ export default function Preheats() {
                 ) : (
                   <Box key={item.id} id={`list-${item.id}`} sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                     <Box className={styles.information}>
-                      {item.result.state === 'SUCCESS' ? (
-                        <Box
-                          id={`SUCCESS-${item.id}`}
-                          component="img"
-                          sx={{ width: '1.3rem', height: '1.3rem' }}
-                          src="/icons/job/preheat/success.svg"
-                        />
-                      ) : item.result.state === 'FAILURE' ? (
-                        <Box
-                          id={`FAILURE-${item.id}`}
-                          component="img"
-                          sx={{ width: '1.3rem', height: '1.3rem' }}
-                          src="/icons/job/preheat/failure.svg"
-                        />
+                      {item?.result?.state === 'SUCCESS' ? (
+                        <Success id={`SUCCESS-${item.id}`} className={styles.statusIcon} />
+                      ) : item?.result?.state === 'FAILURE' ? (
+                        <Failure id={`FAILURE-${item.id}`} className={styles.statusIcon} />
                       ) : (
-                        <Box
-                          id={`PENDING-${item.id}`}
-                          component="img"
-                          sx={{ width: '1.3rem', height: '1.3rem' }}
-                          src="/icons/job/preheat/pending.svg"
-                        />
+                        <Pending id={`PENDING-${item.id}`} className={styles.pendingIcon} />
                       )}
                       <Box className={styles.informationContent}>
                         <Typography id={`id-${item?.id}`} variant="body1" fontFamily="mabry-bold">
@@ -386,13 +346,9 @@ export default function Preheats() {
                         id={`preheat-${item?.id}`}
                         to={`/jobs/preheats/${item?.id}`}
                         underline="hover"
-                        sx={{ color: 'var(--description-color)' }}
+                        sx={{ color: 'var(--palette-description-color)' }}
                       >
-                        <Box
-                          component="img"
-                          sx={{ width: '2rem', height: '2rem' }}
-                          src="/icons/job/preheat/detail.svg"
-                        />
+                        <Detail className={styles.detailIcon} />
                       </RouterLink>
                     </Box>
                   </Box>
@@ -402,7 +358,7 @@ export default function Preheats() {
         )}
       </Card>
       {preheatTotalPages > 1 ? (
-        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: theme.spacing(2) }}>
+        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
           <Pagination
             count={preheatTotalPages}
             page={preheatPage}
@@ -419,6 +375,6 @@ export default function Preheats() {
       ) : (
         <></>
       )}
-    </ThemeProvider>
+    </Box>
   );
 }

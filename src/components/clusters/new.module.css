@@ -49,8 +49,20 @@
 .descriptionIcon {
   width: 0.8rem !important ;
   height: 0.8rem !important;
+  color: var(--palette-grey-300Channel);
 }
 
 .descriptionIcon:hover {
-  color: var(--description-color);
+  color: var(--palette-description-color);
+}
+
+.card {
+  padding: 2rem;
+  margin: auto;
+  width: 60%;
+}
+
+.buttonContainer {
+  margin: auto;
+  width: 60%;
 }

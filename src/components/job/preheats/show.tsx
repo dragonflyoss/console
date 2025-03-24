@@ -2,7 +2,6 @@ import {
   Box,
   Chip,
   Divider,
-  Paper,
   Typography,
   Breadcrumbs,
   Link as RouterLink,
@@ -15,8 +14,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Accordion,
-  ThemeProvider,
-  createTheme,
   styled,
   tooltipClasses,
   TooltipProps,
@@ -29,17 +26,19 @@ import { getBJTDatetime } from '../../../lib/utils';
 import styles from './show.module.css';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import Card from '../../card';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1C293A',
-    },
-  },
-  typography: {
-    fontFamily: 'mabry-light,sans-serif',
-  },
-});
+import { ReactComponent as PreheatID } from '../../../assets/images/job/preheat/id.svg';
+import { ReactComponent as Description } from '../../../assets/images/job/preheat/description.svg';
+import { ReactComponent as Status } from '../../../assets/images/job/preheat/status.svg';
+import { ReactComponent as URL } from '../../../assets/images/job/preheat/url.svg';
+import { ReactComponent as Scope } from '../../../assets/images/job/preheat/scope.svg';
+import { ReactComponent as Tag } from '../../../assets/images/job/preheat/tag.svg';
+import { ReactComponent as Headers } from '../../../assets/images/job/preheat/headers.svg';
+import { ReactComponent as SchedulerClustersID } from '../../../assets/images/job/preheat/id.svg';
+import { ReactComponent as CreatedAt } from '../../../assets/images/job/preheat/created-at.svg';
+import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
+import { ReactComponent as Pending } from '../../../assets/images/job/preheat/pending.svg';
+import { ReactComponent as ErrorLog } from '../../../assets/images/job/preheat/error-log.svg';
+import { ReactComponent as TagScope } from '../../../assets/images/job/preheat/tag-scope.svg';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -132,7 +131,7 @@ export default function ShowPreheat() {
   const scope = preheat?.args?.scope && scopeList.find((item) => item.name === preheat?.args?.scope);
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
@@ -143,6 +142,9 @@ export default function ShowPreheat() {
           {errorMessageText}
         </Alert>
       </Snackbar>
+      <Typography variant="h5" id="preheat-title">
+        Preheat
+      </Typography>
       <Breadcrumbs
         separator={
           <Box
@@ -150,22 +152,19 @@ export default function ShowPreheat() {
           />
         }
         aria-label="breadcrumb"
-        sx={{ mb: '1rem' }}
+        sx={{ mb: '1.5rem', mt: '1rem' }}
       >
-        <Typography>jobs</Typography>
-        <RouterLink component={Link} underline="hover" color="inherit" to={`/jobs/preheats`}>
-          preheats
+        <Typography color="text.primary">Job</Typography>
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/jobs/preheats`}>
+          Preheat
         </RouterLink>
-        <Typography color="text.primary">{preheat?.id || '-'}</Typography>
+        <Typography>{preheat?.id || '-'}</Typography>
       </Breadcrumbs>
-      <Typography variant="h5" mb="2rem">
-        Preheat
-      </Typography>
       <Box width="100%">
         <Card className={styles.container}>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/id.svg" />
+              <PreheatID className={styles.informationTitleIcon} />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -181,7 +180,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/description.svg" />
+              <Description className={styles.informationTitleIcon} />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -197,7 +196,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/status.svg" />
+              <Status className={styles.informationTitleIcon} />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -234,12 +233,7 @@ export default function ShowPreheat() {
                     ) : preheat.result.state === 'FAILURE' ? (
                       <></>
                     ) : (
-                      <Box
-                        component="img"
-                        id="pending-icon"
-                        className={styles.statusIcon}
-                        src="/icons/job/preheat/status-pending.svg"
-                      />
+                      <Pending id="pending-icon" className={styles.pendingIcon} />
                     )}
                     <Typography
                       variant="body2"
@@ -269,12 +263,7 @@ export default function ShowPreheat() {
                               setErrorLog(true);
                             }}
                           >
-                            <Box
-                              id="error-log-icon"
-                              component="img"
-                              sx={{ width: '1.2rem', height: '1.2rem' }}
-                              src="/icons/job/preheat/error-log.svg"
-                            />
+                            <ErrorLog id="error-log-icon" className={styles.errorIcon} />
                           </IconButton>
                         </Tooltip>
                       </>
@@ -290,7 +279,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/url.svg" />
+              <URL className={styles.informationTitleIcon} />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -314,7 +303,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/scope.svg" />
+              <Scope className={styles.informationTitleIcon} />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -329,7 +318,7 @@ export default function ShowPreheat() {
                 <Skeleton data-testid="preheat-isloading" sx={{ width: '2rem' }} />
               ) : scope ? (
                 <Box className={styles.scopeContent}>
-                  <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/tag-scope.svg" />
+                  <TagScope className={styles.informationTitleIcon} />
                   <Typography variant="body2" component="div" fontFamily="mabry-bold" pl="0.2rem">
                     {scope.label || '-'}
                   </Typography>
@@ -341,7 +330,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/tag.svg" />
+              <Tag className={styles.informationTitleIcon} />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -369,7 +358,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/headers.svg" />
+              <Headers className={styles.informationTitleIcon} />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -412,7 +401,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/id.svg" />
+              <SchedulerClustersID className={styles.informationTitleIcon} />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -436,7 +425,7 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Box component="img" className={styles.informationTitleIcon} src="/icons/job/preheat/created-at.svg" />
+              <CreatedAt className={styles.informationTitleIcon} />
               <Typography
                 variant="body1"
                 fontFamily="mabry-bold"
@@ -500,12 +489,8 @@ export default function ShowPreheat() {
                     aria-controls="panel1d-content"
                     id="panel1d-header"
                   >
-                    <Box display="flex">
-                      <Box
-                        component="img"
-                        sx={{ width: '1.4rem', height: '1.4rem', mr: '0.6rem' }}
-                        src="/icons/job/preheat/failure.svg"
-                      />
+                    <Box display="flex" alignItems="center">
+                      <Failure className={styles.statusIcon} />
                       <Typography variant="body2" fontFamily="mabry-bold" sx={{ color: '#d0d7de' }}>
                         Preheat
                       </Typography>
@@ -531,6 +516,6 @@ export default function ShowPreheat() {
           </Box>
         </Drawer>
       </Box>
-    </ThemeProvider>
+    </Box>
   );
 }

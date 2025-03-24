@@ -1,6 +1,12 @@
 .page {
   height: 100vh;
   overflow: hidden;
+  position: relative;
+}
+
+.pageLoading {
+  width: 4rem;
+  height: 4rem;
 }
 
 .container {
@@ -8,12 +14,36 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 7rem;
+  position: relative;
+}
+
+.header {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 11rem;
+}
+
+.githubContainer {
+  z-index: 9;
+  right: 1.6rem;
+  bottom: 1.6rem;
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+}
+
+.headerContent {
+  width: 2rem;
+  height: 2rem;
+  color: var(--palette-secondary-dark);
 }
 
 .logo {
   width: 3rem;
   height: 3rem;
   margin-bottom: 1rem;
+  color: var(--palette-description-color);
 }
 
 .separationLineContainer {

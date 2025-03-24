@@ -3,9 +3,16 @@
 }
 
 .statusIcon {
-  width: 1.3rem !important;
-  height: 1.3rem !important;
+  margin-right: 0.5rem;
+  width: 1rem !important;
+  height: 1rem !important;
+}
+
+.pendingIcon {
+  width: 1.3rem;
+  height: 1.3rem;
   margin-right: 0.4rem;
+  color: var(--palette-button-text-color);
 }
 
 .informationContainer {
@@ -23,11 +30,12 @@
 .informationTitleIcon {
   width: 1.4rem !important;
   height: 1.4rem !important;
+  color: var(--palette-detail-lable-color);
 }
 
 .informationTitleText {
   margin-left: 1rem !important;
-  color: #515151;
+  color: var(--palette-detail-lable-color);
   font-family: 'mabry-bold' !important;
 }
 
@@ -84,8 +92,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--button-color);
-  color: var(--save-size-color);
+  background-color: var(--palette-button-color);
+  color: var(--palette-button-text-color);
   border-radius: 0.3rem;
   min-width: 1.6rem;
   margin-right: 0.5rem;
@@ -95,8 +103,8 @@
 .scopeContent {
   display: inline-flex;
   align-items: center;
-  background-color: var(--button-color);
-  color: var(--save-size-color);
+  background-color: var(--palette-button-color);
+  color: var(--palette-scopes-icon-color);
   border-radius: 0.3rem;
   min-width: 1.6rem;
   margin-right: 0.5rem;
@@ -105,8 +113,8 @@
 
 .tagContent {
   display: inline-flex;
-  background-color: var(--description-color);
-  color: var(--save-size-color);
+  background-color: var(--palette-description-color);
+  color: var(--palette-scopes-icon-color);
   border-radius: 0.3rem;
   min-width: 1.6rem;
   padding: 0.2rem 0.4rem;
@@ -118,4 +126,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-style: italic;
+}
+
+.errorIcon {
+  width: 1.3rem;
+  height: 1.3rem;
 }

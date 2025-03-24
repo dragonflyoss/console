@@ -46,27 +46,9 @@ describe('Profile', () => {
     cy.viewport(1440, 1080);
   });
 
-  it('opens user profile page from the home page', () => {
-    cy.visit('/');
-
-    cy.get('#unfold-more').click();
-
-    // Go to profil page.
-    cy.get('#profile-menu').click();
-
-    // Then I see that the current page is the profile!
-    cy.url().should('include', '/profile');
-
-    cy.get('#my-profile').should('contain', 'My Profile');
-  });
-
   it('when data is loaded', () => {
-    cy.get('#menu-name').should('be.visible').and('have.text', 'root');
-
-    cy.get('#menu-email').should('be.visible').and('have.text', 'root@example.com');
-
     // Show user name.
-    cy.get('.css-70qvj9 > .MuiBox-root > .MuiTypography-h5').should('be.visible').and('have.text', 'root');
+    cy.get('#name-title').should('be.visible').and('have.text', 'root');
 
     // Show user description.
     cy.get('#description').should('be.visible').and('have.text', 'I am root');
@@ -74,14 +56,14 @@ describe('Profile', () => {
     cy.get('#name').should('be.visible').and('have.text', 'root');
     cy.get('#email').should('be.visible').and('have.text', 'root@example.com');
     cy.get('#location').should('be.visible').and('have.text', 'Hangzhou');
-    cy.get('#phone').should('be.visible').and('have.text', 1234567890);
+    cy.get('#phone').should('be.visible').and('have.text', '+86 153 1234 5678');
     cy.get('#created_at').should('be.visible').and('have.text', '2023-11-06 06:09:04');
 
     // Check Update Personal Information form.
     cy.get('.MuiGrid-root > .MuiButtonBase-root').click();
 
     cy.get('#bio').should('have.value', 'I am root');
-    cy.get('#phone').should('have.value', 1234567890);
+    cy.get('#phone').should('have.value', '+86 153 1234 5678');
     cy.get('#location').should('have.value', 'Hangzhou');
     cy.get('#email').should('have.value', 'root@example.com');
   });
@@ -100,11 +82,8 @@ describe('Profile', () => {
       },
     );
 
-    cy.get('#menu-name').should('be.visible').and('have.text', '-');
-    cy.get('#menu-email').should('be.visible').and('have.text', '-');
-
     // Show user name.
-    cy.get('.MuiTypography-caption').should('be.visible').and('have.text', '-');
+    cy.get('#name-title').should('be.visible').and('have.text', '-');
 
     // Show user description.
     cy.get('#description').should('be.visible').and('have.text', '-');
@@ -119,7 +98,7 @@ describe('Profile', () => {
     cy.get('.MuiGrid-root > .MuiButtonBase-root').click();
 
     cy.get('#bio').should('have.value', '');
-    cy.get('#phone').should('have.value', '');
+    cy.get('#phone').should('have.value', '+86');
     cy.get('#location').should('have.value', '');
     cy.get('#email').should('have.value', '');
   });
@@ -144,7 +123,7 @@ describe('Profile', () => {
     cy.get('.MuiGrid-root > .MuiButtonBase-root').click();
 
     cy.get('#bio').should('have.value', '');
-    cy.get('#phone').should('have.value', '');
+    cy.get('#phone').should('have.value', '+86');
     cy.get('#location').should('have.value', '');
     cy.get('#email').should('have.value', '');
   });
@@ -193,9 +172,6 @@ describe('Profile', () => {
 
       cy.get('#save').click();
 
-      // Check whether the navigation bar email has changed.
-      cy.get('.MuiTypography-caption').should('have.text', 'root@gmail.com');
-
       // Check if profile description is updated.
       cy.get('#description').should('be.visible').and('have.text', 'I am root, I will change the description');
 
@@ -206,7 +182,7 @@ describe('Profile', () => {
       cy.get('#location').should('be.visible').and('have.text', 'Shanghai');
 
       // Check if profile phone is updated.
-      cy.get('#phone').should('be.visible').and('have.text', 15123456789);
+      cy.get('#phone').should('be.visible').and('have.text', '+86 153 1234 5678');
     });
 
     it('click the `CANCEL button', () => {
@@ -222,7 +198,6 @@ describe('Profile', () => {
       cy.get('#description').should('be.visible').and('have.text', 'I am root');
 
       // Check whether the navigation bar email has changed.
-      cy.get('.MuiTypography-caption').should('have.text', 'root@example.com');
       cy.get('#email').should('be.visible').and('have.text', 'root@example.com');
 
       // Click EDIT button.
@@ -301,7 +276,7 @@ describe('Profile', () => {
 
       // Should display message phone the validation error.
       cy.get('#phone').clear();
-      cy.get('#phone').type('1234567890');
+      cy.get('#phone').type('+86 153 1234 123123');
 
       // Show verification error message.
       cy.get('#phone-helper-text').should('be.visible').and('have.text', 'Invalid phone number.');
@@ -309,7 +284,7 @@ describe('Profile', () => {
       cy.get('.css-1033rfx > .MuiTypography-root').should('exist').and('have.text', 'Update Personal Information');
 
       cy.get('#phone').clear();
-      cy.get('#phone').type('15123456789');
+      cy.get('#phone').type('+86 151 2345 6789');
 
       // Verification passed.
       cy.get('#phone-helper-text').should('not.exist');
@@ -353,8 +328,21 @@ describe('Profile', () => {
           });
       });
 
-      // Click change password button.
-      cy.get('.css-1a9getn > .MuiButtonBase-root').click();
+      // Click change password tab.
+      cy.get('#tab-password').click();
+
+      cy.get('#oldPassword').type('dragonfly1');
+      cy.get('#newPassword').type('dragonfly2');
+      cy.get('#confirmNewPassword').type('dragonfly2');
+
+      // Click cancel password button.
+      cy.get('#cancel-change-password').click();
+
+      // Input should be cleared.
+      cy.get('#oldPassword').should('have.value', '');
+      cy.get('#newPassword').should('have.value', '');
+      cy.get('#confirmNewPassword').should('have.value', '');
+
       cy.get('#oldPassword').type('dragonfly1');
       cy.get('#newPassword').type('dragonfly2');
       cy.get('#confirmNewPassword').type('dragonfly2');
@@ -366,24 +354,20 @@ describe('Profile', () => {
       cy.url().should('include', 'signin');
     });
 
-    it('click the `CANCEL button', () => {
+    it('click the Profile tab', () => {
       // Click change password button.
-      cy.get('.css-1a9getn > .MuiButtonBase-root').click();
-      cy.get('.profile_profileContainer__l5i6P > .MuiGrid-root > .MuiTypography-root')
-        .should('be.visible')
-        .and('have.text', 'Change Password');
+      cy.get('#tab-password').click();
+      cy.get('#change-password-title').should('be.visible').and('have.text', 'Change Password');
       cy.get('#oldPassword').type('dragonfly1');
       cy.get('#newPassword').type('dragonfly2');
       cy.get('#confirmNewPassword').type('dragonfly2');
 
       // Click cancel button.
-      cy.get('#cancel-change-password').click();
-      cy.get('.profile_profileContainer__l5i6P > .MuiGrid-root > .MuiTypography-root').should('not.exist');
+      cy.get('#tab-profile').click();
+      cy.get('#change-password-title').should('not.exist');
 
-      cy.get('.css-1a9getn > .MuiButtonBase-root').click();
-      cy.get('.profile_profileContainer__l5i6P > .MuiGrid-root > .MuiTypography-root')
-        .should('be.visible')
-        .and('have.text', 'Change Password');
+      cy.get('#tab-password').click();
+      cy.get('#change-password-title').should('be.visible').and('have.text', 'Change Password');
 
       // Check if old password is empty.
       cy.get('#oldPassword').should('have.text', '');
@@ -415,7 +399,7 @@ describe('Profile', () => {
       cy.visit('/profile');
 
       // Click change password button.
-      cy.get('.css-1a9getn > .MuiButtonBase-root').click();
+      cy.get('#tab-password').click();
       cy.get('#oldPassword').type('dragonfly1');
       cy.get('#newPassword').type('dragonfly2');
       cy.get('#confirmNewPassword').type('dragonfly2');
@@ -434,7 +418,7 @@ describe('Profile', () => {
       });
 
       // Click change password button.
-      cy.get('.css-1a9getn > .MuiButtonBase-root').click();
+      cy.get('#tab-password').click();
       cy.get('#oldPassword').type('dragonfly1');
       cy.get('#newPassword').type('dragonfly2');
       cy.get('#confirmNewPassword').type('dragonfly2');
@@ -454,7 +438,7 @@ describe('Profile', () => {
       });
 
       // Click change password button.
-      cy.get('.css-1a9getn > .MuiButtonBase-root').click();
+      cy.get('#tab-password').click();
       cy.get('#oldPassword').type('dragonfly1');
       cy.get('#newPassword').type('dragonfly2');
       cy.get('#confirmNewPassword').type('dragonfly2');
@@ -466,7 +450,7 @@ describe('Profile', () => {
 
     it('cannot change password without required attributes', () => {
       // Click change password button.
-      cy.get('.css-1a9getn > .MuiButtonBase-root').click();
+      cy.get('#tab-password').click();
       cy.get('#change-password').click();
 
       // Show error message.
@@ -490,7 +474,7 @@ describe('Profile', () => {
       const newPasswordLengthIsInsufficient = _.times(7, () => _.sample(characters)).join('');
 
       // Click change password button.
-      cy.get('.css-1a9getn > .MuiButtonBase-root').click();
+      cy.get('#tab-password').click();
 
       // Should display message old password the validation error.
       cy.get('#oldPassword').type(oldPassword);
@@ -543,7 +527,7 @@ describe('Profile', () => {
     });
 
     it('click the password hide butto', () => {
-      cy.get('.css-1a9getn > .MuiButtonBase-root').click();
+      cy.get('#tab-password').click();
 
       // Verify the display status of the content of the old password input box.
       cy.get('#oldPassword').type('dragonfly1');

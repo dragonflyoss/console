@@ -16,6 +16,18 @@
   font-family: 'mabry-bold';
 }
 
+.statusIcon {
+  width: 1.3rem;
+  height: 1.3rem;
+  margin: 0.1rem;
+}
+
+.pendingIcon {
+  width: 1.3rem;
+  height: 1.3rem;
+  color: #dbab0a;
+}
+
 .description {
   width: 90%;
   overflow: hidden;
@@ -36,4 +48,23 @@
   flex-direction: column;
   justify-content: space-between;
   margin-left: 0.6rem;
+}
+
+.detailIcon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--palette-button-color);
+}
+
+.menu {
+  background-color: var(--palette-background-menu);
+  background-image: url(../../../assets/images/menu/cyan-blur.png), url(../../../assets/images/menu/red-blur.png);
+  background-repeat: no-repeat, no-repeat;
+  padding: 0.2rem;
+  background-size: 50%, 50%;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  outline: 0px;
+  background-position: right top, left bottom;
+  border-radius: var(--menu-border-radius);
+  overflow: inherit;
 }

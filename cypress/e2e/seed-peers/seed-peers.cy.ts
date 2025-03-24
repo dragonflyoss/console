@@ -74,11 +74,11 @@ describe('Seed peers', () => {
       cy.get(':nth-child(1) > :nth-child(8) > .MuiChip-root')
         .should('be.visible')
         .and('contain', 'Active')
-        .and('have.css', 'background-color', 'rgb(46, 143, 121)');
+        .and('have.css', 'background-color', 'rgb(31, 125, 83)');
     });
 
     it('can display seed peers card', () => {
-      cy.get(':nth-child(4) > .MuiButtonBase-root').click();
+      cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
       cy.get('#card-id-7').should('be.visible').and('have.text', '7');
 
       // Show hostname.
@@ -329,7 +329,7 @@ describe('Seed peers', () => {
       cy.get(':nth-child(5) > :nth-child(8) > .MuiChip-root')
         .should('be.visible')
         .and('contain', 'Inactive')
-        .and('have.css', 'background-color', 'rgb(28, 41, 58)');
+        .and('have.css', 'background-color', 'rgb(24, 35, 15)');
 
       // Go to last page.
       cy.get(':nth-child(7) > .MuiButtonBase-root').click();
@@ -554,7 +554,7 @@ describe('Seed peers', () => {
       cy.get('#card').click();
 
       // Go to last page.
-      cy.get(':nth-child(4) > .MuiButtonBase-root').click();
+      cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
 
       // Check the current page number.
       cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '3');
@@ -895,7 +895,7 @@ describe('Seed peers', () => {
       cy.get('#close-delete-icon').click();
       cy.get('#delete-all-inactive-instances').click();
 
-      cy.get('.css-pbbh6n > .css-70qvj9 > .MuiTypography-root').should('have.text', 'Delete inactive instances');
+      cy.get('#delete-inactive-instances-title').should('have.text', 'Delete inactive instances');
       cy.get('#seedPeerTotal').should('have.text', '0 inactive');
       cy.get('#back-button').should('be.disabled');
 
@@ -983,7 +983,7 @@ describe('Seed peers', () => {
 
       cy.get('#delete-all-inactive-instances').click();
 
-      cy.get('.css-pbbh6n > .css-70qvj9 > .MuiTypography-root').should('have.text', 'Delete inactive instances');
+      cy.get('#delete-inactive-instances-title').should('have.text', 'Delete inactive instances');
       cy.get('#seedPeerTotal').should('have.text', '20 inactive');
       cy.get('#back-button').should('be.disabled');
       cy.get('#next-button').should('not.be.disabled');

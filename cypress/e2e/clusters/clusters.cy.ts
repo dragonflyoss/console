@@ -43,7 +43,7 @@ describe('Clusters', () => {
     );
 
     cy.visit('/clusters');
-    cy.viewport(1440, 1080);
+    cy.viewport(1440, 1480);
   });
 
   describe('when data is loaded', () => {
@@ -86,7 +86,7 @@ describe('Clusters', () => {
       cy.get('#default-cluster-1')
         .should('be.visible')
         .and('contain', 'Default')
-        .and('have.css', 'background-color', 'rgb(46, 143, 121)');
+        .and('have.css', 'background-color', 'rgb(31, 125, 83)');
 
       // Show cluster name.
       cy.get('#cluster-name-1').should('be.visible').and('contain', 'cluster-1');
@@ -108,7 +108,7 @@ describe('Clusters', () => {
       cy.get('#default-cluster-2')
         .should('be.visible')
         .and('contain', 'Non-Default')
-        .and('have.css', 'background-color', 'rgb(28, 41, 58)');
+        .and('have.css', 'background-color', 'rgb(24, 35, 15)');
     });
   });
 
@@ -183,8 +183,6 @@ describe('Clusters', () => {
 
   describe('pagination', () => {
     it('pagination updates results and page number', () => {
-      cy.get('.Mui-selected').invoke('text').should('eq', 'Cluster1');
-
       // Check number of pagination.
       cy.get('#clusterPagination > .MuiPagination-ul').children().should('have.length', 7);
 
@@ -193,8 +191,6 @@ describe('Clusters', () => {
     });
 
     it('when pagination changes, different page results are rendered', () => {
-      cy.get('.Mui-selected').invoke('text').should('eq', 'Cluster1');
-
       // Go to last page.
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
@@ -205,7 +201,7 @@ describe('Clusters', () => {
       cy.get('#default-cluster-8')
         .should('be.visible')
         .and('contain', 'Non-Default')
-        .and('have.css', 'background-color', 'rgb(28, 41, 58)');
+        .and('have.css', 'background-color', 'rgb(24, 35, 15)');
 
       cy.get('#cluster-name-8').should('be.visible').and('contain', 'cluster-8');
 
@@ -268,7 +264,7 @@ describe('Clusters', () => {
 
       cy.get('#clusterPagination > .MuiPagination-ul .Mui-selected').should('have.text', '5');
 
-      cy.get('#clusters').children().should('have.length', 1);
+      cy.get('#clustersCard').children().should('have.length', 1);
 
       cy.get('#cluster-name-37').should('have.text', 'cluster-37');
 
@@ -384,7 +380,7 @@ describe('Clusters', () => {
       cy.get('#free-solo-demo').type('cluster-47');
 
       // No clusters card.
-      cy.get('#clusters').should('not.exist');
+      cy.get('#clustersCard').should('not.exist');
 
       // Pagination has been hidden.
       cy.get('#clusterPagination > .MuiPagination-ul').should('not.exist');

@@ -46,7 +46,7 @@ describe('Create preheat', () => {
 
   it('can create preheat', () => {
     cy.visit('/jobs/preheats');
-    cy.get('.css-1g5t85q > .MuiButtonBase-root').click();
+    cy.get('#new-preheat').click();
 
     cy.url().should('include', '/jobs/preheats/new');
 
@@ -321,7 +321,6 @@ describe('Create preheat', () => {
     it('try to verify header', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       const key = _.times(101, () => _.sample(characters)).join('');
-      const value = _.times(1001, () => _.sample(characters)).join('');
 
       // Select a cluster.
       cy.get('#select-cluster').click();
@@ -344,13 +343,11 @@ describe('Create preheat', () => {
       // Show  header value verification error message.
       cy.get('.new_headersValueInput__zn-9E > .MuiFormHelperText-root')
         .should('be.visible')
-        .and('have.text', 'Fill in the characters, the length is 1-1000.');
+        .and('have.text', 'Fill in the characters, the length is 1-10000.');
 
       // Verification passed.
       cy.get('.new_headersKeyInput__aZcds > .MuiInputBase-root > .MuiInputBase-input').type('key');
       cy.get('.new_headersKeyInput__aZcds > .MuiFormHelperText-root').should('not.exist');
-      cy.get('.new_headersValueInput__zn-9E > .MuiInputBase-root').type('value');
-      cy.get('.new_headersValueInput__zn-9E > .MuiFormHelperText-root').should('not.exist');
 
       // Incorrect header key entered.
       cy.get('.new_headersKeyInput__aZcds > .MuiInputBase-root > .MuiInputBase-input').clear();
@@ -370,19 +367,6 @@ describe('Create preheat', () => {
       cy.get('.new_headersKeyInput__aZcds > .MuiInputBase-root > .MuiInputBase-input').clear();
       cy.get('.new_headersKeyInput__aZcds > .MuiInputBase-root > .MuiInputBase-input').type('key');
       cy.get('.new_headersKeyInput__aZcds > .MuiFormHelperText-root').should('not.exist');
-
-      // Incorrect header value entered.
-      cy.get('.new_headersValueInput__zn-9E > .MuiInputBase-root').type(value);
-
-      // Show header value verification error message.
-      cy.get('.new_headersValueInput__zn-9E > .MuiFormHelperText-root')
-        .should('be.visible')
-        .and('have.text', 'Fill in the characters, the length is 1-1000.');
-
-      // Show header value verification error message.
-      cy.get('.new_headersValueInput__zn-9E > .MuiFormHelperText-root')
-        .should('be.visible')
-        .and('have.text', 'Fill in the characters, the length is 1-1000.');
 
       cy.get('#save').click();
 

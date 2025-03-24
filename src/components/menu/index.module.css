@@ -1,85 +1,261 @@
 .container {
   display: flex;
-  flex-direction: row;
+  flex: 1 1 auto;
+  flex-direction: column;
+  background-color: var(--palette-sidebar-background-color);
+  height: 100vh;
+}
+
+.layout {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  background-color: var(--palette-sidebar-background-color);
+}
+
+.main {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 1.5rem 2rem;
+  margin: 0.8rem 0.8rem 0.8rem 1.2rem;
+  overflow-y: auto !important;
+  background-color: var(--palette-main-background-paper);
+  box-shadow: var(--palette-card-box-shadow);
+  border-radius: 0.6rem;
 }
 
 .navigationBarContainer {
   background-size: cover;
   background-position: center;
-  height: 100vh;
-  max-width: 16rem;
+  height: 100%;
+  position: fixed;
   display: flex;
   flex-direction: column;
+  z-index: 1101;
+  background-color: var(--palette-sidebar-background-color);
+}
+
+.sidebarTitle {
+  padding: 1.5rem 0 1rem 0.3rem;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
 }
 
-.title {
+.expandIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--palette-sidebar-menu-color);
+}
+
+.liMenu {
   display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.shrinkLiMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
   align-items: center;
-  margin-left: 0.4rem;
-  margin-top: 2rem;
+}
+
+.sidebarExpand {
+  width: 0.6rem;
+  height: 0.6rem;
+}
+
+.list {
+  margin-left: 1.25rem !important;
+  padding-left: 0.75rem !important;
+  padding-top: 0.8rem !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.list:before {
+  top: 0px;
+  left: 0px;
+  width: 2px;
+  content: '';
+  position: absolute;
+  background-color: var(--paletteexpandable-sidebar-navigation);
+  bottom: 1rem;
+  bottom: calc(36px - 2px - 12px / 2);
+}
+
+.expandable:before {
+  left: 0px;
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: var(--paletteexpandable-sidebar-navigation);
+  mask: url(../../assets/images/menu/layout.svg) 50% 50% / 100% no-repeat;
+  transform: translate(calc(12px * -1), calc(12px * -0.4));
+}
+
+.shrinkMenu {
+  background-color: var(--palette-background-menu);
+  background-image: url(../../assets/images/menu/cyan-blur.png), url(../../assets/images/menu/red-blur.png);
+  background-repeat: no-repeat, no-repeat;
+  padding: 0.2rem;
+  background-size: 50%, 50%;
+  box-shadow: var(--custom-sidebar-shadows-dropdown);
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  outline: 0px;
+  background-position: right top, left bottom;
+  border-radius: var(--menu-border-radius);
+  overflow: inherit;
+  min-width: 10rem;
+}
+
+.title {
+  display: inline-flex;
+  align-items: center;
 }
 
 .logo {
   width: 1.8rem;
   height: 1.8rem;
-  margin-right: 0.8rem;
+  color: var(--palette-description-color);
 }
 
 .menuIcon {
-  width: 1.6rem;
-  height: 1.6rem;
-}
-
-.avatar {
-  width: 2.6rem !important;
-  height: 2.6rem !important;
-  margin-right: 0.6rem;
-  background: var(--button-color) !important;
-}
-
-.menu {
-  padding-top: 0.4rem;
-  padding-bottom: 0.4rem;
-  width: 14rem;
-}
-
-.expandMenu {
-  padding-top: 0.4rem;
-  padding-bottom: 0.4rem;
-  width: 14rem;
-  float: right;
+  width: 1rem;
+  height: 1rem;
 }
 
 .menuText {
   font-family: 'mabry-bold' !important;
+  margin-left: 0.5rem !important;
+}
+
+.avatarMenu {
+  font-family: 'mabry-bold' !important;
+  color: var(--palette-color);
+}
+
+.avatarButton {
+  position: relative;
+  transition: transform 0.6s easel;
+  margin-left: 0.3rem;
+  padding: 0.3rem;
+}
+
+.avatarButton:hover {
+  transform: scale(1.06);
+}
+
+.avatarWrapper {
+  background: conic-gradient(#73bafb, #ffd666, #73bafb);
+  width: 2.7rem;
+  height: 2.7rem;
+  animation: rotate 4s linear infinite;
+  position: absolute;
+  border-radius: 50%;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.avatar {
+  width: 2.35rem !important;
+  height: 2.35rem !important;
+  background: var(--palette-secondary-dark) !important;
 }
 
 .profileMenu {
-  background-image: url(../../../public/images/menu/cyan-blur.png), url(../../../public/images/menu/red-blur.png);
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: var(--palette-background-menu);
+  background-image: url(../../assets/images/menu/cyan-blur.png), url(../../assets/images/menu/red-blur.png);
   background-repeat: no-repeat, no-repeat;
   padding: 0.2rem;
   background-size: 50%, 50%;
-  box-shadow: rgba(145, 158, 171, 0.24) 0px 0px 2px 0px, rgba(145, 158, 171, 0.24) -20px 20px 40px -4px;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
   outline: 0px;
   background-position: right top, left bottom;
-  border-radius: 10px;
+  border-radius: var(--menu-border-radius);
   overflow: inherit;
+  min-width: 10rem;
+}
+
+.avatarContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0.8rem;
+}
+
+.menuAvatar {
+  width: 3rem !important;
+  height: 3rem !important;
+  background: var(--palette-secondary-dark) !important;
+}
+
+.menuUserName {
+  font-family: 'mabry-bold' !important;
+  padding-top: 0.6rem;
+  color: var(--palette-color);
+}
+
+.menuUserEmail {
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-top: 0.6rem;
+  color: var(--palette-text-palette-text-secondary);
 }
 
 .menuItemIcon {
-  color: var(--button-color);
+  color: var(--palette-button-color);
 }
 
 .pageContainer {
-  position: relative;
-  width: 100%;
+  overflow-y: auto;
+  height: 100vh;
 }
 
 .pageloading {
   width: 100%;
   position: absolute;
   top: 0;
+  z-index: 1200;
+}
+
+.sidebarUser {
+  padding: 0.4rem 0.6rem 0.4rem 0.7rem;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: var(--palette-sidebar-user-background-paper) !important;
+}
+
+.shrinkSidebarUser {
+  padding-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.shrinkDarkMode {
+  margin-bottom: 1rem;
+}
+
+.darkMode {
+  margin-bottom: 1rem;
+  width: 100%;
 }

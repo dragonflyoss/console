@@ -214,11 +214,11 @@ describe('Cluster', () => {
       // Click the copy scheduler cluster id icon.
       cy.get('#copy-scheduler-cluster-id').click();
       cy.get('#schedulerClusterIDCopyIcon').should('exist');
-      cy.get('#schedulerClusterIDTooltip').should('exist');
+      cy.get('#schedulerClusterIDTooltip').should('not.exist');
       cy.wait(1000);
 
       // Display successful copy icon.
-      cy.get('#schedulerClusterIDCopyIcon').should('not.exist');
+      cy.get('#schedulerClusterIDCopyIcon').should('exist');
       cy.get('#schedulerClusterIDTooltip').should('not.exist');
 
       // Let's check the copied text.
@@ -230,11 +230,11 @@ describe('Cluster', () => {
       // Click the copy seed peer cluster id icon.
       cy.get('#copy-seed-peer-cluster-id').click();
       cy.get('#seedPeerClusterIDCopyIcon').should('exist');
-      cy.get('#seedPeerClusterIDTooltip').should('exist');
+      cy.get('#seedPeerClusterIDTooltip').should('not.exist');
       cy.wait(1000);
 
       // Display successful copy icon.
-      cy.get('#seedPeerClusterIDCopyIcon').should('not.exist');
+      cy.get('#seedPeerClusterIDCopyIcon').should('exist');
       cy.get('#seedPeerClusterIDTooltip').should('not.exist');
 
       // Let's check the copied text.

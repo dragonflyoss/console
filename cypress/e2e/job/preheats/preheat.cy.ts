@@ -44,14 +44,14 @@ describe('Preheat', () => {
   it('click the breadcrumb', () => {
     cy.get('[data-testid="isloading"]').should('be.exist');
 
-    cy.get(':nth-child(6) > .css-1mlhis1 > .css-1ozvesn > .MuiTypography-root > .MuiBox-root').click();
+    cy.get('#preheat-6').click();
 
     cy.url().should('include', '/jobs/preheats/6');
 
     // Check for breadcrumb.
-    cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root').should('exist').and('contain', 'preheats');
+    cy.get(':nth-child(3) > .MuiTypography-root').should('exist').and('contain', 'Preheat');
 
-    cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root').click();
+    cy.get(':nth-child(3) > .MuiTypography-root').click();
 
     cy.get('[data-testid="isloading"]').should('not.exist');
 
@@ -244,7 +244,7 @@ describe('Preheat', () => {
     });
 
     it('unable to display breadcrumb', () => {
-      cy.get('.MuiBreadcrumbs-ol').should('be.visible').and('contain', 'preheats');
+      cy.get('.MuiBreadcrumbs-ol').should('be.visible').and('contain', 'Preheat');
 
       cy.get('.MuiBreadcrumbs-ol > :nth-child(5) > .MuiTypography-root').should('have.text', '-');
     });
@@ -303,7 +303,7 @@ describe('Preheat', () => {
     });
 
     it('unable to display breadcrumb', () => {
-      cy.get('.MuiBreadcrumbs-ol').should('be.visible').and('contain', 'preheats');
+      cy.get('.MuiBreadcrumbs-ol').should('be.visible').and('contain', 'Preheat');
 
       cy.get('.MuiBreadcrumbs-ol > :nth-child(5) > .MuiTypography-root').should('have.text', '-');
     });

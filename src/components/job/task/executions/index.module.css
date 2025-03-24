@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--table-title-color);
+  background-color: var(--palette-table-title-color);
 }
 
 .listWrapper {
@@ -50,4 +50,21 @@
 .nodataText {
   color: var(--palette-text-disabled);
   font-family: 'mabry-bold';
+}
+
+.stateIcon {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.pendingIcon {
+  width: 1.3rem;
+  height: 1.3rem;
+  color: #dbab0a;
+}
+
+.detailIcon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--palette-button-color);
 }

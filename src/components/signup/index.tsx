@@ -1,11 +1,8 @@
-import * as React from 'react';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
@@ -15,6 +12,9 @@ import { signUp } from '../../lib/api';
 import styles from './index.module.css';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { setPageTitle } from '../../lib/utils';
+import { ReactComponent as Login } from '../../assets/images/login/login.svg';
+import { ReactComponent as PageLoading } from '../../assets/images/login/page-loading.svg';
+import { HeaderLayout } from '../dark-layout';
 
 export default function SignUp() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -160,15 +160,6 @@ export default function SignUp() {
     setPageTitle(location.pathname);
   }, [location]);
 
-  const theme = createTheme({
-    palette: {
-      secondary: {
-        contrastText: '#fff',
-        main: '#2E8F79',
-      },
-    },
-  });
-
   const handlePassword = (type: 'password' | 'confirmPassword') => {
     if (type === 'password') {
       setShowPassword((show) => !show);
@@ -244,78 +235,87 @@ export default function SignUp() {
           backgroundColor: 'rgba(0,0,0,0.3)',
         }}
       >
-        <Box component="img" sx={{ width: '4rem', height: '4rem' }} src="/icons/cluster/page-loading.svg" />
+        <PageLoading className={styles.pageLoading} />
       </Backdrop>
       <Grid item xs={6}>
         <Rotation />
       </Grid>
       <Grid item xs={6} className={styles.container}>
-        <ThemeProvider theme={theme}>
-          <Container component="main" maxWidth="xs">
-            <CssBaseline />
-            <Box
-              sx={{
-                mt: '5rem',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <Box component="img" className={styles.logo} src="/images/login/login.svg" />
-              <Typography variant="h5" gutterBottom>
-                Registered Account
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: '1rem' }}>
-                <Grid container spacing={3}>
-                  {formList.map((item) => (
-                    <Grid item key={item.formProps.name} xs={12}>
-                      <TextField required fullWidth color="success" {...item.formProps} />
-                    </Grid>
-                  ))}
-                </Grid>
-                <Button type="submit" fullWidth variant="contained" color="secondary" sx={{ mt: '1.4rem' }}>
-                  <Typography variant="button">Sign Up</Typography>
-                </Button>
-                <Box className={styles.separationLineContainer}>
-                  <Typography component="span" className={styles.separationLine}></Typography>
-                  <Typography component="span" className={styles.text}>
-                    or
-                  </Typography>
-                  <Typography component="span" className={styles.separationLine}></Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Grid>
-                    <Typography component="span">Already have an account?</Typography>
-                    <RouterLink
-                      underline="hover"
-                      component={Link}
-                      to="/signin"
-                      onClick={() => {
-                        setPageLoding(true);
-                      }}
-                      sx={{ color: '#2E8F79', ml: '0.4rem' }}
-                    >
-                      <Typography component="span">Sign in</Typography>
-                    </RouterLink>
+        <HeaderLayout className={styles.header} />
+        <Container component="main" maxWidth="xs">
+          <Box
+            sx={{
+              mt: '5rem',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Login className={styles.logo} />
+            <Typography variant="h5" gutterBottom>
+              Registered Account
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: '1rem' }}>
+              <Grid container spacing={3}>
+                {formList.map((item) => (
+                  <Grid item key={item.formProps.name} xs={12}>
+                    <TextField required fullWidth color="success" {...item.formProps} />
                   </Grid>
-                </Box>
+                ))}
+              </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  mt: '1.4rem',
+                  background: 'var(--palette-description-color)',
+                  color: 'var(--palette-button-text-color)',
+                  ':hover': { backgroundColor: 'var(--palette-sign-hover-button-text-color)' },
+                }}
+              >
+                <Typography variant="button">Sign Up</Typography>
+              </Button>
+              <Box className={styles.separationLineContainer}>
+                <Typography component="span" className={styles.separationLine}></Typography>
+                <Typography component="span" className={styles.text}>
+                  or
+                </Typography>
+                <Typography component="span" className={styles.separationLine}></Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <Grid>
+                  <Typography component="span">Already have an account?</Typography>
+                  <RouterLink
+                    id="sign-in"
+                    underline="hover"
+                    component={Link}
+                    to="/signin"
+                    onClick={() => {
+                      setPageLoding(true);
+                    }}
+                    sx={{ color: '#2E8F79', ml: '0.4rem' }}
+                  >
+                    <Typography component="span">Sign in</Typography>
+                  </RouterLink>
+                </Grid>
               </Box>
             </Box>
-          </Container>
-        </ThemeProvider>
+          </Box>
+        </Container>
       </Grid>
     </Grid>
   );

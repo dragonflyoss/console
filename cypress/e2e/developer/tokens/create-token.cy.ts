@@ -27,7 +27,7 @@ describe('Create token', () => {
     cy.visit('/developer/personal-access-tokens');
 
     // Click the `ADD PERSONAL ACCESS TOKENS` button.
-    cy.get('.css-1qdyvok > .MuiButtonBase-root').click();
+    cy.get('#new-tokens-button').click();
 
     // Then I see that the current page is the developer/personal-access-tokens/new!
     cy.url().should('include', '/developer/personal-access-tokens/new');
@@ -140,7 +140,7 @@ describe('Create token', () => {
     // Show error message.
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('.MuiPaper-root').should('not.exist');
+    cy.get('.MuiAlert-message').should('not.exist');
   });
 
   it('click the `CANCEL button', () => {

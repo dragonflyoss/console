@@ -1,4 +1,3 @@
-import Paper from '@mui/material/Paper';
 import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getSeedPeer, getSeedPeerResponse } from '../../../lib/api';
@@ -8,6 +7,17 @@ import styles from './show.module.css';
 import _ from 'lodash';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import Card from '../../card';
+import { ReactComponent as ID } from '../../../assets/images/cluster/scheduler/scheduler-id.svg';
+import { ReactComponent as Hostname } from '../../../assets/images/cluster/scheduler/hostname.svg';
+import { ReactComponent as IP } from '../../../assets/images/cluster/scheduler/scheduler-ip.svg';
+import { ReactComponent as ClusterID } from '../../../assets/images/cluster/scheduler/cluster-id.svg';
+import { ReactComponent as Type } from '../../../assets/images/cluster/seed-peer/seed-peer-type.svg';
+import { ReactComponent as Status } from '../../../assets/images/cluster/scheduler/status.svg';
+import { ReactComponent as Port } from '../../../assets/images/cluster/scheduler/port.svg';
+import { ReactComponent as DownloadPort } from '../../../assets/images/cluster/seed-peer/seed-peer-download-port.svg';
+import { ReactComponent as ObjectStoragePort } from '../../../assets/images/cluster/seed-peer/object-storage-port.svg';
+import { ReactComponent as CreatedAt } from '../../../assets/images/cluster/scheduler/created-at.svg';
+import { ReactComponent as UpdatedAt } from '../../../assets/images/cluster/scheduler/updated-at.svg';
 
 export default function SeedPeer() {
   const [isLoading, setIsLoading] = useState(false);
@@ -61,6 +71,7 @@ export default function SeedPeer() {
           {errorMessageText}
         </Alert>
       </Snackbar>
+      <Typography variant="h5">Seed-Peer</Typography>
       <Breadcrumbs
         separator={
           <Box
@@ -68,7 +79,7 @@ export default function SeedPeer() {
           />
         }
         aria-label="breadcrumb"
-        sx={{ mb: '1rem' }}
+        sx={{ mb: '2rem', mt: '1rem' }}
       >
         <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters`}>
           clusters
@@ -81,13 +92,10 @@ export default function SeedPeer() {
         </RouterLink>
         <Typography color="text.primary">{seedPeer?.host_name || '-'}</Typography>
       </Breadcrumbs>
-      <Typography variant="h6" sx={{ p: '1rem 0 2rem 0', fontFamily: 'mabry-bold' }}>
-        Seed-Peer
-      </Typography>
       <Card className={styles.container}>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/scheduler-id.svg" />
+            <ID className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               ID
             </Typography>
@@ -98,7 +106,7 @@ export default function SeedPeer() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/hostname.svg" />
+            <Hostname className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Hostname
             </Typography>
@@ -109,7 +117,7 @@ export default function SeedPeer() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/scheduler-ip.svg" />
+            <IP className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               IP
             </Typography>
@@ -120,7 +128,7 @@ export default function SeedPeer() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/cluster-id.svg" />
+            <ClusterID className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Cluster ID
             </Typography>
@@ -137,7 +145,7 @@ export default function SeedPeer() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/seed-peer/seed-peer-type.svg" />
+            <Type className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Type
             </Typography>
@@ -152,7 +160,7 @@ export default function SeedPeer() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/status.svg" />
+            <Status className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Status
             </Typography>
@@ -168,20 +176,38 @@ export default function SeedPeer() {
                 variant="outlined"
                 sx={{
                   borderRadius: '0.25rem',
-                  backgroundColor: seedPeer?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                  backgroundColor:
+                    seedPeer?.state === 'active'
+                      ? 'var(--palette-description-color)'
+                      : 'var(--palette-dark-300Channel)',
                   color: seedPeer?.state === 'active' ? '#FFFFFF' : '#FFFFFF',
-                  borderColor: seedPeer?.state === 'active' ? 'var(--description-color)' : 'var(--button-color)',
+                  borderColor:
+                    seedPeer?.state === 'active'
+                      ? 'var(--palette-description-color)'
+                      : 'var(--palette-dark-300Channel)',
                   fontWeight: 'bold',
                 }}
               />
             ) : (
-              '-'
+              <Chip
+                label={'-'}
+                size="small"
+                id="status"
+                variant="outlined"
+                sx={{
+                  borderRadius: '0.25rem',
+                  backgroundColor: 'var(--palette-description-color)',
+                  color: '#FFFFFF',
+                  borderColor: 'var(--palette-description-color)',
+                  fontWeight: 'bold',
+                }}
+              />
             )}
           </Typography>
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/port.svg" />
+            <Port className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Port
             </Typography>
@@ -192,11 +218,7 @@ export default function SeedPeer() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box
-              component="img"
-              className={styles.headerIcon}
-              src="/icons/cluster/seed-peer/seed-peer-download-port.svg"
-            />
+            <DownloadPort className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Download Port
             </Typography>
@@ -207,7 +229,7 @@ export default function SeedPeer() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/seed-peer/object-storage-port.svg" />
+            <ObjectStoragePort className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Object Storage Port
             </Typography>
@@ -222,7 +244,7 @@ export default function SeedPeer() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/created-at.svg" />
+            <CreatedAt className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Created At
             </Typography>
@@ -244,7 +266,7 @@ export default function SeedPeer() {
         </Box>
         <Box className={styles.headerContainer}>
           <Box className={styles.headerContent}>
-            <Box component="img" className={styles.headerIcon} src="/icons/cluster/scheduler/updated-at.svg" />
+            <UpdatedAt className={styles.headerIcon} />
             <Typography className={styles.headerTitle} variant="body1" component="div">
               Updated At
             </Typography>

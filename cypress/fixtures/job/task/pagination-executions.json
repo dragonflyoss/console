@@ -14,7 +14,8 @@
       "tag": "",
       "task_id": "fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916",
       "timeout": 1800000000000,
-      "url": ""
+      "url": "",
+      "piece_length": 4194304
     },
     "result": {
       "created_at": "2024-11-01T09:25:05.260432054Z",

@@ -39,6 +39,7 @@ import { ReactComponent as Failure } from '../../../assets/images/job/preheat/fa
 import { ReactComponent as Pending } from '../../../assets/images/job/preheat/pending.svg';
 import { ReactComponent as ErrorLog } from '../../../assets/images/job/preheat/error-log.svg';
 import { ReactComponent as TagScope } from '../../../assets/images/job/preheat/tag-scope.svg';
+import { ReactComponent as PieceLength } from '../../../assets/images/job/preheat/piece-length.svg';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -300,6 +301,34 @@ export default function ShowPreheat() {
                 {preheat?.args?.url || '-'}
               </Typography>
             </CustomWidthTooltip>
+          </Box>
+          <Box className={styles.informationContainer}>
+            <Box className={styles.informationTitle}>
+              <PieceLength className={styles.informationTitleIcon} />
+              <Typography
+                variant="body1"
+                fontFamily="mabry-bold"
+                component="div"
+                className={styles.informationTitleText}
+              >
+                Piece Length
+              </Typography>
+            </Box>
+            <Typography
+              id="piece-length"
+              variant="body1"
+              fontFamily="mabry-bold"
+              component="div"
+              className={styles.urlContent}
+            >
+              {isLoading ? (
+                <Skeleton sx={{ width: '4rem' }} />
+              ) : preheat?.args?.piece_length ? (
+                `${Number(preheat?.args?.piece_length) / 1024 / 1024} MiB`
+              ) : (
+                '-'
+              )}
+            </Typography>
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>

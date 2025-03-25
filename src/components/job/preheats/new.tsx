@@ -23,6 +23,7 @@ import {
   Paper,
   SelectChangeEvent,
   Breadcrumbs,
+  InputAdornment,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import HelpIcon from '@mui/icons-material/Help';
@@ -44,6 +45,7 @@ export default function NewPreheat() {
   const [urlError, setURLError] = useState(false);
   const [tagError, setTagError] = useState(false);
   const [filterError, setFilterError] = useState(false);
+  const [pieceLengthError, setPieceLengthError] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const [headers, setheaders] = useState<Array<{ key: string; value: string }>>([]);
   const [cluster, setCluster] = useState([{ id: 0, name: '' }]);
@@ -113,6 +115,51 @@ export default function NewPreheat() {
   const argsForm = [
     {
       formProps: {
+        id: 'pieceLength',
+        label: 'Piece Length',
+        name: 'pieceLength',
+        type: 'number',
+        autoComplete: 'family-name',
+
+        helperText: pieceLengthError ? 'Fill in the number, the length is 4-1024 MiB.' : '',
+        error: pieceLengthError,
+        InputProps: {
+          endAdornment: (
+            <>
+              <InputAdornment position="start">MiB</InputAdornment>
+              <Tooltip
+                title={
+                  'By setting the piece length parameter, you can specify the size of the piece to be downloaded during preheat. The default minimum value is 4MiB and the maximum value is 1024MiB.'
+                }
+                placement="top"
+              >
+                <HelpIcon
+                  sx={{
+                    color: 'var(--palette-grey-300Channel)',
+                    width: '0.8rem',
+                    height: '0.8rem',
+                    ':hover': { color: 'var(--palette-description-color)' },
+                  }}
+                />
+              </Tooltip>
+            </>
+          ),
+        },
+
+        onChange: (e: any) => {
+          changeValidate(e.target.value, argsForm[0]);
+        },
+      },
+      syncError: false,
+      setError: setPieceLengthError,
+
+      validate: (value: string) => {
+        const reg = /^(?:|[4-9]|[1-9]\d{1,2}|10[0-1]\d|102[0-4])$/;
+        return reg.test(value);
+      },
+    },
+    {
+      formProps: {
         id: 'tag',
         label: 'Tag',
         name: 'tag',
@@ -142,7 +189,7 @@ export default function NewPreheat() {
           ),
         },
         onChange: (e: any) => {
-          changeValidate(e.target.value, argsForm[0]);
+          changeValidate(e.target.value, argsForm[1]);
         },
       },
       syncError: false,
@@ -178,7 +225,7 @@ export default function NewPreheat() {
           ),
         },
         onChange: (e: any) => {
-          changeValidate(e.target.value, argsForm[1]);
+          changeValidate(e.target.value, argsForm[2]);
         },
       },
       syncError: false,
@@ -196,13 +243,13 @@ export default function NewPreheat() {
         value: filter,
         options: [],
         onChange: (_e: any, newValue: any) => {
-          if (!argsForm[2].formProps.error) {
+          if (!argsForm[3].formProps.error) {
             setFilter(newValue);
           }
         },
         onInputChange: (e: any) => {
           setFilterHelperText('Fill in the characters, the length is 0-100.');
-          changeValidate(e.target.value, argsForm[2]);
+          changeValidate(e.target.value, argsForm[3]);
         },
 
         renderTags: (value: any, getTagProps: any) =>
@@ -280,6 +327,7 @@ export default function NewPreheat() {
     const url = event.currentTarget.elements.url.value;
     const tag = event.currentTarget.elements.tag.value;
     const filterText = event.currentTarget.elements.filteredQueryParams.value;
+    const pieceLength = event.currentTarget.elements.pieceLength.value;
     const filters = filter.join('&');
 
     const data = new FormData(event.currentTarget);
@@ -345,15 +393,16 @@ export default function NewPreheat() {
         filtered_query_params: filters,
         headers: headerList,
         scope: scope,
+        ...(pieceLength && pieceLength !== 0 && { piece_length: pieceLength * 1024 * 1024 }),
       },
       scheduler_cluster_ids: clusterID,
     };
 
     if (canSubmit) {
       try {
-        await createJob({ ...formDate });
+        const job = await createJob({ ...formDate });
         setLoadingButton(false);
-        navigate('/jobs/preheats');
+        navigate(`/jobs/preheats/${job.id}`);
       } catch (error) {
         if (error instanceof Error) {
           setLoadingButton(false);
@@ -515,29 +564,6 @@ export default function NewPreheat() {
               </Tooltip>
             </Box>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-              <FormControl className={styles.textField} margin="normal" color="success" required size="small">
-                <InputLabel id="scope">Scope</InputLabel>
-                <Select
-                  id="select-scope"
-                  label="scope"
-                  value={scope}
-                  onChange={handleSelectScope}
-                  MenuProps={{
-                    PaperProps: {
-                      style: {
-                        maxHeight: '14rem',
-                        width: '18rem',
-                      },
-                    },
-                  }}
-                >
-                  {scopeList.map((item: any) => (
-                    <MenuItem id={item.name} key={item.name} value={item.name} sx={{ height: '2.6rem' }}>
-                      {item.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
               {argsForm.map((item) => {
                 return item.id === 'filteredQueryParams' ? (
                   <Box key={item.formProps.id} sx={{ width: '100%' }}>
@@ -582,16 +608,40 @@ export default function NewPreheat() {
                       )}
                     />
                   </Box>
-                ) : item.formProps.id === 'tag' ? (
-                  <TextField
-                    key={item.formProps.id}
-                    color="success"
-                    margin="normal"
-                    size="small"
-                    {...item.formProps}
-                    sx={{ marginLeft: '1rem' }}
-                    className={styles.textField}
-                  />
+                ) : item.formProps.id === 'pieceLength' ? (
+                  <Box>
+                    <TextField
+                      color="success"
+                      margin="normal"
+                      size="small"
+                      {...item.formProps}
+                      sx={{ width: '11rem', mr: '1rem' }}
+                      className={styles.textField}
+                    />
+                    <FormControl sx={{ width: '25rem' }} margin="normal" color="success" required size="small">
+                      <InputLabel id="scope">Scope</InputLabel>
+                      <Select
+                        id="select-scope"
+                        label="scope"
+                        value={scope}
+                        onChange={handleSelectScope}
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              maxHeight: '14rem',
+                              width: '18rem',
+                            },
+                          },
+                        }}
+                      >
+                        {scopeList.map((item: any) => (
+                          <MenuItem id={item.name} key={item.name} value={item.name} sx={{ height: '2.6rem' }}>
+                            {item.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
                 ) : (
                   <Box key={item.formProps.id} sx={{ width: '100%' }}>
                     <TextField

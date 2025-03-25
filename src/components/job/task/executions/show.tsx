@@ -46,6 +46,7 @@ import { ReactComponent as TaskID } from '../../../../assets/images/job/task/tas
 import { ReactComponent as Application } from '../../../../assets/images/job/task/type.svg';
 import { ReactComponent as IP } from '../../../../assets/images/job/task/ip.svg';
 import { ReactComponent as CheckLog } from '../../../../assets/images/job/task/error-log.svg';
+import { ReactComponent as PieceLength } from '../../../../assets/images/job/preheat/piece-length.svg';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -257,7 +258,7 @@ export default function ShowExecutions() {
               ID
             </Typography>
           </Box>
-          <Typography variant="body1" className={styles.informationContent}>
+          <Typography id="id" variant="body1" className={styles.informationContent}>
             {isLoading ? <Skeleton data-testid="execution-isloading" sx={{ width: '2rem' }} /> : executions?.id || 0}
           </Typography>
         </Box>
@@ -350,7 +351,7 @@ export default function ShowExecutions() {
               Task ID
             </Typography>
           </Box>
-          <Typography variant="body1" className={styles.informationContent}>
+          <Typography id="task-id" variant="body1" className={styles.informationContent}>
             {isLoading ? (
               <Skeleton data-testid="execution-isloading" sx={{ width: '2rem' }} />
             ) : (
@@ -369,11 +370,34 @@ export default function ShowExecutions() {
             <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
           ) : (
             <CustomWidthTooltip title={executions?.args?.url || '-'} placement="bottom">
-              <Typography variant="body1" component="div" className={styles.urlContent}>
+              <Typography id="url" variant="body1" component="div" className={styles.urlContent}>
                 {executions?.args?.url || '-'}
               </Typography>
             </CustomWidthTooltip>
           )}
+        </Box>
+        <Box className={styles.informationContainer}>
+          <Box className={styles.informationTitle}>
+            <PieceLength className={styles.informationTitleIcon} />
+            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+              Piece Length
+            </Typography>
+          </Box>
+          <Typography
+            id="piece-length"
+            variant="body1"
+            fontFamily="mabry-bold"
+            component="div"
+            className={styles.urlContent}
+          >
+            {isLoading ? (
+              <Skeleton sx={{ width: '4rem' }} />
+            ) : executions?.args?.piece_length ? (
+              `${Number(executions?.args?.piece_length) / 1024 / 1024} MiB`
+            ) : (
+              '-'
+            )}
+          </Typography>
         </Box>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
@@ -387,6 +411,7 @@ export default function ShowExecutions() {
               <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
             ) : executions?.args?.tag ? (
               <Chip
+                id="tag"
                 label={executions?.args?.tag}
                 size="small"
                 variant="outlined"
@@ -400,7 +425,7 @@ export default function ShowExecutions() {
                 }}
               />
             ) : (
-              <Typography variant="body1" className={styles.informationContent}>
+              <Typography id="tag" variant="body1" className={styles.informationContent}>
                 -
               </Typography>
             )}
@@ -414,7 +439,7 @@ export default function ShowExecutions() {
             </Typography>
           </Box>
           <Box className={styles.informationContent} sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            <Typography variant="body1" className={styles.informationContent}>
+            <Typography id="application" variant="body1" className={styles.informationContent}>
               {isLoading ? (
                 <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
               ) : (
@@ -430,13 +455,13 @@ export default function ShowExecutions() {
               Scheduler Clusters ID
             </Typography>
           </Box>
-          <Box className={styles.schedulerClustersID}>
+          <Box id="scheduler-clusters-id" className={styles.schedulerClustersID}>
             {isLoading ? (
               <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
             ) : (
               executions?.scheduler_clusters?.map((item: any, index: number) => {
                 return (
-                  <Box className={styles.schedulerClustersIDContent}>
+                  <Box key={index} id={`scheduler-clusters-id-${index}`} className={styles.schedulerClustersIDContent}>
                     <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
                       {item.id || '-'}
                     </Typography>
@@ -458,13 +483,14 @@ export default function ShowExecutions() {
               <Skeleton data-testid="execution-isloading" sx={{ width: '2rem' }} />
             ) : executions?.created_at ? (
               <Chip
+                id="created-at"
                 avatar={<MoreTimeIcon />}
                 label={getBJTDatetime(executions?.created_at || '0')}
                 variant="outlined"
                 size="small"
               />
             ) : (
-              <Typography variant="body1" className={styles.informationContent}>
+              <Typography id="created-at" variant="body1" className={styles.informationContent}>
                 -
               </Typography>
             )}

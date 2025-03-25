@@ -101,7 +101,10 @@ describe('Preheat', () => {
         .and('have.css', 'background-color', 'rgb(212, 37, 54)')
         .find('#error-log-icon')
         .and('exist');
+
       cy.get('#url').should('have.text', 'http://dock.io/preheat/test');
+
+      cy.get('#piece-length').should('have.text', '4 MiB');
 
       // Show preheat tag.
       cy.get('#tag').should('have.text', 'prheat tag');
@@ -150,6 +153,9 @@ describe('Preheat', () => {
 
       // Show preheat headers.
       cy.get('#headers').children().should('have.length', 2);
+
+      // Show preheat piece length.
+      cy.get('#piece-length').should('have.text', '4 MiB');
     });
 
     it('should display detailed preheat pending information', () => {
@@ -189,6 +195,9 @@ describe('Preheat', () => {
 
       // Show preheat scope.
       cy.get('#scope').should('have.text', 'All Seed Peers');
+
+      // Show preheat piece length.
+      cy.get('#piece-length').should('have.text', '-');
 
       // Show preheat headers.
       cy.get('#headers').children().should('have.length', 1);
@@ -265,6 +274,9 @@ describe('Preheat', () => {
       // Show preheat tag.
       cy.get('#tag').should('have.text', '-');
 
+      // Show preheat piece length.
+      cy.get('#piece-length').should('have.text', '-');
+
       // Show preheat headers.
       cy.get('#headers').should('have.text', '-');
 
@@ -321,6 +333,9 @@ describe('Preheat', () => {
       // Show preheat url.
       cy.get('#url').should('have.text', '-');
 
+      // Show preheat piece length.
+      cy.get('#piece-length').should('have.text', '-');
+
       // Show preheat tag.
       cy.get('#tag').should('have.text', '-').should('have.text', '-');
 
@@ -371,6 +386,9 @@ describe('Preheat', () => {
 
       // Show preheat headers.
       cy.get('#headers').children().should('have.length', 1);
+
+      // Show preheat piece length.
+      cy.get('#piece-length').should('have.text', '-');
 
       cy.wait(120000);
 

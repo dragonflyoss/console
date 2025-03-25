@@ -20,7 +20,8 @@
     "timeout": 1800000000000,
     "type": "file",
     "url": "http://dock.io/preheat/test",
-    "username": ""
+    "username": "",
+    "piece_length": 4194304
   },
   "result": {
     "created_at": "2023-03-23T08:29:18.204923418Z",

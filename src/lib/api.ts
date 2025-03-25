@@ -781,6 +781,7 @@ export interface JobsResponse {
     timeout: number;
     type: string;
     url: string;
+    piece_length: number;
     username: string;
   };
   result: {
@@ -846,6 +847,7 @@ export interface getJobResponse {
     timeout: number;
     type: string;
     url: string;
+    piece_length: number;
     username: string;
   };
   result: {
@@ -889,6 +891,7 @@ interface createJobRequest {
     tag: string;
     filtered_query_params: string;
     headers?: { [key: string]: string } | null;
+    piece_length?: number;
   };
   scheduler_cluster_ids: Array<number>;
 }
@@ -908,6 +911,7 @@ interface cerateJobResponse {
     tag: string;
     type: string;
     url: string;
+    piece_length: number;
   };
   result: string;
 }
@@ -1111,6 +1115,7 @@ export interface getTaskJobResponse {
     task_id: string;
     timeout?: number;
     url?: string;
+    piece_length?: number;
   };
   result: {
     created_at: string;

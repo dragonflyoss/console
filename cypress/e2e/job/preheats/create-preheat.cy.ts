@@ -282,7 +282,7 @@ describe('Create preheat', () => {
       cy.get('#pieceLength').type('0');
 
       // Show verification error message.
-      cy.get('#pieceLength-helper-text').should('have.text', 'Fill in the number, the length is 4-1024 MiB.');
+      cy.get('#pieceLength-helper-text').should('have.text', 'Please enter a value between 4 and 1024 MiB.');
 
       cy.get('#pieceLength').clear();
       cy.get('#pieceLength-helper-text').should('not.eq');

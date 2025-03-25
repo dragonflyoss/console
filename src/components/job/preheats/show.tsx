@@ -341,8 +341,7 @@ export default function ShowPreheat() {
                 <Skeleton data-testid="preheat-isloading" sx={{ width: '2rem' }} />
               ) : scope ? (
                 <Box className={styles.scopeContent}>
-                  <TagScope className={styles.informationTitleIcon} />
-                  <Typography variant="body2" component="div" fontFamily="mabry-bold" pl="0.2rem">
+                  <Typography variant="body2" component="div" fontFamily="mabry-bold">
                     {scope.label || '-'}
                   </Typography>
                 </Box>
@@ -437,11 +436,9 @@ export default function ShowPreheat() {
             <Box id="scheduler-lusters-id" className={styles.schedulerClustersID}>
               {preheat?.scheduler_clusters?.map((item, index) => {
                 return (
-                  <Box className={styles.schedulerClustersIDContent}>
-                    <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
-                      {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} /> : item.id || '-'}
-                    </Typography>
-                  </Box>
+                  <Typography key={index} variant="body1" component="div" fontFamily="mabry-bold" ml="0.5rem">
+                    {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} /> : item.id || '-'}
+                  </Typography>
                 );
               }) || '-'}
             </Box>

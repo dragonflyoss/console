@@ -455,11 +455,9 @@ export default function ShowExecutions() {
             ) : (
               executions?.scheduler_clusters?.map((item: any, index: number) => {
                 return (
-                  <Box key={index} id={`scheduler-clusters-id-${index}`} className={styles.schedulerClustersIDContent}>
-                    <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold">
-                      {item.id || '-'}
-                    </Typography>
-                  </Box>
+                  <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold" ml="0.5rem">
+                    {item.id || '-'}
+                  </Typography>
                 );
               }) || '-'
             )}

@@ -214,10 +214,9 @@ export default function Clear() {
         id: 'pieceLength',
         labels: 'Piece Length',
         name: 'pieceLength',
-        type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Piece Length',
-        helperText: pieceLengthError ? 'Fill in the number, the length is 4-1024 MiB.' : '',
+        helperText: pieceLengthError ? 'Please enter a value between 4 and 1024 MiB.' : '',
         error: pieceLengthError,
         InputProps: (
           <Tooltip
@@ -811,7 +810,15 @@ export default function Clear() {
                               margin="normal"
                               size="small"
                               {...item.formProps}
-                              InputProps={{ endAdornment: <InputAdornment position="start">MiB</InputAdornment> }}
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="start">
+                                    <Typography color="text.primary" sx={{ fontFamily: 'mabry-bold' }}>
+                                      MiB
+                                    </Typography>
+                                  </InputAdornment>
+                                ),
+                              }}
                             />
                           ) : (
                             <TextField margin="normal" size="small" {...item.formProps} className={styles.textField} />

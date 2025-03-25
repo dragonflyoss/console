@@ -39,7 +39,7 @@ export default function UpdateTokens() {
   const [selectedTime, setSelectedTime] = useState('');
   const [expiredTime, setExpiredTime] = useState('');
   const [expiredTimeError, setExpiredTimeError] = useState(false);
-  const [preheat, setPreheat] = useState(false);
+  // const [preheat, setPreheat] = useState(false);
   const [job, setJob] = useState(false);
   const [cluster, setCluster] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
@@ -100,10 +100,9 @@ export default function UpdateTokens() {
         if (params?.id) {
           const tokens = await getToken(params?.id);
           setTokens(tokens);
-          setExpiredTime(tokens.expired_at);
-          setPreheat(tokens.scopes.includes('preheat'));
-          setJob(tokens.scopes.includes('job'));
-          setCluster(tokens.scopes.includes('cluster'));
+          setExpiredTime(tokens?.expired_at || '');
+          setJob(tokens?.scopes?.includes('job'));
+          setCluster(tokens?.scopes?.includes('cluster'));
           setIsLoading(false);
         }
       } catch (error) {
@@ -133,7 +132,7 @@ export default function UpdateTokens() {
     setLoadingButton(true);
     event.preventDefault();
 
-    const scopes = [preheat ? 'preheat' : '', job ? 'job' : '', cluster ? 'cluster' : ''];
+    const scopes = [job ? 'job' : '', cluster ? 'cluster' : ''];
     const filteredScopes = scopes.filter((item) => item !== '');
 
     const data = new FormData(event.currentTarget);
@@ -234,8 +233,8 @@ export default function UpdateTokens() {
             {isLoading ? (
               <Skeleton sx={{ width: '2rem' }} />
             ) : (
-              <Typography component="div" variant="body1" fontFamily="mabry-bold">
-                {tokens.id}
+              <Typography id="id" component="div" variant="body1" fontFamily="mabry-bold">
+                {tokens?.id || '-'}
               </Typography>
             )}
           </Box>
@@ -246,8 +245,8 @@ export default function UpdateTokens() {
             {isLoading ? (
               <Skeleton sx={{ width: '3rem' }} />
             ) : (
-              <Typography component="div" variant="body1" fontFamily="mabry-bold">
-                {tokens.name}
+              <Typography id="name" component="div" variant="body1" fontFamily="mabry-bold">
+                {tokens?.name || '-'}
               </Typography>
             )}
           </Box>
@@ -342,28 +341,10 @@ export default function UpdateTokens() {
               <Box display="flex" alignItems="center">
                 <Box width="10%">
                   <FormControlLabel
-                    label="preheat"
-                    control={
-                      <Checkbox
-                        checked={preheat}
-                        onChange={(event: any) => {
-                          setPreheat(event.target.checked);
-                        }}
-                        sx={{ color: 'var(--palette-button-color)!important' }}
-                      />
-                    }
-                  />
-                </Box>
-                <Typography variant="body2" color="var(--palette-text-palette-text-secondary)" ml="1rem">
-                  Full control of preheating, it's used for preheating of harbor.
-                </Typography>
-              </Box>
-              <Box display="flex" alignItems="center">
-                <Box width="10%">
-                  <FormControlLabel
                     label="job"
                     control={
                       <Checkbox
+                        id="job"
                         checked={job}
                         onChange={(event: any) => {
                           setJob(event.target.checked);
@@ -384,6 +365,7 @@ export default function UpdateTokens() {
                     label="cluster"
                     control={
                       <Checkbox
+                        id="cluster"
                         checked={cluster}
                         onChange={(event: any) => {
                           setCluster(event.target.checked);

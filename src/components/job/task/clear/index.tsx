@@ -811,7 +811,7 @@ export default function Clear() {
                             />
                           ) : item.formProps.id === 'pieceLength' ? (
                             <TextField
-                              sx={{ width: '10.5rem' }}
+                              sx={{ width: '10.8rem' }}
                               margin="normal"
                               size="small"
                               {...item.formProps}

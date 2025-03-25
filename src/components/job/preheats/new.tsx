@@ -120,7 +120,7 @@ export default function NewPreheat() {
         name: 'pieceLength',
         type: 'number',
         autoComplete: 'family-name',
-
+        placeholder: 'Piece Length',
         helperText: pieceLengthError ? 'Fill in the number, the length is 4-1024 MiB.' : '',
         error: pieceLengthError,
         InputProps: {
@@ -129,7 +129,7 @@ export default function NewPreheat() {
               <InputAdornment position="start">MiB</InputAdornment>
               <Tooltip
                 title={
-                  'By setting the piece length parameter, you can specify the size of the piece to be downloaded during preheat. The default minimum value is 4MiB and the maximum value is 1024MiB.'
+                  'By setting the Piece Length parameter, you can specify the size of the piece to be downloaded during preheat. The default minimum value is 4MiB and the maximum value is 1024MiB.'
                 }
                 placement="top"
               >

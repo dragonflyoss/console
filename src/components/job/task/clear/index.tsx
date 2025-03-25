@@ -216,7 +216,7 @@ export default function Clear() {
         name: 'pieceLength',
         type: 'number',
         autoComplete: 'family-name',
-        placeholder: 'Piece length',
+        placeholder: 'Piece Length',
         helperText: pieceLengthError ? 'Fill in the number, the length is 4-1024 MiB.' : '',
         error: pieceLengthError,
         InputProps: (

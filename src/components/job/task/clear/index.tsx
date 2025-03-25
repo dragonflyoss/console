@@ -699,9 +699,7 @@ export default function Clear() {
               '&:hover': {
                 backgroundColor: 'transparent',
               },
-              // textTransform: 'none',
               p: '0.3rem 0.5rem',
-              // width: '11.5rem',
               color: 'var(--palette-dark-400Channel)',
             }}
           >
@@ -724,9 +722,7 @@ export default function Clear() {
               '&:hover': {
                 backgroundColor: 'transparent',
               },
-              // textTransform: 'none',
               p: '0.3rem 0.5rem',
-              // width: '11.5rem',
               color: 'var(--palette-dark-400Channel)',
             }}
           >

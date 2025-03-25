@@ -9,8 +9,6 @@ import {
   SelectChangeEvent,
   FormControlLabel,
   Checkbox,
-  createTheme,
-  ThemeProvider,
   Snackbar,
   Alert,
   Tooltip,
@@ -36,9 +34,8 @@ export default function CreateTokens() {
   const [bioError, setBioError] = useState(false);
   const [selectedTime, setSelectedTime] = useState('3650');
   const [expiredTime, setExpiredTime] = useState('');
-  const [preheat, setPreheat] = useState(false);
-  const [job, setJob] = useState(false);
-  const [cluster, setCluster] = useState(false);
+  const [job, setJob] = useState(true);
+  const [cluster, setCluster] = useState(true);
   const [loadingButton, setLoadingButton] = useState(false);
 
   const { user } = useContext(MyContext);
@@ -145,7 +142,7 @@ export default function CreateTokens() {
 
     const name = event.currentTarget.elements.name;
     const bio = event.currentTarget.elements.bio;
-    const scopes = [preheat ? 'preheat' : '', job ? 'job' : '', cluster ? 'cluster' : ''];
+    const scopes = [job ? 'job' : '', cluster ? 'cluster' : ''];
     const filteredScopes = scopes.filter((item) => item !== '');
 
     const data = new FormData(event.currentTarget);
@@ -288,7 +285,7 @@ export default function CreateTokens() {
               />
             </Tooltip>
           </Box>
-          <FormControl size="small" color="success" >
+          <FormControl size="small" color="success">
             <InputLabel required id="demo-simple-select-label">
               Expiration
             </InputLabel>
@@ -334,28 +331,10 @@ export default function CreateTokens() {
               <Box display="flex" alignItems="center">
                 <Box width="10%">
                   <FormControlLabel
-                    label="preheat"
-                    control={
-                      <Checkbox
-                        checked={preheat}
-                        onChange={(event: any) => {
-                          setPreheat(event.target.checked);
-                        }}
-                        sx={{ color: 'var(--palette-button-color)!important' }}
-                      />
-                    }
-                  />
-                </Box>
-                <Typography variant="body2" color="var(--palette-text-palette-text-secondary)" ml="1rem">
-                  Full control of preheating, it's used for preheating of harbor.
-                </Typography>
-              </Box>
-              <Box display="flex" alignItems="center">
-                <Box width="10%">
-                  <FormControlLabel
                     label="job"
                     control={
                       <Checkbox
+                        id="job"
                         checked={job}
                         onChange={(event: any) => {
                           setJob(event.target.checked);
@@ -376,6 +355,7 @@ export default function CreateTokens() {
                     label="cluster"
                     control={
                       <Checkbox
+                        id="cluster"
                         checked={cluster}
                         onChange={(event: any) => {
                           setCluster(event.target.checked);

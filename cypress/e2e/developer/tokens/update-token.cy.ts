@@ -38,28 +38,19 @@ describe('Update token', () => {
 
   it('when data is loaded', () => {
     // Check the token ID.
-    cy.get('.MuiPaper-root > .css-0 > :nth-child(1)').should('be.visible').and('contain', '11');
+    cy.get('#id').should('be.visible').and('contain', '11');
 
     // Check the token name.
-    cy.get('.MuiPaper-root > .css-0 > :nth-child(2)').should('be.visible').and('contain', 'root-11');
+    cy.get('#name').should('be.visible').and('contain', 'root-11');
 
     // Check the token description.
     cy.get('#bio').should('have.value', 'root-11 token, used to control of cluster');
 
-    // Check that the preheat checkbox.
-    cy.get(
-      ':nth-child(1) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).should('not.be.checked');
-
     // Check that the job checkbox.
-    cy.get(
-      ':nth-child(2) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).should('not.be.checked');
+    cy.get('#job').should('not.be.checked');
 
     // Check that the cluster checkbox.
-    cy.get(':nth-child(3) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input')
-      .should('be.checked')
-      .check({ force: true });
+    cy.get('#cluster').should('be.checked').check({ force: true });
   });
 
   it('when no data is loaded', () => {
@@ -77,28 +68,19 @@ describe('Update token', () => {
     );
 
     // Check the token ID.
-    cy.get('.MuiPaper-root > .css-0 > :nth-child(1)').should('be.visible').and('not.contain', '11');
+    cy.get('#id').should('have.text', '-');
 
     // Check the token name.
-    cy.get('.MuiPaper-root > .css-0 > :nth-child(2)').should('be.visible').and('not.contain', 'root-11');
+    cy.get('#name').should('have.text', '-');
 
     // Check the token description.
     cy.get('#bio').should('have.value', '');
 
-    // Check that the preheat checkbox.
-    cy.get(
-      ':nth-child(1) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).should('not.be.checked');
-
     // Check that the job checkbox.
-    cy.get(
-      ':nth-child(2) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).should('not.be.checked');
+    cy.get('#job').should('not.be.checked');
 
     // Check that the cluster checkbox.
-    cy.get(
-      ':nth-child(3) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).should('not.be.checked');
+    cy.get('#cluster').should('not.be.checked');
   });
 
   it('can update token', () => {
@@ -133,7 +115,7 @@ describe('Update token', () => {
     // Then I see that the current page is the developer/personal-access-tokens/11!
     cy.url().should('include', '/developer/personal-access-tokens/11');
 
-    cy.get('.MuiPaper-root > .css-0 > :nth-child(2)').should('be.visible').and('contain', 'root-11');
+    cy.get('#name').should('be.visible').and('contain', 'root-11');
 
     // Update token description.
     cy.get('#bio').clear();
@@ -143,23 +125,13 @@ describe('Update token', () => {
     cy.get('#demo-simple-select').click();
     cy.get('[data-value="3650"]').click();
 
-    cy.get(
-      ':nth-child(1) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).click();
-
-    // Check if the preheat checkbox is checked.
-    cy.get(':nth-child(1) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input')
-      .should('be.checked')
-      .check({ force: true });
-
-    cy.get(
-      ':nth-child(3) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).click();
+    // Check if the job checkbox is checked.
+    cy.get('#job').click();
+    cy.get('#job').should('be.checked').check({ force: true });
 
     // Check if the cluster checkbox is checked.
-    cy.get(
-      ':nth-child(3) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input',
-    ).should('not.be.checked');
+    cy.get('#cluster').click();
+    cy.get('#cluster').should('not.be.checked');
 
     cy.intercept(
       {
@@ -261,7 +233,7 @@ describe('Update token', () => {
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
 
-      cy.get('.MuiPaper-root > .css-0 > :nth-child(1)').should('be.visible').and('contain', '0');
+      cy.get('#id').should('be.visible').and('contain', '-');
     });
 
     it('update token API error response', () => {
@@ -318,19 +290,10 @@ describe('Update token', () => {
     // Verification passed.
     cy.get('#bio-helper-text').should('not.exist');
 
-    // Check that the preheat checkbox.
-    cy.get(':nth-child(1) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input')
-      .should('not.be.checked')
-      .check({ force: true });
-
     // Check that the job checkbox.
-    cy.get(':nth-child(2) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input')
-      .should('not.be.checked')
-      .check({ force: true });
+    cy.get('#job').should('not.be.checked').check({ force: true });
 
     // Check that the cluster checkbox.
-    cy.get(':nth-child(3) > .MuiBox-root > .MuiFormControlLabel-root > .MuiButtonBase-root > .PrivateSwitchBase-input')
-      .should('be.checked')
-      .check({ force: true });
+    cy.get('#cluster').should('be.checked').check({ force: true });
   });
 });

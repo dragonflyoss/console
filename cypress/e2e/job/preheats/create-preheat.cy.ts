@@ -236,28 +236,28 @@ describe('Create preheat', () => {
   });
 
   describe('cannot create preheat with invalid attributes', () => {
-    // it('try to verify information', () => {
-    //   const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    //   const description = _.times(1001, () => _.sample(characters)).join('');
+    it('try to verify information', () => {
+      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const description = _.times(1001, () => _.sample(characters)).join('');
 
-    //   // Select a cluster.
-    //   cy.get('#select-cluster').click();
-    //   cy.get('#cluster-1').check();
-    //   cy.get('body').click('topLeft');
+      // Select a cluster.
+      cy.get('#select-cluster').click();
+      cy.get('#cluster-1').check();
+      cy.get('body').click('topLeft');
 
-    //   // Add ure.
-    //   cy.get('#url').type('https://example.com/path/to/file');
+      // Add ure.
+      cy.get('#url').type('https://example.com/path/to/file');
 
-    //   // Should display message describing the validation error.
-    //   cy.get('#description').type(description);
+      // Should display message describing the validation error.
+      cy.get('#description').type(description);
 
-    //   // Show verification error message.
-    //   cy.get('#description-helper-text')
-    //     .should('be.visible')
-    //     .and('have.text', 'Fill in the characters, the length is 0-1000.');
+      // Show verification error message.
+      cy.get('#description-helper-text')
+        .should('be.visible')
+        .and('have.text', 'Fill in the characters, the length is 0-1000.');
 
-    //   cy.get('#save').click();
-    // });
+      cy.get('#save').click();
+    });
 
     it('try to verify args', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

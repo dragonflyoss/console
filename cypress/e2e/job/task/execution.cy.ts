@@ -241,6 +241,54 @@ describe('Executions', () => {
     });
   });
 
+  describe('when no data is loaded', () => {
+    beforeEach(() => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/6',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: {},
+          });
+        },
+      );
+
+      cy.visit('jobs/task/executions/6');
+    });
+
+    it('execution information should appear empty', () => {
+      // Show execution id.
+      cy.get('#id').should('have.text', 0);
+
+      // Show execution status.
+      cy.get('#status').should('not.exist');
+
+      // Show execution task id.
+      cy.get('#task-id').should('have.text', '-');
+
+      // Show execution url.
+      cy.get('#url').should('have.text', '-');
+
+      // Show execution piece length.
+      cy.get('#piece-length').should('have.text', '-');
+
+      // Show execution tag.
+      cy.get('#tag').should('have.text', '-');
+
+      // Show execution scheduler clusters ID.
+      cy.get('#scheduler-clusters-id').should('have.text', '-');
+
+      // Show execution Created At.
+      cy.get('#created-at').should('have.text', '-');
+
+      // Don't show failure tasks.
+      cy.get('#failure-tasks').should('not.exist');
+    });
+  });
+
   describe('should handle API error response', () => {
     beforeEach(() => {
       cy.intercept(

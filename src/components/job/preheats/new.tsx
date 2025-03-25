@@ -126,7 +126,7 @@ export default function NewPreheat() {
           endAdornment: (
             <>
               <InputAdornment position="start">
-                <Typography color="text.primary" sx={{ fontFamily: 'mabry-bold' }}>
+                <Typography sx={{ fontFamily: 'mabry-bold', color: 'var(--palette-sidebar-menu-color)' }}>
                   MiB
                 </Typography>
               </InputAdornment>

@@ -314,13 +314,7 @@ export default function ShowPreheat() {
                 Piece Length
               </Typography>
             </Box>
-            <Typography
-              id="piece-length"
-              variant="body1"
-              fontFamily="mabry-bold"
-              component="div"
-              className={styles.urlContent}
-            >
+            <Typography id="piece-length" variant="body1" className={styles.informationContent}>
               {isLoading ? (
                 <Skeleton sx={{ width: '4rem' }} />
               ) : preheat?.args?.piece_length ? (

@@ -61,7 +61,6 @@ describe('Executions', () => {
   describe('when data is loaded', () => {
     it('should display detailed execution failure information', () => {
       // Click the execution details button.
-
       cy.intercept(
         {
           method: 'GET',
@@ -86,9 +85,12 @@ describe('Executions', () => {
       cy.get('.MuiBreadcrumbs-ol').should('exist').and('contain', 10);
 
       // Show execution id.
-      cy.get('.MuiPaper-root > :nth-child(1)').should('contain', 10);
+      cy.get('#id').should('contain', 10);
 
       cy.get('[data-testid="execution-isloading"]').should('not.exist');
+
+      // Show execution piece length.
+      cy.get('#piece-length').should('have.text', '4 MiB');
 
       // Show execution status.
       cy.get('#status')
@@ -96,20 +98,16 @@ describe('Executions', () => {
         .and('have.css', 'background-color', 'rgb(212, 37, 54)')
         .find('#error-log-icon')
         .and('exist');
-
-      cy.get('.MuiPaper-root > :nth-child(3)').should(
-        'contain',
-        'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916',
-      );
+      cy.get('#task-id').should('contain', 'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916');
 
       // Show execution tag.
-      cy.get('.MuiPaper-root > :nth-child(5)').should('contain', 'execution-tag');
+      cy.get('#tag').should('contain', 'execution-tag');
 
-      // Show execution tag.
-      cy.get('.MuiPaper-root > :nth-child(6)').should('contain', 'execution-application');
+      // Show execution application.
+      cy.get('#application').should('contain', 'execution-application');
 
       // Show execution scheduler clusters ID.
-      cy.get(':nth-child(7) > :nth-child(2)').should('have.text', 1);
+      cy.get('#scheduler-clusters-id').should('have.text', 1);
 
       // Click the show error log button.
       cy.get('#status > .MuiButtonBase-root').click();
@@ -129,8 +127,7 @@ describe('Executions', () => {
       cy.get('.MuiBreadcrumbs-ol').should('exist').and('contain', 9);
 
       // Show execution id.
-      cy.get('.MuiPaper-root > :nth-child(1)').should('contain', 9);
-
+      cy.get('#id').should('contain', 9);
       cy.get('[data-testid="execution-isloading"]').should('not.exist');
 
       // Show execution status.
@@ -143,9 +140,11 @@ describe('Executions', () => {
       // Show execution URL.
       cy.get('.MuiPaper-root > :nth-child(4)').should('contain', 'https://example.com/path/to/file');
 
+      // Show execution piece length.
+      cy.get('#piece-length').should('have.text', '-');
+
       // Show failure task.
       cy.get('#failure-tasks').should('exist');
-
       cy.get('#failure-tasks-list > :nth-child(1) > :nth-child(1)').should('contain', 'kind-worker');
 
       // Go to next page.
@@ -153,9 +152,7 @@ describe('Executions', () => {
 
       // Check the current page number.
       cy.get('#failure-tasks-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
-
       cy.get('#failure-tasks-list').children().should('have.length', 1);
-
       cy.get('#failure-tasks-list > .MuiTableRow-root > :nth-child(1)').should('have.text', 'dragonfly-seed-client-5');
 
       // Refresh page.
@@ -165,16 +162,12 @@ describe('Executions', () => {
 
       // Check the current page number.
       cy.get('#failure-tasks-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
-
       cy.get('#failure-tasks-list').children().should('have.length', 1);
-
       cy.get('#failure-tasks-list > .MuiTableRow-root > :nth-child(1)').should('have.text', 'dragonfly-seed-client-5');
 
       // Show error log.
       cy.get('#error-log-icon').click();
-
       cy.get('#panel1d-header').click();
-
       cy.get('.MuiAccordionDetails-root').should(
         'contain',
         'task a1e21fceseba95d4407a83b3fc767da6de2a2fe35736c2ba3b95473229de1894 failed: rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 172.18.0.3:4000: connect: connection refused"',
@@ -183,7 +176,6 @@ describe('Executions', () => {
 
     it('should display detailed execution pending information', () => {
       let interceptCount = 0;
-
       cy.intercept(
         {
           method: 'GET',
@@ -197,14 +189,13 @@ describe('Executions', () => {
           interceptCount++;
         },
       ).as('execution');
-
       cy.get('#execution-11').click();
 
       // Check for breadcrumb.
       cy.get('.MuiBreadcrumbs-ol').should('exist').and('contain', 11);
 
       // Show execution id.
-      cy.get('.MuiPaper-root > :nth-child(1)').should('contain', 11);
+      cy.get('#id').should('contain', 11);
 
       // Show execution status.
       cy.get('#status')
@@ -214,7 +205,6 @@ describe('Executions', () => {
         .and('exist')
         .find('#error-log-icon')
         .and('not.exist');
-
       cy.wait(120000);
 
       // Check how many times the API should be executed after six seconds.
@@ -245,6 +235,9 @@ describe('Executions', () => {
         .and('have.css', 'background-color', 'rgb(212, 37, 54)')
         .find('#error-log-icon')
         .and('exist');
+
+      // Show execution piece length.
+      cy.get('#piece-length').should('have.text', '4 MiB');
     });
   });
 
@@ -268,28 +261,28 @@ describe('Executions', () => {
 
     it('execution information should appear empty', () => {
       // Show execution id.
-      cy.get(':nth-child(1) > .show_informationContent__KJR0m').should('have.text', 0);
+      cy.get('#id').should('have.text', 0);
 
       // Show execution status.
       cy.get('#status').should('not.exist');
 
       // Show execution task id.
-      cy.get(':nth-child(3) > .show_informationContent__KJR0m').should('have.text', '-');
+      cy.get('#task-id').should('have.text', '-');
 
       // Show execution url.
-      cy.get('.show_urlContent__GX54w').should('have.text', '-');
+      cy.get('#url').should('have.text', '-');
+
+      // Show execution piece length.
+      cy.get('#piece-length').should('have.text', '-');
 
       // Show execution tag.
-      cy.get(':nth-child(5) > .show_informationContent__KJR0m.MuiBox-root > .MuiTypography-root').should(
-        'have.text',
-        '-',
-      );
+      cy.get('#tag').should('have.text', '-');
 
       // Show execution scheduler clusters ID.
-      cy.get(':nth-child(7) > :nth-child(2)').should('have.text', '-');
+      cy.get('#scheduler-clusters-id').should('have.text', '-');
 
       // Show execution Created At.
-      cy.get(':nth-child(8) > :nth-child(2) > .MuiTypography-root').should('have.text', '-');
+      cy.get('#created-at').should('have.text', '-');
 
       // Don't show failure tasks.
       cy.get('#failure-tasks').should('not.exist');
@@ -324,22 +317,29 @@ describe('Executions', () => {
 
     it('execution information should appear empty', () => {
       // Show execution id.
-      cy.get(':nth-child(1) > .show_informationContent__KJR0m').should('have.text', 0);
+      cy.get('#id').should('have.text', 0);
+
       // Show execution status.
       cy.get('#status').should('not.exist');
+
       // Show execution task id.
-      cy.get(':nth-child(3) > .show_informationContent__KJR0m').should('have.text', '-');
+      cy.get('#task-id').should('have.text', '-');
+
       // Show execution url.
-      cy.get('.show_urlContent__GX54w').should('have.text', '-');
+      cy.get('#url').should('have.text', '-');
+
+      // Show execution piece length.
+      cy.get('#piece-length').should('have.text', '-');
+
       // Show execution tag.
-      cy.get(':nth-child(5) > .show_informationContent__KJR0m.MuiBox-root > .MuiTypography-root').should(
-        'have.text',
-        '-',
-      );
+      cy.get('#tag').should('have.text', '-');
+
       // Show execution scheduler clusters ID.
-      cy.get(':nth-child(7) > :nth-child(2)').should('have.text', '-');
+      cy.get('#scheduler-clusters-id').should('have.text', '-');
+
       // Show execution Created At.
-      cy.get(':nth-child(8) > :nth-child(2) > .MuiTypography-root').should('have.text', '-');
+      cy.get('#created-at').should('have.text', '-');
+
       // Don't show failure tasks.
       cy.get('#failure-tasks').should('not.exist');
     });
@@ -367,7 +367,7 @@ describe('Executions', () => {
       cy.get('.MuiBreadcrumbs-ol').should('exist').and('contain', 11);
 
       // Show execution id.
-      cy.get(':nth-child(1) > .show_informationContent__KJR0m').should('contain', 11);
+      cy.get('#id').should('contain', 11);
 
       // Show execution status.
       cy.get('#status')

@@ -12,7 +12,8 @@
     "filtered_query_params": "X-Amz-Algorithm&X-Amz-Credential&X-Amz-Date&X-Amz-Expires&X-Amz-SignedHeaders&X-Amz-Signature&X-Amz-Security-Token&X-Amz-User-Agent&X-Goog-Algorithm&X-Goog-Credential&X-Goog-Date&X-Goog-Expires&X-Goog-SignedHeaders&X-Goog-Signature&OSSAccessKeyId&Expires&Signature&SecurityToken&AccessKeyId&Signature&Expires&X-Obs-Date&X-Obs-Security-Token&q-sign-algorithm&q-ak&q-sign-time&q-key-time&q-header-list&q-url-param-list&q-signature&x-cos-security-token&ns",
     "tag": "",
     "task_id": "",
-    "url": "https://example.com/path/to/file"
+    "url": "https://example.com/path/to/file",
+    "piece_length": 4194304
   },
   "result": {
     "created_at": "2024-11-05T03:10:31.965787257Z",

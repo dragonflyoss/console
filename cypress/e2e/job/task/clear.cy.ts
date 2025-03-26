@@ -69,12 +69,22 @@ describe('Clear', () => {
     it('click the `CANCEL button', () => {
       cy.get('#url').click();
 
-      // Show tag input.
+      // Add tag input.
       cy.get('#tag').should('exist');
+
+      // Add url.
+      cy.get('#url').type('https://example.com/path/to/file');
+
+      // Add piece length.
+      cy.get('#pieceLength').type('4');
+
       cy.get('#cancelSearchByURL').click();
 
-      // not show tag input.
-      cy.get('#tag').should('not.exist');
+      cy.get('#url').click();
+
+      cy.get('#tag').should('have.value', '');
+      cy.get('#url').should('have.value', '');
+      cy.get('#pieceLength').should('have.value', '');
     });
 
     it('can search by url', () => {
@@ -85,13 +95,16 @@ describe('Clear', () => {
       // Add url.
       cy.get('#url').type('https://example.com/path/to/file');
 
-      // Show tag input.
+      // Add piece length.
+      cy.get('#pieceLength').type('4');
+
+      // Add tag input.
       cy.get('#tag').type('tag');
 
-      // Show tag input.
+      // Add tag input.
       cy.get('#application').type('application');
 
-      // Show tag input.
+      // Add filtered query params input.
       cy.get('.MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('filteredQueryParams{enter}');
       cy.get('.MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('X-Amz-Algorithm{enter}');
 

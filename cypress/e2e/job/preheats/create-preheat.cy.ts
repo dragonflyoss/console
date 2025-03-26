@@ -59,6 +59,8 @@ describe('Create preheat', () => {
     cy.get('#cluster-1').check();
     cy.get('body').click('topLeft');
 
+    cy.get('#pieceLength').type('4');
+
     // Select a scope.
     cy.get('#select-scope').click();
 
@@ -75,22 +77,20 @@ describe('Create preheat', () => {
       (req) => {
         req.reply({
           statusCode: 200,
-          body: [],
+          body: createPreheat,
         });
       },
     );
+
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/jobs?page=1&per_page=10&type=preheat',
+        url: '/api/v1/jobs/12',
       },
       (req) => {
-        req.reply((res: any) => {
-          const responseHeaders = {
-            ...res.headers,
-            Link: '</api/v1/jobs?page=1&per_page=10&state=FAILURE>;rel=prev,</api/v1/jobs?page=2&per_page=10&state=FAILURE>;rel=next,</api/v1/jobs?page=1&per_page=10&state=FAILURE>;rel=first,</api/v1/jobs?page=2&per_page=10&state=FAILURE>;rel=last',
-          };
-          res.send(200, createPreheat, responseHeaders);
+        req.reply({
+          statusCode: 200,
+          body: createPreheat,
         });
       },
     );
@@ -98,14 +98,13 @@ describe('Create preheat', () => {
     cy.get('#save').click();
 
     // Then I see that the current page is the preheats page!
-    cy.url().should('include', '/jobs/preheats');
+    cy.url().should('include', '/jobs/preheats/12');
 
     // Displays successfully added preheat task.
-    cy.get('#PENDING-12').should('exist');
-    cy.get('#id-12').should('have.text', 12);
-
-    cy.get('#created_at-12').should('have.text', '2023-03-23 16:29:18');
-    cy.get('#description-12').should('have.text', 'create preheat');
+    cy.get('#description').should('have.text', 'create preheat');
+    cy.get('#status').should('have.text', 'PENDING');
+    cy.get('#id').should('have.text', 12);
+    cy.get('#piece-length').should('have.text', '4 MiB');
   });
 
   it('cannot to use cluster without scheduler for preheat', () => {
@@ -177,39 +176,34 @@ describe('Create preheat', () => {
       (req) => {
         req.reply({
           statusCode: 200,
-          body: [],
+          body: createPreheat,
         });
       },
     );
+
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/jobs?page=1&per_page=10&type=preheat',
+        url: '/api/v1/jobs/12',
       },
       (req) => {
-        req.reply((res: any) => {
-          const responseHeaders = {
-            ...res.headers,
-            Link: '</api/v1/jobs?page=1&per_page=10&state=FAILURE>;rel=prev,</api/v1/jobs?page=2&per_page=10&state=FAILURE>;rel=next,</api/v1/jobs?page=1&per_page=10&state=FAILURE>;rel=first,</api/v1/jobs?page=2&per_page=10&state=FAILURE>;rel=last',
-          };
-          res.send(200, createPreheat, responseHeaders);
+        req.reply({
+          statusCode: 200,
+          body: createPreheat,
         });
       },
     );
 
     cy.get('#save').click();
 
-    cy.get('.MuiAlert-message').should('not.exist');
-
     // Then I see that the current page is the preheats page!
-    cy.url().should('include', '/jobs/preheats');
+    cy.url().should('include', '/jobs/preheats/12');
 
     // Displays successfully added preheat task.
-    cy.get('#PENDING-12').should('exist');
-    cy.get('#id-12').should('have.text', 12);
-
-    cy.get('#created_at-12').should('have.text', '2023-03-23 16:29:18');
-    cy.get('#description-12').should('have.text', 'create preheat');
+    cy.get('#description').should('have.text', 'create preheat');
+    cy.get('#status').should('have.text', 'PENDING');
+    cy.get('#id').should('have.text', 12);
+    cy.get('#piece-length').should('have.text', '4 MiB');
   });
 
   it('should handle API error response', () => {
@@ -283,6 +277,22 @@ describe('Create preheat', () => {
       cy.get('#save').click();
       cy.get('#url').clear();
       cy.get('#url').type('https://docs');
+
+      // Should display message Piece Length the validation error.
+      cy.get('#pieceLength').type('0');
+
+      // Show verification error message.
+      cy.get('#pieceLength-helper-text').should('have.text', 'Please enter a value between 4 and 1024 MiB.');
+
+      cy.get('#pieceLength').clear();
+      cy.get('#pieceLength-helper-text').should('not.eq');
+      cy.get('#pieceLength').type('1025');
+      cy.get('#save').click();
+
+      // Preheat creation failed, the page is still in preheat/new!
+      cy.url().should('include', '/jobs/preheats/new');
+
+      cy.get('#pieceLength-helper-text').should('exist');
 
       // Should display message tag the validation error.
       cy.get('#tag').type(url);

@@ -14,7 +14,8 @@
       "tag": "",
       "task_id": "aea9af454bc33e61dd24647b0dd6d023195360a6b67c7c3e0feda4713819cc38",
       "timeout": 1800000000000,
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "piece_length": null
     },
     "result": {
       "created_at": "2024-11-01T10:02:44.836338419Z",
@@ -123,7 +124,8 @@
       "tag": "",
       "task_id": "",
       "timeout": 1800000000000,
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "piece_length": 4194304
     },
     "result": {
       "created_at": "2024-11-01T09:59:49.07231163Z",
@@ -232,7 +234,8 @@
       "tag": "",
       "task_id": "",
       "timeout": 1800000000000,
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "piece_length": 4194304
     },
     "result": {
       "created_at": "2024-11-01T09:56:31.537420427Z",
@@ -341,7 +344,8 @@
       "tag": "",
       "task_id": "",
       "timeout": 1800000000000,
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "piece_length": 4194304
     },
     "result": {
       "created_at": "2024-11-01T09:54:04.883390304Z",
@@ -444,7 +448,8 @@
       "tag": "",
       "task_id": "",
       "timeout": 1800000000000,
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "piece_length": 4194304
     },
     "result": {
       "created_at": "2024-11-01T09:34:14.312378294Z",
@@ -547,7 +552,8 @@
       "tag": "",
       "task_id": "",
       "timeout": 1800000000000,
-      "url": "https://example.com/path/to/file"
+      "url": "https://example.com/path/to/file",
+      "piece_length": 4194304
     },
     "result": {
       "created_at": "2024-11-01T09:32:30.001617594Z",
@@ -650,7 +656,8 @@
       "tag": "",
       "task_id": "8c3dbd38fc7f4b3637d4e8ad8490ce107ac4cf2df81d45e7d33224f29ab4cf3d",
       "timeout": 1800000000000,
-      "url": ""
+      "url": "",
+      "piece_length": null
     },
     "result": {
       "created_at": "2024-11-01T09:28:11.774771335Z",
@@ -753,7 +760,8 @@
       "tag": "",
       "task_id": "8c3dbd38fc7f4b3637d4e8ad8490ce107ac4cf2df81d45e7d33224f29ab4cf3d",
       "timeout": 1800000000000,
-      "url": ""
+      "url": "",
+      "piece_length": null
     },
     "result": {
       "created_at": "2024-11-01T09:25:05.260432054Z",
@@ -856,7 +864,8 @@
       "tag": "",
       "task_id": "8c3dbd38fc7f4b3637d4e8ad8490ce107ac4cf2df81d45e7d33224f29ab4cf3d",
       "timeout": 1800000000000,
-      "url": ""
+      "url": "",
+      "piece_length": null
     },
     "result": {
       "created_at": "2024-11-01T09:25:05.260432054Z",

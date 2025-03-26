@@ -12,7 +12,8 @@
     "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
     "tag": "",
     "task_id": "",
-    "url": "https://example.com/path/to/file"
+    "url": "https://example.com/path/to/file",
+    "piece_length": 4194304
   },
   "result": null,
   "user_id": 0,

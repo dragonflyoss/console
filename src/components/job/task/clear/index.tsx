@@ -19,6 +19,7 @@ import {
   toggleButtonGroupClasses,
   Pagination,
   useTheme,
+  InputAdornment,
 } from '@mui/material';
 import styles from './index.module.css';
 import { useEffect, useState } from 'react';
@@ -79,12 +80,19 @@ export default function Clear() {
   const [taskIDError, setTaskIDError] = useState(false);
   const [applicationError, setApplicationError] = useState(false);
   const [tagError, setTagError] = useState(false);
+  const [pieceLengthError, setPieceLengthError] = useState(false);
   const [filterError, setFilterError] = useState(false);
   const [filterHelperText, setFilterHelperText] = useState('Fill in the characters, the length is 0-100.');
   const [search, setSearch] = useState<string | null>('url');
   const [searchID, setSearchID] = useState(0);
   const [taskPages, setTaskPages] = useState<any>({});
-  const [searchData, setSearchDada] = useState({ url: '', tag: '', application: '', filtered_query_params: '' });
+  const [searchData, setSearchDada] = useState({
+    url: '',
+    tag: '',
+    application: '',
+    filtered_query_params: '',
+    piece_length: 0,
+  });
 
   const { url, tag, application, filtered_query_params } = searchData;
   const navigate = useNavigate();
@@ -203,6 +211,45 @@ export default function Clear() {
   const formList = [
     {
       formProps: {
+        id: 'pieceLength',
+        labels: 'Piece Length',
+        name: 'pieceLength',
+        autoComplete: 'family-name',
+        placeholder: 'Piece Length',
+        helperText: pieceLengthError ? 'Please enter a value between 4 and 1024 MiB.' : '',
+        error: pieceLengthError,
+        InputProps: (
+          <Tooltip
+            title={
+              'When the task URLs are the same but the Piece Length is different, they will be distinguished based on the Piece Length, and the queried tasks will also be different.'
+            }
+            placement="top"
+          >
+            <HelpIcon
+              sx={{
+                color: 'var(--palette-grey-300Channel)',
+                width: '0.8rem',
+                height: '0.8rem',
+                ':hover': { color: 'var(--palette-description-color)' },
+              }}
+            />
+          </Tooltip>
+        ),
+        onChange: (e: any) => {
+          changeValidate(e.target.value, formList[0]);
+          setSearchDada({ ...searchData, piece_length: e.target.value });
+        },
+      },
+      syncError: false,
+      setError: setPieceLengthError,
+
+      validate: (value: string) => {
+        const reg = /^(?:|[4-9]|[1-9]\d{1,2}|10[0-1]\d|102[0-4])$/;
+        return reg.test(value);
+      },
+    },
+    {
+      formProps: {
         id: 'tag',
         labels: 'Tag',
         name: 'tag',
@@ -230,7 +277,7 @@ export default function Clear() {
         ),
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, formList[0]);
+          changeValidate(e.target.value, formList[1]);
           setSearchDada({ ...searchData, tag: e.target.value });
         },
       },
@@ -266,7 +313,7 @@ export default function Clear() {
         ),
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, formList[1]);
+          changeValidate(e.target.value, formList[2]);
           setSearchDada({ ...searchData, application: e.target.value });
         },
       },
@@ -287,14 +334,14 @@ export default function Clear() {
         options: [],
 
         onChange: (_e: any, newValue: any) => {
-          if (!formList[2].formProps.error) {
+          if (!formList[3].formProps.error) {
             setSearchDada({ ...searchData, filtered_query_params: newValue.join('&') });
           }
         },
 
         onInputChange: (e: any) => {
           setFilterHelperText('Fill in the characters, the length is 0-100.');
-          changeValidate(e.target.value, formList[2]);
+          changeValidate(e.target.value, formList[3]);
         },
 
         renderTags: (value: any, getTagProps: any) =>
@@ -407,6 +454,8 @@ export default function Clear() {
                 tag: task?.args?.tag,
                 application: task?.args?.application,
                 filtered_query_params: task?.args?.filtered_query_params,
+                ...(searchData.piece_length &&
+                  searchData.piece_length !== 0 && { piece_length: searchData.piece_length * 1024 * 1024 }),
               },
               scheduler_cluster_ids: [schedulerClusterID],
               type: 'delete_task',
@@ -503,6 +552,7 @@ export default function Clear() {
 
     const data = new FormData(event.currentTarget);
     const filterText = event.currentTarget.elements.filteredQueryParams?.value;
+
     formList.forEach((item) => {
       const value = data.get(item.formProps.name);
       item.setError(!item.validate(value as string));
@@ -541,6 +591,8 @@ export default function Clear() {
         tag: searchData.tag,
         application: searchData.application,
         filtered_query_params: searchData.filtered_query_params,
+        ...(searchData.piece_length &&
+          searchData.piece_length !== 0 && { piece_length: searchData.piece_length * 1024 * 1024 }),
       },
       type: 'get_task',
     };
@@ -580,7 +632,9 @@ export default function Clear() {
 
   const handleCloseSearch = () => {
     setOptional(false);
-    setSearchDada({ url: '', tag: '', application: '', filtered_query_params: '' });
+    setSearchDada({ url: '', tag: '', application: '', filtered_query_params: '', piece_length: 0 });
+    setPieceLengthError(false);
+    setUrlError(false);
   };
 
   const handleChangeSearch = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
@@ -589,7 +643,7 @@ export default function Clear() {
     }
     setOptional(false);
     setSearchTask('');
-    setSearchDada({ url: '', tag: '', application: '', filtered_query_params: '' });
+    setSearchDada({ url: '', tag: '', application: '', filtered_query_params: '', piece_length: 0 });
   };
 
   const handlePageChange = (peerId: any, newPage: any) => {
@@ -644,9 +698,7 @@ export default function Clear() {
               '&:hover': {
                 backgroundColor: 'transparent',
               },
-              // textTransform: 'none',
               p: '0.3rem 0.5rem',
-              // width: '11.5rem',
               color: 'var(--palette-dark-400Channel)',
             }}
           >
@@ -669,9 +721,7 @@ export default function Clear() {
               '&:hover': {
                 backgroundColor: 'transparent',
               },
-              // textTransform: 'none',
               p: '0.3rem 0.5rem',
-              // width: '11.5rem',
               color: 'var(--palette-dark-400Channel)',
             }}
           >
@@ -681,109 +731,121 @@ export default function Clear() {
         </StyledToggleButtonGroup>
       </Paper>
       {search === 'task-id' ? (
-        <Box component="form" onSubmit={handleSearchByTaskID} sx={{ width: '38rem', height: '3rem' }}>
+        <Box key="task-id" component="form" onSubmit={handleSearchByTaskID} sx={{ width: '38rem', height: '3rem' }}>
           <TextField fullWidth variant="outlined" size="small" {...taskIDList.formProps} sx={{ p: 0 }} />
         </Box>
       ) : (
-        <>
-          <Box sx={{ position: 'relative', height: '3rem' }}>
-            <Paper
-              component="form"
-              onSubmit={handleSearchByURL}
-              elevation={optional ? 3 : 0}
-              sx={{
-                p: optional ? '1rem' : '',
-                borderRadius: '0.2rem',
-                width: optional ? '45rem' : '36rem',
-                position: 'absolute',
-                backgroundColor: 'var(--palette-background-menu-paper)',
+        <Box sx={{ position: 'relative', height: '3rem' }}>
+          <Paper
+            component="form"
+            onSubmit={handleSearchByURL}
+            elevation={optional ? 3 : 0}
+            sx={{
+              p: optional ? '1rem' : '',
+              borderRadius: '0.2rem',
+              width: optional ? '45rem' : '36rem',
+              position: 'absolute',
+              backgroundColor: 'var(--palette-background-menu-paper)',
+            }}
+          >
+            <TextField
+              {...urlList.formProps}
+              fullWidth
+              size="small"
+              onFocus={(e) => {
+                setOptional(true);
               }}
-            >
-              <TextField
-                {...urlList.formProps}
-                fullWidth
-                size="small"
-                onFocus={(e) => {
-                  setOptional(true);
-                }}
-              />
+              key="url"
+            />
 
-              {optional ? (
-                <>
-                  <Divider sx={{ m: '1rem 0' }} />
-                  <Typography variant="subtitle1" fontFamily="mabry-bold" component="div">
-                    Optional
-                  </Typography>
-                  <Box>
-                    <Box className={styles.optionalContainer}>
-                      {formList.map((item) => {
-                        return (
-                          <Box key={item.formProps.id} className={styles.filterInput}>
-                            <Box width="30%" display="flex" alignItems="center">
-                              <Typography variant="body2" color="#5e5e5e" fontFamily="mabry-bold" mr="0.4rem">
-                                {item?.formProps?.labels}
-                              </Typography>
-                              {item?.id === 'filteredQueryParams' ? (
-                                <Tooltip
-                                  title={
-                                    'Filter the query parameters of the downloaded URL. If the download URL is the same, it will be scheduled as the same task.'
-                                  }
-                                  placement="top"
-                                >
-                                  <HelpIcon
-                                    sx={{
-                                      color: 'var(--palette-grey-300Channel)',
-                                      width: '0.8rem',
-                                      height: '0.8rem',
-                                      mr: '0.3rem',
-                                      ':hover': { color: 'var(--palette-description-color)' },
-                                    }}
-                                  />
-                                </Tooltip>
-                              ) : (
-                                item.formProps?.InputProps
-                              )}
-                            </Box>
-                            {item.id === 'filteredQueryParams' ? (
-                              <Autocomplete
-                                freeSolo
-                                multiple
-                                disableClearable
-                                {...item.filterFormProps}
-                                className={styles.textField}
-                                size="small"
-                                renderInput={(params) => <TextField {...params} margin="normal" {...item.formProps} />}
-                              />
+            {optional ? (
+              <>
+                <Divider sx={{ m: '1rem 0' }} />
+                <Typography variant="subtitle1" fontFamily="mabry-bold" component="div">
+                  Optional
+                </Typography>
+                <Box>
+                  <Box className={styles.optionalContainer}>
+                    {formList.map((item) => {
+                      return (
+                        <Box key={item.formProps.id} className={styles.filterInput}>
+                          <Box width="30%" display="flex" alignItems="center">
+                            <Typography variant="body2" color="#5e5e5e" fontFamily="mabry-bold" mr="0.4rem">
+                              {item?.formProps?.labels}
+                            </Typography>
+                            {item?.id === 'filteredQueryParams' ? (
+                              <Tooltip
+                                title={
+                                  'Filter the query parameters of the downloaded URL. If the download URL is the same, it will be scheduled as the same task.'
+                                }
+                                placement="top"
+                              >
+                                <HelpIcon
+                                  sx={{
+                                    color: 'var(--palette-grey-300Channel)',
+                                    width: '0.8rem',
+                                    height: '0.8rem',
+                                    mr: '0.3rem',
+                                    ':hover': { color: 'var(--palette-description-color)' },
+                                  }}
+                                />
+                              </Tooltip>
                             ) : (
-                              <TextField
-                                margin="normal"
-                                size="small"
-                                {...item.formProps}
-                                className={styles.textField}
-                              />
+                              item.formProps?.InputProps
                             )}
                           </Box>
-                        );
-                      })}
-                    </Box>
-                    <Divider sx={{ pb: '1rem' }} />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1rem' }}>
-                      <CancelLoadingButton id="cancelSearchByURL" loading={loadingButton} onClick={handleCloseSearch} />
-                      <SavelLoadingButton
-                        loading={loadingButton}
-                        endIcon={<SearchIcon />}
-                        id="searchByURL"
-                        text="search"
-                      />
-                    </Box>
+                          {item.id === 'filteredQueryParams' ? (
+                            <Autocomplete
+                              freeSolo
+                              multiple
+                              disableClearable
+                              {...item.filterFormProps}
+                              className={styles.textField}
+                              size="small"
+                              renderInput={(params) => <TextField {...params} margin="normal" {...item.formProps} />}
+                            />
+                          ) : item.formProps.id === 'pieceLength' ? (
+                            <TextField
+                              sx={{ width: '10.8rem' }}
+                              margin="normal"
+                              size="small"
+                              {...item.formProps}
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="start">
+                                    <Typography
+                                      sx={{ fontFamily: 'mabry-bold', color: 'var(--palette-sidebar-menu-color)' }}
+                                    >
+                                      MiB
+                                    </Typography>
+                                  </InputAdornment>
+                                ),
+                              }}
+                            />
+                          ) : (
+                            <TextField margin="normal" size="small" {...item.formProps} className={styles.textField} />
+                          )}
+                        </Box>
+                      );
+                    })}
                   </Box>
-                </>
-              ) : (
-                ''
-              )}
-            </Paper>
-          </Box>
-        </>
+                  <Divider sx={{ pb: '1rem' }} />
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1rem' }}>
+                    <CancelLoadingButton id="cancelSearchByURL" loading={loadingButton} onClick={handleCloseSearch} />
+                    <SavelLoadingButton
+                      loading={loadingButton}
+                      endIcon={<SearchIcon />}
+                      id="searchByURL"
+                      text="search"
+                    />
+                  </Box>
+                </Box>
+              </>
+            ) : (
+              ''
+            )}
+          </Paper>
+        </Box>
       )}
       {isLoading ? (
         <Box id="isLoading" sx={{ mt: '4rem' }}>
@@ -896,62 +958,60 @@ export default function Clear() {
                         <Box id={`cache-${index}`}>
                           {currentPageData?.map((item: any, index: number) => {
                             return index !== currentPageData.length - 1 ? (
-                              <>
-                                <Box sx={{ p: '1rem', display: 'flex', alignItems: 'center' }}>
-                                  <Box width="20%" sx={{ display: 'flex', alignItems: 'center', pb: '0.4rem' }}>
-                                    <Box>
-                                      <Tooltip title={item?.hostname || '-'} placement="top">
-                                        <Typography variant="body1">{item?.hostname}</Typography>
-                                      </Tooltip>
-                                    </Box>
-                                  </Box>
-                                  <Box width="35%">
-                                    <Tooltip title={item?.id || '-'} placement="top">
-                                      <Typography variant="body2" component="div" className={styles.text}>
-                                        {item?.id || '-'}
-                                      </Typography>
+                              <Box key={index} sx={{ p: '1rem', display: 'flex', alignItems: 'center' }}>
+                                <Box width="20%" sx={{ display: 'flex', alignItems: 'center', pb: '0.4rem' }}>
+                                  <Box>
+                                    <Tooltip title={item?.hostname || '-'} placement="top">
+                                      <Typography variant="body1">{item?.hostname}</Typography>
                                     </Tooltip>
                                   </Box>
-                                  <Box width="15%">
-                                    <Box className={styles.ipContainer}>
-                                      <Typography variant="subtitle2" component="div">
-                                        {item?.ip || '-'}
-                                      </Typography>
-                                    </Box>
-                                  </Box>
-                                  <Box width="15%">
-                                    <Chip
-                                      label={_.upperFirst(item?.host_type) || ''}
-                                      size="small"
-                                      variant="outlined"
-                                      sx={{
-                                        borderRadius: '0.2rem',
-                                        backgroundColor:
-                                          item?.host_type === 'super'
-                                            ? 'var( --palette-description-color)'
-                                            : 'var(--palette-button-color)',
-                                        color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
-                                        borderColor:
-                                          item?.host_type === 'super'
-                                            ? 'var( --palette-description-color)'
-                                            : 'var(--palette-button-color)',
-                                        fontWeight: 'bold',
-                                      }}
-                                    />
-                                  </Box>
-                                  <Box width="15%">
-                                    <Chip
-                                      avatar={<MoreTimeIcon />}
-                                      label={getBJTDatetime(item?.created_at || '')}
-                                      variant="outlined"
-                                      size="small"
-                                    />
-                                  </Box>
-                                  <Divider />
                                 </Box>
-                              </>
+                                <Box width="35%">
+                                  <Tooltip title={item?.id || '-'} placement="top">
+                                    <Typography variant="body2" component="div" className={styles.text}>
+                                      {item?.id || '-'}
+                                    </Typography>
+                                  </Tooltip>
+                                </Box>
+                                <Box width="15%">
+                                  <Box className={styles.ipContainer}>
+                                    <Typography variant="subtitle2" component="div">
+                                      {item?.ip || '-'}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                                <Box width="15%">
+                                  <Chip
+                                    label={_.upperFirst(item?.host_type) || ''}
+                                    size="small"
+                                    variant="outlined"
+                                    sx={{
+                                      borderRadius: '0.2rem',
+                                      backgroundColor:
+                                        item?.host_type === 'super'
+                                          ? 'var( --palette-description-color)'
+                                          : 'var(--palette-button-color)',
+                                      color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
+                                      borderColor:
+                                        item?.host_type === 'super'
+                                          ? 'var( --palette-description-color)'
+                                          : 'var(--palette-button-color)',
+                                      fontWeight: 'bold',
+                                    }}
+                                  />
+                                </Box>
+                                <Box width="15%">
+                                  <Chip
+                                    avatar={<MoreTimeIcon />}
+                                    label={getBJTDatetime(item?.created_at || '')}
+                                    variant="outlined"
+                                    size="small"
+                                  />
+                                </Box>
+                                <Divider />
+                              </Box>
                             ) : (
-                              <Box sx={{ p: '1rem', display: 'flex', alignItems: 'center' }}>
+                              <Box key={index} sx={{ p: '1rem', display: 'flex', alignItems: 'center' }}>
                                 <Box width="20%" sx={{ display: 'flex', alignItems: 'center', pb: '0.4rem' }}>
                                   <Box>
                                     <Tooltip title={item?.hostname || '-'} placement="top">

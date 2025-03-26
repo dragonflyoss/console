@@ -13,7 +13,8 @@
     "tag": "",
     "task_id": "",
     "timeout": 1800000000000,
-    "url": "https://example.com/path/to/file"
+    "url": "https://example.com/path/to/file",
+    "piece_length": null
   },
   "result": {
     "created_at": "2024-11-01T10:02:44.836338419Z",

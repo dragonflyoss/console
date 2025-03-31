@@ -24,7 +24,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^6.4.3",
     "@mui/lab": "^5.0.0-alpha.138",
-    "@mui/material": "^5.14.3",
+    "@mui/material": "^7.0.1",
     "@mui/styled-engine-sc": "^6.0.1",
     "@mui/styles": "^5.14.3",
     "@testing-library/jest-dom": "^6.0.1",

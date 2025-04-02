@@ -24,7 +24,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getJobs, JobsResponse } from '../../../lib/api';
 import { DEFAULT_PAGE_SIZE } from '../../../lib/constants';
-import { getBJTDatetime, useQuery } from '../../../lib/utils';
+import { getDatetime, useQuery } from '../../../lib/utils';
 import styles from './index.module.css';
 import Card from '../../card';
 import { ReactComponent as IcContent } from '../../../assets/images/cluster/scheduler/ic-content.svg';
@@ -281,7 +281,7 @@ export default function Preheats() {
                         <Chip
                           id={`created_at-${item?.id}`}
                           avatar={<MoreTimeIcon />}
-                          label={getBJTDatetime(item.created_at) || '-'}
+                          label={getDatetime(item.created_at) || '-'}
                           variant="outlined"
                           size="small"
                         />
@@ -335,7 +335,7 @@ export default function Preheats() {
                       <Chip
                         id={`created_at-${item?.id}`}
                         avatar={<MoreTimeIcon />}
-                        label={getBJTDatetime(item.created_at) || '-'}
+                        label={getDatetime(item.created_at) || '-'}
                         variant="outlined"
                         size="small"
                       />

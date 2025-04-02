@@ -30,7 +30,7 @@ import {
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import styles from './show.module.css';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import { getBJTDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
+import { getDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
 import _ from 'lodash';
 import { DEFAULT_SCHEDULER_TABLE_PAGE_SIZE } from '../../../../lib/constants';
 import Card from '../../../card';
@@ -477,7 +477,7 @@ export default function ShowExecutions() {
               <Chip
                 id="created-at"
                 avatar={<MoreTimeIcon />}
-                label={getBJTDatetime(executions?.created_at || '0')}
+                label={getDatetime(executions?.created_at || '0')}
                 variant="outlined"
                 size="small"
               />

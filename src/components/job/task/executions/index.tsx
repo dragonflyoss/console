@@ -3,7 +3,7 @@ import styles from './index.module.css';
 import { getDeleteTaskJob, getTaskJobResponse } from '../../../../lib/api';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getBJTDatetime, useQuery } from '../../../../lib/utils';
+import { getDatetime, useQuery } from '../../../../lib/utils';
 import { DEFAULT_PAGE_SIZE } from '../../../../lib/constants';
 import {
   Divider,
@@ -232,7 +232,7 @@ export default function Executions() {
                       <Box className={styles.timeContainer}>
                         <Chip
                           avatar={<MoreTimeIcon />}
-                          label={getBJTDatetime(item.created_at) || '-'}
+                          label={getDatetime(item.created_at) || '-'}
                           variant="outlined"
                           size="small"
                         />
@@ -280,7 +280,7 @@ export default function Executions() {
                     <Box className={styles.timeContainer}>
                       <Chip
                         avatar={<MoreTimeIcon />}
-                        label={getBJTDatetime(item.created_at) || '-'}
+                        label={getDatetime(item.created_at) || '-'}
                         variant="outlined"
                         size="small"
                       />

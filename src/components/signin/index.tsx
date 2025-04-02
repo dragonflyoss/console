@@ -169,10 +169,10 @@ export default function SignIn() {
       >
         <PageLoading className={styles.pageLoading} />
       </Backdrop>
-      <Grid item xs={6}>
+      <Grid size={6}>
         <Rotation />
       </Grid>
-      <Grid item xs={6} className={styles.container}>
+      <Grid size={6} className={styles.container}>
         <HeaderLayout className={styles.header} />
         <Container component="main" maxWidth="xs">
           <Box

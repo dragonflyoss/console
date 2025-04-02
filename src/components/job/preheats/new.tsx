@@ -737,6 +737,7 @@ export default function NewPreheat() {
                     width: '100%',
                     mt: '1.5rem',
                   }}
+                  id="add-headers"
                   variant="outlined"
                   size="small"
                   startIcon={<AddIcon />}
@@ -758,6 +759,7 @@ export default function NewPreheat() {
                   width: '8rem',
                   mt: '1rem',
                 }}
+                id="add-headers"
                 variant="outlined"
                 size="small"
                 onClick={() => {

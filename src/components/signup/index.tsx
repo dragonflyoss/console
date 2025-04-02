@@ -237,10 +237,10 @@ export default function SignUp() {
       >
         <PageLoading className={styles.pageLoading} />
       </Backdrop>
-      <Grid item xs={6}>
+      <Grid size={6}>
         <Rotation />
       </Grid>
-      <Grid item xs={6} className={styles.container}>
+      <Grid size={6} className={styles.container}>
         <HeaderLayout className={styles.header} />
         <Container component="main" maxWidth="xs">
           <Box
@@ -265,7 +265,7 @@ export default function SignUp() {
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: '1rem' }}>
               <Grid container spacing={3}>
                 {formList.map((item) => (
-                  <Grid item key={item.formProps.name} xs={12}>
+                  <Grid key={item.formProps.name} size={12}>
                     <TextField required fullWidth color="success" {...item.formProps} />
                   </Grid>
                 ))}

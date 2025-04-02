@@ -341,7 +341,7 @@ describe('Create preheat', () => {
       cy.get('#url').type('https://example.com/path/to/file');
 
       // Click add header button.
-      cy.get('.css-q8hpuo-MuiFormControl-root > :nth-child(3) > .MuiButtonBase-root').click();
+      cy.get('#add-headers').click();
 
       cy.get('#header').children().should('have.length', 3);
 

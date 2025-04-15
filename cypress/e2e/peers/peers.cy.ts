@@ -194,7 +194,7 @@ describe('Peers', () => {
       cy.get('#save').click();
 
       // Show error message.
-      cy.get('.MuiAlert-message').should('have.text', 'Export failed');
+      cy.get('#alert-message').should('have.text', 'Export failed');
     });
   });
 
@@ -233,11 +233,11 @@ describe('Peers', () => {
 
     it('show error message', () => {
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('#alert-message').should('be.visible').and('contain', 'Failed to fetch');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('.MuiAlert-message').should('not.exist');
+      cy.get('#alert-message').should('not.exist');
     });
 
     it('cannot export csv file', () => {
@@ -245,7 +245,7 @@ describe('Peers', () => {
       cy.get('#save').click();
 
       // Show error message.
-      cy.get('.MuiAlert-message').should('have.text', 'Export failed');
+      cy.get('#alert-message').should('have.text', 'Export failed');
     });
   });
 
@@ -337,7 +337,7 @@ describe('Peers', () => {
 
       cy.wait(2000);
 
-      cy.get('.MuiAlert-message').should('have.text', 'scheduler cluster id 7: record not found');
+      cy.get('#alert-message').should('have.text', 'scheduler cluster id 7: record not found');
 
       cy.get('#total').should('have.text', 10);
       cy.get('#git-version').should('have.text', 4);
@@ -394,7 +394,7 @@ describe('Peers', () => {
       cy.wait(2000);
 
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('#alert-message').should('be.visible').and('contain', 'Failed to fetch');
 
       cy.get('#total').should('have.text', 10);
       cy.get('#git-version').should('have.text', 4);

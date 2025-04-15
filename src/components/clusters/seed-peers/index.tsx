@@ -915,14 +915,14 @@ export default function ShowCluster() {
                   </Button>
                   <Box sx={{ flex: '1 1 auto' }} />
                   {activeStep === steps.length - 1 ? (
-                    <LoadingButton
+                    <Button
                       endIcon={<DeleteIcon />}
                       size="small"
                       variant="contained"
                       type="submit"
                       id="save-delete"
                       sx={{
-                        '&.MuiLoadingButton-root': {
+                        '&.MuiButton-root': {
                           backgroundColor: 'var(--palette-delete-button-color)',
                           color: '#fff',
                           borderColor: 'var(--palette-save-color)',
@@ -930,7 +930,7 @@ export default function ShowCluster() {
                       }}
                     >
                       Delete
-                    </LoadingButton>
+                    </Button>
                   ) : (
                     <Button
                       disabled={Array.isArray(seedPeerInactive) && seedPeerInactive.length === 0}

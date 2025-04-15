@@ -1,7 +1,7 @@
 import React from 'react';
 import { LoadingButton } from '@mui/lab';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { ButtonProps } from '@mui/material/Button';
+import Button, { ButtonProps } from '@mui/material/Button';
 
 interface cancelLoadingButtonProps extends ButtonProps {
   loading: boolean;
@@ -10,7 +10,7 @@ interface cancelLoadingButtonProps extends ButtonProps {
 }
 
 export const CancelLoadingButton: React.FC<cancelLoadingButtonProps> = ({ loading, onClick, id, ...rest }) => (
-  <LoadingButton
+  <Button
     loading={loading}
     endIcon={<CancelIcon sx={{ color: 'var(--palette-secondary-dark)' }} />}
     size="small"
@@ -19,7 +19,7 @@ export const CancelLoadingButton: React.FC<cancelLoadingButtonProps> = ({ loadin
     loadingPosition="end"
     id={id}
     sx={{
-      '&.MuiLoadingButton-root': {
+      '&.MuiButton-root': {
         color: 'var(--palette-secondary-dark)',
         borderColor: 'var(--palette-secondary-dark)',
         backgroundColor: 'var(--palette-calcel-background-color)',
@@ -28,7 +28,7 @@ export const CancelLoadingButton: React.FC<cancelLoadingButtonProps> = ({ loadin
         backgroundColor: 'var(--palette-calcel-hover-corlor)',
         borderColor: 'var(--palette-secondary-dark)',
       },
-      '&.MuiLoadingButton-loading': {
+      '&.MuiButton-loading': {
         backgroundColor: 'var(--palette-button-loading-color)',
         color: 'var(--palette-button-loading-size-color)',
       },
@@ -39,7 +39,7 @@ export const CancelLoadingButton: React.FC<cancelLoadingButtonProps> = ({ loadin
     {...rest}
   >
     Cancel
-  </LoadingButton>
+  </Button>
 );
 
 interface saveLoadingButtonProps {
@@ -65,7 +65,7 @@ export const SavelLoadingButton: React.FC<saveLoadingButtonProps> = ({
   };
 
   return (
-    <LoadingButton
+    <Button
       loading={loading}
       endIcon={endIcon}
       size="small"
@@ -74,7 +74,7 @@ export const SavelLoadingButton: React.FC<saveLoadingButtonProps> = ({
       loadingPosition="end"
       id={id}
       sx={{
-        '&.MuiLoadingButton-root': {
+        '&.MuiButton-root': {
           background: 'var(--palette-button-color)',
           color: 'var(--palette-button-text-color)',
           borderColor: 'var(--palette-button-color)',
@@ -83,7 +83,7 @@ export const SavelLoadingButton: React.FC<saveLoadingButtonProps> = ({
           backgroundColor: 'var(--palette-hover-button-text-color)',
           borderColor: 'var(--palette-hover-button-text-color)',
         },
-        '&.MuiLoadingButton-loading': {
+        '&.MuiButton-loading': {
           backgroundColor: 'var(--palette-button-loading-color)',
           color: 'var(--palette-button-loading-size-color)',
           borderColor: 'var(--palette-button-loading-color)',
@@ -94,7 +94,7 @@ export const SavelLoadingButton: React.FC<saveLoadingButtonProps> = ({
       {...rest}
     >
       {text}
-    </LoadingButton>
+    </Button>
   );
 };
 
@@ -113,7 +113,7 @@ export const DeleteLoadingButton: React.FC<saveLoadingButtonProps> = ({
   };
 
   return (
-    <LoadingButton
+    <Button
       loading={loading}
       endIcon={endIcon}
       size="small"
@@ -122,7 +122,7 @@ export const DeleteLoadingButton: React.FC<saveLoadingButtonProps> = ({
       loadingPosition="end"
       id={id}
       sx={{
-        '&.MuiLoadingButton-root': {
+        '&.MuiButton-root': {
           backgroundColor: 'var(--palette-delete-button-color)',
           color: 'var(--palette-common-white)',
           borderColor: 'var(--palette-delete-button-color)',
@@ -131,7 +131,7 @@ export const DeleteLoadingButton: React.FC<saveLoadingButtonProps> = ({
           backgroundColor: 'var(--palette-delete-button-hover-color)',
           borderColor: 'var(--palette-delete-button-hover-color)',
         },
-        '&.MuiLoadingButton-loading': {
+        '&.MuiButton-loading': {
           backgroundColor: 'var(--palette-delete-button-color)',
 
           borderColor: 'var(--palette-delete-button-color)',
@@ -142,6 +142,6 @@ export const DeleteLoadingButton: React.FC<saveLoadingButtonProps> = ({
       {...rest}
     >
       {text}
-    </LoadingButton>
+    </Button>
   );
 };

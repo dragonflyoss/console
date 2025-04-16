@@ -7,7 +7,7 @@ export const ColorModeContext = createContext({ toggleColorMode: () => {} });
 function App() {
   const [mode, setMode] = useState<'light' | 'dark'>(() => {
     const dataTheme = localStorage.getItem('data-theme');
-    return (dataTheme as 'light' | 'dark') || 'light';
+    return (dataTheme as 'light' | 'dark') || 'dark';
   });
 
   const colorMode = useMemo(

@@ -119,7 +119,7 @@ describe('Scheduler', () => {
       cy.get('#status')
         .should('be.visible')
         .and('contain', 'Active')
-        .and('have.css', 'background-color', 'rgb(31, 125, 83)');
+        .and('have.css', 'background-color', 'rgb(0, 129, 112)');
 
       // Show features.
       cy.get('#features').should('be.visible').and('contain', 'Schedule').and('contain', 'Preheat');
@@ -154,7 +154,7 @@ describe('Scheduler', () => {
       cy.get('#status')
         .should('be.visible')
         .and('contain', 'Inactive')
-        .and('have.css', 'background-color', 'rgb(24, 35, 15)');
+        .and('have.css', 'background-color', 'rgb(93, 95, 97)');
     });
   });
 

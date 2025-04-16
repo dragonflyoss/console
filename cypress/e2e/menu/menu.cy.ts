@@ -19,15 +19,6 @@ describe('Menu', () => {
     cy.guestSignin();
     cy.visit('/');
 
-    // Click the Toggle Dark button.
-    cy.get('#dark').click();
-
-    cy.get('.Mui-selected').invoke('text').should('contain', 'Dark');
-
-    cy.get('.Mui-selected').invoke('text').should('not.contain', 'Light');
-
-    cy.get('#main').should('have.css', 'background-color', 'rgb(31, 36, 48)');
-
     // Click the Toggle Light button.
     cy.get('#light').click();
 
@@ -36,6 +27,15 @@ describe('Menu', () => {
     cy.get('.Mui-selected').invoke('text').should('contain', 'Light');
 
     cy.get('#main').should('have.css', 'background-color', 'rgb(244, 246, 248)');
+
+    // Click the Toggle Dark button.
+    cy.get('#dark').click();
+
+    cy.get('.Mui-selected').invoke('text').should('contain', 'Dark');
+
+    cy.get('.Mui-selected').invoke('text').should('not.contain', 'Light');
+
+    cy.get('#main').should('have.css', 'background-color', 'rgb(31, 36, 48)');
   });
 
   describe('try to signin as guest user', () => {

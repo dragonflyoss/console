@@ -121,7 +121,7 @@ describe('Seed peer', () => {
       cy.get('#status')
         .should('be.visible')
         .and('contain', 'Active')
-        .and('have.css', 'background-color', 'rgb(31, 125, 83)');
+        .and('have.css', 'background-color', 'rgb(0, 129, 112)');
 
       // Show Created At.
       cy.get('#created-at').should('have.text', '2023-11-11 20:09:08');
@@ -147,7 +147,7 @@ describe('Seed peer', () => {
       cy.get('#status')
         .should('be.visible')
         .and('contain', 'Inactive')
-        .and('have.css', 'background-color', 'rgb(24, 35, 15)');
+        .and('have.css', 'background-color', 'rgb(93, 95, 97)');
     });
   });
 

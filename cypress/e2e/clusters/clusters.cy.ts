@@ -86,7 +86,7 @@ describe('Clusters', () => {
       cy.get('#default-cluster-1')
         .should('be.visible')
         .and('contain', 'Default')
-        .and('have.css', 'background-color', 'rgb(31, 125, 83)');
+        .and('have.css', 'background-color', 'rgb(0, 129, 112)');
 
       // Show cluster name.
       cy.get('#cluster-name-1').should('be.visible').and('contain', 'cluster-1');
@@ -108,7 +108,7 @@ describe('Clusters', () => {
       cy.get('#default-cluster-2')
         .should('be.visible')
         .and('contain', 'Non-Default')
-        .and('have.css', 'background-color', 'rgb(24, 35, 15)');
+        .and('have.css', 'background-color', 'rgb(93, 95, 97)');
     });
   });
 
@@ -201,7 +201,7 @@ describe('Clusters', () => {
       cy.get('#default-cluster-8')
         .should('be.visible')
         .and('contain', 'Non-Default')
-        .and('have.css', 'background-color', 'rgb(24, 35, 15)');
+        .and('have.css', 'background-color', 'rgb(93, 95, 97)');
 
       cy.get('#cluster-name-8').should('be.visible').and('contain', 'cluster-8');
 

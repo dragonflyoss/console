@@ -74,7 +74,7 @@ describe('Seed peers', () => {
       cy.get(':nth-child(1) > :nth-child(8) > .MuiChip-root')
         .should('be.visible')
         .and('contain', 'Active')
-        .and('have.css', 'background-color', 'rgb(31, 125, 83)');
+        .and('have.css', 'background-color', 'rgb(0, 129, 112)');
     });
 
     it('can display seed peers card', () => {
@@ -91,7 +91,7 @@ describe('Seed peers', () => {
       cy.get('#card-state-7')
         .should('be.visible')
         .and('have.text', 'Active')
-        .and('have.css', 'background-color', 'rgba(0, 167, 111, 0.1)');
+        .and('have.css', 'background-color', 'rgba(0, 129, 112, 0.2)');
 
       // Show type
       cy.get('#card-type-7').should('have.text', 'Super');
@@ -329,7 +329,7 @@ describe('Seed peers', () => {
       cy.get(':nth-child(5) > :nth-child(8) > .MuiChip-root')
         .should('be.visible')
         .and('contain', 'Inactive')
-        .and('have.css', 'background-color', 'rgb(24, 35, 15)');
+        .and('have.css', 'background-color', 'rgb(93, 95, 97)');
 
       // Go to last page.
       cy.get(':nth-child(7) > .MuiButtonBase-root').click();

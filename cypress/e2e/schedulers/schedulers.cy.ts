@@ -858,6 +858,7 @@ describe('Schedulers', () => {
       cy.wait(6000);
       cy.get('#failure').should('exist');
       cy.get('#inactive-header').click();
+
       // Show error message.
       cy.get('.MuiAccordionDetails-root > .MuiTypography-root')
         .should('be.visible')
@@ -915,8 +916,6 @@ describe('Schedulers', () => {
       cy.get('.css-xmqx0h').should('be.visible');
       cy.get('#failure').should('not.exist');
 
-      cy.wait(400 * schedulers.length);
-
       // Show number of deleted schedulers.
       cy.get('.MuiAlert-message').should('have.text', 'You have successfully removed 34 inactive schedulers!');
 
@@ -951,6 +950,7 @@ describe('Schedulers', () => {
       cy.get('#deleteAllInactive').type('DELETE{enter}');
       cy.get('#failure').should('exist');
       cy.get('#inactive-header').click();
+
       // Show error message.
       cy.get('.MuiAccordionDetails-root > .MuiTypography-root')
         .should('be.visible')

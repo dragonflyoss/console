@@ -13,7 +13,6 @@ import {
 } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import styles from './information.module.css';
 import Card from '../card';
 import HelpIcon from '@mui/icons-material/Help';
 import { useContext, useState } from 'react';
@@ -30,24 +29,11 @@ import { ReactComponent as CIDRs } from '../../assets/images/cluster/cidrs.svg';
 import { ReactComponent as Hostnames } from '../../assets/images/cluster/hostnames.svg';
 import { ReactComponent as Delete } from '../../assets/images/cluster/delete.svg';
 import { CancelLoadingButton, DeleteLoadingButton } from '../loading-button';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Chart,
-} from 'chart.js';
 import { useNavigate, useParams } from 'react-router-dom';
 import { deleteCluster } from '../../lib/api';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getDatetime } from '../../lib/utils';
-
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
-Chart.defaults.font.family = 'mabry-light';
+import styles from './information.module.css';
 
 export default function Information() {
   const [openCIDRs, setOpenCIDRs] = useState(false);
@@ -64,6 +50,7 @@ export default function Information() {
   const params = useParams();
   const navigate = useNavigate();
   const [, setCopyToClipboard] = useCopyToClipboard();
+
   const copyClusterID = (title: string, clusterID: number) => {
     if (title === 'schedulerClusterID') {
       setCopyToClipboard(String(clusterID));
@@ -97,6 +84,7 @@ export default function Information() {
     if (reason === 'clickaway') {
       return;
     }
+
     setOpenDeleteCluster(false);
   };
 
@@ -142,6 +130,29 @@ export default function Information() {
           {errorMessageText}
         </Alert>
       </Snackbar>
+      <Dialog
+        open={openDeleteCluster}
+        onClose={handleDeleteClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Delete className={styles.deleteClusterIcon} />
+            <Typography pt="1rem">Are you sure you want to delet this cluster?</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
+            <CancelLoadingButton id="cancelDeleteCluster" loading={deleteLoadingButton} onClick={handleDeleteClose} />
+            <DeleteLoadingButton
+              loading={deleteLoadingButton}
+              endIcon={<DeleteIcon />}
+              id="deleteCluster"
+              onClick={handleDeleteCluster}
+              text="Delete"
+            />
+          </Box>
+        </DialogContent>
+      </Dialog>
       <Box className={styles.container}>
         <Typography variant="h6" fontFamily="mabry-bold">
           Cluster
@@ -154,13 +165,7 @@ export default function Information() {
             }}
             size="small"
             variant="contained"
-            className={styles.updateButton}
-            sx={{
-              background: 'var(--palette-button-color)',
-              color: 'var(--palette-button-text-color)',
-              ':hover': { backgroundColor: 'var(--palette-hover-button-text-color)' },
-              mr: '1.5rem',
-            }}
+            className={styles.button}
           >
             <Edit className={styles.updateClusterIcon} />
             Update
@@ -172,12 +177,7 @@ export default function Information() {
             onClick={() => {
               setOpenDeleteCluster(true);
             }}
-            className={styles.deleteButton}
-            sx={{
-              background: 'var(--palette-button-color)',
-              color: 'var(--palette-button-text-color)',
-              ':hover': { backgroundColor: 'var(--palette-hover-button-text-color)' },
-            }}
+            className={styles.button}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
             Delete
@@ -190,7 +190,7 @@ export default function Information() {
             <InformationCluster className={styles.clusterIcon} />
             <Box>
               <Typography id="name" variant="h6" component="div" className={styles.name}>
-                {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : cluster.name || '-'}
+                {isLoading ? <Skeleton className={styles.loading} /> : cluster.name || '-'}
               </Typography>
               <Typography
                 id="description"
@@ -198,7 +198,11 @@ export default function Information() {
                 component="div"
                 color="var(--palette-text-palette-text-secondary)"
               >
-                {isLoading ? <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} /> : cluster?.bio || '-'}
+                {isLoading ? (
+                  <Skeleton data-testid="cluster-loading" className={styles.loading} />
+                ) : (
+                  cluster?.bio || '-'
+                )}
               </Typography>
             </Box>
           </Box>
@@ -229,7 +233,7 @@ export default function Information() {
                 />
                 <Typography id="default" variant="body2" component="div" className={styles.clusterContent}>
                   {isLoading ? (
-                    <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
+                    <Skeleton data-testid="cluster-loading" className={styles.loading} />
                   ) : cluster.is_default ? (
                     'Yes'
                   ) : (
@@ -259,7 +263,7 @@ export default function Information() {
                   className={styles.clusterContent}
                 >
                   {isLoading ? (
-                    <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
+                    <Skeleton data-testid="cluster-loading" className={styles.loading} />
                   ) : (
                     cluster?.scheduler_cluster_id || 0
                   )}
@@ -322,7 +326,7 @@ export default function Information() {
                   className={styles.clusterContent}
                 >
                   {isLoading ? (
-                    <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
+                    <Skeleton data-testid="cluster-loading" className={styles.loading} />
                   ) : (
                     cluster?.seed_peer_cluster_id || 0
                   )}
@@ -374,14 +378,14 @@ export default function Information() {
                 </MuiTooltip>
               </Box>
               <Typography id="name" variant="body2" component="div" className={styles.clusterContent}>
-                {isLoading ? <Skeleton sx={{ width: '8rem' }} /> : getDatetime(cluster.created_at)}
+                {isLoading ? <Skeleton className={styles.loading} /> : getDatetime(cluster.created_at)}
               </Typography>
             </Box>
           </Box>
         </Card>
         <Box className={styles.wrapper}>
           <Box className={styles.scopesWrapper}>
-            <Typography variant="body1" sx={{ mr: '0.4rem', fontFamily: 'mabry-bold' }}>
+            <Typography variant="body1" className={styles.informationTitle}>
               Scopes
             </Typography>
             <MuiTooltip
@@ -393,7 +397,7 @@ export default function Information() {
             </MuiTooltip>
           </Box>
           <Box className={styles.configTitle}>
-            <Typography variant="body1" sx={{ mr: '0.4rem', fontFamily: 'mabry-bold' }}>
+            <Typography variant="body1" className={styles.informationTitle}>
               Config
             </Typography>
             <MuiTooltip title="The configuration for P2P downloads." placement="top">
@@ -420,7 +424,7 @@ export default function Information() {
               </Box>
               <Box className={styles.locationTextContainer}>
                 {isLoading ? (
-                  <Skeleton data-testid="cluster-loading" sx={{ width: '8rem' }} />
+                  <Skeleton data-testid="cluster-loading" className={styles.loading} />
                 ) : cluster.scopes?.location ? (
                   <Paper id="location" elevation={0} className={styles.cidrsContent}>
                     <MuiTooltip title={cluster?.scopes?.location || '-' || '-'} placement="top">
@@ -452,7 +456,7 @@ export default function Information() {
                 </Box>
                 <Paper id="idc-total" elevation={0} className={styles.totalContainer}>
                   <Total className={styles.totalIcon} />
-                  <Typography variant="body2" component="div" color="var(--palette-description-color)" pl="0.3rem">
+                  <Typography variant="body2" component="div" className={styles.totalText}>
                     {`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`}
                   </Typography>
                 </Paper>
@@ -460,7 +464,7 @@ export default function Information() {
               <Box className={styles.cidrsTags}>
                 {cluster?.scopes?.idc ? (
                   <>
-                    <Box className={styles.cidrWrapper}>
+                    <Box className={styles.cidrsWrapper}>
                       <Paper id="idc-1" elevation={0} className={styles.cidrsContent}>
                         <MuiTooltip title={cluster?.scopes?.idc.split('|')[0] || '-'} placement="top">
                           <Typography variant="body2" component="div" className={styles.cidrsText}>
@@ -468,7 +472,7 @@ export default function Information() {
                           </Typography>
                         </MuiTooltip>
                       </Paper>
-                      {cluster?.scopes?.idc.split('|').length > 1 ? (
+                      {cluster?.scopes?.idc.split('|').length > 1 && (
                         <Paper id="idc-2" elevation={0} className={styles.cidrsContent}>
                           <MuiTooltip title={cluster?.scopes?.idc.split('|')[1] || ''} placement="top">
                             <Typography variant="body2" component="div" className={styles.cidrsText}>
@@ -476,10 +480,8 @@ export default function Information() {
                             </Typography>
                           </MuiTooltip>
                         </Paper>
-                      ) : (
-                        <></>
                       )}
-                      {cluster?.scopes?.idc.split('|').length > 2 ? (
+                      {cluster?.scopes?.idc.split('|').length > 2 && (
                         <Paper id="idc-3" elevation={0} className={styles.cidrsContent}>
                           <MuiTooltip title={cluster?.scopes?.idc.split('|')[2] || ''} placement="top">
                             <Typography variant="body2" component="div" className={styles.cidrsText}>
@@ -487,10 +489,8 @@ export default function Information() {
                             </Typography>
                           </MuiTooltip>
                         </Paper>
-                      ) : (
-                        <></>
                       )}
-                      {cluster?.scopes?.idc.split('|').length > 3 ? (
+                      {cluster?.scopes?.idc.split('|').length > 3 && (
                         <Paper id="idc-4" elevation={0} className={styles.cidrsContent}>
                           <MuiTooltip title={cluster?.scopes?.idc.split('|')[3] || ''} placement="top">
                             <Typography variant="body2" component="div" className={styles.cidrsText}>
@@ -498,11 +498,9 @@ export default function Information() {
                             </Typography>
                           </MuiTooltip>
                         </Paper>
-                      ) : (
-                        <></>
                       )}
                     </Box>
-                    {cluster?.scopes?.idc.split('|').length > 2 ? (
+                    {cluster?.scopes?.idc.split('|').length > 2 && (
                       <IconButton
                         size="small"
                         id="idc"
@@ -512,8 +510,6 @@ export default function Information() {
                       >
                         <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                       </IconButton>
-                    ) : (
-                      <></>
                     )}
                   </>
                 ) : (
@@ -561,7 +557,7 @@ export default function Information() {
                 </Box>
                 <Paper id="cidrs-total" elevation={0} className={styles.totalContainer}>
                   <Total className={styles.totalIcon} />
-                  <Typography variant="body2" component="div" color="var(--palette-description-color)" pl="0.3rem">
+                  <Typography variant="body2" component="div" className={styles.totalText}>
                     {`Total: ${cluster?.scopes?.cidrs?.length || 0}`}
                   </Typography>
                 </Paper>
@@ -572,7 +568,7 @@ export default function Information() {
                 <Box className={styles.cidrsTags}>
                   {Array.isArray(cluster?.scopes?.cidrs) && cluster?.scopes?.cidrs?.length > 0 ? (
                     <>
-                      <Box className={styles.cidrWrapper}>
+                      <Box className={styles.cidrsWrapper}>
                         <Paper id="cidrs-1" elevation={0} className={styles.cidrsContent}>
                           <MuiTooltip title={cluster?.scopes?.cidrs[0] || '-'} placement="top">
                             <Typography variant="body2" className={styles.cidrsText}>
@@ -580,7 +576,7 @@ export default function Information() {
                             </Typography>
                           </MuiTooltip>
                         </Paper>
-                        {cluster?.scopes?.cidrs?.length > 1 ? (
+                        {cluster?.scopes?.cidrs?.length > 1 && (
                           <Paper id="cidrs-2" elevation={0} className={styles.cidrsContent}>
                             <MuiTooltip title={cluster?.scopes?.cidrs[1] || ''} placement="top">
                               <Typography variant="body2" className={styles.cidrsText}>
@@ -588,10 +584,8 @@ export default function Information() {
                               </Typography>
                             </MuiTooltip>
                           </Paper>
-                        ) : (
-                          <></>
                         )}
-                        {cluster?.scopes?.cidrs?.length > 2 ? (
+                        {cluster?.scopes?.cidrs?.length > 2 && (
                           <Paper id="cidrs-3" elevation={0} className={styles.cidrsContent}>
                             <MuiTooltip title={cluster?.scopes?.cidrs[2] || ''} placement="top">
                               <Typography variant="body2" className={styles.cidrsText}>
@@ -599,10 +593,8 @@ export default function Information() {
                               </Typography>
                             </MuiTooltip>
                           </Paper>
-                        ) : (
-                          <></>
                         )}
-                        {cluster?.scopes?.cidrs?.length > 3 ? (
+                        {cluster?.scopes?.cidrs?.length > 3 && (
                           <Paper id="cidrs-4" elevation={0} className={styles.cidrsContent}>
                             <MuiTooltip title={cluster?.scopes?.cidrs[3] || ''} placement="top">
                               <Typography variant="body2" className={styles.cidrsText}>
@@ -610,11 +602,9 @@ export default function Information() {
                               </Typography>
                             </MuiTooltip>
                           </Paper>
-                        ) : (
-                          <></>
                         )}
                       </Box>
-                      {cluster?.scopes?.cidrs?.length > 2 ? (
+                      {cluster?.scopes?.cidrs?.length > 2 && (
                         <IconButton
                           size="small"
                           id="cidrs"
@@ -624,8 +614,6 @@ export default function Information() {
                         >
                           <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                         </IconButton>
-                      ) : (
-                        <></>
                       )}
                     </>
                   ) : (
@@ -666,9 +654,7 @@ export default function Information() {
                     Hostnames
                   </Typography>
                   <MuiTooltip
-                    title={
-                      'The cluster needs to serve all peers in hostname. The input parameter is the multiple hostname regexes. The hostname will be reported in the peer configuration when the peer is started. When the hostname matches the multiple hostname regexes in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. Hostname has higher priority than IDC in the scopes. Hostname has priority equal to CIDRs in the scopes.'
-                    }
+                    title="The cluster needs to serve all peers in hostname. The input parameter is the multiple hostname regexes. The hostname will be reported in the peer configuration when the peer is started. When the hostname matches the multiple hostname regexes in the cluster, the peer will preferentially use the scheduler and the seed peer of the cluster. Hostname has higher priority than IDC in the scopes. Hostname has priority equal to CIDRs in the scopes."
                     placement="top"
                   >
                     <HelpIcon className={styles.descriptionIcon} />
@@ -676,7 +662,7 @@ export default function Information() {
                 </Box>
                 <Paper id="hostnames-total" elevation={0} className={styles.totalContainer}>
                   <Total className={styles.totalIcon} />
-                  <Typography variant="body2" component="div" color="var(--palette-description-color)" pl="0.3rem">
+                  <Typography variant="body2" component="div" className={styles.totalText}>
                     {`Total: ${cluster?.scopes?.idc !== '' ? cluster?.scopes?.idc.split('|').length : 0}`}
                   </Typography>
                 </Paper>
@@ -687,7 +673,7 @@ export default function Information() {
                 <Box className={styles.cidrsTags}>
                   {Array.isArray(cluster?.scopes?.hostnames) && cluster?.scopes?.hostnames?.length > 0 ? (
                     <>
-                      <Box className={styles.cidrWrapper}>
+                      <Box className={styles.cidrsWrapper}>
                         <Paper id="hostname-1" elevation={0} className={styles.cidrsContent}>
                           <MuiTooltip title={cluster?.scopes?.hostnames[0] || '-'} placement="top">
                             <Typography variant="body2" className={styles.cidrsText}>
@@ -695,7 +681,7 @@ export default function Information() {
                             </Typography>
                           </MuiTooltip>
                         </Paper>
-                        {cluster?.scopes?.hostnames?.length > 1 ? (
+                        {cluster?.scopes?.hostnames?.length > 1 && (
                           <Paper id="hostname-2" elevation={0} className={styles.cidrsContent}>
                             <MuiTooltip title={cluster?.scopes?.hostnames[1] || ''} placement="top">
                               <Typography variant="body2" className={styles.cidrsText}>
@@ -703,10 +689,8 @@ export default function Information() {
                               </Typography>
                             </MuiTooltip>
                           </Paper>
-                        ) : (
-                          <></>
                         )}
-                        {cluster?.scopes?.hostnames?.length > 2 ? (
+                        {cluster?.scopes?.hostnames?.length > 2 && (
                           <Paper id="hostname-3" elevation={0} className={styles.cidrsContent}>
                             <MuiTooltip title={cluster?.scopes?.hostnames[2] || ''} placement="top">
                               <Typography variant="body2" className={styles.cidrsText}>
@@ -714,10 +698,8 @@ export default function Information() {
                               </Typography>
                             </MuiTooltip>
                           </Paper>
-                        ) : (
-                          <></>
                         )}
-                        {cluster?.scopes?.hostnames?.length > 3 ? (
+                        {cluster?.scopes?.hostnames?.length > 3 && (
                           <Paper id="hostname-4" elevation={0} className={styles.cidrsContent}>
                             <MuiTooltip title={cluster?.scopes?.hostnames[3] || ''} placement="top">
                               <Typography variant="body2" className={styles.cidrsText}>
@@ -725,11 +707,9 @@ export default function Information() {
                               </Typography>
                             </MuiTooltip>
                           </Paper>
-                        ) : (
-                          <></>
                         )}
                       </Box>
-                      {cluster?.scopes?.hostnames?.length > 2 ? (
+                      {cluster?.scopes?.hostnames?.length > 2 && (
                         <IconButton
                           size="small"
                           id="hostnames"
@@ -739,8 +719,6 @@ export default function Information() {
                         >
                           <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
                         </IconButton>
-                      ) : (
-                        <></>
                       )}
                     </>
                   ) : (
@@ -888,29 +866,6 @@ export default function Information() {
           </Card>
         </Box>
       </Box>
-      <Dialog
-        open={openDeleteCluster}
-        onClose={handleDeleteClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Delete className={styles.deleteClusterIcon} />
-            <Typography pt="1rem">Are you sure you want to delet this cluster?</Typography>
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
-            <CancelLoadingButton id="cancelDeleteCluster" loading={deleteLoadingButton} onClick={handleDeleteClose} />
-            <DeleteLoadingButton
-              loading={deleteLoadingButton}
-              endIcon={<DeleteIcon />}
-              id="deleteCluster"
-              onClick={handleDeleteCluster}
-              text="Delete"
-            />
-          </Box>
-        </DialogContent>
-      </Dialog>
     </Box>
   );
 }

@@ -5,6 +5,19 @@
   align-items: center;
 }
 
+.button {
+  background-color: var(--palette-button-color) !important;
+  color: var(--palette-button-text-color) !important;
+}
+
+.button:hover {
+  background-color: var(--palette-hover-button-text-color);
+}
+
+.button:nth-child(2) {
+  margin-left: 1.5rem;
+}
+
 .wrapper {
   padding-top: 1.5rem;
   width: 100%;
@@ -138,6 +151,11 @@
   height: 1rem;
 }
 
+.totalText {
+  color: var(--palette-description-color);
+  padding-left: 0.3rem;
+}
+
 .locationTitle {
   display: flex;
   align-items: center;
@@ -146,6 +164,10 @@
 .locationTextContainer {
   display: flex;
   align-items: flex-end;
+}
+
+.loading {
+  width: 8rem;
 }
 
 .cidrsContainer {
@@ -214,7 +236,7 @@
   }
 }
 
-.cidrWrapper {
+.cidrsWrapper {
   display: flex;
   width: 80%;
 }
@@ -242,6 +264,11 @@
   display: flex;
   align-items: center;
   width: 70%;
+}
+
+.informationTitle {
+  font-family: 'mabry-bold';
+  margin-right: 0.4rem;
 }
 
 .configTitle {
@@ -287,6 +314,13 @@
   padding: 0.4rem 0.8rem;
 }
 
+.cidrsIcon {
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-right: 0.3rem;
+  color: var(--palette-save-color);
+}
+
 .cidrsDialogContainer {
   gap: calc(1.5rem);
   display: grid;
@@ -299,11 +333,4 @@
   align-items: center;
   justify-content: flex-start;
   padding: 0.4rem 0.8rem;
-}
-
-.cidrsIcon {
-  width: 1.6rem;
-  height: 1.6rem;
-  margin-right: 0.3rem;
-  color: var(--palette-save-color);
 }

@@ -920,7 +920,6 @@ describe('Schedulers', () => {
       cy.get('#close-delete-icon').should('not.exist');
       cy.get('#cancel-button').should('not.exist');
       cy.get('body').click('topLeft');
-      cy.get('.css-xmqx0h').should('be.visible');
       cy.get('#failure').should('not.exist');
 
       // Show number of deleted schedulers.

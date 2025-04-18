@@ -105,6 +105,15 @@
   width: 23rem;
 }
 
+.searchIconContainer {
+  width: 2.2rem;
+  height: 2.2rem;
+  padding-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .nameText {
   font-family: 'mabry-bold' !important;
 }
@@ -150,6 +159,21 @@
 
 .loadingCard {
   width: 33.33%;
+}
+
+.divider {
+  border-style: dashed !important;
+  border-color: rgba(145 158 171 / 0.2);
+  border-width: 0px 0px thin;
+  margin: 1rem 0 !important;
+}
+
+.clusterNameWrapper {
+  padding: 1.2rem 1.2rem 0 1.2rem;
+}
+
+.clusterDefaultWrapper {
+  padding: 0 1.2rem 1.2rem 1.2rem;
 }
 
 .card {

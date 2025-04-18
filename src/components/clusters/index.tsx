@@ -348,7 +348,7 @@ export default function Clusters() {
             onInputChange={(_event, newInputValue) => {
               handleInputChange(newInputValue);
             }}
-            options={(Array.isArray(clusterCount) && clusterCount.map((option) => option?.name)) || ['']}
+            options={(Array.isArray(clusterCount) && clusterCount?.map((option) => option?.name)) || ['']}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -357,29 +357,11 @@ export default function Clusters() {
                 InputProps={{
                   ...params.InputProps,
                   startAdornment: searchIconISLodaing ? (
-                    <Box
-                      sx={{
-                        width: '2.2rem',
-                        height: '2.2rem',
-                        pl: '0.5rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
+                    <Box className={styles.searchIconContainer}>
                       <SearchCircularProgress />
                     </Box>
                   ) : (
-                    <Box
-                      sx={{
-                        width: '2.2rem',
-                        height: '2.2rem',
-                        pl: '0.5rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
+                    <Box className={styles.searchIconContainer}>
                       <SearchIcon sx={{ color: '#919EAB' }} />
                     </Box>
                   ),
@@ -393,33 +375,24 @@ export default function Clusters() {
         {isLoading ? (
           <Box id="clustersCard" className={styles.loadingCard}>
             <Card>
-              <Box className={styles.clusterListContent}>
-                <Box p="1.2rem 1.2rem 0 1.2rem">
-                  <Box display="flex" mb="0.5rem" alignItems="center">
-                    <ClusterID className={styles.idIcon} />
-                    <Skeleton data-testid="isloading" sx={{ width: '1rem', ml: '0.4rem' }} />
-                  </Box>
-                  <Typography variant="h6" mb="0.5rem" className={styles.nameText}>
-                    <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
-                  </Typography>
-                  <Box display="flex">
-                    <Skeleton data-testid="isloading" sx={{ width: '15rem' }} />
-                  </Box>
+              <Box className={styles.clusterNameWrapper}>
+                <Box display="flex" mb="0.5rem" alignItems="center">
+                  <ClusterID className={styles.idIcon} />
+                  <Skeleton data-testid="isloading" sx={{ width: '1rem', ml: '0.4rem' }} />
                 </Box>
-                <Divider
-                  sx={{
-                    borderStyle: 'dashed',
-                    borderColor: 'rgba(145 158 171 / 0.2)',
-                    borderWidth: '0px 0px thin',
-                    m: '1rem 0',
-                  }}
-                />
-                <Box p="0 1.2rem 1.2rem 1.2rem">
-                  <Skeleton data-testid="isloading" sx={{ width: '4rem', height: '1.4rem', mb: '0.8rem' }} />
-                  <Box className={styles.creatTimeContainer}>
-                    <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
-                    <Skeleton variant="circular" width={40} height={40} />
-                  </Box>
+                <Typography variant="h6" mb="0.5rem" className={styles.nameText}>
+                  <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
+                </Typography>
+                <Box display="flex">
+                  <Skeleton data-testid="isloading" sx={{ width: '15rem' }} />
+                </Box>
+              </Box>
+              <Divider className={styles.divider} />
+              <Box className={styles.clusterDefaultWrapper}>
+                <Skeleton data-testid="isloading" sx={{ width: '4rem', height: '1.4rem', mb: '0.8rem' }} />
+                <Box className={styles.creatTimeContainer}>
+                  <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
+                  <Skeleton variant="circular" width={40} height={40} />
                 </Box>
               </Box>
             </Card>
@@ -447,7 +420,7 @@ export default function Clusters() {
               allClusters.map((item) => (
                 <Card key={item.id} id="clusters" className={styles.card}>
                   <Box className={styles.clusterListContent}>
-                    <Box p="1.2rem 1.2rem 0 1.2rem">
+                    <Box className={styles.clusterNameWrapper}>
                       <Box display="flex" mb="0.5rem" alignItems="center">
                         <ClusterID className={styles.idIcon} />
                         <Typography id={`cluster-id-${item.id}`} variant="subtitle1" className={styles.idText}>
@@ -474,15 +447,8 @@ export default function Clusters() {
                         </Tooltip>
                       </Box>
                     </Box>
-                    <Divider
-                      sx={{
-                        borderStyle: 'dashed',
-                        borderColor: 'var(--palette-palette-divider)',
-                        borderWidth: '0px 0px thin',
-                        m: '1rem 0',
-                      }}
-                    />
-                    <Box p="0 1.2rem 1.2rem 1.2rem">
+                    <Divider className={styles.divider} />
+                    <Box className={styles.clusterDefaultWrapper}>
                       <Paper
                         elevation={0}
                         id={`default-cluster-${item.id || 0}`}

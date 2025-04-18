@@ -63,7 +63,7 @@ describe('Cluster', () => {
 
   describe('when data is loaded', () => {
     it('can display breadcrumb', () => {
-      // Show isloading.
+      // Display is loading.
       cy.get('[data-testid="cluster-loading"]').should('be.exist');
       cy.url().should('include', '/clusters/1');
       cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
@@ -71,16 +71,16 @@ describe('Cluster', () => {
         .and('contain', 'cluster-1');
       cy.get('.MuiBreadcrumbs-ol > :nth-child(1) > .MuiTypography-root').click();
 
-      // Does not show isloading.
+      // Load does not exist.
       cy.get('[data-testid="cluster-loading"]').should('not.exist');
       cy.url().should('include', '/clusters');
     });
 
     it('can display information', () => {
-      // Show cluster name.
+      // Display the cluster name
       cy.get('#name').should('be.visible').and('contain', 'cluster-1');
 
-      // Show cluster description.
+      // Display the cluster description.
       cy.get('#description')
         .should('be.visible')
         .and(
@@ -88,28 +88,28 @@ describe('Cluster', () => {
           'Cluster-1 is a high-performance computing cluster located in China, specifically in Hangzhou and Beijing data centers.',
         );
 
-      // Show whether it is the default cluster.
+      // Displays whether it is the default cluster.
       cy.get('#default').should('be.visible').and('contain', 'Yes');
 
-      // Show scheduler cluster id.
+      // Displays the scheduler cluster ID.
       cy.get('#scheduler-cluster-id').should('be.visible').and('contain', '1');
 
-      // Show seed peer cluster id.
+      // Displays the seed peer cluster ID.
       cy.get('#seed-peer-cluster-id').should('be.visible').and('contain', '1');
     });
 
     it('can display scopes', () => {
-      // Show location.
+      // Displays the location.
       cy.get('#location').should('be.visible').and('contain', 'China|Hang|Zhou');
 
-      // Show idc.
+      // Displays the idc.
       cy.get('#idc-1').should('be.visible').and('contain', 'Hangzhou');
       cy.get('#idc-2').should('be.visible').and('contain', 'Shanghai');
 
-      // IDC is not visible.
+      // IDC does not exist.
       cy.get('#idc-3').should('not.be.visible', 'Beijing');
 
-      // The number of idc is 2 and the button is no longer displayed.
+      // The number of IDC is 2 and the More button is no longer displayed.
       cy.get('#idc').should('exist').click();
 
       // Click the button to show more idc.
@@ -121,7 +121,7 @@ describe('Cluster', () => {
       cy.get('#idc-total').should('contain', 'Total: 5');
       cy.get('body').click('topLeft');
 
-      // Show CIDRs
+      // Displays the CIDRs
       cy.get('#cidrs-2').should('be.visible').and('contain', '192.168.0.0/16');
       cy.get('#cidrs-total').should('contain', 'Total: 5');
 
@@ -133,14 +133,14 @@ describe('Cluster', () => {
       cy.get('.MuiDialogContent-root').should('be.visible').and('contain', '10.0.0.0/8');
       cy.get('body').click('topLeft');
 
-      // The number of CIDRs displayed is 3.
+      // The CIDR number should be 3.
       cy.get('.MuiDialogContent-root > :nth-child(1)').should('have.text', '10.0.0.0/8');
       cy.get('.MuiDialogContent-root > :nth-child(2)').should('have.text', '192.168.0.0/16');
 
       // CIDRs is not visible.
       cy.get('.MuiDialogContent-root > :nth-child(3)').should('not.be.visible', '172.16.0.0/12');
 
-      // The number of hostnames displayed is 3.
+      // The number of hostnames should be 3.
       cy.get('#hostname-1').should('have.text', 'cluster-1');
       cy.get('#hostname-2').should('have.text', 'cluster-2');
 
@@ -289,7 +289,7 @@ describe('Cluster', () => {
     });
 
     it('unable to display breadcrumb', () => {
-      // Show isloading.
+      // Display is loading.
       cy.get('[data-testid="cluster-loading"]').should('be.exist');
 
       cy.url().should('include', '/clusters/1');
@@ -309,20 +309,20 @@ describe('Cluster', () => {
     });
 
     it('unable to display scopes', () => {
-      // Show location.
+      // location should be empty.
       cy.get('#no-location').should('have.text', '-');
 
-      // Show idc.
+      // idc should be empty.
       cy.get('#idc').should('not.exist');
       cy.get('#no-idc').should('have.text', '-');
       cy.get('#idc-total').should('have.text', 'Total: 0');
 
-      // Show cidrs.
+      // cidrs should be empty..
       cy.get('#cidrs').should('not.exist');
       cy.get('#no-cidrs').should('have.text', '-');
       cy.get('#cidrs-total').should('have.text', 'Total: 0');
 
-      // Show hostnames.
+      // hostnames should be empty..
       cy.get('#hostnames').should('not.exist');
       cy.get('#no-hostnames').should('have.text', '-');
       cy.get('#hostnames-total').should('have.text', 'Total: 0');
@@ -352,13 +352,13 @@ describe('Cluster', () => {
 
     cy.visit('clusters/1');
 
-    // Show isloading.
+    // Display is loading.
     cy.get('[data-testid="cluster-loading"]').should('be.exist');
 
-    // Show error message.
+    // An error message should be displayed.
     cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
 
-    // Close error message.
+    // Close the error message prompt.
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
     cy.get('.MuiAlert-message').should('not.exist');
   });
@@ -483,11 +483,11 @@ describe('Cluster', () => {
         },
       );
 
+      // Click the delete button.
       cy.get('#delete-cluster').click();
-
       cy.get('#deleteCluster').click();
 
-      // Show error message.
+      // An error message should be displayed.
       cy.get('.MuiAlert-message').should('have.text', 'scheduler cluster exists scheduler');
     });
 
@@ -548,12 +548,11 @@ describe('Cluster', () => {
         },
       );
 
+      // Click the delete button.
       cy.get('#delete-cluster').click();
-
-      // Confirm delete.
       cy.get('#deleteCluster').click();
 
-      // Show error message.
+      // An error message should be displayed.
       cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch');
     });
 
@@ -573,6 +572,7 @@ describe('Cluster', () => {
 
       cy.guestSignin();
 
+      // The cluster name should be cluster-10.
       cy.get('#cluster-name-10').should('be.visible').and('contain', 'cluster-10');
 
       cy.get('#show-cluster-10').click();
@@ -594,10 +594,10 @@ describe('Cluster', () => {
 
       cy.get('#delete-cluster').click();
 
-      // Confirm delete
+      // Click the Confirm Deletion button.
       cy.get('#deleteCluster').click();
 
-      // Show error message.
+      // An error message should be displayed.
       cy.get('.MuiAlert-message').should('have.text', 'permission deny');
     });
   });

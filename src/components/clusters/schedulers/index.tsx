@@ -45,17 +45,6 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Chart,
-} from 'chart.js';
-import {
   getSchedulers,
   deleteScheduler,
   getSchedulersResponse,
@@ -67,7 +56,6 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
-import { LoadingButton } from '@mui/lab';
 import styles from './index.module.css';
 import _ from 'lodash';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
@@ -106,13 +94,10 @@ import { ReactComponent as Preheat } from '../../../assets/images/cluster/prehea
 import { ReactComponent as Schedule } from '../../../assets/images/cluster/scheduler.svg';
 import { ReactComponent as Count } from '../../../assets/images/cluster/scheduler/number.svg';
 
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
-Chart.defaults.font.family = 'mabry-light';
-
 function CircularProgressWithLabel(props: LinearProgressProps & { value: number }) {
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', width: '70%', pt: '0.4rem' }}>
-      <Box sx={{ width: '100%', mr: 1 }}>
+    <Box className={styles.progressBarWrapper}>
+      <Box className={styles.progressBar}>
         <LinearProgress
           color="error"
           sx={{ height: '0.6rem', borderRadius: '0.2rem' }}
@@ -120,7 +105,7 @@ function CircularProgressWithLabel(props: LinearProgressProps & { value: number 
           {...props}
         />
       </Box>
-      <Box sx={{ minWidth: 35 }}>
+      <Box className={styles.progressBarLabelWrapper}>
         <Typography variant="body2" fontFamily="mabry-bold" color="text.secondary">{`${Math.round(
           props.value,
         )}%`}</Typography>
@@ -605,12 +590,7 @@ export default function ShowCluster() {
             onClick={() => {
               setOpenDeleteInactive(true);
             }}
-            className={styles.deleteButton}
-            sx={{
-              background: 'var(--palette-button-color)',
-              color: 'var(--palette-button-text-color)',
-              ':hover': { backgroundColor: 'var(--palette-hover-button-text-color)' },
-            }}
+            className={styles.button}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
             DELETE INACTIVE INSTANCES
@@ -720,29 +700,11 @@ export default function ShowCluster() {
                 InputProps={{
                   ...params.InputProps,
                   startAdornment: searchSchedulerIconISLodaing ? (
-                    <Box
-                      sx={{
-                        width: '2.2rem',
-                        height: '2.2rem',
-                        pl: '0.5rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
+                    <Box className={styles.searchIconContainer}>
                       <SearchCircularProgress />
                     </Box>
                   ) : (
-                    <Box
-                      sx={{
-                        width: '2.2rem',
-                        height: '2.2rem',
-                        pl: '0.5rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
+                    <Box className={styles.searchIconContainer}>
                       <SearchIcon sx={{ color: '#919EAB' }} />
                     </Box>
                   ),
@@ -808,13 +770,13 @@ export default function ShowCluster() {
           </Menu>
           <Paper
             elevation={0}
-            sx={() => ({
+            sx={{
               display: 'flex',
               border: `1px solid var(--palette-action-hover)`,
               flexWrap: 'wrap',
               ml: '1rem',
               backgroundColor: 'var(--palette-background-paper)',
-            })}
+            }}
           >
             <StyledToggleButtonGroup
               size="small"
@@ -1336,7 +1298,7 @@ export default function ShowCluster() {
           </Table>
         </Card>
       )}
-      {schedulerTotalPages > 1 ? (
+      {schedulerTotalPages > 1 && (
         <Box id="pagination" display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
           <Pagination
             count={schedulerTotalPages}
@@ -1365,8 +1327,6 @@ export default function ShowCluster() {
             id="scheduler-pagination"
           />
         </Box>
-      ) : (
-        <></>
       )}
       <Dialog
         open={openDeleteInactive}
@@ -1387,7 +1347,7 @@ export default function ShowCluster() {
               Delete inactive instances
             </Typography>
           </Box>
-          {!progressLoading ? (
+          {!progressLoading && (
             <IconButton
               aria-label="close"
               id="close-delete-icon"
@@ -1399,8 +1359,6 @@ export default function ShowCluster() {
             >
               <CloseIcon />
             </IconButton>
-          ) : (
-            <></>
           )}
         </Box>
         <Divider />
@@ -1524,22 +1482,16 @@ export default function ShowCluster() {
                 )}
                 <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                   <Box sx={{ flex: '1 1 auto' }} />
-                  {!progressLoading ? (
+                  {!progressLoading && (
                     <Button
                       variant="contained"
                       id="cancel-button"
                       size="small"
                       onClick={handleReset}
-                      sx={{
-                        background: 'var(--palette-button-color)',
-                        color: 'var(--palette-button-text-color)',
-                        ':hover': { backgroundColor: 'var(--palette-hover-button-text-color)' },
-                      }}
+                      className={styles.button}
                     >
                       Cancel
                     </Button>
-                  ) : (
-                    <></>
                   )}
                 </Box>
               </Fragment>
@@ -1755,13 +1707,7 @@ export default function ShowCluster() {
                       variant="contained"
                       type="submit"
                       id="save-delete"
-                      sx={{
-                        '&.MuiButton-root': {
-                          backgroundColor: 'var(--palette-delete-button-color)',
-                          color: 'var(--palette-button-text-color)',
-                          borderColor: 'var(--palette-save-color)',
-                        },
-                      }}
+                      className={styles.deleteButton}
                     >
                       Delete
                     </Button>
@@ -1836,8 +1782,8 @@ export default function ShowCluster() {
           },
         }}
       >
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '0.8rem 1rem' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Box className={styles.featuresHeader}>
+          <Box className={styles.featuresHeaderTitle}>
             <Features className={styles.featuresHeaderIcon} />
             <Typography variant="h6" fontFamily="mabry-bold" pl="0.5rem">
               Featrues
@@ -1912,7 +1858,7 @@ export default function ShowCluster() {
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </Card>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
+          <Box className={styles.featuresButtonWrapper}>
             <CancelLoadingButton
               id="cancelEditFeatures"
               loading={deleteLoadingButton}

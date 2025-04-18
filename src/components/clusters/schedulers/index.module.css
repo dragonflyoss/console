@@ -1,3 +1,19 @@
+.progressBarWrapper {
+  display: flex;
+  align-items: center;
+  width: 70%;
+  padding-top: 0.4rem;
+}
+
+.progressBar {
+  width: 100%;
+  margin-right: 1rem;
+}
+
+.progressBarLabelWrapper {
+  max-width: 35;
+}
+
 .schedulerInactiveCountWrapper {
   display: flex;
   align-items: center;
@@ -147,6 +163,24 @@
   padding-bottom: 1.5rem;
 }
 
+.searchContainer {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 0.2rem 0.4rem;
+  width: 23rem;
+}
+
+.searchIconContainer {
+  width: 2.2rem;
+  height: 2.2rem;
+  padding-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .idIcon {
   width: 1.4rem;
   height: 1.4rem;
@@ -243,6 +277,18 @@
   text-overflow: ellipsis;
 }
 
+.featuresHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+}
+
+.featuresHeaderTitle {
+  display: flex;
+  align-items: center;
+}
+
 .featuresEdit {
   display: flex;
   align-items: center;
@@ -252,6 +298,13 @@
 
 .featuresEdit:nth-last-child(2n) {
   margin-top: 1rem;
+}
+
+.featuresButtonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.5rem;
 }
 
 .moreVertIcon {
@@ -448,4 +501,19 @@
   width: 1.2rem;
   height: 1.2rem;
   margin-right: 0.4rem;
+}
+
+.button {
+  background-color: var(--palette-button-color) !important;
+  color: var(--palette-button-text-color) !important;
+}
+
+.button:hover {
+  background-color: var(--palette-hover-button-text-color);
+}
+
+.deleteButton {
+  background-color: var(--palette-delete-button-color) !important;
+  color: var(--palette-button-text-color) !important;
+  border-color: var(--palette-save-color) !important;
 }

@@ -801,13 +801,16 @@ describe('Schedulers', () => {
           });
         },
       );
+
       cy.get('#delete-all-inactive-instances').click();
+
       // Close delete inactive schedulers.
       cy.get('#close-delete-icon').click();
       cy.get('#delete-all-inactive-instances').click();
       cy.get('#delete-inactive-instances-title').should('have.text', 'Delete inactive instances');
       cy.get('#schedulerTotal').should('have.text', '0 inactive');
       cy.get('#back-button').should('be.disabled');
+
       // Check next button.
       cy.get('#next-button').should('be.disabled');
     });
@@ -820,10 +823,12 @@ describe('Schedulers', () => {
           body: { message: 'Not Found' },
         });
       });
+
       const schedulers = [
         43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 29, 30, 31, 28, 27, 26, 25, 23, 24, 10, 11, 12, 13, 14, 15, 21,
         8, 6, 4, 2,
       ];
+
       for (let i = 0; i < schedulers.length; i++) {
         cy.intercept('DELETE', `/api/v1/schedulers/${schedulers[i]}`, (req) => {
           req.reply({
@@ -850,14 +855,17 @@ describe('Schedulers', () => {
           });
         },
       );
+
       cy.get('#deleteAllInactive').type('DELET3{enter}');
+
       // Display verification failure prompt information.
       cy.get('#deleteAllInactive-helper-text').should('have.text', 'Please enter "DELETE"');
       cy.get('#deleteAllInactive').clear();
       cy.get('#deleteAllInactive').type('DELETE{enter}');
-      cy.wait(6000);
+
       cy.get('#failure').should('exist');
       cy.get('#inactive-header').click();
+
       // Show error message.
       cy.get('.MuiAccordionDetails-root > .MuiTypography-root')
         .should('be.visible')
@@ -915,8 +923,6 @@ describe('Schedulers', () => {
       cy.get('.css-xmqx0h').should('be.visible');
       cy.get('#failure').should('not.exist');
 
-      cy.wait(400 * schedulers.length);
-
       // Show number of deleted schedulers.
       cy.get('.MuiAlert-message').should('have.text', 'You have successfully removed 34 inactive schedulers!');
 
@@ -951,6 +957,7 @@ describe('Schedulers', () => {
       cy.get('#deleteAllInactive').type('DELETE{enter}');
       cy.get('#failure').should('exist');
       cy.get('#inactive-header').click();
+
       // Show error message.
       cy.get('.MuiAccordionDetails-root > .MuiTypography-root')
         .should('be.visible')

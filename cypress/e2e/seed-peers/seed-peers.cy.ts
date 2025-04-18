@@ -951,9 +951,8 @@ describe('Seed peers', () => {
       cy.get('#deleteAllInactive').clear();
       cy.get('#deleteAllInactive').type('DELETE{enter}');
 
-      cy.wait(400 * seedPeers.length);
-
       cy.get('#failure').should('exist');
+
       cy.get('#inactive-header').click();
 
       // Show error message.

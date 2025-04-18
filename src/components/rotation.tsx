@@ -4,8 +4,6 @@ import { autoPlay } from 'react-swipeable-views-utils';
 import SwipeableViews from 'react-swipeable-views';
 import { ReactComponent as Dragonfly } from '../assets/images/login/dragonfly.svg';
 import { ReactComponent as DarkDragonfly } from '../assets/images/login/dark-dragonfly.svg';
-import { ReactComponent as Features } from '../assets/images/login/features.svg';
-import { ReactComponent as DarkFeatures } from '../assets/images/login/dark-features.svg';
 import { ReactComponent as Milestones } from '../assets/images/login/milestones.svg';
 import { ReactComponent as DarkMilestones } from '../assets/images/login/dark-milestones.svg';
 

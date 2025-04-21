@@ -21,11 +21,9 @@ describe('Clear', () => {
 
     // Click the Toggle Light button.
     cy.get('#light').click();
+    cy.get('#light').should('have.class', 'Mui-selected');
 
-    cy.get('.Mui-selected').invoke('text').should('not.contain', 'Dark');
-
-    cy.get('.Mui-selected').invoke('text').should('contain', 'Light');
-
+    // Check if it is switched to light mode.
     cy.get('#main').should('have.css', 'background-color', 'rgb(244, 246, 248)');
 
     cy.get('#no-task-image').should('exist');

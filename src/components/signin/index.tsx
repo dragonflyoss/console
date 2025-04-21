@@ -75,7 +75,7 @@ export default function SignIn() {
               }}
               edge="end"
             >
-              {showPassword ? <Visibility /> : <VisibilityOff />}
+              {showPassword ? <Visibility id="visibility" /> : <VisibilityOff id="visibility-off" />}
             </IconButton>
           ),
         },
@@ -152,9 +152,10 @@ export default function SignIn() {
     <Grid container className={styles.page}>
       <Snackbar
         open={errorMessage}
-        autoHideDuration={3000}
+        autoHideDuration={30000}
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        id="error-message"
       >
         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
           {errorMessageText}
@@ -190,14 +191,7 @@ export default function SignIn() {
               Through which you can easily configure clusters and view cluster information.
             </Typography>
           </Box>
-          <Box
-            sx={{
-              mt: '0.2rem',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
+          <Box className={styles.formWrapper}>
             <Box component="form" onSubmit={handleSubmit} noValidate>
               {formList.map((item) => (
                 <TextField
@@ -229,13 +223,7 @@ export default function SignIn() {
                 </Typography>
                 <Typography component="span" className={styles.separationLine}></Typography>
               </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
+              <Box className={styles.createAccountWrapper}>
                 <Grid>
                   <Typography component="span" fontFamily="-moz-initial">
                     New to Dragnfly?

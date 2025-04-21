@@ -270,6 +270,7 @@ export default function Layout(props: any) {
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           onClose={handleClose}
           sx={{ alignItems: 'center' }}
+          id="change-password-warning"
         >
           <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
             Please change the password in time for the first login!

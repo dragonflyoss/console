@@ -24,15 +24,6 @@
   width: 11rem;
 }
 
-.githubContainer {
-  z-index: 9;
-  right: 1.6rem;
-  bottom: 1.6rem;
-  width: 2rem;
-  height: 2rem;
-  position: absolute;
-}
-
 .logo {
   width: 3rem;
   height: 3rem;
@@ -60,8 +51,15 @@
   vertical-align: middle;
 }
 
-.github {
-  width: 2rem;
-  height: 2rem;
-  color: var(--palette-secondary-dark);
+.formWrapper {
+  margin-top: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.createAccountWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

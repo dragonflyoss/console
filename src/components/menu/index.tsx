@@ -35,7 +35,7 @@ import { ReactComponent as Expand } from '../../assets/images/menu/expand.svg';
 import { ReactComponent as Closure } from '../../assets/images/menu/closure.svg';
 import { ReactComponent as SidebarExpand } from '../../assets/images/menu/sidebar-expand.svg';
 import { ReactComponent as SidebarClosure } from '../../assets/images/menu/sidebar-closure.svg';
-import { HeaderLayout, ShrinkDarkMode } from '../dark-layout';
+import { DarkMode, ShrinkDarkMode } from '../dark-layout';
 import Card from '../card';
 import _ from 'lodash';
 
@@ -627,7 +627,7 @@ export default function Layout(props: any) {
                       </List>
                     </Box>
                     <Box>
-                      <HeaderLayout className={styles.darkMode} />
+                      <DarkMode className={styles.darkMode} />
                       <Card className={styles.sidebarUser}>
                         <IconButton
                           onClick={(event: any) => {

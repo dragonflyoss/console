@@ -1,12 +1,7 @@
 import {
   Box,
-  FormControl,
-  FormControlLabel,
-  IconButton,
-  Link,
   Paper,
   styled,
-  Switch,
   ToggleButton,
   ToggleButtonGroup,
   toggleButtonGroupClasses,
@@ -15,7 +10,7 @@ import {
 } from '@mui/material';
 import { ReactComponent as Dark } from '../assets/images/menu/dark.svg';
 import { ReactComponent as Light } from '../assets/images/menu/light.svg';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { ColorModeContext } from '../App';
 import styles from './dark-layout.module.css';
 
@@ -52,22 +47,13 @@ const VerticalToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   },
 }));
 
-export const HeaderLayout: React.FC<layoutProps> = ({ className }) => {
+export const DarkMode: React.FC<layoutProps> = ({ className }) => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
 
   return (
     <Box className={className}>
-      <Paper
-        elevation={0}
-        sx={() => ({
-          display: 'inline-flex',
-          flexWrap: 'wrap',
-          bgcolor: 'var(--palette-grey-600Channel)',
-          borderRadius: '1.2rem',
-          width: '100%',
-        })}
-      >
+      <Paper elevation={0} className={styles.darkModeWrapper}>
         <StyledToggleButtonGroup
           size="small"
           value={theme.palette.mode}
@@ -135,15 +121,7 @@ export const ShrinkDarkMode: React.FC<layoutProps> = ({ className }) => {
 
   return (
     <Box className={className}>
-      <Paper
-        elevation={0}
-        sx={() => ({
-          display: 'inline-flex',
-          flexWrap: 'wrap',
-          backgroundColor: 'var(--palette-grey-600Channel)',
-          borderRadius: '1.2rem',
-        })}
-      >
+      <Paper elevation={0} className={styles.shrinkDarkModeWrapper}>
         <VerticalToggleButtonGroup
           size="small"
           value={theme.palette.mode}

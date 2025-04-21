@@ -73,11 +73,11 @@ describe('Signin', () => {
     cy.location('pathname').should('eq', '/clusters');
 
     // Prompt message: Please change your password promptly when logging in for the first time!
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('exist');
+    cy.get('#change-password-warning').should('exist');
 
     // Close the prompt message.
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+    cy.get('#change-password-warning').should('not.exist');
 
     // Menu exists users.
     cy.get('[href="/users"]').should('exist');
@@ -89,9 +89,9 @@ describe('Signin', () => {
     cy.get('form').submit();
 
     // Show error message.
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
+    cy.get('#error-message').should('be.visible').and('contain', 'Unauthorized');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+    cy.get('#error-message').should('not.exist');
   });
 
   it('try to signin with invalid account', () => {
@@ -100,9 +100,9 @@ describe('Signin', () => {
     cy.get('form').submit();
 
     // Show error message.
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
+    cy.get('#error-message').should('be.visible').and('contain', 'Unauthorized');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+    cy.get('#error-message').should('not.exist');
   });
 
   it('try to signin with guest user', () => {
@@ -151,10 +151,10 @@ describe('Signin', () => {
     cy.get('#account').type('root');
     cy.get('#password').type(`dragonfly`);
 
-    cy.get('.MuiInputBase-root > .MuiButtonBase-root').click();
+    cy.get('#visibility-off').click();
     cy.get('#password').should('have.value', 'dragonfly');
 
-    cy.get('.MuiInputBase-root > .MuiButtonBase-root').click();
+    cy.get('#visibility').click();
     cy.get('#password').should('not.have.text', 'dragonfly');
   });
 
@@ -172,9 +172,9 @@ describe('Signin', () => {
     cy.get('form').submit();
 
     // Show error message.
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+    cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+    cy.get('#error-message').should('not.exist');
   });
 
   it('try to verify account and password', () => {
@@ -183,11 +183,14 @@ describe('Signin', () => {
     const passwordLengthExceeds = _.times(17, () => _.sample('abcdefghijklmnopqrstuvwxyz')).join('');
 
     cy.get('#account').type(nameNotLongEnough);
+
+    // Show account help text.
     cy.get('#account-helper-text').should('be.visible').and('contain', 'Fill in the characters, the length is 3-10.');
 
     cy.get('#account').type(nameLengthExceeds);
     cy.get('#account-helper-text').should('be.visible').and('contain', 'Fill in the characters, the length is 3-10.');
 
+    // Show password help text.
     cy.get('#password').type(passwordLengthExceeds);
     cy.get('#password-helper-text')
       .should('be.visible')

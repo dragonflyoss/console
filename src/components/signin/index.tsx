@@ -15,7 +15,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { setPageTitle } from '../../lib/utils';
 import { ReactComponent as Login } from '../../assets/images/login/login.svg';
 import { ReactComponent as PageLoading } from '../../assets/images/login/page-loading.svg';
-import { HeaderLayout } from '../dark-layout';
+import { DarkMode } from '../dark-layout';
 
 export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -173,7 +173,7 @@ export default function SignIn() {
         <Rotation />
       </Grid>
       <Grid size={6} className={styles.container}>
-        <HeaderLayout className={styles.header} />
+        <DarkMode className={styles.header} />
         <Container component="main" maxWidth="xs">
           <Box
             sx={{

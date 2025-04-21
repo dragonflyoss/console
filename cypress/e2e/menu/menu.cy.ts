@@ -19,22 +19,18 @@ describe('Menu', () => {
     cy.guestSignin();
     cy.visit('/');
 
-    // Click the Toggle Light button.
+    // Click the Light button.
     cy.get('#light').click();
+    cy.get('#light').should('have.class', 'Mui-selected');
 
-    cy.get('.Mui-selected').invoke('text').should('not.contain', 'Dark');
-
-    cy.get('.Mui-selected').invoke('text').should('contain', 'Light');
-
+    // Check if it is switched to light mode.
     cy.get('#main').should('have.css', 'background-color', 'rgb(244, 246, 248)');
 
-    // Click the Toggle Dark button.
+    // Click the Dark button.
     cy.get('#dark').click();
+    cy.get('#dark').should('have.class', 'Mui-selected');
 
-    cy.get('.Mui-selected').invoke('text').should('contain', 'Dark');
-
-    cy.get('.Mui-selected').invoke('text').should('not.contain', 'Light');
-
+    // Check if it is switched to dark mode.
     cy.get('#main').should('have.css', 'background-color', 'rgb(31, 36, 48)');
   });
 

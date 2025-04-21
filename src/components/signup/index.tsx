@@ -95,7 +95,7 @@ export default function SignUp() {
               }}
               edge="end"
             >
-              {showPassword ? <Visibility /> : <VisibilityOff />}
+              {showPassword ? <Visibility id="visibility" /> : <VisibilityOff id="visibility-off" />}
             </IconButton>
           ),
         },
@@ -135,7 +135,11 @@ export default function SignUp() {
                 }}
                 edge="end"
               >
-                {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                {showConfirmPassword ? (
+                  <Visibility id="confirm-password-visibility" />
+                ) : (
+                  <VisibilityOff id="confirm-password-visibility-off" />
+                )}
               </IconButton>
             </InputAdornment>
           ),
@@ -223,6 +227,7 @@ export default function SignUp() {
         autoHideDuration={3000}
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        id="error-message"
       >
         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
           {errorMessageText}

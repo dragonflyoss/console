@@ -39,11 +39,11 @@ describe('Signup', () => {
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
 
     // Show error message.
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
+    cy.get('#error-message').should('be.visible').and('contain', 'Conflict');
 
     // Close error message.
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+    cy.get('#error-message').should('not.exist');
   });
 
   it('cannot create account with existing account', () => {
@@ -53,25 +53,34 @@ describe('Signup', () => {
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
 
     // Show error message.
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
+    cy.get('#error-message').should('be.visible').and('contain', 'Conflict');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+    cy.get('#error-message').should('not.exist');
   });
 
   it('click the password hide butto and confirm password hide butto', () => {
     cy.get('#password').type('dragonfly1');
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
 
-    cy.get('.MuiInputBase-root > .MuiButtonBase-root > [data-testid="VisibilityOffIcon"] > path').click();
-    cy.get('#confirmPassword').should('have.value', 'dragonfly1');
+    // Click the password hide butto.
+    cy.get('#visibility-off').click();
 
-    cy.get('[data-testid="VisibilityOffIcon"]').click();
+    // Can show password.
     cy.get('#confirmPassword').should('have.value', 'dragonfly1');
+    cy.get('#visibility').should('be.visible');
+
+    // Click the password hide butto.
+    cy.get('#confirm-password-visibility-off').click();
+
+    //  // Can show  confirm password.
+    cy.get('#confirmPassword').should('have.value', 'dragonfly1');
+    cy.get('#confirm-password-visibility').should('be.visible');
   });
 
   it('cannot signup without required attributes', () => {
     cy.get('.MuiButton-root').click();
 
+    // The help text should be displayed.
     cy.get('#account-helper-text').should('be.visible').and('contain', 'Fill in the characters, the length is 3-10.');
     cy.get('#email-helper-text').should('be.visible').and('contain', 'Email is invalid or already taken.');
     cy.get('#confirmPassword-helper-text').should('be.visible').and('contain', 'Please enter the same password.');
@@ -86,15 +95,16 @@ describe('Signup', () => {
         });
     });
 
+    // Fill in the form.
     cy.get('#account').type('root-1');
     cy.get('#email').type('root@console.com');
     cy.get('#password').type('dragonfly1');
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
 
     // Show error message.
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+    cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+    cy.get('#error-message').should('not.exist');
   });
 
   it('click the `Sign in` button', () => {

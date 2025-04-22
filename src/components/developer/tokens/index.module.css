@@ -1,3 +1,40 @@
+.titleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.breadcrumbs {
+  width: 0.3rem;
+  height: 0.3rem;
+  background-color: #919eab;
+  border-radius: 50%;
+  margin: 0 0.4rem;
+}
+
+.tokenWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.5rem;
+}
+
+.tokenNameWrapper {
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.4rem;
+}
+
+.tokenName {
+  color: var(--palette-description-color) !important;
+}
+
+.tokenExpires {
+  display: flex;
+  align-items: center;
+}
+
 .noData {
   width: 100%;
   height: 16rem;
@@ -35,4 +72,22 @@
 .deleteIcon {
   width: 6rem;
   height: 6rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.deleteDialogTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1.2rem;
 }

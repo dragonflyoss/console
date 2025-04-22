@@ -169,7 +169,7 @@ export default function PersonalAccessTokens() {
           {errorMessageText}
         </Alert>
       </Snackbar>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: '1rem' }}>
+      <Box className={styles.titleContainer}>
         <Typography variant="h5" id="token-title">
           Personal access tokens
         </Typography>
@@ -190,15 +190,7 @@ export default function PersonalAccessTokens() {
           Add Personal access tokens
         </Button>
       </Box>
-      <Breadcrumbs
-        separator={
-          <Box
-            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
-          />
-        }
-        aria-label="breadcrumb"
-        sx={{ mb: '1rem' }}
-      >
+      <Breadcrumbs separator={<Box className={styles.breadcrumbs} />} aria-label="breadcrumb" sx={{ mb: '1rem' }}>
         <Typography color="text.primary">Developer</Typography>
         <Typography color="inherit">Personal access tokens</Typography>
       </Breadcrumbs>
@@ -244,12 +236,12 @@ export default function PersonalAccessTokens() {
       )}
       {isLoading ? (
         <Card>
-          <Box sx={{ display: 'flex', p: '0.8rem', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box className={styles.tokenWrapper}>
             <Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
+              <Box className={styles.tokenNameWrapper}>
                 <Skeleton data-testid="isloading" sx={{ fontSize: '0.8rem' }} width="6rem" />
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box className={styles.tokenExpires}>
                 <Typography variant="body2" component="span">
                   <Skeleton data-testid="isloading" width="8rem" />
                 </Typography>
@@ -273,17 +265,15 @@ export default function PersonalAccessTokens() {
             allTokens.map((item, index) => {
               return index !== allTokens.length - 1 ? (
                 <Box key={item.id}>
-                  <Box
-                    sx={{ display: 'flex', p: '0.8rem 1.5rem', justifyContent: 'space-between', alignItems: 'center' }}
-                  >
+                  <Box className={styles.tokenWrapper}>
                     <Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
+                      <Box className={styles.tokenNameWrapper}>
                         <RouterLink
                           id={item.name}
                           component={Link}
                           to={`/developer/personal-access-tokens/${item?.id}`}
                           underline="hover"
-                          sx={{ color: 'var(--palette-description-color)' }}
+                          className={styles.tokenName}
                         >
                           {item.name}
                         </RouterLink>
@@ -291,7 +281,7 @@ export default function PersonalAccessTokens() {
                           &nbsp;—&nbsp;{item?.user?.name}
                         </Typography>
                       </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Box className={styles.tokenExpires}>
                         <Typography variant="body2" component="span" fontFamily="mabry-bold">
                           Expires on&nbsp;
                         </Typography>
@@ -328,17 +318,15 @@ export default function PersonalAccessTokens() {
                 </Box>
               ) : (
                 <Box key={item.id}>
-                  <Box
-                    sx={{ display: 'flex', p: '0.8rem 1.5rem', justifyContent: 'space-between', alignItems: 'center' }}
-                  >
+                  <Box className={styles.tokenWrapper}>
                     <Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.4rem' }}>
+                      <Box className={styles.tokenNameWrapper}>
                         <RouterLink
                           id={item.name}
                           component={Link}
                           to={`/developer/personal-access-tokens/${item?.id}`}
                           underline="hover"
-                          sx={{ color: 'var(--palette-description-color)' }}
+                          className={styles.tokenName}
                         >
                           {item.name}
                         </RouterLink>
@@ -346,7 +334,7 @@ export default function PersonalAccessTokens() {
                           &nbsp;—&nbsp;{item?.user?.name}
                         </Typography>
                       </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Box className={styles.tokenExpires}>
                         <Typography variant="body2" component="span" fontFamily="mabry-bold">
                           Expires on&nbsp;
                         </Typography>
@@ -378,8 +366,8 @@ export default function PersonalAccessTokens() {
             })}
         </Card>
       )}
-      {tokensTotalPages > 1 ? (
-        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '1rem' }}>
+      {tokensTotalPages > 1 && (
+        <Box className={styles.pagination}>
           <Pagination
             id="tokens-pagination"
             count={tokensTotalPages}
@@ -392,8 +380,6 @@ export default function PersonalAccessTokens() {
             size="small"
           />
         </Box>
-      ) : (
-        <></>
       )}
       <Dialog
         open={openDeletToken}
@@ -404,13 +390,13 @@ export default function PersonalAccessTokens() {
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Box className={styles.deleteDialogTitle}>
             <Delete className={styles.deleteIcon} />
             <Typography fontFamily="mabry-bold" pt="1rem">
               Are you sure you want to delete this token?
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1.2rem' }}>
+          <Box className={styles.buttonWrapper}>
             <CancelLoadingButton
               id="cancel"
               loading={deleteLoadingButton}

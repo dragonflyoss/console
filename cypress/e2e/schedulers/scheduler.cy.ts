@@ -75,11 +75,9 @@ describe('Scheduler', () => {
 
   it('click the breadcrumb', () => {
     // Check for breadcrumb.
-    cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
-      .should('be.visible')
-      .and('contain', 'scheduler-cluster-1');
+    cy.get('#cluster-id').should('be.visible').and('contain', 'scheduler-cluster-1');
 
-    cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root').click();
+    cy.get('#cluster-id').click();
 
     // Then I see that the current page is the clusters/1!
     cy.url().should('include', '/clusters/1');
@@ -87,47 +85,45 @@ describe('Scheduler', () => {
 
   describe('when data is loaded', () => {
     it('can display breadcrumb', () => {
-      // Show isloading.
+      // Display is loading.
       cy.get('[data-testid="isloading"]').should('be.exist');
 
-      cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
-        .should('be.visible')
-        .and('contain', 'scheduler-cluster-1');
+      cy.get('#cluster-id').should('be.visible').and('contain', 'scheduler-cluster-1');
 
-      cy.get(':nth-child(7) > .MuiTypography-root').should('be.visible').and('contain', 'scheduler-7');
+      cy.get('#scheduler-host-name').should('be.visible').and('contain', 'scheduler-7');
 
       cy.get('[data-testid="isloading"]').should('not.exist');
     });
 
     it('can display active scheduler', () => {
-      // Show id.
+      // Displays the scheduler ID.
       cy.get('#id').should('be.visible').and('contain', '7');
 
-      // Show hostname.
+      // Displays the scheduler hostname.
       cy.get('#hostname').should('be.visible').and('contain', 'scheduler-7');
 
-      // Show ip.
+      // Displays the scheduler IP.
       cy.get('#ip').should('be.visible').and('contain', '30.44.98.202');
 
-      // Show cluster id.
+      // Displays the scheduler cluster ID.
       cy.get('#cluster-id').should('be.visible').and('contain', '1');
 
-      // Show port.
+      // Displays the scheduler port.
       cy.get('#port').should('be.visible').and('contain', '8002');
 
-      // Show Active background color.
+      // Displays the active background color.
       cy.get('#status')
         .should('be.visible')
         .and('contain', 'Active')
         .and('have.css', 'background-color', 'rgb(0, 129, 112)');
 
-      // Show features.
+      // Displays the scheduler features.
       cy.get('#features').should('be.visible').and('contain', 'Schedule').and('contain', 'Preheat');
 
-      // Show created at.
+      // Displays the scheduler creation time.
       cy.get('#created-at').should('have.text', '2023-11-09 07:09:06');
 
-      // Show updated at.
+      // Displays the scheduler update time.
       cy.get('#updated-at').should('have.text', '2023-11-09 07:09:11');
     });
 
@@ -147,10 +143,10 @@ describe('Scheduler', () => {
 
       cy.visit('/clusters/1/schedulers/2');
 
-      // Show hostname.
+      // Displays the scheduler hostname.
       cy.get('#hostname').should('be.visible').and('contain', 'scheduler-2');
 
-      // Show Inactive background color.
+      // Displays the inactive background color.
       cy.get('#status')
         .should('be.visible')
         .and('contain', 'Inactive')
@@ -169,39 +165,37 @@ describe('Scheduler', () => {
     });
 
     it('unable to display breadcrumb', () => {
-      cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
-        .should('be.visible')
-        .and('contain', 'scheduler-cluster-1');
+      cy.get('#cluster-id').should('be.visible').and('contain', 'scheduler-cluster-1');
 
-      cy.get(':nth-child(7) > .MuiTypography-root').should('be.visible').and('contain', '-');
+      cy.get('#scheduler-host-name').should('be.visible').and('contain', '-');
     });
 
     it('scheduler should render empty status', () => {
-      // Show ID.
+      // Displays the scheduler ID.
       cy.get('#id').should('contain', '-');
 
-      // Show Hostname.
+      // Displays the scheduler hostname.
       cy.get('#hostname').should('contain', '-');
 
-      // Show IP.
+      // Displays the scheduler IP.
       cy.get('#ip').should('contain', '-');
 
-      // Show Cluster ID.
+      // Displays the scheduler cluster ID.
       cy.get('#cluster-id').should('contain', '-');
 
-      // Show Port.
+      // Displays the scheduler port.
       cy.get('#port').should('contain', '-');
 
-      // Show Start.
+      // Displays the scheduler status.
       cy.get('#status').should('contain', '-');
 
-      // Show Features.
+      // Displays the scheduler features.
       cy.get('#features').should('contain', '-');
 
-      // Show Created At.
+      // Displays the scheduler creation time.
       cy.get('#created-at').should('contain', '-');
 
-      // Show Updated At.
+      // Displays the scheduler update time.
       cy.get('#updated-at').should('contain', '-');
     });
   });
@@ -224,47 +218,45 @@ describe('Scheduler', () => {
 
     it('show error message', () => {
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('.MuiAlert-message').should('not.exist');
+      cy.get('#error-message').should('not.exist');
     });
 
     it('unable to display breadcrumb', () => {
-      cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
-        .should('be.visible')
-        .and('contain', 'scheduler-cluster-1');
+      cy.get('#cluster-id').should('be.visible').and('contain', 'scheduler-cluster-1');
 
-      cy.get(':nth-child(7) > .MuiTypography-root').should('be.visible').and('contain', '-');
+      cy.get('#scheduler-host-name').should('be.visible').and('contain', '-');
     });
 
     it('scheduler should render empty status', () => {
-      // Show ID.
+      // Displays the scheduler ID.
       cy.get('#id').should('contain', '-');
 
-      // Show Hostname.
+      // Displays the scheduler hostname.
       cy.get('#hostname').should('contain', '-');
 
-      // Show IP.
+      // Displays the scheduler IP.
       cy.get('#ip').should('contain', '-');
 
-      // Show Cluster ID.
+      // Displays the scheduler cluster ID.
       cy.get('#cluster-id').should('contain', '-');
 
-      // Show Port.
+      // Displays the scheduler port.
       cy.get('#port').should('contain', '-');
 
-      // Show Start.
+      // Displays the scheduler status.
       cy.get('#status').should('contain', '-');
 
-      // Show Features.
+      // Displays the scheduler features.
       cy.get('#features').should('contain', '-');
 
-      // Show Created At.
+      // Displays the scheduler creation time.
       cy.get('#created-at').should('contain', '-');
 
-      // Show Updated At.
+      // Displays the scheduler update time.
       cy.get('#updated-at').should('contain', '-');
     });
   });

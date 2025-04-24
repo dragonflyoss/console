@@ -75,7 +75,7 @@ export default function Schedulers() {
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
           {errorMessageText}
         </Alert>
       </Snackbar>
@@ -89,16 +89,24 @@ export default function Schedulers() {
         aria-label="breadcrumb"
         sx={{ mb: '2rem', mt: '1rem' }}
       >
-        <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters`}>
+        <RouterLink id="cluster" component={Link} underline="hover" color="inherit" to={`/clusters`}>
           clusters
         </RouterLink>
-        <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}`}>
+        <RouterLink id="cluster-id" component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}`}>
           {`scheduler-cluster-${clusterID}`}
         </RouterLink>
-        <RouterLink component={Link} underline="hover" color="inherit" to={`/clusters/${clusterID}/schedulers`}>
+        <RouterLink
+          id="scheduler"
+          component={Link}
+          underline="hover"
+          color="inherit"
+          to={`/clusters/${clusterID}/schedulers`}
+        >
           {`schedulers`}
         </RouterLink>
-        <Typography color="text.primary">{scheduler?.host_name || '-'}</Typography>
+        <Typography id="scheduler-host-name" color="text.primary">
+          {scheduler?.host_name || '-'}
+        </Typography>
       </Breadcrumbs>
       <Card className={styles.container}>
         <Box className={styles.headerContainer}>

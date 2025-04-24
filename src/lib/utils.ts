@@ -138,3 +138,24 @@ export const fuzzySearchScheduler = (keyword: string, data: any[]) => {
     (item) => item.host_name && typeof item.host_name === 'string' && item.host_name.includes(keyword),
   );
 };
+
+export const fuzzySearchPersistentCacheTask = (keyword: string, data: any[]) => {
+  if (!data || !Array.isArray(data)) return [];
+
+  return data.filter((item) => item.id && typeof item.id === 'string' && item.id.includes(keyword));
+};
+
+export function formatSize(tagSize: string): string {
+  const size: number = Number.parseInt(tagSize, 10);
+  if (Math.pow(1024, 1) <= size && size < Math.pow(1024, 2)) {
+    return (size / Math.pow(1024, 1)).toFixed(2) + 'KiB';
+  } else if (Math.pow(1024, 2) <= size && size < Math.pow(1024, 3)) {
+    return (size / Math.pow(1024, 2)).toFixed(2) + 'MiB';
+  } else if (Math.pow(1024, 3) <= size && size < Math.pow(1024, 4)) {
+    return (size / Math.pow(1024, 3)).toFixed(2) + 'GiB';
+  } else if (Math.pow(1024, 4) <= size) {
+    return (size / Math.pow(1024, 4)).toFixed(2) + 'TiB';
+  } else {
+    return size + 'B';
+  }
+}

@@ -1153,3 +1153,136 @@ export async function getDeleteTaskJob(params: getJobsParams): Promise<getDelete
   const responses = { data: data, total_page: totalPage };
   return responses;
 }
+
+interface getPersistentCacheTasksParams {
+  page?: number;
+  per_page?: number;
+  scheduler_cluster_id?: string;
+}
+
+interface persistentCacheTasksPeersResponse {
+  block_parents: [string];
+  cost: number;
+  created_at: string;
+  finished_pieces: {};
+  host: {
+    announce_interval: number;
+    build: {
+      git_commit: string;
+      git_version: string;
+      go_version: string;
+      platform: string;
+    };
+    cpu: {
+      logical_count: number;
+      percent: number;
+      physical_count: number;
+      process_percent: number;
+      times: {
+        guest: number;
+        guest_nice: number;
+        idle: number;
+        iowait: number;
+        irq: number;
+        nice: number;
+        softirq: number;
+        steal: number;
+        system: number;
+        user: number;
+      };
+    };
+    created_at: string;
+    disable_shared: boolean;
+    disk: {
+      free: number;
+      inodes_free: number;
+      inodes_total: number;
+      inodes_used: number;
+      inodes_used_percent: number;
+      read_bandwidth: number;
+      total: number;
+      used: number;
+      used_percent: number;
+      write_bandwidth: number;
+    };
+    download_port: number;
+    hostname: string;
+    id: string;
+    ip: string;
+    kernel_version: string;
+    memory: {
+      available: number;
+      free: number;
+      process_used_percent: number;
+      total: number;
+      used: number;
+      used_percent: number;
+    };
+    network: {
+      download_rate: number;
+      download_rate_limit: number;
+      idc: string;
+      location: string;
+      tcp_connection_count: number;
+      upload_rate: number;
+      upload_rate_limit: number;
+      upload_tcp_connection_count: number;
+    };
+    os: string;
+    platform: string;
+    platform_family: string;
+    platform_version: string;
+    port: number;
+    scheduler_cluster_id: number;
+    type: string;
+    updated_at: string;
+  };
+  id: string;
+  persistent: boolean;
+  state: string;
+  updated_at: string;
+}
+
+export interface getPersistentCacheTasksResponse {
+  id: string;
+  persistent_replica_count: number;
+  tag: string;
+  application: string;
+  piece_length: number;
+  content_length: number;
+  total_piece_count: number;
+  state: string;
+  ttl: number;
+  created_at: string;
+  updated_at: string;
+  peers: Array<persistentCacheTasksPeersResponse>;
+}
+
+export async function getPersistentCacheTasks(
+  params: getPersistentCacheTasksParams,
+): Promise<getPersistentCacheTasksResponse[]> {
+  const url = new URL(`/api/v1/persistent-cache-tasks?${queryString.stringify(params)}`, API_URL);
+
+  const response = await get(url);
+  return await response.json();
+}
+
+export async function getPersistentCacheTask(
+  id: string,
+  params: getPersistentCacheTasksParams,
+): Promise<getPersistentCacheTasksResponse> {
+  const url = new URL(`/api/v1/persistent-cache-tasks/${id}?${queryString.stringify(params)}`, API_URL);
+
+  const response = await get(url);
+  return await response.json();
+}
+
+interface deletePersistentCacheTasksParams {
+  scheduler_cluster_id?: string;
+}
+
+export async function deletePersistentCacheTask(id: string, params: deletePersistentCacheTasksParams) {
+  const url = new URL(`/api/v1/persistent-cache-tasks/${id}?${queryString.stringify(params)}`, API_URL);
+
+  return await destroy(url);
+}

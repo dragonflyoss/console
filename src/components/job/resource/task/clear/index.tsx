@@ -27,24 +27,24 @@ import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import { getTaskJobResponse, createTaskJob, getTaskJob } from '../../../../lib/api';
-import { getDatetime, getPaginatedList } from '../../../../lib/utils';
+import { getTaskJobResponse, createTaskJob, getTaskJob } from '../../../../../lib/api';
+import { getDatetime, getPaginatedList } from '../../../../../lib/utils';
 import _ from 'lodash';
-import SearchTaskAnimation from '../../../search-task-animation';
+import SearchTaskAnimation from '../../../../search-task-animation';
 import { useNavigate } from 'react-router-dom';
-import { CancelLoadingButton, DeleteLoadingButton, SavelLoadingButton } from '../../../loading-button';
+import { CancelLoadingButton, DeleteLoadingButton, SavelLoadingButton } from '../../../../loading-button';
 import HelpIcon from '@mui/icons-material/Help';
 import SearchIcon from '@mui/icons-material/Search';
-import SearchCircularProgress from '../../../circular-progress';
+import SearchCircularProgress from '../../../../circular-progress';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import LinkOutlinedIcon from '@mui/icons-material/LinkOutlined';
-import Card from '../../../card';
-import { ReactComponent as SchedulerCluster } from '../../../../assets/images/job/task/scheduler-cluster.svg';
-import { ReactComponent as NoSearch } from '../../../../assets/images/job/task/no-search.svg';
-import { ReactComponent as NoTask } from '../../../../assets/images/job/task/no-task.svg';
-import { ReactComponent as DarkNoTask } from '../../../../assets/images/job/task/dark-no-task.svg';
-import { ReactComponent as Delete } from '../../../../assets/images/cluster/delete.svg';
-import { ReactComponent as DeleteWarning } from '../../../../assets/images/cluster/delete-warning.svg';
+import Card from '../../../../card';
+import { ReactComponent as SchedulerCluster } from '../../../../../assets/images/job/task/scheduler-cluster.svg';
+import { ReactComponent as NoSearch } from '../../../../../assets/images/job/task/no-search.svg';
+import { ReactComponent as NoTask } from '../../../../../assets/images/job/task/no-task.svg';
+import { ReactComponent as DarkNoTask } from '../../../../../assets/images/job/task/dark-no-task.svg';
+import { ReactComponent as Delete } from '../../../../../assets/images/cluster/delete.svg';
+import { ReactComponent as DeleteWarning } from '../../../../../assets/images/cluster/delete-warning.svg';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
@@ -465,7 +465,7 @@ export default function Clear() {
 
             if (tasks?.id) {
               setDeleteLoadingButton(false);
-              navigate(`/jobs/task/executions/${tasks?.id}`);
+              navigate(`/jobs/task/resource/executions/${tasks?.id}`);
               setOpenDeleteTask(false);
             }
           } else if (task?.args?.task_id) {
@@ -480,7 +480,7 @@ export default function Clear() {
             const tasks = await createTaskJob(formList);
             if (tasks?.id) {
               setDeleteLoadingButton(false);
-              navigate(`/jobs/task/executions/${tasks?.id}`);
+              navigate(`/jobs/task/resource/executions/${tasks?.id}`);
               setOpenDeleteTask(false);
             }
           }
@@ -528,7 +528,7 @@ export default function Clear() {
         const task = await createTaskJob(data);
         setSearchID(task?.id);
       } else {
-        navigate('/jobs/task/clear');
+        navigate('/jobs/task/resource/clear');
         setTask(null);
         setIsLoading(false);
         setSearchTaskISLodaing(false);

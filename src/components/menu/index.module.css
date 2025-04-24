@@ -68,9 +68,9 @@
 }
 
 .list {
-  margin-left: 1.25rem !important;
+  margin-left: 1.1rem !important;
   padding-left: 0.75rem !important;
-  padding-top: 0.8rem !important;
+  padding-top: 0.6rem !important;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
@@ -84,7 +84,7 @@
   position: absolute;
   background-color: var(--paletteexpandable-sidebar-navigation);
   bottom: 1rem;
-  bottom: calc(36px - 2px - 12px / 2);
+  bottom: calc(36px - 3px - 12px / 2);
 }
 
 .expandable:before {

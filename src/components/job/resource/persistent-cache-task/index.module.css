@@ -1,0 +1,26 @@
+.tabIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.noData {
+  width: 100%;
+  /* height: 18rem; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  /* background-color: rgba(var(--palette-no-data-color) / 0.04) !important;
+  border: dashed 1px rgba(var(--palette-no-data-color) / 0.08); */
+  padding: 1rem 0 2rem 0;
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+}
+
+.nodataIcon {
+  max-width: 16rem;
+  height: 10rem;
+}

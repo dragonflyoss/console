@@ -6,8 +6,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab, { TabProps } from '@mui/material/Tab';
 import { useEffect } from 'react';
 import styles from './index.module.css';
-import { ReactComponent as Clear } from '../../../assets/images/job/task/clear-cache.svg';
-import { ReactComponent as Executions } from '../../../assets/images/job/task/executions.svg';
+import { ReactComponent as Clear } from '../../../../assets/images/job/task/clear-cache.svg';
+import { ReactComponent as Executions } from '../../../../assets/images/job/task/executions.svg';
 
 export default function NavTabs() {
   const [value, setValue] = React.useState(1);
@@ -103,7 +103,7 @@ export default function NavTabs() {
           iconPosition="start"
           label="Clear"
           component={Link}
-          to="/jobs/task/clear"
+          to="/jobs/resource/task/clear"
           sx={{ textTransform: 'none' }}
           id="tab-clear"
         />
@@ -112,7 +112,7 @@ export default function NavTabs() {
           iconPosition="start"
           label="Executions"
           component={Link}
-          to="/jobs/task/executions"
+          to="/jobs/resource/task/executions"
           id="tab-executions"
         />
       </AntTabs>

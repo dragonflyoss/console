@@ -1,0 +1,34 @@
+.container {
+  padding: 1rem 2rem;
+  margin-bottom: 2rem;
+}
+
+.informationContainer {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem 0rem;
+}
+
+.informationTitle {
+  width: 30%;
+  display: flex;
+  align-items: center;
+}
+
+.informationTitleIcon {
+  width: 1.4rem !important;
+  height: 1.4rem !important;
+  color: var(--palette-detail-lable-color);
+}
+
+.informationTitleText {
+  margin-left: 1rem !important;
+  color: var(--palette-detail-lable-color);
+  font-family: 'mabry-bold' !important;
+}
+
+.informationContent {
+  width: 70%;
+  word-break: break-all;
+  font-family: 'mabry-bold' !important;
+}

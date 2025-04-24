@@ -1,10 +1,10 @@
 import Box from '@mui/material/Box';
 import styles from './index.module.css';
-import { getDeleteTaskJob, getTaskJobResponse } from '../../../../lib/api';
+import { getDeleteTaskJob, getTaskJobResponse } from '../../../../../lib/api';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getDatetime, useQuery } from '../../../../lib/utils';
-import { DEFAULT_PAGE_SIZE } from '../../../../lib/constants';
+import { getDatetime, useQuery } from '../../../../../lib/utils';
+import { DEFAULT_PAGE_SIZE } from '../../../../../lib/constants';
 import {
   Divider,
   FormControl,
@@ -22,12 +22,12 @@ import {
   Skeleton,
 } from '@mui/material';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import Card from '../../../card';
-import { ReactComponent as IcContent } from '../../../../assets/images/cluster/scheduler/ic-content.svg';
-import { ReactComponent as Success } from '../../../../assets/images/job/preheat/success.svg';
-import { ReactComponent as Failure } from '../../../../assets/images/job/preheat/failure.svg';
-import { ReactComponent as Pending } from '../../../../assets/images/job/preheat/pending.svg';
-import { ReactComponent as Detail } from '../../../../assets/images/job/preheat/detail.svg';
+import Card from '../../../../card';
+import { ReactComponent as IcContent } from '../../../../../assets/images/cluster/scheduler/ic-content.svg';
+import { ReactComponent as Success } from '../../../../../assets/images/job/preheat/success.svg';
+import { ReactComponent as Failure } from '../../../../../assets/images/job/preheat/failure.svg';
+import { ReactComponent as Pending } from '../../../../../assets/images/job/preheat/pending.svg';
+import { ReactComponent as Detail } from '../../../../../assets/images/job/preheat/detail.svg';
 
 export default function Executions() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -241,7 +241,7 @@ export default function Executions() {
                         <RouterLink
                           component={Link}
                           id={`execution-${item?.id}`}
-                          to={`/jobs/task/executions/${item?.id}`}
+                          to={`/jobs/resource/task/executions/${item?.id}`}
                           underline="hover"
                           sx={{ color: 'var(--palette-description-color)' }}
                         >
@@ -289,7 +289,7 @@ export default function Executions() {
                       <RouterLink
                         component={Link}
                         id={`execution-${item?.id}`}
-                        to={`/jobs/task/executions/${item?.id}`}
+                        to={`/jobs/resource/task/executions/${item?.id}`}
                         underline="hover"
                         sx={{ color: 'var(--palette-description-color)' }}
                       >
@@ -309,7 +309,7 @@ export default function Executions() {
             page={executionsPage}
             onChange={(_event: any, newPage: number) => {
               setExecutionsPage(newPage);
-              navigate(`/jobs/task/executions${newPage > 1 ? `?page=${newPage}` : ''}`);
+              navigate(`/jobs/resource/task/executions${newPage > 1 ? `?page=${newPage}` : ''}`);
             }}
             boundaryCount={1}
             color="primary"

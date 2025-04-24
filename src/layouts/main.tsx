@@ -22,10 +22,12 @@ import EditTokens from '../components/developer/tokens/edit';
 import Preheats from '../components/job/preheats';
 import NewPreheat from '../components/job/preheats/new';
 import ShowPreheat from '../components/job/preheats/show';
-import Clear from '../components/job/task/clear';
-import Task from '../components/job/task';
-import Executions from '../components/job/task/executions';
-import ShowTask from '../components/job/task/executions/show';
+import Clear from '../components/job/resource/task/clear';
+import Task from '../components/job/resource/task';
+import Executions from '../components/job/resource/task/executions';
+import ShowTask from '../components/job/resource/task/executions/show';
+import PersistentCacheTasks from '../components/job/resource/persistent-cache-task';
+import PersistentCacheTask from '../components/job/resource/persistent-cache-task/information/show';
 import { useState, useEffect } from 'react';
 import { getJwtPayload } from '../lib/utils';
 import { getUserRoles } from '../lib/api';
@@ -77,10 +79,12 @@ function Main() {
         <Route path="/jobs/preheats/new" element={<NewPreheat />} />
         <Route path="/jobs/preheats/:id" element={<ShowPreheat />} />
         <Route element={<Task />}>
-          <Route path="/jobs/task/clear" element={<Clear />} />
-          <Route path="/jobs/task/executions" element={<Executions />} />
-          <Route path="/jobs/task/executions/:id" element={<ShowTask />} />
+          <Route path="/jobs/resource/task/clear" element={<Clear />} />
+          <Route path="/jobs/resource/task/executions" element={<Executions />} />
+          <Route path="/jobs/resource/task/executions/:id" element={<ShowTask />} />
         </Route>
+        <Route path="/jobs/resource/persistent-cache-task" element={<PersistentCacheTasks />} />
+        <Route path="/jobs/resource/persistent-cache-task/:id" element={<PersistentCacheTask />} />
         {isRoot && <Route path="/users" element={<Users />} />}
         <Route path="/users/new" element={<NewUser />} />
       </Route>

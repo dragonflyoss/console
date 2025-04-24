@@ -37,7 +37,7 @@ import { ReactComponent as SidebarExpand } from '../../assets/images/menu/sideba
 import { ReactComponent as SidebarClosure } from '../../assets/images/menu/sidebar-closure.svg';
 import { HeaderLayout, ShrinkDarkMode } from '../dark-layout';
 import Card from '../card';
-import _ from 'lodash';
+import _, { set } from 'lodash';
 
 interface MyContextType {
   user: getUserResponse;
@@ -99,6 +99,7 @@ export default function Layout(props: any) {
   const [firstLogin, setFirstLogin] = useState(false);
   const [expandDeveloper, setExpandDeveloper] = useState(false);
   const [expandJob, setExpandJob] = useState(false);
+  const [expandResource, setExpandResource] = useState(false);
   const [progress, setProgress] = useState(0);
   const [expandedMenu, setExpandedMenu] = useState<any | null>(null);
   const [compactLayout, setCompactLayout] = useState(() => {
@@ -213,9 +214,23 @@ export default function Layout(props: any) {
           text: 'Preheat',
         },
         {
-          label: 'task',
-          href: '/jobs/task/clear',
-          text: 'Task',
+          label: 'resource',
+          href: '/resource',
+          text: 'Resource',
+          expand: expandResource,
+          setExpand: setExpandResource,
+          menuProps: [
+            {
+              label: 'clear',
+              href: '/jobs/resource/task/clear',
+              text: 'Task',
+            },
+            {
+              label: 'persistent-cache-task',
+              href: '/jobs/resource/persistent-cache-task',
+              text: 'Persistent Cache Task',
+            },
+          ],
         },
       ],
     },
@@ -353,22 +368,56 @@ export default function Layout(props: any) {
                                   }}
                                   className={styles.shrinkMenu}
                                 >
-                                  {items.menuProps.map((subItem) => (
-                                    <MenuItem
-                                      id={subItem.label}
-                                      sx={{ borderRadius: 'var(--menu-border-radius)' }}
-                                      key={subItem.label}
-                                      onClick={() => {
-                                        setExpandedMenu(null);
-                                      }}
-                                      component={Link}
-                                      to={subItem.href}
-                                    >
-                                      <Typography variant="body2" className={styles.avatarMenu}>
+                                  {items.menuProps.map((subItem) =>
+                                    subItem.href ? (
+                                      <MenuItem
+                                        id={subItem.label}
+                                        sx={{ borderRadius: 'var(--menu-border-radius)' }}
+                                        key={subItem.label}
+                                        onClick={() => {
+                                          setExpandedMenu(null);
+                                        }}
+                                        component={Link}
+                                        to={subItem.href}
+                                      >
+                                        <Typography variant="body2" className={styles.avatarMenu}>
+                                          {subItem.text}
+                                        </Typography>
+                                      </MenuItem>
+                                    ) : (
+                                      <ListItemButton>
                                         {subItem.text}
-                                      </Typography>
-                                    </MenuItem>
-                                  ))}
+
+                                        {/* {subItem.menuProps?.map((item) => {
+                                          return (
+                                            <ListItemButton
+                                              className={styles.expandable}
+                                              id={item.label}
+                                              selected={(location.pathname.split('/')[2] || '') === item.label}
+                                              component={Link}
+                                              to={item.href || ''}
+                                              sx={{
+                                                '&.Mui-selected': {
+                                                  backgroundColor: 'var(--palette-menu-background-color)',
+                                                  color: 'var(--palette-secondary-dark)',
+                                                },
+                                                '&.Mui-selected:hover': {
+                                                  color: 'var(--palette-secondary-dark)',
+                                                },
+                                                borderRadius: '0.6rem',
+                                                p: '0.4rem 0.7rem',
+                                                color: 'var(--palette-sidebar-menu-color)',
+                                              }}
+                                            >
+                                              <Typography variant="body1" sx={{ fontFamily: 'mabry-bold' }}>
+                                                {item.text}
+                                              </Typography>
+                                            </ListItemButton>
+                                          );
+                                        })} */}
+                                      </ListItemButton>
+                                    ),
+                                  )}
                                 </Box>
                               )}
                             </ListItemButton>
@@ -499,8 +548,8 @@ export default function Layout(props: any) {
                 ) : (
                   <Grid
                     sx={{
-                      width: '13.5rem',
-                      pl: '1.2rem',
+                      width: '15.4rem',
+                      pl: '1rem',
                       height: '100%',
                       display: 'flex',
                       flexDirection: 'column',
@@ -552,7 +601,7 @@ export default function Layout(props: any) {
                               >
                                 <Box display="flex" alignItems="center">
                                   {items.icon}
-                                  <Typography variant="body1" className={styles.menuText}>
+                                  <Typography variant="body2" className={styles.menuText}>
                                     {items.text}
                                   </Typography>
                                 </Box>
@@ -565,7 +614,78 @@ export default function Layout(props: any) {
                               <Collapse in={items.expand} timeout="auto" unmountOnExit sx={{ position: 'relative' }}>
                                 <List component="ul" disablePadding className={styles.list}>
                                   {items.menuProps?.map((item) => {
-                                    return (
+                                    return item?.menuProps ? (
+                                      <Box key={item.href}>
+                                        <ListItemButton
+                                          className={styles.expandable}
+                                          id={item.label}
+                                          selected={(location.pathname.split('/')[2] || '') === item.label}
+                                          // component={Link}
+                                          // to={item.href || ''}
+                                          onClick={() => {
+                                            item?.setExpand(!item?.expand);
+                                          }}
+                                          sx={{
+                                            '&.Mui-selected': {
+                                              backgroundColor: 'var(--palette-menu-background-color)',
+                                              color: 'var(--palette-secondary-dark)',
+                                            },
+                                            '&.Mui-selected:hover': {
+                                              color: 'var(--palette-secondary-dark)',
+                                            },
+                                            borderRadius: '0.6rem',
+                                            p: '0.4rem 0.7rem',
+                                            color: 'var(--palette-sidebar-menu-color)',
+                                            justifyContent: 'space-between',
+                                          }}
+                                        >
+                                          <Typography variant="body2" sx={{ fontFamily: 'mabry-bold' }}>
+                                            {item.text}
+                                          </Typography>
+                                          {item.expand ? (
+                                            <SidebarClosure className={styles.sidebarExpand} />
+                                          ) : (
+                                            <SidebarExpand className={styles.sidebarExpand} />
+                                          )}
+                                        </ListItemButton>
+                                        <Collapse
+                                          in={item.expand}
+                                          timeout="auto"
+                                          unmountOnExit
+                                          sx={{ position: 'relative' }}
+                                        >
+                                          <List component="ul" disablePadding className={styles.list}>
+                                            {item.menuProps?.map((subitem) => {
+                                              return (
+                                                <ListItemButton
+                                                  className={styles.expandable}
+                                                  id={subitem.label}
+                                                  selected={(location.pathname.split('/')[2] || '') === subitem.label}
+                                                  component={Link}
+                                                  to={subitem.href || ''}
+                                                  sx={{
+                                                    '&.Mui-selected': {
+                                                      backgroundColor: 'var(--palette-menu-background-color)',
+                                                      color: 'var(--palette-secondary-dark)',
+                                                    },
+                                                    '&.Mui-selected:hover': {
+                                                      color: 'var(--palette-secondary-dark)',
+                                                    },
+                                                    borderRadius: '0.6rem',
+                                                    p: '0.4rem 0.7rem',
+                                                    color: 'var(--palette-sidebar-menu-color)',
+                                                  }}
+                                                >
+                                                  <Typography variant="body2" sx={{ fontFamily: 'mabry-bold' }}>
+                                                    {subitem.text}
+                                                  </Typography>
+                                                </ListItemButton>
+                                              );
+                                            })}
+                                          </List>
+                                        </Collapse>
+                                      </Box>
+                                    ) : (
                                       <ListItemButton
                                         className={styles.expandable}
                                         id={item.label}
@@ -585,7 +705,7 @@ export default function Layout(props: any) {
                                           color: 'var(--palette-sidebar-menu-color)',
                                         }}
                                       >
-                                        <Typography variant="body1" sx={{ fontFamily: 'mabry-bold' }}>
+                                        <Typography variant="body2" sx={{ fontFamily: 'mabry-bold' }}>
                                           {item.text}
                                         </Typography>
                                       </ListItemButton>
@@ -618,7 +738,7 @@ export default function Layout(props: any) {
                               }}
                             >
                               {items.icon}
-                              <Typography variant="body1" className={styles.menuText}>
+                              <Typography variant="body2" className={styles.menuText}>
                                 {items.text}
                               </Typography>
                             </ListItemButton>
@@ -747,7 +867,7 @@ export default function Layout(props: any) {
               <Box
                 id="main"
                 className={styles.layout}
-                sx={{ paddingLeft: compactLayout ? '4rem !important' : '13.5rem !important' }}
+                sx={{ paddingLeft: compactLayout ? '4rem !important' : '15.4rem !important' }}
               >
                 <main onMouseEnter={handleMouseLeave} className={styles.main}>
                   <Outlet />

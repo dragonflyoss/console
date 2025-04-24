@@ -67,11 +67,9 @@ describe('Seed peer', () => {
 
   it('click the breadcrumb', () => {
     // Check for breadcrumb.
-    cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
-      .should('be.visible')
-      .and('contain', 'seed-peer-cluster-1');
+    cy.get('#seed-peer-cluster-id').should('be.visible').and('contain', 'seed-peer-cluster-1');
 
-    cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root').click();
+    cy.get('#seed-peer-cluster-id').click();
 
     // Then I see that the current page is the clusters/1!
     cy.url().should('include', '/clusters/1');
@@ -81,52 +79,48 @@ describe('Seed peer', () => {
     it('can display breadcrumb', () => {
       // Show isloading.
       cy.get('[data-testid="isloading"]').should('be.exist');
-      cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
-        .should('be.visible')
-        .and('contain', 'seed-peer-cluster-1');
+      cy.get('#seed-peer-cluster-id').should('be.visible').and('contain', 'seed-peer-cluster-1');
 
-      cy.get('.MuiBreadcrumbs-ol > :nth-child(7) > .MuiTypography-root')
-        .should('be.visible')
-        .and('contain', 'seed-peer-10');
+      cy.get('#seed-peer-hostname').should('be.visible').and('contain', 'seed-peer-10');
 
       cy.get('[data-testid="isloading"]').should('not.exist');
     });
 
     it('can display active seed peer', () => {
-      // Show ID.
+      // Displays the seed peer ID.
       cy.get('#id').should('be.visible').and('contain', '10');
 
-      // Show Hostname.
+      // Displays the seed peer hostname.
       cy.get('#hostname').should('be.visible').and('contain', 'seed-peer-10');
 
-      // Show IP.
+      // Displays the seed peer IP.
       cy.get('#ip').should('be.visible').and('contain', '33.149.137.183');
 
-      // Show Cluster ID.
+      // Displays the seed peer cluster ID.
       cy.get('#cluster-id').should('be.visible').and('contain', '1');
 
-      // Show Port.
+      // Displays the seed peer port.
       cy.get('#port').should('be.visible').and('contain', '65006');
 
-      // Show Download Port.
+      // Displays the seed peer Download Port.
       cy.get('#download-port').should('be.visible').and('contain', '65002');
 
-      // Show Object Storage Port.
+      // Displays the seed peer Object Storage Port.
       cy.get('#object-storage-port').should('be.visible').and('contain', '443');
 
-      // Show Type.
+      // Displays the seed peer Type.
       cy.get('#type').should('be.visible').and('contain', 'Supe');
 
-      // Show Active background color.
+      // Displays the seed peer Active background color.
       cy.get('#status')
         .should('be.visible')
         .and('contain', 'Active')
         .and('have.css', 'background-color', 'rgb(0, 129, 112)');
 
-      // Show Created At.
+      // Displays the seed peer Created At.
       cy.get('#created-at').should('have.text', '2023-11-11 20:09:08');
 
-      // Show Updated At.
+      // Displays the seed peer Updated At.
       cy.get('#updated-at').should('have.text', '2023-11-11 20:09:13');
     });
 
@@ -140,10 +134,10 @@ describe('Seed peer', () => {
 
       cy.visit('/clusters/1/seed-peers/11');
 
-      // Show Hostname.
+      // Displays the seed peer hostname.
       cy.get('#hostname').should('be.visible').and('contain', 'seed-peer-11');
 
-      // Show Inactive background color.
+      // Displays the seed peer Inactive background color.
       cy.get('#status')
         .should('be.visible')
         .and('contain', 'Inactive')
@@ -163,45 +157,43 @@ describe('Seed peer', () => {
     });
 
     it('unable to display breadcrumb', () => {
-      cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
-        .should('be.visible')
-        .and('contain', 'seed-peer-cluster-1');
+      cy.get('#seed-peer-cluster-id').should('be.visible').and('contain', 'seed-peer-cluster-1');
 
-      cy.get('.MuiBreadcrumbs-ol > :nth-child(7) > .MuiTypography-root').should('be.visible').and('contain', '-');
+      cy.get('#seed-peer-hostname').should('be.visible').and('contain', '-');
     });
 
     it('seed peer should render empty status', () => {
-      // Show ID.
+      // Displays the seed peer ID.
       cy.get('#id').should('contain', '-');
 
-      // Show Hostname.
+      // Displays the seed peer hostname.
       cy.get('#hostname').should('contain', '-');
 
-      // Show IP.
+      // Displays the seed peer IP.
       cy.get('#ip').should('contain', '-');
 
-      // Show Cluster ID.
+      // Displays the seed peer cluster ID.
       cy.get('#cluster-id').should('contain', '-');
 
-      // Show Port.
+      // Displays the seed peer port.
       cy.get('#port').should('contain', '-');
 
-      // Show Download Port.
+      // Displays the seed peer Download Port.
       cy.get('#download-port').should('contain', '-');
 
-      // Show Object Storage Port.
+      // Displays the seed peer Object Storage Port.
       cy.get('#object-storage-port').should('contain', '-');
 
-      // Show Type.
+      // Displays the seed peer Type.
       cy.get('#type').should('contain', '-');
 
       // Show Start.
       cy.get('#status').should('contain', '-');
 
-      // Show Created At.
+      // Displays the seed peer Created At.
       cy.get('#created-at').should('contain', '-');
 
-      // Show Updated At.
+      // Displays the seed peer Updated At.
       cy.get('#updated-at').should('contain', '-');
     });
   });
@@ -219,53 +211,51 @@ describe('Seed peer', () => {
 
     it('show error message', () => {
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('.MuiAlert-message').should('not.exist');
+      cy.get('#error-message').should('not.exist');
     });
 
     it('unable to display breadcrumb', () => {
-      cy.get('.MuiBreadcrumbs-ol > :nth-child(3) > .MuiTypography-root')
-        .should('be.visible')
-        .and('contain', 'seed-peer-cluster-1');
+      cy.get('#seed-peer-cluster-id').should('be.visible').and('contain', 'seed-peer-cluster-1');
 
-      cy.get('.MuiBreadcrumbs-ol > :nth-child(7) > .MuiTypography-root').should('be.visible').and('contain', '-');
+      cy.get('#seed-peer-hostname').should('be.visible').and('contain', '-');
     });
 
     it('seed peer should render empty status', () => {
-      // Show ID.
+      // Displays the seed peer ID.
       cy.get('#id').should('contain', '-');
 
-      // Show Hostname.
+      // Displays the seed peer hostname.
       cy.get('#hostname').should('contain', '-');
 
-      // Show IP.
+      // Displays the seed peer IP.
       cy.get('#ip').should('contain', '-');
 
-      // Show Cluster ID.
+      // Displays the seed peer cluster ID.
       cy.get('#cluster-id').should('contain', '-');
 
-      // Show Port.
+      // Displays the seed peer port.
       cy.get('#port').should('contain', '-');
 
-      // Show Download Port.
+      // Displays the seed peer Download Port.
       cy.get('#download-port').should('contain', '-');
 
-      // Show Object Storage Port.
+      // Displays the seed peer Object Storage Port.
       cy.get('#object-storage-port').should('contain', '-');
 
-      // Show Type.
+      // Displays the seed peer Type.
       cy.get('#type').should('contain', '-');
 
       // Show Start.
       cy.get('#status').should('contain', '-');
 
-      // Show Created At.
+      // Displays the seed peer Created At.
       cy.get('#created-at').should('contain', '-');
 
-      // Show Updated At.
+      // Displays the seed peer Updated At.
       cy.get('#updated-at').should('contain', '-');
     });
   });

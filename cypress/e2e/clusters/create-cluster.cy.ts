@@ -70,20 +70,20 @@ describe('Create cluster', () => {
     cy.get('#location').type('China|Hang|Zhou');
 
     // Add idc.
-    cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('hz{enter}');
-    cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('sh{enter}');
-    cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click();
+    cy.get('#idc').type('hz{enter}');
+    cy.get('#idc').type('sh{enter}');
 
     // Add cidrs.
+    cy.get('#cidrs').click();
     cy.contains('li', '10.0.0.0/8').click();
-    cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click();
+    cy.get('#cidrs').click();
     cy.contains('li', '172.16.0.0/12').click();
-    cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').click();
+    cy.get('#cidrs').click();
     cy.contains('li', '192.168.0.0/16').click();
 
     // Add config.
-    cy.get(':nth-child(3) > .MuiInputBase-root').clear();
-    cy.get(':nth-child(3) > .MuiInputBase-root').type('10');
+    cy.get('#candidateParentLimit').clear();
+    cy.get('#candidateParentLimit').type('10');
 
     cy.intercept(
       {
@@ -130,7 +130,7 @@ describe('Create cluster', () => {
     // Then I see that the current page is the clusters.
     cy.url().should('include', '/clusters/38');
 
-    cy.get('.information_classNameWrapper__Ey-oo > div.MuiBox-root > #name').should('have.text', 'cluster-38');
+    cy.get('#name').should('have.text', 'cluster-38');
 
     cy.get('#description').should('have.text', 'Add new cluster case');
 
@@ -190,9 +190,9 @@ describe('Create cluster', () => {
     cy.get('#name').type('cluster-1{enter}');
 
     // Show error message.
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
+    cy.get('#error-message').should('be.visible').and('contain', 'Conflict');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('.MuiPaper-message').should('not.exist');
+    cy.get('#error-message').should('not.exist');
   });
 
   it('click the `CANCEL button', () => {
@@ -222,7 +222,7 @@ describe('Create cluster', () => {
     cy.get('#name').type('cluster-17{enter}');
 
     // Show error message.
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'permission deny');
+    cy.get('#error-message').should('be.visible').and('contain', 'permission deny');
 
     cy.get('#cancel').click();
 
@@ -242,7 +242,7 @@ describe('Create cluster', () => {
 
     cy.get('#name').type('cluster-17');
     cy.get('#save').click();
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+    cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
   });
 
   describe('cannot create cluster with invalid attributes', () => {
@@ -310,41 +310,37 @@ describe('Create cluster', () => {
       cy.get('#location-helper-text').should('not.exist');
 
       // Should display idc the validation error message.
-      cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('hz');
+      cy.get('#idc').type('hz');
       cy.get('#save').click();
       cy.url().should('include', '/clusters/new');
       cy.get('#idc-helper-text').should('be.visible').and('contain', `Please press ENTER to end the IDC creation.`);
-      cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('hz{enter}');
+      cy.get('#idc').type('hz{enter}');
 
       // Verification passed.
       cy.get('#idc-helper-text').should('not.exist');
 
       // Should display cidrs the validation error message.
-      cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
-        '192.168.40.0/24',
-      );
+      cy.get('#cidrs').type('192.168.40.0/24');
       cy.get('#save').click();
       cy.url().should('include', '/clusters/new');
       cy.get('#cidrs-helper-text').should('be.visible').and('contain', `Please press ENTER to end the CIDRs creation.`);
 
-      cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
-        '192.168.40.0/24{enter}',
-      );
+      cy.get('#cidrs').type('192.168.40.0/24{enter}');
 
       // Verification passed.
       cy.get('#cidrs-helper-text').should('not.exist');
 
       // Should display cidrs the validation error message.
-      cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('sigma');
+      cy.get('#hostnames').type('sigma');
       cy.get('#save').click();
+
       cy.url().should('include', '/clusters/new');
+      
       cy.get('#hostnames-helper-text')
         .should('be.visible')
         .and('contain', `Please press ENTER to end the Hostnames creation.`);
-      cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
-        'hostname{enter}',
-      );
-      cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(hostnames);
+      cy.get('#hostnames').type('hostname{enter}');
+      cy.get('#hostnames').type(hostnames);
 
       cy.get('#hostnames-helper-text')
         .should('be.visible')

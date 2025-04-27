@@ -132,10 +132,11 @@ export default function NewCluster() {
       },
     },
     {
-      name: 'idc',
-      label: 'IDC',
       enterMultiple: true,
       scopesFormProps: {
+        id: 'idc',
+        name: 'idc',
+        label: 'IDC',
         value: idc,
         options: [],
         onChange: (_e: any, newValue: any) => {
@@ -151,7 +152,7 @@ export default function NewCluster() {
 
         renderTags: (value: any, getTagProps: any) =>
           value.map((option: any, index: any) => (
-            <Chip size="small" key={index} label={option} {...getTagProps({ index })} />
+            <Chip id={`idc-${index}`} size="small" key={index} label={option} {...getTagProps({ index })} />
           )),
       },
 
@@ -196,10 +197,11 @@ export default function NewCluster() {
       },
     },
     {
-      name: 'cidrs',
-      label: 'CIDRs',
       enterMultiple: true,
       scopesFormProps: {
+        id: 'cidrs',
+        name: 'cidrs',
+        label: 'CIDRs',
         value: cidrs,
         options: cidrsOptions,
 
@@ -216,7 +218,7 @@ export default function NewCluster() {
 
         renderTags: (value: any, getTagProps: any) =>
           value.map((option: any, index: any) => (
-            <Chip size="small" key={index} label={option} {...getTagProps({ index })} />
+            <Chip id={`cidrs-${index}`} size="small" key={index} label={option} {...getTagProps({ index })} />
           )),
       },
 
@@ -262,10 +264,11 @@ export default function NewCluster() {
       },
     },
     {
-      name: 'hostnames',
-      label: 'Hostnames',
       enterMultiple: true,
       scopesFormProps: {
+        id: 'hostnames',
+        name: 'hostnames',
+        label: 'Hostnames',
         value: hostnames,
         options: [],
 
@@ -282,7 +285,7 @@ export default function NewCluster() {
 
         renderTags: (value: any, getTagProps: any) =>
           value.map((option: any, index: any) => (
-            <Chip size="small" key={index} label={option} {...getTagProps({ index })} />
+            <Chip id={`hostnames-${index}`} size="small" key={index} label={option} {...getTagProps({ index })} />
           )),
       },
 
@@ -654,22 +657,14 @@ export default function NewCluster() {
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
           {errorMessageText}
         </Alert>
       </Snackbar>
       <Typography variant="h5" mb="1rem">
         Create Cluster
       </Typography>
-      <Breadcrumbs
-        separator={
-          <Box
-            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
-          />
-        }
-        aria-label="breadcrumb"
-        sx={{ mt: '1rem' }}
-      >
+      <Breadcrumbs separator={<Box className={styles.breadcrumbs} />} aria-label="breadcrumb" sx={{ mt: '1rem' }}>
         <RouterLink component={Link} underline="hover" color="text.primary" to={`/clusters`}>
           Cluster
         </RouterLink>
@@ -678,8 +673,8 @@ export default function NewCluster() {
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <Box className={styles.container}>
-          <Box className={styles.informationTitle}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+          <Box className={styles.titleContainer}>
+            <Typography variant="h6" className={styles.titleTexg}>
               Information
             </Typography>
             <Tooltip title="The information of cluster." placement="top">
@@ -700,7 +695,7 @@ export default function NewCluster() {
               <HelpIcon className={styles.descriptionIcon} />
             </Tooltip>
           </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Box className={styles.scopesContainer}>
             {informationForm.map((item) => {
               return item?.formProps?.name === 'description' ? (
                 <TextField
@@ -721,8 +716,8 @@ export default function NewCluster() {
               );
             })}
           </Box>
-          <Box className={styles.scopesTitle}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+          <Box className={styles.titleContainer}>
+            <Typography variant="h6" className={styles.titleTexg}>
               Scopes
             </Typography>
             <Tooltip
@@ -764,8 +759,8 @@ export default function NewCluster() {
               );
             })}
           </Grid>
-          <Box className={styles.configTitle}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+          <Box className={styles.titleContainer}>
+            <Typography variant="h6" className={styles.titleTexg}>
               Config
             </Typography>
             <Tooltip title=" The configuration for P2P downloads." placement="top">

@@ -674,7 +674,7 @@ export default function NewCluster() {
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <Box className={styles.container}>
           <Box className={styles.titleContainer}>
-            <Typography variant="h6" className={styles.titleTexg}>
+            <Typography variant="h6" className={styles.titleText}>
               Information
             </Typography>
             <Tooltip title="The information of cluster." placement="top">
@@ -717,7 +717,7 @@ export default function NewCluster() {
             })}
           </Box>
           <Box className={styles.titleContainer}>
-            <Typography variant="h6" className={styles.titleTexg}>
+            <Typography variant="h6" className={styles.titleText}>
               Scopes
             </Typography>
             <Tooltip
@@ -760,7 +760,7 @@ export default function NewCluster() {
             })}
           </Grid>
           <Box className={styles.titleContainer}>
-            <Typography variant="h6" className={styles.titleTexg}>
+            <Typography variant="h6" className={styles.titleText}>
               Config
             </Typography>
             <Tooltip title=" The configuration for P2P downloads." placement="top">

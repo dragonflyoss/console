@@ -198,7 +198,7 @@ export default function Clusters() {
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
           {errorMessageText}
         </Alert>
       </Snackbar>
@@ -338,38 +338,37 @@ export default function Clusters() {
         </Card>
       </Grid>
       <Box className={styles.searchContainer}>
-        <Stack spacing={2} sx={{ width: '20rem' }}>
-          <Autocomplete
-            color="secondary"
-            id="free-solo-demo"
-            size="small"
-            freeSolo
-            inputValue={searchClusters}
-            onInputChange={(_event, newInputValue) => {
-              handleInputChange(newInputValue);
-            }}
-            options={(Array.isArray(clusterCount) && clusterCount?.map((option) => option?.name)) || ['']}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                sx={{ padding: 0 }}
-                label="Search"
-                InputProps={{
-                  ...params.InputProps,
-                  startAdornment: searchIconISLodaing ? (
-                    <Box className={styles.searchIconContainer}>
-                      <SearchCircularProgress />
-                    </Box>
-                  ) : (
-                    <Box className={styles.searchIconContainer}>
-                      <SearchIcon sx={{ color: '#919EAB' }} />
-                    </Box>
-                  ),
-                }}
-              />
-            )}
-          />
-        </Stack>
+        <Autocomplete
+          sx={{ width: '20rem' }}
+          color="secondary"
+          id="search-wrapper"
+          size="small"
+          freeSolo
+          inputValue={searchClusters}
+          onInputChange={(_event, newInputValue) => {
+            handleInputChange(newInputValue);
+          }}
+          options={(Array.isArray(clusterCount) && clusterCount?.map((option) => option?.name)) || ['']}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              sx={{ padding: 0 }}
+              label="Search"
+              InputProps={{
+                ...params.InputProps,
+                startAdornment: searchIconISLodaing ? (
+                  <Box className={styles.searchIconContainer}>
+                    <SearchCircularProgress />
+                  </Box>
+                ) : (
+                  <Box className={styles.searchIconContainer}>
+                    <SearchIcon sx={{ color: '#919EAB' }} />
+                  </Box>
+                ),
+              }}
+            />
+          )}
+        />
       </Box>
       <Box>
         {isLoading ? (
@@ -380,7 +379,7 @@ export default function Clusters() {
                   <ClusterID className={styles.idIcon} />
                   <Skeleton data-testid="isloading" sx={{ width: '1rem', ml: '0.4rem' }} />
                 </Box>
-                <Typography variant="h6" mb="0.5rem" className={styles.nameText}>
+                <Typography variant="h6" className={styles.nameText}>
                   <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
                 </Typography>
                 <Box display="flex">
@@ -407,7 +406,7 @@ export default function Clusters() {
         ) : Array.isArray(allClusters) && allClusters.length === 0 ? (
           <Box id="no-clusters" className={styles.noClusterContainer}>
             <NoCluster className={styles.noClusterIcon} />
-            <Box fontSize="1.2rem">
+            <Box id="no-results" fontSize="1.2rem">
               No results for&nbsp;
               <Typography variant="h6" component="span">
                 "{searchClusters || ''}"
@@ -419,70 +418,61 @@ export default function Clusters() {
             {Array.isArray(allClusters) &&
               allClusters.map((item) => (
                 <Card key={item.id} id="clusters" className={styles.card}>
-                  <Box className={styles.clusterListContent}>
-                    <Box className={styles.clusterNameWrapper}>
-                      <Box display="flex" mb="0.5rem" alignItems="center">
-                        <ClusterID className={styles.idIcon} />
-                        <Typography id={`cluster-id-${item.id}`} variant="subtitle1" className={styles.idText}>
-                          {item.id}
-                        </Typography>
-                      </Box>
-                      <Typography
-                        id={`cluster-name-${item.id || 0}`}
-                        variant="h6"
-                        mb="0.5rem"
-                        className={styles.nameText}
-                      >
-                        {item.name}
+                  <Box className={styles.clusterNameWrapper}>
+                    <Box display="flex" mb="0.5rem" alignItems="center">
+                      <ClusterID className={styles.idIcon} />
+                      <Typography id={`cluster-id-${item.id}`} variant="subtitle1" className={styles.idText}>
+                        {item.id}
                       </Typography>
-                      <Box display="flex">
-                        <Tooltip title={item.bio || '-'} placement="top">
-                          <Typography
-                            id={`cluster-description-${item.id || 0}`}
-                            variant="caption"
-                            className={styles.descriptionText}
-                          >
-                            {item.bio || '-'}
-                          </Typography>
-                        </Tooltip>
-                      </Box>
                     </Box>
-                    <Divider className={styles.divider} />
-                    <Box className={styles.clusterDefaultWrapper}>
-                      <Paper
-                        elevation={0}
-                        id={`default-cluster-${item.id || 0}`}
-                        sx={{
-                          height: '1.4rem',
-                          background: item.is_default
-                            ? 'var(--palette-description-color)'
-                            : 'var(--palette-dark-300Channel)',
-                          color: item.is_default ? '#FFFFFF' : '#FFFFFF',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          padding: '0.4rem',
+                    <Typography id={`cluster-name-${item.id || 0}`} variant="h6" className={styles.nameText}>
+                      {item.name}
+                    </Typography>
+                    <Tooltip title={item.bio || '-'} placement="top">
+                      <Typography
+                        id={`cluster-description-${item.id || 0}`}
+                        variant="caption"
+                        className={styles.descriptionText}
+                      >
+                        {item.bio || '-'}
+                      </Typography>
+                    </Tooltip>
+                  </Box>
+                  <Divider className={styles.divider} />
+                  <Box className={styles.clusterDefaultWrapper}>
+                    <Paper
+                      elevation={0}
+                      id={`default-cluster-${item.id || 0}`}
+                      sx={{
+                        height: '1.4rem',
+                        background: item.is_default
+                          ? 'var(--palette-description-color)'
+                          : 'var(--palette-dark-300Channel)',
+                        color: '#FFFFFF',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '0.4rem',
+                      }}
+                    >
+                      <Typography variant="body2">{`${item.is_default ? 'Default' : 'Non-Default'}`}</Typography>
+                    </Paper>
+                    <Box className={styles.creatTimeContainer}>
+                      <Chip
+                        avatar={<MoreTimeIcon />}
+                        label={getDatetime(item.created_at)}
+                        variant="outlined"
+                        size="small"
+                      />
+                      <IconButton
+                        id={`show-cluster-${item.id}`}
+                        className={styles.buttonContent}
+                        onClick={() => {
+                          navigate(`/clusters/${item.id}`);
                         }}
                       >
-                        <Typography variant="body2">{`${item.is_default ? 'Default' : 'Non-Default'}`}</Typography>
-                      </Paper>
-                      <Box className={styles.creatTimeContainer}>
-                        <Chip
-                          avatar={<MoreTimeIcon />}
-                          label={getDatetime(item.created_at)}
-                          variant="outlined"
-                          size="small"
-                        />
-                        <IconButton
-                          id={`show-cluster-${item.id}`}
-                          className={styles.buttonContent}
-                          onClick={() => {
-                            navigate(`/clusters/${item.id}`);
-                          }}
-                        >
-                          <ArrowCircleRightIcon className={styles.arrowCircleRightIcon} />
-                        </IconButton>
-                      </Box>
+                        <ArrowCircleRightIcon className={styles.arrowCircleRightIcon} />
+                      </IconButton>
                     </Box>
                   </Box>
                 </Card>
@@ -490,7 +480,7 @@ export default function Clusters() {
           </Box>
         )}
       </Box>
-      {totalPages > 1 ? (
+      {totalPages > 1 && (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
           <Pagination
             count={totalPages}
@@ -514,8 +504,6 @@ export default function Clusters() {
             id="clusterPagination"
           />
         </Box>
-      ) : (
-        <></>
       )}
     </Box>
   );

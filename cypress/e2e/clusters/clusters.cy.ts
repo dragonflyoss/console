@@ -48,9 +48,10 @@ describe('Clusters', () => {
 
   describe('when data is loaded', () => {
     it('display the total number of clusters and the default number', () => {
+      // Click the create cluster button.
       cy.get('#create-cluster').click();
 
-      // Then I see that the current page is the create clusters!
+      // Then I see that the current page is the create cluster!
       cy.url().should('include', '/clusters/new');
 
       cy.get('#cancel').click();
@@ -59,8 +60,10 @@ describe('Clusters', () => {
       cy.url().should('include', '/clusters');
       cy.get('[data-testid="isloading"]').should('be.exist');
 
+      // Check total clusters.
       cy.get('#total-clusters').should('be.visible').and('contain', '37');
 
+      // Check total default clusters.
       cy.get('#default-clusters').should('be.visible').and('contain', '13');
 
       cy.get('[data-testid="isloading"]').should('not.exist');
@@ -114,7 +117,6 @@ describe('Clusters', () => {
 
   describe('when no data is loaded', () => {
     beforeEach(() => {
-      cy.signin();
       cy.intercept(
         {
           method: 'GET',
@@ -318,11 +320,11 @@ describe('Clusters', () => {
 
     it('show error message', () => {
       // Show error message.
-      cy.get('.MuiSnackbar-root > .MuiPaper-root').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+      cy.get('#error-message').should('not.exist');
     });
 
     it('display the total number of clusters and the default number', () => {
@@ -355,7 +357,7 @@ describe('Clusters', () => {
 
   describe('search', () => {
     it('should search cluster name', () => {
-      cy.get('#free-solo-demo').type('cluster-10');
+      cy.get('#search-wrapper').type('cluster-10');
 
       // Then I see that the current page is the /clusters/1?search=cluster-10!
       cy.url().should('include', '/clusters?search=cluster-10');
@@ -364,10 +366,10 @@ describe('Clusters', () => {
       cy.get('#cluster-name-10').should('have.text', 'cluster-10');
 
       // Clear search box.
-      cy.get('#free-solo-demo').clear();
+      cy.get('#search-wrapper').clear();
 
       // If the search is empty, all clusters will be displayed.
-      cy.get('#free-solo-demo').type('{enter}');
+      cy.get('#search-wrapper').type('{enter}');
       cy.get('#clusterPagination > .MuiPagination-ul').should('exist');
 
       // Check number of pagination.
@@ -377,7 +379,7 @@ describe('Clusters', () => {
     });
 
     it('should search cluster name and show no results', () => {
-      cy.get('#free-solo-demo').type('cluster-47');
+      cy.get('#search-wrapper').type('cluster-47');
 
       // No clusters card.
       cy.get('#clustersCard').should('not.exist');
@@ -387,20 +389,20 @@ describe('Clusters', () => {
 
       cy.get('#no-clusters').should('be.visible');
 
-      cy.get('.css-khvsip > .MuiTypography-root').should('have.text', '"cluster-47"');
+      cy.get('#no-results').should('contain', '"cluster-47"');
     });
 
     it('should be queried based on the query string', () => {
       cy.visit('/clusters/?search=cluster-2');
 
       // The content of the input box is displayed as cluster-2.
-      cy.get('#free-solo-demo').should('have.value', 'cluster-2');
+      cy.get('#search-wrapper').should('have.value', 'cluster-2');
 
       cy.get('#clustersCard').should('exist').children().should('have.length', 9);
     });
 
     it('should search for cluster name and switch paging', () => {
-      cy.get('#free-solo-demo').type('cluster');
+      cy.get('#search-wrapper').type('cluster');
 
       // Go to 2 page.
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
@@ -427,7 +429,7 @@ describe('Clusters', () => {
       // Go to 2 page.
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
-      cy.get('#free-solo-demo').type('-2');
+      cy.get('#search-wrapper').type('-2');
 
       // Check number of pagination.
       cy.get('#clusterPagination > .MuiPagination-ul').children().should('have.length', 4);

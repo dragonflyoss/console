@@ -172,10 +172,11 @@ export default function EditCluster() {
       },
     },
     {
-      name: 'idc',
-      label: 'IDC',
       enterMultiple: true,
       scopesFormProps: {
+        id: 'idc',
+        name: 'idc',
+        label: 'IDC',
         value: (idc && idc?.split('|')) || [],
         options: [],
 
@@ -192,7 +193,7 @@ export default function EditCluster() {
 
         renderTags: (value: any, getTagProps: any) =>
           value.map((option: any, index: any) => (
-            <Chip size="small" key={index} label={option} {...getTagProps({ index })} />
+            <Chip id={`idc-${index}`} size="small" key={index} label={option} {...getTagProps({ index })} />
           )),
       },
       formProps: {
@@ -233,10 +234,11 @@ export default function EditCluster() {
       },
     },
     {
-      name: 'cidrs',
-      label: 'CIDRs',
       enterMultiple: true,
       scopesFormProps: {
+        id: 'cidrs',
+        name: 'cidrs',
+        label: 'CIDRs',
         value: cidrs || [],
         options: cidrsOptions,
 
@@ -253,7 +255,7 @@ export default function EditCluster() {
 
         renderTags: (value: any, getTagProps: any) =>
           value.map((option: any, index: any) => (
-            <Chip size="small" key={index} label={option} {...getTagProps({ index })} />
+            <Chip id={`cidrs-${index}`} size="small" key={index} label={option} {...getTagProps({ index })} />
           )),
       },
       formProps: {
@@ -296,10 +298,11 @@ export default function EditCluster() {
       },
     },
     {
-      name: 'hostnames',
-      label: 'Hostnames',
       enterMultiple: true,
       scopesFormProps: {
+        id: 'hostnames',
+        name: 'hostnames',
+        label: 'Hostnames',
         value: hostnames || [],
         options: [],
 
@@ -316,7 +319,7 @@ export default function EditCluster() {
 
         renderTags: (value: any, getTagProps: any) =>
           value.map((option: any, index: any) => (
-            <Chip size="small" key={index} label={option} {...getTagProps({ index })} />
+            <Chip id={`hostnames-${index}`} size="small" key={index} label={option} {...getTagProps({ index })} />
           )),
       },
 
@@ -700,17 +703,13 @@ export default function EditCluster() {
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
           {errorMessageText}
         </Alert>
       </Snackbar>
       <Typography variant="h5">Update Cluster</Typography>
       <Breadcrumbs
-        separator={
-          <Box
-            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
-          />
-        }
+        separator={<Box className={styles.breadcrumbs} />}
         aria-label="breadcrumb"
         sx={{ mb: '2rem', mt: '1rem' }}
       >
@@ -754,8 +753,8 @@ export default function EditCluster() {
       </Card>
       <Grid component="form" noValidate onSubmit={handleSubmit}>
         <Box className={styles.container}>
-          <Box className={styles.informationTitle}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+          <Box className={styles.titelContainer}>
+            <Typography variant="h6" className={styles.titleText}>
               Information
             </Typography>
             <Tooltip title="The information of cluster." placement="top">
@@ -770,6 +769,7 @@ export default function EditCluster() {
                   onChange={(event: { target: { checked: any } }) => {
                     setCluster({ ...cluster, is_default: event.target.checked });
                   }}
+                  id="default"
                   sx={{ '&.MuiCheckbox-root': { color: 'var(--palette-button-color)' } }}
                 />
               }
@@ -793,8 +793,8 @@ export default function EditCluster() {
               className={styles.idcInput}
             />
           ))}
-          <Box className={styles.scopesTitle}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+          <Box className={styles.titelContainer}>
+            <Typography variant="h6" className={styles.titleText}>
               Scopes
             </Typography>
             <Tooltip
@@ -836,8 +836,8 @@ export default function EditCluster() {
               );
             })}
           </Grid>
-          <Box className={styles.configTitle}>
-            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+          <Box className={styles.titelContainer}>
+            <Typography variant="h6" className={styles.titleText}>
               Config
             </Typography>
             <Tooltip title=" The configuration for P2P downloads." placement="top">

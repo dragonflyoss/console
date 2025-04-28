@@ -27,24 +27,24 @@ describe('Update cluster', () => {
     // Show cluster information.
     cy.get('#name').should('contain', 'cluster-1');
 
-    cy.get('.PrivateSwitchBase-input').should('be.checked').check({ force: true });
+    cy.get('#default').should('be.checked').check({ force: true });
 
-    // Show scopes.
+    // Should display location.
     cy.get('#location').should('have.value', 'China|Hang|Zhou');
 
-    cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root')
-      .should('contain', 'Hangzhou')
-      .and('contain', 'Shanghai');
+    // Should display idc.
+    cy.get('#idc-0').should('contain', 'Hangzhou');
+    cy.get('#idc-1').should('contain', 'Shanghai');
 
-    cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root')
-      .should('contain', '10.0.0.0/8')
-      .and('contain', '192.168.0.0/16')
-      .and('contain', '172.16.0.0/12');
+    // Should display cidrs.
+    cy.get('#cidrs-0').should('contain', '10.0.0.0/8');
+    cy.get('#cidrs-1').should('contain', '192.168.0.0/16');
+    cy.get('#cidrs-2').should('contain', '172.16.0.0/12');
 
-    cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root')
-      .should('contain', 'cluster-1')
-      .and('contain', 'cluster-2')
-      .and('contain', 'cluster-3');
+    // Should display hostnames.
+    cy.get('#hostnames-0').should('contain', 'cluster-1');
+    cy.get('#hostnames-1').should('contain', 'cluster-2');
+    cy.get('#hostnames-2').should('contain', 'cluster-3');
 
     // Show config.
     cy.get('#seedPeerLoadLimit').should('have.value', 300);
@@ -101,28 +101,28 @@ describe('Update cluster', () => {
 
     cy.get('#name').should('contain', '');
 
-    cy.get('.PrivateSwitchBase-input').should('not.be.checked').check({ force: false });
+    cy.get('#default').should('not.be.checked').check({ force: false });
 
-    // When location is empty.
+    // Location should be empty.
     cy.get('#location').should('have.value', '');
 
-    // When idc is empty.
+    // IDC should be empty.
     cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').should(
       'have.value',
       '',
     );
-    // When CIDRs is empty.
+    // CIDRs should be empty.
     cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').should(
       'have.value',
       '',
     );
-    // When Hostname is empty.
+    // Hostname should be empty.
     cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').should(
       'have.value',
       '',
     );
 
-    // Show config.
+    // cluster config should be empty.
     cy.get('#seedPeerLoadLimit').should('have.value', 0);
     cy.get('#peerLoadLimit').should('have.value', 0);
     cy.get('#candidateParentLimit').should('have.value', 0);
@@ -146,7 +146,7 @@ describe('Update cluster', () => {
     // Show cluster name.
     cy.get('#name').should('be.visible').and('contain', 'cluster-1');
 
-    cy.get('.PrivateSwitchBase-input').click();
+    cy.get('#default').click();
 
     // Update cluster description.
     cy.get('#description').clear();
@@ -160,9 +160,7 @@ describe('Update cluster', () => {
       .type('{selectall}')
       .type('{backspace}');
 
-    cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
-      '192.168.20.2{enter}',
-    );
+    cy.get('#cidrs').type('192.168.20.2{enter}');
 
     // Update cluster Config.
     cy.get('#seedPeerLoadLimit').clear();
@@ -241,11 +239,11 @@ describe('Update cluster', () => {
     cy.get('#save').click();
 
     // Show error message.
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'permission deny');
+    cy.get('#error-message').should('be.visible').and('contain', 'permission deny');
 
     // Close error message.
-    cy.get(':nth-child(1) > .MuiSnackbar-root > .MuiPaper-root > .MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('.MuiAlert-message').should('not.exist');
+    cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+    cy.get('#error-message').should('not.exist');
   });
 
   describe('should handle API error response', () => {
@@ -262,9 +260,10 @@ describe('Update cluster', () => {
         },
       );
 
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      // Show error message.
+      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('.MuiSnackbar-root > .MuiPaper-root').should('not.exist');
+      cy.get('error-message').should('not.exist');
     });
 
     it('update cluster API error response', () => {
@@ -279,7 +278,9 @@ describe('Update cluster', () => {
       cy.get('#description').type('update cluster-1');
 
       cy.get('#save').click();
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+
+      // Show error message.
+      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
     });
   });
 
@@ -333,7 +334,7 @@ describe('Update cluster', () => {
       cy.get('#idc-helper-text').should('be.visible').and('contain', `Please press ENTER to end the IDC creation.`);
 
       // Verification passed.
-      cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('hz{enter}');
+      cy.get('#idc').type('hz{enter}');
       cy.get('#idc-helper-text').should('not.exist');
 
       // Should display cidrs the validation error message.
@@ -342,12 +343,11 @@ describe('Update cluster', () => {
       );
       cy.get('#save').click();
       cy.url().should('include', '/clusters/1/edit');
+
       // Show verification error message.
       cy.get('#cidrs-helper-text').should('be.visible').and('contain', `Please press ENTER to end the CIDRs creation.`);
 
-      cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
-        '192.168.40.0/24{enter}',
-      );
+      cy.get('#cidrs').type('192.168.40.0/24{enter}');
       cy.get('#cidrs-helper-text').should('not.exist');
 
       // Should display hostnames the validation error message.
@@ -361,9 +361,7 @@ describe('Update cluster', () => {
         .should('be.visible')
         .and('contain', `Please press ENTER to end the Hostnames creation.`);
 
-      cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
-        'cluster-1{enter}',
-      );
+      cy.get('#hostnames').type('cluster-1{enter}');
       cy.get('#hostnames-helper-text').should('not.exist');
     });
 

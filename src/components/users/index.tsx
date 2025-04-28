@@ -311,56 +311,37 @@ export default function Users() {
         </Button>
       </Box>
       <Box className={styles.searchWrapper}>
-        <Stack spacing={2} sx={{ width: '20rem' }}>
-          <Autocomplete
-            color="secondary"
-            id="free-solo-demo"
-            size="small"
-            freeSolo
-            inputValue={searchUser}
-            onInputChange={(_event, newInputValue) => {
-              handleInputChange(newInputValue);
-            }}
-            options={(Array.isArray(allUsers) && allUsers.map((option) => option?.name)) || ['']}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                sx={{ padding: 0 }}
-                label="Search"
-                InputProps={{
-                  ...params.InputProps,
-                  startAdornment: searchIconISLodaing ? (
-                    <Box
-                      sx={{
-                        width: '2.2rem',
-                        height: '2.2rem',
-                        pl: '0.5rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <SearchCircularProgress />
-                    </Box>
-                  ) : (
-                    <Box
-                      sx={{
-                        width: '2.2rem',
-                        height: '2.2rem',
-                        pl: '0.5rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <SearchIcon sx={{ color: '#919EAB' }} />
-                    </Box>
-                  ),
-                }}
-              />
-            )}
-          />
-        </Stack>
+        <Autocomplete
+          color="secondary"
+          id="free-solo-demo"
+          size="small"
+          fullWidth
+          freeSolo
+          inputValue={searchUser}
+          onInputChange={(_event, newInputValue) => {
+            handleInputChange(newInputValue);
+          }}
+          options={(Array.isArray(allUsers) && allUsers.map((option) => option?.name)) || ['']}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              sx={{ padding: 0 }}
+              label="Search user"
+              InputProps={{
+                ...params.InputProps,
+                startAdornment: searchIconISLodaing ? (
+                  <Box className={styles.searchIconContainer}>
+                    <SearchCircularProgress />
+                  </Box>
+                ) : (
+                  <Box className={styles.searchIconContainer}>
+                    <SearchIcon sx={{ color: '#919EAB' }} />
+                  </Box>
+                ),
+              }}
+            />
+          )}
+        />
       </Box>
       <Card>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -531,9 +512,7 @@ export default function Users() {
                             Detail
                           </Typography>
                         </MenuItem>
-                        {selectedRow?.name === 'root' ? (
-                          <></>
-                        ) : (
+                        {selectedRow?.name !== 'root' && (
                           <MenuItem
                             sx={{ borderRadius: 'var(--menu-border-radius)' }}
                             id={`edit-${selectedRow?.name}`}
@@ -559,7 +538,7 @@ export default function Users() {
           </TableBody>
         </Table>
       </Card>
-      {userTotalPages > 1 ? (
+      {userTotalPages > 1 && (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '1rem' }}>
           <Pagination
             id="user-pagination"
@@ -573,8 +552,6 @@ export default function Users() {
             size="small"
           />
         </Box>
-      ) : (
-        <></>
       )}
       <Dialog
         open={switchUser}
@@ -721,13 +698,7 @@ export default function Users() {
                 <ClearOutlinedIcon sx={{ color: 'var(--palette-secondary-dark)' }} />
               </IconButton>
             </Box>
-            <Divider
-              sx={{
-                borderStyle: 'dashed',
-                borderColor: 'var(--palette-palette-divider)',
-                borderWidth: '0px 0px thin',
-              }}
-            />
+            <Divider className={styles.divider} />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <UserID className={styles.detailIcon} />
@@ -739,13 +710,7 @@ export default function Users() {
                 {detailIsLoading ? <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} /> : user?.id || 0}
               </Typography>
             </ListItem>
-            <Divider
-              sx={{
-                borderStyle: 'dashed',
-                borderColor: 'var(--palette-palette-divider)',
-                borderWidth: '0px 0px thin',
-              }}
-            />
+            <Divider className={styles.divider} />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <Name className={styles.detailIcon} />
@@ -761,13 +726,7 @@ export default function Users() {
                 )}
               </Typography>
             </ListItem>
-            <Divider
-              sx={{
-                borderStyle: 'dashed',
-                borderColor: 'var(--palette-palette-divider)',
-                borderWidth: '0px 0px thin',
-              }}
-            />
+            <Divider className={styles.divider} />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <DetailRole className={styles.detailIcon} />
@@ -799,13 +758,7 @@ export default function Users() {
                 )}
               </Typography>
             </ListItem>
-            <Divider
-              sx={{
-                borderStyle: 'dashed',
-                borderColor: 'var(--palette-palette-divider)',
-                borderWidth: '0px 0px thin',
-              }}
-            />
+            <Divider className={styles.divider} />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <Email className={styles.detailIcon} />
@@ -823,13 +776,7 @@ export default function Users() {
                 </Typography>
               </Tooltip>
             </ListItem>
-            <Divider
-              sx={{
-                borderStyle: 'dashed',
-                borderColor: 'var(--palette-palette-divider)',
-                borderWidth: '0px 0px thin',
-              }}
-            />
+            <Divider className={styles.divider} />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <Phone className={styles.detailIcon} />
@@ -841,17 +788,11 @@ export default function Users() {
                 {detailIsLoading ? (
                   <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                 ) : (
-                  user.phone || '-'
+                  user?.phone || '-'
                 )}
               </Typography>
             </ListItem>
-            <Divider
-              sx={{
-                borderStyle: 'dashed',
-                borderColor: 'var(--palette-palette-divider)',
-                borderWidth: '0px 0px thin',
-              }}
-            />
+            <Divider className={styles.divider} />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <Location className={styles.detailIcon} />
@@ -865,19 +806,13 @@ export default function Users() {
                     {detailIsLoading ? (
                       <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
                     ) : (
-                      user.location || '-'
+                      user?.location || '-'
                     )}
                   </Typography>
                 </Box>
               </Tooltip>
             </ListItem>
-            <Divider
-              sx={{
-                borderStyle: 'dashed',
-                borderColor: 'var(--palette-palette-divider)',
-                borderWidth: '0px 0px thin',
-              }}
-            />
+            <Divider className={styles.divider} />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <CreatedAt className={styles.detailIcon} />
@@ -885,29 +820,15 @@ export default function Users() {
                   Created At
                 </Typography>
               </ListItemAvatar>
-              {detailIsLoading ? (
-                <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
-              ) : user.created_at ? (
-                <Typography id="created-at" variant="body2" className={styles.detailContent}>
-                  {detailIsLoading ? (
-                    <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
-                  ) : (
-                    getDatetime(user.created_at || '-')
-                  )}
-                </Typography>
-              ) : (
-                <Typography id="created-at" variant="body2" className={styles.detailContent}>
-                  -
-                </Typography>
-              )}
+              <Typography id="created-at" variant="body2" className={styles.detailContent}>
+                {detailIsLoading ? (
+                  <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
+                ) : (
+                  getDatetime(user?.created_at || '-')
+                )}
+              </Typography>
             </ListItem>
-            <Divider
-              sx={{
-                borderStyle: 'dashed',
-                borderColor: 'var(--palette-palette-divider)',
-                borderWidth: '0px 0px thin',
-              }}
-            />
+            <Divider className={styles.divider} />
             <ListItem className={styles.detailContentWrap}>
               <ListItemAvatar className={styles.detailContentLabelContainer}>
                 <UpdatedAt className={styles.detailIcon} />
@@ -915,21 +836,13 @@ export default function Users() {
                   Updated At
                 </Typography>
               </ListItemAvatar>
-              {detailIsLoading ? (
-                <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
-              ) : user.updated_at ? (
-                <Typography id="updated-at" variant="body2" className={styles.detailContent}>
-                  {detailIsLoading ? (
-                    <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
-                  ) : (
-                    getDatetime(user.updated_at || '-')
-                  )}
-                </Typography>
-              ) : (
-                <Typography id="updated-at" variant="body2" className={styles.detailContent}>
-                  -
-                </Typography>
-              )}
+              <Typography id="updated-at" variant="body2" className={styles.detailContent}>
+                {detailIsLoading ? (
+                  <Skeleton data-testid="detail-isloading" sx={{ width: '8rem' }} />
+                ) : (
+                  getDatetime(user?.updated_at || '-')
+                )}
+              </Typography>
             </ListItem>
           </List>
         </Box>

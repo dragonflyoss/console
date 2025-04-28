@@ -33,6 +33,7 @@ import { ReactComponent as User } from '../../assets/images/menu/user.svg';
 import { ReactComponent as Logo } from '../../assets/images/menu/logo.svg';
 import { ReactComponent as Expand } from '../../assets/images/menu/expand.svg';
 import { ReactComponent as Closure } from '../../assets/images/menu/closure.svg';
+import { ReactComponent as Resource } from '../../assets/images/menu/resource.svg';
 import { ReactComponent as SidebarExpand } from '../../assets/images/menu/sidebar-expand.svg';
 import { ReactComponent as SidebarClosure } from '../../assets/images/menu/sidebar-closure.svg';
 import { DarkMode, ShrinkDarkMode } from '../dark-layout';
@@ -99,6 +100,7 @@ export default function Layout(props: any) {
   const [firstLogin, setFirstLogin] = useState(false);
   const [expandDeveloper, setExpandDeveloper] = useState(false);
   const [expandJob, setExpandJob] = useState(false);
+  const [expandResource, setExpandResource] = useState(false);
   const [progress, setProgress] = useState(0);
   const [expandedMenu, setExpandedMenu] = useState<any | null>(null);
   const [compactLayout, setCompactLayout] = useState(() => {
@@ -212,10 +214,25 @@ export default function Layout(props: any) {
           href: '/jobs/preheats',
           text: 'Preheat',
         },
+      ],
+    },
+    {
+      label: 'resource',
+      href: '/resource',
+      text: 'Resource',
+      icon: <Resource className={styles.menuIcon} />,
+      expand: expandResource,
+      setExpand: setExpandResource,
+      menuProps: [
         {
           label: 'task',
-          href: '/jobs/task/clear',
+          href: '/resource/task/clear',
           text: 'Task',
+        },
+        {
+          label: 'persistent-cache-task',
+          href: '/resource/persistent-cache-task',
+          text: 'Persistent Cache Task',
         },
       ],
     },
@@ -500,7 +517,7 @@ export default function Layout(props: any) {
                 ) : (
                   <Grid
                     sx={{
-                      width: '13.5rem',
+                      width: '14rem',
                       pl: '1.2rem',
                       height: '100%',
                       display: 'flex',
@@ -553,7 +570,7 @@ export default function Layout(props: any) {
                               >
                                 <Box display="flex" alignItems="center">
                                   {items.icon}
-                                  <Typography variant="body1" className={styles.menuText}>
+                                  <Typography variant="body2" className={styles.menuText}>
                                     {items.text}
                                   </Typography>
                                 </Box>
@@ -586,7 +603,7 @@ export default function Layout(props: any) {
                                           color: 'var(--palette-sidebar-menu-color)',
                                         }}
                                       >
-                                        <Typography variant="body1" sx={{ fontFamily: 'mabry-bold' }}>
+                                        <Typography variant="body2" sx={{ fontFamily: 'mabry-bold' }}>
                                           {item.text}
                                         </Typography>
                                       </ListItemButton>
@@ -619,7 +636,7 @@ export default function Layout(props: any) {
                               }}
                             >
                               {items.icon}
-                              <Typography variant="body1" className={styles.menuText}>
+                              <Typography variant="body2" className={styles.menuText}>
                                 {items.text}
                               </Typography>
                             </ListItemButton>
@@ -748,7 +765,7 @@ export default function Layout(props: any) {
               <Box
                 id="main"
                 className={styles.layout}
-                sx={{ paddingLeft: compactLayout ? '4rem !important' : '13.5rem !important' }}
+                sx={{ paddingLeft: compactLayout ? '4rem !important' : '14rem !important' }}
               >
                 <main onMouseEnter={handleMouseLeave} className={styles.main}>
                   <Outlet />

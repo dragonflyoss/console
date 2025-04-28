@@ -17,13 +17,14 @@ export default function NotFound() {
       </Box>
       <Box className={styles.content}>
         <NotFoundImg className={styles.notFound} />
-        <Typography variant="h4" gutterBottom mt="2rem" color="#1c293a">
+        <Typography id="something-went-wrong" variant="h4" gutterBottom mt="2rem" color="#1c293a">
           Something gone wrong!
         </Typography>
-        <Typography variant="body1" fontFamily="mabry-light" mb="2rem" color="#1c293a">
+        <Typography id="404-help-text" variant="body1" fontFamily="mabry-light" mb="2rem" color="#1c293a">
           The page you were looking for doesn't exist.
         </Typography>
         <Button
+          id="go-back"
           variant="contained"
           color="secondary"
           size="large"

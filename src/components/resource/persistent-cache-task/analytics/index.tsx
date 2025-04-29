@@ -52,6 +52,11 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
       const application = Object.entries(
         persistentCacheTasks.reduce<{ [key: string]: number }>((acc, curr) => {
           const { application } = curr;
+
+          if (application === '') {
+            return acc;
+          }
+
           if (acc[application]) {
             acc[application] += 1;
           } else {
@@ -70,6 +75,11 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
       const tag = Object.entries(
         persistentCacheTasks.reduce<{ [key: string]: number }>((acc, curr) => {
           const { tag } = curr;
+
+          if (tag === '') {
+            return acc;
+          }
+
           if (acc[tag]) {
             acc[tag] += 1;
           } else {
@@ -216,7 +226,7 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                   <Count />
                 </span> */}
                 <Typography variant="body2" color="var(--palette-table-title-text-color)">
-                  number of application persistent cache tasks
+                  number of application
                 </Typography>
               </Box>
             </Box>
@@ -244,7 +254,7 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                   <Count />
                 </span> */}
                 <Typography variant="body2" color="var(--palette-table-title-text-color)">
-                  number of tag persistent cache tasks
+                  number of tag
                 </Typography>
               </Box>
             </Box>

@@ -25,10 +25,12 @@ import {
   ListItemText,
   debounce,
   ListItemIcon,
+  Drawer,
+  ListItem,
+  Box,
 } from '@mui/material';
 import { Link, Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab, { TabProps } from '@mui/material/Tab';
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
@@ -38,18 +40,23 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 import styles from './index.module.css';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 
 import { ReactComponent as CreateAt } from '../../../assets/images/resource/persistent-cache-task/create-at.svg';
-import { ReactComponent as ClusterID } from '../../../assets/images/cluster/id.svg';
+import { ReactComponent as ClusterID } from '../../../assets/images/resource/persistent-cache-task/id.svg';
 import { ReactComponent as IcContent } from '../../../assets/images/cluster/scheduler/ic-content.svg';
 import { ReactComponent as NoCluster } from '../../../assets/images/cluster/no-cluster.svg';
 import { ReactComponent as ArrowCircleRightIcon } from '../../../assets/images/cluster/arrow-circle-right.svg';
 import { ReactComponent as Location } from '../../../assets/images/cluster/location.svg';
-import { ReactComponent as Status } from '../../../assets/images/cluster/status.svg';
+import { ReactComponent as Cluster } from '../../../assets/images/resource/persistent-cache-task/cluster.svg';
+import { ReactComponent as SidebarExpand } from '../../../assets/images/menu/sidebar-expand.svg';
+import { ReactComponent as SidebarClosure } from '../../../assets/images/menu/sidebar-closure.svg';
+import { ReactComponent as Name } from '../../../assets/images/user/name.svg';
+import { ReactComponent as Default } from '../../../assets/images/resource/persistent-cache-task/default.svg';
 
 import {
   getClusters,
-  getClustersResponse,
+  getClusterResponse,
   getPersistentCacheTasks,
   getPersistentCacheTasksResponse,
 } from '../../../lib/api';
@@ -61,26 +68,11 @@ import { fuzzySearch, getDatetime, getPaginatedList, useQuery } from '../../../l
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import SearchCircularProgress from '../../circular-progress';
 
-const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
-  [`& .${toggleButtonGroupClasses.grouped}`]: {
-    margin: theme.spacing(0.5),
-    border: 0,
-    borderRadius: theme.shape.borderRadius,
-    [`&.${toggleButtonGroupClasses.disabled}`]: {
-      border: 0,
-    },
-  },
-  [`& .${toggleButtonGroupClasses.middleButton},& .${toggleButtonGroupClasses.lastButton}`]: {
-    marginLeft: -1,
-    borderLeft: '1px solid transparent',
-  },
-}));
-
 type StyledTabProps = Omit<TabProps, 'component'> & {};
 
 export default function PersistentCacheTask() {
   const [value, setValue] = useState('1');
-  const [cluster, setCluster] = useState<getClustersResponse[]>([]);
+  const [cluster, setCluster] = useState<getClusterResponse[]>([]);
   const [errorMessage, setErrorMessage] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
@@ -89,16 +81,19 @@ export default function PersistentCacheTask() {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(9);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [className, setClassName] = useState('');
+  // const [selectCluster, setSelectCluster] = useState();
   const [isDefault, setISDefault] = useState('all');
   const [anchorElement, setAnchorElement] = useState(null);
-  const [selectedRow, setSelectedRow] = useState<getClustersResponse>();
+  const [selectedRow, setSelectedRow] = useState<getClusterResponse | null>(null);
+  const [clusterDetail, setClusterDetail] = useState(false);
+  const [scopesExpand, setScopesExpand] = useState(true);
+  const [configExpand, setConfigExpand] = useState(true);
 
-  const [clusterCount, setClusterCount] = useState<getClustersResponse[]>([]);
+  const [clusterCount, setClusterCount] = useState<getClusterResponse[]>([]);
   // const [delete, setDelete] = useState(false);
 
   const [searchClusters, setSearchClusters] = useState('');
-  const [allClusters, setAllClusters] = useState<getClustersResponse[]>([]);
+  const [allClusters, setAllClusters] = useState<getClusterResponse[]>([]);
 
   const [persistentCacheTasks, setPersistentCacheTasks] = useState<getPersistentCacheTasksResponse[]>();
 
@@ -282,12 +277,313 @@ export default function PersistentCacheTask() {
   };
 
   const handleClose = () => {
+    console.log(clusterDetail);
+
     setAnchorEl(null);
     setAnchorElement(null);
+    setClusterDetail(false);
+    setSelectedRow(null);
+    setScopesExpand(true);
+    setConfigExpand(true);
   };
 
   return (
     <Box>
+      <Drawer anchor="right" open={clusterDetail} onClose={handleClose}>
+        <Box
+          role="presentation"
+          // sx={{ width: 350, backgroundColor: 'var(--palette-sidebar-background-color)', height: '100%' }}
+          className={styles.detailContainer}
+        >
+          <Box className={styles.detailWrapper}>
+            <Typography variant="h6" fontFamily="mabry-bold">
+              Detail
+            </Typography>
+            <IconButton
+              id="closure-user-detail"
+              onClick={() => {
+                setSelectedRow(null);
+                setClusterDetail(false);
+                setScopesExpand(true);
+                setConfigExpand(true);
+              }}
+            >
+              <ClearOutlinedIcon sx={{ color: 'var(--palette-secondary-dark)' }} fontSize="small" />
+            </IconButton>
+          </Box>
+          <Box
+            sx={{
+              backgroundColor: 'var(--palette-sidebar-background-color)',
+              p: '0 1.2rem',
+              // height: '100%',
+              overflow: 'hidden',
+            }}
+          >
+            {/* <Typography id="name" variant="body1" fontFamily="mabry-bold" p="1rem 0">
+              {selectedRow?.name}
+            </Typography>
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            /> */}
+            <Box className={styles.detailContentWrap}>
+              <Box className={styles.detailContentLabelContainer}>
+                <ClusterID className={styles.detailIcon} />
+                <Typography variant="body2" className={styles.detailTitle}>
+                  ID
+                </Typography>
+              </Box>
+              <Typography id="id" variant="body2" className={styles.detailContent}>
+                {selectedRow?.id}
+              </Typography>
+            </Box>
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            />
+            <Box className={styles.detailContentWrap}>
+              <Box className={styles.detailContentLabelContainer}>
+                <Name className={styles.detailIcon} />
+                <Typography variant="body2" className={styles.detailTitle}>
+                  Name
+                </Typography>
+              </Box>
+              <Typography id="id" variant="body2" className={styles.detailContent}>
+                {selectedRow?.name}
+              </Typography>
+            </Box>
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            />
+            <Box className={styles.detailContentWrap}>
+              <Box className={styles.detailContentLabelContainer}>
+                <Default className={styles.detailIcon} />
+                <Typography variant="body2" className={styles.detailTitle}>
+                  Default
+                </Typography>
+              </Box>
+              {/* <Typography id="id" variant="body2" className={styles.detailContent}>
+                {selectedRow?.is_default}
+              </Typography> */}
+
+              <Chip
+                label={`${selectedRow?.is_default ? 'Default' : 'Non-Default'}`}
+                size="small"
+                variant="outlined"
+                id={`default-cluster-${selectedRow?.id || 0}`}
+                sx={{
+                  borderRadius: '0.4rem',
+                  backgroundColor: selectedRow?.is_default
+                    ? 'var(--palette-grey-background-color)'
+                    : 'var(--palette-background-inactive)',
+                  color: selectedRow?.is_default
+                    ? 'var(--palette-description-color)'
+                    : 'var(--palette-table-title-text-color)',
+                  border: 0,
+                  fontFamily: 'mabry-bold',
+                }}
+              />
+            </Box>
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            />
+            {/* <ListItem className={styles.detailContentWrap}>
+              <Box className={styles.detailContentLabelContainer}>
+                <ClusterID className={styles.detailIcon} />
+                <Typography variant="body2" className={styles.detailTitle}>
+                  Scheduler cluster ID
+                </Typography>
+              </Box>
+              <Typography id="id" variant="body2" className={styles.detailContent}>
+                {selectedRow?.scheduler_cluster_id}
+              </Typography>
+            </ListItem>
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            />
+            <ListItem className={styles.detailContentWrap}>
+              <Box className={styles.detailContentLabelContainer}>
+                <ClusterID className={styles.detailIcon} />
+                <Typography variant="body2" className={styles.detailTitle}>
+                  Seed peer cluster ID
+                </Typography>
+              </Box>
+              <Typography id="id" variant="body2" className={styles.detailContent}>
+                {selectedRow?.seed_peer_cluster_id}
+              </Typography>
+            </ListItem>
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            /> */}
+            <Box className={styles.detailContentWrap}>
+              <Box className={styles.detailContentLabelContainer}>
+                <CreateAt className={styles.detailIcon} />
+                <Typography variant="body2" className={styles.detailTitle}>
+                  Create At
+                </Typography>
+              </Box>
+              <Typography id="id" variant="body2" className={styles.detailContent}>
+                {getDatetime(selectedRow?.created_at || '')}
+              </Typography>
+            </Box>
+            <Divider
+              sx={{
+                borderStyle: 'dashed',
+                borderColor: 'var(--palette-palette-divider)',
+                borderWidth: '0px 0px thin',
+              }}
+            />
+
+            <Box className={styles.scopesWrapper}>
+              <Typography variant="subtitle1" fontFamily="mabry-bold">
+                Scopes
+              </Typography>
+              <IconButton
+                aria-label="delete"
+                onClick={() => {
+                  setScopesExpand(!scopesExpand);
+                }}
+              >
+                {scopesExpand ? (
+                  <SidebarClosure className={styles.expand} />
+                ) : (
+                  <SidebarExpand className={styles.expand} />
+                )}
+              </IconButton>
+            </Box>
+            {scopesExpand && (
+              <>
+                <Box className={styles.detailContentWrap}>
+                  <Typography variant="body2" className={styles.socperContainer}>
+                    Location
+                  </Typography>
+                  <Typography id="id" variant="body2" className={styles.detailContent}>
+                    {selectedRow?.scopes?.location || '-'}
+                  </Typography>
+                </Box>
+                <Box className={styles.idcContainer}>
+                  <Typography variant="body2" component="div" mb="0.6rem" className={styles.socperContainer}>
+                    IDC
+                  </Typography>
+                  <Card className={styles.idcDialogContent}>
+                    {selectedRow?.scopes?.idc !== '' &&
+                      selectedRow?.scopes?.idc
+                        .split('|')
+                        .map((item: any, id: any) => <Chip size="small" key={id} label={item} variant="outlined" />)}
+                  </Card>
+                </Box>
+                <Box className={styles.idcContainer}>
+                  <Typography variant="body2" component="div" mb="0.6rem" className={styles.socperContainer}>
+                    CIDRs
+                  </Typography>
+                  <Card className={styles.idcDialogContent}>
+                    {selectedRow?.scopes?.cidrs?.length !== 0 &&
+                      selectedRow?.scopes?.cidrs?.map((item: any, id: any) => (
+                        <Chip size="small" key={id} label={item} variant="outlined" />
+                      ))}
+                  </Card>
+                </Box>
+                <Box className={styles.idcContainer}>
+                  <Typography variant="body2" component="div" mb="0.6rem" className={styles.socperContainer}>
+                    Hostnames
+                  </Typography>
+                  <Card className={styles.idcDialogContent}>
+                    {selectedRow?.scopes?.hostnames?.length! &&
+                      selectedRow?.scopes?.hostnames?.map((item: any, id: any) => (
+                        <Chip size="small" key={id} label={item} variant="outlined" />
+                      ))}
+                  </Card>
+                </Box>
+              </>
+            )}
+
+            <Box className={styles.scopesWrapper}>
+              <Typography variant="subtitle1" fontFamily="mabry-bold">
+                Config
+              </Typography>
+              <IconButton
+                aria-label="delete"
+                onClick={() => {
+                  setConfigExpand(!configExpand);
+                }}
+              >
+                {configExpand ? (
+                  <SidebarClosure className={styles.expand} />
+                ) : (
+                  <SidebarExpand className={styles.expand} />
+                )}
+              </IconButton>
+            </Box>
+
+            {configExpand && (
+              <>
+                <Box className={styles.detailContentWrap}>
+                  <Typography variant="body2" className={styles.configContainer}>
+                    Seed peer load limit
+                  </Typography>
+                  <Typography id="id" variant="body2" className={styles.detailContent}>
+                    {selectedRow?.seed_peer_cluster_config?.load_limit || '-'}
+                  </Typography>
+                </Box>
+                <Box className={styles.detailContentWrap}>
+                  <Typography variant="body2" className={styles.configContainer}>
+                    Peer load limit
+                  </Typography>
+                  <Typography id="id" variant="body2" className={styles.detailContent}>
+                    {selectedRow?.peer_cluster_config?.load_limit || '-'}
+                  </Typography>
+                </Box>
+                <Box className={styles.detailContentWrap}>
+                  <Typography variant="body2" className={styles.configContainer}>
+                    Candidate parent limit
+                  </Typography>
+                  <Typography id="id" variant="body2" className={styles.detailContent}>
+                    {selectedRow?.scheduler_cluster_config?.candidate_parent_limit || '-'}
+                  </Typography>
+                </Box>
+                <Box className={styles.detailContentWrap}>
+                  <Typography variant="body2" className={styles.configContainer}>
+                    Filter parent limit
+                  </Typography>
+                  <Typography id="id" variant="body2" className={styles.detailContent}>
+                    {selectedRow?.scheduler_cluster_config?.filter_parent_limit || '-'}
+                  </Typography>
+                </Box>
+                <Box className={styles.detailContentWrap}>
+                  <Typography variant="body2" className={styles.configContainer}>
+                    Job Rate Limit
+                  </Typography>
+                  <Typography id="id" variant="body2" className={styles.detailContent}>
+                    {selectedRow?.scheduler_cluster_config?.job_rate_limit || '-'}
+                  </Typography>
+                </Box>
+              </>
+            )}
+          </Box>
+        </Box>
+      </Drawer>
       <Typography variant="h5" mb="1rem">
         Persistent Cache Tasks
       </Typography>
@@ -442,116 +738,142 @@ export default function PersistentCacheTask() {
         <Box id="clustersCard" className={styles.cardCantainer}>
           {Array.isArray(allClusters) &&
             allClusters.map((item) => (
-              <Card key={item.id} id="clusters" className={styles.card}>
-                <Box className={styles.clusterNameWrapper}>
-                  <IconButton
-                    id={`operation-${item?.id}`}
-                    onClick={(event: any) => {
-                      setAnchorElement(event.currentTarget);
-                      //   setSchedulerSelectedRow(item);
-                      //   setSchedulerSelectedID(item.id);
+              <Card
+                key={item.id}
+                id="clusters"
+                className={styles.card}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setSelectedRow(item);
 
-                      setSelectedRow(item);
-                    }}
-                    size="small"
-                    // aria-controls={Boolean(anchorElement) ? item?.id : ''}
-                    aria-haspopup="true"
-                    // aria-expanded={Boolean(anchorElement) ? 'true' : ''}
-                    className={styles.moreVertIcon}
-                  >
-                    <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
-                  </IconButton>
-                  <Menu
-                    anchorEl={anchorElement}
-                    // id={schedulerSelectedRow?.host_name}
-                    open={Boolean(anchorElement)}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'right',
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
+                  setClusterDetail(true);
+                }}
+              >
+                <Box>
+                  <Paper
+                    variant="outlined"
                     sx={{
-                      '& .MuiMenu-paper': {
-                        boxShadow: 'var(--custom-shadows-dropdown)',
-                        borderRadius: '0.6rem',
-                      },
-                      '& .MuiMenu-list': {
-                        width: '8rem',
-                        p: '0',
-                      },
+                      backgroundColor: 'var(--palette-background-paper)',
+                      boxShadow: 'var(--palette-card-box-shadow)',
+                      borderRadius: '0.6rem',
+                      transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+                      zIndex: 0,
+                      color: 'var(--palette-color)',
+                      backgroundImage: 'none',
+                      overflow: 'hidden',
                     }}
+                    className={styles.clusterWrapper}
                   >
-                    <Box className={styles.menu}>
-                      <div className={styles.span} />
-                      <MenuItem
-                        className={styles.menuItem}
-                        id={`view-${selectedRow?.id}`}
-                        onClick={() => {
-                          navigate(`/resource/persistent-cache-task/clusters/${selectedRow?.id}`);
-
-                          setAnchorElement(null);
-                        }}
-                      >
-                        <ListItemIcon>
-                          <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
-                        </ListItemIcon>
-                        <Typography variant="body2" className={styles.menuText}>
-                          View
-                        </Typography>
-                      </MenuItem>
-                    </Box>
-                  </Menu>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.5rem' }}>
-                    <Chip
-                      label={`${item.is_default ? 'Default' : 'Non-Default'}`}
-                      size="small"
-                      variant="outlined"
-                      id={`default-cluster-${item.id || 0}`}
-                      sx={{
-                        borderRadius: '0.4rem',
-                        backgroundColor: item.is_default
-                          ? 'var(--palette-grey-background-color)'
-                          : 'var(--palette-background-inactive)',
-                        color: item.is_default
-                          ? 'var(--palette-description-color)'
-                          : 'var(--palette-table-title-text-color)',
-                        border: 0,
-                        fontFamily: 'mabry-bold',
+                    <Cluster className={styles.cluster} />
+                  </Paper>
+                  <Box className={styles.clusterNameWrapper}>
+                    <IconButton
+                      id={`operation-${item?.id}`}
+                      onClick={(event: any) => {
+                        event.stopPropagation();
+                        setAnchorElement(event.currentTarget);
+                        setSelectedRow(item);
                       }}
-                    />
-                  </Box>
-                  <RouterLink
+                      size="small"
+                      aria-haspopup="true"
+                      className={styles.moreVertIcon}
+                    >
+                      <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorElement}
+                      id={selectedRow?.name}
+                      open={Boolean(anchorElement)}
+                      onClose={(event: any) => {
+                        event.stopPropagation();
+
+                        setAnchorElement(null);
+                      }}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      sx={{
+                        '& .MuiMenu-paper': {
+                          boxShadow: 'var(--custom-shadows-dropdown)',
+                          borderRadius: '0.6rem',
+                        },
+                        '& .MuiMenu-list': {
+                          width: '8rem',
+                          p: '0',
+                        },
+                      }}
+                    >
+                      <Box className={styles.menu}>
+                        <div className={styles.span} />
+                        <MenuItem
+                          className={styles.menuItem}
+                          id={`view-${selectedRow?.id}`}
+                          onClick={() => {
+                            navigate(`/resource/persistent-cache-task/clusters/${selectedRow?.id}`);
+
+                            setAnchorElement(null);
+                          }}
+                        >
+                          <ListItemIcon>
+                            <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
+                          </ListItemIcon>
+                          <Typography variant="body2" className={styles.menuText}>
+                            View
+                          </Typography>
+                        </MenuItem>
+                      </Box>
+                    </Menu>
+                    {/* <RouterLink
                     component={Link}
                     to={`/resource/persistent-cache-task/clusters/${item.id}`}
                     underline="hover"
                   >
-                    <Typography
-                      id={`cluster-name-${item.id || 0}`}
-                      variant="h6"
-                      mb="0.5rem"
-                      className={styles.nameText}
-                    >
+                   
+                  </RouterLink> */}
+                    <Typography id={`cluster-name-${item.id || 0}`} variant="subtitle1" className={styles.nameText}>
                       {item.name}
                     </Typography>
-                  </RouterLink>
-                  {/* <Box display="flex" m="0.5rem 0">
-                      <Tooltip title={item.bio || '-'} placement="top">
-                        <Typography
-                          id={`cluster-description-${item.id || 0}`}
-                          variant="caption"
-                          className={styles.descriptionText}
-                        >
-                          {item.bio || '-'}
-                        </Typography>
-                      </Tooltip>
-                    </Box> */}
-                </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.5rem' }}>
+                      <Chip
+                        label={`${item.is_default ? 'Default' : 'Non-Default'}`}
+                        size="small"
+                        variant="outlined"
+                        id={`default-cluster-${item.id || 0}`}
+                        sx={{
+                          borderRadius: '0.4rem',
+                          backgroundColor: item.is_default
+                            ? 'var(--palette-grey-background-color)'
+                            : 'var(--palette-background-inactive)',
+                          color: item.is_default
+                            ? 'var(--palette-description-color)'
+                            : 'var(--palette-table-title-text-color)',
+                          border: 0,
+                          fontFamily: 'mabry-bold',
+                        }}
+                      />
+                    </Box>
+                    {/* <Chip
+                      avatar={<CreateAt className={styles.cardIcon} />}
+                      label={getDatetime(item.created_at)}
+                      variant="outlined"
+                      size="small"
+                      sx={{ fontFamily: 'mabry-bold' }}
+                    /> */}
 
-                <Divider className={styles.divider} />
+                    <Box className={styles.creatTimeContainer}>
+                      <CreateAt className={styles.cardIcon} />
+                      <Typography id={`cluster-id-${item.id}`} variant="caption" className={styles.idText}>
+                        {getDatetime(item.created_at)}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+                {/* <Divider className={styles.divider} />
                 <Box className={styles.clusterDefaultWrapper}>
                   <Box className={styles.creatTimeContainer}>
                     <ClusterID className={styles.cardIcon} />
@@ -572,18 +894,18 @@ export default function PersistentCacheTask() {
                     </Typography>
                   </Box>
 
-                  {/* <Box className={styles.creatTimeContainer}>
-                        <IconButton
-                          id={`show-cluster-${item.id}`}
-                          className={styles.buttonContent}
-                          onClick={() => {
-                            navigate(`/resource/persistent-cache-task/clusters/${item.id}`);
-                          }}
-                        >
-                          <ArrowCircleRightIcon className={styles.arrowCircleRightIcon} />
-                        </IconButton>
-                      </Box> */}
-                </Box>
+                  <Box className={styles.creatTimeContainer}>
+                    <IconButton
+                      id={`show-cluster-${item.id}`}
+                      className={styles.buttonContent}
+                      onClick={() => {
+                        navigate(`/resource/persistent-cache-task/clusters/${item.id}`);
+                      }}
+                    >
+                      <ArrowCircleRightIcon className={styles.arrowCircleRightIcon} />
+                    </IconButton>
+                  </Box>
+                </Box> */}
               </Card>
             ))}
         </Box>

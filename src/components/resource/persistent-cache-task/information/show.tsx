@@ -13,6 +13,7 @@ import {
   Divider,
   Snackbar,
   Alert,
+  Paper,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -344,6 +345,25 @@ export default function PersistentCachetask() {
         <Box className={styles.informationWrapper}>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
+              <Application className={styles.informationTitleIcon} />
+              <Box className={styles.informationContentWrapper}>
+                <Typography variant="body2" component="div" className={styles.informationTitleText}>
+                  Application
+                </Typography>
+                <Box className={styles.informationContent} sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                  <Typography id="application" variant="body1" className={styles.informationContent}>
+                    {isLoading ? (
+                      <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
+                    ) : (
+                      persistentCacheTask?.application || '-'
+                    )}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+          <Box className={styles.informationContainer}>
+            <Box className={styles.informationTitle}>
               <Tag className={styles.informationTitleIcon} />
               <Box className={styles.informationContentWrapper}>
                 <Typography variant="body2" component="div" className={styles.informationTitleText}>
@@ -378,20 +398,31 @@ export default function PersistentCachetask() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <Application className={styles.informationTitleIcon} />
+              <TotalPieceLength className={styles.informationTitleIcon} />
               <Box className={styles.informationContentWrapper}>
                 <Typography variant="body2" component="div" className={styles.informationTitleText}>
-                  Application
+                  Total Piece Length
                 </Typography>
-                <Box className={styles.informationContent} sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                  <Typography id="application" variant="body1" className={styles.informationContent}>
-                    {isLoading ? (
-                      <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
-                    ) : (
-                      persistentCacheTask?.application || '-'
-                    )}
-                  </Typography>
-                </Box>
+                <Typography id="piece-length" variant="body1" className={styles.informationContent}>
+                  {isLoading ? <Skeleton sx={{ width: '4rem' }} /> : persistentCacheTask?.total_piece_count || '-'}
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+          <Box className={styles.informationContainer}>
+            <Box className={styles.informationTitle}>
+              <PersistentReplicaCount className={styles.informationTitleIcon} />
+              <Box className={styles.informationContentWrapper}>
+                <Typography variant="body2" component="div" className={styles.informationTitleText}>
+                  Persistent Replica Count
+                </Typography>
+                <Typography id="piece-length" variant="body1" className={styles.informationContent}>
+                  {isLoading ? (
+                    <Skeleton sx={{ width: '4rem' }} />
+                  ) : (
+                    persistentCacheTask?.persistent_replica_count || '-'
+                  )}
+                </Typography>
               </Box>
             </Box>
           </Box>
@@ -435,36 +466,6 @@ export default function PersistentCachetask() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
-              <TotalPieceLength className={styles.informationTitleIcon} />
-              <Box className={styles.informationContentWrapper}>
-                <Typography variant="body2" component="div" className={styles.informationTitleText}>
-                  Total Piece Length
-                </Typography>
-                <Typography id="piece-length" variant="body1" className={styles.informationContent}>
-                  {isLoading ? <Skeleton sx={{ width: '4rem' }} /> : persistentCacheTask?.total_piece_count || '-'}
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-          <Box className={styles.informationContainer}>
-            <Box className={styles.informationTitle}>
-              <PersistentReplicaCount className={styles.informationTitleIcon} />
-              <Box className={styles.informationContentWrapper}>
-                <Typography variant="body2" component="div" className={styles.informationTitleText}>
-                  Persistent Replica Count
-                </Typography>
-                <Typography id="piece-length" variant="body1" className={styles.informationContent}>
-                  {isLoading ? (
-                    <Skeleton sx={{ width: '4rem' }} />
-                  ) : (
-                    persistentCacheTask?.persistent_replica_count || '-'
-                  )}
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-          <Box className={styles.informationContainer}>
-            <Box className={styles.informationTitle}>
               <CreatedAt className={styles.informationTitleIcon} />
               <Box className={styles.informationContentWrapper}>
                 <Typography variant="body2" component="div" className={styles.informationTitleText}>
@@ -501,10 +502,22 @@ export default function PersistentCachetask() {
           }}
         />
         <Box p="1.5rem">
-          <Typography variant="h6" fontFamily="mabry-bold" mb="1.5rem">
+          <Typography variant="h6" fontFamily="mabry-bold" mb="1rem">
             Peers
           </Typography>
-          <Box width="100%">
+          <Paper
+            variant="outlined"
+            sx={{
+              backgroundColor: 'var(--palette-background-paper)',
+              // boxShadow: 'var(--palette-card-box-shadow)',
+              // borderRadius: '0.6rem',
+              // transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+              zIndex: 0,
+              color: 'var(--palette-color)',
+              backgroundImage: 'none',
+              overflow: 'hidden',
+            }}
+          >
             <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="seed-peer-table">
               <TableHead sx={{ backgroundColor: 'var(--palette-table-title-color)' }}>
                 <TableRow>
@@ -535,6 +548,11 @@ export default function PersistentCachetask() {
                   </TableCell>
                   <TableCell align="center" className={styles.tableHeader}>
                     <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                      Type
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
                       IP
                     </Typography>
                   </TableCell>
@@ -546,11 +564,6 @@ export default function PersistentCachetask() {
                   <TableCell align="center" className={styles.tableHeader}>
                     <Typography variant="subtitle1" className={styles.tableHeaderText}>
                       Download port
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="center" className={styles.tableHeader}>
-                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
-                      Type
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -600,23 +613,24 @@ export default function PersistentCachetask() {
                           />
                         </TableCell>
                         <TableCell id={`state-${item?.id}`} align="center">
+                          {_.upperFirst(item?.host?.type)}
+                        </TableCell>
+                        <TableCell id={`state-${item?.id}`} align="center">
                           {item?.host?.ip}
                         </TableCell>
+
                         <TableCell id={`port-${item?.id}`} align="center">
                           {item?.host?.port}
                         </TableCell>
                         <TableCell id={`state-${item?.id}`} align="center">
                           {item?.host?.download_port}
                         </TableCell>
-                        <TableCell id={`state-${item?.id}`} align="center">
-                          {_.upperFirst(item?.host?.type)}
-                        </TableCell>
                       </TableRow>
                     );
                   })}
               </TableBody>
             </Table>
-          </Box>
+          </Paper>
         </Box>
       </Card>
     </div>

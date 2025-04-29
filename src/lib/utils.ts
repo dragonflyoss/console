@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { decode, JwtPayload } from 'jsonwebtoken';
-import { getPeersResponse, getClustersResponse, getSchedulersResponse } from './api';
+import { getPeersResponse, getClusterResponse, getSchedulersResponse } from './api';
 import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
 

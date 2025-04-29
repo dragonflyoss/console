@@ -215,29 +215,6 @@ interface getClustersParams {
   name?: string;
 }
 
-export interface getClustersResponse {
-  id: number;
-  name: string;
-  bio: string;
-  scopes: {
-    idc: string;
-    location: string;
-    cidrs: Array<string>;
-    hostnames: Array<string>;
-  };
-  created_at: string;
-  is_default: boolean;
-}
-
-export async function getClusters(params?: getClustersParams): Promise<getClustersResponse[]> {
-  const url = params
-    ? new URL(`/api/v1/clusters?${queryString.stringify(params)}`, API_URL)
-    : new URL('/api/v1/clusters', API_URL);
-
-  const response = await get(url);
-  return await response.json();
-}
-
 export interface getClusterResponse {
   id: number;
   name: string;
@@ -264,6 +241,15 @@ export interface getClusterResponse {
   created_at: string;
   updated_at: string;
   is_default: boolean;
+}
+
+export async function getClusters(params?: getClustersParams): Promise<getClusterResponse[]> {
+  const url = params
+    ? new URL(`/api/v1/clusters?${queryString.stringify(params)}`, API_URL)
+    : new URL('/api/v1/clusters', API_URL);
+
+  const response = await get(url);
+  return await response.json();
 }
 
 export async function getCluster(id: string): Promise<getClusterResponse> {

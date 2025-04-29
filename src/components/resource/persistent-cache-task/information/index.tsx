@@ -445,7 +445,7 @@ export default function Information(props: InformationProps) {
                         borderRadius: '0.6rem',
                       },
                       '& .MuiMenu-list': {
-                        width: '11rem',
+                        width: '9rem',
                         p: '0',
                       },
                     }}
@@ -493,7 +493,7 @@ export default function Information(props: InformationProps) {
                       </MenuItem>
                     </Box>
                   </Menu>
-                  <Box
+                  {/* <Box
                     sx={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -513,7 +513,26 @@ export default function Information(props: InformationProps) {
                     <Typography variant="body2" fontFamily="mabry-bold">
                       {(item?.state && (item?.state === 'Succeeded' ? 'SUCCESS' : 'FAILURE')) || ''}
                     </Typography>
-                  </Box>
+                  </Box> */}
+                  <Chip
+                    label={(item?.state && (item?.state === 'Succeeded' ? 'SUCCESS' : 'FAILURE')) || ''}
+                    size="small"
+                    variant="outlined"
+                    id={`card-state-${item.id}`}
+                    sx={{
+                      borderRadius: '0.2rem',
+                      backgroundColor:
+                        item?.state === 'Succeeded'
+                          ? 'var(--palette-grey-background-color)'
+                          : 'var(--palette-background-inactive)',
+                      color:
+                        item?.state === 'Succeeded'
+                          ? 'var(--palette-text-color)'
+                          : 'var(--palette-table-title-text-color)',
+                      border: 0,
+                      fontFamily: 'mabry-bold',
+                    }}
+                  />
                   <MuiTooltip title={item.id || '-'} placement="top">
                     <RouterLink
                       component={Link}
@@ -547,18 +566,6 @@ export default function Information(props: InformationProps) {
                 <Box p="1.2rem">
                   <Box className={styles.cardContent}>
                     <Box className={styles.portContainer}>
-                      <PieceLength className={styles.statusIcon} />
-                      <Typography id={`piece-length-${item.id}`} variant="caption" sx={{ color: '#919EAB' }}>
-                        {item?.piece_length && `${Number(item?.piece_length) / 1024 / 1024} MiB`}
-                      </Typography>
-                    </Box>
-                    <Box className={styles.portContainer}>
-                      <ContentLength className={styles.statusIcon} />
-                      <Typography id={`content-length-${item.id}`} variant="caption" sx={{ color: '#919EAB' }}>
-                        {item?.content_length && formatSize(item?.content_length)}
-                      </Typography>
-                    </Box>
-                    <Box className={styles.portContainer}>
                       <TotalPieceLength className={styles.statusIcon} />
                       <Typography id={`total-piece-count-${item.id}`} variant="caption" sx={{ color: '#919EAB' }}>
                         {item?.total_piece_count}
@@ -572,6 +579,18 @@ export default function Information(props: InformationProps) {
                         sx={{ color: '#919EAB' }}
                       >
                         {item?.persistent_replica_count}
+                      </Typography>
+                    </Box>
+                    <Box className={styles.portContainer}>
+                      <PieceLength className={styles.statusIcon} />
+                      <Typography id={`piece-length-${item.id}`} variant="caption" sx={{ color: '#919EAB' }}>
+                        {item?.piece_length && `${Number(item?.piece_length) / 1024 / 1024} MiB`}
+                      </Typography>
+                    </Box>
+                    <Box className={styles.portContainer}>
+                      <ContentLength className={styles.statusIcon} />
+                      <Typography id={`content-length-${item.id}`} variant="caption" sx={{ color: '#919EAB' }}>
+                        {item?.content_length && formatSize(item?.content_length)}
                       </Typography>
                     </Box>
                   </Box>

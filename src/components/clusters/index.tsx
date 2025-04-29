@@ -20,7 +20,7 @@ import {
   getSchedulers,
   getSeedPeers,
   getClusters,
-  getClustersResponse,
+  getClusterResponse,
   getSchedulersResponse,
   getSeedPeersResponse,
 } from '../../lib/api';
@@ -56,11 +56,11 @@ export default function Clusters() {
   const [pageSize, setPageSize] = useState<number>(9);
   const [searchClusters, setSearchClusters] = useState('');
   const [searchIconISLodaing, setSearchIconISLodaing] = useState(false);
-  const [clusterCount, setClusterCount] = useState<getClustersResponse[]>([]);
-  const [cluster, setCluster] = useState<getClustersResponse[]>([]);
+  const [clusterCount, setClusterCount] = useState<getClusterResponse[]>([]);
+  const [cluster, setCluster] = useState<getClusterResponse[]>([]);
   const [scheduler, setScheduler] = useState<getSchedulersResponse[]>([]);
   const [seedPeer, setSeedPeer] = useState<getSeedPeersResponse[]>([]);
-  const [allClusters, setAllClusters] = useState<getClustersResponse[]>([]);
+  const [allClusters, setAllClusters] = useState<getClusterResponse[]>([]);
   const navigate = useNavigate();
   const query = useQuery();
   const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;

@@ -40,7 +40,7 @@ import { ReactComponent as ArrowCircleRightIcon } from '../../../assets/images/c
 
 import {
   getClusters,
-  getClustersResponse,
+  getClusterResponse,
   getPersistentCacheTasks,
   getPersistentCacheTasksResponse,
 } from '../../../lib/api';
@@ -109,7 +109,7 @@ export const DataContext = createContext({ setDeleteTask: (value: boolean) => {}
 
 export default function PersistentCacheTask() {
   const [value, setValue] = useState('1');
-  const [cluster, setCluster] = useState<getClustersResponse[]>([]);
+  const [cluster, setCluster] = useState<getClusterResponse[]>([]);
   const [errorMessage, setErrorMessage] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
@@ -123,12 +123,12 @@ export default function PersistentCacheTask() {
     return clusterID || 0;
   });
 
-  const [clusterCount, setClusterCount] = useState<getClustersResponse[]>([]);
+  const [clusterCount, setClusterCount] = useState<getClusterResponse[]>([]);
   // const [delete, setDelete] = useState(false);
 
   const [searchClusters, setSearchClusters] = useState('');
   const [deleteTask, setDeleteTask] = useState(false);
-  const [allClusters, setAllClusters] = useState<getClustersResponse[]>([]);
+  const [allClusters, setAllClusters] = useState<getClusterResponse[]>([]);
 
   const [persistentCacheTasks, setPersistentCacheTasks] = useState<getPersistentCacheTasksResponse[]>();
 

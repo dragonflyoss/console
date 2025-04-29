@@ -255,8 +255,8 @@ describe('Users', () => {
     cy.guestSignin();
 
     // The 404 page is displayed and the user page does not exist.
-    cy.get('.MuiTypography-h4').should('have.text', 'Something gone wrong!');
-    cy.get('.MuiTypography-body1').should('have.text', `The page you were looking for doesn't exist.`);
+    cy.get('#something-went-wrong').should('have.text', 'Something gone wrong!');
+    cy.get('#404-help-text').should('have.text', `The page you were looking for doesn't exist.`);
   });
 
   describe('get role API error response', () => {

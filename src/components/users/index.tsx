@@ -9,7 +9,6 @@ import {
   DialogContent,
   Drawer,
   FormControl,
-  FormLabel,
   IconButton,
   ListItemAvatar,
   Radio,
@@ -29,7 +28,6 @@ import {
   Menu,
   ListItemIcon,
   Button,
-  Stack,
   Autocomplete,
   TextField,
 } from '@mui/material';
@@ -313,7 +311,7 @@ export default function Users() {
       <Box className={styles.searchWrapper}>
         <Autocomplete
           color="secondary"
-          id="free-solo-demo"
+          id="search-user"
           size="small"
           fullWidth
           freeSolo
@@ -409,6 +407,12 @@ export default function Users() {
                   </Box>
                 </TableCell>
               </TableRow>
+            ) : allUsers.length === 0 ? (
+              <TableRow>
+                <TableCell id="no-user-table" colSpan={9} align="center" sx={{ border: 0 }}>
+                  You don't have user.
+                </TableCell>
+              </TableRow>
             ) : (
               Array.isArray(allUsers) &&
               allUsers.map((item) => (
@@ -436,7 +440,7 @@ export default function Users() {
                     </Box>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="body1" fontFamily="mabry-bold">
+                    <Typography id={`user-name-${item?.name || '-'}`} variant="body1" fontFamily="mabry-bold">
                       {item?.name || '-'}
                     </Typography>
                   </TableCell>

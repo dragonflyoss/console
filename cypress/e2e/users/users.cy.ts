@@ -311,7 +311,7 @@ describe('Users', () => {
       cy.get('#phone').should('have.text', '-');
       cy.get('#location').should('have.text', '-');
       cy.get('#created-at').should('contain', '-');
-      cy.get('.MuiList-root > :nth-child(17)').should('contain', '-');
+      cy.get('#updated-at').should('contain', '-');
     });
   });
 
@@ -728,6 +728,36 @@ describe('Users', () => {
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('have.text', 'Failed to fetch');
+    });
+  });
+
+  describe('search', () => {
+    it('can search for user name', () => {
+      cy.get('#user-table-body').children().should('have.length', 10);
+
+      // Enter user name root.
+      cy.get('#search-user').type('root');
+
+      // Check table.
+      cy.get('#user-table-body').children().should('have.length', 1);
+
+      cy.get('#user-name-root').should('have.text', 'root');
+    });
+
+    it('should be queried based on the query string', () => {
+      cy.visit('/users?search=jack');
+
+      // The search box should be jack.
+      cy.get('#search-user').should('have.value', 'jack');
+
+      cy.get('#user-name-jack').should('have.text', 'jack');
+    });
+
+    it('should search for non-existent user name', () => {
+      cy.get('#search-user').type('dragonfly');
+
+      // No users.
+      cy.get('#no-user-table').should('have.text', `You don't have user.`);
     });
   });
 });

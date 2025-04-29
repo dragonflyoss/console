@@ -180,7 +180,7 @@ describe('Users', () => {
       cy.get('#phone').should('have.text', '+86 153 1234 5678');
       cy.get('#location').should('have.text', 'Shanghai');
       cy.get('#created-at').should('contain', '2023-11-07 06:09:04');
-      cy.get('.MuiList-root > :nth-child(17)').should('contain', '2023-11-07 06:09:04');
+      cy.get('#updated-at').should('contain', '2023-11-07 06:09:04');
 
       cy.get('[data-testid="detail-isloading"]').should('not.exist');
     });

@@ -267,8 +267,8 @@
 }
 
 .informationTitle {
-  font-family: 'mabry-bold';
-  margin-right: 0.4rem;
+  font-family: 'mabry-bold' !important;
+  margin-right: 0.4rem !important;
 }
 
 .configTitle {

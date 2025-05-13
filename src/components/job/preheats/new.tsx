@@ -9,12 +9,8 @@ import {
   Autocomplete,
   InputLabel,
   Select,
-  OutlinedInput,
   MenuItem,
-  Checkbox,
-  ListItemText,
   Link as RouterLink,
-  FormHelperText,
   Grid,
   Chip,
   Divider,
@@ -35,7 +31,6 @@ import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './new.module.css';
 import AddIcon from '@mui/icons-material/Add';
 import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
-import Card from '../../card';
 
 export default function NewPreheat() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -52,7 +47,7 @@ export default function NewPreheat() {
   const [clusterError, setClusterError] = useState(false);
   const [filter, setFilter] = useState([]);
   const [clusterName, setClusterName] = useState<string[]>([]);
-  const [clusterID, setClusterID] = useState<number[]>([]);
+  const [clusterHelperText, setClusterHelperText] = useState('Select at least one option.');
   const [scope, setScope] = useState<string>('single_seed_peer');
   const [filterHelperText, setFilterHelperText] = useState('Fill in the characters, the length is 0-100.');
 
@@ -239,10 +234,10 @@ export default function NewPreheat() {
       },
     },
     {
-      id: 'filteredQueryParams',
-      name: 'filteredQueryParams',
-      label: 'Filter Query Params',
       filterFormProps: {
+        id: 'filteredQueryParams',
+        name: 'filteredQueryParams',
+        label: 'Filter Query Params',
         value: filter,
         options: [],
         onChange: (_e: any, newValue: any) => {
@@ -286,20 +281,62 @@ export default function NewPreheat() {
     },
   ];
 
+  const clusterFrom = [
+    {
+      enterMultiple: true,
+      scopesFormProps: {
+        id: 'cluster',
+        name: 'cluster',
+        label: 'Cluster',
+        value: clusterName,
+        options: (Array.isArray(cluster) && cluster?.map((option) => option?.name)) || [''],
+
+        onChange: (e: any, newValue: any) => {
+          const existingNames = new Set(cluster.map((item) => item?.name));
+
+          if (!newValue.every((item: string) => existingNames.has(item))) {
+            setClusterError(true);
+            setClusterHelperText(`cluster not found`);
+          } else {
+            setClusterName(newValue);
+            setClusterError(false);
+            setClusterHelperText('Select at least one option.');
+          }
+        },
+
+        renderTags: (value: any, getTagProps: any) =>
+          value.map((option: any, index: any) => (
+            <Chip id={`cluster-${index}`} size="small" key={index} label={option} {...getTagProps({ index })} />
+          )),
+      },
+
+      formProps: {
+        id: 'cluster',
+        label: 'Cluster',
+        name: 'cluster',
+        placeholder: 'Please enter Cluster',
+        required: true,
+        error: clusterError,
+        helperText: clusterError && clusterHelperText,
+        onKeyDown: (e: any) => {
+          if (e.keyCode === 13) {
+            e.preventDefault();
+          }
+        },
+      },
+
+      validate: (value: string) => {
+        const reg = /^(.{0,1000})$/;
+        return reg.test(value);
+      },
+    },
+  ];
+
   const scopeList = [
     { label: 'Single Seed Peer', name: 'single_seed_peer' },
     { label: 'All Seed Peers', name: 'all_seed_peers' },
     { label: 'All Peers', name: 'all_peers' },
   ];
-
-  const handleSelectCluster = (event: any) => {
-    const selectedValues = event.target.value;
-    const selectedNames = selectedValues.map((item: any) => item.name);
-    const selectedIds = selectedValues.map((item: any) => item.id);
-    setClusterName(selectedNames);
-    setClusterID(selectedIds);
-    setClusterError(false);
-  };
 
   const handleSelectScope = (event: SelectChangeEvent) => {
     const selectedValues = event.target.value;
@@ -385,6 +422,10 @@ export default function NewPreheat() {
         headerValidate &&
         Boolean(!filterText),
     );
+
+    const clusterSet = new Set(clusterName);
+
+    const clusterID = cluster.filter((item) => clusterSet.has(item.name)).map((item) => item.id);
 
     const formDate = {
       bio: bio,
@@ -515,39 +556,27 @@ export default function NewPreheat() {
                 />
               </Tooltip>
             </Box>
+
             <FormControl className={styles.textField} margin="normal" required size="small" error={clusterError}>
-              <InputLabel id="select-clusters">Clusters</InputLabel>
-              <Select
-                labelId="select-clusters"
-                id="select-cluster"
-                label="Clusters *"
-                multiple
-                value={clusterName.map((name) => cluster.find((item) => item.name === name))}
-                onChange={handleSelectCluster}
-                input={<OutlinedInput label="clusters" />}
-                renderValue={(selected) => selected.map((item: any) => item.name).join(', ')}
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      maxHeight: '14rem',
-                      width: '18rem',
-                    },
-                  },
-                }}
-              >
-                {cluster.map((item: any) => (
-                  <MenuItem key={item.id} value={item} sx={{ height: '2.6rem' }}>
-                    <Checkbox
-                      id={`cluster-${item.id}`}
-                      size="small"
-                      sx={{ '&.MuiCheckbox-root': { color: 'var(--palette-button-color)' } }}
-                      checked={clusterName.indexOf(item.name) > -1}
+              {clusterFrom.map((item) => (
+                <Autocomplete
+                  freeSolo
+                  multiple
+                  disableClearable
+                  {...item.scopesFormProps}
+                  size="small"
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      InputProps={{
+                        ...params.InputProps,
+                      }}
+                      color="success"
+                      {...item.formProps}
                     />
-                    <ListItemText primary={item.name} />
-                  </MenuItem>
-                ))}
-              </Select>
-              {clusterError && <FormHelperText id="clusters-helper-text">Select at least one option.</FormHelperText>}
+                  )}
+                />
+              ))}
             </FormControl>
           </Box>
           <Box className={styles.title}>
@@ -568,7 +597,7 @@ export default function NewPreheat() {
             </Box>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {argsForm.map((item) => {
-                return item.id === 'filteredQueryParams' ? (
+                return item?.filterFormProps?.id === 'filteredQueryParams' ? (
                   <Box key={item.formProps.id} sx={{ width: '100%' }}>
                     <Autocomplete
                       freeSolo

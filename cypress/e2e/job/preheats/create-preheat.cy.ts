@@ -55,8 +55,8 @@ describe('Create preheat', () => {
     cy.get('#description').type('create preheat');
 
     // Select a cluster.
-    cy.get('#select-cluster').click();
-    cy.get('#cluster-1').check();
+    cy.get('#cluster').type('cluster-1{enter}');
+
     cy.get('body').click('topLeft');
 
     cy.get('#pieceLength').type('4');
@@ -121,8 +121,8 @@ describe('Create preheat', () => {
       },
     );
 
-    cy.get('#select-cluster').click();
-    cy.get('#cluster-2').check();
+    cy.get('#cluster').click();
+    cy.contains('li', 'cluster-2').click();
     cy.get('body').click('topLeft');
 
     // Select a scope.
@@ -145,7 +145,7 @@ describe('Create preheat', () => {
   it('cannot create preheat task without required attributes', () => {
     cy.get('#save').click();
 
-    cy.get('#clusters-helper-text').should('be.visible').and('have.text', 'Select at least one option.');
+    cy.get('#cluster-helper-text').should('be.visible').and('have.text', 'Select at least one option.');
     cy.get('#url-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 1-1000.');
   });
 
@@ -157,8 +157,8 @@ describe('Create preheat', () => {
     cy.get('[href="/users"]').should('not.exist');
 
     // Select a cluster.
-    cy.get('#select-cluster').click();
-    cy.get('#cluster-1').check();
+    cy.get('#cluster').click();
+    cy.contains('li', 'cluster-1').click();
     cy.get('body').click('topLeft');
 
     // Select a scope.
@@ -219,8 +219,8 @@ describe('Create preheat', () => {
       },
     );
 
-    cy.get('#select-cluster').click();
-    cy.get('#cluster-2').check();
+    cy.get('#cluster').click();
+    cy.contains('li', 'cluster-2').click();
     cy.get('body').click('topLeft');
 
     // Select a scope.
@@ -241,8 +241,8 @@ describe('Create preheat', () => {
       const description = _.times(1001, () => _.sample(characters)).join('');
 
       // Select a cluster.
-      cy.get('#select-cluster').click();
-      cy.get('#cluster-1').check();
+      cy.get('#cluster').click();
+      cy.contains('li', 'cluster-1').click();
       cy.get('body').click('topLeft');
 
       // Add ure.
@@ -265,8 +265,8 @@ describe('Create preheat', () => {
       const filter = _.times(101, () => _.sample(characters)).join('');
 
       // Select a cluster.
-      cy.get('#select-cluster').click();
-      cy.get('#cluster-1').check();
+      cy.get('#cluster').click();
+      cy.contains('li', 'cluster-1').click();
       cy.get('body').click('topLeft');
 
       // Should display message url the validation error.
@@ -302,7 +302,7 @@ describe('Create preheat', () => {
       cy.get('#tag').clear();
 
       // Should display message filter the validation error.
-      cy.get('.MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('filter');
+      cy.get('#filteredQueryParams').type('filter');
 
       cy.get('#save').click();
 
@@ -311,11 +311,10 @@ describe('Create preheat', () => {
         .should('be.visible')
         .and('have.text', 'Please press ENTER to end the filter creation');
 
-      cy.get('.MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').clear();
+      cy.get('#filteredQueryParams').clear();
+      cy.get('#filteredQueryParams').type('filter{enter}');
 
-      cy.get('.MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('filter{enter}');
-
-      cy.get('.MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(filter);
+      cy.get('#filteredQueryParams').type(filter);
 
       // Show verification error message.
       cy.get('#filteredQueryParams-helper-text')
@@ -333,8 +332,8 @@ describe('Create preheat', () => {
       const key = _.times(101, () => _.sample(characters)).join('');
 
       // Select a cluster.
-      cy.get('#select-cluster').click();
-      cy.get('#cluster-1').check();
+      cy.get('#cluster').click();
+      cy.contains('li', 'cluster-1').click();
       cy.get('body').click('topLeft');
 
       // Add ure.

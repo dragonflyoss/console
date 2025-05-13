@@ -324,11 +324,6 @@ export default function NewPreheat() {
           }
         },
       },
-
-      validate: (value: string) => {
-        const reg = /^(.{0,1000})$/;
-        return reg.test(value);
-      },
     },
   ];
 

@@ -240,6 +240,11 @@ describe('Create preheat', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       const description = _.times(1001, () => _.sample(characters)).join('');
 
+      cy.get('#cluster').type('cluster-99{enter}');
+      cy.get('#cluster-helper-text').should('have.text', 'cluster not found');
+
+      cy.get('#cluster').type('cluster-9{enter}');
+
       // Select a cluster.
       cy.get('#cluster').click();
       cy.contains('li', 'cluster-1').click();

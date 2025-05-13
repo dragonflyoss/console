@@ -72,6 +72,8 @@ body {
   --palette-dark-400Channel: rgba(0, 0, 0, 0.7);
   --palette-dark-300Channel: #18230f;
   --palette-dark-200Channel: #e9e9e9;
+  --palette-dark-100Channel: rgb(242, 246, 250);
+
   --palette-green-500Channel: rgb(237, 247, 237);
   --palette-color-neutral-200: #e8e8e8;
   --palette-main-box-shadow: 0 0.125rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.245rem -1.0625rem #0000004d;
@@ -131,6 +133,7 @@ body {
   --palette-dark-400Channel: #7d8893;
   --palette-dark-300Channel: #5d5f61;
   --palette-dark-200Channel: #28323d;
+  --palette-dark-100Channel: #262c3b;
   --palette-green-500Channel: rgb(12, 19, 13);
   --palette-color-neutral-200: #1f2430;
   --palette-main-box-shadow: rgb(255 255 255 / 23%) 0px 0px 0px 0px, rgb(202 204 206 / 32%) 0px 1px 1px -3px;

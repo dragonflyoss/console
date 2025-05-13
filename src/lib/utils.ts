@@ -148,14 +148,44 @@ export const fuzzySearchPersistentCacheTask = (keyword: string, data: any[]) => 
 export function formatSize(tagSize: string): string {
   const size: number = Number.parseInt(tagSize, 10);
   if (Math.pow(1024, 1) <= size && size < Math.pow(1024, 2)) {
-    return (size / Math.pow(1024, 1)).toFixed(2) + 'KiB';
+    return (size / Math.pow(1024, 1)).toFixed(2) + ' KiB';
   } else if (Math.pow(1024, 2) <= size && size < Math.pow(1024, 3)) {
-    return (size / Math.pow(1024, 2)).toFixed(2) + 'MiB';
+    return (size / Math.pow(1024, 2)).toFixed(2) + ' MiB';
   } else if (Math.pow(1024, 3) <= size && size < Math.pow(1024, 4)) {
-    return (size / Math.pow(1024, 3)).toFixed(2) + 'GiB';
+    return (size / Math.pow(1024, 3)).toFixed(2) + ' GiB';
   } else if (Math.pow(1024, 4) <= size) {
-    return (size / Math.pow(1024, 4)).toFixed(2) + 'TiB';
+    return (size / Math.pow(1024, 4)).toFixed(2) + ' TiB';
   } else {
     return size + 'B';
   }
 }
+
+export const formatDuring = function (ps: number) {
+  const millisecond = ps / 1e6;
+
+  const days = Math.floor(millisecond / (1000 * 60 * 60 * 24));
+  const remainingAfterDays = millisecond % (1000 * 60 * 60 * 24);
+
+  const hours = Math.floor(remainingAfterDays / (1000 * 60 * 60));
+  const remainingAfterHours = remainingAfterDays % (1000 * 60 * 60);
+
+  const minutes = Math.floor(remainingAfterHours / (1000 * 60));
+  const seconds = Math.floor((remainingAfterHours % (1000 * 60)) / 1000);
+
+  let result = '';
+
+  if (days > 0) {
+    result += `${days} days`;
+  }
+  if (hours > 0) {
+    result += `${hours} hours`;
+  }
+  if (minutes > 0) {
+    result += `${minutes} minutes`;
+  }
+  if (seconds > 0) {
+    result += `${seconds} seconds`;
+  }
+
+  return result.trim();
+};

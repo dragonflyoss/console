@@ -86,7 +86,7 @@ function Main() {
         </Route>
         <Route path="/resource/persistent-cache-task" element={<PersistentCacheTasksCluster />} />
         <Route path="/resource/persistent-cache-task/clusters/:id" element={<PersistentCacheTasks />} />
-        <Route path="/resource/persistent-cache-task/cluster/:id/:id" element={<PersistentCacheTask />} />
+        <Route path="/resource/persistent-cache-task/clusters/:id/:id" element={<PersistentCacheTask />} />
         {isRoot && <Route path="/users" element={<Users />} />}
         <Route path="/users/new" element={<NewUser />} />
       </Route>

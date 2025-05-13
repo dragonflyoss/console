@@ -20,7 +20,6 @@ import { ReactComponent as Tag } from '../../../../assets/images/resource/persis
 import { ReactComponent as Success } from '../../../../assets/images/cluster/default.svg';
 import styles from './index.module.css';
 import Card from '../../../card';
-import { start } from 'repl';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 Chart.defaults.font.family = 'mabry-light';
@@ -42,9 +41,9 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
 
   useEffect(() => {
     (async function () {
-      const applicationCount = persistentCacheTasks.map((item) => item.application !== '').length;
+      const applicationCount = persistentCacheTasks.filter((item) => item.application !== '').length;
 
-      const tagCount = persistentCacheTasks.map((item) => item.application !== '').length;
+      const tagCount = persistentCacheTasks.filter((item) => item.tag !== '').length;
 
       setApplicationCount(applicationCount);
       setTagCount(tagCount);
@@ -195,9 +194,6 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
               </Typography>
             )}
             <Box className={styles.navigationCount}>
-              {/* <span className={styles.navigationCountIcon}>
-                <Count />
-              </span> */}
               <Typography variant="body2" color="var(--palette-table-title-text-color)">
                 number of persistent cache tasks
               </Typography>
@@ -217,14 +213,11 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                   <Skeleton height={40} data-testid="isloading" width="2rem" />
                 </Box>
               ) : (
-                <Typography id="active" variant="h5" p="0.7rem 0">
+                <Typography id="application" variant="h5" p="0.7rem 0">
                   {applicationCount}
                 </Typography>
               )}
               <Box className={styles.navigationCount}>
-                {/* <span className={styles.navigationCountIcon}>
-                  <Count />
-                </span> */}
                 <Typography variant="body2" color="var(--palette-table-title-text-color)">
                   number of application
                 </Typography>
@@ -245,14 +238,11 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                   <Skeleton height={40} data-testid="isloading" width="2rem" />
                 </Box>
               ) : (
-                <Typography id="inactive" variant="h5" p="0.7rem 0">
+                <Typography id="tag" variant="h5" p="0.7rem 0">
                   {tagCount}
                 </Typography>
               )}
               <Box className={styles.navigationCount}>
-                {/* <span className={styles.navigationCountIcon}>
-                  <Count />
-                </span> */}
                 <Typography variant="body2" color="var(--palette-table-title-text-color)">
                   number of tag
                 </Typography>
@@ -314,7 +304,7 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                     <Typography variant="subtitle2" fontFamily="mabry-light">
                       Application
                     </Typography>
-                    <Typography id="git-version-active" variant="subtitle1" fontFamily="mabry-bold">
+                    <Typography id="application-ratio" variant="subtitle1" fontFamily="mabry-bold">
                       {isLoading ? <Skeleton width="2rem" /> : applicationSuccess ? `${applicationSuccess}%` : '0'}
                     </Typography>
                   </Box>
@@ -383,7 +373,7 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                     <Typography variant="subtitle2" fontFamily="mabry-light">
                       Tag
                     </Typography>
-                    <Typography id="git-version-active" variant="subtitle1" fontFamily="mabry-bold">
+                    <Typography id="tag-ratio" variant="subtitle1" fontFamily="mabry-bold">
                       {isLoading ? <Skeleton width="2rem" /> : tagSuccess ? `${tagSuccess}%` : '0'}
                     </Typography>
                   </Box>

@@ -1,0 +1,507 @@
+{
+  "id": "2865345332",
+  "persistent_replica_count": 2,
+  "tag": "tag-1",
+  "application": "application-1",
+  "piece_length": 4194304,
+  "content_length": 1630,
+  "total_piece_count": 1,
+  "state": "Succeeded",
+  "ttl": 604800000000000,
+  "created_at": "2025-05-01T05:24:05Z",
+  "updated_at": "2025-05-01T05:24:05Z",
+  "peers": [
+    {
+      "block_parents": ["<string>", "<string>"],
+      "cost": 9223372036854776000,
+      "created_at": "<string>",
+      "finished_pieces": {},
+      "host": {
+        "announce_interval": 3600000000000,
+        "build": {
+          "git_commit": "<string>",
+          "git_version": "<string>",
+          "go_version": "<string>",
+          "platform": "<string>"
+        },
+        "cpu": {
+          "logical_count": "<integer>",
+          "percent": 69,
+          "physical_count": "<integer>",
+          "process_percent": "<number>",
+          "times": {
+            "guest": "<number>",
+            "guest_nice": "<number>",
+            "idle": "<number>",
+            "iowait": "<number>",
+            "irq": "<number>",
+            "nice": "<number>",
+            "softirq": "<number>",
+            "steal": "<number>",
+            "system": "<number>",
+            "user": "<number>"
+          }
+        },
+        "created_at": "<string>",
+        "disable_shared": "<boolean>",
+        "disk": {
+          "free": "<integer>",
+          "inodes_free": "<integer>",
+          "inodes_total": "<integer>",
+          "inodes_used": "<integer>",
+          "inodes_used_percent": "<number>",
+          "read_bandwidth": "<integer>",
+          "total": "<integer>",
+          "used": 21474836480,
+          "used_percent": "<number>",
+          "write_bandwidth": "<integer>"
+        },
+        "download_port": 4000,
+        "hostname": "hostname-1",
+        "id": "<string>",
+        "ip": "10.244.3.8",
+        "kernel_version": "<string>",
+        "memory": {
+          "available": "<integer>",
+          "free": "<integer>",
+          "process_used_percent": "<number>",
+          "total": "<integer>",
+          "used": 122,
+          "used_percent": "<number>"
+        },
+        "network": {
+          "download_rate": 1000,
+          "download_rate_limit": "<integer>",
+          "idc": "<string>",
+          "location": "<string>",
+          "tcp_connection_count": "<integer>",
+          "upload_rate": "<integer>",
+          "upload_rate_limit": "<integer>",
+          "upload_tcp_connection_count": "<integer>"
+        },
+        "os": "Linux",
+        "platform": "Linux",
+        "platform_family": "<string>",
+        "platform_version": "<string>",
+        "port": 4001,
+        "scheduler_cluster_id": "<integer>",
+        "type": "super",
+        "updated_at": "<string>"
+      },
+      "id": "1",
+      "persistent": false,
+      "state": "Succeeded",
+      "updated_at": "<string>"
+    },
+    {
+      "block_parents": ["<string>", "<string>"],
+      "cost": 1000,
+      "created_at": "<string>",
+      "finished_pieces": {},
+      "host": {
+        "announce_interval": 3600000000000,
+        "build": {
+          "git_commit": "<string>",
+          "git_version": "<string>",
+          "go_version": "<string>",
+          "platform": "<string>"
+        },
+        "cpu": {
+          "logical_count": "<integer>",
+          "percent": "<number>",
+          "physical_count": "<integer>",
+          "process_percent": "<number>",
+          "times": {
+            "guest": "<number>",
+            "guest_nice": "<number>",
+            "idle": "<number>",
+            "iowait": "<number>",
+            "irq": "<number>",
+            "nice": "<number>",
+            "softirq": "<number>",
+            "steal": "<number>",
+            "system": "<number>",
+            "user": "<number>"
+          }
+        },
+        "created_at": "<string>",
+        "disable_shared": "<boolean>",
+        "disk": {
+          "free": "<integer>",
+          "inodes_free": "<integer>",
+          "inodes_total": "<integer>",
+          "inodes_used": "<integer>",
+          "inodes_used_percent": "<number>",
+          "read_bandwidth": "<integer>",
+          "total": "<integer>",
+          "used": "<integer>",
+          "used_percent": "<number>",
+          "write_bandwidth": "<integer>"
+        },
+        "download_port": "4001",
+        "hostname": "hostname-2",
+        "id": "<string>",
+        "ip": "112.3325.44",
+        "kernel_version": "<string>",
+        "memory": {
+          "available": "<integer>",
+          "free": "<integer>",
+          "process_used_percent": "<number>",
+          "total": "<integer>",
+          "used": "<integer>",
+          "used_percent": "<number>"
+        },
+        "network": {
+          "download_rate": "<integer>",
+          "download_rate_limit": "<integer>",
+          "idc": "<string>",
+          "location": "<string>",
+          "tcp_connection_count": "<integer>",
+          "upload_rate": "<integer>",
+          "upload_rate_limit": "<integer>",
+          "upload_tcp_connection_count": "<integer>"
+        },
+        "os": "ios",
+        "platform": "ios",
+        "platform_family": "<string>",
+        "platform_version": "<string>",
+        "port": "8001",
+        "scheduler_cluster_id": "<integer>",
+        "type": "super",
+        "updated_at": "<string>"
+      },
+      "id": "2",
+      "persistent": true,
+      "state": "succeeded",
+      "updated_at": "<string>"
+    },
+    {
+      "block_parents": ["<string>", "<string>"],
+      "cost": 9223372036854776000,
+      "created_at": "<string>",
+      "finished_pieces": {},
+      "host": {
+        "announce_interval": 3600000000000,
+        "build": {
+          "git_commit": "<string>",
+          "git_version": "<string>",
+          "go_version": "<string>",
+          "platform": "<string>"
+        },
+        "cpu": {
+          "logical_count": "<integer>",
+          "percent": 69,
+          "physical_count": "<integer>",
+          "process_percent": "<number>",
+          "times": {
+            "guest": "<number>",
+            "guest_nice": "<number>",
+            "idle": "<number>",
+            "iowait": "<number>",
+            "irq": "<number>",
+            "nice": "<number>",
+            "softirq": "<number>",
+            "steal": "<number>",
+            "system": "<number>",
+            "user": "<number>"
+          }
+        },
+        "created_at": "<string>",
+        "disable_shared": "<boolean>",
+        "disk": {
+          "free": "<integer>",
+          "inodes_free": "<integer>",
+          "inodes_total": "<integer>",
+          "inodes_used": "<integer>",
+          "inodes_used_percent": "<number>",
+          "read_bandwidth": "<integer>",
+          "total": "<integer>",
+          "used": 21474836480,
+          "used_percent": "<number>",
+          "write_bandwidth": "<integer>"
+        },
+        "download_port": 4000,
+        "hostname": "hostname-3",
+        "id": "<string>",
+        "ip": "10.244.3.8",
+        "kernel_version": "<string>",
+        "memory": {
+          "available": "<integer>",
+          "free": "<integer>",
+          "process_used_percent": "<number>",
+          "total": "<integer>",
+          "used": 122,
+          "used_percent": "<number>"
+        },
+        "network": {
+          "download_rate": 1000,
+          "download_rate_limit": "<integer>",
+          "idc": "<string>",
+          "location": "<string>",
+          "tcp_connection_count": "<integer>",
+          "upload_rate": "<integer>",
+          "upload_rate_limit": "<integer>",
+          "upload_tcp_connection_count": "<integer>"
+        },
+        "os": "Linux",
+        "platform": "Linux",
+        "platform_family": "<string>",
+        "platform_version": "<string>",
+        "port": 4001,
+        "scheduler_cluster_id": "<integer>",
+        "type": "super",
+        "updated_at": "<string>"
+      },
+      "id": "3",
+      "persistent": false,
+      "state": "Succeeded",
+      "updated_at": "<string>"
+    },
+    {
+      "block_parents": ["<string>", "<string>"],
+      "cost": 9223372036854776000,
+      "created_at": "<string>",
+      "finished_pieces": {},
+      "host": {
+        "announce_interval": 3600000000000,
+        "build": {
+          "git_commit": "<string>",
+          "git_version": "<string>",
+          "go_version": "<string>",
+          "platform": "<string>"
+        },
+        "cpu": {
+          "logical_count": "<integer>",
+          "percent": 69,
+          "physical_count": "<integer>",
+          "process_percent": "<number>",
+          "times": {
+            "guest": "<number>",
+            "guest_nice": "<number>",
+            "idle": "<number>",
+            "iowait": "<number>",
+            "irq": "<number>",
+            "nice": "<number>",
+            "softirq": "<number>",
+            "steal": "<number>",
+            "system": "<number>",
+            "user": "<number>"
+          }
+        },
+        "created_at": "<string>",
+        "disable_shared": "<boolean>",
+        "disk": {
+          "free": "<integer>",
+          "inodes_free": "<integer>",
+          "inodes_total": "<integer>",
+          "inodes_used": "<integer>",
+          "inodes_used_percent": "<number>",
+          "read_bandwidth": "<integer>",
+          "total": "<integer>",
+          "used": 21474836480,
+          "used_percent": "<number>",
+          "write_bandwidth": "<integer>"
+        },
+        "download_port": 4000,
+        "hostname": "hostname-4",
+        "id": "<string>",
+        "ip": "10.244.3.8",
+        "kernel_version": "<string>",
+        "memory": {
+          "available": "<integer>",
+          "free": "<integer>",
+          "process_used_percent": "<number>",
+          "total": "<integer>",
+          "used": 122,
+          "used_percent": "<number>"
+        },
+        "network": {
+          "download_rate": 1000,
+          "download_rate_limit": "<integer>",
+          "idc": "<string>",
+          "location": "<string>",
+          "tcp_connection_count": "<integer>",
+          "upload_rate": "<integer>",
+          "upload_rate_limit": "<integer>",
+          "upload_tcp_connection_count": "<integer>"
+        },
+        "os": "Linux",
+        "platform": "Linux",
+        "platform_family": "<string>",
+        "platform_version": "<string>",
+        "port": 4001,
+        "scheduler_cluster_id": "<integer>",
+        "type": "super",
+        "updated_at": "<string>"
+      },
+      "id": "4",
+      "persistent": false,
+      "state": "Succeeded",
+      "updated_at": "<string>"
+    },
+    {
+      "block_parents": ["<string>", "<string>"],
+      "cost": 9223372036854776000,
+      "created_at": "<string>",
+      "finished_pieces": {},
+      "host": {
+        "announce_interval": 3600000000000,
+        "build": {
+          "git_commit": "<string>",
+          "git_version": "<string>",
+          "go_version": "<string>",
+          "platform": "<string>"
+        },
+        "cpu": {
+          "logical_count": "<integer>",
+          "percent": 69,
+          "physical_count": "<integer>",
+          "process_percent": "<number>",
+          "times": {
+            "guest": "<number>",
+            "guest_nice": "<number>",
+            "idle": "<number>",
+            "iowait": "<number>",
+            "irq": "<number>",
+            "nice": "<number>",
+            "softirq": "<number>",
+            "steal": "<number>",
+            "system": "<number>",
+            "user": "<number>"
+          }
+        },
+        "created_at": "<string>",
+        "disable_shared": "<boolean>",
+        "disk": {
+          "free": "<integer>",
+          "inodes_free": "<integer>",
+          "inodes_total": "<integer>",
+          "inodes_used": "<integer>",
+          "inodes_used_percent": "<number>",
+          "read_bandwidth": "<integer>",
+          "total": "<integer>",
+          "used": 21474836480,
+          "used_percent": "<number>",
+          "write_bandwidth": "<integer>"
+        },
+        "download_port": 4000,
+        "hostname": "hostname-5",
+        "id": "<string>",
+        "ip": "10.244.3.8",
+        "kernel_version": "<string>",
+        "memory": {
+          "available": "<integer>",
+          "free": "<integer>",
+          "process_used_percent": "<number>",
+          "total": "<integer>",
+          "used": 122,
+          "used_percent": "<number>"
+        },
+        "network": {
+          "download_rate": 1000,
+          "download_rate_limit": "<integer>",
+          "idc": "<string>",
+          "location": "<string>",
+          "tcp_connection_count": "<integer>",
+          "upload_rate": "<integer>",
+          "upload_rate_limit": "<integer>",
+          "upload_tcp_connection_count": "<integer>"
+        },
+        "os": "Linux",
+        "platform": "Linux",
+        "platform_family": "<string>",
+        "platform_version": "<string>",
+        "port": 4001,
+        "scheduler_cluster_id": "<integer>",
+        "type": "super",
+        "updated_at": "<string>"
+      },
+      "id": "5",
+      "persistent": false,
+      "state": "Succeeded",
+      "updated_at": "<string>"
+    },
+    {
+      "block_parents": ["<string>", "<string>"],
+      "cost": 9223372036854776000,
+      "created_at": "<string>",
+      "finished_pieces": {},
+      "host": {
+        "announce_interval": 3600000000000,
+        "build": {
+          "git_commit": "<string>",
+          "git_version": "<string>",
+          "go_version": "<string>",
+          "platform": "<string>"
+        },
+        "cpu": {
+          "logical_count": "<integer>",
+          "percent": 69,
+          "physical_count": "<integer>",
+          "process_percent": "<number>",
+          "times": {
+            "guest": "<number>",
+            "guest_nice": "<number>",
+            "idle": "<number>",
+            "iowait": "<number>",
+            "irq": "<number>",
+            "nice": "<number>",
+            "softirq": "<number>",
+            "steal": "<number>",
+            "system": "<number>",
+            "user": "<number>"
+          }
+        },
+        "created_at": "<string>",
+        "disable_shared": "<boolean>",
+        "disk": {
+          "free": "<integer>",
+          "inodes_free": "<integer>",
+          "inodes_total": "<integer>",
+          "inodes_used": "<integer>",
+          "inodes_used_percent": "<number>",
+          "read_bandwidth": "<integer>",
+          "total": "<integer>",
+          "used": 21474836480,
+          "used_percent": "<number>",
+          "write_bandwidth": "<integer>"
+        },
+        "download_port": 4000,
+        "hostname": "hostname-7",
+        "id": "<string>",
+        "ip": "10.244.3.8",
+        "kernel_version": "<string>",
+        "memory": {
+          "available": "<integer>",
+          "free": "<integer>",
+          "process_used_percent": "<number>",
+          "total": "<integer>",
+          "used": 122,
+          "used_percent": "<number>"
+        },
+        "network": {
+          "download_rate": 1000,
+          "download_rate_limit": "<integer>",
+          "idc": "<string>",
+          "location": "<string>",
+          "tcp_connection_count": "<integer>",
+          "upload_rate": "<integer>",
+          "upload_rate_limit": "<integer>",
+          "upload_tcp_connection_count": "<integer>"
+        },
+        "os": "Linux",
+        "platform": "Linux",
+        "platform_family": "<string>",
+        "platform_version": "<string>",
+        "port": 4001,
+        "scheduler_cluster_id": "<integer>",
+        "type": "super",
+        "updated_at": "<string>"
+      },
+      "id": "6",
+      "persistent": true,
+      "state": "Succeeded",
+      "updated_at": "<string>"
+    }
+  ]
+}

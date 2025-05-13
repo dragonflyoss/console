@@ -15,10 +15,26 @@
   align-items: center;
 }
 
-.barChart {
-  width: 3rem;
-  height: 3rem;
-  color: var(--palette-description-color);
+.navigation {
+  top: -2rem;
+  width: 160px;
+  z-index: -1;
+  height: 160px;
+  right: -6rem;
+  opacity: 0.12;
+  border-radius: 24px;
+  position: absolute;
+  transform: rotate(34deg);
+  background: linear-gradient(to right, var(--palette-text-color) 0%, transparent 100%);
+}
+
+.navigationIcon {
+  width: 2rem;
+  height: 2rem;
+  top: 2.4rem;
+  right: 1.2rem;
+  position: absolute;
+  color: var(--palette-text-color);
 }
 
 .loadingCard {
@@ -77,46 +93,49 @@
   grid-template-columns: repeat(3, 1fr);
 }
 
+.card:hover {
+  transform: scale(1.01);
+}
+
 @media screen and (max-width: 2560px) {
   .cardCantainer {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, 1fr) !important;
   }
 }
 
 @media screen and (max-width: 2048px) {
   .cardCantainer {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr) !important;
   }
 }
 
 @media screen and (max-width: 1920px) {
   .cardCantainer {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr) !important;
   }
 }
 
 @media screen and (max-width: 1600px) {
   .cardCantainer {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr) !important;
   }
 }
 
 @media screen and (max-width: 1440px) {
   .cardCantainer {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr) !important;
   }
 }
 
 .idIcon {
-  width: 1.4rem;
-  height: 1.4rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 .idText {
   white-space: nowrap;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
-  width: 90% !important;
   font-family: 'mabry-bold' !important;
 }
 
@@ -128,7 +147,15 @@
 
 .portContainer {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ttlIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.4rem;
+  color: var(--palette-text-color);
 }
 
 .statusIcon {
@@ -144,10 +171,16 @@
   margin-right: 0.4rem;
 }
 
+.ttlWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .cardContent {
   gap: calc(1rem);
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .cardCantainer {
@@ -166,4 +199,85 @@
   width: 1.4rem;
   height: 1.4rem;
   padding-right: 0.2rem;
+}
+
+.tableHeader {
+  border-color: var(--palette-palette-divider) !important;
+}
+
+.tableHeaderText {
+  color: var(--palette-table-title-text-color);
+  font-family: 'mabry-bold' !important;
+}
+
+.tableRow {
+  border-bottom: dashed var(--palette-palette-divider);
+}
+
+.tableRow:last-child {
+  border-bottom: none;
+}
+
+.divider {
+  border-width: 0px 0px thin;
+  border-color: var(--palette-palette-divider);
+  border-style: dashed;
+  margin: 0;
+}
+
+.taskHeader {
+  height: 3.8rem;
+  background: var(--palette-dark-100Channel);
+}
+
+.taskWrapper {
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  line-height: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  user-select: none;
+
+  left: 0px;
+  right: 0px;
+  width: 64px;
+  height: 2rem;
+  z-index: 11;
+  margin-left: auto;
+  margin-right: auto;
+  top: 2.5rem;
+  position: absolute;
+}
+
+.task {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  object-fit: cover;
+  color: var(--palette-text-color);
+  text-indent: 10000px;
+}
+
+.taskBgcolor {
+  user-select: none;
+  display: inline-block;
+  flex-shrink: 0;
+  fill: currentcolor;
+  font-size: 1.5rem;
+  width: 144px;
+  height: 58px;
+  color: var(--palette-background-paper);
+  left: 0px;
+  right: 0px;
+  z-index: 10;
+  margin-left: auto;
+  margin-right: auto;
+  top: 1.7rem;
+  position: absolute;
+  transition: fill 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }

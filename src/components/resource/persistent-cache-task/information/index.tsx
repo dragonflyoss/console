@@ -8,7 +8,6 @@ import {
   Menu,
   MenuItem,
   Skeleton,
-  Stack,
   TextField,
   Typography,
   Tooltip as MuiTooltip,
@@ -18,42 +17,47 @@ import {
   DialogContent,
   Snackbar,
   Alert,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
+  ToggleButtonGroup,
+  styled,
+  toggleButtonGroupClasses,
+  ToggleButton,
+  Pagination,
 } from '@mui/material';
 import { deletePersistentCacheTask, getPersistentCacheTasksResponse } from '../../../../lib/api';
 import styles from './index.module.css';
 import Card from '../../../card';
 import SearchCircularProgress from '../../../circular-progress';
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
+  formatDuring,
   formatSize,
-  fuzzySearch,
   fuzzySearchPersistentCacheTask,
-  fuzzySearchScheduler,
-  getDatetime,
   getPaginatedList,
   useQuery,
 } from '../../../../lib/utils';
-import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
-
 import SearchIcon from '@mui/icons-material/Search';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { ReactComponent as IcContent } from '../../../../assets/images/cluster/scheduler/ic-content.svg';
-import { ReactComponent as ID } from '../../../../assets/images/cluster/id.svg';
-import { ReactComponent as PieceLength } from '../../../../assets/images/resource/persistent-cache-task/piece-length.svg';
-import { ReactComponent as ContentLength } from '../../../../assets/images/resource/persistent-cache-task/content-length.svg';
-import { ReactComponent as TotalPieceLength } from '../../../../assets/images/resource/persistent-cache-task/total-piece-length.svg';
-import { ReactComponent as CotentLength } from '../../../../assets/images/resource/persistent-cache-task/content-length.svg';
+import { ReactComponent as Total } from '../../../../assets/images/cluster/peer/total.svg';
+import { ReactComponent as HeaderTag } from '../../../../assets/images/resource/persistent-cache-task/header-tag.svg';
+import { ReactComponent as HeaderApplication } from '../../../../assets/images/resource/persistent-cache-task/header-application.svg';
+import { ReactComponent as SuccessTask } from '../../../../assets/images/resource/persistent-cache-task/success-task.svg';
+import { ReactComponent as FailedTask } from '../../../../assets/images/resource/persistent-cache-task/failed-task.svg';
+import { ReactComponent as TaskBgcolor } from '../../../../assets/images/resource/persistent-cache-task/task-bgc.svg';
 import { ReactComponent as Delete } from '../../../../assets/images/cluster/delete.svg';
 import { ReactComponent as DeleteWarning } from '../../../../assets/images/cluster/delete-warning.svg';
-import { ReactComponent as BarChart } from '../../../../assets/images/resource/persistent-cache-task/bar-chart.svg';
-import { ReactComponent as PersistentReplicaCount } from '../../../../assets/images/resource/persistent-cache-task/tab-persistent-replica-count.svg';
+import { ReactComponent as SelectCard } from '../../../../assets/images/cluster/scheduler/card.svg';
+import { ReactComponent as SelectTable } from '../../../../assets/images/cluster/scheduler/table.svg';
 
 import _ from 'lodash';
 import { DataContext } from '../show';
@@ -62,9 +66,23 @@ import { CancelLoadingButton, DeleteLoadingButton } from '../../../loading-butto
 interface InformationProps {
   persistentCacheTasks: getPersistentCacheTasksResponse[];
   isLoading: boolean;
-  clusterID: any;
   deleteTask: boolean;
 }
+
+const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
+  [`& .${toggleButtonGroupClasses.grouped}`]: {
+    margin: theme.spacing(0.5),
+    border: 0,
+    borderRadius: theme.shape.borderRadius,
+    [`&.${toggleButtonGroupClasses.disabled}`]: {
+      border: 0,
+    },
+  },
+  [`& .${toggleButtonGroupClasses.middleButton},& .${toggleButtonGroupClasses.lastButton}`]: {
+    marginLeft: -1,
+    borderLeft: '1px solid transparent',
+  },
+}));
 
 export default function Information(props: InformationProps) {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -74,16 +92,18 @@ export default function Information(props: InformationProps) {
   const [allPersistentCacheTasks, setAllPersistentCacheTasks] = useState<getPersistentCacheTasksResponse[]>([]);
   const [searchIslodaing, setSearchIconISLodaing] = useState(false);
   const [anchorElement, setAnchorElement] = useState(null);
+  const [tableAnchorElement, setTableAnchorElement] = useState(null);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [persistentCacheTaskPage, setPersistentCacheTaskPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(9);
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
-
-  const [persistentCacheTaskPage, setPersistentCacheTaskPage] = useState(1);
-  const [schedulerTotalPages, setSchedulerTotalPages] = useState<number>(1);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<getPersistentCacheTasksResponse>();
-  const { persistentCacheTasks, isLoading, clusterID, deleteTask } = props;
+  const [selectedRow, setSelectedRow] = useState<getPersistentCacheTasksResponse | null>(null);
+  const [alignment, setAlignment] = useState('card');
+  const [taskIsLoading, setTaskIsLoading] = useState(false);
+  const { persistentCacheTasks, isLoading, deleteTask } = props;
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
@@ -94,29 +114,19 @@ export default function Information(props: InformationProps) {
   const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
   const search = query.get('search') ? (query.get('search') as string) : '';
 
-  const persistentCacheTasksSuccess = persistentCacheTasks.filter((item) => item.state === 'Succeeded');
-
-  // const persistentCacheTasksApplication = new Set(persistentCacheTasks.map((item) => item.application)).size;
-
   const persistentCacheTasksApplication = persistentCacheTasks.filter((item) => item.application !== '');
 
+  const persistentCacheTasksTag = persistentCacheTasks.filter((item) => item.tag !== '');
+
   useEffect(() => {
+    setPersistentCacheTaskPage(page);
     setPersistentCacheTasksCount(persistentCacheTasks);
-  }, [persistentCacheTasks]);
+  }, [page, persistentCacheTasks]);
 
   useEffect(() => {
-    if (Array.isArray(persistentCacheTasks) && persistentCacheTasks.length > 0) {
-      persistentCacheTasks.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-
-      //   persistentCacheTasks.sort((a, b) => {
-      //     if (a.is_default && !b.is_default) {
-      //       return -1;
-      //     } else if (!a.is_default && b.is_default) {
-      //       return 1;
-      //     } else {
-      //       return 0;
-      //     }
-      //   });
+    setTaskIsLoading(true);
+    if (Array.isArray(persistentCacheTasksCount) && persistentCacheTasksCount.length > 0) {
+      persistentCacheTasksCount.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
       const updatePageSize = () => {
         if (window.matchMedia('(max-width: 1440px)').matches) {
@@ -136,24 +146,50 @@ export default function Information(props: InformationProps) {
 
       window.addEventListener('resize', updatePageSize);
 
-      const totalPage = Math.ceil(persistentCacheTasks.length / pageSize);
+      const totalPage = Math.ceil(persistentCacheTasksCount.length / pageSize);
 
-      const currentPageData = getPaginatedList(persistentCacheTasks, persistentCacheTaskPage, pageSize);
+      const currentPageData = getPaginatedList(persistentCacheTasksCount, persistentCacheTaskPage, pageSize);
 
-      setSchedulerTotalPages(totalPage);
+      if (currentPageData.length === 0 && persistentCacheTaskPage > 1) {
+        const queryParts = [];
+        if (search) {
+          queryParts.push(`search=${search}`);
+        }
+
+        if (page > 1) {
+          queryParts.push(`page=${persistentCacheTaskPage - 1}`);
+        }
+
+        // if (status !== 'all') {
+        //   queryParts.push(`status=${status}`);
+        // }
+
+        const queryString = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
+
+        navigate(`${location.pathname}${queryString}`);
+      }
+
+      setTotalPages(totalPage);
       setAllPersistentCacheTasks(currentPageData);
+      setTaskIsLoading(true);
+    } else if (persistentCacheTasksCount === null || persistentCacheTasksCount) {
+      setTotalPages(1);
+      setAllPersistentCacheTasks([]);
     }
-    //  else if (cluster === null || cluster) {
-    //   setSchedulerTotalPages(1);
-    //   setAllPersistentCacheTasks([]);
-    // }
-  }, [persistentCacheTasks, persistentCacheTaskPage, pageSize]);
+  }, [
+    persistentCacheTaskPage,
+    pageSize,
+    persistentCacheTasksCount,
+    searchPersistentCacheTask,
+    location.pathname,
+    navigate,
+    page,
+    search,
+  ]);
 
   const debounced = useMemo(
     () =>
       debounce(async (currentSearch) => {
-        console.log(currentSearch);
-
         if (currentSearch && persistentCacheTasks.length > 0) {
           const clusters = fuzzySearchPersistentCacheTask(currentSearch, persistentCacheTasks);
 
@@ -179,14 +215,20 @@ export default function Information(props: InformationProps) {
     [debounced, location.pathname, navigate],
   );
 
+  useEffect(() => {
+    if (search) {
+      setSearchPersistentCacheTask(search);
+      debounced(search);
+    }
+  }, [search, debounced]);
+
   const handleDelete = async (event: any) => {
     try {
       event.preventDefault();
       const delet = event.currentTarget.elements.deletCache.value;
       if (delet === 'DELETE') {
-        if (selectedRow?.id) {
-          await deletePersistentCacheTask(selectedRow?.id, { scheduler_cluster_id: clusterID });
-          console.log(deleteTask);
+        if (selectedRow?.id && params?.id) {
+          await deletePersistentCacheTask(selectedRow?.id, { scheduler_cluster_id: params?.id });
 
           setDeleteTask(!deleteTask);
           setSuccessMessage(true);
@@ -207,6 +249,9 @@ export default function Information(props: InformationProps) {
     }
   };
 
+  const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string) => {
+    setAlignment(newAlignment);
+  };
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -215,6 +260,9 @@ export default function Information(props: InformationProps) {
     setAnchorElement(null);
     setOpenDelete(false);
     setErrorMessage(false);
+    setTableAnchorElement(null);
+    setSelectedRow(null);
+    setSuccessMessage(false);
   };
 
   return (
@@ -225,7 +273,7 @@ export default function Information(props: InformationProps) {
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert id="successMessage" onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+        <Alert id="success-message" onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Submission successful!
         </Alert>
       </Snackbar>
@@ -235,7 +283,7 @@ export default function Information(props: InformationProps) {
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
           {errorMessageText}
         </Alert>
       </Snackbar>
@@ -255,47 +303,13 @@ export default function Information(props: InformationProps) {
               </Typography>
             )}
             <Box className={styles.navigationCount}>
-              {/* <span className={styles.navigationCountIcon}>
-                <Count />
-              </span> */}
               <Typography variant="body2" color="var(--palette-table-title-text-color)">
-                number of persistent cache task
+                number of persistent cache tasks
               </Typography>
             </Box>
           </Box>
-
-          <BarChart className={styles.barChart} />
-          {/* <Box className={styles.navigation} /> */}
-          {/* <Total className={styles.navigationIcon} /> */}
-        </Card>
-        <Card className={styles.navigationWrapper}>
-          <Box className={styles.navigationContent}>
-            <Box>
-              <Typography variant="subtitle2" fontFamily="mabry-bold" color="var(--palette-table-title-text-color)">
-                Success
-              </Typography>
-              {isLoading ? (
-                <Box p="0.4rem 0">
-                  <Skeleton height={40} data-testid="isloading" width="2rem" />
-                </Box>
-              ) : (
-                <Typography id="active" variant="h5" p="0.7rem 0">
-                  {persistentCacheTasksSuccess?.length}
-                </Typography>
-              )}
-              <Box className={styles.navigationCount}>
-                {/* <span className={styles.navigationCountIcon}>
-                  <Count />
-                </span> */}
-                <Typography variant="body2" color="var(--palette-table-title-text-color)">
-                  number of successes
-                </Typography>
-              </Box>
-            </Box>
-            <Box className={styles.navigation} />
-            {/* <Active className={styles.navigationIcon} /> */}
-          </Box>
-          <BarChart className={styles.barChart} />
+          <Box className={styles.navigation} />
+          <Total className={styles.navigationIcon} />
         </Card>
         <Card className={styles.navigationWrapper}>
           <Box className={styles.navigationContent}>
@@ -308,14 +322,11 @@ export default function Information(props: InformationProps) {
                   <Skeleton height={40} data-testid="isloading" width="2rem" />
                 </Box>
               ) : (
-                <Typography id="inactive" variant="h5" p="0.7rem 0">
+                <Typography id="application" variant="h5" p="0.7rem 0">
                   {persistentCacheTasksApplication.length}
                 </Typography>
               )}
               <Box className={styles.navigationCount}>
-                {/* <span className={styles.navigationCountIcon}>
-                  <Count />
-                </span> */}
                 <Typography variant="body2" color="var(--palette-table-title-text-color)">
                   number of application
                 </Typography>
@@ -323,16 +334,43 @@ export default function Information(props: InformationProps) {
             </Box>
             <Box className={styles.navigation} />
           </Box>
-          <BarChart className={styles.barChart} />
+          <Box className={styles.navigation} />
+          <HeaderApplication className={styles.navigationIcon} />
+        </Card>
+        <Card className={styles.navigationWrapper}>
+          <Box className={styles.navigationContent}>
+            <Box>
+              <Typography variant="subtitle2" fontFamily="mabry-bold" color="var(--palette-table-title-text-color)">
+                Tag
+              </Typography>
+              {isLoading ? (
+                <Box p="0.4rem 0">
+                  <Skeleton height={40} data-testid="isloading" width="2rem" />
+                </Box>
+              ) : (
+                <Typography id="tag" variant="h5" p="0.7rem 0">
+                  {persistentCacheTasksTag?.length}
+                </Typography>
+              )}
+              <Box className={styles.navigationCount}>
+                <Typography variant="body2" color="var(--palette-table-title-text-color)">
+                  number of tag
+                </Typography>
+              </Box>
+            </Box>
+            <Box className={styles.navigation} />
+            <HeaderTag className={styles.navigationIcon} />
+          </Box>
         </Card>
       </Box>
-      <Stack spacing={2} sx={{ width: '22rem', mb: '2rem' }}>
+      <Box sx={{ mb: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Autocomplete
           size="small"
           color="secondary"
-          id="free-solo-demo"
+          id="search-task"
           freeSolo
-          inputValue={search}
+          sx={{ width: '22rem' }}
+          inputValue={searchPersistentCacheTask}
           onInputChange={(_event, newInputValue) => {
             handleInputChange(newInputValue);
           }}
@@ -374,186 +412,42 @@ export default function Information(props: InformationProps) {
             />
           )}
         />
-      </Stack>
-      {isLoading ? (
-        <Card className={styles.loadingCard}>
-          <Box className={styles.clusterListContent}>
-            <Box p="1.2rem">
-              <Box display="flex" mb="0.5rem">
-                <ID className={styles.idIcon} />
-                <Skeleton data-testid="isloading" sx={{ width: '1rem' }} />
-              </Box>
-              <Typography variant="h6" mb="0.5rem">
-                <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
-              </Typography>
-              <Box display="flex">
-                <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
-              </Box>
-            </Box>
-            <Divider
-              sx={{
-                borderStyle: 'dashed',
-                borderColor: 'var(--palette-palette-divider)',
-                borderWidth: '0px 0px thin',
-              }}
-            />
-            <Box p="1.2rem">
-              <Skeleton data-testid="isloading" sx={{ width: '4rem', height: '1.4rem', mb: '0.8rem' }} />
-              <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
-            </Box>
-          </Box>
-        </Card>
-      ) : Array.isArray(persistentCacheTasksCount) && persistentCacheTasksCount.length > 0 ? (
-        <Box id="scheduler-card" className={styles.cardCantainer}>
-          {Array.isArray(persistentCacheTasksCount) &&
-            persistentCacheTasksCount.map((item: any) => (
-              <Card className={styles.card}>
-                <Box p="1.2rem" position="relative">
-                  <IconButton
-                    id={`operation-${item?.id}`}
-                    onClick={(event: any) => {
-                      setAnchorElement(event.currentTarget);
-                      //   setSchedulerSelectedRow(item);
-                      //   setSchedulerSelectedID(item.id);
-
-                      setSelectedRow(item);
-                    }}
-                    size="small"
-                    aria-controls={Boolean(anchorElement) ? item?.host_name : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={Boolean(anchorElement) ? 'true' : undefined}
-                    className={styles.moreVertIcon}
-                  >
-                    <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
-                  </IconButton>
-                  <Menu
-                    anchorEl={anchorElement}
-                    // id={schedulerSelectedRow?.host_name}
-                    open={Boolean(anchorElement)}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'right',
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    sx={{
-                      '& .MuiMenu-paper': {
-                        boxShadow: 'var(--custom-shadows-dropdown)',
-                        borderRadius: '0.6rem',
-                      },
-                      '& .MuiMenu-list': {
-                        width: '9rem',
-                        p: '0',
-                      },
-                    }}
-                  >
-                    <Box className={styles.menu}>
-                      <MenuItem
-                        className={styles.menuItem}
-                        id={`view-${selectedRow?.id}`}
-                        onClick={() => {
-                          navigate(
-                            `/resource/persistent-cache-task/cluster/${location?.pathname.split('/')[4]}/${item?.id}`,
-                          );
-
-                          setAnchorElement(null);
-                        }}
-                      >
-                        <ListItemIcon>
-                          <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
-                        </ListItemIcon>
-                        <Typography variant="body2" className={styles.menuText}>
-                          View
-                        </Typography>
-                      </MenuItem>
-
-                      <MenuItem
-                        className={styles.menuItem}
-                        id={`delete-${selectedRow?.id}`}
-                        onClick={() => {
-                          //   openHandleScheduler(schedulerSelectedRow);
-
-                          setAnchorElement(null);
-                          setOpenDelete(true);
-                        }}
-                      >
-                        <ListItemIcon>
-                          <DeleteIcon fontSize="small" sx={{ color: 'var(--palette-delete-button-color)' }} />
-                        </ListItemIcon>
-                        <Typography
-                          variant="body2"
-                          className={styles.menuText}
-                          color="var(--palette-delete-button-color)"
-                        >
-                          Delete
-                        </Typography>
-                      </MenuItem>
-                    </Box>
-                  </Menu>
-                  {/* <Box
-                    sx={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      borderRadius: '0.3rem',
-                      p: '0.2rem 0.6rem',
-                      backgroundColor:
-                        item?.state === 'Succeeded'
-                          ? 'var(--palette-grey-background-color)'
-                          : 'var(--palette-background-inactive)',
-                      color:
-                        item?.state === 'Succeeded'
-                          ? 'var(--palette-text-color)'
-                          : 'var(--palette-table-title-text-color)',
-                    }}
-                    id="status"
-                  >
-                    <Typography variant="body2" fontFamily="mabry-bold">
-                      {(item?.state && (item?.state === 'Succeeded' ? 'SUCCESS' : 'FAILURE')) || ''}
-                    </Typography>
-                  </Box> */}
-                  <Chip
-                    label={(item?.state && (item?.state === 'Succeeded' ? 'SUCCESS' : 'FAILURE')) || ''}
-                    size="small"
-                    variant="outlined"
-                    id={`card-state-${item.id}`}
-                    sx={{
-                      borderRadius: '0.2rem',
-                      backgroundColor:
-                        item?.state === 'Succeeded'
-                          ? 'var(--palette-grey-background-color)'
-                          : 'var(--palette-background-inactive)',
-                      color:
-                        item?.state === 'Succeeded'
-                          ? 'var(--palette-text-color)'
-                          : 'var(--palette-table-title-text-color)',
-                      border: 0,
-                      fontFamily: 'mabry-bold',
-                    }}
-                  />
-                  <MuiTooltip title={item.id || '-'} placement="top">
-                    <RouterLink
-                      component={Link}
-                      to={`/resource/persistent-cache-task/cluster/${location?.pathname.split('/')[4]}/${item?.id}`}
-                      underline="hover"
-                    >
-                      <Typography
-                        id={`card-hostname-${item.id}`}
-                        variant="subtitle1"
-                        m="0.7rem 0"
-                        className={styles.idText}
-                      >
-                        {item.id}
-                      </Typography>
-                    </RouterLink>
-                  </MuiTooltip>
-                  <Box display="flex" alignItems="flex-end">
-                    <MoreTimeIcon fontSize="small" />
-                    <Typography variant="body2" pl="0.4rem">
-                      {getDatetime(item?.created_at)}
-                    </Typography>
+        <Paper
+          elevation={0}
+          sx={(theme) => ({
+            display: 'flex',
+            border: `1px solid var(--palette-action-hover)`,
+            flexWrap: 'wrap',
+            ml: '1rem',
+            backgroundColor: 'var(--palette-background-paper)',
+          })}
+        >
+          <StyledToggleButtonGroup
+            size="small"
+            value={alignment}
+            exclusive
+            onChange={handleAlignment}
+            aria-label="text alignment"
+          >
+            <ToggleButton id="card" value="card" aria-label="centered">
+              <SelectCard />
+            </ToggleButton>
+            <ToggleButton id="table" value="table" aria-label="left aligned">
+              <SelectTable />
+            </ToggleButton>
+          </StyledToggleButtonGroup>
+        </Paper>
+      </Box>
+      {alignment === 'card' ? (
+        <>
+          {isLoading && taskIsLoading ? (
+            <Card className={styles.loadingCard}>
+              <Box className={styles.clusterListContent}>
+                <Box p="1.2rem">
+                  <Skeleton data-testid="isloading" sx={{ width: '5rem', height: '2rem' }} />
+                  <Skeleton data-testid="isloading" sx={{ width: '5rem', m: '0.5rem 0' }} />
+                  <Box display="flex">
+                    <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
                   </Box>
                 </Box>
                 <Divider
@@ -566,51 +460,481 @@ export default function Information(props: InformationProps) {
                 <Box p="1.2rem">
                   <Box className={styles.cardContent}>
                     <Box className={styles.portContainer}>
-                      <TotalPieceLength className={styles.statusIcon} />
-                      <Typography id={`total-piece-count-${item.id}`} variant="caption" sx={{ color: '#919EAB' }}>
-                        {item?.total_piece_count}
+                      <Typography variant="caption" sx={{ color: '#919EAB' }}>
+                        Tag
                       </Typography>
+                      <Skeleton data-testid="isloading" sx={{ width: '3rem' }} />
                     </Box>
                     <Box className={styles.portContainer}>
-                      <PersistentReplicaCount className={styles.statusIcon} />
-                      <Typography
-                        id={`persistent-replica-count-${item.id}`}
-                        variant="caption"
-                        sx={{ color: '#919EAB' }}
-                      >
-                        {item?.persistent_replica_count}
+                      <Typography variant="caption" sx={{ color: '#919EAB' }}>
+                        Application
                       </Typography>
+                      <Skeleton data-testid="isloading" sx={{ width: '3rem' }} />
                     </Box>
                     <Box className={styles.portContainer}>
-                      <PieceLength className={styles.statusIcon} />
-                      <Typography id={`piece-length-${item.id}`} variant="caption" sx={{ color: '#919EAB' }}>
-                        {item?.piece_length && `${Number(item?.piece_length) / 1024 / 1024} MiB`}
+                      <Typography variant="caption" sx={{ color: '#919EAB' }}>
+                        Content length
                       </Typography>
-                    </Box>
-                    <Box className={styles.portContainer}>
-                      <ContentLength className={styles.statusIcon} />
-                      <Typography id={`content-length-${item.id}`} variant="caption" sx={{ color: '#919EAB' }}>
-                        {item?.content_length && formatSize(item?.content_length)}
-                      </Typography>
+                      <Skeleton data-testid="isloading" sx={{ width: '3rem' }} />
                     </Box>
                   </Box>
                 </Box>
-              </Card>
-            ))}
+              </Box>
+            </Card>
+          ) : Array.isArray(allPersistentCacheTasks) && allPersistentCacheTasks.length > 0 ? (
+            <Box id="card-list" className={styles.cardCantainer}>
+              {Array.isArray(allPersistentCacheTasks) &&
+                allPersistentCacheTasks.map((item: any, index) => (
+                  <Card key={index} className={styles.card}>
+                    <Box position="relative">
+                      <IconButton
+                        id={`operation-${index}`}
+                        onClick={(event: any) => {
+                          setAnchorElement(event.currentTarget);
+                          setSelectedRow(item);
+                        }}
+                        size="small"
+                        aria-controls={Boolean(anchorElement) ? item?.host_name : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={Boolean(anchorElement) ? 'true' : undefined}
+                        className={styles.moreVertIcon}
+                      >
+                        <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
+                      </IconButton>
+                      <Menu
+                        anchorEl={anchorElement}
+                        // id={schedulerSelectedRow?.host_name}
+                        open={Boolean(anchorElement)}
+                        onClose={handleClose}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                        sx={{
+                          '& .MuiMenu-paper': {
+                            boxShadow: 'var(--custom-shadows-dropdown)',
+                            borderRadius: '0.6rem',
+                          },
+                          '& .MuiMenu-list': {
+                            width: '9rem',
+                            p: '0',
+                          },
+                        }}
+                      >
+                        <Box className={styles.menu}>
+                          <MenuItem
+                            className={styles.menuItem}
+                            id={`view-${selectedRow?.id}`}
+                            onClick={() => {
+                              navigate(
+                                `/resource/persistent-cache-task/clusters/${location?.pathname.split('/')[4]}/${
+                                  selectedRow?.id
+                                }`,
+                              );
+
+                              setAnchorElement(null);
+                            }}
+                          >
+                            <ListItemIcon>
+                              <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
+                            </ListItemIcon>
+                            <Typography variant="body2" className={styles.menuText}>
+                              View
+                            </Typography>
+                          </MenuItem>
+                          <MenuItem
+                            className={styles.menuItem}
+                            id={`delete-${selectedRow?.id}`}
+                            onClick={() => {
+                              setAnchorElement(null);
+                              setOpenDelete(true);
+                            }}
+                          >
+                            <ListItemIcon>
+                              <DeleteIcon fontSize="small" sx={{ color: 'var(--palette-delete-button-color)' }} />
+                            </ListItemIcon>
+                            <Typography
+                              variant="body2"
+                              className={styles.menuText}
+                              color="var(--palette-delete-button-color)"
+                            >
+                              Delete
+                            </Typography>
+                          </MenuItem>
+                        </Box>
+                      </Menu>
+                      <TaskBgcolor className={styles.taskBgcolor} />
+                      <Box className={styles.taskWrapper}>
+                        {item?.state === 'Succeeded' ? (
+                          <SuccessTask id={`success-task-${index}`} className={styles.task} />
+                        ) : (
+                          <FailedTask id={`failed-task-${index}`} className={styles.task} />
+                        )}
+                      </Box>
+                      <Box className={styles.taskHeader} />
+                      <Box p="1rem" pt="2rem" display="flex" alignItems="center" flexDirection="column">
+                        <MuiTooltip title={item.id || '-'} placement="top">
+                          <RouterLink
+                            component={Link}
+                            to={`/resource/persistent-cache-task/clusters/${location?.pathname.split('/')[4]}/${
+                              item?.id
+                            }`}
+                            underline="hover"
+                          >
+                            <Typography id={`card-id-${index}`} variant="subtitle1" className={styles.idText}>
+                              {item.id}
+                            </Typography>
+                          </RouterLink>
+                        </MuiTooltip>
+                        <Typography variant="caption" sx={{ color: '#919EAB' }}>
+                          Persistent Replica Count : {item?.persistent_replica_count}
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Divider
+                      sx={{
+                        borderStyle: 'dashed',
+                        borderColor: 'var(--palette-palette-divider)',
+                        borderWidth: '0px 0px thin',
+                      }}
+                    />
+                    <Box p="1rem">
+                      <Box className={styles.cardContent}>
+                        <Box className={styles.portContainer}>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Typography variant="caption" sx={{ color: '#919EAB' }}>
+                              Tag
+                            </Typography>
+                          </Box>
+
+                          <Typography id={`tag-${index}`} variant="caption" sx={{ fontFamily: 'mabry-bold' }}>
+                            {item?.tag || '-'}
+                          </Typography>
+                        </Box>
+                        <Box className={styles.portContainer}>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Typography variant="caption" sx={{ color: '#919EAB' }}>
+                              Application
+                            </Typography>
+                          </Box>
+                          <Typography id={`application-${index}`} variant="caption" sx={{ fontFamily: 'mabry-bold' }}>
+                            {item?.application || '-'}
+                          </Typography>
+                        </Box>
+                        <Box className={styles.portContainer}>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Typography variant="caption" sx={{ color: '#919EAB' }}>
+                              Content length
+                            </Typography>
+                          </Box>
+                          <Typography id={`piece-length-${index}`} variant="caption" sx={{ fontFamily: 'mabry-bold' }}>
+                            {item?.content_length && formatSize(item?.content_length)}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Card>
+                ))}
+            </Box>
+          ) : (
+            <Card className={styles.noData}>
+              <IcContent className={styles.nodataIcon} />
+              <Typography id="no-task" variant="h6" className={styles.nodataText}>
+                This scheduler cluster has no persistent cache task.
+              </Typography>
+            </Card>
+          )}
+        </>
+      ) : (
+        <Card>
+          <Box width="100%">
+            <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="seed-peer-table">
+              <TableHead sx={{ backgroundColor: 'var(--palette-table-title-color)' }}>
+                <TableRow>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                      ID
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                      Persistent Replica Count
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                      TTL
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                      Application
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                      Tag
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                      Piece Length
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                      Status
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center" className={styles.tableHeader}>
+                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                      Operation
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody id="seed-peer-table-body">
+                {isLoading ? (
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell align="center">
+                      <Skeleton data-testid="isloading" />
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="4rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="4rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="2rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="2rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="2rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="2rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="3.5rem" height="2.6rem" />
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Skeleton data-testid="isloading" width="2.5rem" height="2.5rem" />
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ) : persistentCacheTasksCount.length === 0 ? (
+                  <TableRow>
+                    <TableCell id="no-task-table" colSpan={9} align="center" sx={{ border: 0 }}>
+                      This scheduler cluster has no persistent cache task.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  <>
+                    {Array.isArray(persistentCacheTasksCount) &&
+                      persistentCacheTasksCount.map((item: getPersistentCacheTasksResponse, index) => {
+                        return (
+                          <TableRow
+                            key={index}
+                            selected={selectedRow === item}
+                            sx={{
+                              '&:last-child td, &:last-child th': { border: 0 },
+                              ':hover': { backgroundColor: 'var(--palette-action-hover)' },
+                            }}
+                            className={styles.tableRow}
+                          >
+                            <TableCell id={`id-${item?.id}`} align="center">
+                              <RouterLink
+                                component={Link}
+                                to={`/resource/persistent-cache-task/clusters/${location?.pathname.split('/')[4]}/${
+                                  item?.id
+                                }`}
+                                underline="hover"
+                                color="var(--palette-description-color)"
+                              >
+                                {item?.id}
+                              </RouterLink>
+                            </TableCell>
+                            <TableCell id={`persistent-replica-count-${item?.id}`} align="center">
+                              {item?.persistent_replica_count}
+                            </TableCell>
+                            <TableCell id={`ttl-${item?.id}`} align="center">
+                              {formatDuring(item?.ttl)}
+                            </TableCell>
+                            <TableCell id={`application-${item?.id}`} align="center">
+                              {item?.application || '-'}
+                            </TableCell>
+                            <TableCell id={`tag-${item?.id}`} align="center">
+                              {item?.tag || '-'}
+                            </TableCell>
+                            <TableCell id={`piece-length-${item?.id}`} align="center">
+                              {item?.piece_length && `${Number(item?.piece_length) / 1024 / 1024} MiB`}
+                            </TableCell>
+                            <TableCell id={`state-${item?.id}`} align="center">
+                              <Chip
+                                label={(item?.state && (item?.state === 'Succeeded' ? 'SUCCESS' : 'FAILURE')) || ''}
+                                size="small"
+                                variant="outlined"
+                                id={`card-state-${item.id}`}
+                                sx={{
+                                  borderRadius: '0.2rem',
+                                  backgroundColor:
+                                    item?.state === 'Succeeded'
+                                      ? 'var(--palette-grey-background-color)'
+                                      : 'var(--palette-background-inactive)',
+                                  color:
+                                    item?.state === 'Succeeded'
+                                      ? 'var(--palette-text-color)'
+                                      : 'var(--palette-table-title-text-color)',
+                                  border: 0,
+                                  fontFamily: 'mabry-bold',
+                                  mb: '0.7rem',
+                                }}
+                              />
+                            </TableCell>
+                            <TableCell align="center">
+                              <IconButton
+                                id={`operation-${item?.id}`}
+                                onClick={(event: any) => {
+                                  setSelectedRow(item);
+                                  setTableAnchorElement(event.currentTarget);
+                                }}
+                                size="small"
+                                aria-haspopup="true"
+                              >
+                                <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
+                              </IconButton>
+                              <Menu
+                                anchorEl={tableAnchorElement}
+                                open={Boolean(tableAnchorElement)}
+                                onClose={handleClose}
+                                anchorOrigin={{
+                                  vertical: 'bottom',
+                                  horizontal: 'right',
+                                }}
+                                transformOrigin={{
+                                  vertical: 'top',
+                                  horizontal: 'right',
+                                }}
+                                sx={{
+                                  '& .MuiMenu-paper': {
+                                    boxShadow: 'var(--custom-shadows-dropdown)',
+                                    borderRadius: '0.6rem',
+                                  },
+                                  '& .MuiMenu-list': {
+                                    width: '9rem',
+                                    p: '0',
+                                  },
+                                }}
+                              >
+                                <Box className={styles.menu}>
+                                  <MenuItem
+                                    className={styles.menuItem}
+                                    id={`view-${selectedRow?.id}`}
+                                    onClick={() => {
+                                      navigate(
+                                        `/resource/persistent-cache-task/clusters/${location?.pathname.split('/')[4]}/${
+                                          selectedRow?.id
+                                        }`,
+                                      );
+
+                                      setAnchorElement(null);
+                                    }}
+                                  >
+                                    <ListItemIcon>
+                                      <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
+                                    </ListItemIcon>
+                                    <Typography variant="body2" className={styles.menuText}>
+                                      View
+                                    </Typography>
+                                  </MenuItem>
+                                  <MenuItem
+                                    className={styles.menuItem}
+                                    id={`delete-${selectedRow?.id}`}
+                                    onClick={() => {
+                                      setAnchorElement(null);
+                                      setOpenDelete(true);
+                                    }}
+                                  >
+                                    <ListItemIcon>
+                                      <DeleteIcon
+                                        fontSize="small"
+                                        sx={{ color: 'var(--palette-delete-button-color)' }}
+                                      />
+                                    </ListItemIcon>
+                                    <Typography
+                                      variant="body2"
+                                      className={styles.menuText}
+                                      color="var(--palette-delete-button-color)"
+                                    >
+                                      Delete
+                                    </Typography>
+                                  </MenuItem>
+                                </Box>
+                              </Menu>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                  </>
+                )}
+              </TableBody>
+            </Table>
+          </Box>
+        </Card>
+      )}
+      {totalPages > 1 ? (
+        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
+          <Pagination
+            id="task-pagination"
+            count={totalPages}
+            page={persistentCacheTaskPage}
+            onChange={(_event: any, newPage: number) => {
+              setPersistentCacheTaskPage(newPage);
+              const queryParts = [];
+
+              if (newPage > 1) {
+                queryParts.push(`page=${newPage}`);
+              }
+
+              const queryString = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
+
+              navigate(`/resource/persistent-cache-task/clusters/${params?.id}${queryString}`);
+            }}
+            color="primary"
+            size="small"
+          />
         </Box>
       ) : (
-        <Card className={styles.noData}>
-          <IcContent className={styles.nodataIcon} />
-          <Typography id="no-scheduler" variant="h6" className={styles.nodataText}>
-            This scheduler cluster has no persistent cache task.
-          </Typography>
-        </Card>
+        <></>
       )}
       <Dialog
         open={openDelete}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        id="delete-task"
         sx={{
           '& .MuiDialog-paper': {
             minWidth: '40rem',
@@ -667,7 +991,7 @@ export default function Information(props: InformationProps) {
                 </Typography>
               </Box>
             </Box>
-            <Typography variant="body1" component="div">
+            <Typography variant="body1" component="div" id="help-delete-task">
               Persistent cache task will be permanently deleted.
             </Typography>
             <TextField
@@ -695,7 +1019,6 @@ export default function Information(props: InformationProps) {
                 endIcon={<DeleteIcon />}
                 id="deleteTask"
                 text="Delete"
-                // onClick={handleDelete}
               />
             </Box>
           </Box>

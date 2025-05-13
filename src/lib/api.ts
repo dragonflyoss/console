@@ -1146,7 +1146,7 @@ interface getPersistentCacheTasksParams {
   scheduler_cluster_id?: string;
 }
 
-interface persistentCacheTasksPeersResponse {
+export interface persistentCacheTasksPeersResponse {
   block_parents: [string];
   cost: number;
   created_at: string;

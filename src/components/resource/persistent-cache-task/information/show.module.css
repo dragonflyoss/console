@@ -1,11 +1,14 @@
 .container {
-  /* padding: 2rem; */
-  /* margin-bottom: 2rem; */
-  /* display: inline-flex; */
+  margin-top: 1.5rem;
+}
+
+.Icon {
+  width: 1.8rem !important;
+  height: 1.8rem !important;
+  color: var(--palette-button-color);
 }
 
 .idContent {
-  padding-top: 1rem;
   font-family: 'mabry-bold' !important;
 }
 
@@ -15,37 +18,35 @@
 
 .informationWrapper {
   display: grid;
-  gap: calc(1.5rem);
-  grid-template-columns: repeat(3, 1fr);
+  gap: calc(2rem);
+  grid-template-columns: repeat(2, 1fr);
   padding: 1.5rem;
 }
 
-.informationContentWrapper {
-  margin-left: 0.6rem !important;
-}
-
 .informationTitle {
-  display: flex;
+  display: inline-flex;
   align-items: flex-start;
+  width: 45%;
 }
 
 .informationTitleIcon {
   width: 1.2rem !important;
   height: 1.2rem !important;
-  color: var(--palette-button-color);
+  color: var(--palette-table-title-text-color);
 }
 
 .informationTitleText {
-  /* color: var(--palette-detail-lable-color); */
   color: #637381;
-  font-family: 'mabry-bold' !important;
+  padding-left: 0.5rem;
+}
+
+.informationcontainer {
+  display: flex;
+  align-items: center;
 }
 
 .informationContent {
-  word-break: break-all;
   font-family: 'mabry-bold' !important;
-  /* padding-left: 1rem; */
-  padding-top: 0.4rem;
 }
 
 .tableRow {
@@ -63,4 +64,16 @@
 
 .tableRow:last-child {
   border-bottom: none;
+}
+
+.deleteIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: 0.4rem;
+}
+
+.deleteWarningIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  padding-right: 0.2rem;
 }

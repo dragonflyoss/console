@@ -76,13 +76,23 @@ describe('Menu', () => {
 
       // The selected menu is preheats.
       cy.get('#preheats').should('have.class', 'Mui-selected');
+    });
 
+    it('should navigate to the  task page and task persistent cache page', () => {
+      cy.get('#resource').click();
       cy.get('#task').click();
 
       // Then I see that the current page is the task!
-      cy.url().should('include', '/jobs/task/clear');
+      cy.url().should('include', '/resource/task/clear');
 
       cy.get('#task').should('have.class', 'Mui-selected');
+
+      cy.get('#persistent-cache-task').click();
+
+      // Then I see that the current page is the task persistent cache!
+      cy.url().should('include', '/resource/persistent-cache-task');
+
+      cy.get('#persistent-cache-task').should('have.class', 'Mui-selected');
     });
   });
 
@@ -158,13 +168,23 @@ describe('Menu', () => {
 
       // The selected menu is preheats.
       cy.get('#preheats').should('have.class', 'Mui-selected');
+    });
 
+    it('should navigate to the task page and task persistent cache page', () => {
+      cy.get('#resource').click();
       cy.get('#task').click();
 
       // Then I see that the current page is the task!
-      cy.url().should('include', '/jobs/task/clear');
+      cy.url().should('include', '/resource/task/clear');
 
       cy.get('#task').should('have.class', 'Mui-selected');
+
+      cy.get('#persistent-cache-task').click();
+
+      // Then I see that the current page is the task persistent cache!
+      cy.url().should('include', '/resource/persistent-cache-task');
+
+      cy.get('#persistent-cache-task').should('have.class', 'Mui-selected');
     });
 
     it('should navigate to the users page', () => {
@@ -210,14 +230,19 @@ describe('Menu', () => {
       cy.url().should('include', '/jobs/preheats');
 
       // Go to task page.
-      cy.get('#jobs').click();
+      cy.get('#resource').click();
       cy.get('#task').click();
 
       // Then I see that the current page is the task!
-      cy.url().should('include', '/jobs/task/clear');
+      cy.url().should('include', '/resource/task/clear');
+
+      cy.get('#resource').click();
+      cy.get('#persistent-cache-task').click();
+
+      // Then I see that the current page is the task persistent cache!
+      cy.url().should('include', '/resource/persistent-cache-task');
 
       // Go to user page.
-
       cy.get('#users').click();
 
       // Then I see that the current page is the users!

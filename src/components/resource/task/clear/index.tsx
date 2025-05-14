@@ -528,7 +528,7 @@ export default function Clear() {
         const task = await createTaskJob(data);
         setSearchID(task?.id);
       } else {
-        navigate('/resource/task/resource/clear');
+        navigate('/resource/task/clear');
         setTask(null);
         setIsLoading(false);
         setSearchTaskISLodaing(false);

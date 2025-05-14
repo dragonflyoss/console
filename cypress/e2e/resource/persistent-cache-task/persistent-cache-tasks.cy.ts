@@ -57,14 +57,14 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#application').should('have.text', 6);
       cy.get('#tag').should('have.text', 17);
 
-      cy.get('#card-id-0').should('have.text', '2865345332');
+      cy.get('#card-id-0').should('have.text', '3810320977');
 
-      cy.get('#tag-0').should('have.text', 'tag-1');
-      cy.get('#application-0').should('have.text', 'application-1');
+      cy.get('#tag-0').should('have.text', 'tag-4');
+      cy.get('#application-0').should('have.text', 'application-3');
 
       cy.get('#table').click();
 
-      cy.get(':nth-child(1) > #id-2865345332').should('have.text', '2865345332');
+      cy.get(':nth-child(1) > #id-3810320977').should('have.text', '3810320977');
     });
 
     it('should show visualization of persistent cache tasks', () => {
@@ -175,7 +175,7 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#no-clusters').should('exist');
     });
 
-    it('can search Persistent Cache Task', () => {
+    it('can search persistent cache task', () => {
       cy.get('#cluster-name-1').click();
 
       cy.get('#search-task').type('2484851399{enter}');
@@ -214,12 +214,12 @@ describe('Persistent Cache Tasks', () => {
       cy.visit('/resource/persistent-cache-task/clusters/1');
     });
 
-    it('can the delet task', () => {
+    it('can the delet persistent cache task', () => {
       cy.get('#operation-0').click();
 
       cy.get('#delete-task').should('not.exist');
 
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #delete-2865345332').click();
+      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #delete-3810320977').click();
       cy.get('#delete-task').should('exist');
 
       cy.get('#help-delete-task').should('have.text', 'Persistent cache task will be permanently deleted.');
@@ -237,7 +237,7 @@ describe('Persistent Cache Tasks', () => {
       cy.intercept(
         {
           method: 'DELETE',
-          url: '/api/v1/persistent-cache-tasks/2865345332?scheduler_cluster_id=1',
+          url: '/api/v1/persistent-cache-tasks/3810320977?scheduler_cluster_id=1',
         },
         (req) => {
           req.reply({
@@ -277,7 +277,7 @@ describe('Persistent Cache Tasks', () => {
 
       cy.get('#delete-task').should('not.exist');
 
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #delete-2865345332').click();
+      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #delete-3810320977').click();
       cy.get('#delete-task').should('exist');
 
       cy.get('#help-delete-task').should('have.text', 'Persistent cache task will be permanently deleted.');
@@ -285,7 +285,7 @@ describe('Persistent Cache Tasks', () => {
       cy.intercept(
         {
           method: 'DELETE',
-          url: '/api/v1/persistent-cache-tasks/2865345332?scheduler_cluster_id=1',
+          url: '/api/v1/persistent-cache-tasks/3810320977?scheduler_cluster_id=1',
         },
         (req) => {
           req.reply({
@@ -310,12 +310,12 @@ describe('Persistent Cache Tasks', () => {
 
       cy.get('#operation-0').click();
 
-      cy.get('#delete-3810320977').click();
+      cy.get('#delete-2865345332').click();
 
       cy.intercept(
         {
           method: 'DELETE',
-          url: '/api/v1/persistent-cache-tasks/3810320977?scheduler_cluster_id=1',
+          url: '/api/v1/persistent-cache-tasks/2865345332?scheduler_cluster_id=1',
         },
         (req) => {
           req.reply({
@@ -358,18 +358,18 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#task-pagination > .MuiPagination-ul').children().should('have.length', '5');
 
       // Check the last task ID.
-      cy.get('#card-id-8').should('have.text', '2484851397');
+      cy.get('#card-id-8').should('have.text', '2865345332');
 
       cy.url().should('include', '/resource/persistent-cache-task/clusters/1?page=2');
 
       cy.get('#operation-8').click();
 
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #delete-2484851397').click();
+      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #delete-2865345332').click();
 
       cy.intercept(
         {
           method: 'DELETE',
-          url: '/api/v1/persistent-cache-tasks/2484851397?scheduler_cluster_id=1',
+          url: '/api/v1/persistent-cache-tasks/2865345332?scheduler_cluster_id=1',
         },
         (req) => {
           req.reply({
@@ -405,7 +405,7 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#task-pagination > .MuiPagination-ul').children().should('have.length', '4');
 
       // Check the last task ID.
-      cy.get('#card-id-8').should('have.text', '3810320977');
+      cy.get('#card-id-8').should('have.text', '2865345332');
     });
   });
 
@@ -479,13 +479,13 @@ describe('Persistent Cache Tasks', () => {
 
       cy.get('#card-list').children().should('have.length', 9);
 
-      cy.get('#card-id-0').should('have.text', '2865345332');
+      cy.get('#card-id-0').should('have.text', '3810320977');
 
       cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
       cy.get('#card-list').children().should('have.length', 9);
 
-      cy.get('#card-id-0').should('have.text', '8270122509');
+      cy.get('#card-id-0').should('have.text', '3870122509');
     });
 
     it('when you click refresh, the paginated results and page numbers remain unchanged.', () => {
@@ -511,7 +511,7 @@ describe('Persistent Cache Tasks', () => {
 
       cy.get('#card-list').children().should('have.length', 9);
 
-      cy.get('#card-id-0').should('have.text', '8270122509');
+      cy.get('#card-id-0').should('have.text', '3870122509');
 
       // Refresh page.
       cy.reload().then(() => {
@@ -520,7 +520,7 @@ describe('Persistent Cache Tasks', () => {
 
       cy.get('#card-list').children().should('have.length', 9);
 
-      cy.get('#card-id-0').should('have.text', '8270122509');
+      cy.get('#card-id-0').should('have.text', '3870122509');
     });
   });
 });

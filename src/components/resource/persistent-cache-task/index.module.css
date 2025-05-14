@@ -127,6 +127,17 @@
   }
 }
 
+.idWrapper {
+  border-radius: 0.3rem;
+  background-color: var(--palette-background-inactive);
+  border: 0;
+  font-family: 'mabry-bold';
+  display: inline-flex;
+  padding: 0.1rem 0.4rem;
+  align-items: center;
+  margin-right: 0.4rem;
+}
+
 .statusIcon {
   width: 1rem !important;
   height: 1rem !important;
@@ -169,7 +180,7 @@
 }
 
 .idText {
-  padding-left: 0rem;
+  padding-left: 0.2rem;
 }
 
 .descriptionText {

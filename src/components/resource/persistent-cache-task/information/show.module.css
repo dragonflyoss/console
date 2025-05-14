@@ -2,7 +2,7 @@
   margin-top: 1.5rem;
 }
 
-.Icon {
+.taskIcon {
   width: 1.8rem !important;
   height: 1.8rem !important;
   color: var(--palette-button-color);
@@ -38,11 +38,6 @@
 .informationTitleText {
   color: #637381;
   padding-left: 0.5rem;
-}
-
-.informationcontainer {
-  display: flex;
-  align-items: center;
 }
 
 .informationContent {

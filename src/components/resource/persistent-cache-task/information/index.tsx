@@ -28,6 +28,7 @@ import {
   toggleButtonGroupClasses,
   ToggleButton,
   Pagination,
+  Tooltip,
 } from '@mui/material';
 import { deletePersistentCacheTask, getPersistentCacheTasksResponse } from '../../../../lib/api';
 import styles from './index.module.css';
@@ -126,7 +127,7 @@ export default function Information(props: InformationProps) {
   useEffect(() => {
     setTaskIsLoading(true);
     if (Array.isArray(persistentCacheTasksCount) && persistentCacheTasksCount.length > 0) {
-      persistentCacheTasksCount.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+      persistentCacheTasksCount.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
       const updatePageSize = () => {
         if (window.matchMedia('(max-width: 1440px)').matches) {
@@ -252,6 +253,7 @@ export default function Information(props: InformationProps) {
   const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string) => {
     setAlignment(newAlignment);
   };
+
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -442,41 +444,53 @@ export default function Information(props: InformationProps) {
         <>
           {isLoading && taskIsLoading ? (
             <Card className={styles.loadingCard}>
-              <Box className={styles.clusterListContent}>
-                <Box p="1.2rem">
-                  <Skeleton data-testid="isloading" sx={{ width: '5rem', height: '2rem' }} />
-                  <Skeleton data-testid="isloading" sx={{ width: '5rem', m: '0.5rem 0' }} />
-                  <Box display="flex">
-                    <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
-                  </Box>
+              <Box position="relative">
+                <TaskBgcolor className={styles.taskBackground} />
+                <Box className={styles.taskWrapper}>
+                  <Skeleton data-testid="isloading" variant="circular" width={30} height={30} />
                 </Box>
-                <Divider
-                  sx={{
-                    borderStyle: 'dashed',
-                    borderColor: 'var(--palette-palette-divider)',
-                    borderWidth: '0px 0px thin',
-                  }}
-                />
-                <Box p="1.2rem">
-                  <Box className={styles.cardContent}>
-                    <Box className={styles.portContainer}>
+                <Box className={styles.taskHeader} />
+                <Box p="1rem" pt="2rem" display="flex" alignItems="center" flexDirection="column">
+                  <Skeleton data-testid="isloading" sx={{ width: '3rem' }} />
+                  <Typography variant="caption" sx={{ color: '#919EAB', display: 'flex', alignItems: 'center' }}>
+                    Persistent Replica Count :
+                    <Skeleton data-testid="isloading" sx={{ width: '1.5rem', ml: '0.5rem' }} />
+                  </Typography>
+                </Box>
+              </Box>
+              <Divider
+                sx={{
+                  borderStyle: 'dashed',
+                  borderColor: 'var(--palette-palette-divider)',
+                  borderWidth: '0px 0px thin',
+                }}
+              />
+              <Box p="1rem">
+                <Box className={styles.cardContent}>
+                  <Box className={styles.portContainer}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Typography variant="caption" sx={{ color: '#919EAB' }}>
                         Tag
                       </Typography>
-                      <Skeleton data-testid="isloading" sx={{ width: '3rem' }} />
                     </Box>
-                    <Box className={styles.portContainer}>
+
+                    <Skeleton data-testid="isloading" sx={{ width: '3rem' }} />
+                  </Box>
+                  <Box className={styles.portContainer}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Typography variant="caption" sx={{ color: '#919EAB' }}>
                         Application
                       </Typography>
-                      <Skeleton data-testid="isloading" sx={{ width: '3rem' }} />
                     </Box>
-                    <Box className={styles.portContainer}>
+                    <Skeleton data-testid="isloading" sx={{ width: '3rem' }} />
+                  </Box>
+                  <Box className={styles.portContainer}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Typography variant="caption" sx={{ color: '#919EAB' }}>
                         Content length
                       </Typography>
-                      <Skeleton data-testid="isloading" sx={{ width: '3rem' }} />
                     </Box>
+                    <Skeleton data-testid="isloading" sx={{ width: '3rem' }} />
                   </Box>
                 </Box>
               </Box>
@@ -503,7 +517,6 @@ export default function Information(props: InformationProps) {
                       </IconButton>
                       <Menu
                         anchorEl={anchorElement}
-                        // id={schedulerSelectedRow?.host_name}
                         open={Boolean(anchorElement)}
                         onClose={handleClose}
                         anchorOrigin={{
@@ -517,7 +530,7 @@ export default function Information(props: InformationProps) {
                         sx={{
                           '& .MuiMenu-paper': {
                             boxShadow: 'var(--custom-shadows-dropdown)',
-                            borderRadius: '0.6rem',
+                            borderRadius: 'var(--menu-border-radius)',
                           },
                           '& .MuiMenu-list': {
                             width: '9rem',
@@ -567,7 +580,7 @@ export default function Information(props: InformationProps) {
                           </MenuItem>
                         </Box>
                       </Menu>
-                      <TaskBgcolor className={styles.taskBgcolor} />
+                      <TaskBgcolor className={styles.taskBackground} />
                       <Box className={styles.taskWrapper}>
                         {item?.state === 'Succeeded' ? (
                           <SuccessTask id={`success-task-${index}`} className={styles.task} />
@@ -610,10 +623,11 @@ export default function Information(props: InformationProps) {
                               Tag
                             </Typography>
                           </Box>
-
-                          <Typography id={`tag-${index}`} variant="caption" sx={{ fontFamily: 'mabry-bold' }}>
-                            {item?.tag || '-'}
-                          </Typography>
+                          <Tooltip title={item?.tag || '-'} placement="top">
+                            <Typography id={`tag-${index}`} variant="caption" className={styles.tetailText}>
+                              {item?.tag || '-'}
+                            </Typography>
+                          </Tooltip>
                         </Box>
                         <Box className={styles.portContainer}>
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -621,9 +635,11 @@ export default function Information(props: InformationProps) {
                               Application
                             </Typography>
                           </Box>
-                          <Typography id={`application-${index}`} variant="caption" sx={{ fontFamily: 'mabry-bold' }}>
-                            {item?.application || '-'}
-                          </Typography>
+                          <Tooltip title={item?.application || '-'} placement="top">
+                            <Typography id={`application-${index}`} variant="caption" className={styles.tetailText}>
+                              {item?.application || '-'}
+                            </Typography>
+                          </Tooltip>
                         </Box>
                         <Box className={styles.portContainer}>
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -631,9 +647,14 @@ export default function Information(props: InformationProps) {
                               Content length
                             </Typography>
                           </Box>
-                          <Typography id={`piece-length-${index}`} variant="caption" sx={{ fontFamily: 'mabry-bold' }}>
-                            {item?.content_length && formatSize(item?.content_length)}
-                          </Typography>
+                          <Tooltip
+                            title={(item?.content_length && formatSize(item?.content_length)) || '-'}
+                            placement="top"
+                          >
+                            <Typography id={`piece-length-${index}`} variant="caption" className={styles.tetailText}>
+                              {item?.content_length && formatSize(item?.content_length)}
+                            </Typography>
+                          </Tooltip>
                         </Box>
                       </Box>
                     </Box>
@@ -651,257 +672,247 @@ export default function Information(props: InformationProps) {
         </>
       ) : (
         <Card>
-          <Box width="100%">
-            <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="seed-peer-table">
-              <TableHead sx={{ backgroundColor: 'var(--palette-table-title-color)' }}>
-                <TableRow>
-                  <TableCell align="center" className={styles.tableHeader}>
-                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
-                      ID
-                    </Typography>
+          <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="seed-peer-table">
+            <TableHead sx={{ backgroundColor: 'var(--palette-table-title-color)' }}>
+              <TableRow>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    ID
+                  </Typography>
+                </TableCell>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    Persistent Replica Count
+                  </Typography>
+                </TableCell>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    TTL
+                  </Typography>
+                </TableCell>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    Application
+                  </Typography>
+                </TableCell>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    Tag
+                  </Typography>
+                </TableCell>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    Piece Length
+                  </Typography>
+                </TableCell>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    Status
+                  </Typography>
+                </TableCell>
+                <TableCell align="center" className={styles.tableHeader}>
+                  <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                    Operation
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody id="seed-peer-table-body">
+              {isLoading ? (
+                <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell align="center">
+                    <Skeleton data-testid="isloading" />
                   </TableCell>
-                  <TableCell align="center" className={styles.tableHeader}>
-                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
-                      Persistent Replica Count
-                    </Typography>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton data-testid="isloading" width="4rem" />
+                    </Box>
                   </TableCell>
-                  <TableCell align="center" className={styles.tableHeader}>
-                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
-                      TTL
-                    </Typography>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton data-testid="isloading" width="4rem" />
+                    </Box>
                   </TableCell>
-                  <TableCell align="center" className={styles.tableHeader}>
-                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
-                      Application
-                    </Typography>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton data-testid="isloading" width="2rem" />
+                    </Box>
                   </TableCell>
-                  <TableCell align="center" className={styles.tableHeader}>
-                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
-                      Tag
-                    </Typography>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton data-testid="isloading" width="2rem" />
+                    </Box>
                   </TableCell>
-                  <TableCell align="center" className={styles.tableHeader}>
-                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
-                      Piece Length
-                    </Typography>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton data-testid="isloading" width="2rem" />
+                    </Box>
                   </TableCell>
-                  <TableCell align="center" className={styles.tableHeader}>
-                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
-                      Status
-                    </Typography>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton data-testid="isloading" width="3.5rem" height="2.6rem" />
+                    </Box>
                   </TableCell>
-                  <TableCell align="center" className={styles.tableHeader}>
-                    <Typography variant="subtitle1" className={styles.tableHeaderText}>
-                      Operation
-                    </Typography>
+                  <TableCell align="center">
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                      <Skeleton data-testid="isloading" width="2.5rem" height="2.5rem" />
+                    </Box>
                   </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody id="seed-peer-table-body">
-                {isLoading ? (
-                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell align="center">
-                      <Skeleton data-testid="isloading" />
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Skeleton data-testid="isloading" width="4rem" />
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Skeleton data-testid="isloading" width="4rem" />
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Skeleton data-testid="isloading" width="2rem" />
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Skeleton data-testid="isloading" width="2rem" />
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Skeleton data-testid="isloading" width="2rem" />
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Skeleton data-testid="isloading" width="2rem" />
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Skeleton data-testid="isloading" width="3.5rem" height="2.6rem" />
-                      </Box>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Skeleton data-testid="isloading" width="2.5rem" height="2.5rem" />
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ) : persistentCacheTasksCount.length === 0 ? (
-                  <TableRow>
-                    <TableCell id="no-task-table" colSpan={9} align="center" sx={{ border: 0 }}>
-                      This scheduler cluster has no persistent cache task.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  <>
-                    {Array.isArray(persistentCacheTasksCount) &&
-                      persistentCacheTasksCount.map((item: getPersistentCacheTasksResponse, index) => {
-                        return (
-                          <TableRow
-                            key={index}
-                            selected={selectedRow === item}
-                            sx={{
-                              '&:last-child td, &:last-child th': { border: 0 },
-                              ':hover': { backgroundColor: 'var(--palette-action-hover)' },
-                            }}
-                            className={styles.tableRow}
-                          >
-                            <TableCell id={`id-${item?.id}`} align="center">
-                              <RouterLink
-                                component={Link}
-                                to={`/resource/persistent-cache-task/clusters/${location?.pathname.split('/')[4]}/${
-                                  item?.id
-                                }`}
-                                underline="hover"
-                                color="var(--palette-description-color)"
-                              >
-                                {item?.id}
-                              </RouterLink>
-                            </TableCell>
-                            <TableCell id={`persistent-replica-count-${item?.id}`} align="center">
-                              {item?.persistent_replica_count}
-                            </TableCell>
-                            <TableCell id={`ttl-${item?.id}`} align="center">
-                              {formatDuring(item?.ttl)}
-                            </TableCell>
-                            <TableCell id={`application-${item?.id}`} align="center">
-                              {item?.application || '-'}
-                            </TableCell>
-                            <TableCell id={`tag-${item?.id}`} align="center">
-                              {item?.tag || '-'}
-                            </TableCell>
-                            <TableCell id={`piece-length-${item?.id}`} align="center">
-                              {item?.piece_length && `${Number(item?.piece_length) / 1024 / 1024} MiB`}
-                            </TableCell>
-                            <TableCell id={`state-${item?.id}`} align="center">
-                              <Chip
-                                label={(item?.state && (item?.state === 'Succeeded' ? 'SUCCESS' : 'FAILURE')) || ''}
-                                size="small"
-                                variant="outlined"
-                                id={`card-state-${item.id}`}
-                                sx={{
-                                  borderRadius: '0.2rem',
-                                  backgroundColor:
-                                    item?.state === 'Succeeded'
-                                      ? 'var(--palette-grey-background-color)'
-                                      : 'var(--palette-background-inactive)',
-                                  color:
-                                    item?.state === 'Succeeded'
-                                      ? 'var(--palette-text-color)'
-                                      : 'var(--palette-table-title-text-color)',
-                                  border: 0,
-                                  fontFamily: 'mabry-bold',
-                                  mb: '0.7rem',
-                                }}
-                              />
-                            </TableCell>
-                            <TableCell align="center">
-                              <IconButton
-                                id={`operation-${item?.id}`}
-                                onClick={(event: any) => {
-                                  setSelectedRow(item);
-                                  setTableAnchorElement(event.currentTarget);
-                                }}
-                                size="small"
-                                aria-haspopup="true"
-                              >
-                                <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
-                              </IconButton>
-                              <Menu
-                                anchorEl={tableAnchorElement}
-                                open={Boolean(tableAnchorElement)}
-                                onClose={handleClose}
-                                anchorOrigin={{
-                                  vertical: 'bottom',
-                                  horizontal: 'right',
-                                }}
-                                transformOrigin={{
-                                  vertical: 'top',
-                                  horizontal: 'right',
-                                }}
-                                sx={{
-                                  '& .MuiMenu-paper': {
-                                    boxShadow: 'var(--custom-shadows-dropdown)',
-                                    borderRadius: '0.6rem',
-                                  },
-                                  '& .MuiMenu-list': {
-                                    width: '9rem',
-                                    p: '0',
-                                  },
-                                }}
-                              >
-                                <Box className={styles.menu}>
-                                  <MenuItem
-                                    className={styles.menuItem}
-                                    id={`view-${selectedRow?.id}`}
-                                    onClick={() => {
-                                      navigate(
-                                        `/resource/persistent-cache-task/clusters/${location?.pathname.split('/')[4]}/${
-                                          selectedRow?.id
-                                        }`,
-                                      );
+              ) : persistentCacheTasksCount.length === 0 ? (
+                <TableRow>
+                  <TableCell id="no-task-table" colSpan={9} align="center" sx={{ border: 0 }}>
+                    This scheduler cluster has no persistent cache task.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                <>
+                  {Array.isArray(persistentCacheTasksCount) &&
+                    persistentCacheTasksCount.map((item: getPersistentCacheTasksResponse, index) => {
+                      return (
+                        <TableRow
+                          key={index}
+                          selected={selectedRow === item}
+                          sx={{
+                            '&:last-child td, &:last-child th': { border: 0 },
+                            ':hover': { backgroundColor: 'var(--palette-action-hover)' },
+                          }}
+                          className={styles.tableRow}
+                        >
+                          <TableCell id={`id-${item?.id}`} align="center">
+                            <RouterLink
+                              component={Link}
+                              to={`/resource/persistent-cache-task/clusters/${location?.pathname.split('/')[4]}/${
+                                item?.id
+                              }`}
+                              underline="hover"
+                              color="var(--palette-description-color)"
+                            >
+                              {item?.id}
+                            </RouterLink>
+                          </TableCell>
+                          <TableCell id={`persistent-replica-count-${item?.id}`} align="center">
+                            {item?.persistent_replica_count}
+                          </TableCell>
+                          <TableCell id={`ttl-${item?.id}`} align="center">
+                            {formatDuring(item?.ttl)}
+                          </TableCell>
+                          <TableCell id={`application-${item?.id}`} align="center">
+                            {item?.application || '-'}
+                          </TableCell>
+                          <TableCell id={`tag-${item?.id}`} align="center">
+                            {item?.tag || '-'}
+                          </TableCell>
+                          <TableCell id={`piece-length-${item?.id}`} align="center">
+                            {item?.piece_length && `${Number(item?.piece_length) / 1024 / 1024} MiB`}
+                          </TableCell>
+                          <TableCell id={`state-${item?.id}`} align="center">
+                            <Chip
+                              label={(item?.state && (item?.state === 'Succeeded' ? 'SUCCESS' : 'FAILURE')) || ''}
+                              size="small"
+                              variant="outlined"
+                              id={`card-state-${item.id}`}
+                              sx={{
+                                borderRadius: '0.2rem',
+                                backgroundColor:
+                                  item?.state === 'Succeeded'
+                                    ? 'var(--palette-grey-background-color)'
+                                    : 'var(--palette-background-inactive)',
+                                color:
+                                  item?.state === 'Succeeded'
+                                    ? 'var(--palette-text-color)'
+                                    : 'var(--palette-table-title-text-color)',
+                                border: 0,
+                                fontFamily: 'mabry-bold',
+                                mb: '0.7rem',
+                              }}
+                            />
+                          </TableCell>
+                          <TableCell align="center">
+                            <IconButton
+                              id={`operation-${item?.id}`}
+                              onClick={(event: any) => {
+                                setSelectedRow(item);
+                                setTableAnchorElement(event.currentTarget);
+                              }}
+                              size="small"
+                              aria-haspopup="true"
+                            >
+                              <MoreVertIcon sx={{ color: 'var(--palette-color)' }} />
+                            </IconButton>
+                            <Menu
+                              anchorEl={tableAnchorElement}
+                              open={Boolean(tableAnchorElement)}
+                              onClose={handleClose}
+                              anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'right',
+                              }}
+                              transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                              }}
+                              sx={{
+                                '& .MuiMenu-paper': {
+                                  boxShadow: 'var(--custom-shadows-dropdown)',
+                                  borderRadius: '0.6rem',
+                                },
+                                '& .MuiMenu-list': {
+                                  width: '9rem',
+                                  p: '0',
+                                },
+                              }}
+                            >
+                              <Box className={styles.menu}>
+                                <MenuItem
+                                  className={styles.menuItem}
+                                  id={`view-${selectedRow?.id}`}
+                                  onClick={() => {
+                                    navigate(
+                                      `/resource/persistent-cache-task/clusters/${location?.pathname.split('/')[4]}/${
+                                        selectedRow?.id
+                                      }`,
+                                    );
 
-                                      setAnchorElement(null);
-                                    }}
+                                    setAnchorElement(null);
+                                  }}
+                                >
+                                  <ListItemIcon>
+                                    <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
+                                  </ListItemIcon>
+                                  <Typography variant="body2" className={styles.menuText}>
+                                    View
+                                  </Typography>
+                                </MenuItem>
+                                <MenuItem
+                                  className={styles.menuItem}
+                                  id={`delete-${selectedRow?.id}`}
+                                  onClick={() => {
+                                    setAnchorElement(null);
+                                    setOpenDelete(true);
+                                  }}
+                                >
+                                  <ListItemIcon>
+                                    <DeleteIcon fontSize="small" sx={{ color: 'var(--palette-delete-button-color)' }} />
+                                  </ListItemIcon>
+                                  <Typography
+                                    variant="body2"
+                                    className={styles.menuText}
+                                    color="var(--palette-delete-button-color)"
                                   >
-                                    <ListItemIcon>
-                                      <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
-                                    </ListItemIcon>
-                                    <Typography variant="body2" className={styles.menuText}>
-                                      View
-                                    </Typography>
-                                  </MenuItem>
-                                  <MenuItem
-                                    className={styles.menuItem}
-                                    id={`delete-${selectedRow?.id}`}
-                                    onClick={() => {
-                                      setAnchorElement(null);
-                                      setOpenDelete(true);
-                                    }}
-                                  >
-                                    <ListItemIcon>
-                                      <DeleteIcon
-                                        fontSize="small"
-                                        sx={{ color: 'var(--palette-delete-button-color)' }}
-                                      />
-                                    </ListItemIcon>
-                                    <Typography
-                                      variant="body2"
-                                      className={styles.menuText}
-                                      color="var(--palette-delete-button-color)"
-                                    >
-                                      Delete
-                                    </Typography>
-                                  </MenuItem>
-                                </Box>
-                              </Menu>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                  </>
-                )}
-              </TableBody>
-            </Table>
-          </Box>
+                                    Delete
+                                  </Typography>
+                                </MenuItem>
+                              </Box>
+                            </Menu>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </>
+              )}
+            </TableBody>
+          </Table>
         </Card>
       )}
       {totalPages > 1 ? (

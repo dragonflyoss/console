@@ -34,10 +34,6 @@
   color: var(--palette-text-color);
 }
 
-.loadingCard {
-  width: 33.33%;
-}
-
 .visualizationWrapper {
   width: 100%;
 }
@@ -91,20 +87,20 @@
   color: var(--palette-description-color);
 }
 
-.activeContainer {
+.tagContainer {
   display: flex;
   align-items: flex-end;
   padding: 0 1rem 1rem 1rem;
 }
 
-.activeIcon {
+.tagIcon {
   width: 1.6rem;
   height: 1.6rem;
   margin-right: 0.6rem;
   color: var(--palette-text-color);
 }
 
-.activeContent {
+.tagContent {
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -214,26 +214,51 @@ export default function PersistentCacheTask() {
       </Box>
       {isLoading ? (
         <Box id="clustersCard" className={styles.loadingCard}>
-          <Card>
-            <Box className={styles.clusterNameWrapper}>
-              <Box display="flex" mb="0.5rem" alignItems="center">
-                <ClusterID className={styles.idIcon} />
-                <Skeleton data-testid="isloading" sx={{ width: '1rem', ml: '0.4rem' }} />
+          <Card className={styles.card}>
+            <Box p="1.2rem">
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <Paper
+                  variant="outlined"
+                  sx={{
+                    backgroundColor: 'var(--palette-background-paper)',
+                    boxShadow: 'var(--palette-card-box-shadow)',
+                    borderRadius: '0.6rem',
+                    transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+                    zIndex: 0,
+                    color: 'var(--palette-color)',
+                    backgroundImage: 'none',
+                    overflow: 'hidden',
+                    padding: '0.3rem',
+                    display: 'inline-flex',
+                  }}
+                >
+                  <Cluster className={styles.cluster} />
+                </Paper>
+                <Skeleton data-testid="isloading" sx={{ width: '2rem', height: '2rem' }} />
               </Box>
-              <Typography variant="h6" mb="0.5rem" className={styles.nameText}>
-                <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
-              </Typography>
-              <Box display="flex">
-                <Skeleton data-testid="isloading" sx={{ width: '15rem' }} />
+              <Skeleton data-testid="isloading" sx={{ width: '4rem', height: '2rem', m: '0.4rem 0' }} />
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box className={styles.idWrapper}>
+                  <ID className={styles.statusIcon} />
+                  <Skeleton data-testid="isloading" sx={{ width: '1rem', ml: '0.4rem' }} />
+                </Box>
+                <Box className={styles.idWrapper}>
+                  <Location className={styles.statusIcon} />
+                  <Skeleton data-testid="isloading" sx={{ width: '2rem', ml: '0.4rem' }} />
+                </Box>
               </Box>
             </Box>
-            <Divider className={styles.divider} />
-            <Box className={styles.clusterDefaultWrapper}>
-              <Skeleton data-testid="isloading" sx={{ width: '4rem', height: '1.4rem', mb: '0.8rem' }} />
-              <Box className={styles.creatTimeContainer}>
-                <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
-                <Skeleton variant="circular" width={40} height={40} />
-              </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                bgcolor: 'var(--palette-dark-100Channel)',
+                p: '0.2rem 1.2rem',
+              }}
+            >
+              <Skeleton data-testid="isloading" sx={{ width: '1rem', ml: '0.4rem' }} />
+              <Skeleton variant="circular" width={40} height={40} />
             </Box>
           </Card>
         </Box>
@@ -307,34 +332,13 @@ export default function PersistentCacheTask() {
                     </Typography>
                   </RouterLink>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Box
-                      sx={{
-                        borderRadius: '0.3rem',
-                        background: 'var(--palette-background-inactive)',
-                        border: '0',
-                        fontFamily: 'mabry-bold',
-                        display: 'inline-flex',
-                        p: '0.1rem 0.4rem',
-                        alignItems: 'center',
-                        mr: '0.4rem',
-                      }}
-                    >
+                    <Box className={styles.idWrapper}>
                       <ID className={styles.statusIcon} />
                       <Typography id={`cluster-id-${item.id}`} variant="caption" className={styles.idText}>
                         {item.scheduler_cluster_id}
                       </Typography>
                     </Box>
-                    <Box
-                      sx={{
-                        borderRadius: '0.3rem',
-                        background: 'var(--palette-background-inactive)',
-                        border: '0',
-                        fontFamily: 'mabry-bold',
-                        display: 'inline-flex',
-                        p: '0.1rem 0.4rem',
-                        alignItems: 'center',
-                      }}
-                    >
+                    <Box className={styles.idWrapper}>
                       <Location className={styles.statusIcon} />
                       <Typography id={`cluster-id-${item.id}`} variant="caption" className={styles.idText}>
                         {item?.scopes?.location || '-'}

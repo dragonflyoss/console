@@ -339,7 +339,7 @@ export default function PersistentCachetask() {
                   display: 'inline-flex',
                 }}
               >
-                <Task className={styles.Icon} />
+                <Task className={styles.taskIcon} />
               </Paper>
 
               <Box>

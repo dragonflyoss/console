@@ -297,10 +297,10 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                   <Pie options={doughnutOptions} data={applicationDoughnut} />
                 </Box>
               </Box>
-              <Box className={styles.activeContainer}>
-                <Success className={styles.activeIcon} />
+              <Box className={styles.tagContainer}>
+                <Success className={styles.tagIcon} />
                 <Box sx={{ width: '100%' }}>
-                  <Box className={styles.activeContent}>
+                  <Box className={styles.tagContent}>
                     <Typography variant="subtitle2" fontFamily="mabry-light">
                       Application
                     </Typography>
@@ -366,10 +366,10 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                   <Pie options={doughnutOptions} data={tagDoughnut} />
                 </Box>
               </Box>
-              <Box className={styles.activeContainer}>
-                <Success className={styles.activeIcon} />
+              <Box className={styles.tagContainer}>
+                <Success className={styles.tagIcon} />
                 <Box sx={{ width: '100%' }}>
-                  <Box className={styles.activeContent}>
+                  <Box className={styles.tagContent}>
                     <Typography variant="subtitle2" fontFamily="mabry-light">
                       Tag
                     </Typography>

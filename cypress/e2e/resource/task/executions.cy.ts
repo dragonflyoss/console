@@ -8,7 +8,7 @@ describe('Executions', () => {
   beforeEach(() => {
     cy.signin();
 
-    cy.visit('/jobs/task/executions');
+    cy.visit('/resource/task/executions');
     cy.viewport(1440, 1080);
 
     cy.intercept(
@@ -96,12 +96,12 @@ describe('Executions', () => {
       cy.get('#tab-clear').click();
 
       // Then I see that the current page is the clear page!
-      cy.url().should('include', '/jobs/task/clear');
+      cy.url().should('include', '/resource/task/clear');
 
       cy.get('#tab-executions').click();
 
       // Then I see that the current page is the executions page!
-      cy.url().should('include', '/jobs/task/executions');
+      cy.url().should('include', '/resource/task/executions');
     });
 
     it('should display executions success list', () => {
@@ -314,7 +314,7 @@ describe('Executions', () => {
       cy.get('#execution-1').click();
 
       // Then I see that the current page is the show update personal-access-tokens.
-      cy.url().should('include', '/jobs/task/executions/1');
+      cy.url().should('include', '/resource/task/executions/1');
 
       // Go back to the last page.
       cy.go('back');

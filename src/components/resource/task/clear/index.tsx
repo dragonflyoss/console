@@ -465,7 +465,7 @@ export default function Clear() {
 
             if (tasks?.id) {
               setDeleteLoadingButton(false);
-              navigate(`/jobs/task/resource/executions/${tasks?.id}`);
+              navigate(`/resource/task/executions/${tasks?.id}`);
               setOpenDeleteTask(false);
             }
           } else if (task?.args?.task_id) {
@@ -480,7 +480,7 @@ export default function Clear() {
             const tasks = await createTaskJob(formList);
             if (tasks?.id) {
               setDeleteLoadingButton(false);
-              navigate(`/jobs/task/resource/executions/${tasks?.id}`);
+              navigate(`/resource/task/executions/${tasks?.id}`);
               setOpenDeleteTask(false);
             }
           }
@@ -528,7 +528,7 @@ export default function Clear() {
         const task = await createTaskJob(data);
         setSearchID(task?.id);
       } else {
-        navigate('/jobs/task/resource/clear');
+        navigate('/resource/task/resource/clear');
         setTask(null);
         setIsLoading(false);
         setSearchTaskISLodaing(false);

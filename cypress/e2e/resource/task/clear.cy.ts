@@ -9,7 +9,7 @@ describe('Clear', () => {
   beforeEach(() => {
     cy.signin();
 
-    cy.visit('/jobs/task/clear');
+    cy.visit('/resource/task/clear');
     cy.viewport(1440, 1080);
   });
 
@@ -441,7 +441,7 @@ describe('Clear', () => {
       cy.get('#deleteTask').click();
 
       // Then I see that the current page is the executions id.
-      cy.url().should('include', '/jobs/task/executions/1');
+      cy.url().should('include', '/resource/task/executions/1');
     });
 
     it('Can delete cache searched by task id', () => {
@@ -494,7 +494,7 @@ describe('Clear', () => {
       cy.get('#deleteTask').click();
 
       // Then I see that the current page is the executions id.
-      cy.url().should('include', '/jobs/task/executions/1');
+      cy.url().should('include', '/resource/task/executions/1');
     });
 
     it('search by task id API error response should be handled', () => {
@@ -563,7 +563,7 @@ describe('Clear', () => {
       cy.get('#deleteTask').click();
 
       // Then I see that the current page is the clear.
-      cy.url().should('include', '/jobs/task/clear');
+      cy.url().should('include', '/resource/task/clear');
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
@@ -636,7 +636,7 @@ describe('Clear', () => {
       cy.get('#deleteTask').click();
 
       // Then I see that the current page is the clear.
-      cy.url().should('include', '/jobs/task/clear');
+      cy.url().should('include', '/resource/task/clear');
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');

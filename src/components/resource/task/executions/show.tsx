@@ -641,7 +641,7 @@ export default function ShowExecutions() {
                 count={totalPages}
                 page={page}
                 onChange={(_event: any, newPage: number) => {
-                  navigate(`/jobs/task/executions/${params.id}${newPage > 1 ? `?page=${newPage}` : ''}`);
+                  navigate(`/resource/task/executions/${params.id}${newPage > 1 ? `?page=${newPage}` : ''}`);
                 }}
                 boundaryCount={1}
                 color="primary"

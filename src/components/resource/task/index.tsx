@@ -75,7 +75,7 @@ export default function NavTabs() {
         aria-label="breadcrumb"
         sx={{ mb: '1rem' }}
       >
-        <Typography color="text.primary">Job</Typography>
+        <Typography color="text.primary">Resource</Typography>
         <Typography color="text.primary">Task</Typography>
         {location.pathname.split('/')[3] === 'executions' ? (
           <RouterLink

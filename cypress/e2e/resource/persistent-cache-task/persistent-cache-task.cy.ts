@@ -138,7 +138,7 @@ describe('Persistent Cache Tasks', () => {
       cy.intercept(
         {
           method: 'GET',
-          url: '/api/v1/persistent-cache-tasks/2865345332?scheduler_cluster_id=1',
+          url: '/api/v1/persistent-cache-tasks/3810320977?scheduler_cluster_id=1',
         },
         (req) => {
           req.reply({
@@ -146,6 +146,7 @@ describe('Persistent Cache Tasks', () => {
           });
         },
       );
+      cy.visit('/resource/persistent-cache-task/clusters/1/3810320977');
     });
 
     it('show error message', () => {

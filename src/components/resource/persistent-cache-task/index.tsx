@@ -138,8 +138,6 @@ export default function PersistentCacheTask() {
   );
 
   useEffect(() => {
-    console.log(search);
-
     if (search) {
       debounced(search);
       setSearchClusters(search);

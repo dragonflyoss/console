@@ -175,16 +175,16 @@ export const formatDuring = function (ps: number) {
   let result = '';
 
   if (days > 0) {
-    result += `${days} days`;
+    result += `${days} Days`;
   }
   if (hours > 0) {
-    result += `${hours} hours`;
+    result += `${hours} Hours`;
   }
   if (minutes > 0) {
-    result += `${minutes} minutes`;
+    result += `${minutes} Minutes`;
   }
   if (seconds > 0) {
-    result += `${seconds} seconds`;
+    result += `${seconds} Seconds`;
   }
 
   return result.trim();

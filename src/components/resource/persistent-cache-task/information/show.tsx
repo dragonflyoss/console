@@ -30,17 +30,14 @@ import {
   persistentCacheTasksPeersResponse,
 } from '../../../../lib/api';
 import Card from '../../../card';
-import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { ReactComponent as Tag } from '../../../../assets/images/resource/persistent-cache-task/detail-tag.svg';
 import { ReactComponent as Application } from '../../../../assets/images/resource/persistent-cache-task/detail-application.svg';
-import { ReactComponent as PersistentReplicaCount } from '../../../../assets/images/resource/persistent-cache-task/detail-persistent-replica-count.svg';
 import { ReactComponent as PieceLength } from '../../../../assets/images/resource/persistent-cache-task/detail-piece-length.svg';
-import { ReactComponent as ContentLength } from '../../../../assets/images/resource/persistent-cache-task/detail-content-length.svg';
-import { ReactComponent as TTL } from '../../../../assets/images/resource/persistent-cache-task/ttl.svg';
 import { ReactComponent as Delete } from '../../../../assets/images/cluster/delete.svg';
 import { ReactComponent as DeleteWarning } from '../../../../assets/images/cluster/delete-warning.svg';
 import { CancelLoadingButton, DeleteLoadingButton } from '../../../loading-button';
-import { ReactComponent as Task } from '../../../../assets/images/resource/persistent-cache-task/task.svg';
+import { ReactComponent as SuccessTask } from '../../../../assets/images/resource/persistent-cache-task/success-task.svg';
+import { ReactComponent as FailedTask } from '../../../../assets/images/resource/persistent-cache-task/failed-task.svg';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { formatDuring, formatSize, getDatetime, getPaginatedList } from '../../../../lib/utils';
 import styles from './show.module.css';
@@ -59,7 +56,7 @@ export default function PersistentCachetask() {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [page, setPage] = useState<number>(1);
   const [peers, setPeers] = useState<any>([]);
-  const [allPeers, setAllPerrs] = useState<persistentCacheTasksPeersResponse[] | null>(null);
+  const [allPeers, setAllPerrs] = useState<any[] | null>(null);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -75,6 +72,8 @@ export default function PersistentCachetask() {
           const persistentCacheTask = await getPersistentCacheTask(params?.id, { scheduler_cluster_id: clusterID });
           setPersistentCacheTask(persistentCacheTask);
           setAllPerrs(persistentCacheTask?.peers);
+
+          // setAllPerrs(peer);
 
           setIsLoading(false);
         }
@@ -301,7 +300,10 @@ export default function PersistentCachetask() {
           ''
         )}
       </Breadcrumbs>
-      <Box display="flex" justifyContent="flex-end">
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb="1rem">
+        <Typography variant="h6" fontFamily="mabry-bold">
+          Information
+        </Typography>
         <Button
           id="delete-task"
           size="small"
@@ -319,222 +321,188 @@ export default function PersistentCachetask() {
           Delete
         </Button>
       </Box>
-      <Card className={styles.container}>
-        <Box p="1.5rem" display="flex" justifyContent="space-between" alignItems="flex-start">
-          <Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.6rem' }}>
-              <Paper
-                variant="outlined"
-                sx={{
-                  backgroundColor: 'var(--palette-background-paper)',
-                  boxShadow: 'var(--palette-card-box-shadow)',
-                  borderRadius: '0.6rem',
-                  transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)',
-                  zIndex: 0,
-                  color: 'var(--palette-color)',
-                  backgroundImage: 'none',
-                  overflow: 'hidden',
-                  mr: '0.6rem',
-                  p: '0.3rem',
-                  display: 'inline-flex',
-                }}
-              >
-                <Task className={styles.taskIcon} />
-              </Paper>
-
-              <Box>
-                <Typography id="id" variant="subtitle1" className={styles.idContent}>
+      <Box className={styles.container}>
+        <Card>
+          <Box p="1.5rem 1.5rem 0 1.5rem" display="flex" justifyContent="space-between" alignItems="flex-start">
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.5rem' }}>
+              {isLoading ? (
+                <Skeleton data-testid="isloading" width={30} height={40} sx={{ mr: '1rem' }} />
+              ) : persistentCacheTask?.state === 'Succeeded' ? (
+                <SuccessTask id="success-task" className={styles.taskIcon} />
+              ) : (
+                <FailedTask id="failure-task" className={styles.taskIcon} />
+              )}
+              <Typography id="id" variant="body1" className={styles.idContent}>
+                {isLoading ? <Skeleton data-testid="isloading" sx={{ width: '5rem' }} /> : persistentCacheTask?.id || 0}
+              </Typography>
+            </Box>
+          </Box>
+          <Box className={styles.informationWrapper}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+              <Box className={styles.informationTitle}>
+                <Typography variant="body2" component="div" className={styles.informationTitleText}>
+                  Persistent Replica Count
+                </Typography>
+                <Typography
+                  component="div"
+                  id="persistent-replica-count"
+                  variant="body2"
+                  className={styles.informationContent}
+                >
                   {isLoading ? (
-                    <Skeleton data-testid="isloading" sx={{ width: '2rem' }} />
+                    <Skeleton sx={{ width: '4rem' }} />
                   ) : (
-                    persistentCacheTask?.id || 0
+                    persistentCacheTask?.persistent_replica_count || '-'
                   )}
                 </Typography>
               </Box>
             </Box>
-            {isLoading ? (
-              <Skeleton data-testid="isloading" sx={{ width: '8rem', height: '2.5rem' }} />
-            ) : persistentCacheTask?.created_at ? (
-              <Chip
-                avatar={<MoreTimeIcon />}
-                label={persistentCacheTask?.created_at && getDatetime(persistentCacheTask?.created_at)}
-                variant="outlined"
-                size="small"
-                id="crate-at"
-              />
-            ) : (
-              <Box id="crate-at">-</Box>
-            )}
-          </Box>
-          <Box className={styles.statusContent}>
-            {isLoading ? (
-              <Skeleton data-testid="isloading" sx={{ width: '4rem' }} />
-            ) : persistentCacheTask?.state ? (
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  borderRadius: '0.4rem',
-                  p: '0.2rem 0.5rem',
-                  backgroundColor: persistentCacheTask?.state === 'Succeeded' ? '#228B22' : '#D42536',
-                  color: '#FFF',
-                }}
-                id="status"
-              >
-                <Typography variant="caption" fontFamily="mabry-bold">
-                  {(persistentCacheTask?.state &&
-                    (persistentCacheTask?.state === 'Succeeded' ? 'SUCCESS' : 'FAILURE')) ||
-                    ''}
+            <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+              <Box className={styles.informationTitle}>
+                <Typography variant="body2" component="div" className={styles.informationTitleText}>
+                  TTL
+                </Typography>
+                <Typography component="div" id="ttl" variant="body2" className={styles.informationContent}>
+                  {isLoading ? (
+                    <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
+                  ) : persistentCacheTask?.ttl ? (
+                    formatDuring(persistentCacheTask?.ttl || 0)
+                  ) : (
+                    '-'
+                  )}
                 </Typography>
               </Box>
-            ) : (
-              <Box id="status">-</Box>
-            )}
-          </Box>
-        </Box>
-        <Divider
-          sx={{
-            borderStyle: 'dashed',
-            borderColor: 'var(--palette-palette-divider)',
-            borderWidth: '0px 0px thin',
-          }}
-        />
-        <Box className={styles.informationWrapper}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box className={styles.informationTitle}>
-              <PersistentReplicaCount className={styles.informationTitleIcon} />
-              <Typography variant="body2" component="div" className={styles.informationTitleText}>
-                Persistent Replica Count :
-              </Typography>
             </Box>
-            <Typography
-              component="div"
-              id="persistent-replica-count"
-              variant="body1"
-              className={styles.informationContent}
-            >
-              {isLoading ? <Skeleton sx={{ width: '4rem' }} /> : persistentCacheTask?.persistent_replica_count || '-'}
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box className={styles.informationTitle}>
-              <TTL className={styles.informationTitleIcon} />
-              <Typography variant="body2" component="div" className={styles.informationTitleText}>
-                TTL :
-              </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+              <Box className={styles.informationTitle}>
+                <Typography variant="body2" component="div" className={styles.informationTitleText}>
+                  Content Length
+                </Typography>
+                <Typography component="div" id="content-length" variant="body2" className={styles.informationContent}>
+                  {isLoading ? (
+                    <Skeleton sx={{ width: '4rem' }} />
+                  ) : persistentCacheTask?.content_length ? (
+                    formatSize(String(persistentCacheTask?.content_length))
+                  ) : (
+                    '-'
+                  )}
+                </Typography>
+              </Box>
             </Box>
-            <Typography component="div" id="ttl" variant="body1" className={styles.informationContent}>
-              {isLoading ? (
-                <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
-              ) : persistentCacheTask?.ttl ? (
-                formatDuring(persistentCacheTask?.ttl || 0)
-              ) : (
-                '-'
-              )}
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box className={styles.informationTitle}>
-              <ContentLength className={styles.informationTitleIcon} />
-              <Typography variant="body2" component="div" className={styles.informationTitleText}>
-                Content Length :
-              </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+              <Box className={styles.informationTitle}>
+                <Typography variant="body2" component="div" className={styles.informationTitleText}>
+                  Create At
+                </Typography>
+                <Typography component="div" id="create-at" variant="body1" className={styles.informationContent}>
+                  {isLoading ? (
+                    <Skeleton sx={{ width: '4rem' }} />
+                  ) : persistentCacheTask?.created_at ? (
+                    persistentCacheTask?.created_at && getDatetime(persistentCacheTask?.created_at)
+                  ) : (
+                    '-'
+                  )}
+                </Typography>
+              </Box>
             </Box>
-            <Typography component="div" id="content-length" variant="body1" className={styles.informationContent}>
-              {isLoading ? (
-                <Skeleton sx={{ width: '4rem' }} />
-              ) : persistentCacheTask?.content_length ? (
-                formatSize(String(persistentCacheTask?.content_length))
-              ) : (
-                '-'
-              )}
-            </Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box className={styles.informationTitle}>
+        </Card>
+        <Box className={styles.containerWrapper}>
+          <Card className={styles.containerContainer}>
+            <Box className={styles.containerTitle}>
               <PieceLength className={styles.informationTitleIcon} />
-              <Typography variant="body2" component="div" className={styles.informationTitleText}>
-                Piece Length :
+              <Typography variant="body2" component="div" className={styles.containerTitleText}>
+                Piece Length
               </Typography>
             </Box>
-            <Typography component="div" id="piece-length" variant="body1" className={styles.informationContent}>
-              {isLoading ? (
-                <Skeleton sx={{ width: '4rem' }} />
-              ) : persistentCacheTask?.piece_length ? (
-                `${Number(persistentCacheTask?.piece_length) / 1024 / 1024} MiB`
-              ) : (
-                '-'
-              )}
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box className={styles.informationTitle}>
-              <Application className={styles.informationTitleIcon} />
-              <Typography variant="body2" component="div" className={styles.informationTitleText}>
-                Application :
-              </Typography>
-            </Box>
-            <Typography component="div" id="application" variant="body1" className={styles.informationContent}>
-              {isLoading ? (
-                <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
-              ) : (
-                persistentCacheTask?.application || '-'
-              )}
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box className={styles.informationTitle}>
-              <Tag className={styles.informationTitleIcon} />
-              <Typography variant="body2" component="div" className={styles.informationTitleText}>
-                Tag :
-              </Typography>
-            </Box>
-            {isLoading ? (
-              <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
-            ) : persistentCacheTask?.tag ? (
-              <Chip
-                id="tag"
-                label={persistentCacheTask?.tag}
-                size="small"
-                variant="outlined"
+            <Box>
+              <Box
+                component="div"
                 sx={{
-                  borderRadius: '0.3rem',
-                  background: 'var(--palette-button-color)',
-                  color: '#FFFFFF',
-                  mr: '0.4rem',
-                  borderColor: 'var(--palette-button-color)',
-                  fontWeight: 'bold',
+                  background: 'var(--palette-background-inactive)',
+                  color: 'var(--palette-table-title-text-color)',
+                  display: 'inline-flex',
+                  borderRadius: '0.4rem',
+                  padding: '0.2rem 0.8rem',
                 }}
-              />
-            ) : (
-              <Typography id="tag" variant="body1" className={styles.informationContent}>
-                -
+              >
+                <Typography component="div" id="piece-length" variant="body2" className={styles.informationContent}>
+                  {isLoading ? (
+                    <Skeleton sx={{ width: '4rem' }} />
+                  ) : persistentCacheTask?.piece_length ? (
+                    `${Number(persistentCacheTask?.piece_length) / 1024 / 1024} MiB`
+                  ) : (
+                    '-'
+                  )}
+                </Typography>
+              </Box>
+            </Box>
+          </Card>
+          <Card className={styles.containerContainer}>
+            <Box className={styles.containerTitle}>
+              <Application className={styles.informationTitleIcon} />
+              <Typography variant="body2" component="div" className={styles.containerTitleText}>
+                Application
               </Typography>
-            )}
-          </Box>
+            </Box>
+            <Box>
+              <Box
+                component="div"
+                sx={{
+                  background: 'var(--palette-background-inactive)',
+                  color: 'var(--palette-table-title-text-color)',
+                  display: 'inline-flex',
+                  borderRadius: '0.4rem',
+                  padding: '0.2rem 0.8rem',
+                }}
+              >
+                <Typography id="application" variant="body2" className={styles.informationContent}>
+                  {isLoading ? (
+                    <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
+                  ) : (
+                    persistentCacheTask?.application || '-'
+                  )}
+                </Typography>
+              </Box>
+            </Box>
+          </Card>
+          <Card className={styles.containerContainer}>
+            <Box className={styles.containerTitle}>
+              <Tag className={styles.informationTitleIcon} />
+              <Typography variant="body2" component="div" className={styles.containerTitleText}>
+                Tag
+              </Typography>
+            </Box>
+            <Box>
+              <Box>
+                <Box
+                  component="div"
+                  sx={{
+                    background: 'var(--palette-background-inactive)',
+                    color: 'var(--palette-table-title-text-color)',
+                    display: 'inline-flex',
+                    borderRadius: '0.4rem',
+                    padding: '0.2rem 0.8rem',
+                  }}
+                >
+                  <Typography id="tag" variant="body2" className={styles.informationContent}>
+                    {isLoading ? (
+                      <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
+                    ) : (
+                      persistentCacheTask?.tag || '-'
+                    )}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          </Card>
         </Box>
         {peers.length > 0 && (
-          <Box id="peers" p="1.5rem">
-            <Divider
-              sx={{
-                borderStyle: 'dashed',
-                borderColor: 'var(--palette-palette-divider)',
-                borderWidth: '0px 0px thin',
-              }}
-            />
+          <Box id="peers">
             <Typography variant="h6" fontFamily="mabry-bold" p="1rem 0">
               Peers
             </Typography>
-            <Paper
-              variant="outlined"
-              sx={{
-                backgroundColor: 'var(--palette-background-paper)',
-                zIndex: 0,
-                color: 'var(--palette-color)',
-                backgroundImage: 'none',
-                overflow: 'hidden',
-              }}
-            >
+            <Card>
               <Table sx={{ minWidth: 650 }} aria-label="a dense table" id="seed-peer-table">
                 <TableHead sx={{ backgroundColor: 'var(--palette-table-title-color)' }}>
                   <TableRow>
@@ -644,7 +612,7 @@ export default function PersistentCachetask() {
                     })}
                 </TableBody>
               </Table>
-            </Paper>
+            </Card>
             {totalPages > 1 ? (
               <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
                 <Pagination
@@ -663,7 +631,7 @@ export default function PersistentCachetask() {
             )}
           </Box>
         )}
-      </Card>
+      </Box>
     </div>
   );
 }

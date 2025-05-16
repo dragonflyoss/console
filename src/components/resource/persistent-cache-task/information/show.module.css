@@ -6,6 +6,7 @@
   width: 1.8rem !important;
   height: 1.8rem !important;
   color: var(--palette-button-color);
+  margin-right: 0.5rem;
 }
 
 .idContent {
@@ -19,25 +20,47 @@
 .informationWrapper {
   display: grid;
   gap: calc(2rem);
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   padding: 1.5rem;
 }
 
-.informationTitle {
+.containerContainer {
+  padding: 1.2rem;
+}
+
+.containerWrapper {
+  display: grid;
+  gap: calc(1.5rem);
+  grid-template-columns: repeat(3, 1fr);
+  padding: 1.5rem 0;
+}
+
+.containerTitleText {
+  color: var(--palette-table-title-text-color);
+  font-family: 'mabry-bold' !important;
+}
+
+.containerTitle {
+  padding-bottom: 3rem;
   display: inline-flex;
-  align-items: flex-start;
-  width: 45%;
+  align-items: center;
+}
+
+.informationTitle {
+  padding-left: 0.4rem;
 }
 
 .informationTitleIcon {
-  width: 1.2rem !important;
-  height: 1.2rem !important;
-  color: var(--palette-table-title-text-color);
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  color: var(--palette-button-color);
+  margin-right: 0.5rem;
 }
 
 .informationTitleText {
-  color: #637381;
-  padding-left: 0.5rem;
+  color: var(--palette-table-title-text-color);
+  padding-bottom: 0.5rem;
+  font-family: 'mabry-bold' !important;
 }
 
 .informationContent {

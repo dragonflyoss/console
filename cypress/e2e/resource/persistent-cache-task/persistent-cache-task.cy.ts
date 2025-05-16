@@ -53,9 +53,9 @@ describe('Persistent Cache Tasks', () => {
 
     it('can display success persistent cache task', () => {
       cy.get('#id').should('have.text', '2865345332');
-      cy.get('#status').should('have.text', 'SUCCESS');
+      cy.get('#success-task').should('exist');
       cy.get('#persistent-replica-count').should('have.text', '2');
-      cy.get('#ttl').should('have.text', '7 days');
+      cy.get('#ttl').should('have.text', '7 Days');
       cy.get('#content-length').should('have.text', '1.59 KiB');
       cy.get('#piece-length').should('have.text', '4 MiB');
       cy.get('#application').should('have.text', 'application-1');
@@ -97,150 +97,150 @@ describe('Persistent Cache Tasks', () => {
 
       cy.get('#peers').should('not.exist');
 
-      cy.get('#status').should('have.text', 'FAILURE');
+      cy.get('#failure-task').should('exist');
     });
   });
 
-    describe('when no data is loaded', () => {
-      beforeEach(() => {
-        cy.intercept(
-          {
-            method: 'GET',
-            url: '/api/v1/persistent-cache-tasks/2865345332?scheduler_cluster_id=1',
-          },
-          (req) => {
-            req.reply({
-              statusCode: 200,
-              body: {},
-            });
-          },
-        );
-      });
-
-      it('unable to display breadcrumb', () => {
-        cy.get('#task-id-2865345332').should('have.text', '2865345332');
-      });
-
-      it('persistent cache task render empty status', () => {
-        cy.get('#id').should('have.text', '0');
-        cy.get('#status').should('have.text', '-');
-        cy.get('#crate-at').should('have.text', '-');
-        cy.get('#persistent-replica-count').should('have.text', '-');
-        cy.get('#ttl').should('have.text', '-');
-        cy.get('#content-length').should('have.text', '-');
-        cy.get('#piece-length').should('have.text', '-');
-        cy.get('#application').should('have.text', '-');
-        cy.get('#tag').should('have.text', '-');
-        cy.get('#peers').should('not.exist');
-      });
+  describe('when no data is loaded', () => {
+    beforeEach(() => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/persistent-cache-tasks/2865345332?scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: {},
+          });
+        },
+      );
     });
 
-    describe('should handle API error response', () => {
-      beforeEach(() => {
-        cy.intercept(
-          {
-            method: 'GET',
-            url: '/api/v1/persistent-cache-tasks/3810320977?scheduler_cluster_id=1',
-          },
-          (req) => {
-            req.reply({
-              forceNetworkError: true,
-            });
-          },
-        );
-        cy.visit('/resource/persistent-cache-task/clusters/1/3810320977');
-      });
-
-      it('show error message', () => {
-        // Show error message.
-        cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
-
-        // Close error message.
-        cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-        cy.get('#error-message').should('not.exist');
-      });
-
-      it('persistent cache task render empty status', () => {
-        cy.get('#id').should('have.text', '0');
-        cy.get('#status').should('have.text', '-');
-        cy.get('#crate-at').should('have.text', '-');
-        cy.get('#persistent-replica-count').should('have.text', '-');
-        cy.get('#ttl').should('have.text', '-');
-        cy.get('#content-length').should('have.text', '-');
-        cy.get('#piece-length').should('have.text', '-');
-        cy.get('#application').should('have.text', '-');
-        cy.get('#tag').should('have.text', '-');
-        cy.get('#peers').should('not.exist');
-      });
+    it('unable to display breadcrumb', () => {
+      cy.get('#task-id-2865345332').should('have.text', '2865345332');
     });
 
-    describe('delete', () => {
-      it('persistent cache tasks can be deleted', () => {
-        cy.get('#open-dialog').should('not.exist');
-        cy.get('#delete-task').click();
-
-        cy.get('#open-dialog').should('exist');
-
-        // Cancel delete task.
-        cy.get('#cancel-delete-task').click();
-
-        cy.get('#open-dialog').should('not.exist');
-
-        cy.get('#delete-task').click();
-
-        cy.get('#delete-task-input').type('delete');
-
-        cy.get('#save-delete-task').click();
-
-        // Shoe help text.
-        cy.get('#delete-task-input-helper-text').should('have.text', 'Please enter "DELETE"');
-
-        cy.get('#delete-task-input').clear();
-
-        cy.get('#delete-task-input').type('DELETE');
-
-        cy.get('#delete-task-input-helper-text').should('not.exist');
-
-        cy.intercept(
-          {
-            method: 'DELETE',
-            url: '/api/v1/persistent-cache-tasks/2865345332?scheduler_cluster_id=1',
-          },
-          (req) => {
-            req.reply({
-              statusCode: 200,
-            });
-          },
-        );
-
-        cy.get('#save-delete-task').click();
-
-        cy.url().should('include', '/resource/persistent-cache-task/clusters/1');
-      });
-
-      it('should handle API error response', () => {
-        cy.get('#delete-task').click();
-
-        cy.get('#delete-task-input').type('DELETE');
-
-        cy.get('#delete-task-input-helper-text').should('not.exist');
-
-        cy.intercept(
-          {
-            method: 'DELETE',
-            url: '/api/v1/persistent-cache-tasks/2865345332?scheduler_cluster_id=1',
-          },
-          (req) => {
-            req.reply({
-              forceNetworkError: true,
-            });
-          },
-        );
-
-        cy.get('#save-delete-task').click();
-
-        // Show error message.
-        cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
-      });
+    it('persistent cache task render empty status', () => {
+      cy.get('#id').should('have.text', '0');
+      cy.get('#failure-task').should('exist');
+      cy.get('#create-at').should('have.text', '-');
+      cy.get('#persistent-replica-count').should('have.text', '-');
+      cy.get('#ttl').should('have.text', '-');
+      cy.get('#content-length').should('have.text', '-');
+      cy.get('#piece-length').should('have.text', '-');
+      cy.get('#application').should('have.text', '-');
+      cy.get('#tag').should('have.text', '-');
+      cy.get('#peers').should('not.exist');
     });
+  });
+
+  describe('should handle API error response', () => {
+    beforeEach(() => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/persistent-cache-tasks/3810320977?scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            forceNetworkError: true,
+          });
+        },
+      );
+      cy.visit('/resource/persistent-cache-task/clusters/1/3810320977');
+    });
+
+    it('show error message', () => {
+      // Show error message.
+      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
+
+      // Close error message.
+      cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+      cy.get('#error-message').should('not.exist');
+    });
+
+    it('persistent cache task render empty status', () => {
+      cy.get('#id').should('have.text', '0');
+      cy.get('#failure-task').should('exist');
+      cy.get('#create-at').should('have.text', '-');
+      cy.get('#persistent-replica-count').should('have.text', '-');
+      cy.get('#ttl').should('have.text', '-');
+      cy.get('#content-length').should('have.text', '-');
+      cy.get('#piece-length').should('have.text', '-');
+      cy.get('#application').should('have.text', '-');
+      cy.get('#tag').should('have.text', '-');
+      cy.get('#peers').should('not.exist');
+    });
+  });
+
+  describe('delete', () => {
+    it('persistent cache tasks can be deleted', () => {
+      cy.get('#open-dialog').should('not.exist');
+      cy.get('#delete-task').click();
+
+      cy.get('#open-dialog').should('exist');
+
+      // Cancel delete task.
+      cy.get('#cancel-delete-task').click();
+
+      cy.get('#open-dialog').should('not.exist');
+
+      cy.get('#delete-task').click();
+
+      cy.get('#delete-task-input').type('delete');
+
+      cy.get('#save-delete-task').click();
+
+      // Shoe help text.
+      cy.get('#delete-task-input-helper-text').should('have.text', 'Please enter "DELETE"');
+
+      cy.get('#delete-task-input').clear();
+
+      cy.get('#delete-task-input').type('DELETE');
+
+      cy.get('#delete-task-input-helper-text').should('not.exist');
+
+      cy.intercept(
+        {
+          method: 'DELETE',
+          url: '/api/v1/persistent-cache-tasks/2865345332?scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+          });
+        },
+      );
+
+      cy.get('#save-delete-task').click();
+
+      cy.url().should('include', '/resource/persistent-cache-task/clusters/1');
+    });
+
+    it('should handle API error response', () => {
+      cy.get('#delete-task').click();
+
+      cy.get('#delete-task-input').type('DELETE');
+
+      cy.get('#delete-task-input-helper-text').should('not.exist');
+
+      cy.intercept(
+        {
+          method: 'DELETE',
+          url: '/api/v1/persistent-cache-tasks/2865345332?scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            forceNetworkError: true,
+          });
+        },
+      );
+
+      cy.get('#save-delete-task').click();
+
+      // Show error message.
+      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
+    });
+  });
 });

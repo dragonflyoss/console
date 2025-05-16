@@ -84,7 +84,7 @@
   position: absolute;
   background-color: var(--paletteexpandable-sidebar-navigation);
   bottom: 1rem;
-  bottom: calc(36px - 2px - 12px / 2);
+  bottom: calc(36px - 2px - 15px / 2);
 }
 
 .expandable:before {

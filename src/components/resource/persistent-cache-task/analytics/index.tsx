@@ -34,17 +34,20 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
   const [tag, setTag] = useState([{ name: '', count: 0 }]);
   const [applicationCount, setApplicationCount] = useState<number>(0);
   const [tagCount, setTagCount] = useState<number>(0);
-  const [applicationSuccess, setApplicationSuccess] = useState<number>(0);
-  const [tagSuccess, setTagSuccess] = useState<number>(0);
+  const [applicationPercentage, setApplicationPercentage] = useState<number>(0);
+  const [tagPercentage, setTagPercentage] = useState<number>(0);
 
   const theme = useTheme();
 
   useEffect(() => {
     (async function () {
       const applicationCount = persistentCacheTasks.filter((item) => item.application !== '').length;
-
+      const applicationPercentage = (applicationCount / persistentCacheTasks.length) * 100;
       const tagCount = persistentCacheTasks.filter((item) => item.tag !== '').length;
+      const tagPercentage = (tagCount / persistentCacheTasks.length) * 100;
 
+      setApplicationPercentage(Number(applicationPercentage.toFixed(2)));
+      setTagPercentage(Number(tagPercentage.toFixed(2)));
       setApplicationCount(applicationCount);
       setTagCount(tagCount);
 
@@ -65,10 +68,6 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
         }, {}),
       ).map(([name, count]) => ({ name, count }));
 
-      const applicationSuccess = (application.length / persistentCacheTasks.length) * 100;
-
-      setApplicationSuccess(Number(applicationSuccess.toFixed(2)));
-
       setApplication(application);
 
       const tag = Object.entries(
@@ -88,9 +87,6 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
         }, {}),
       ).map(([name, count]) => ({ name, count }));
 
-      const tagSuccess = (tag.length / persistentCacheTasks.length) * 100;
-
-      setTagSuccess(Number(tagSuccess.toFixed(2)));
       setTag(tag);
     })();
   }, [persistentCacheTasks]);
@@ -177,7 +173,7 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
   };
 
   return (
-    <div>
+    <Box>
       <Box className={styles.navigationContainer}>
         <Card className={styles.navigationWrapper}>
           <Box>
@@ -270,7 +266,6 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                   <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                 </MuiTooltip>
               </Box>
-
               <Bar options={barOptions} data={applicationBar} />
             </Card>
             <Card className={styles.doughnutContainer}>
@@ -288,7 +283,7 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                       by Application
                     </Typography>
                   </Box>
-                  <MuiTooltip title="Number of peer and active proportion under different Application" placement="top">
+                  <MuiTooltip title="Number of Persistent cache tasks under different Application" placement="top">
                     <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                   </MuiTooltip>
                 </Box>
@@ -305,7 +300,13 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                       Application
                     </Typography>
                     <Typography id="application-ratio" variant="subtitle1" fontFamily="mabry-bold">
-                      {isLoading ? <Skeleton width="2rem" /> : applicationSuccess ? `${applicationSuccess}%` : '0'}
+                      {isLoading ? (
+                        <Skeleton width="2rem" />
+                      ) : applicationPercentage ? (
+                        `${applicationPercentage}%`
+                      ) : (
+                        '0'
+                      )}
                     </Typography>
                   </Box>
                   <LinearProgress
@@ -316,7 +317,7 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                       },
                     }}
                     variant="determinate"
-                    value={applicationSuccess ? applicationSuccess : 0}
+                    value={applicationPercentage ? applicationPercentage : 0}
                   />
                 </Box>
               </Box>
@@ -335,11 +336,10 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                     by Tag
                   </Typography>
                 </Box>
-                <MuiTooltip title="Number of Persistent cache tasks under different Tag" placement="top">
+                <MuiTooltip title="Number of persistent cache tasks under different tag" placement="top">
                   <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                 </MuiTooltip>
               </Box>
-
               <Bar options={barOptions} data={tagBar} />
             </Card>
             <Card className={styles.doughnutContainer}>
@@ -357,7 +357,7 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                       by Tag
                     </Typography>
                   </Box>
-                  <MuiTooltip title="Number of peer and active proportion under different Tag" placement="top">
+                  <MuiTooltip title="Number of persistent cache tasks under different tag" placement="top">
                     <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                   </MuiTooltip>
                 </Box>
@@ -374,7 +374,7 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                       Tag
                     </Typography>
                     <Typography id="tag-ratio" variant="subtitle1" fontFamily="mabry-bold">
-                      {isLoading ? <Skeleton width="2rem" /> : tagSuccess ? `${tagSuccess}%` : '0'}
+                      {isLoading ? <Skeleton width="2rem" /> : tagPercentage ? `${tagPercentage}%` : '0'}
                     </Typography>
                   </Box>
                   <LinearProgress
@@ -385,7 +385,7 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
                       },
                     }}
                     variant="determinate"
-                    value={tagSuccess ? tagSuccess : 0}
+                    value={tagPercentage ? tagPercentage : 0}
                   />
                 </Box>
               </Box>
@@ -393,6 +393,6 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
           </Box>
         </Box>
       </Box>
-    </div>
+    </Box>
   );
 }

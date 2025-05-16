@@ -43,6 +43,16 @@ function App() {
         typography: {
           fontFamily: 'mabry-light',
         },
+        components: {
+          MuiDialog: {
+            styleOverrides: {
+              paper: {
+                backgroundColor: 'var(--palette-profile-background-paper)',
+                backgroundImage: 'none',
+              },
+            },
+          },
+        },
       }),
     [mode],
   );

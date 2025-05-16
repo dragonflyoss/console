@@ -1,5 +1,5 @@
 import { Breadcrumbs, styled, Typography, Link as RouterLink, Snackbar, Alert } from '@mui/material';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';

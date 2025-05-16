@@ -76,9 +76,9 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#application').should('have.text', 6);
       cy.get('#tag').should('have.text', 17);
 
-      cy.get('#application-ratio').should('have.text', '15.79%');
+      cy.get('#application-ratio').should('have.text', '31.58%');
 
-      cy.get('#tag-ratio').should('have.text', '21.05%');
+      cy.get('#tag-ratio').should('have.text', '89.47%');
     });
 
     it('call onChange when changing page size', () => {

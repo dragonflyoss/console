@@ -21,7 +21,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './index.module.css';
 import { ReactComponent as ID } from '../../../assets/images/cluster/scheduler/scheduler-id.svg';
 import { ReactComponent as ArrowCircleRightIcon } from '../../../assets/images/cluster/arrow-circle-right.svg';
-import { ReactComponent as ClusterID } from '../../../assets/images/resource/persistent-cache-task/id.svg';
 import { ReactComponent as IcContent } from '../../../assets/images/cluster/scheduler/ic-content.svg';
 import { ReactComponent as NoCluster } from '../../../assets/images/cluster/no-cluster.svg';
 import { ReactComponent as Cluster } from '../../../assets/images/cluster/cluster.svg';
@@ -283,26 +282,39 @@ export default function PersistentCacheTask() {
         <Box id="clusters-card" className={styles.cardCantainer}>
           {Array.isArray(allClusters) &&
             allClusters.map((item) => (
-              <Card key={item.id} id="clusters" className={styles.card} onClick={(event) => {}}>
+              <Card key={item.id} id="clusters" className={styles.card}>
                 <Box p="1.2rem">
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <Paper
-                      variant="outlined"
-                      sx={{
-                        backgroundColor: 'var(--palette-background-paper)',
-                        boxShadow: 'var(--palette-card-box-shadow)',
-                        borderRadius: '0.6rem',
-                        transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)',
-                        zIndex: 0,
-                        color: 'var(--palette-color)',
-                        backgroundImage: 'none',
-                        overflow: 'hidden',
-                        padding: '0.3rem',
-                        display: 'inline-flex',
-                      }}
-                    >
-                      <Cluster className={styles.cluster} />
-                    </Paper>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Paper
+                        variant="outlined"
+                        sx={{
+                          backgroundColor: 'var(--palette-background-paper)',
+                          boxShadow: 'var(--palette-card-box-shadow)',
+                          borderRadius: '0.6rem',
+                          transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+                          zIndex: 0,
+                          color: 'var(--palette-color)',
+                          backgroundImage: 'none',
+                          overflow: 'hidden',
+                          padding: '0.3rem',
+                          display: 'inline-flex',
+                        }}
+                      >
+                        <Cluster className={styles.cluster} />
+                      </Paper>
+                      <Box sx={{ display: 'flex', alignItems: 'center', ml: '0.5rem' }}>
+                        <Typography
+                          id={`cluster-id-${item.id}`}
+                          fontFamily="mabry-bold"
+                          variant="body1"
+                          className={styles.idText}
+                        >
+                          {item.scheduler_cluster_id}
+                        </Typography>
+                      </Box>
+                    </Box>
+
                     <Paper
                       elevation={0}
                       id={`default-cluster-${item.id || 0}`}
@@ -322,6 +334,7 @@ export default function PersistentCacheTask() {
                       }`}</Typography>
                     </Paper>
                   </Box>
+
                   <RouterLink
                     component={Link}
                     to={`/resource/persistent-cache-task/clusters/${item?.id}`}
@@ -332,12 +345,6 @@ export default function PersistentCacheTask() {
                     </Typography>
                   </RouterLink>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Box className={styles.idWrapper}>
-                      <ID className={styles.statusIcon} />
-                      <Typography id={`cluster-id-${item.id}`} variant="caption" className={styles.idText}>
-                        {item.scheduler_cluster_id}
-                      </Typography>
-                    </Box>
                     <Box className={styles.idWrapper}>
                       <Location className={styles.statusIcon} />
                       <Typography id={`cluster-id-${item.id}`} variant="caption" className={styles.idText}>
@@ -352,7 +359,7 @@ export default function PersistentCacheTask() {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     bgcolor: 'var(--palette-dark-100Channel)',
-                    p: '0.2rem 1.2rem',
+                    p: '0.8rem 1.2rem',
                   }}
                 >
                   <Chip
@@ -363,15 +370,6 @@ export default function PersistentCacheTask() {
                     id={`crate-at${item?.id}`}
                     sx={{ fontSize: '0.75rem' }}
                   />
-                  <IconButton
-                    id={`show-cluster-${item.id}`}
-                    className={styles.buttonContent}
-                    onClick={() => {
-                      navigate(`/resource/persistent-cache-task/clusters/${item?.id}`);
-                    }}
-                  >
-                    <ArrowCircleRightIcon className={styles.arrowCircleRightIcon} />
-                  </IconButton>
                 </Box>
               </Card>
             ))}

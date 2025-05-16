@@ -30,11 +30,6 @@ import {
   Pagination,
   Tooltip,
 } from '@mui/material';
-import { deletePersistentCacheTask, getPersistentCacheTasksResponse } from '../../../../lib/api';
-import styles from './index.module.css';
-import Card from '../../../card';
-import SearchCircularProgress from '../../../circular-progress';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
   formatDuring,
   formatSize,
@@ -42,6 +37,11 @@ import {
   getPaginatedList,
   useQuery,
 } from '../../../../lib/utils';
+import { deletePersistentCacheTask, getPersistentCacheTasksResponse } from '../../../../lib/api';
+import styles from './index.module.css';
+import Card from '../../../card';
+import SearchCircularProgress from '../../../circular-progress';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
@@ -59,10 +59,10 @@ import { ReactComponent as Delete } from '../../../../assets/images/cluster/dele
 import { ReactComponent as DeleteWarning } from '../../../../assets/images/cluster/delete-warning.svg';
 import { ReactComponent as SelectCard } from '../../../../assets/images/cluster/scheduler/card.svg';
 import { ReactComponent as SelectTable } from '../../../../assets/images/cluster/scheduler/table.svg';
-
 import _ from 'lodash';
 import { DataContext } from '../show';
 import { CancelLoadingButton, DeleteLoadingButton } from '../../../loading-button';
+import { DEFAULT_PAGE_SIZE } from '../../../../lib/constants';
 
 interface InformationProps {
   persistentCacheTasks: getPersistentCacheTasksResponse[];
@@ -104,19 +104,17 @@ export default function Information(props: InformationProps) {
   const [selectedRow, setSelectedRow] = useState<getPersistentCacheTasksResponse | null>(null);
   const [alignment, setAlignment] = useState('card');
   const [taskIsLoading, setTaskIsLoading] = useState(false);
+
+  const { setDeleteTask } = useContext(DataContext);
   const { persistentCacheTasks, isLoading, deleteTask } = props;
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
   const query = useQuery();
 
-  const { setDeleteTask } = useContext(DataContext);
-
   const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
   const search = query.get('search') ? (query.get('search') as string) : '';
-
   const persistentCacheTasksApplication = persistentCacheTasks.filter((item) => item.application !== '');
-
   const persistentCacheTasksTag = persistentCacheTasks.filter((item) => item.tag !== '');
 
   useEffect(() => {
@@ -147,9 +145,14 @@ export default function Information(props: InformationProps) {
 
       window.addEventListener('resize', updatePageSize);
 
-      const totalPage = Math.ceil(persistentCacheTasksCount.length / pageSize);
-
-      const currentPageData = getPaginatedList(persistentCacheTasksCount, persistentCacheTaskPage, pageSize);
+      const totalPage = Math.ceil(
+        persistentCacheTasksCount.length / (alignment === 'card' ? pageSize : DEFAULT_PAGE_SIZE),
+      );
+      const currentPageData = getPaginatedList(
+        persistentCacheTasksCount,
+        persistentCacheTaskPage,
+        alignment === 'card' ? pageSize : DEFAULT_PAGE_SIZE,
+      );
 
       if (currentPageData.length === 0 && persistentCacheTaskPage > 1) {
         const queryParts = [];
@@ -160,10 +163,6 @@ export default function Information(props: InformationProps) {
         if (page > 1) {
           queryParts.push(`page=${persistentCacheTaskPage - 1}`);
         }
-
-        // if (status !== 'all') {
-        //   queryParts.push(`status=${status}`);
-        // }
 
         const queryString = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
 
@@ -186,6 +185,7 @@ export default function Information(props: InformationProps) {
     navigate,
     page,
     search,
+    alignment,
   ]);
 
   const debounced = useMemo(
@@ -767,8 +767,8 @@ export default function Information(props: InformationProps) {
                 </TableRow>
               ) : (
                 <>
-                  {Array.isArray(persistentCacheTasksCount) &&
-                    persistentCacheTasksCount.map((item: getPersistentCacheTasksResponse, index) => {
+                  {Array.isArray(allPersistentCacheTasks) &&
+                    allPersistentCacheTasks.map((item: getPersistentCacheTasksResponse, index) => {
                       return (
                         <TableRow
                           key={index}
@@ -814,17 +814,10 @@ export default function Information(props: InformationProps) {
                               id={`card-state-${item.id}`}
                               sx={{
                                 borderRadius: '0.2rem',
-                                backgroundColor:
-                                  item?.state === 'Succeeded'
-                                    ? 'var(--palette-grey-background-color)'
-                                    : 'var(--palette-background-inactive)',
-                                color:
-                                  item?.state === 'Succeeded'
-                                    ? 'var(--palette-text-color)'
-                                    : 'var(--palette-table-title-text-color)',
+                                backgroundColor: item?.state === 'Succeeded' ? '#228B22' : '#D42536',
+                                color: '#FFF',
                                 border: 0,
-                                fontFamily: 'mabry-bold',
-                                mb: '0.7rem',
+                                fontSize: '0.8rem',
                               }}
                             />
                           </TableCell>

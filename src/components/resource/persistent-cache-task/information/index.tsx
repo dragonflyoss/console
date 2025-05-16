@@ -60,7 +60,7 @@ import { ReactComponent as DeleteWarning } from '../../../../assets/images/clust
 import { ReactComponent as SelectCard } from '../../../../assets/images/cluster/scheduler/card.svg';
 import { ReactComponent as SelectTable } from '../../../../assets/images/cluster/scheduler/table.svg';
 import _ from 'lodash';
-import { DataContext } from '../show';
+import { DataContext } from '..';
 import { CancelLoadingButton, DeleteLoadingButton } from '../../../loading-button';
 import { DEFAULT_PAGE_SIZE } from '../../../../lib/constants';
 

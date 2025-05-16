@@ -61,6 +61,7 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#application').should('have.text', 'application-1');
       cy.get('#tag').should('have.text', 'tag-1');
 
+      // Display peers.
       cy.get('#peers').should('exist');
 
       cy.get('#id-0').should('have.text', '2');
@@ -71,6 +72,11 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#ip-0').should('have.text', '112.3325.44');
       cy.get('#port-0').should('have.text', '8001');
       cy.get('#download-port-0').should('have.text', '4001');
+
+      // Go to last page.
+      cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
+
+      cy.get('#hostname-0').should('have.text', 'hostname-5');
     });
 
     it('can display failed persistent cache task', () => {

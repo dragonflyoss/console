@@ -111,7 +111,7 @@ describe('Executions', () => {
 
       // Click the show error log button.
       cy.get('#status > .MuiButtonBase-root').click();
-      cy.get('.css-sp3me4 > .MuiTypography-h6').should('have.text', 'Error log');
+      cy.get('#error-log').should('have.text', 'Error log');
       cy.get('#panel1d-header').click();
 
       // Check error log.

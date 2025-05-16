@@ -187,8 +187,8 @@ export default function ShowExecutions() {
         </Alert>
       </Snackbar>
       <Drawer anchor="right" open={errorLog} onClose={handleClose}>
-        <Box role="presentation" sx={{ width: '28rem', height: '100vh', backgroundColor: '#24292f' }}>
-          <Typography variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#d0d7de' }}>
+        <Box role="presentation" sx={{ width: '25rem', height: '100vh', backgroundColor: '#24292f' }}>
+          <Typography id="error-log" variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#d0d7de' }}>
             Error log
           </Typography>
           <Divider sx={{ backgroundColor: '#6c6e6f' }} />
@@ -455,7 +455,7 @@ export default function ShowExecutions() {
             ) : (
               executions?.scheduler_clusters?.map((item: any, index: number) => {
                 return (
-                  <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold" ml="0.5rem">
+                  <Typography key={index} variant="body2" component="div" fontFamily="mabry-bold" mr="0.7rem">
                     {item.id || '-'}
                   </Typography>
                 );

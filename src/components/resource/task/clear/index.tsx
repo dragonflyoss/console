@@ -39,10 +39,10 @@ import SearchCircularProgress from '../../../circular-progress';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import LinkOutlinedIcon from '@mui/icons-material/LinkOutlined';
 import Card from '../../../card';
-import { ReactComponent as SchedulerCluster } from '../../../../assets/images/job/task/scheduler-cluster.svg';
-import { ReactComponent as NoSearch } from '../../../../assets/images/job/task/no-search.svg';
-import { ReactComponent as NoTask } from '../../../../assets/images/job/task/no-task.svg';
-import { ReactComponent as DarkNoTask } from '../../../../assets/images/job/task/dark-no-task.svg';
+import { ReactComponent as SchedulerCluster } from '../../../../assets/images/resource/task/scheduler-cluster.svg';
+import { ReactComponent as NoSearch } from '../../../../assets/images/resource/task/no-search.svg';
+import { ReactComponent as NoTask } from '../../../../assets/images/resource/task/no-task.svg';
+import { ReactComponent as DarkNoTask } from '../../../../assets/images/resource/task/dark-no-task.svg';
 import { ReactComponent as Delete } from '../../../../assets/images/cluster/delete.svg';
 import { ReactComponent as DeleteWarning } from '../../../../assets/images/cluster/delete-warning.svg';
 
@@ -465,7 +465,7 @@ export default function Clear() {
 
             if (tasks?.id) {
               setDeleteLoadingButton(false);
-              navigate(`/jobs/task/executions/${tasks?.id}`);
+              navigate(`/resource/task/executions/${tasks?.id}`);
               setOpenDeleteTask(false);
             }
           } else if (task?.args?.task_id) {
@@ -480,7 +480,7 @@ export default function Clear() {
             const tasks = await createTaskJob(formList);
             if (tasks?.id) {
               setDeleteLoadingButton(false);
-              navigate(`/jobs/task/executions/${tasks?.id}`);
+              navigate(`/resource/task/executions/${tasks?.id}`);
               setOpenDeleteTask(false);
             }
           }
@@ -528,7 +528,7 @@ export default function Clear() {
         const task = await createTaskJob(data);
         setSearchID(task?.id);
       } else {
-        navigate('/jobs/task/clear');
+        navigate('/resource/task/clear');
         setTask(null);
         setIsLoading(false);
         setSearchTaskISLodaing(false);

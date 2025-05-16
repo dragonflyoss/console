@@ -1,0 +1,97 @@
+.container {
+  margin-top: 1.5rem;
+}
+
+.taskIcon {
+  width: 1.8rem !important;
+  height: 1.8rem !important;
+  color: var(--palette-button-color);
+  margin-right: 0.5rem;
+}
+
+.idContent {
+  font-family: 'mabry-bold' !important;
+}
+
+.statusContent {
+  display: inline-flex;
+}
+
+.informationWrapper {
+  display: grid;
+  gap: calc(2rem);
+  grid-template-columns: repeat(4, 1fr);
+  padding: 1.5rem;
+}
+
+.containerContainer {
+  padding: 1.2rem;
+}
+
+.containerWrapper {
+  display: grid;
+  gap: calc(1.5rem);
+  grid-template-columns: repeat(3, 1fr);
+  padding: 1.5rem 0;
+}
+
+.containerTitleText {
+  color: var(--palette-table-title-text-color);
+  font-family: 'mabry-bold' !important;
+}
+
+.containerTitle {
+  padding-bottom: 3rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.informationTitle {
+  padding-left: 0.4rem;
+}
+
+.informationTitleIcon {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  color: var(--palette-button-color);
+  margin-right: 0.5rem;
+}
+
+.informationTitleText {
+  color: var(--palette-table-title-text-color);
+  padding-bottom: 0.5rem;
+  font-family: 'mabry-bold' !important;
+}
+
+.informationContent {
+  font-family: 'mabry-bold' !important;
+}
+
+.tableRow {
+  border-bottom: dashed var(--palette-palette-divider);
+}
+
+.tableHeader {
+  border-color: var(--palette-palette-divider) !important;
+}
+
+.tableHeaderText {
+  color: var(--palette-table-title-text-color);
+  font-family: 'mabry-bold' !important;
+}
+
+.tableRow:last-child {
+  border-bottom: none;
+}
+
+.deleteIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: 0.4rem;
+}
+
+.deleteWarningIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  padding-right: 0.2rem;
+}

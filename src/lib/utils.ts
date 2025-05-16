@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { decode, JwtPayload } from 'jsonwebtoken';
-import { getPeersResponse, getClustersResponse, getSchedulersResponse } from './api';
+import { getPeersResponse, getClusterResponse, getSchedulersResponse } from './api';
 import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
 
@@ -137,4 +137,55 @@ export const fuzzySearchScheduler = (keyword: string, data: any[]) => {
   return data.filter(
     (item) => item.host_name && typeof item.host_name === 'string' && item.host_name.includes(keyword),
   );
+};
+
+export const fuzzySearchPersistentCacheTask = (keyword: string, data: any[]) => {
+  if (!data || !Array.isArray(data)) return [];
+
+  return data.filter((item) => item.id && typeof item.id === 'string' && item.id.includes(keyword));
+};
+
+export function formatSize(tagSize: string): string {
+  const size: number = Number.parseInt(tagSize, 10);
+  if (Math.pow(1024, 1) <= size && size < Math.pow(1024, 2)) {
+    return (size / Math.pow(1024, 1)).toFixed(2) + ' KiB';
+  } else if (Math.pow(1024, 2) <= size && size < Math.pow(1024, 3)) {
+    return (size / Math.pow(1024, 2)).toFixed(2) + ' MiB';
+  } else if (Math.pow(1024, 3) <= size && size < Math.pow(1024, 4)) {
+    return (size / Math.pow(1024, 3)).toFixed(2) + ' GiB';
+  } else if (Math.pow(1024, 4) <= size) {
+    return (size / Math.pow(1024, 4)).toFixed(2) + ' TiB';
+  } else {
+    return size + 'B';
+  }
+}
+
+export const formatDuring = function (ps: number) {
+  const millisecond = ps / 1e6;
+
+  const days = Math.floor(millisecond / (1000 * 60 * 60 * 24));
+  const remainingAfterDays = millisecond % (1000 * 60 * 60 * 24);
+
+  const hours = Math.floor(remainingAfterDays / (1000 * 60 * 60));
+  const remainingAfterHours = remainingAfterDays % (1000 * 60 * 60);
+
+  const minutes = Math.floor(remainingAfterHours / (1000 * 60));
+  const seconds = Math.floor((remainingAfterHours % (1000 * 60)) / 1000);
+
+  let result = '';
+
+  if (days > 0) {
+    result += `${days} Days`;
+  }
+  if (hours > 0) {
+    result += `${hours} Hours`;
+  }
+  if (minutes > 0) {
+    result += `${minutes} Minutes`;
+  }
+  if (seconds > 0) {
+    result += `${seconds} Seconds`;
+  }
+
+  return result.trim();
 };

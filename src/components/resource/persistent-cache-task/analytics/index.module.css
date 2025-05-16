@@ -1,0 +1,112 @@
+.navigationContainer {
+  display: grid;
+  gap: calc(1.5rem);
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 1.5rem;
+}
+
+.navigationWrapper {
+  padding: 1.2rem;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.navigation {
+  top: -2rem;
+  width: 160px;
+  z-index: -1;
+  height: 160px;
+  right: -6rem;
+  opacity: 0.12;
+  border-radius: 24px;
+  position: absolute;
+  transform: rotate(34deg);
+  background: linear-gradient(to right, var(--palette-text-color) 0%, transparent 100%);
+}
+
+.navigationIcon {
+  width: 2rem;
+  height: 2rem;
+  top: 2.4rem;
+  right: 1.2rem;
+  position: absolute;
+  color: var(--palette-text-color);
+}
+
+.visualizationWrapper {
+  width: 100%;
+}
+
+.pieWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+}
+
+.dashboard {
+  display: flex;
+  align-items: stretch;
+}
+
+.barContainer {
+  width: 67%;
+  padding: 1rem;
+}
+
+.barTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 1.2rem 0.2rem;
+}
+
+.doughnutTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1rem;
+}
+
+.doughnutContainer {
+  margin-left: 1.6rem;
+  width: 33%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.descriptionIcon {
+  width: 1rem !important ;
+  height: 1rem !important;
+  color: rgb(188, 188, 188);
+}
+
+.descriptionIcon:hover {
+  color: var(--palette-description-color);
+}
+
+.tagContainer {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 1rem 1rem 1rem;
+}
+
+.tagIcon {
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-right: 0.6rem;
+  color: var(--palette-text-color);
+}
+
+.tagContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.linearProgress {
+  width: 100%;
+  color: var(--palette-description-color);
+}

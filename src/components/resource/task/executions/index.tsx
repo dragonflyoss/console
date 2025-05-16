@@ -241,7 +241,7 @@ export default function Executions() {
                         <RouterLink
                           component={Link}
                           id={`execution-${item?.id}`}
-                          to={`/jobs/task/executions/${item?.id}`}
+                          to={`/resource/task/executions/${item?.id}`}
                           underline="hover"
                           sx={{ color: 'var(--palette-description-color)' }}
                         >
@@ -289,7 +289,7 @@ export default function Executions() {
                       <RouterLink
                         component={Link}
                         id={`execution-${item?.id}`}
-                        to={`/jobs/task/executions/${item?.id}`}
+                        to={`/resource/task/executions/${item?.id}`}
                         underline="hover"
                         sx={{ color: 'var(--palette-description-color)' }}
                       >
@@ -309,7 +309,7 @@ export default function Executions() {
             page={executionsPage}
             onChange={(_event: any, newPage: number) => {
               setExecutionsPage(newPage);
-              navigate(`/jobs/task/executions${newPage > 1 ? `?page=${newPage}` : ''}`);
+              navigate(`/resource/task/executions${newPage > 1 ? `?page=${newPage}` : ''}`);
             }}
             boundaryCount={1}
             color="primary"

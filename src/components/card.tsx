@@ -1,13 +1,14 @@
 import { Paper } from '@mui/material';
-import { ReactNode } from 'react';
+import { MouseEventHandler, ReactNode } from 'react';
 
 interface CardProps {
   children: ReactNode;
   className?: string;
   id?: string;
+  onClick?: MouseEventHandler<HTMLDivElement>;
 }
 
-const Card: React.FC<CardProps> = ({ children, className, id }) => {
+const Card: React.FC<CardProps> = ({ children, className, id, onClick }) => {
   return (
     <Paper
       sx={{
@@ -22,6 +23,7 @@ const Card: React.FC<CardProps> = ({ children, className, id }) => {
       }}
       id={id}
       className={className}
+      onClick={onClick}
     >
       {children}
     </Paper>

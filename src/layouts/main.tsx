@@ -22,10 +22,13 @@ import EditTokens from '../components/developer/tokens/edit';
 import Preheats from '../components/job/preheats';
 import NewPreheat from '../components/job/preheats/new';
 import ShowPreheat from '../components/job/preheats/show';
-import Clear from '../components/job/task/clear';
-import Task from '../components/job/task';
-import Executions from '../components/job/task/executions';
-import ShowTask from '../components/job/task/executions/show';
+import Clear from '../components/resource/task/clear';
+import Task from '../components/resource/task';
+import Executions from '../components/resource/task/executions';
+import ShowTask from '../components/resource/task/executions/show';
+import PersistentCacheTasksCluster from '../components/resource/persistent-cache-task/cluster';
+import PersistentCacheTasks from '../components/resource/persistent-cache-task';
+import PersistentCacheTask from '../components/resource/persistent-cache-task/show';
 import { useState, useEffect } from 'react';
 import { getJwtPayload } from '../lib/utils';
 import { getUserRoles } from '../lib/api';
@@ -77,10 +80,13 @@ function Main() {
         <Route path="/jobs/preheats/new" element={<NewPreheat />} />
         <Route path="/jobs/preheats/:id" element={<ShowPreheat />} />
         <Route element={<Task />}>
-          <Route path="/jobs/task/clear" element={<Clear />} />
-          <Route path="/jobs/task/executions" element={<Executions />} />
-          <Route path="/jobs/task/executions/:id" element={<ShowTask />} />
+          <Route path="/resource/task/clear" element={<Clear />} />
+          <Route path="/resource/task/executions" element={<Executions />} />
+          <Route path="/resource/task/executions/:id" element={<ShowTask />} />
         </Route>
+        <Route path="/resource/persistent-cache-task" element={<PersistentCacheTasksCluster />} />
+        <Route path="/resource/persistent-cache-task/clusters/:id" element={<PersistentCacheTasks />} />
+        <Route path="/resource/persistent-cache-task/clusters/:id/:id" element={<PersistentCacheTask />} />
         {isRoot && <Route path="/users" element={<Users />} />}
         <Route path="/users/new" element={<NewUser />} />
       </Route>

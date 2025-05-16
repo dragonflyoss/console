@@ -42,10 +42,10 @@ import { ReactComponent as CreatedAt } from '../../../../assets/images/job/prehe
 import { ReactComponent as Failure } from '../../../../assets/images/job/preheat/failure.svg';
 import { ReactComponent as Pending } from '../../../../assets/images/job/preheat/pending.svg';
 import { ReactComponent as ErrorLog } from '../../../../assets/images/job/preheat/error-log.svg';
-import { ReactComponent as TaskID } from '../../../../assets/images/job/task/task-id.svg';
-import { ReactComponent as Application } from '../../../../assets/images/job/task/type.svg';
-import { ReactComponent as IP } from '../../../../assets/images/job/task/ip.svg';
-import { ReactComponent as CheckLog } from '../../../../assets/images/job/task/error-log.svg';
+import { ReactComponent as TaskID } from '../../../../assets/images/resource/task/task-id.svg';
+import { ReactComponent as Application } from '../../../../assets/images/resource/task/type.svg';
+import { ReactComponent as IP } from '../../../../assets/images/resource/task/ip.svg';
+import { ReactComponent as CheckLog } from '../../../../assets/images/resource/task/error-log.svg';
 import { ReactComponent as PieceLength } from '../../../../assets/images/job/preheat/piece-length.svg';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -379,7 +379,7 @@ export default function ShowExecutions() {
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>
             <PieceLength className={styles.informationTitleIcon} />
-            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+            <Typography variant="body1" component="div" className={styles.informationTitleText}>
               Piece Length
             </Typography>
           </Box>
@@ -641,7 +641,7 @@ export default function ShowExecutions() {
                 count={totalPages}
                 page={page}
                 onChange={(_event: any, newPage: number) => {
-                  navigate(`/jobs/task/executions/${params.id}${newPage > 1 ? `?page=${newPage}` : ''}`);
+                  navigate(`/resource/task/executions/${params.id}${newPage > 1 ? `?page=${newPage}` : ''}`);
                 }}
                 boundaryCount={1}
                 color="primary"

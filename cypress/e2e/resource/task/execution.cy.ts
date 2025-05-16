@@ -35,7 +35,7 @@ describe('Executions', () => {
       },
     );
 
-    cy.visit('/jobs/task/executions');
+    cy.visit('/resource/task/executions');
     cy.viewport(1440, 1080);
   });
 
@@ -45,7 +45,7 @@ describe('Executions', () => {
 
     cy.get('#execution-9').click();
 
-    cy.url().should('include', '/jobs/task/executions/9');
+    cy.url().should('include', '/resource/task/executions/9');
 
     // Check for breadcrumb.
     cy.get('.MuiBreadcrumbs-ol').should('exist').and('contain', 'Executions').and('contain', '9');
@@ -55,7 +55,7 @@ describe('Executions', () => {
     cy.get('[data-testid="isloading"]').should('not.exist');
 
     // Then I see that the current page is the executions page!
-    cy.url().should('include', '/jobs/task/executions');
+    cy.url().should('include', '/resource/task/executions');
   });
 
   describe('when data is loaded', () => {
@@ -256,7 +256,7 @@ describe('Executions', () => {
         },
       );
 
-      cy.visit('jobs/task/executions/6');
+      cy.visit('resource/task/executions/6');
     });
 
     it('execution information should appear empty', () => {
@@ -303,7 +303,7 @@ describe('Executions', () => {
         },
       );
 
-      cy.visit('jobs/task/executions/6');
+      cy.visit('resource/task/executions/6');
     });
 
     it('show error message', () => {
@@ -361,7 +361,7 @@ describe('Executions', () => {
         },
       ).as('execution');
 
-      cy.visit('jobs/task/executions/11');
+      cy.visit('resource/task/executions/11');
 
       // Check for breadcrumb.
       cy.get('.MuiBreadcrumbs-ol').should('exist').and('contain', 11);

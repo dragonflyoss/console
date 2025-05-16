@@ -436,7 +436,7 @@ export default function ShowPreheat() {
             <Box id="scheduler-lusters-id" className={styles.schedulerClustersID}>
               {preheat?.scheduler_clusters?.map((item, index) => {
                 return (
-                  <Typography key={index} variant="body1" component="div" fontFamily="mabry-bold" ml="0.5rem">
+                  <Typography key={index} variant="body1" component="div" fontFamily="mabry-bold" mr="0.7rem">
                     {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} /> : item.id || '-'}
                   </Typography>
                 );
@@ -473,7 +473,7 @@ export default function ShowPreheat() {
           </Box>
         </Card>
         <Drawer anchor="right" open={errorLog} onClose={handleClose}>
-          <Box role="presentation" sx={{ width: '28rem' }}>
+          <Box role="presentation" sx={{ width: '25rem' }}>
             <Box sx={{ height: '100vh', backgroundColor: '#24292f' }}>
               <Typography variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#fff' }}>
                 Error log

@@ -188,7 +188,7 @@ export default function ShowExecutions() {
       </Snackbar>
       <Drawer anchor="right" open={errorLog} onClose={handleClose}>
         <Box role="presentation" sx={{ width: '25rem', height: '100vh', backgroundColor: '#24292f' }}>
-          <Typography variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#d0d7de' }}>
+          <Typography id="error-log" variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#d0d7de' }}>
             Error log
           </Typography>
           <Divider sx={{ backgroundColor: '#6c6e6f' }} />

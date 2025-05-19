@@ -4,17 +4,16 @@ import {
   Button,
   Chip,
   Grid,
-  IconButton,
   Pagination,
   Paper,
   Skeleton,
   Snackbar,
   Tooltip,
   Typography,
-  Stack,
   Autocomplete,
   TextField,
   Divider,
+  Link as RouterLink,
 } from '@mui/material';
 import {
   getSchedulers,
@@ -30,7 +29,7 @@ import styles from './index.module.css';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { fuzzySearch, getDatetime, getPaginatedList, useQuery } from '../../lib/utils';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { MAX_PAGE_SIZE } from '../../lib/constants';
 import Card from '../card';
 import debounce from 'lodash/debounce';
@@ -42,7 +41,6 @@ import { ReactComponent as Active } from '../../assets/images/cluster/active.svg
 import { ReactComponent as ClusterID } from '../../assets/images/cluster/id.svg';
 import { ReactComponent as IcContent } from '../../assets/images/cluster/scheduler/ic-content.svg';
 import { ReactComponent as NoCluster } from '../../assets/images/cluster/no-cluster.svg';
-import { ReactComponent as ArrowCircleRightIcon } from '../../assets/images/cluster/arrow-circle-right.svg';
 import { ReactComponent as Cluster } from '../../assets/images/cluster/cluster.svg';
 import { ReactComponent as Scheduler } from '../../assets/images/cluster/scheduler.svg';
 import { ReactComponent as SeedPeer } from '../../assets/images/cluster/seed-peer.svg';
@@ -375,7 +373,7 @@ export default function Clusters() {
           <Box id="clustersCard" className={styles.loadingCard}>
             <Card>
               <Box className={styles.clusterNameWrapper}>
-                <Box display="flex" mb="0.5rem" alignItems="center">
+                <Box display="flex" mb="0.5rem" alignItems="flex-start">
                   <ClusterID className={styles.idIcon} />
                   <Skeleton data-testid="isloading" sx={{ width: '1rem', ml: '0.4rem' }} />
                 </Box>
@@ -419,20 +417,28 @@ export default function Clusters() {
               allClusters.map((item) => (
                 <Card key={item.id} id="clusters" className={styles.card}>
                   <Box className={styles.clusterNameWrapper}>
-                    <Box display="flex" mb="0.5rem" alignItems="center">
+                    <Box display="flex" mb="0.5rem" alignItems="flex-start">
                       <ClusterID className={styles.idIcon} />
-                      <Typography id={`cluster-id-${item.id}`} variant="subtitle1" className={styles.idText}>
+                      <Typography
+                        component="div"
+                        id={`cluster-id-${item.id}`}
+                        variant="body1"
+                        className={styles.idText}
+                      >
                         {item.id}
                       </Typography>
                     </Box>
-                    <Typography id={`cluster-name-${item.id || 0}`} variant="h6" className={styles.nameText}>
-                      {item.name}
-                    </Typography>
+                    <RouterLink component={Link} to={`/clusters/${item.id}`} underline="hover">
+                      <Typography id={`cluster-name-${item.id || 0}`} variant="h6" className={styles.nameText}>
+                        {item.name}
+                      </Typography>
+                    </RouterLink>
                     <Tooltip title={item.bio || '-'} placement="top">
                       <Typography
                         id={`cluster-description-${item.id || 0}`}
                         variant="caption"
                         className={styles.descriptionText}
+                        component="div"
                       >
                         {item.bio || '-'}
                       </Typography>
@@ -464,15 +470,6 @@ export default function Clusters() {
                         variant="outlined"
                         size="small"
                       />
-                      <IconButton
-                        id={`show-cluster-${item.id}`}
-                        className={styles.buttonContent}
-                        onClick={() => {
-                          navigate(`/clusters/${item.id}`);
-                        }}
-                      >
-                        <ArrowCircleRightIcon className={styles.arrowCircleRightIcon} />
-                      </IconButton>
                     </Box>
                   </Box>
                 </Card>

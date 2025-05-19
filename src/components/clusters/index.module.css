@@ -121,7 +121,7 @@
 
 .idText {
   color: var(--palette-table-title-text-color);
-  padding-left: 0.4rem;
+  padding-left: 0.6rem;
 }
 
 .idIcon {
@@ -138,7 +138,6 @@
 .creatTimeContainer {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin-top: 1rem;
 }
 

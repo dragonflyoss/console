@@ -433,7 +433,6 @@ export default function Clusters() {
                         {item.name}
                       </Typography>
                     </RouterLink>
-
                     <Tooltip title={item.bio || '-'} placement="top">
                       <Typography
                         id={`cluster-description-${item.id || 0}`}

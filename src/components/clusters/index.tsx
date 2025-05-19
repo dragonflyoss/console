@@ -373,7 +373,7 @@ export default function Clusters() {
           <Box id="clustersCard" className={styles.loadingCard}>
             <Card>
               <Box className={styles.clusterNameWrapper}>
-                <Box display="flex" mb="0.5rem" alignItems="center">
+                <Box display="flex" mb="0.5rem" alignItems="flex-start">
                   <ClusterID className={styles.idIcon} />
                   <Skeleton data-testid="isloading" sx={{ width: '1rem', ml: '0.4rem' }} />
                 </Box>
@@ -417,9 +417,14 @@ export default function Clusters() {
               allClusters.map((item) => (
                 <Card key={item.id} id="clusters" className={styles.card}>
                   <Box className={styles.clusterNameWrapper}>
-                    <Box display="flex" mb="0.5rem" alignItems="center">
+                    <Box display="flex" mb="0.5rem" alignItems="flex-start">
                       <ClusterID className={styles.idIcon} />
-                      <Typography id={`cluster-id-${item.id}`} variant="subtitle1" className={styles.idText}>
+                      <Typography
+                        component="div"
+                        id={`cluster-id-${item.id}`}
+                        variant="body1"
+                        className={styles.idText}
+                      >
                         {item.id}
                       </Typography>
                     </Box>

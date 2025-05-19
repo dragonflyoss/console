@@ -331,7 +331,6 @@ export default function PersistentCacheTask() {
                       }`}</Typography>
                     </Paper>
                   </Box>
-
                   <RouterLink
                     component={Link}
                     to={`/resource/persistent-cache-task/clusters/${item?.id}`}

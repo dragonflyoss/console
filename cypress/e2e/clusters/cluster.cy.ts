@@ -413,7 +413,7 @@ describe('Cluster', () => {
       // Choose a cluster without scheduler and seed peer.
       cy.get('#cluster-name-10').should('be.visible').and('contain', 'cluster-10');
 
-      cy.get('#show-cluster-10').click();
+      cy.get('#cluster-name-10').click();
 
       cy.get('#name').scrollIntoView();
 
@@ -466,7 +466,7 @@ describe('Cluster', () => {
     it('cluster cannot be deleted if scheduler and seed nodes exist in the cluster', () => {
       cy.get('#cluster-id-1').should('be.visible').and('contain', '1');
 
-      cy.get('#show-cluster-1').click();
+      cy.get('#cluster-name-1').click();
 
       cy.get('#name').scrollIntoView().should('be.visible').and('contain', 'cluster-1');
 
@@ -532,7 +532,7 @@ describe('Cluster', () => {
       // Choose a cluster without scheduler and seed peer.
       cy.get('#cluster-name-10').should('be.visible').and('contain', 'cluster-10');
 
-      cy.get('#show-cluster-10').click();
+      cy.get('#cluster-name-10').click();
 
       cy.get('#name').scrollIntoView().should('be.visible').and('contain', 'cluster-10');
 
@@ -575,7 +575,7 @@ describe('Cluster', () => {
       // The cluster name should be cluster-10.
       cy.get('#cluster-name-10').should('be.visible').and('contain', 'cluster-10');
 
-      cy.get('#show-cluster-10').click();
+      cy.get('#cluster-name-10').click();
 
       cy.get('#name').scrollIntoView().should('be.visible').and('contain', 'cluster-10');
 

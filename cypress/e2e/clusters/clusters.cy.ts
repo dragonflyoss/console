@@ -276,7 +276,7 @@ describe('Clusters', () => {
       cy.get('#cluster-name-8').should('be.visible').and('contain', 'cluster-8');
 
       // Go to show cluster page.
-      cy.get('#show-cluster-8').click();
+      cy.get('#cluster-name-8').click();
 
       // Then I see that the current page is the show cluster.
       cy.url().should('include', '/clusters/8');

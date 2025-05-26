@@ -1,0 +1,17 @@
+[
+  {
+    "id": 16,
+    "created_at": "2025-05-21T09:16:16.348Z",
+    "updated_at": "2025-05-21T09:16:16.348Z",
+    "is_del": 0,
+    "actor_type": "USER",
+    "actor_name": "root",
+    "event_type": "API",
+    "operation": "PUT",
+    "operated_at": "2025-05-21T09:16:15Z",
+    "state": "SUCCESS",
+    "path": "/api/v1/users/2/roles/root",
+    "status_code": 200,
+    "detail": null
+  }
+]

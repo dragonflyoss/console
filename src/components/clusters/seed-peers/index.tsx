@@ -1111,6 +1111,7 @@ export default function ShowCluster() {
               aria-label="when device is locked"
               aria-expanded={open ? 'true' : undefined}
               onClick={handleClickListItem}
+              sx={{ borderRadius: '0.3rem' }}
             >
               <ListItemText sx={{ pr: '0.6rem' }}>
                 <Typography variant="body1" fontFamily="mabry-bold">
@@ -1130,32 +1131,27 @@ export default function ShowCluster() {
               role: 'listbox',
             }}
             sx={{
-              '& .MuiMenu-paper': {
-                boxShadow: 'var(--custom-shadows-dropdown)',
-                borderRadius: '0.6rem',
-              },
               '& .MuiMenu-list': {
                 p: 0,
                 width: '10rem',
               },
             }}
           >
-            <Box className={styles.menu}>
-              <Typography variant="body1" fontFamily="mabry-bold" sx={{ m: '0.4rem 1rem' }}>
-                Filter by status
-              </Typography>
-              <Divider sx={{ mb: '0.2rem' }} />
-              {statusList.map((item, index) => (
-                <MenuItem
-                  className={styles.menuItem}
-                  key={item.name}
-                  value={item.name}
-                  onClick={() => handleMenuItemClick(item)}
-                >
-                  {item.lable}
-                </MenuItem>
-              ))}
-            </Box>
+            <Typography variant="body1" fontFamily="mabry-bold" sx={{ m: '0.4rem 1rem' }}>
+              Filter by status
+            </Typography>
+            <Divider sx={{ mb: '0.2rem' }} />
+            {statusList.map((item) => (
+              <MenuItem
+                selected={status === item.name}
+                className={styles.menuItem}
+                key={item.name}
+                value={item.name}
+                onClick={() => handleMenuItemClick(item)}
+              >
+                {item.lable}
+              </MenuItem>
+            ))}
           </Menu>
           <Paper
             elevation={0}
@@ -1249,52 +1245,46 @@ export default function ShowCluster() {
                           horizontal: 'right',
                         }}
                         sx={{
-                          '& .MuiMenu-paper': {
-                            boxShadow: 'var(--custom-shadows-dropdown)',
-                            borderRadius: '0.6rem',
-                          },
                           '& .MuiMenu-list': {
                             width: '9rem',
                             p: '0',
                           },
                         }}
                       >
-                        <Box className={styles.menu}>
-                          <MenuItem
-                            className={styles.menuItem}
-                            id={`view-${seedPeerSelectedRow?.host_name}`}
-                            onClick={() => {
-                              navigate(`/clusters/${params.id}/seed-peers/${seedPeerSelectedRow?.id}`);
-                              setSeedPeerAnchorElement(null);
-                            }}
+                        <MenuItem
+                          className={styles.menuItem}
+                          id={`view-${seedPeerSelectedRow?.host_name}`}
+                          onClick={() => {
+                            navigate(`/clusters/${params.id}/seed-peers/${seedPeerSelectedRow?.id}`);
+                            setSeedPeerAnchorElement(null);
+                          }}
+                        >
+                          <ListItemIcon>
+                            <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
+                          </ListItemIcon>
+                          <Typography variant="body2" className={styles.menuText}>
+                            View
+                          </Typography>
+                        </MenuItem>
+                        <MenuItem
+                          className={styles.menuItem}
+                          id={`delete-${seedPeerSelectedRow?.host_name}`}
+                          onClick={() => {
+                            openHandleSeedPeer(seedPeerSelectedRow);
+                            setSeedPeerAnchorElement(null);
+                          }}
+                        >
+                          <ListItemIcon>
+                            <DeleteIcon fontSize="small" sx={{ color: 'var(--palette-delete-button-color)' }} />
+                          </ListItemIcon>
+                          <Typography
+                            variant="body1"
+                            className={styles.menuText}
+                            sx={{ color: 'var(--palette-delete-button-color)' }}
                           >
-                            <ListItemIcon>
-                              <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
-                            </ListItemIcon>
-                            <Typography variant="body2" className={styles.menuText}>
-                              View
-                            </Typography>
-                          </MenuItem>
-                          <MenuItem
-                            className={styles.menuItem}
-                            id={`delete-${seedPeerSelectedRow?.host_name}`}
-                            onClick={() => {
-                              openHandleSeedPeer(seedPeerSelectedRow);
-                              setSeedPeerAnchorElement(null);
-                            }}
-                          >
-                            <ListItemIcon>
-                              <DeleteIcon fontSize="small" sx={{ color: 'var(--palette-delete-button-color)' }} />
-                            </ListItemIcon>
-                            <Typography
-                              variant="body1"
-                              className={styles.menuText}
-                              sx={{ color: 'var(--palette-delete-button-color)' }}
-                            >
-                              Delete
-                            </Typography>
-                          </MenuItem>
-                        </Box>
+                            Delete
+                          </Typography>
+                        </MenuItem>
                       </Menu>
                       <Box display="flex">
                         <ID className={styles.idIcon} />{' '}
@@ -1589,55 +1579,46 @@ export default function ShowCluster() {
                                   horizontal: 'right',
                                 }}
                                 sx={{
-                                  '& .MuiMenu-paper': {
-                                    boxShadow: 'var(--custom-shadows-dropdown)',
-                                    borderRadius: '0.6rem',
-                                  },
                                   '& .MuiMenu-list': {
-                                    width: '11rem',
+                                    width: '9rem',
                                     p: '0',
                                   },
                                 }}
                               >
-                                <Box className={styles.menu}>
-                                  <MenuItem
-                                    className={styles.menuItem}
-                                    id={`view-${seedPeerSelectedRow?.host_name}`}
-                                    onClick={() => {
-                                      navigate(`/clusters/${params.id}/seed-peers/${seedPeerSelectedRow?.id}`);
-                                      setSeedPeerAnchorElement(null);
-                                    }}
+                                <MenuItem
+                                  className={styles.menuItem}
+                                  id={`view-${seedPeerSelectedRow?.host_name}`}
+                                  onClick={() => {
+                                    navigate(`/clusters/${params.id}/seed-peers/${seedPeerSelectedRow?.id}`);
+                                    setSeedPeerAnchorElement(null);
+                                  }}
+                                >
+                                  <ListItemIcon>
+                                    <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
+                                  </ListItemIcon>
+                                  <Typography variant="body1" className={styles.menuText}>
+                                    View
+                                  </Typography>
+                                </MenuItem>
+                                <MenuItem
+                                  className={styles.menuItem}
+                                  id={`delete-${seedPeerSelectedRow?.host_name}`}
+                                  onClick={() => {
+                                    openHandleSeedPeer(seedPeerSelectedRow);
+                                    setSeedPeerAnchorElement(null);
+                                  }}
+                                >
+                                  <ListItemIcon>
+                                    <DeleteIcon fontSize="small" sx={{ color: 'var(--palette-delete-button-color)' }} />
+                                  </ListItemIcon>
+                                  <Typography
+                                    variant="body2"
+                                    className={styles.menuText}
+                                    sx={{ color: 'var(--palette-delete-button-color)' }}
                                   >
-                                    <ListItemIcon>
-                                      <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
-                                    </ListItemIcon>
-                                    <Typography variant="body1" className={styles.menuText}>
-                                      View
-                                    </Typography>
-                                  </MenuItem>
-                                  <MenuItem
-                                    className={styles.menuItem}
-                                    id={`delete-${seedPeerSelectedRow?.host_name}`}
-                                    onClick={() => {
-                                      openHandleSeedPeer(seedPeerSelectedRow);
-                                      setSeedPeerAnchorElement(null);
-                                    }}
-                                  >
-                                    <ListItemIcon>
-                                      <DeleteIcon
-                                        fontSize="small"
-                                        sx={{ color: 'var(--palette-delete-button-color)' }}
-                                      />
-                                    </ListItemIcon>
-                                    <Typography
-                                      variant="body2"
-                                      className={styles.menuText}
-                                      sx={{ color: 'var(--palette-delete-button-color)' }}
-                                    >
-                                      Delete
-                                    </Typography>
-                                  </MenuItem>
-                                </Box>
+                                    Delete
+                                  </Typography>
+                                </MenuItem>
                               </Menu>
                             </TableCell>
                           </TableRow>

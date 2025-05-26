@@ -1,0 +1,47 @@
+[
+  {
+    "id": 5,
+    "created_at": "2025-05-26T03:19:08.822Z",
+    "updated_at": "2025-05-26T03:19:08.822Z",
+    "is_del": 0,
+    "actor_type": "USER",
+    "actor_name": "jack",
+    "event_type": "API",
+    "operation": "GET",
+    "operated_at": "2025-05-26T03:19:08Z",
+    "state": "SUCCESS",
+    "path": "/api/v1/users",
+    "status_code": 200,
+    "detail": null
+  },
+  {
+    "id": 13,
+    "created_at": "2025-05-19T08:09:16.26Z",
+    "updated_at": "2025-05-19T08:09:16.26Z",
+    "is_del": 0,
+    "actor_type": "USER",
+    "actor_name": "jack",
+    "event_type": "API",
+    "operation": "GET",
+    "operated_at": "2025-05-19T08:09:14Z",
+    "state": "SUCCESS",
+    "path": "/api/v1/users/3",
+    "status_code": 200,
+    "detail": null
+  },
+  {
+    "id": 14,
+    "created_at": "2025-05-19T08:09:30.125Z",
+    "updated_at": "2025-05-19T08:09:30.125Z",
+    "is_del": 0,
+    "actor_type": "USER",
+    "actor_name": "jack",
+    "event_type": "API",
+    "operation": "PATCH",
+    "operated_at": "2025-05-19T08:09:28Z",
+    "state": "FAILURE",
+    "path": "/api/v1/clusters/1",
+    "status_code": 401,
+    "detail": null
+  }
+]

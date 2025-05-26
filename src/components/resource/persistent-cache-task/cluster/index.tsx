@@ -311,7 +311,6 @@ export default function PersistentCacheTask() {
                         </Typography>
                       </Box>
                     </Box>
-
                     <Paper
                       elevation={0}
                       id={`default-cluster-${item.id || 0}`}
@@ -331,7 +330,6 @@ export default function PersistentCacheTask() {
                       }`}</Typography>
                     </Paper>
                   </Box>
-
                   <RouterLink
                     component={Link}
                     to={`/resource/persistent-cache-task/clusters/${item?.id}`}

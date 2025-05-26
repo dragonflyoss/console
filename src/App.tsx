@@ -38,6 +38,13 @@ function App() {
           },
           success: {
             main: mode === 'light' ? '#1f7d53' : '#008170',
+            light: '#1f7d53',
+            dark: '#008170',
+          },
+          secondary: {
+            main: '#1f7d53',
+            light: '#1f7d53',
+            dark: '#008170',
           },
         },
         typography: {

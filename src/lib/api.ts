@@ -1272,3 +1272,47 @@ export async function deletePersistentCacheTask(id: string, params: deletePersis
 
   return await destroy(url);
 }
+
+interface getAuditLogsParams {
+  page?: number;
+  per_page?: number;
+  start_time?: string;
+  actor_name?: string;
+  actor_type?: string;
+  operation?: string;
+  state?: string;
+  path?: string;
+}
+
+export interface auditLogsResponse {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  actor_type: string;
+  actor_name: string;
+  event_type: string;
+  operation: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  operated_at: string;
+  state: string;
+  path: string;
+  status_code: number;
+  detail: null | [];
+}
+
+interface getAuditLogsResponse {
+  data: auditLogsResponse[];
+  total_page?: number;
+}
+
+export async function getAuditLogs(params: getAuditLogsParams): Promise<getAuditLogsResponse> {
+  const url = new URL(`/api/v1/audits?${queryString.stringify(params)}`, API_URL);
+
+  const response = await get(url);
+  const data = await response.json();
+  const linkHeader = response.headers.get('link');
+  const links = parseLinkHeader(linkHeader || null);
+  const totalPage = Number(links?.last?.page);
+  const responses = { data: data, total_page: totalPage };
+  return responses;
+}

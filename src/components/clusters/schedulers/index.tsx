@@ -722,6 +722,7 @@ export default function ShowCluster() {
               aria-label="when device is locked"
               aria-expanded={open ? 'true' : undefined}
               onClick={handleClickListItem}
+              sx={{ borderRadius: '0.3rem' }}
             >
               <ListItemText sx={{ pr: '0.6rem' }}>
                 <Typography variant="body1" fontFamily="mabry-bold">
@@ -741,32 +742,27 @@ export default function ShowCluster() {
               role: 'listbox',
             }}
             sx={{
-              '& .MuiMenu-paper': {
-                boxShadow: 'var(--custom-shadows-dropdown)',
-                borderRadius: '0.6rem',
-              },
               '& .MuiMenu-list': {
                 p: 0,
                 width: '10rem',
               },
             }}
           >
-            <Box className={styles.menu}>
-              <Typography variant="body1" fontFamily="mabry-bold" sx={{ m: '0.4rem 1rem' }}>
-                Filter by status
-              </Typography>
-              <Divider sx={{ mb: '0.2rem' }} />
-              {statusList.map((item, index) => (
-                <MenuItem
-                  className={styles.menuItem}
-                  key={item.name}
-                  value={item.name}
-                  onClick={() => handleMenuItemClick(item)}
-                >
-                  {item.lable}
-                </MenuItem>
-              ))}
-            </Box>
+            <Typography variant="body1" fontFamily="mabry-bold" sx={{ m: '0.4rem 1rem' }}>
+              Filter by status
+            </Typography>
+            <Divider sx={{ mb: '0.2rem' }} />
+            {statusList.map((item, index) => (
+              <MenuItem
+                selected={status === item.name}
+                className={styles.menuItem}
+                key={item.name}
+                value={item.name}
+                onClick={() => handleMenuItemClick(item)}
+              >
+                {item.lable}
+              </MenuItem>
+            ))}
           </Menu>
           <Paper
             elevation={0}
@@ -860,71 +856,65 @@ export default function ShowCluster() {
                           horizontal: 'right',
                         }}
                         sx={{
-                          '& .MuiMenu-paper': {
-                            boxShadow: 'var(--custom-shadows-dropdown)',
-                            borderRadius: '0.6rem',
-                          },
                           '& .MuiMenu-list': {
-                            width: '11rem',
+                            width: '10rem',
                             p: '0',
                           },
                         }}
                       >
-                        <Box className={styles.menu}>
+                        <MenuItem
+                          className={styles.menuItem}
+                          id={`view-${schedulerSelectedRow?.id}`}
+                          onClick={() => {
+                            navigate(`/clusters/${params.id}/schedulers/${schedulerSelectedRow?.id}`);
+                            setSchedulerAnchorElement(null);
+                          }}
+                        >
+                          <ListItemIcon>
+                            <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
+                          </ListItemIcon>
+                          <Typography variant="body2" className={styles.menuText}>
+                            View
+                          </Typography>
+                        </MenuItem>
+                        {schedulerFeatures && schedulerFeatures.length > 0 ? (
                           <MenuItem
                             className={styles.menuItem}
-                            id={`view-${schedulerSelectedRow?.id}`}
+                            id={`edit-${schedulerSelectedRow?.id}`}
                             onClick={() => {
-                              navigate(`/clusters/${params.id}/schedulers/${schedulerSelectedRow?.id}`);
+                              setOpenSchedulerEditFeatures(true);
                               setSchedulerAnchorElement(null);
                             }}
                           >
                             <ListItemIcon>
-                              <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
+                              <ModeEditIcon fontSize="small" className={styles.menuItemIcon} />
                             </ListItemIcon>
                             <Typography variant="body2" className={styles.menuText}>
-                              View
+                              Edit Features
                             </Typography>
                           </MenuItem>
-                          {schedulerFeatures && schedulerFeatures.length > 0 ? (
-                            <MenuItem
-                              className={styles.menuItem}
-                              id={`edit-${schedulerSelectedRow?.id}`}
-                              onClick={() => {
-                                setOpenSchedulerEditFeatures(true);
-                                setSchedulerAnchorElement(null);
-                              }}
-                            >
-                              <ListItemIcon>
-                                <ModeEditIcon fontSize="small" className={styles.menuItemIcon} />
-                              </ListItemIcon>
-                              <Typography variant="body2" className={styles.menuText}>
-                                Edit Features
-                              </Typography>
-                            </MenuItem>
-                          ) : (
-                            ''
-                          )}
-                          <MenuItem
-                            className={styles.menuItem}
-                            id={`delete-${schedulerSelectedRow?.id}`}
-                            onClick={() => {
-                              openHandleScheduler(schedulerSelectedRow);
-                              setSchedulerAnchorElement(null);
-                            }}
+                        ) : (
+                          ''
+                        )}
+                        <MenuItem
+                          className={styles.menuItem}
+                          id={`delete-${schedulerSelectedRow?.id}`}
+                          onClick={() => {
+                            openHandleScheduler(schedulerSelectedRow);
+                            setSchedulerAnchorElement(null);
+                          }}
+                        >
+                          <ListItemIcon>
+                            <DeleteIcon fontSize="small" sx={{ color: 'var(--palette-delete-button-color)' }} />
+                          </ListItemIcon>
+                          <Typography
+                            variant="body2"
+                            className={styles.menuText}
+                            color="var(--palette-delete-button-color)"
                           >
-                            <ListItemIcon>
-                              <DeleteIcon fontSize="small" sx={{ color: 'var(--palette-delete-button-color)' }} />
-                            </ListItemIcon>
-                            <Typography
-                              variant="body2"
-                              className={styles.menuText}
-                              color="var(--palette-delete-button-color)"
-                            >
-                              Delete
-                            </Typography>
-                          </MenuItem>
-                        </Box>
+                            Delete
+                          </Typography>
+                        </MenuItem>
                       </Menu>
                       <Box display="flex">
                         <ID className={styles.idIcon} />
@@ -1222,71 +1212,65 @@ export default function ShowCluster() {
                                 horizontal: 'right',
                               }}
                               sx={{
-                                '& .MuiMenu-paper': {
-                                  boxShadow: 'var(--custom-shadows-dropdown)',
-                                  borderRadius: '0.6rem',
-                                },
                                 '& .MuiMenu-list': {
-                                  width: '11rem',
+                                  width: '10rem',
                                   p: '0',
                                 },
                               }}
                             >
-                              <Box className={styles.menu}>
+                              <MenuItem
+                                className={styles.menuItem}
+                                id={`view-${schedulerSelectedRow?.host_name}`}
+                                onClick={() => {
+                                  navigate(`/clusters/${params.id}/schedulers/${schedulerSelectedRow?.id}`);
+                                  setSchedulerAnchorElement(null);
+                                }}
+                              >
+                                <ListItemIcon>
+                                  <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
+                                </ListItemIcon>
+                                <Typography variant="body2" className={styles.menuText}>
+                                  View
+                                </Typography>
+                              </MenuItem>
+                              {schedulerFeatures && schedulerFeatures.length > 0 ? (
                                 <MenuItem
                                   className={styles.menuItem}
-                                  id={`view-${schedulerSelectedRow?.host_name}`}
+                                  id={`edit-${schedulerSelectedRow?.host_name}`}
                                   onClick={() => {
-                                    navigate(`/clusters/${params.id}/schedulers/${schedulerSelectedRow?.id}`);
+                                    setOpenSchedulerEditFeatures(true);
                                     setSchedulerAnchorElement(null);
                                   }}
                                 >
                                   <ListItemIcon>
-                                    <RemoveRedEyeIcon fontSize="small" className={styles.menuItemIcon} />
+                                    <ModeEditIcon fontSize="small" className={styles.menuItemIcon} />
                                   </ListItemIcon>
                                   <Typography variant="body2" className={styles.menuText}>
-                                    View
+                                    Edit Features
                                   </Typography>
                                 </MenuItem>
-                                {schedulerFeatures && schedulerFeatures.length > 0 ? (
-                                  <MenuItem
-                                    className={styles.menuItem}
-                                    id={`edit-${schedulerSelectedRow?.host_name}`}
-                                    onClick={() => {
-                                      setOpenSchedulerEditFeatures(true);
-                                      setSchedulerAnchorElement(null);
-                                    }}
-                                  >
-                                    <ListItemIcon>
-                                      <ModeEditIcon fontSize="small" className={styles.menuItemIcon} />
-                                    </ListItemIcon>
-                                    <Typography variant="body2" className={styles.menuText}>
-                                      Edit Features
-                                    </Typography>
-                                  </MenuItem>
-                                ) : (
-                                  ''
-                                )}
-                                <MenuItem
-                                  className={styles.menuItem}
-                                  id={`delete-${schedulerSelectedRow?.host_name}`}
-                                  onClick={() => {
-                                    openHandleScheduler(schedulerSelectedRow);
-                                    setSchedulerAnchorElement(null);
-                                  }}
+                              ) : (
+                                ''
+                              )}
+                              <MenuItem
+                                className={styles.menuItem}
+                                id={`delete-${schedulerSelectedRow?.host_name}`}
+                                onClick={() => {
+                                  openHandleScheduler(schedulerSelectedRow);
+                                  setSchedulerAnchorElement(null);
+                                }}
+                              >
+                                <ListItemIcon>
+                                  <DeleteIcon fontSize="small" sx={{ color: 'var(--palette-delete-button-color)' }} />
+                                </ListItemIcon>
+                                <Typography
+                                  variant="body2"
+                                  className={styles.menuText}
+                                  color="var(--palette-delete-button-color)"
                                 >
-                                  <ListItemIcon>
-                                    <DeleteIcon fontSize="small" sx={{ color: 'var(--palette-delete-button-color)' }} />
-                                  </ListItemIcon>
-                                  <Typography
-                                    variant="body2"
-                                    className={styles.menuText}
-                                    color="var(--palette-delete-button-color)"
-                                  >
-                                    Delete
-                                  </Typography>
-                                </MenuItem>
-                              </Box>
+                                  Delete
+                                </Typography>
+                              </MenuItem>
                             </Menu>
                           </TableCell>
                         </TableRow>

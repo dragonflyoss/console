@@ -29,6 +29,7 @@ import ShowTask from '../components/resource/task/executions/show';
 import PersistentCacheTasksCluster from '../components/resource/persistent-cache-task/cluster';
 import PersistentCacheTasks from '../components/resource/persistent-cache-task';
 import PersistentCacheTask from '../components/resource/persistent-cache-task/show';
+import Audit from '../components/audit';
 import { useState, useEffect } from 'react';
 import { getJwtPayload } from '../lib/utils';
 import { getUserRoles } from '../lib/api';
@@ -43,8 +44,16 @@ function Main() {
     (async function () {
       try {
         if (payload?.id) {
-          const role = await getUserRoles(payload?.id);
-          setIsRoot(role.includes(ROLE_ROOT));
+          const role = localStorage.getItem('role');
+
+          if (role) {
+            setIsRoot(role === 'root');
+          } else {
+            const role = await getUserRoles(payload?.id);
+            setIsRoot(role.includes(ROLE_ROOT));
+          }
+        } else {
+          localStorage.removeItem('role');
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -87,6 +96,7 @@ function Main() {
         <Route path="/resource/persistent-cache-task" element={<PersistentCacheTasksCluster />} />
         <Route path="/resource/persistent-cache-task/clusters/:id" element={<PersistentCacheTasks />} />
         <Route path="/resource/persistent-cache-task/clusters/:id/:id" element={<PersistentCacheTask />} />
+        <Route path="/audit" element={<Audit />} />
         {isRoot && <Route path="/users" element={<Users />} />}
         <Route path="/users/new" element={<NewUser />} />
       </Route>

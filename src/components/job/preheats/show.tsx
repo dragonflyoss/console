@@ -68,7 +68,7 @@ export default function ShowPreheat() {
 
           setPreheat(job);
           setIsLoading(false);
-          if (job.result.state !== 'SUCCESS' && job.result.state !== 'FAILURE') {
+          if (job?.result?.state !== 'SUCCESS' && job?.result?.state !== 'FAILURE') {
             setShouldPoll(true);
           }
         }
@@ -219,19 +219,19 @@ export default function ShowPreheat() {
                       height: '2rem',
                       borderRadius: '0.3rem',
                       p: '0.4rem 0.6rem',
-                      pr: preheat.result.state === 'FAILURE' ? '0' : '',
+                      pr: preheat?.result?.state === 'FAILURE' ? '0' : '',
                       backgroundColor:
-                        preheat.result.state === 'SUCCESS'
+                        preheat?.result?.state === 'SUCCESS'
                           ? '#228B22'
-                          : preheat.result.state === 'FAILURE'
+                          : preheat?.result?.state === 'FAILURE'
                           ? '#D42536'
                           : '#DBAB0A',
                     }}
                     id="status"
                   >
-                    {preheat.result.state === 'SUCCESS' ? (
+                    {preheat?.result?.state === 'SUCCESS' ? (
                       <></>
-                    ) : preheat.result.state === 'FAILURE' ? (
+                    ) : preheat?.result?.state === 'FAILURE' ? (
                       <></>
                     ) : (
                       <Pending id="pending-icon" className={styles.pendingIcon} />
@@ -243,9 +243,9 @@ export default function ShowPreheat() {
                         color: '#FFF',
                       }}
                     >
-                      {preheat.result.state || ''}
+                      {preheat?.result?.state || ''}
                     </Typography>
-                    {preheat?.result.state === 'FAILURE' ? (
+                    {preheat?.result?.state === 'FAILURE' ? (
                       <>
                         <Box
                           sx={{ ml: '0.4rem', mr: '0.2rem', backgroundColor: '#fff', height: '1rem', width: '0.08rem' }}

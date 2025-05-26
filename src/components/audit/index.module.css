@@ -1,0 +1,50 @@
+.search {
+  width: 20rem;
+  margin-bottom: 2rem !important;
+}
+
+.searchIconContainer {
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterWrapper {
+  margin: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.statusFilterWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.statusFilter {
+  width: 8rem;
+  margin-left: 1rem !important;
+}
+
+.userFilter {
+  width: 14rem;
+}
+
+.tableRow {
+  border-bottom: dashed var(--palette-palette-divider);
+}
+
+.tableHeader {
+  border-color: var(--palette-palette-divider) !important;
+}
+
+.tableHeaderText {
+  color: var(--palette-table-title-text-color);
+  font-family: 'mabry-bold' !important;
+}
+
+.tableRow:last-child {
+  border-bottom: none;
+}

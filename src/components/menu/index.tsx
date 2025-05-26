@@ -134,7 +134,6 @@ export default function Layout(props: any) {
 
         if (payload?.id) {
           const user = await getUser(payload?.id);
-
           const role = localStorage.getItem('role');
 
           if (role) {
@@ -143,6 +142,7 @@ export default function Layout(props: any) {
             const userRoles = await getUserRoles(payload?.id);
             const role = userRoles.includes(ROLE_ROOT) ? ROLE_ROOT : ROLE_GUEST;
 
+            setRole(role);
             localStorage.setItem('role', role);
           }
 

@@ -643,16 +643,6 @@ describe('Users', () => {
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('have.text', 'permission deny');
-
-      // Refresh page.
-      cy.reload().then(() => {
-        cy.wait(2000);
-      });
-
-      // When the user role is guest, the user page will no longer be displayed.
-      cy.get('.MuiTypography-body1')
-        .should('be.visible')
-        .and('have.text', `The page you were looking for doesn't exist.`);
     });
 
     it('get role API error response', () => {

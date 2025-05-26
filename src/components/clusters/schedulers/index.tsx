@@ -1133,6 +1133,7 @@ export default function ShowCluster() {
                               sx={{ color: 'var(--palette-description-color)' }}
                             >
                               {item?.host_name}
+                              dragonfly-scheduler-1.scheduler.cluster-a.svc.cluster.local
                             </RouterLink>
                           </TableCell>
                           <TableCell align="center" id={`ip-${item?.id}`}>

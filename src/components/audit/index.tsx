@@ -421,7 +421,7 @@ export default function AuditLogs() {
                           backgroundColor: 'var(--palette-background-inactive)',
                           p: '0.4rem 0.4rem',
                           borderRadius: '4px',
-                          display: 'inline',
+                          display: 'inline-flex',
                           color: 'var(--palette-table-title-text-color)',
                         }}
                       >

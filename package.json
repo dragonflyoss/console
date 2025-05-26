@@ -34,7 +34,7 @@
     "@types/jsonwebtoken": "^9.0.9",
     "@types/lodash.upperfirst": "^4.3.7",
     "@types/node": "^22.1.0",
-    "@types/react": "^18.2.18",
+    "@types/react": "^19.1.5",
     "@types/react-dom": "^19.0.1",
     "@types/react-swipeable-views": "^0.13.2",
     "@types/react-swipeable-views-utils": "^0.13.4",

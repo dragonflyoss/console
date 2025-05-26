@@ -133,6 +133,7 @@
 
 .menuItem {
   border-radius: var(--menu-border-radius) !important;
+  margin: 0.3rem !important;
 }
 
 .menuItemIcon {

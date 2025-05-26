@@ -65,7 +65,6 @@ export default function PersistentCacheTask() {
     (async function () {
       try {
         if (params?.id) {
-          localStorage.setItem('cluster-id', String(params?.id));
           setIsLoading(true);
           const persistentCacheTasks = await getPersistentCacheTasks({
             page: 1,

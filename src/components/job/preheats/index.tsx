@@ -213,7 +213,14 @@ export default function Preheats() {
               </Typography>
               <Divider />
               {statusList.map((item) => (
-                <MenuItem key={item.name} value={item.name}>
+                <MenuItem
+                  key={item.name}
+                  value={item.name}
+                  sx={{
+                    m: '0.3rem',
+                    borderRadius: '4px',
+                  }}
+                >
                   {item.lable}
                 </MenuItem>
               ))}

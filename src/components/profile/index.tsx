@@ -1,7 +1,6 @@
 import {
   Alert,
   Box,
-  Breadcrumbs,
   Button,
   Chip,
   Divider,
@@ -18,7 +17,6 @@ import {
   Typography,
 } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
 import { useState, useEffect, useContext } from 'react';
 import { updateUser, getUser, updatePassword, signOut, getUserResponse } from '../../lib/api';
 import EmailIcon from '@mui/icons-material/Email';
@@ -43,7 +41,6 @@ import { ReactComponent as Phone } from '../../assets/images/profile/phone.svg';
 import { ReactComponent as CreatedAt } from '../../assets/images/profile/created-at.svg';
 import { ReactComponent as Edit } from '../../assets/images/user/edit.svg';
 import { ReactComponent as UserID } from '../../assets/images/user/id.svg';
-import { ReactComponent as DetailRole } from '../../assets/images/user/detail-role.svg';
 import TabPanel from '@mui/lab/TabPanel';
 import { TabContext } from '@mui/lab';
 import _ from 'lodash';
@@ -57,7 +54,7 @@ const AntTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} /
   [theme.breakpoints.up('sm')]: {
     minWidth: 0,
   },
-  minHeight: '3rem',
+  minHeight: '3.2rem',
   fontWeight: theme.typography.fontWeightRegular,
   color: 'var(--palette-grey-tab)',
   padding: '0',

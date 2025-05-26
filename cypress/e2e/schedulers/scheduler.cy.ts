@@ -20,18 +20,6 @@ describe('Scheduler', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/seed-peers?page=1&per_page=10000000&seed_peer_cluster_id=1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: [],
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
         url: '/api/v1/schedulers?page=1&per_page=10000000&scheduler_cluster_id=1',
       },
       (req) => {

@@ -311,7 +311,6 @@ export default function PersistentCacheTask() {
                         </Typography>
                       </Box>
                     </Box>
-
                     <Paper
                       elevation={0}
                       id={`default-cluster-${item.id || 0}`}

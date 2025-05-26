@@ -30,6 +30,7 @@ import { ReactComponent as Cluster } from '../../assets/images/menu/cluster.svg'
 import { ReactComponent as Developer } from '../../assets/images/menu/developer.svg';
 import { ReactComponent as Job } from '../../assets/images/menu/job.svg';
 import { ReactComponent as User } from '../../assets/images/menu/user.svg';
+import { ReactComponent as Logs } from '../../assets/images/menu/audit-log.svg';
 import { ReactComponent as Logo } from '../../assets/images/menu/logo.svg';
 import { ReactComponent as Expand } from '../../assets/images/menu/expand.svg';
 import { ReactComponent as Closure } from '../../assets/images/menu/closure.svg';
@@ -132,9 +133,20 @@ export default function Layout(props: any) {
         setPageTitle(location.pathname);
 
         if (payload?.id) {
-          const [user, userRoles] = await Promise.all([getUser(payload?.id), getUserRoles(payload?.id)]);
+          const user = await getUser(payload?.id);
+          const role = localStorage.getItem('role');
+
+          if (role) {
+            setRole(role);
+          } else {
+            const userRoles = await getUserRoles(payload?.id);
+            const role = userRoles.includes(ROLE_ROOT) ? ROLE_ROOT : ROLE_GUEST;
+
+            setRole(role);
+            localStorage.setItem('role', role);
+          }
+
           setUser(user);
-          setRole(userRoles.includes(ROLE_ROOT) ? ROLE_ROOT : ROLE_GUEST);
 
           clearInterval(interval);
           setProgress(30);
@@ -235,6 +247,12 @@ export default function Layout(props: any) {
           text: 'Persistent Cache Task',
         },
       ],
+    },
+    {
+      label: 'audit',
+      href: '/audit',
+      text: 'Audit',
+      icon: <Logs className={styles.menuIcon} />,
     },
   ];
 

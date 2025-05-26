@@ -37,7 +37,7 @@ function App() {
             primary: mode === 'light' ? '#1C293A' : 'rgba(255, 255, 255, 0.8)',
           },
           success: {
-            main: mode === 'light' ? '#1f7d53' : '#008170',
+            main: '#1f7d53',
             light: '#1f7d53',
             dark: '#008170',
           },

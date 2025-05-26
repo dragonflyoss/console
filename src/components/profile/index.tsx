@@ -497,10 +497,6 @@ export default function Profile() {
           await updateUser(String(users.id), { ...formData });
 
           const user = await getUser(String(users.id));
-          const jsonString = JSON.stringify(user);
-          const base64Encoded = btoa(jsonString);
-
-          localStorage.setItem('user', base64Encoded);
 
           handleUserUpdate(user);
           setPersonalLoadingButton(false);

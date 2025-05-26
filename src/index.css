@@ -84,7 +84,6 @@ body {
   --palette-background-color-put: rgba(10 81 189 / 16%);
   --palette-color-deltet: #780f0f;
   --palette-background-color-deltet: rgba(120 15 15 / 0.16);
-  --palette-table-header-color: #28323d;
   --palette-main-box-shadow: 0 0.125rem 0.2rem -0.0625rem #32325d40, 0 0.0625rem 0.245rem -1.0625rem #0000004d;
   --palette-card-box-shadow: 0 0 2px 0 rgba(145 158 171 / 0.2), 0 12px 24px -4px rgba(145 158 171 / 0.12);
   --palette-menu-shadow: 0 0.02rem 0.08rem 0.004rem #32325d6b, 0 0.0625rem 0.0145rem -0.0625rem #0000004d;
@@ -93,15 +92,6 @@ body {
 }
 
 [data-theme='dark'] body {
-  --palette-color-get: #228b22;
-  --palette-color-post: #dbab0a;
-  --palette-background-color-post: rgba(255 171 0 / 0.16);
-  --palette-color-patch: #9852ea;
-  --palette-background-color-patch: rgba(98 52 221 / 0.16);
-  --palette-color-put: #2c72dc;
-  --palette-background-color-put: rgba(22 84 177 / 16%);
-  --palette-color-deltet: #ad0606;
-  --palette-background-color-deltet: rgb(227 61 61 / 16%);
   color: rgba(255, 255, 255, 0.8) !important;
   background-color: #0d121e !important;
   --palette-main-background-paper: #0d121e;
@@ -154,7 +144,15 @@ body {
   --palette-dark-100Channel: #262c3b;
   --palette-green-500Channel: rgb(12, 19, 13);
   --palette-color-neutral-200: #1f2430;
-  --palette-table-header-color: #f4f6f8;
+  --palette-color-get: #228b22;
+  --palette-color-post: #dbab0a;
+  --palette-background-color-post: rgba(255 171 0 / 0.16);
+  --palette-color-patch: #9852ea;
+  --palette-background-color-patch: rgba(98 52 221 / 0.16);
+  --palette-color-put: #2c72dc;
+  --palette-background-color-put: rgba(22 84 177 / 16%);
+  --palette-color-deltet: #ad0606;
+  --palette-background-color-deltet: rgb(227 61 61 / 16%);
   --palette-main-box-shadow: rgb(255 255 255 / 23%) 0px 0px 0px 0px, rgb(202 204 206 / 32%) 0px 1px 1px -3px;
   --custom-shadows-dropdown: 0 0 1px 0 rgb(93 94 95 / 20%), 1px 2px 0px -2px rgb(103 108 112 / 24%);
   --custom-sidebar-shadows-dropdown: 0 0 2px 0 rgba(0 0 0 / 0.34), -20px 20px 40px -4px rgba(0 0 0 / 0.24);

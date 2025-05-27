@@ -69,6 +69,9 @@ describe('Preheats', () => {
           interceptCount++;
         },
       ).as('preheats');
+
+      cy.wait(100);
+
       cy.get('[data-testid="isloading"]').should('be.exist');
 
       cy.wait(60000);

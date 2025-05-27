@@ -423,5 +423,25 @@ describe('Preheats', () => {
 
       cy.get('#FAILURE-10').should('exist');
     });
+
+    it('should handle API error response', () => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/6',
+        },
+        (req) => {
+          req.reply({
+            forceNetworkError: true,
+          });
+        },
+      );
+
+      // should search for preheat ID.
+      cy.get('#search').type('6');
+
+      // Show error message.
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+    });
   });
 });

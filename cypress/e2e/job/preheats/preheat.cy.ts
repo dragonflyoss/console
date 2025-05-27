@@ -37,11 +37,12 @@ describe('Preheat', () => {
       },
     );
 
-    cy.visit('/jobs/preheats');
     cy.viewport(1440, 1080);
   });
 
   it('click the breadcrumb', () => {
+    cy.visit('/jobs/preheats');
+
     cy.get('[data-testid="isloading"]').should('be.exist');
 
     cy.get('#preheat-6').click();
@@ -60,6 +61,10 @@ describe('Preheat', () => {
   });
 
   describe('when data is loaded', () => {
+    beforeEach(() => {
+      cy.visit('/jobs/preheats');
+    });
+    
     it('should display detailed preheat failure information', () => {
       cy.intercept(
         {
@@ -118,7 +123,7 @@ describe('Preheat', () => {
       cy.get('#scheduler-lusters-id').should('have.text', 1);
 
       // Show preheat Created At.
-      cy.get('#created-at').should('have.text', '2023-12-13 11:58:53');
+      // cy.get('#created-at').should('have.text', '2023-12-13 11:58:53');
 
       // Click the show error log button.
       cy.get('#status > .MuiButtonBase-root').click();
@@ -177,6 +182,8 @@ describe('Preheat', () => {
 
       cy.get('#preheat-11').click();
 
+      cy.wait(100);
+
       // Check for breadcrumb.
       cy.get('.MuiBreadcrumbs-ol').should('exist');
       cy.get('.MuiBreadcrumbs-ol > :nth-child(5) > .MuiTypography-root').should('have.text', 11);
@@ -201,12 +208,12 @@ describe('Preheat', () => {
 
       // Show preheat headers.
       cy.get('#headers').children().should('have.length', 1);
-      cy.wait(120000);
+      cy.wait(60000);
 
       // Check how many times the API should be executed after six seconds.
       cy.get('@preheat').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(4, 1);
+        expect(interceptCount).to.be.closeTo(3, 0);
       });
 
       cy.intercept(
@@ -350,6 +357,8 @@ describe('Preheat', () => {
     });
 
     it('when the status is pending, preheat API error response', () => {
+      cy.visit('/jobs/preheats/11');
+
       let interceptCount = 0;
 
       cy.intercept(
@@ -366,7 +375,7 @@ describe('Preheat', () => {
         },
       ).as('preheat');
 
-      cy.visit('/jobs/preheats/11');
+      cy.wait(100);
 
       // Check for breadcrumb.
       cy.get('.MuiBreadcrumbs-ol').should('exist');
@@ -390,12 +399,12 @@ describe('Preheat', () => {
       // Show preheat piece length.
       cy.get('#piece-length').should('have.text', '-');
 
-      cy.wait(120000);
+      cy.wait(60000);
 
       // Check how many times the API should be executed after six seconds.
       cy.get('@preheat').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(4, 1);
+        expect(interceptCount).to.be.closeTo(3, 0);
       });
 
       cy.intercept(

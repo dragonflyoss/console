@@ -498,7 +498,7 @@ export default function NewPreheat() {
         sx={{ mt: '1rem' }}
       >
         <Typography color="text.primary">Job</Typography>
-        <RouterLink component={Link} underline="hover" color="text.primary" to={`/developer/personal-access-tokens`}>
+        <RouterLink component={Link} underline="hover" color="text.primary" to={`/jobs/preheats`}>
           Preheat
         </RouterLink>
         <Typography variant="body2" color="inherit">

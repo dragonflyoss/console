@@ -793,7 +793,7 @@ export interface JobsResponse {
     configs: null | any;
   };
   seed_peer_clusters: any[];
-  scheduler_clusters: scheduler_clusters;
+  scheduler_clusters: scheduler_clusters[];
 }
 
 interface getJobsResponse {
@@ -813,56 +813,7 @@ export async function getJobs(params: getJobsParams): Promise<getJobsResponse> {
   return responses;
 }
 
-export interface getJobResponse {
-  id: number;
-  created_at: string;
-  updated_at: string;
-  is_del: number;
-  task_id: string;
-  bio: string;
-  type: string;
-  state: string;
-  args: {
-    concurrent_count: number;
-    filtered_query_params: string;
-    headers: { [key: string]: string } | null;
-    password: string;
-    platform: string;
-    scope: string;
-    tag: string;
-    timeout: number;
-    type: string;
-    url: string;
-    piece_length: number;
-    username: string;
-  };
-  result: {
-    created_at: string;
-    group_uuid: string;
-    job_states: Array<JobStates>;
-    state: string;
-    updated_at: string;
-  };
-  user_id: number;
-  user: {
-    id: number;
-    created_at: string;
-    updated_at: string;
-    is_del: number;
-    email: string;
-    name: string;
-    avatar: string;
-    phone: string;
-    state: string;
-    location: string;
-    bio: string;
-    configs: null;
-  };
-  seed_peer_clusters: [];
-  scheduler_clusters: Array<scheduler_clusters>;
-}
-
-export async function getJob(id: string): Promise<getJobResponse> {
+export async function getJob(id: string): Promise<JobsResponse> {
   const url = new URL(`/api/v1/jobs/${id}`, API_URL);
   const response = await get(url);
   return await response.json();

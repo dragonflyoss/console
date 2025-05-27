@@ -147,7 +147,7 @@ export default function Preheats() {
         clearInterval(pollingInterval);
       };
     }
-  }, [status, shouldPoll, preheatID]);
+  }, [status, shouldPoll, preheatID, page]);
 
   const statusList = [
     { lable: 'Pending', name: 'PENDING' },

@@ -3,6 +3,9 @@ import paginationPreheats from '../../../fixtures/job/preheats/pagination-prehea
 import successPreheats from '../../../fixtures/job/preheats/success-preheats.json';
 import failurePreheats from '../../../fixtures/job/preheats/failure-preheats.json';
 import pendingPreheats from '../../../fixtures/job/preheats/pending-preheats.json';
+import failurePreheat from '../../../fixtures/job/preheats/failure-preheat.json';
+import successPreheat from '../../../fixtures/job/preheats/success-preheat.json';
+import pendingPreheat from '../../../fixtures/job/preheats/pending-preheat.json';
 
 declare const expect: Chai.ExpectStatic;
 
@@ -25,6 +28,7 @@ describe('Preheats', () => {
         });
       },
     );
+
     cy.intercept(
       {
         method: 'GET',
@@ -65,15 +69,17 @@ describe('Preheats', () => {
           interceptCount++;
         },
       ).as('preheats');
+
       cy.get('[data-testid="isloading"]').should('be.exist');
-      cy.wait(120000);
+
+      cy.wait(60000);
 
       // Executed every 3 seconds, it should be executed 2 times after 6 seconds.
       cy.get('@preheats').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
         expect(interceptCount).to.be.closeTo(2, 1);
       });
-      
+
       cy.get('[data-testid="isloading"]').should('not.exist');
       cy.get('.MuiList-root > :nth-child(3) > .MuiButtonBase-root').click();
 
@@ -140,6 +146,7 @@ describe('Preheats', () => {
 
     it('should display preheat pending list', () => {
       let interceptCount = 0;
+
       cy.intercept(
         {
           method: 'GET',
@@ -156,16 +163,22 @@ describe('Preheats', () => {
             interceptCount++;
         },
       ).as('preheats');
+
       cy.get('.MuiInputBase-root > #states-select').click();
+
       cy.get('[data-value="PENDING"]').click();
+
       // Check how many preheat tasks are in pending failure.
       cy.get('#preheats-list').children().should('have.length', 1);
-      cy.wait(120000);
+
+      cy.wait(60000);
+
       // The API should poll.
       cy.get('@preheats').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(3, 1);
+        expect(interceptCount).to.be.closeTo(2, 0);
       });
+
       cy.intercept(
         {
           method: 'GET',
@@ -178,7 +191,9 @@ describe('Preheats', () => {
           });
         },
       );
+
       cy.wait(60000);
+
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
     });
@@ -304,6 +319,130 @@ describe('Preheats', () => {
       cy.get('#preheat-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '2');
 
       cy.get('#list-1').should('exist').find('#SUCCESS-1').should('exist');
+    });
+  });
+
+  describe('search', () => {
+    it('should search for successful preheat', () => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/8',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: successPreheat,
+          });
+        },
+      );
+
+      // Check the list.
+      cy.get('#preheats-list').children().should('have.length', 10);
+
+      // should search for preheat ID.
+      cy.get('#search').type('8');
+
+      // Check the number of preheat lists is 1.
+      cy.get('#preheats-list').children().should('have.length', 1);
+
+      cy.get('#id-8').should('have.text', 8);
+
+      cy.get('#search').clear();
+      cy.get('#preheats-list').children().should('have.length', 10);
+    });
+
+    it('should search for failure preheat', () => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/10',
+        },
+        (req) => {
+          req.reply((res) => {
+            res.setDelay(1000);
+            res.send({
+              statusCode: 200,
+              body: failurePreheat,
+            });
+          });
+        },
+      );
+
+      // Check the list.
+      cy.get('#preheats-list').children().should('have.length', 10);
+
+      // should search for preheat ID.
+      cy.get('#search').type('10');
+
+      // Check the number of preheat lists is 1.
+      cy.get('#preheats-list').children().should('have.length', 1);
+
+      cy.get('#id-10').should('have.text', 10);
+    });
+
+    it('should search for pending preheat', () => {
+      let interceptCount = 0;
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/11',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: pendingPreheat,
+          });
+          interceptCount++;
+        },
+      ).as('preheat');
+
+      // should search for preheat ID.
+      cy.get('#search').type('11');
+
+      cy.wait(60000);
+
+      // Check how many times the API should be executed after six seconds.
+      cy.get('@preheat').then(() => {
+        expect(interceptCount).to.be.greaterThan(0);
+        expect(interceptCount).to.be.closeTo(1, 0);
+      });
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/11',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: failurePreheat,
+          });
+        },
+      );
+
+      cy.get('#FAILURE-10').should('exist');
+    });
+
+    it('should handle API error response', () => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/6',
+        },
+        (req) => {
+          req.reply({
+            forceNetworkError: true,
+          });
+        },
+      );
+
+      // should search for preheat ID.
+      cy.get('#search').type('6');
+
+      // Show error message.
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
     });
   });
 });

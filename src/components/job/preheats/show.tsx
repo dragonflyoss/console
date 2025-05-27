@@ -19,7 +19,7 @@ import {
   TooltipProps,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { getJob, getJobResponse } from '../../../lib/api';
+import { getJob, JobsResponse } from '../../../lib/api';
 import { useParams, Link } from 'react-router-dom';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { getDatetime } from '../../../lib/utils';
@@ -55,7 +55,7 @@ export default function ShowPreheat() {
   const [isLoading, setIsLoading] = useState(false);
   const [shouldPoll, setShouldPoll] = useState(false);
   const [errorLog, setErrorLog] = useState(false);
-  const [preheat, setPreheat] = useState<getJobResponse>();
+  const [preheat, setPreheat] = useState<JobsResponse>();
 
   const params = useParams();
 

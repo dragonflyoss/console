@@ -17,12 +17,15 @@ import {
   Skeleton,
   Breadcrumbs,
   Tooltip,
+  TextField,
+  debounce,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { useNavigate, Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { getJobs, JobsResponse } from '../../../lib/api';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { getJob, getJobs, JobsResponse } from '../../../lib/api';
 import { DEFAULT_PAGE_SIZE } from '../../../lib/constants';
 import { getDatetime, useQuery } from '../../../lib/utils';
 import styles from './index.module.css';
@@ -32,17 +35,20 @@ import { ReactComponent as Success } from '../../../assets/images/job/preheat/su
 import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
 import { ReactComponent as Pending } from '../../../assets/images/job/preheat/pending.svg';
 import { ReactComponent as Detail } from '../../../assets/images/job/preheat/detail.svg';
+import SearchCircularProgress from '../../circular-progress';
 
 export default function Preheats() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [preheatPage, setPreheatPage] = useState(1);
   const [preheatTotalPages, setPreheatTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<string>('ALL');
   const [shouldPoll, setShouldPoll] = useState(false);
   const [openStatusSelect, setOpenStatusSelect] = useState(false);
   const [allPreheats, setAllPreheats] = useState<JobsResponse[]>([]);
+  const [search, setSearch] = useState<string>('');
+  const [preheatID, setPreheatID] = useState('');
+  const [searchLodaing, setSearchLodaing] = useState(false);
 
   const navigate = useNavigate();
   const query = useQuery();
@@ -52,24 +58,40 @@ export default function Preheats() {
     (async function () {
       try {
         setIsLoading(true);
-        setPreheatPage(page);
 
-        const jobs = await getJobs({
-          page: preheatPage,
-          per_page: DEFAULT_PAGE_SIZE,
-          state: status === 'ALL' ? undefined : status,
-        });
+        if (preheatID === '') {
+          const jobs = await getJobs({
+            page: page,
+            per_page: DEFAULT_PAGE_SIZE,
+            state: status === 'ALL' ? undefined : status,
+          });
 
-        setAllPreheats(jobs.data);
-        setPreheatTotalPages(jobs.total_page || 1);
+          setAllPreheats(jobs.data);
+          setPreheatTotalPages(jobs.total_page || 1);
 
-        const states = jobs.data.filter(
-          (obj) => obj?.result?.state !== 'SUCCESS' && obj?.result?.state !== 'FAILURE',
-        ).length;
+          const states = jobs.data.filter(
+            (obj) => obj?.result?.state !== 'SUCCESS' && obj?.result?.state !== 'FAILURE',
+          ).length;
 
-        states === 0 ? setShouldPoll(false) : setShouldPoll(true);
+          states === 0 ? setShouldPoll(false) : setShouldPoll(true);
 
-        setIsLoading(false);
+          setIsLoading(false);
+        } else {
+          const job = await getJob(preheatID);
+
+          if (job.type === 'preheat') {
+            setAllPreheats([job]);
+            setPreheatTotalPages(1);
+
+            if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {
+              setShouldPoll(false);
+            }
+          } else {
+            setAllPreheats([]);
+          }
+
+          setIsLoading(false);
+        }
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(true);
@@ -78,27 +100,37 @@ export default function Preheats() {
         }
       }
     })();
-  }, [status, preheatPage, page]);
+  }, [status, page, preheatID]);
 
   useEffect(() => {
     if (shouldPoll) {
       const pollingInterval = setInterval(() => {
         const pollPreheat = async () => {
           try {
-            const jobs = await getJobs({
-              page: preheatPage,
-              per_page: DEFAULT_PAGE_SIZE,
-              state: status === 'ALL' ? undefined : status,
-            });
+            if (preheatID === '') {
+              const jobs = await getJobs({
+                page: page,
+                per_page: DEFAULT_PAGE_SIZE,
+                state: status === 'ALL' ? undefined : status,
+              });
 
-            setAllPreheats(jobs.data);
-            setPreheatTotalPages(jobs.total_page || 1);
+              setAllPreheats(jobs.data);
+              setPreheatTotalPages(jobs.total_page || 1);
 
-            const states = jobs.data.filter(
-              (obj) => obj?.result?.state !== 'SUCCESS' && obj?.result?.state !== 'FAILURE',
-            ).length;
+              const states = jobs.data.filter(
+                (obj) => obj?.result?.state !== 'SUCCESS' && obj?.result?.state !== 'FAILURE',
+              ).length;
 
-            states === 0 ? setShouldPoll(false) : setShouldPoll(true);
+              states === 0 ? setShouldPoll(false) : setShouldPoll(true);
+            } else {
+              const job = await getJob(preheatID);
+              setAllPreheats([job]);
+              setPreheatTotalPages(1);
+
+              if ((job?.result?.state && job?.result?.state === 'SUCCESS') || job?.result?.state === 'FAILURE') {
+                setShouldPoll(false);
+              }
+            }
           } catch (error) {
             if (error instanceof Error) {
               setErrorMessage(true);
@@ -115,7 +147,7 @@ export default function Preheats() {
         clearInterval(pollingInterval);
       };
     }
-  }, [status, shouldPoll, preheatPage]);
+  }, [status, shouldPoll, preheatID, page]);
 
   const statusList = [
     { lable: 'Pending', name: 'PENDING' },
@@ -136,6 +168,23 @@ export default function Preheats() {
 
     setErrorMessage(false);
   };
+
+  const debounced = useMemo(
+    () =>
+      debounce(async (currentSearch) => {
+        setPreheatID(currentSearch);
+        setSearchLodaing(false);
+      }, 500),
+    [],
+  );
+
+  const handleSearch = useCallback(
+    (newSearch: any) => {
+      debounced(newSearch);
+      setSearchLodaing(true);
+    },
+    [debounced],
+  );
 
   return (
     <Box>
@@ -180,6 +229,36 @@ export default function Preheats() {
         <Typography color="text.primary">Job</Typography>
         <Typography color="inherit">Preheat</Typography>
       </Breadcrumbs>
+      <FormControl className={styles.search} size="small">
+        <TextField
+          sx={{
+            '& .MuiInputBase-input': {
+              padding: '0.7rem 0.6rem',
+            },
+          }}
+          value={search}
+          label="Search"
+          id="search"
+          name="search"
+          placeholder="Search by ID"
+          onChange={(e) => {
+            const value = e.target.value;
+            setSearch(value);
+            handleSearch(value);
+          }}
+          InputProps={{
+            startAdornment: searchLodaing ? (
+              <Box className={styles.searchIconContainer}>
+                <SearchCircularProgress />
+              </Box>
+            ) : (
+              <Box className={styles.searchIconContainer}>
+                <SearchIcon sx={{ color: '#919EAB' }} />
+              </Box>
+            ),
+          }}
+        />
+      </FormControl>
       <Card>
         <Box
           sx={{
@@ -368,9 +447,8 @@ export default function Preheats() {
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
           <Pagination
             count={preheatTotalPages}
-            page={preheatPage}
+            page={page}
             onChange={(_event: any, newPage: number) => {
-              setPreheatPage(newPage);
               navigate(`/jobs/preheats${newPage > 1 ? `?page=${newPage}` : ''}`);
             }}
             boundaryCount={1}

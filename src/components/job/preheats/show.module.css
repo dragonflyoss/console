@@ -184,6 +184,5 @@
 .divider {
   border-width: 0px 0px thin;
   border-color: var(--palette-palette-divider);
-  /* border-style: dashed; */
   margin: 0;
 }

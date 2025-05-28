@@ -22,9 +22,9 @@ import {
   InputAdornment,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
+import DoNotDisturbOnOutlinedIcon from '@mui/icons-material/DoNotDisturbOnOutlined';
 import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ClearIcon from '@mui/icons-material/Clear';
 import { Link, useNavigate } from 'react-router-dom';
 import { createJob, getClusters } from '../../../lib/api';
 import { MAX_PAGE_SIZE } from '../../../lib/constants';
@@ -39,10 +39,15 @@ export default function NewPreheat() {
   const [bioError, setBioError] = useState(false);
   const [urlError, setURLError] = useState(false);
   const [tagError, setTagError] = useState(false);
+  const [applicationError, setApplicationError] = useState(false);
   const [filterError, setFilterError] = useState(false);
   const [pieceLengthError, setPieceLengthError] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
-  const [headers, setheaders] = useState<Array<{ key: string; value: string }>>([]);
+  const [headers, setheaders] = useState<
+    Array<{ key: { key: string; error: boolean }; value: { value: string; error: boolean } }>
+  >([]);
+  const [URLs, setURLS] = useState<Array<{ url: string; error: boolean }>>([]);
+
   const [cluster, setCluster] = useState([{ id: 0, name: '' }]);
   const [clusterError, setClusterError] = useState(false);
   const [filter, setFilter] = useState([]);
@@ -106,6 +111,29 @@ export default function NewPreheat() {
       },
     },
   ];
+
+  const urlForm = {
+    formProps: {
+      id: 'url',
+      label: 'URL',
+      name: 'url',
+      required: true,
+      autoComplete: 'family-name',
+      placeholder: 'Enter your URL',
+      helperText: urlError ? 'Fill in the characters, the length is 1-1000.' : '',
+      error: urlError,
+
+      onChange: (e: any) => {
+        changeValidate(e.target.value, urlForm);
+      },
+    },
+    syncError: false,
+    setError: setURLError,
+    validate: (value: string) => {
+      const reg = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s].{1,1000}$/;
+      return reg.test(value);
+    },
+  };
 
   const argsForm = [
     {
@@ -200,17 +228,23 @@ export default function NewPreheat() {
     },
     {
       formProps: {
-        id: 'url',
-        label: 'URL',
-        name: 'url',
-        required: true,
+        id: 'application',
+        label: 'Application',
+        name: 'application',
+        multiline: true,
+        maxRows: 2,
         autoComplete: 'family-name',
-        placeholder: 'Enter your URL',
-        helperText: urlError ? 'Fill in the characters, the length is 1-1000.' : '',
-        error: urlError,
+        placeholder: 'Enter your application',
+        helperText: applicationError ? 'Fill in the characters, the length is 0-1000.' : '',
+        error: applicationError,
         InputProps: {
           endAdornment: (
-            <Tooltip title={'URL address used to specify the resource to be preheat.'} placement="top">
+            <Tooltip
+              title={
+                'When the URL of the preheat tasks are the same but the Application are different, they will be distinguished based on the Application and the generated preheat tasks will be different.'
+              }
+              placement="top"
+            >
               <HelpIcon
                 sx={{
                   color: 'var(--palette-grey-300Channel)',
@@ -227,9 +261,10 @@ export default function NewPreheat() {
         },
       },
       syncError: false,
-      setError: setURLError,
+      setError: setApplicationError,
+
       validate: (value: string) => {
-        const reg = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s].{1,1000}$/;
+        const reg = /^.{0,1000}$/;
         return reg.test(value);
       },
     },
@@ -339,6 +374,11 @@ export default function NewPreheat() {
     setScope(currentSelection?.name || '');
   };
 
+  const headerURLValidate = (value: any) => {
+    const regex = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s]{1,1000}$/;
+    return regex.test(value);
+  };
+
   const headersKeyValidate = (key: any) => {
     const regex = /^.{1,50}$/;
     return regex.test(key);
@@ -361,6 +401,8 @@ export default function NewPreheat() {
     const bio = event.currentTarget.elements.description.value;
     const url = event.currentTarget.elements.url.value;
     const tag = event.currentTarget.elements.tag.value;
+    const application = event.currentTarget.elements.application.value;
+
     const filterText = event.currentTarget.elements.filteredQueryParams.value;
     const pieceLength = event.currentTarget.elements.pieceLength.value;
     const filters = filter.join('&');
@@ -374,6 +416,9 @@ export default function NewPreheat() {
       setFilterError(false);
       setFilterHelperText('Fill in the characters, the length is 0-100.');
     }
+
+    urlForm.setError(!urlForm.validate(url as string));
+    urlForm.syncError = !urlForm.validate(url as string);
 
     informationForm.forEach((item) => {
       const value = data.get(item.formProps.name);
@@ -389,15 +434,35 @@ export default function NewPreheat() {
       }
     });
 
-    const headerValidate = headers.every((item) => {
-      const isValidKey = headersKeyValidate(item.key);
-      const isValidValue = headersValueValidate(item.value);
+    const urlValidate = URLs.every((item: { url: any; error: boolean }, index) => {
+      const isValid = headerURLValidate(item.url);
+
+      const newURL = [...URLs];
+      newURL[index].error = !isValid;
+
+      setURLS(newURL);
+      return isValid;
+    });
+
+    const headerValidate = headers.every((item, index) => {
+      const isValidKey = headersKeyValidate(item.key.key);
+      const isValidValue = headersValueValidate(item.value.value);
+      const newURL = [...headers];
+
+      newURL[index].key.error = !isValidKey;
+      newURL[index].value.error = !isValidValue;
+
+      setheaders(newURL);
 
       return isValidKey && isValidValue;
     });
 
+    const urlList = URLs.map((item) => item.url);
+
+    urlList.push(url);
+
     const headerList: { [key: string]: string } = headers.reduce(
-      (accumulator, currentValue) => ({ ...accumulator, [currentValue.key]: currentValue.value }),
+      (accumulator, currentValue) => ({ ...accumulator, [currentValue.key.key]: currentValue.value.value }),
       {},
     );
 
@@ -413,8 +478,10 @@ export default function NewPreheat() {
     const canSubmit = Boolean(
       !informationForm.filter((item) => item.syncError).length &&
         !argsForm.filter((item) => item.syncError).length &&
+        !urlForm.syncError &&
         clusterIDValidate &&
         headerValidate &&
+        urlValidate &&
         Boolean(!filterText),
     );
 
@@ -427,8 +494,9 @@ export default function NewPreheat() {
       type: 'preheat',
       args: {
         type: 'file',
-        url: url,
+        urls: urlList,
         tag: tag,
+        application: application,
         filtered_query_params: filters,
         headers: headerList,
         scope: scope,
@@ -513,7 +581,7 @@ export default function NewPreheat() {
               <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
                 Information
               </Typography>
-              <Tooltip title=" The information of preheat." placement="top">
+              <Tooltip title="The information of preheat." placement="top">
                 <HelpIcon
                   sx={{
                     color: 'var(--palette-grey-300Channel)',
@@ -528,7 +596,6 @@ export default function NewPreheat() {
               <TextField
                 color="success"
                 size="small"
-                margin="normal"
                 key={item.formProps.name}
                 {...item.formProps}
                 className={styles.filterInput}
@@ -551,8 +618,7 @@ export default function NewPreheat() {
                 />
               </Tooltip>
             </Box>
-
-            <FormControl className={styles.textField} margin="normal" required size="small" error={clusterError}>
+            <FormControl className={styles.textField} required size="small" error={clusterError}>
               {clusterFrom.map((item) => (
                 <Autocomplete
                   freeSolo
@@ -573,6 +639,89 @@ export default function NewPreheat() {
                 />
               ))}
             </FormControl>
+          </Box>
+          <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+                URL
+              </Typography>
+              <Tooltip title="URL address used to specify the resource to be preheat." placement="top">
+                <HelpIcon
+                  sx={{
+                    color: 'var(--palette-grey-300Channel)',
+                    width: '0.8rem',
+                    height: '0.8rem',
+                    ':hover': { color: 'var(--palette-description-color)' },
+                  }}
+                />
+              </Tooltip>
+            </Box>
+            <TextField {...urlForm.formProps} color="success" className={styles.filterInput} size="small" />
+            {URLs.map((item, index) => {
+              return (
+                <Box sx={{ display: 'inline-flex', alignItems: 'flex-start', m: '0.8rem 0' }}>
+                  <TextField
+                    color="success"
+                    id={`url-${index}`}
+                    key={index}
+                    size="small"
+                    label="URL"
+                    name="urls"
+                    value={item.url}
+                    error={item.error}
+                    helperText={item.error && 'Fill in the characters, the length is 1-1000.'}
+                    placeholder="Enter your URL"
+                    className={styles.urlInput}
+                    onChange={(event) => {
+                      const newURL = [...URLs];
+                      newURL[index].url = event.target.value;
+
+                      const isValid = headerURLValidate(event.target.value);
+                      newURL[index].error = !isValid;
+
+                      setURLS(newURL);
+                    }}
+                  />
+                  <IconButton
+                    id={`clear-url-${index}`}
+                    sx={{
+                      width: '2.4rem',
+                      height: '2.4rem',
+                      p: '0.2rem',
+                    }}
+                    onClick={() => {
+                      const newURL = [...URLs];
+                      newURL.splice(index, 1);
+                      setURLS(newURL);
+                    }}
+                  >
+                    <DoNotDisturbOnOutlinedIcon
+                      sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--palette-button-color)' }}
+                    />
+                  </IconButton>
+                </Box>
+              );
+            })}
+            <Button
+              sx={{
+                '&.MuiButton-root': {
+                  borderColor: 'var(--palette-description-color)',
+                  color: 'var(--palette-description-color)',
+                  borderStyle: 'dashed',
+                },
+                width: '37rem',
+                m: '1rem 0',
+              }}
+              variant="outlined"
+              id="add-url"
+              size="small"
+              startIcon={<AddIcon />}
+              onClick={() => {
+                setURLS([...URLs, { url: '', error: false }]);
+              }}
+            >
+              add URL
+            </Button>
           </Box>
           <Box className={styles.title}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -603,7 +752,6 @@ export default function NewPreheat() {
                       className={styles.filterInput}
                       renderInput={(params) => (
                         <TextField
-                          margin="normal"
                           {...params}
                           InputProps={{
                             ...params.InputProps,
@@ -637,15 +785,8 @@ export default function NewPreheat() {
                   </Box>
                 ) : item.formProps.id === 'pieceLength' ? (
                   <Box>
-                    <TextField
-                      color="success"
-                      margin="normal"
-                      size="small"
-                      {...item.formProps}
-                      sx={{ width: '11rem', mr: '1rem' }}
-                      className={styles.textField}
-                    />
-                    <FormControl sx={{ width: '25rem' }} margin="normal" color="success" required size="small">
+                    <TextField color="success" size="small" {...item.formProps} className={styles.pieceLengthInput} />
+                    <FormControl className={styles.selectInput} color="success" required size="small">
                       <InputLabel id="scope">Scope</InputLabel>
                       <Select
                         id="select-scope"
@@ -662,7 +803,12 @@ export default function NewPreheat() {
                         }}
                       >
                         {scopeList.map((item: any) => (
-                          <MenuItem id={item.name} key={item.name} value={item.name} sx={{ height: '2.6rem' }}>
+                          <MenuItem
+                            id={item.name}
+                            key={item.name}
+                            value={item.name}
+                            sx={{ m: '0.3rem', borderRadius: '0.2rem' }}
+                          >
                             {item.label}
                           </MenuItem>
                         ))}
@@ -671,13 +817,7 @@ export default function NewPreheat() {
                   </Box>
                 ) : (
                   <Box key={item.formProps.id} sx={{ width: '100%' }}>
-                    <TextField
-                      color="success"
-                      margin="normal"
-                      size="small"
-                      {...item.formProps}
-                      className={styles.filterInput}
-                    />
+                    <TextField color="success" size="small" {...item.formProps} className={styles.filterInput} />
                   </Box>
                 );
               })}
@@ -705,35 +845,44 @@ export default function NewPreheat() {
                       label="Key"
                       color="success"
                       size="small"
-                      id={item.key}
-                      error={!headersKeyValidate(item.key)}
-                      helperText={!headersKeyValidate(item.key) && 'Fill in the characters, the length is 1-100.'}
+                      id={`key-${index}`}
+                      value={item.key.key}
+                      error={item.key.error}
+                      helperText={item.key.error && 'Fill in the characters, the length is 1-100.'}
                       className={styles.headersKeyInput}
-                      value={item.key}
                       onChange={(event) => {
-                        const newheaders = [...headers];
-                        newheaders[index].key = event.target.value;
-                        setheaders(newheaders);
+                        const newHeaders = [...headers];
+                        newHeaders[index].key.key = event.target.value;
+
+                        const isValid = headersKeyValidate(event.target.value);
+                        newHeaders[index].key.error = !isValid;
+
+                        setheaders(newHeaders);
                       }}
                     />
                     <TextField
                       label="Value"
                       color="success"
                       size="small"
-                      id={item.value}
+                      id={`value-${index}`}
+                      value={item.value.value}
                       multiline
                       maxRows={3}
-                      error={!headersValueValidate(item.value)}
-                      helperText={!headersValueValidate(item.value) && 'Fill in the characters, the length is 1-10000.'}
+                      error={item.value.error}
+                      helperText={item.value.error && 'Fill in the characters, the length is 1-10000.'}
                       className={styles.headersValueInput}
-                      value={item.value}
                       onChange={(event) => {
-                        const newheaders = [...headers];
-                        newheaders[index].value = event.target.value;
-                        setheaders(newheaders);
+                        const newHeaders = [...headers];
+                        newHeaders[index].value.value = event.target.value;
+
+                        const isValid = headersValueValidate(event.target.value);
+                        newHeaders[index].value.error = !isValid;
+
+                        setheaders(newHeaders);
                       }}
                     />
                     <IconButton
+                      id={`clear-header-${index}`}
                       sx={{
                         width: '2.4rem',
                         height: '2.4rem',
@@ -745,20 +894,22 @@ export default function NewPreheat() {
                         setheaders(newheaders);
                       }}
                     >
-                      <ClearIcon sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--palette-button-color)' }} />
+                      <DoNotDisturbOnOutlinedIcon
+                        sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--palette-button-color)' }}
+                      />
                     </IconButton>
                   </Grid>
                 ))}
                 <Button
                   sx={{
                     '&.MuiButton-root': {
-                      backgroundColor: 'var(--palette-description-color)',
                       borderColor: 'var(--palette-description-color)',
-                      color: '#FFF',
+                      color: 'var(--palette-description-color)',
                       display: 'inline-flex',
                       alignItems: 'center',
+                      borderStyle: 'dashed',
                     },
-                    width: '100%',
+                    width: '32.6rem',
                     mt: '1.5rem',
                   }}
                   id="add-headers"
@@ -766,7 +917,7 @@ export default function NewPreheat() {
                   size="small"
                   startIcon={<AddIcon />}
                   onClick={() => {
-                    setheaders([...headers, { key: '', value: '' }]);
+                    setheaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
                   }}
                 >
                   add headers
@@ -787,7 +938,7 @@ export default function NewPreheat() {
                 variant="outlined"
                 size="small"
                 onClick={() => {
-                  setheaders([...headers, { key: '', value: '' }]);
+                  setheaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
                 }}
               >
                 add headers

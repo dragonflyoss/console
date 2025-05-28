@@ -59,7 +59,7 @@ describe('Create preheat', () => {
 
     cy.get('body').click('topLeft');
 
-    cy.get('#pieceLength').type('4');
+    cy.get('#pieceLength').type('5');
 
     // Select a scope.
     cy.get('#select-scope').click();
@@ -68,6 +68,15 @@ describe('Create preheat', () => {
 
     // Add url.
     cy.get('#url').type('https://example.com/path/to/file');
+
+    cy.get('#add-url').click();
+    cy.get('#url-0').type('https://example.com/path/to/file/url-1');
+
+    // Add tag.
+    cy.get('#tag').type('tag-1');
+
+    // Add application.
+    cy.get('#application').type('application-1');
 
     cy.intercept(
       {
@@ -103,8 +112,13 @@ describe('Create preheat', () => {
     // Displays successfully added preheat task.
     cy.get('#description').should('have.text', 'create preheat');
     cy.get('#status').should('have.text', 'PENDING');
+    cy.get('#url-0').should('have.text', 'https://example.com/path/to/file/url-1');
+    cy.get('#url-1').should('have.text', 'https://example.com/path/to/file');
     cy.get('#id').should('have.text', 12);
-    cy.get('#piece-length').should('have.text', '4 MiB');
+    cy.get('#piece-length').should('have.text', '5 MiB');
+    cy.get('#scope').should('have.text', 'All Seed Peers');
+    cy.get('#tag').should('have.text', 'tag-1');
+    cy.get('#application').should('have.text', 'application-1');
   });
 
   it('cannot to use cluster without scheduler for preheat', () => {
@@ -203,7 +217,7 @@ describe('Create preheat', () => {
     cy.get('#description').should('have.text', 'create preheat');
     cy.get('#status').should('have.text', 'PENDING');
     cy.get('#id').should('have.text', 12);
-    cy.get('#piece-length').should('have.text', '4 MiB');
+    cy.get('#piece-length').should('have.text', '5 MiB');
   });
 
   it('should handle API error response', () => {
@@ -264,6 +278,42 @@ describe('Create preheat', () => {
       cy.get('#save').click();
     });
 
+    it('try to verify URL', () => {
+      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const url = _.times(1001, () => _.sample(characters)).join('');
+
+      // Should display message URL the validation error.
+      cy.get('#url').type(`https://docs${url}`);
+
+      cy.get('#url-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 1-1000.');
+
+      // Click add URL button.
+      cy.get('#add-url').click();
+
+      // cy.get('#url-0').type('https://example.com/path/to/file/url-1');
+
+      cy.get('#save').click();
+
+      // The added URL validation error prompt should be displayed.
+      cy.get('#url-0-helper-text')
+        .should('be.visible')
+        .and('have.text', 'Fill in the characters, the length is 1-1000.');
+
+      cy.get('#url-0').type('https://example.com/path/to/file');
+
+      // Click add URL button.
+      cy.get('#add-url').click();
+
+      // Check whether to add URL input box.
+      cy.get('#url-1').should('exist');
+
+      // Click the clear URL button.
+      cy.get('#clear-url-1').click();
+      cy.get('#url-1').should('not.exist');
+
+      cy.get('#url').clear();
+    });
+
     it('try to verify args', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       const url = _.times(1001, () => _.sample(characters)).join('');
@@ -274,13 +324,6 @@ describe('Create preheat', () => {
       cy.contains('li', 'cluster-1').click();
       cy.get('body').click('topLeft');
 
-      // Should display message url the validation error.
-      cy.get('#url').type(`https://docs${url}`);
-
-      cy.get('#url-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 1-1000.');
-
-      cy.get('#save').click();
-      cy.get('#url').clear();
       cy.get('#url').type('https://docs');
 
       // Should display message Piece Length the validation error.
@@ -349,26 +392,16 @@ describe('Create preheat', () => {
 
       cy.get('#header').children().should('have.length', 3);
 
-      // Show header key verification error message.
-      cy.get('.new_headersKeyInput__aZcds > .MuiFormHelperText-root')
-        .should('be.visible')
-        .and('have.text', 'Fill in the characters, the length is 1-100.');
-
-      // Show  header value verification error message.
-      cy.get('.new_headersValueInput__zn-9E > .MuiFormHelperText-root')
-        .should('be.visible')
-        .and('have.text', 'Fill in the characters, the length is 1-10000.');
-
       // Verification passed.
-      cy.get('.new_headersKeyInput__aZcds > .MuiInputBase-root > .MuiInputBase-input').type('key');
-      cy.get('.new_headersKeyInput__aZcds > .MuiFormHelperText-root').should('not.exist');
+      cy.get('#key-0').type('key');
+      cy.get('#key-0-helper-text').should('not.exist');
 
       // Incorrect header key entered.
-      cy.get('.new_headersKeyInput__aZcds > .MuiInputBase-root > .MuiInputBase-input').clear();
-      cy.get('.new_headersKeyInput__aZcds > .MuiInputBase-root > .MuiInputBase-input').type(key);
+      cy.get('#key-0').clear();
+      cy.get('#key-0').type(key);
 
       // Show header key verification error message.
-      cy.get('.new_headersKeyInput__aZcds > .MuiFormHelperText-root')
+      cy.get('#key-0-helper-text')
         .should('be.visible')
         .and('have.text', 'Fill in the characters, the length is 1-100.');
 
@@ -377,12 +410,13 @@ describe('Create preheat', () => {
       // Preheat creation failed, the page is still in preheat/new!
       cy.url().should('include', '/jobs/preheats/new');
 
-      // Verification passed.
-      cy.get('.new_headersKeyInput__aZcds > .MuiInputBase-root > .MuiInputBase-input').clear();
-      cy.get('.new_headersKeyInput__aZcds > .MuiInputBase-root > .MuiInputBase-input').type('key');
-      cy.get('.new_headersKeyInput__aZcds > .MuiFormHelperText-root').should('not.exist');
-
       cy.get('#save').click();
+
+      cy.get('#value-0-helper-text').should('have.text', 'Fill in the characters, the length is 1-10000.');
+
+      cy.get('#value-0').type('key');
+
+      cy.get('#value-0-helper-text').should('not.exist');
 
       // Preheat creation failed, the page is still in preheat/new!
       cy.url().should('include', '/jobs/preheats/new');
@@ -393,8 +427,8 @@ describe('Create preheat', () => {
       // Check the number of headers.
       cy.get('#header').children().should('have.length', 4);
 
-      // Delete header.
-      cy.get('#header > :nth-child(3) > .MuiButtonBase-root').click();
+      // Delete header input box.
+      cy.get('#clear-header-1').click();
 
       cy.get('#header').children().should('have.length', 3);
     });

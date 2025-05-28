@@ -17,6 +17,12 @@ import {
   styled,
   tooltipClasses,
   TooltipProps,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getJob, JobsResponse } from '../../../lib/api';
@@ -38,7 +44,7 @@ import { ReactComponent as CreatedAt } from '../../../assets/images/job/preheat/
 import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
 import { ReactComponent as Pending } from '../../../assets/images/job/preheat/pending.svg';
 import { ReactComponent as ErrorLog } from '../../../assets/images/job/preheat/error-log.svg';
-import { ReactComponent as TagScope } from '../../../assets/images/job/preheat/tag-scope.svg';
+import { ReactComponent as Application } from '../../../assets/images/resource/task/type.svg';
 import { ReactComponent as PieceLength } from '../../../assets/images/job/preheat/piece-length.svg';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -130,6 +136,10 @@ export default function ShowPreheat() {
   ];
 
   const scope = preheat?.args?.scope && scopeList.find((item) => item.name === preheat?.args?.scope);
+
+  console.log(
+    preheat?.args?.headers && preheat?.args?.headers !== null && Object.entries(preheat?.args?.headers).length,
+  );
 
   return (
     <Box>
@@ -252,6 +262,7 @@ export default function ShowPreheat() {
                         />
                         <Tooltip title="View error log." placement="top">
                           <IconButton
+                            id="view-error-log"
                             sx={{
                               '&.MuiIconButton-root': {
                                 borderRadius: '0.3rem',
@@ -290,17 +301,45 @@ export default function ShowPreheat() {
                 URL
               </Typography>
             </Box>
-            <CustomWidthTooltip title={preheat?.args?.url || '-'} placement="bottom">
-              <Typography
-                id="url"
-                variant="body1"
-                fontFamily="mabry-bold"
-                component="div"
-                className={styles.urlContent}
-              >
-                {preheat?.args?.url || '-'}
+            {(preheat?.args?.urls !== null && Array.isArray(preheat?.args?.urls) && preheat?.args?.urls?.length > 0 && (
+              <>
+                {preheat?.args?.urls?.length === 1 ? (
+                  <CustomWidthTooltip title={preheat?.args?.urls?.[0] || '-'} placement="bottom">
+                    <Typography
+                      id="url"
+                      variant="body1"
+                      fontFamily="mabry-bold"
+                      component="div"
+                      className={styles.urlContent}
+                    >
+                      {preheat?.args?.urls?.[0] || '-'}
+                    </Typography>
+                  </CustomWidthTooltip>
+                ) : preheat?.args?.urls?.length > 1 ? (
+                  <Paper variant="outlined" className={styles.urlsWrapper}>
+                    {preheat?.args?.urls?.map((item, index) => (
+                      <CustomWidthTooltip key={index} title={item || '-'} placement="bottom">
+                        <Typography
+                          id={`url-${index}`}
+                          variant="body1"
+                          fontFamily="mabry-bold"
+                          component="div"
+                          className={styles.urls}
+                        >
+                          {item || '-'}
+                        </Typography>
+                      </CustomWidthTooltip>
+                    ))}
+                  </Paper>
+                ) : (
+                  <>-</>
+                )}
+              </>
+            )) || (
+              <Typography id="url" variant="body1" className={styles.informationContent}>
+                -
               </Typography>
-            </CustomWidthTooltip>
+            )}
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
@@ -342,11 +381,11 @@ export default function ShowPreheat() {
               ) : scope ? (
                 <Box className={styles.scopeContent}>
                   <Typography variant="body2" component="div" fontFamily="mabry-bold">
-                    {scope.label || '-'}
+                    {scope?.label || '-'}
                   </Typography>
                 </Box>
               ) : (
-                ''
+                '-'
               )}
             </Box>
           </Box>
@@ -380,6 +419,28 @@ export default function ShowPreheat() {
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
+              <Application className={styles.informationTitleIcon} />
+              <Typography
+                variant="body1"
+                fontFamily="mabry-bold"
+                component="div"
+                className={styles.informationTitleText}
+              >
+                Application
+              </Typography>
+            </Box>
+            <Typography id="application" variant="body1" className={styles.informationContent}>
+              {isLoading ? (
+                <Skeleton sx={{ width: '4rem' }} />
+              ) : preheat?.args?.application ? (
+                preheat?.args?.application
+              ) : (
+                '-'
+              )}
+            </Typography>
+          </Box>
+          <Box className={styles.informationContainer}>
+            <Box className={styles.informationTitle}>
               <Headers className={styles.informationTitleIcon} />
               <Typography
                 variant="body1"
@@ -394,22 +455,60 @@ export default function ShowPreheat() {
               <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
             ) : preheat?.args?.headers && preheat?.args?.headers !== null ? (
               Object.keys(preheat?.args?.headers).length > 0 ? (
-                <Card id="headers" className={styles.headersContent}>
+                <Paper variant="outlined" id="headers" className={styles.headersContent}>
+                  <Box className={styles.tableHeader}>
+                    <Box className={styles.tableHeaderKey}>
+                      <Typography variant="body2" className={styles.tableHeaderText}>
+                        Key
+                      </Typography>
+                    </Box>
+                    <Box className={styles.tableHeaderValue}>
+                      <Typography variant="body2" className={styles.tableHeaderText}>
+                        Value
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Divider className={styles.divider} />
                   {Object.entries(preheat?.args.headers).map(([key, value], index) => (
-                    <Box key={index} className={styles.headersText}>
-                      <Box id={`header-key${index}`} fontFamily="mabry-bold" width="35%" mr="1rem">
-                        {key}
-                      </Box>
-                      <Box width="65%" className={styles.headerValue} id={`header-value${index}`}>
+                    <Box key={index}>
+                      <Box className={styles.headersText}>
+                        <Typography
+                          variant="body2"
+                          component="div"
+                          fontFamily="mabry-bold"
+                          id={`header-key-${index}`}
+                          width="35%"
+                          mr="1rem"
+                        >
+                          {key}
+                        </Typography>
                         <CustomWidthTooltip title={value || '-'} placement="bottom">
-                          <Typography id="url" variant="body1" component="div">
+                          <Typography
+                            variant="body2"
+                            component="div"
+                            width="65%"
+                            id={`header-value-${index}`}
+                            className={styles.headerValue}
+                          >
                             {value}
                           </Typography>
                         </CustomWidthTooltip>
                       </Box>
+                      {index !==
+                        (preheat?.args?.headers &&
+                          preheat?.args?.headers !== null &&
+                          Object.entries(preheat?.args?.headers).length - 1) && (
+                        <Divider
+                          sx={{
+                            borderStyle: 'dashed',
+                            borderColor: 'var(--palette-palette-divider)',
+                            borderWidth: '0px 0px thin',
+                          }}
+                        />
+                      )}
                     </Box>
                   ))}
-                </Card>
+                </Paper>
               ) : (
                 <Typography id="headers" variant="body1" className={styles.informationContent}>
                   -
@@ -522,13 +621,15 @@ export default function ShowPreheat() {
                       backgroundColor: '#24292f',
                     }}
                   >
-                    {preheat?.result?.job_states.map((item) =>
-                      item.state === 'FAILURE' && item.error !== '' ? (
-                        <Typography sx={{ color: '#d0d7de' }}>{item.error}</Typography>
-                      ) : (
-                        ''
-                      ),
-                    )}
+                    {preheat?.result?.job_states !== null &&
+                      Array.isArray(preheat?.result?.job_states) &&
+                      preheat?.result?.job_states?.map((item) =>
+                        item.state === 'FAILURE' && item.error !== '' ? (
+                          <Typography sx={{ color: '#d0d7de' }}>{item.error}</Typography>
+                        ) : (
+                          ''
+                        ),
+                      )}
                   </AccordionDetails>
                 </Accordion>
               </Box>

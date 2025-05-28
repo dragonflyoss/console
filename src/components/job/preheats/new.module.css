@@ -1,18 +1,34 @@
 .textField {
   width: 18rem;
+  margin: 0.8rem 0 !important;
 }
 
 .filterInput {
   width: 37rem !important;
+  margin: 0.8rem 0 !important;
+}
+
+.urlInput {
+  width: 37rem !important;
+}
+
+.selectInput {
+  width: 25rem;
+  margin: 0.8rem 0 !important;
+}
+
+.pieceLengthInput {
+  width: 11rem;
+  margin: 0.8rem 1rem 0.8rem 0 !important;
 }
 
 .headersKeyInput {
-  width: 40%;
-  margin-right: 0.6rem !important;
+  width: 12rem;
+  margin-right: 1rem !important;
 }
 
 .headersValueInput {
-  width: 60%;
+  width: 20rem;
 }
 
 .title {

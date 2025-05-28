@@ -8,20 +8,24 @@
   "type": "preheat",
   "state": "PENDING",
   "args": {
+    "application": "application-1",
     "concurrent_count": 50,
-    "filtered_query_params": "",
-    "headers": {
-      "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT"
-    },
+    "content_for_calculating_task_id": null,
+    "count": null,
+    "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
+    "headers": { "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT" },
+    "load_to_cache": false,
     "password": "",
+    "percentage": null,
+    "piece_length": null,
     "platform": "",
     "scope": "all_seed_peers",
     "tag": "",
     "timeout": 1800000000000,
     "type": "file",
-    "url": "https://example.com/path/to/file",
-    "username": "",
-    "piece_length": null
+    "url": "",
+    "urls": ["https://example.com/path/to/file"],
+    "username": ""
   },
   "result": {
     "created_at": "2023-03-23T08:29:18.204923418Z",

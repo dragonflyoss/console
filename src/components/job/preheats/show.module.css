@@ -61,10 +61,6 @@
   background-color: var(--palette-background-paper) !important;
   border-radius: var(--menu-border-radius) !important;
   box-shadow: none;
-  /* border-style: dashed; */
-  /* padding-bottom: 1rem; */
-  /* display: inline; */
-  /* overflow: hidden; */
 }
 
 .headersText {

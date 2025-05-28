@@ -126,7 +126,7 @@ describe('Preheat', () => {
       cy.get('#scheduler-lusters-id').should('have.text', 1);
 
       // Show preheat Created At.
-      // cy.get('#created-at').should('have.text', '2023-12-13 11:58:53');
+      cy.get('#created-at').should('have.text', '2023-12-13 11:58:53');
 
       // Click the show error log button.
       cy.get('#view-error-log').click();

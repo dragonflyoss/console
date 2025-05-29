@@ -135,18 +135,21 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-style: italic;
+  border-radius: 0.3rem;
+  background-color: var(--palette-background-inactive);
+  border: 0;
+  padding: 0.4rem 0.8rem;
+  margin-bottom: 1.2rem !important;
 }
 
 .urlsWrapper {
-  width: 70%;
-  display: grid;
-  gap: calc(1rem);
-  grid-template-columns: repeat(1, 1fr);
+  max-width: 70%;
   border-color: var(--palette-palette-divider) !important;
   background-color: var(--palette-background-paper) !important;
   border-radius: var(--menu-border-radius) !important;
   box-shadow: none;
-  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .errorIcon {

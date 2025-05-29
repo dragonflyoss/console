@@ -316,21 +316,21 @@ export default function ShowPreheat() {
                     </Typography>
                   </CustomWidthTooltip>
                 ) : preheat?.args?.urls?.length > 1 ? (
-                  <Paper variant="outlined" className={styles.urlsWrapper}>
+                  <Box className={styles.urlsWrapper}>
                     {preheat?.args?.urls?.map((item, index) => (
                       <CustomWidthTooltip key={index} title={item || '-'} placement="bottom">
                         <Typography
                           id={`url-${index}`}
                           variant="body1"
                           fontFamily="mabry-bold"
-                          component="div"
                           className={styles.urls}
+                          component="div"
                         >
                           {item || '-'}
                         </Typography>
                       </CustomWidthTooltip>
                     ))}
-                  </Paper>
+                  </Box>
                 ) : (
                   <>-</>
                 )}

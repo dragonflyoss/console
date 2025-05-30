@@ -758,6 +758,7 @@ export interface JobsResponse {
   type: string;
   state: string;
   args: {
+    application: string;
     concurrent_count: number;
     headers: { [key: string]: string } | null;
     password: string;
@@ -767,6 +768,7 @@ export interface JobsResponse {
     timeout: number;
     type: string;
     url: string;
+    urls: Array<string> | null;
     piece_length: number;
     username: string;
   };
@@ -824,7 +826,9 @@ interface createJobRequest {
   type: string;
   args: {
     type: string;
-    url: string;
+    url?: string;
+    urls: Array<string> | null;
+    application: string;
     tag: string;
     filtered_query_params: string;
     headers?: { [key: string]: string } | null;

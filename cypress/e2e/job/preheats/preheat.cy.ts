@@ -64,7 +64,7 @@ describe('Preheat', () => {
     beforeEach(() => {
       cy.visit('/jobs/preheats');
     });
-    
+
     it('should display detailed preheat failure information', () => {
       cy.intercept(
         {
@@ -107,26 +107,29 @@ describe('Preheat', () => {
         .find('#error-log-icon')
         .and('exist');
 
-      cy.get('#url').should('have.text', 'http://dock.io/preheat/test');
+      cy.get('#url-0').should('have.text', 'https://example.com/path/to/file');
+      cy.get('#url-1').should('have.text', 'https://example.com/path/to/file/url-1');
+      cy.get('#url-2').should('have.text', 'https://example.com/path/to/file/url-2');
 
       cy.get('#piece-length').should('have.text', '4 MiB');
 
       // Show preheat tag.
       cy.get('#tag').should('have.text', 'prheat tag');
 
+      cy.get('#application').should('have.text', 'application-1');
+
       // Show preheat headers.
-      cy.get('#headers').children().should('have.length', 1);
-      cy.get('.css-172ywp3').should('have.text', 'Connection');
-      cy.get('.css-ft9ciy').should('have.text', 'keep-alive');
+      cy.get('#header-key-0').should('have.text', 'Connection');
+      cy.get('#header-value-0').should('have.text', 'keep-alive');
 
       // Show preheat scheduler clusters ID.
       cy.get('#scheduler-lusters-id').should('have.text', 1);
 
       // Show preheat Created At.
-      // cy.get('#created-at').should('have.text', '2023-12-13 11:58:53');
+      cy.get('#created-at').should('have.text', '2023-12-13 11:58:53');
 
       // Click the show error log button.
-      cy.get('#status > .MuiButtonBase-root').click();
+      cy.get('#view-error-log').click();
       cy.get('.css-avhns > .MuiTypography-h6').should('have.text', 'Error log');
       cy.get('#panel1d-header').click();
 
@@ -157,7 +160,8 @@ describe('Preheat', () => {
         .and('not.exist');
 
       // Show preheat headers.
-      cy.get('#headers').children().should('have.length', 2);
+      cy.get('#header-key-0').should('have.text', 'Authorization');
+      cy.get('#header-key-1').should('have.text', 'Connection');
 
       // Show preheat piece length.
       cy.get('#piece-length').should('have.text', '4 MiB');
@@ -207,7 +211,8 @@ describe('Preheat', () => {
       cy.get('#piece-length').should('have.text', '-');
 
       // Show preheat headers.
-      cy.get('#headers').children().should('have.length', 1);
+      cy.get('#header-value-0').should('have.text', 'Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT');
+
       cy.wait(60000);
 
       // Check how many times the API should be executed after six seconds.
@@ -278,11 +283,17 @@ describe('Preheat', () => {
       // Show preheat url.
       cy.get('#url').should('have.text', '-');
 
+      // Show preheat piece length.
+      cy.get('#piece-length').should('have.text', '-');
+
+      // Show preheat scope.
+      cy.get('#scope').should('have.text', '-');
+
       // Show preheat tag.
       cy.get('#tag').should('have.text', '-');
 
-      // Show preheat piece length.
-      cy.get('#piece-length').should('have.text', '-');
+      // Show preheat application.
+      cy.get('#application').should('have.text', '-');
 
       // Show preheat headers.
       cy.get('#headers').should('have.text', '-');
@@ -394,7 +405,7 @@ describe('Preheat', () => {
         .and('not.exist');
 
       // Show preheat headers.
-      cy.get('#headers').children().should('have.length', 1);
+      cy.get('#header-key-0').should('have.text', 'Authorization');
 
       // Show preheat piece length.
       cy.get('#piece-length').should('have.text', '-');

@@ -88,6 +88,7 @@ export default function Preheats() {
             }
           } else {
             setAllPreheats([]);
+            setPreheatTotalPages(1);
           }
 
           setIsLoading(false);
@@ -97,6 +98,8 @@ export default function Preheats() {
           setErrorMessage(true);
           setErrorMessageText(error.message);
           setIsLoading(false);
+          setAllPreheats([]);
+          setPreheatTotalPages(1);
         }
       }
     })();

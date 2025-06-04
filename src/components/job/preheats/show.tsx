@@ -138,10 +138,6 @@ export default function ShowPreheat() {
 
   const scope = preheat?.args?.scope && scopeList.find((item) => item.name === preheat?.args?.scope);
 
-  console.log(
-    preheat?.args?.headers && preheat?.args?.headers !== null && Object.entries(preheat?.args?.headers).length,
-  );
-
   return (
     <Box>
       <Snackbar

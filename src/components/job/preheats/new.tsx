@@ -22,17 +22,11 @@ import {
   InputAdornment,
   styled,
   Slider,
-  toggleButtonGroupClasses,
-  ToggleButtonGroup,
-  Switch,
-  ToggleButton,
-  FormControlLabel,
   TabProps,
   Tab,
   Tabs,
-  Checkbox,
 } from '@mui/material';
-import { SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import DoNotDisturbOnOutlinedIcon from '@mui/icons-material/DoNotDisturbOnOutlined';
 import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -43,9 +37,6 @@ import styles from './new.module.css';
 import AddIcon from '@mui/icons-material/Add';
 import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
 import Card from '../../card';
-import { ReactComponent as Count } from '../../../assets/images/job/preheat/count.svg';
-import { ReactComponent as Percentage } from '../../../assets/images/job/preheat/percentage.svg';
-import { title } from 'process';
 
 const PrettoSlider = styled(Slider)({
   color: 'var(--palette-description-color)',
@@ -86,39 +77,6 @@ const PrettoSlider = styled(Slider)({
       transform: 'rotate(45deg)',
     },
   },
-});
-
-type StyledTabProps = Omit<TabProps, 'component'> & {};
-
-const AntTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} />)(({ theme }) => ({
-  textTransform: 'none',
-  minWidth: 0,
-  [theme.breakpoints.up('sm')]: {
-    minWidth: 0,
-  },
-  minHeight: '3.2rem',
-  fontWeight: theme.typography.fontWeightRegular,
-  color: 'var(--palette-grey-tab)',
-  padding: '0',
-  marginRight: '2rem',
-  fontSize: '0.9rem',
-  fontFamily: 'mabry-bold',
-  '&:hover': {
-    color: 'primary',
-    opacity: 1,
-  },
-  '&.Mui-selected': {
-    color: 'var(--palette-description-color)',
-    fontFamily: 'mabry-bold',
-  },
-}));
-
-const AntTabs = styled(Tabs)({
-  '& .MuiTabs-indicator': {
-    backgroundColor: 'var(--palette-description-color)',
-    borderRadius: '1rem',
-  },
-  borderBottom: '1px solid var(--palette-tab-border-color)',
 });
 
 export default function NewPreheat() {

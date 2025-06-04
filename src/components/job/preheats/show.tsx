@@ -17,11 +17,6 @@ import {
   styled,
   tooltipClasses,
   TooltipProps,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Paper,
 } from '@mui/material';
 import { useEffect, useState } from 'react';

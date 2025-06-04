@@ -899,7 +899,7 @@ export default function NewPreheat() {
                       </Select>
                     </FormControl>
                     {scope !== 'single_seed_peer' ? (
-                      <Card className={styles.scope} id="count-or-percentage">
+                      <Paper variant="outlined" className={styles.scope} id="count-or-percentage">
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <Typography variant="subtitle1" fontFamily="mabry-bold" mr="0.4rem">
                             {scope === 'all_seed_peers' ? 'All Seed Peers' : scope === 'all_peers' ? 'All Peers' : ''}
@@ -1017,7 +1017,7 @@ export default function NewPreheat() {
                             <></>
                           )}
                         </Box>
-                      </Card>
+                      </Paper>
                     ) : (
                       <></>
                     )}

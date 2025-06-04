@@ -37,6 +37,30 @@ describe('Create preheat', () => {
     cy.viewport(1440, 1080);
   });
 
+  it('can create an All Peers task with a preheat scope of 30%', () => {
+    // By default, there is no percentage and count.
+    cy.get('#count-or-percentage').should('not.exist');
+
+    // Scope select all peers.
+    cy.get('#select-scope').click();
+    cy.get('#all_peers').click();
+
+    cy.get('#count-or-percentage').should('exist');
+
+    cy.get('#select-count').click();
+
+    cy.get('#percentage').click();
+
+    cy.get('#percentage').click(100, 10);
+
+    // Select count.
+    cy.get('#select-count').click();
+
+    cy.get('#count').click();
+
+    cy.get('#count').type('50');
+  });
+
   it('click the `CANCEL button', () => {
     cy.get('#cancel').click();
 

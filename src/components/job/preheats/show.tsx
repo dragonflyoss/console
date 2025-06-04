@@ -137,10 +137,6 @@ export default function ShowPreheat() {
 
   const scope = preheat?.args?.scope && scopeList.find((item) => item.name === preheat?.args?.scope);
 
-  console.log(
-    preheat?.args?.headers && preheat?.args?.headers !== null && Object.entries(preheat?.args?.headers).length,
-  );
-
   return (
     <Box>
       <Snackbar
@@ -383,6 +379,22 @@ export default function ShowPreheat() {
                   <Typography variant="body2" component="div" fontFamily="mabry-bold">
                     {scope?.label || '-'}
                   </Typography>
+                  {preheat?.args?.count && (
+                    <>
+                      <Box sx={{ m: '0.4rem', backgroundColor: '#fff', height: '0.8rem', width: '0.08rem' }} />
+                      <Typography id="count" variant="body2" component="div" fontFamily="mabry-bold">
+                        {preheat?.args?.count}
+                      </Typography>
+                    </>
+                  )}
+                  {preheat?.args?.percentage && (
+                    <>
+                      <Box sx={{ m: '0.4rem', backgroundColor: '#fff', height: '0.8rem', width: '0.08rem' }} />
+                      <Typography id="percentage" variant="body2" component="div" fontFamily="mabry-bold">
+                        {preheat?.args?.percentage}%
+                      </Typography>
+                    </>
+                  )}
                 </Box>
               ) : (
                 '-'
@@ -625,7 +637,16 @@ export default function ShowPreheat() {
                       Array.isArray(preheat?.result?.job_states) &&
                       preheat?.result?.job_states?.map((item) =>
                         item.state === 'FAILURE' && item.error !== '' ? (
-                          <Typography sx={{ color: '#d0d7de' }}>{item.error}</Typography>
+                          <Typography
+                            variant="body2"
+                            component="div"
+                            fontFamily="mabry-bold"
+                            color="#d0d7de"
+                            mb="1rem"
+                            className={styles.errorLog}
+                          >
+                            {item.error}
+                          </Typography>
                         ) : (
                           ''
                         ),

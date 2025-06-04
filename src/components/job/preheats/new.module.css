@@ -58,3 +58,19 @@
   border-radius: 0.25rem !important;
   background-color: var(--palette-background-paper) !important;
 }
+
+.scope {
+  width: 37rem;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.tabIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.countSelect {
+  width: 12rem;
+  margin: 0.8rem 0 !important;
+}

@@ -185,3 +185,29 @@
   border-color: var(--palette-palette-divider);
   margin: 0;
 }
+
+.socpe {
+  border-radius: 0.3rem;
+  background-color: var(--palette-background-inactive);
+  border: 0;
+  font-family: 'mabry-bold';
+  display: inline-flex;
+  padding: 0.3rem 0.4rem;
+  align-items: center;
+}
+
+.count {
+  border-radius: 1rem;
+  background-color: var(--palette-description-color);
+  padding: 0.15rem 0.4rem;
+  color: #fff;
+  margin-left: 0.4rem;
+}
+
+.errorLog {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: normal;
+  overflow: hidden;
+}

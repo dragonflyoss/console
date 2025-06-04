@@ -771,6 +771,8 @@ export interface JobsResponse {
     urls: Array<string> | null;
     piece_length: number;
     username: string;
+    count: number | null;
+    percentage: number | null;
   };
   result: {
     created_at: string;
@@ -833,6 +835,8 @@ interface createJobRequest {
     filtered_query_params: string;
     headers?: { [key: string]: string } | null;
     piece_length?: number;
+    count?: number | null;
+    percentage?: number | null;
   };
   scheduler_cluster_ids: Array<number>;
 }

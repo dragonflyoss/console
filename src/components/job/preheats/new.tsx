@@ -20,8 +20,19 @@ import {
   SelectChangeEvent,
   Breadcrumbs,
   InputAdornment,
+  styled,
+  Slider,
+  toggleButtonGroupClasses,
+  ToggleButtonGroup,
+  Switch,
+  ToggleButton,
+  FormControlLabel,
+  TabProps,
+  Tab,
+  Tabs,
+  Checkbox,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import DoNotDisturbOnOutlinedIcon from '@mui/icons-material/DoNotDisturbOnOutlined';
 import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -31,6 +42,84 @@ import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './new.module.css';
 import AddIcon from '@mui/icons-material/Add';
 import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
+import Card from '../../card';
+import { ReactComponent as Count } from '../../../assets/images/job/preheat/count.svg';
+import { ReactComponent as Percentage } from '../../../assets/images/job/preheat/percentage.svg';
+import { title } from 'process';
+
+const PrettoSlider = styled(Slider)({
+  color: 'var(--palette-description-color)',
+  height: 8,
+  width: '14rem',
+  marginLeft: '0.4rem',
+  '& .MuiSlider-track': {
+    border: 'none',
+  },
+  '& .MuiSlider-thumb': {
+    height: 22,
+    width: 22,
+    backgroundColor: '#fff',
+    border: '3px solid currentColor',
+    '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
+      boxShadow: 'inherit',
+    },
+    '&::before': {
+      display: 'none',
+    },
+  },
+  '& .MuiSlider-valueLabel': {
+    lineHeight: 1.2,
+    fontSize: 12,
+    background: 'unset',
+    padding: 0,
+    width: 32,
+    height: 32,
+    borderRadius: '50% 50% 50% 0',
+    backgroundColor: 'var(--palette-description-color)',
+    transformOrigin: 'bottom left',
+    transform: 'translate(50%, -100%) rotate(-45deg) scale(0)',
+    '&::before': { display: 'none' },
+    '&.MuiSlider-valueLabelOpen': {
+      transform: 'translate(50%, -100%) rotate(-45deg) scale(1)',
+    },
+    '& > *': {
+      transform: 'rotate(45deg)',
+    },
+  },
+});
+
+type StyledTabProps = Omit<TabProps, 'component'> & {};
+
+const AntTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} />)(({ theme }) => ({
+  textTransform: 'none',
+  minWidth: 0,
+  [theme.breakpoints.up('sm')]: {
+    minWidth: 0,
+  },
+  minHeight: '3.2rem',
+  fontWeight: theme.typography.fontWeightRegular,
+  color: 'var(--palette-grey-tab)',
+  padding: '0',
+  marginRight: '2rem',
+  fontSize: '0.9rem',
+  fontFamily: 'mabry-bold',
+  '&:hover': {
+    color: 'primary',
+    opacity: 1,
+  },
+  '&.Mui-selected': {
+    color: 'var(--palette-description-color)',
+    fontFamily: 'mabry-bold',
+  },
+}));
+
+const AntTabs = styled(Tabs)({
+  '& .MuiTabs-indicator': {
+    backgroundColor: 'var(--palette-description-color)',
+    borderRadius: '1rem',
+  },
+  borderBottom: '1px solid var(--palette-tab-border-color)',
+});
 
 export default function NewPreheat() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -47,14 +136,17 @@ export default function NewPreheat() {
     Array<{ key: { key: string; error: boolean }; value: { value: string; error: boolean } }>
   >([]);
   const [URLs, setURLS] = useState<Array<{ url: string; error: boolean }>>([]);
-
   const [cluster, setCluster] = useState([{ id: 0, name: '' }]);
   const [clusterError, setClusterError] = useState(false);
   const [filter, setFilter] = useState([]);
   const [clusterName, setClusterName] = useState<string[]>([]);
   const [clusterHelperText, setClusterHelperText] = useState('Select at least one option.');
   const [scope, setScope] = useState<string>('single_seed_peer');
+  const [count, setCount] = useState<string>('all');
   const [filterHelperText, setFilterHelperText] = useState('Fill in the characters, the length is 0-100.');
+
+  const [checked, setChecked] = useState(false);
+  const [countError, setCountError] = useState(false);
 
   const navigate = useNavigate();
 
@@ -368,6 +460,22 @@ export default function NewPreheat() {
     { label: 'All Peers', name: 'all_peers' },
   ];
 
+  const counList = [
+    { label: 'All', name: 'all', title: '' },
+    {
+      label: 'Percentage',
+      name: 'percentage',
+      title:
+        'Percentage is the percentage of peers to be preheated. It must be a value between 1 and 100 (inclusive) if provided.',
+    },
+    {
+      label: 'Count',
+      name: 'count',
+      title:
+        'Count is the number of peers to be preheated.  It must be a value between 1 and 200 (inclusive) if provided.',
+    },
+  ];
+
   const handleSelectScope = (event: SelectChangeEvent) => {
     const selectedValues = event.target.value;
     const currentSelection = scopeList.find((scope) => scope.name === selectedValues);
@@ -389,6 +497,11 @@ export default function NewPreheat() {
     return regex.test(value);
   };
 
+  const headerCountValidate = (value: any) => {
+    const regex = /^(-?(?:[1-9]|[1-9][0-9]|1[0-9]{2}|200))$/;
+    return regex.test(value);
+  };
+
   const changeValidate = (value: string, data: any) => {
     const { setError, validate } = data;
     setError(!validate(value));
@@ -406,6 +519,17 @@ export default function NewPreheat() {
     const filterText = event.currentTarget.elements.filteredQueryParams.value;
     const pieceLength = event.currentTarget.elements.pieceLength.value;
     const filters = filter.join('&');
+
+    let percentage = null;
+    let countValue = null;
+
+    if (count !== 'all') {
+      if (count === 'percentage') {
+        percentage = event.currentTarget.elements.scopePercentage.value;
+      } else if (count === 'count') {
+        countValue = event.currentTarget.elements.scopeCount.value;
+      }
+    }
 
     const data = new FormData(event.currentTarget);
 
@@ -500,6 +624,8 @@ export default function NewPreheat() {
         filtered_query_params: filters,
         headers: headerList,
         scope: scope,
+        ...(countValue && count === 'count' && { count: Number(countValue) }),
+        ...(percentage && count === 'percentage' && { percentage: Number(percentage) }),
         ...(pieceLength && pieceLength !== 0 && { piece_length: pieceLength * 1024 * 1024 }),
       },
       scheduler_cluster_ids: clusterID,
@@ -814,6 +940,129 @@ export default function NewPreheat() {
                         ))}
                       </Select>
                     </FormControl>
+                    {scope !== 'single_seed_peer' ? (
+                      <Card className={styles.scope} id="count-or-percentage">
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Typography variant="subtitle1" fontFamily="mabry-bold" mr="0.4rem">
+                            {scope === 'all_seed_peers' ? 'All Seed Peers' : scope === 'all_peers' ? 'All Peers' : ''}
+                          </Typography>
+                          <Tooltip
+                            title="By default, all peers are preheated. Users can select Percentage or count according to actual needs."
+                            placement="top"
+                          >
+                            <HelpIcon
+                              sx={{
+                                color: 'var(--palette-grey-300Channel)',
+                                width: '0.8rem',
+                                height: '0.8rem',
+                                ':hover': { color: 'var(--palette-description-color)' },
+                              }}
+                            />
+                          </Tooltip>
+                        </Box>
+                        <Box
+                          sx={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between' }}
+                        >
+                          <FormControl color="success" className={styles.countSelect} size="small">
+                            <InputLabel id="scope">
+                              {scope === 'all_seed_peers' ? 'All Seed Peers' : scope === 'all_peers' ? 'All Peers' : ''}
+                            </InputLabel>
+                            <Select
+                              id="select-count"
+                              label="percentage"
+                              value={count}
+                              onChange={(event) => {
+                                const selectedValues = event.target.value;
+                                const currentSelection = counList.find((scope) => scope.name === selectedValues);
+                                setCount(currentSelection?.name || '');
+                              }}
+                            >
+                              {counList.map((item: any) => (
+                                <MenuItem
+                                  id={item.name}
+                                  key={item.name}
+                                  value={item.name}
+                                  sx={{
+                                    m: '0.3rem',
+                                    borderRadius: '0.2rem',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                  }}
+                                >
+                                  {item.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                          {count === 'percentage' ? (
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <PrettoSlider
+                                valueLabelDisplay="auto"
+                                aria-label="pretto slider"
+                                defaultValue={1}
+                                min={1}
+                                max={100}
+                                name="scopePercentage"
+                                id="percentage"
+                              />
+                              <Tooltip
+                                title="Percentage is the percentage of peers to be preheated. It must be a value between 1 and 100 (inclusive) if provided."
+                                placement="top"
+                              >
+                                <HelpIcon
+                                  sx={{
+                                    color: 'var(--palette-grey-300Channel)',
+                                    width: '0.8rem',
+                                    height: '0.8rem',
+                                    ':hover': { color: 'var(--palette-description-color)' },
+                                    ml: '0.6rem',
+                                  }}
+                                />
+                              </Tooltip>
+                            </Box>
+                          ) : count === 'count' ? (
+                            <TextField
+                              name="scopeCount"
+                              id="count"
+                              label="Count"
+                              size="small"
+                              color="success"
+                              defaultValue={1}
+                              placeholder="Enter your count"
+                              type="number"
+                              error={countError}
+                              helperText={countError && 'Fill in the characters, the length is 1-1000.'}
+                              onChange={(e) => {
+                                const validate = headerCountValidate(e.target.value);
+                                setCountError(!validate);
+                              }}
+                              InputProps={{
+                                endAdornment: (
+                                  <Tooltip
+                                    title="Count is the number of peers to be preheated.  It must be a value between 1 and 200 (inclusive) if provided."
+                                    placement="top"
+                                  >
+                                    <HelpIcon
+                                      sx={{
+                                        color: 'var(--palette-grey-300Channel)',
+                                        width: '0.8rem',
+                                        height: '0.8rem',
+                                        ':hover': { color: 'var(--palette-description-color)' },
+                                      }}
+                                    />
+                                  </Tooltip>
+                                ),
+                              }}
+                              sx={{ width: '8rem' }}
+                            />
+                          ) : (
+                            <></>
+                          )}
+                        </Box>
+                      </Card>
+                    ) : (
+                      <></>
+                    )}
                   </Box>
                 ) : (
                   <Box key={item.formProps.id} sx={{ width: '100%' }}>

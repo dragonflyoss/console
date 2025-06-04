@@ -771,6 +771,7 @@ export interface JobsResponse {
     urls: Array<string> | null;
     piece_length: number;
     username: string;
+    content_for_calculating_task_id: string;
   };
   result: {
     created_at: string;
@@ -827,12 +828,13 @@ interface createJobRequest {
   args: {
     type: string;
     url?: string;
-    urls: Array<string> | null;
-    application: string;
-    tag: string;
-    filtered_query_params: string;
+    urls?: Array<string> | null;
+    application?: string;
+    tag?: string;
+    filtered_query_params?: string;
     headers?: { [key: string]: string } | null;
     piece_length?: number;
+    content_for_calculating_task_id?: string;
   };
   scheduler_cluster_ids: Array<number>;
 }
@@ -962,6 +964,7 @@ interface createTaskJobResquest {
     tag?: string;
     application?: string;
     filtered_query_params?: string;
+    content_for_calculating_task_id?: string;
   };
   scheduler_cluster_ids?: Array<number>;
   type: string;
@@ -1057,6 +1060,7 @@ export interface getTaskJobResponse {
     timeout?: number;
     url?: string;
     piece_length?: number;
+    content_for_calculating_task_id?: string | null;
   };
   result: {
     created_at: string;

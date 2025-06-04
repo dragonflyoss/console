@@ -87,6 +87,9 @@ describe('Executions', () => {
       // Show execution id.
       cy.get('#id').should('contain', 10);
 
+      // Show execution content for calculating task id.
+      cy.get('#content-for-calculating-task-id').should('have.text', '-');
+
       cy.get('[data-testid="execution-isloading"]').should('not.exist');
 
       // Show execution piece length.
@@ -269,6 +272,9 @@ describe('Executions', () => {
       // Show execution task id.
       cy.get('#task-id').should('have.text', '-');
 
+      // Show execution content for calculating task id.
+      cy.get('#content-for-calculating-task-id').should('have.text', '-');
+
       // Show execution url.
       cy.get('#url').should('have.text', '-');
 
@@ -325,6 +331,9 @@ describe('Executions', () => {
       // Show execution task id.
       cy.get('#task-id').should('have.text', '-');
 
+      // Show execution content for calculating task id.
+      cy.get('#content-for-calculating-task-id').should('have.text', '-');
+      
       // Show execution url.
       cy.get('#url').should('have.text', '-');
 

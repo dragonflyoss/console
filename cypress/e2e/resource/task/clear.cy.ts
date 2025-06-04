@@ -237,6 +237,52 @@ describe('Clear', () => {
       cy.get('.MuiInputBase-root > #task-id').should('not.have.value');
       cy.get('.MuiInputBase-root > #task-id').type('{enter}');
     });
+
+    it('can search by content for calculating task id', () => {
+      cy.get('#serach-content-for-calculating-task-id').click();
+
+      cy.intercept(
+        {
+          method: 'post',
+          url: '/api/v1/jobs',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: createTaskJob,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: task,
+          });
+        },
+      );
+
+      cy.get('#content-for-calculating-task-id').type('3870122509{enter}');
+      cy.get('#cache').children().should('have.length', 3);
+
+      // Go to next page.
+      cy.get('#pagination-0 > .MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
+
+      // Check the current page number.
+      cy.get('#pagination-0 > .MuiPagination-ul .Mui-selected').should('have.text', '2');
+      cy.get('#cache-0 > :nth-child(1) > .css-tzff0k > .MuiBox-root > .MuiTypography-root').should(
+        'have.text',
+        'dragonfly-seed-client-5',
+      );
+      cy.get('#cache-0').children().should('have.length', 2);
+
+      // Pagination should not be displayed.
+      cy.get('#pagination-1').should('exist');
+    });
   });
 
   describe('should handle API error response', () => {
@@ -497,6 +543,56 @@ describe('Clear', () => {
       cy.url().should('include', '/resource/task/executions/1');
     });
 
+    it('Can delete cache searched by content for calculating task id', () => {
+      cy.get('#serach-content-for-calculating-task-id').click();
+
+      cy.intercept(
+        {
+          method: 'post',
+          url: '/api/v1/jobs',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: createTaskJob,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: taskIDByTask,
+          });
+        },
+      );
+
+      cy.get('#content-for-calculating-task-id').type('3870122509{enter}');
+
+      cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .MuiButtonBase-root').click();
+
+      cy.get('#deletCache').type('e');
+
+      // Should display message delete cache the validation error.
+      cy.get('#deletCache-helper-text').should('have.text', 'Please enter "DELETE"');
+
+      cy.get('#deletCache').clear();
+
+      cy.get('#deletCache').type('DELETE');
+
+      cy.get('#deletCache-helper-text').should('not.exist');
+
+      // Click delete cache button.
+      cy.get('#deleteTask').click();
+
+      // Then I see that the current page is the executions id.
+      cy.url().should('include', '/resource/task/executions/1');
+    });
+
     it('search by task id API error response should be handled', () => {
       cy.get('#url').click();
       // Add url.
@@ -719,6 +815,19 @@ describe('Clear', () => {
 
       cy.get('#task-id').type(`${taskID}{enter}`);
       cy.get('#task-id-helper-text')
+        .should('be.visible')
+        .and('have.text', 'Fill in the characters, the length is 0-1000.');
+    });
+
+    it('try to verify url', () => {
+      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const contentForCalculatingTaskID = _.times(1001, () => _.sample(characters)).join('');
+
+      cy.get('#serach-content-for-calculating-task-id').click();
+
+      cy.get('#content-for-calculating-task-id').type(`${contentForCalculatingTaskID}{enter}`);
+
+      cy.get('#content-for-calculating-task-id-helper-text')
         .should('be.visible')
         .and('have.text', 'Fill in the characters, the length is 0-1000.');
     });

@@ -47,6 +47,8 @@ import { ReactComponent as Application } from '../../../../assets/images/resourc
 import { ReactComponent as IP } from '../../../../assets/images/resource/task/ip.svg';
 import { ReactComponent as CheckLog } from '../../../../assets/images/resource/task/error-log.svg';
 import { ReactComponent as PieceLength } from '../../../../assets/images/job/preheat/piece-length.svg';
+import { ReactComponent as ContentForCalculatingTaskID } from '../../../../assets/images/resource/task/content-for-calculating-task-id.svg';
+
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -375,6 +377,33 @@ export default function ShowExecutions() {
               </Typography>
             </CustomWidthTooltip>
           )}
+        </Box>
+        <Box className={styles.informationContainer}>
+          <Box className={styles.informationTitle}>
+            <ContentForCalculatingTaskID className={styles.informationTitleIcon} />
+            <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
+              Content for calculating task id
+            </Typography>
+          </Box>
+          <Box width="70%">
+            <CustomWidthTooltip title={executions?.args?.content_for_calculating_task_id || '-'} placement="bottom">
+              <Typography
+                id="content-for-calculating-task-id"
+                variant="body1"
+                fontFamily="mabry-bold"
+                component="div"
+                className={styles.contentForCalculatingTaskID}
+              >
+                {isLoading ? (
+                  <Skeleton sx={{ width: '4rem' }} />
+                ) : executions?.args?.content_for_calculating_task_id ? (
+                  executions?.args?.content_for_calculating_task_id
+                ) : (
+                  '-'
+                )}
+              </Typography>
+            </CustomWidthTooltip>
+          </Box>
         </Box>
         <Box className={styles.informationContainer}>
           <Box className={styles.informationTitle}>

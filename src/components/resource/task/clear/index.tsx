@@ -45,6 +45,7 @@ import { ReactComponent as NoTask } from '../../../../assets/images/resource/tas
 import { ReactComponent as DarkNoTask } from '../../../../assets/images/resource/task/dark-no-task.svg';
 import { ReactComponent as Delete } from '../../../../assets/images/cluster/delete.svg';
 import { ReactComponent as DeleteWarning } from '../../../../assets/images/cluster/delete-warning.svg';
+import { ReactComponent as ContentForCalculatingTaskID } from '../../../../assets/images/resource/task/content-for-calculating-task-id.svg';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
@@ -66,10 +67,12 @@ export default function Clear() {
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [searchTaskISLodaing, setSearchTaskISLodaing] = useState(false);
+  const [searchContentForCalculatingTaskIDISLodaing, setSearchContentForCalculatingTaskIDISLodaing] = useState(false);
   const [searchIconISLodaing, setSearchIconISLodaing] = useState(false);
   const [openDeleteTask, setOpenDeleteTask] = useState(false);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [searchTask, setSearchTask] = useState('');
+  const [searchContentForCalculatingTaskID, setSearchContentForCalculatingTaskID] = useState('');
   const [task, setTask] = useState<getTaskJobResponse | any>();
   const [optional, setOptional] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
@@ -78,6 +81,7 @@ export default function Clear() {
   const [schedulerClusterID, setSchedulerClusterID] = useState(0);
   const [urlError, setUrlError] = useState(false);
   const [taskIDError, setTaskIDError] = useState(false);
+  const [contentForCalculatingTaskIDError, setContentForCalculatingTaskIDError] = useState(false);
   const [applicationError, setApplicationError] = useState(false);
   const [tagError, setTagError] = useState(false);
   const [pieceLengthError, setPieceLengthError] = useState(false);
@@ -109,6 +113,7 @@ export default function Clear() {
               setIsLoading(false);
               setSearchIconISLodaing(false);
               setSearchTaskISLodaing(false);
+              setSearchContentForCalculatingTaskIDISLodaing(false);
 
               setTask(job);
             } else {
@@ -123,6 +128,7 @@ export default function Clear() {
           setIsLoading(false);
           setSearchIconISLodaing(false);
           setSearchTaskISLodaing(false);
+          setSearchContentForCalculatingTaskIDISLodaing(false);
         }
       }
     };
@@ -142,6 +148,7 @@ export default function Clear() {
               setIsLoading(false);
               setSearchIconISLodaing(false);
               setSearchTaskISLodaing(false);
+              setSearchContentForCalculatingTaskIDISLodaing(false);
             }
           } catch (error) {
             if (error instanceof Error) {
@@ -151,6 +158,7 @@ export default function Clear() {
               setIsLoading(false);
               setSearchIconISLodaing(false);
               setSearchTaskISLodaing(false);
+              setSearchContentForCalculatingTaskIDISLodaing(false);
             }
           }
         };
@@ -383,7 +391,7 @@ export default function Clear() {
       required: true,
       value: searchTask,
       autoComplete: 'family-name',
-      placeholder: 'Enter your URL',
+      placeholder: 'Enter your task id',
       helperText: taskIDError ? 'Fill in the characters, the length is 0-1000.' : '',
       error: taskIDError,
       InputProps: {
@@ -421,6 +429,56 @@ export default function Clear() {
 
     validate: (value: string) => {
       const reg = /^.{0,1000}$/;
+      return reg.test(value);
+    },
+  };
+
+  const calculatingTaskIDList = {
+    formProps: {
+      id: 'content-for-calculating-task-id',
+      label: 'Content for Calculating Task ID',
+      name: 'content-for-calculating-task-id',
+      required: true,
+      value: searchContentForCalculatingTaskID,
+      autoComplete: 'family-name',
+      placeholder: 'Enter your content for calculating task id',
+      helperText: contentForCalculatingTaskIDError ? 'Fill in the characters, the length is 0-1000.' : '',
+      error: contentForCalculatingTaskIDError,
+      InputProps: {
+        startAdornment: searchContentForCalculatingTaskIDISLodaing ? (
+          <Box className={styles.circularProgress}>
+            <SearchCircularProgress />
+          </Box>
+        ) : (
+          <Box className={styles.circularProgress}>
+            <SearchIcon sx={{ color: '#9BA0A6' }} />
+          </Box>
+        ),
+        endAdornment: searchContentForCalculatingTaskID ? (
+          <IconButton
+            type="button"
+            aria-label="search"
+            onClick={() => {
+              setSearchContentForCalculatingTaskID('');
+            }}
+          >
+            <ClearIcon />
+          </IconButton>
+        ) : (
+          <></>
+        ),
+      },
+
+      onChange: (e: any) => {
+        changeValidate(e.target.value, calculatingTaskIDList);
+        setSearchContentForCalculatingTaskID(e.target.value);
+      },
+    },
+    syncError: false,
+    setError: setContentForCalculatingTaskIDError,
+
+    validate: (value: string) => {
+      const reg = /^.{1,1000}$/;
       return reg.test(value);
     },
   };
@@ -472,6 +530,21 @@ export default function Clear() {
             const formList = {
               args: {
                 task_id: task?.args?.task_id,
+              },
+              scheduler_cluster_ids: [schedulerClusterID],
+              type: 'delete_task',
+            };
+
+            const tasks = await createTaskJob(formList);
+            if (tasks?.id) {
+              setDeleteLoadingButton(false);
+              navigate(`/resource/task/executions/${tasks?.id}`);
+              setOpenDeleteTask(false);
+            }
+          } else if (task?.args?.content_for_calculating_task_id) {
+            const formList = {
+              args: {
+                content_for_calculating_task_id: task?.args?.content_for_calculating_task_id,
               },
               scheduler_cluster_ids: [schedulerClusterID],
               type: 'delete_task',
@@ -619,6 +692,44 @@ export default function Clear() {
     }
   };
 
+  const handleSearchBySearchContentForCalculatingTaskID = async (event: any) => {
+    setIsLoading(true);
+    setSearchContentForCalculatingTaskIDISLodaing(true);
+    setSearchIconISLodaing(false);
+    try {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+
+      const taskIDValue = data.get(calculatingTaskIDList.formProps.name);
+      calculatingTaskIDList.setError(!calculatingTaskIDList.validate(taskIDValue as string));
+      calculatingTaskIDList.syncError = !calculatingTaskIDList.validate(taskIDValue as string);
+
+      if (searchContentForCalculatingTaskID !== '' && !calculatingTaskIDList.syncError) {
+        const data = {
+          args: {
+            content_for_calculating_task_id: searchContentForCalculatingTaskID,
+          },
+          type: 'get_task',
+        };
+
+        const task = await createTaskJob(data);
+        setSearchID(task?.id);
+      } else {
+        navigate('/resource/task/clear');
+        setTask(null);
+        setIsLoading(false);
+        setSearchContentForCalculatingTaskIDISLodaing(false);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(true);
+        setErrorMessageText(error.message);
+        setIsLoading(false);
+        setSearchContentForCalculatingTaskIDISLodaing(false);
+      }
+    }
+  };
+
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -700,6 +811,7 @@ export default function Clear() {
               },
               p: '0.3rem 0.5rem',
               color: 'var(--palette-dark-400Channel)',
+              textTransform: 'none',
             }}
           >
             <LinkOutlinedIcon sx={{ mr: '0.4rem' }} />
@@ -723,16 +835,50 @@ export default function Clear() {
               },
               p: '0.3rem 0.5rem',
               color: 'var(--palette-dark-400Channel)',
+              textTransform: 'none',
             }}
           >
             <AssignmentOutlinedIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-            Search by task id
+            Search by Task ID
+          </ToggleButton>
+          <ToggleButton
+            id="serach-content-for-calculating-task-id"
+            value="content-for-calculating-task-id"
+            size="small"
+            sx={{
+              '&.Mui-selected': {
+                backgroundColor: 'var(--palette-save-color)',
+                color: '#FFFFFF',
+                boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
+                '&:hover': {
+                  backgroundColor: 'var(--palette-save-color)',
+                },
+              },
+              '&:hover': {
+                backgroundColor: 'transparent',
+              },
+              p: '0.3rem 0.5rem',
+              color: 'var(--palette-dark-400Channel)',
+              textTransform: 'none',
+            }}
+          >
+            <ContentForCalculatingTaskID className={styles.contentForCalculatingTaskIDIcon} />
+            Search by Calculating Task ID
           </ToggleButton>
         </StyledToggleButtonGroup>
       </Paper>
       {search === 'task-id' ? (
         <Box key="task-id" component="form" onSubmit={handleSearchByTaskID} sx={{ width: '38rem', height: '3rem' }}>
           <TextField fullWidth variant="outlined" size="small" {...taskIDList.formProps} sx={{ p: 0 }} />
+        </Box>
+      ) : search === 'content-for-calculating-task-id' ? (
+        <Box
+          key="content-for-calculating-task-id"
+          component="form"
+          onSubmit={handleSearchBySearchContentForCalculatingTaskID}
+          sx={{ width: '38rem', height: '3rem' }}
+        >
+          <TextField fullWidth variant="outlined" size="small" {...calculatingTaskIDList.formProps} sx={{ p: 0 }} />
         </Box>
       ) : (
         <Box sx={{ position: 'relative', height: '3rem' }}>
@@ -757,90 +903,78 @@ export default function Clear() {
               }}
               key="url"
             />
-
             {optional ? (
-              <>
-                <Divider sx={{ m: '1rem 0' }} />
-                <Typography variant="subtitle1" fontFamily="mabry-bold" component="div">
-                  Optional
-                </Typography>
-                <Box>
-                  <Box className={styles.optionalContainer}>
-                    {formList.map((item) => {
-                      return (
-                        <Box key={item.formProps.id} className={styles.filterInput}>
-                          <Box width="30%" display="flex" alignItems="center">
-                            <Typography variant="body2" color="#5e5e5e" fontFamily="mabry-bold" mr="0.4rem">
-                              {item?.formProps?.labels}
-                            </Typography>
-                            {item?.id === 'filteredQueryParams' ? (
-                              <Tooltip
-                                title={
-                                  'Filter the query parameters of the downloaded URL. If the download URL is the same, it will be scheduled as the same task.'
-                                }
-                                placement="top"
-                              >
-                                <HelpIcon
-                                  sx={{
-                                    color: 'var(--palette-grey-300Channel)',
-                                    width: '0.8rem',
-                                    height: '0.8rem',
-                                    mr: '0.3rem',
-                                    ':hover': { color: 'var(--palette-description-color)' },
-                                  }}
-                                />
-                              </Tooltip>
-                            ) : (
-                              item.formProps?.InputProps
-                            )}
-                          </Box>
-                          {item.id === 'filteredQueryParams' ? (
-                            <Autocomplete
-                              freeSolo
-                              multiple
-                              disableClearable
-                              {...item.filterFormProps}
-                              className={styles.textField}
-                              size="small"
-                              renderInput={(params) => <TextField {...params} margin="normal" {...item.formProps} />}
-                            />
-                          ) : item.formProps.id === 'pieceLength' ? (
-                            <TextField
-                              sx={{ width: '10.8rem' }}
-                              margin="normal"
-                              size="small"
-                              {...item.formProps}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="start">
-                                    <Typography
-                                      sx={{ fontFamily: 'mabry-bold', color: 'var(--palette-sidebar-menu-color)' }}
-                                    >
-                                      MiB
-                                    </Typography>
-                                  </InputAdornment>
-                                ),
-                              }}
-                            />
+              <Box mt="1rem">
+                <Box className={styles.optionalContainer}>
+                  {formList.map((item) => {
+                    return (
+                      <Box key={item.formProps.id} className={styles.filterInput}>
+                        <Box width="30%" display="flex" alignItems="center">
+                          <Typography variant="body2" color="#5e5e5e" fontFamily="mabry-bold" mr="0.4rem">
+                            {item?.formProps?.labels}
+                          </Typography>
+                          {item?.id === 'filteredQueryParams' ? (
+                            <Tooltip
+                              title={
+                                'Filter the query parameters of the downloaded URL. If the download URL is the same, it will be scheduled as the same task.'
+                              }
+                              placement="top"
+                            >
+                              <HelpIcon
+                                sx={{
+                                  color: 'var(--palette-grey-300Channel)',
+                                  width: '0.8rem',
+                                  height: '0.8rem',
+                                  mr: '0.3rem',
+                                  ':hover': { color: 'var(--palette-description-color)' },
+                                }}
+                              />
+                            </Tooltip>
                           ) : (
-                            <TextField margin="normal" size="small" {...item.formProps} className={styles.textField} />
+                            item.formProps?.InputProps
                           )}
                         </Box>
-                      );
-                    })}
-                  </Box>
-                  <Divider sx={{ pb: '1rem' }} />
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1rem' }}>
-                    <CancelLoadingButton id="cancelSearchByURL" loading={loadingButton} onClick={handleCloseSearch} />
-                    <SavelLoadingButton
-                      loading={loadingButton}
-                      endIcon={<SearchIcon />}
-                      id="searchByURL"
-                      text="search"
-                    />
-                  </Box>
+                        {item.id === 'filteredQueryParams' ? (
+                          <Autocomplete
+                            freeSolo
+                            multiple
+                            disableClearable
+                            {...item.filterFormProps}
+                            className={styles.textField}
+                            size="small"
+                            renderInput={(params) => <TextField {...params} margin="normal" {...item.formProps} />}
+                          />
+                        ) : item.formProps.id === 'pieceLength' ? (
+                          <TextField
+                            sx={{ width: '10.8rem' }}
+                            margin="normal"
+                            size="small"
+                            {...item.formProps}
+                            InputProps={{
+                              endAdornment: (
+                                <InputAdornment position="start">
+                                  <Typography
+                                    sx={{ fontFamily: 'mabry-bold', color: 'var(--palette-sidebar-menu-color)' }}
+                                  >
+                                    MiB
+                                  </Typography>
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                        ) : (
+                          <TextField margin="normal" size="small" {...item.formProps} className={styles.textField} />
+                        )}
+                      </Box>
+                    );
+                  })}
                 </Box>
-              </>
+                <Divider sx={{ pb: '1rem' }} />
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1rem' }}>
+                  <CancelLoadingButton id="cancelSearchByURL" loading={loadingButton} onClick={handleCloseSearch} />
+                  <SavelLoadingButton loading={loadingButton} endIcon={<SearchIcon />} id="searchByURL" text="search" />
+                </Box>
+              </Box>
             ) : (
               ''
             )}

@@ -107,15 +107,9 @@ describe('Update cluster', () => {
     cy.get('#location').should('have.value', '');
 
     // IDC should be empty.
-    cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').should(
-      'have.value',
-      '',
-    );
+    cy.get('#idc').should('have.value', '');
     // CIDRs should be empty.
-    cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').should(
-      'have.value',
-      '',
-    );
+    cy.get('#cidrs').should('have.value', '');
     // Hostname should be empty.
     cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').should(
       'have.value',
@@ -156,9 +150,7 @@ describe('Update cluster', () => {
     cy.get('#location').clear();
     cy.get('#location').type('China|Shang|Hai');
 
-    cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root')
-      .type('{selectall}')
-      .type('{backspace}');
+    cy.get('#idc').type('{selectall}').type('{backspace}');
 
     cy.get('#cidrs').type('192.168.20.2{enter}');
 
@@ -328,7 +320,7 @@ describe('Update cluster', () => {
       cy.get('#location-helper-text').should('not.exist');
 
       // Should display idc the validation error message.
-      cy.get(':nth-child(2) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('hz');
+      cy.get('#idc').type('hz');
       cy.get('#save').click();
       cy.url().should('include', '/clusters/1/edit');
       cy.get('#idc-helper-text').should('be.visible').and('contain', `Please press ENTER to end the IDC creation.`);
@@ -338,9 +330,7 @@ describe('Update cluster', () => {
       cy.get('#idc-helper-text').should('not.exist');
 
       // Should display cidrs the validation error message.
-      cy.get(':nth-child(3) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type(
-        '192.168.40.0/24',
-      );
+      cy.get('#cidrs').type('192.168.40.0/24');
       cy.get('#save').click();
       cy.url().should('include', '/clusters/1/edit');
 
@@ -351,7 +341,7 @@ describe('Update cluster', () => {
       cy.get('#cidrs-helper-text').should('not.exist');
 
       // Should display hostnames the validation error message.
-      cy.get(':nth-child(4) > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root').type('cluster-2');
+      cy.get('#hostnames').type('cluster-2');
 
       cy.get('#save').click();
       cy.url().should('include', '/clusters/1/edit');

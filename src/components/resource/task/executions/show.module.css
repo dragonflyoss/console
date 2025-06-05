@@ -29,6 +29,14 @@
   font-family: 'mabry-bold' !important;
 }
 
+.contentForCalculatingTaskID {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-style: italic;
+}
+
 .informationTitleIcon {
   width: 1.4rem !important;
   height: 1.4rem !important;

@@ -395,10 +395,8 @@ export default function ShowExecutions() {
               >
                 {isLoading ? (
                   <Skeleton sx={{ width: '4rem' }} />
-                ) : executions?.args?.content_for_calculating_task_id ? (
-                  executions?.args?.content_for_calculating_task_id
                 ) : (
-                  '-'
+                  executions?.args?.content_for_calculating_task_id || '-'
                 )}
               </Typography>
             </CustomWidthTooltip>

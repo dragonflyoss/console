@@ -123,7 +123,7 @@ describe('Create preheat', () => {
     cy.get('#application').should('have.text', 'application-1');
   });
 
-  it('can create preheat by content for calculating task id', () => {
+  it('can create preheat by calculating task id', () => {
     cy.visit('/jobs/preheats');
     cy.get('#new-preheat').click();
 
@@ -283,33 +283,71 @@ describe('Create preheat', () => {
     cy.get('#piece-length').should('have.text', '5 MiB');
   });
 
-  it('should handle API error response', () => {
-    cy.intercept(
-      {
-        method: 'POST',
-        url: '/api/v1/jobs',
-      },
-      (req) => {
-        req.reply({
-          forceNetworkError: true,
-        });
-      },
-    );
+  describe('should handle API error response', () => {
+    it('unable to create preheat via arguments', () => {
+      cy.intercept(
+        {
+          method: 'POST',
+          url: '/api/v1/jobs',
+        },
+        (req) => {
+          req.reply({
+            forceNetworkError: true,
+          });
+        },
+      );
 
-    cy.get('#cluster').click();
-    cy.contains('li', 'cluster-2').click();
-    cy.get('body').click('topLeft');
+      cy.get('#cluster').click();
+      cy.contains('li', 'cluster-2').click();
+      cy.get('body').click('topLeft');
 
-    // Select a scope.
-    cy.get('#select-scope').click();
-    cy.get('#all_peers').click();
+      // Select a scope.
+      cy.get('#select-scope').click();
+      cy.get('#all_peers').click();
 
-    cy.get('#url').type('https://example.com/path/to/file');
+      cy.get('#url').type('https://example.com/path/to/file');
 
-    cy.get('#save').click();
+      cy.get('#save').click();
 
-    // Show error message.
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      // Show error message.
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+    });
+
+    it('unable to create preheat via calculating task id', () => {
+      cy.get('#description').type('create preheat');
+
+      // Select a cluster.
+      cy.get('#cluster').type('cluster-1{enter}');
+
+      cy.get('body').click('topLeft');
+      // Add url.
+      cy.get('#url').type('https://example.com/path/to/file');
+
+      cy.get('#add-url').click();
+      cy.get('#url-0').type('https://example.com/path/to/file/url-1');
+
+      // Click content for calculating task id button
+      cy.get('#create-content-for-calculating-task-id').click();
+
+      cy.get('#content-for-calculating-task-id').type('3870122509');
+
+      cy.intercept(
+        {
+          method: 'POST',
+          url: '/api/v1/jobs',
+        },
+        (req) => {
+          req.reply({
+            forceNetworkError: true,
+          });
+        },
+      );
+
+      cy.get('#save').click();
+
+      // Show error message.
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+    });
   });
 
   describe('cannot create preheat with invalid attributes', () => {
@@ -496,7 +534,7 @@ describe('Create preheat', () => {
       cy.get('#header').children().should('have.length', 3);
     });
 
-    it('try to verify information', () => {
+    it('try to verify calculating task id', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       const contentForCalculatingTaskID = _.times(1001, () => _.sample(characters)).join('');
 

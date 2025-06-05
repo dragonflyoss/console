@@ -21,6 +21,10 @@ import {
   Breadcrumbs,
   InputAdornment,
   styled,
+  Slider,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
   ToggleButtonGroup,
   toggleButtonGroupClasses,
   ToggleButton,
@@ -53,6 +57,56 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   },
 }));
 
+const PrettoSlider = styled(Slider)(({ theme }) => ({
+  color: 'var(--palette-description-color)',
+  padding: '12px 0',
+  width: '14rem',
+  '& .MuiSlider-thumb': {
+    height: 20,
+    width: 20,
+    backgroundColor: '#fff',
+    boxShadow: '0 0 2px 0px rgba(0, 0, 0, 0.1)',
+    '&:focus, &:hover, &.Mui-active': {
+      boxShadow: '0px 0px 3px 1px rgba(0, 0, 0, 0.1)',
+      '@media (hover: none)': {
+        boxShadow: '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)',
+      },
+    },
+    '&:before': {
+      boxShadow: '0px 0px 1px 0px rgba(0,0,0,0.2), 0px 0px 0px 0px rgba(0,0,0,0.14), 0px 0px 1px 0px rgba(0,0,0,0.12)',
+    },
+  },
+  '& .MuiSlider-valueLabel': {
+    fontSize: 12,
+    fontWeight: 'normal',
+    top: -6,
+    backgroundColor: 'unset',
+    color: theme.palette.text.primary,
+    '&::before': {
+      display: 'none',
+    },
+    '& *': {
+      background: 'transparent',
+      color: '#000',
+      ...theme.applyStyles('dark', {
+        color: '#fff',
+      }),
+    },
+  },
+  '& .MuiSlider-track': {
+    border: 'none',
+    height: 5,
+  },
+  '& .MuiSlider-rail': {
+    opacity: 0.5,
+    boxShadow: 'inset 0px 0px 4px -2px #000',
+    backgroundColor: '#d0d0d0',
+  },
+  ...theme.applyStyles('dark', {
+    color: 'var(--palette-description-color)',
+  }),
+}));
+
 export default function NewPreheat() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
@@ -75,7 +129,10 @@ export default function NewPreheat() {
   const [clusterName, setClusterName] = useState<string[]>([]);
   const [clusterHelperText, setClusterHelperText] = useState('Select at least one option.');
   const [scope, setScope] = useState<string>('single_seed_peer');
+  const [count, setCount] = useState<string>('all');
   const [filterHelperText, setFilterHelperText] = useState('Fill in the characters, the length is 0-100.');
+  const [countError, setCountError] = useState(false);
+  const [percentage, setPercentage] = useState(50);
   const [search, setSearch] = useState<string | null>('args');
 
   const navigate = useNavigate();
@@ -418,9 +475,10 @@ export default function NewPreheat() {
     const selectedValues = event.target.value;
     const currentSelection = scopeList.find((scope) => scope.name === selectedValues);
     setScope(currentSelection?.name || '');
+    setCount('all');
   };
 
-  const headerURLValidate = (value: any) => {
+  const URLValidate = (value: any) => {
     const regex = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s]{1,1000}$/;
     return regex.test(value);
   };
@@ -432,6 +490,11 @@ export default function NewPreheat() {
 
   const headersValueValidate = (value: any) => {
     const regex = /^.{1,10000}$/;
+    return regex.test(value);
+  };
+
+  const countValidate = (value: any) => {
+    const regex = /^(?:[1-9][0-9]?|1[0-9]{2}|200)$/;
     return regex.test(value);
   };
 
@@ -455,6 +518,18 @@ export default function NewPreheat() {
       const pieceLength = event.currentTarget.elements.pieceLength.value;
       const filters = filter.join('&');
 
+      let percentage = null;
+      let countValue = null;
+
+      if (count !== 'all') {
+        if (count === 'percentage') {
+          percentage = event.currentTarget.elements.scopePercentage.value;
+        } else if (count === 'count') {
+          countValue = event.currentTarget.elements.scopeCount.value;
+        }
+      }
+
+      const data = new FormData(event.currentTarget);
       if (filterText) {
         setFilterError(true);
         setFilterHelperText('Please press ENTER to end the filter creation');
@@ -481,7 +556,7 @@ export default function NewPreheat() {
       urlForm.syncError = !urlForm.validate(url as string);
 
       const urlValidate = URLs.every((item: { url: any; error: boolean }, index) => {
-        const isValid = headerURLValidate(item.url);
+        const isValid = URLValidate(item.url);
 
         const newURL = [...URLs];
         newURL[index].error = !isValid;
@@ -507,6 +582,8 @@ export default function NewPreheat() {
 
       urlList.push(url);
 
+      const validateCount = countValidate(countValue);
+
       const headerList: { [key: string]: string } = headers.reduce(
         (accumulator, currentValue) => ({ ...accumulator, [currentValue.key.key]: currentValue.value.value }),
         {},
@@ -528,7 +605,8 @@ export default function NewPreheat() {
           clusterIDValidate &&
           headerValidate &&
           urlValidate &&
-          Boolean(!filterText),
+          Boolean(!filterText) &&
+          (countValue ? validateCount : true),
       );
 
       const clusterSet = new Set(clusterName);
@@ -546,6 +624,8 @@ export default function NewPreheat() {
           filtered_query_params: filters,
           headers: headerList,
           scope: scope,
+          ...(countValue && count === 'count' && { count: Number(countValue) }),
+          ...(percentage && count === 'percentage' && { percentage: Number(percentage) }),
           ...(pieceLength && pieceLength !== 0 && { piece_length: pieceLength * 1024 * 1024 }),
         },
         scheduler_cluster_ids: clusterID,
@@ -575,9 +655,6 @@ export default function NewPreheat() {
         item.syncError = !item.validate(value as string);
       });
 
-      calculatingTaskIDList.setError(!calculatingTaskIDList.validate(contentForCalculatingTaskID as string));
-      calculatingTaskIDList.syncError = !calculatingTaskIDList.validate(contentForCalculatingTaskID as string);
-
       const urlList = URLs.map((item) => item.url);
 
       urlList.push(url);
@@ -599,7 +676,7 @@ export default function NewPreheat() {
       urlForm.syncError = !urlForm.validate(url as string);
 
       const urlValidate = URLs.every((item: { url: any; error: boolean }, index) => {
-        const isValid = headerURLValidate(item.url);
+        const isValid = URLValidate(item.url);
 
         const newURL = [...URLs];
         newURL[index].error = !isValid;
@@ -608,9 +685,20 @@ export default function NewPreheat() {
         return isValid;
       });
 
+      informationForm.forEach((item) => {
+        const value = data.get(item.formProps.name);
+        item.setError(!item.validate(value as string));
+        item.syncError = !item.validate(value as string);
+      });
+
+      calculatingTaskIDList.setError(!calculatingTaskIDList.validate(contentForCalculatingTaskID));
+
+      calculatingTaskIDList.syncError = !calculatingTaskIDList.validate(contentForCalculatingTaskID);
+
       const canSubmit = Boolean(
         !informationForm.filter((item) => item.syncError).length &&
           !urlForm.syncError &&
+          !calculatingTaskIDList.syncError &&
           clusterIDValidate &&
           urlValidate &&
           !calculatingTaskIDList.syncError,
@@ -787,6 +875,7 @@ export default function NewPreheat() {
           <Box sx={{ width: '100%' }}>
             <TextField {...urlForm.formProps} color="success" className={styles.filterInput} size="small" />
           </Box>
+
           {URLs.map((item, index) => {
             return (
               <Box sx={{ display: 'inline-flex', alignItems: 'flex-start', m: '0.8rem 0' }}>
@@ -806,7 +895,7 @@ export default function NewPreheat() {
                     const newURL = [...URLs];
                     newURL[index].url = event.target.value;
 
-                    const isValid = headerURLValidate(event.target.value);
+                    const isValid = URLValidate(event.target.value);
                     newURL[index].error = !isValid;
 
                     setURLS(newURL);
@@ -832,26 +921,28 @@ export default function NewPreheat() {
               </Box>
             );
           })}
-          <Button
-            sx={{
-              '&.MuiButton-root': {
-                borderColor: 'var(--palette-description-color)',
-                color: 'var(--palette-description-color)',
-                borderStyle: 'dashed',
-              },
-              width: '37rem',
-              m: '1rem 0',
-            }}
-            variant="outlined"
-            id="add-url"
-            size="small"
-            startIcon={<AddIcon />}
-            onClick={() => {
-              setURLS([...URLs, { url: '', error: false }]);
-            }}
-          >
-            add URL
-          </Button>
+          <Box>
+            <Button
+              sx={{
+                '&.MuiButton-root': {
+                  borderColor: 'var(--palette-description-color)',
+                  color: 'var(--palette-description-color)',
+                  borderStyle: 'dashed',
+                },
+                width: '37rem',
+                m: '1rem 0',
+              }}
+              variant="outlined"
+              id="add-url"
+              size="small"
+              startIcon={<AddIcon />}
+              onClick={() => {
+                setURLS([...URLs, { url: '', error: false }]);
+              }}
+            >
+              add URL
+            </Button>
+          </Box>
         </Box>
         <Paper
           elevation={0}
@@ -923,21 +1014,6 @@ export default function NewPreheat() {
         </Paper>
         {search === 'args' ? (
           <Box className={styles.title}>
-            {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
-                Args
-              </Typography>
-              <Tooltip title="Args used to pass additional configuration options to the preheat task." placement="top">
-                <HelpIcon
-                  sx={{
-                    color: 'var(--palette-grey-300Channel)',
-                    width: '0.8rem',
-                    height: '0.8rem',
-                    ':hover': { color: 'var(--palette-description-color)' },
-                  }}
-                />
-              </Tooltip>
-            </Box> */}
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {argsForm.map((item) => {
                 return item?.filterFormProps?.id === 'filteredQueryParams' ? (
@@ -1013,6 +1089,150 @@ export default function NewPreheat() {
                         ))}
                       </Select>
                     </FormControl>
+                    {scope !== 'single_seed_peer' ? (
+                      <Paper variant="outlined" className={styles.scope} id="count-or-percentage">
+                        <FormControl sx={{ p: '0.8rem 1rem' }}>
+                          <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            value={count}
+                            onChange={(_e, newValue) => {
+                              setCount(newValue);
+                            }}
+                          >
+                            <FormControlLabel
+                              value="all"
+                              control={
+                                <Radio
+                                  sx={{ '&.MuiRadio-root': { color: 'var(--palette-description-color)' } }}
+                                  size="small"
+                                  id="radio-all"
+                                />
+                              }
+                              label="All"
+                            />
+                            <FormControlLabel
+                              value="percentage"
+                              control={
+                                <Radio
+                                  sx={{ '&.MuiRadio-root': { color: 'var(--palette-description-color)' } }}
+                                  size="small"
+                                  id="radio-percentage"
+                                />
+                              }
+                              label="Percentage"
+                            />
+                            <FormControlLabel
+                              value="count"
+                              control={
+                                <Radio
+                                  sx={{ '&.MuiRadio-root': { color: 'var(--palette-description-color)' } }}
+                                  size="small"
+                                  id="radio-count"
+                                />
+                              }
+                              label="Count"
+                            />
+                          </RadioGroup>
+                        </FormControl>
+                        <Divider
+                          sx={{
+                            borderStyle: 'dashed',
+                            borderColor: 'var(--palette-palette-divider)',
+                            borderWidth: '0px 0px thin',
+                          }}
+                        />
+                        <Box
+                          sx={{
+                            width: '100%',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            p: '1.2rem 1rem',
+                          }}
+                        > 
+                          {count === 'percentage' ? (
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <PrettoSlider
+                                valueLabelDisplay="auto"
+                                aria-label="pretto slider"
+                                defaultValue={30}
+                                value={percentage}
+                                onChange={(event, newValue: any) => {
+                                  setPercentage(newValue);
+                                }}
+                                min={1}
+                                max={100}
+                                name="scopePercentage"
+                                id="percentage"
+                              />
+                              <Typography variant="body2" fontFamily="mabry-bold" ml="0.6rem">
+                                {percentage}%
+                              </Typography>
+                              <Tooltip
+                                title="Percentage is the percentage of peers to be preheated. It must be a value between 1 and 100 (inclusive) if provided."
+                                placement="top"
+                              >
+                                <HelpIcon
+                                  sx={{
+                                    color: 'var(--palette-grey-300Channel)',
+                                    width: '0.8rem',
+                                    height: '0.8rem',
+                                    ':hover': { color: 'var(--palette-description-color)' },
+                                    ml: '0.6rem',
+                                  }}
+                                />
+                              </Tooltip>
+                            </Box>
+                          ) : count === 'count' ? (
+                            <TextField
+                              name="scopeCount"
+                              id="count"
+                              label="Count"
+                              size="small"
+                              color="success"
+                              defaultValue={1}
+                              placeholder="Enter your count"
+                              type="number"
+                              error={countError}
+                              helperText={countError && 'Fill in the characters, the length is 1-200.'}
+                              onChange={(e) => {
+                                const validate = countValidate(e.target.value);
+                                setCountError(!validate);
+                              }}
+                              InputProps={{
+                                endAdornment: (
+                                  <Tooltip
+                                    title="Count is the number of peers to be preheated.  It must be a value between 1 and 200 (inclusive) if provided."
+                                    placement="top"
+                                  >
+                                    <HelpIcon
+                                      sx={{
+                                        color: 'var(--palette-grey-300Channel)',
+                                        width: '0.8rem',
+                                        height: '0.8rem',
+                                        ':hover': { color: 'var(--palette-description-color)' },
+                                      }}
+                                    />
+                                  </Tooltip>
+                                ),
+                              }}
+                              sx={{ width: '12rem' }}
+                            />
+                          ) : (
+                            <Typography variant="body2" id="all">
+                              {scope === 'all_seed_peers'
+                                ? 'Preheat to each seed peer in the P2P cluster.'
+                                : scope === 'all_peers'
+                                ? 'Preheat to each peer in the P2P cluster.'
+                                : ''}
+                            </Typography>
+                          )}
+                        </Box>
+                      </Paper>
+                    ) : (
+                      <></>
+                    )}
                   </Box>
                 ) : (
                   <Box key={item.formProps.id} sx={{ width: '100%' }}>

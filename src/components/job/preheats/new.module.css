@@ -59,6 +59,19 @@
   background-color: var(--palette-background-paper) !important;
 }
 
+.scope {
+  width: 37rem;
+  margin: 1rem 0;
+  border-radius: 0.25rem !important;
+  background-color: var(--palette-background-paper) !important;
+  border-color: var(--palette-description-color) !important;
+}
+
+.countSelect {
+  width: 12rem;
+  margin: 0.8rem 0 !important;
+}
+
 .contentForCalculatingTaskIDIcon {
   width: 1.25rem;
   height: 1.25rem;

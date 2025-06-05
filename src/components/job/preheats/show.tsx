@@ -17,11 +17,6 @@ import {
   styled,
   tooltipClasses,
   TooltipProps,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Paper,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -46,6 +41,8 @@ import { ReactComponent as Pending } from '../../../assets/images/job/preheat/pe
 import { ReactComponent as ErrorLog } from '../../../assets/images/job/preheat/error-log.svg';
 import { ReactComponent as Application } from '../../../assets/images/resource/task/type.svg';
 import { ReactComponent as PieceLength } from '../../../assets/images/job/preheat/piece-length.svg';
+import { ReactComponent as Percentage } from '../../../assets/images/job/preheat/percentage.svg';
+import { ReactComponent as Count } from '../../../assets/images/job/preheat/count.svg';
 import { ReactComponent as ContentForCalculatingTaskID } from '../../../assets/images/resource/task/content-for-calculating-task-id.svg';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -418,6 +415,48 @@ export default function ShowPreheat() {
               )}
             </Box>
           </Box>
+          {preheat?.args?.percentage && (
+            <Box className={styles.informationContainer}>
+              <Box className={styles.informationTitle}>
+                <Percentage className={styles.informationTitleIcon} />
+                <Typography
+                  variant="body1"
+                  fontFamily="mabry-bold"
+                  component="div"
+                  className={styles.informationTitleText}
+                >
+                  Percentage
+                </Typography>
+              </Box>
+              <Box id="percentage" className={styles.informationContent}>
+                <Typography variant="body2" component="div" fontFamily="mabry-bold">
+                  {preheat?.args?.percentage}%
+                </Typography>
+              </Box>
+            </Box>
+          )}
+
+          {preheat?.args?.count && (
+            <Box className={styles.informationContainer}>
+              <Box className={styles.informationTitle}>
+                <Count className={styles.informationTitleIcon} />
+                <Typography
+                  variant="body1"
+                  fontFamily="mabry-bold"
+                  component="div"
+                  className={styles.informationTitleText}
+                >
+                  Count
+                </Typography>
+              </Box>
+              <Box id="count" className={styles.informationContent}>
+                <Typography variant="body2" component="div" fontFamily="mabry-bold">
+                  {preheat?.args?.count}
+                </Typography>
+              </Box>
+            </Box>
+          )}
+
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
               <Tag className={styles.informationTitleIcon} />
@@ -654,7 +693,16 @@ export default function ShowPreheat() {
                       Array.isArray(preheat?.result?.job_states) &&
                       preheat?.result?.job_states?.map((item) =>
                         item.state === 'FAILURE' && item.error !== '' ? (
-                          <Typography sx={{ color: '#d0d7de' }}>{item.error}</Typography>
+                          <Typography
+                            variant="body2"
+                            component="div"
+                            fontFamily="mabry-bold"
+                            color="#d0d7de"
+                            mb="1rem"
+                            className={styles.errorLog}
+                          >
+                            {item.error}
+                          </Typography>
                         ) : (
                           ''
                         ),

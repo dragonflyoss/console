@@ -16,7 +16,7 @@
     "headers": { "Authorization": "Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT" },
     "load_to_cache": false,
     "password": "",
-    "percentage": null,
+    "percentage": 100,
     "piece_length": null,
     "platform": "",
     "scope": "all_seed_peers",

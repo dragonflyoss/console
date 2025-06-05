@@ -98,7 +98,10 @@ describe('Preheat', () => {
       cy.get('[data-testid="preheat-isloading"]').should('not.exist');
 
       // Show preheat scope.
-      cy.get('#scope').should('have.text', 'All Peers');
+      cy.get('#scope').should('contain', 'All Peers');
+
+      // Show preheat scope count.
+      cy.get('#count').should('contain', '100');
 
       // Show preheat status.
       cy.get('#status')
@@ -208,7 +211,10 @@ describe('Preheat', () => {
         .and('not.exist');
 
       // Show preheat scope.
-      cy.get('#scope').should('have.text', 'All Seed Peers');
+      cy.get('#scope').should('contain', 'All Seed Peers');
+
+      // Show preheat scope.
+      cy.get('#percentage').should('contain', '100%');
 
       // Show preheat piece length.
       cy.get('#piece-length').should('have.text', '-');

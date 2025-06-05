@@ -771,6 +771,8 @@ export interface JobsResponse {
     urls: Array<string> | null;
     piece_length: number;
     username: string;
+    count: number | null;
+    percentage: number | null;
     content_for_calculating_task_id: string;
   };
   result: {
@@ -834,6 +836,8 @@ interface createJobRequest {
     filtered_query_params?: string;
     headers?: { [key: string]: string } | null;
     piece_length?: number;
+    count?: number | null;
+    percentage?: number | null;
     content_for_calculating_task_id?: string;
   };
   scheduler_cluster_ids: Array<number>;

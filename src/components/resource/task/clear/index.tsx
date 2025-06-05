@@ -436,7 +436,7 @@ export default function Clear() {
   const calculatingTaskIDList = {
     formProps: {
       id: 'content-for-calculating-task-id',
-      label: 'Content for calculating task id',
+      label: 'Content for Calculating Task ID',
       name: 'content-for-calculating-task-id',
       required: true,
       value: searchContentForCalculatingTaskID,
@@ -839,7 +839,7 @@ export default function Clear() {
             }}
           >
             <AssignmentOutlinedIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-            Search by task id
+            Search by Task ID
           </ToggleButton>
           <ToggleButton
             id="serach-content-for-calculating-task-id"
@@ -863,7 +863,7 @@ export default function Clear() {
             }}
           >
             <ContentForCalculatingTaskID className={styles.contentForCalculatingTaskIDIcon} />
-            Search by calculating task id
+            Search by Calculating Task ID
           </ToggleButton>
         </StyledToggleButtonGroup>
       </Paper>
@@ -903,90 +903,78 @@ export default function Clear() {
               }}
               key="url"
             />
-
             {optional ? (
-              <>
-                <Divider sx={{ m: '1rem 0' }} />
-                <Typography variant="subtitle1" fontFamily="mabry-bold" component="div">
-                  Optional
-                </Typography>
-                <Box>
-                  <Box className={styles.optionalContainer}>
-                    {formList.map((item) => {
-                      return (
-                        <Box key={item.formProps.id} className={styles.filterInput}>
-                          <Box width="30%" display="flex" alignItems="center">
-                            <Typography variant="body2" color="#5e5e5e" fontFamily="mabry-bold" mr="0.4rem">
-                              {item?.formProps?.labels}
-                            </Typography>
-                            {item?.id === 'filteredQueryParams' ? (
-                              <Tooltip
-                                title={
-                                  'Filter the query parameters of the downloaded URL. If the download URL is the same, it will be scheduled as the same task.'
-                                }
-                                placement="top"
-                              >
-                                <HelpIcon
-                                  sx={{
-                                    color: 'var(--palette-grey-300Channel)',
-                                    width: '0.8rem',
-                                    height: '0.8rem',
-                                    mr: '0.3rem',
-                                    ':hover': { color: 'var(--palette-description-color)' },
-                                  }}
-                                />
-                              </Tooltip>
-                            ) : (
-                              item.formProps?.InputProps
-                            )}
-                          </Box>
-                          {item.id === 'filteredQueryParams' ? (
-                            <Autocomplete
-                              freeSolo
-                              multiple
-                              disableClearable
-                              {...item.filterFormProps}
-                              className={styles.textField}
-                              size="small"
-                              renderInput={(params) => <TextField {...params} margin="normal" {...item.formProps} />}
-                            />
-                          ) : item.formProps.id === 'pieceLength' ? (
-                            <TextField
-                              sx={{ width: '10.8rem' }}
-                              margin="normal"
-                              size="small"
-                              {...item.formProps}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="start">
-                                    <Typography
-                                      sx={{ fontFamily: 'mabry-bold', color: 'var(--palette-sidebar-menu-color)' }}
-                                    >
-                                      MiB
-                                    </Typography>
-                                  </InputAdornment>
-                                ),
-                              }}
-                            />
+              <Box mt="1rem">
+                <Box className={styles.optionalContainer}>
+                  {formList.map((item) => {
+                    return (
+                      <Box key={item.formProps.id} className={styles.filterInput}>
+                        <Box width="30%" display="flex" alignItems="center">
+                          <Typography variant="body2" color="#5e5e5e" fontFamily="mabry-bold" mr="0.4rem">
+                            {item?.formProps?.labels}
+                          </Typography>
+                          {item?.id === 'filteredQueryParams' ? (
+                            <Tooltip
+                              title={
+                                'Filter the query parameters of the downloaded URL. If the download URL is the same, it will be scheduled as the same task.'
+                              }
+                              placement="top"
+                            >
+                              <HelpIcon
+                                sx={{
+                                  color: 'var(--palette-grey-300Channel)',
+                                  width: '0.8rem',
+                                  height: '0.8rem',
+                                  mr: '0.3rem',
+                                  ':hover': { color: 'var(--palette-description-color)' },
+                                }}
+                              />
+                            </Tooltip>
                           ) : (
-                            <TextField margin="normal" size="small" {...item.formProps} className={styles.textField} />
+                            item.formProps?.InputProps
                           )}
                         </Box>
-                      );
-                    })}
-                  </Box>
-                  <Divider sx={{ pb: '1rem' }} />
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1rem' }}>
-                    <CancelLoadingButton id="cancelSearchByURL" loading={loadingButton} onClick={handleCloseSearch} />
-                    <SavelLoadingButton
-                      loading={loadingButton}
-                      endIcon={<SearchIcon />}
-                      id="searchByURL"
-                      text="search"
-                    />
-                  </Box>
+                        {item.id === 'filteredQueryParams' ? (
+                          <Autocomplete
+                            freeSolo
+                            multiple
+                            disableClearable
+                            {...item.filterFormProps}
+                            className={styles.textField}
+                            size="small"
+                            renderInput={(params) => <TextField {...params} margin="normal" {...item.formProps} />}
+                          />
+                        ) : item.formProps.id === 'pieceLength' ? (
+                          <TextField
+                            sx={{ width: '10.8rem' }}
+                            margin="normal"
+                            size="small"
+                            {...item.formProps}
+                            InputProps={{
+                              endAdornment: (
+                                <InputAdornment position="start">
+                                  <Typography
+                                    sx={{ fontFamily: 'mabry-bold', color: 'var(--palette-sidebar-menu-color)' }}
+                                  >
+                                    MiB
+                                  </Typography>
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                        ) : (
+                          <TextField margin="normal" size="small" {...item.formProps} className={styles.textField} />
+                        )}
+                      </Box>
+                    );
+                  })}
                 </Box>
-              </>
+                <Divider sx={{ pb: '1rem' }} />
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '1rem' }}>
+                  <CancelLoadingButton id="cancelSearchByURL" loading={loadingButton} onClick={handleCloseSearch} />
+                  <SavelLoadingButton loading={loadingButton} endIcon={<SearchIcon />} id="searchByURL" text="search" />
+                </Box>
+              </Box>
             ) : (
               ''
             )}

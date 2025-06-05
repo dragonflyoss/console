@@ -347,7 +347,7 @@ export default function ShowPreheat() {
                 component="div"
                 className={styles.informationTitleText}
               >
-                Content for calculating task id
+                Content for Calculating Task ID
               </Typography>
             </Box>
             <Box width="70%">

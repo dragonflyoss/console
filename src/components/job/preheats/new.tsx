@@ -393,7 +393,7 @@ export default function NewPreheat() {
   const calculatingTaskIDList = {
     formProps: {
       id: 'content-for-calculating-task-id',
-      label: 'Content for calculating task id',
+      label: 'Content for Calculating Task ID',
       name: 'contentForCalculatingTaskID',
       required: true,
       autoComplete: 'family-name',
@@ -893,7 +893,7 @@ export default function NewPreheat() {
               }}
             >
               <Args className={styles.contentForCalculatingTaskIDIcon} />
-              Args
+              Arguments
             </ToggleButton>
             <ToggleButton
               id="create-content-for-calculating-task-id"
@@ -917,7 +917,7 @@ export default function NewPreheat() {
               }}
             >
               <ContentForCalculatingTaskID className={styles.contentForCalculatingTaskIDIcon} />
-              Content for calculating task id
+              Content for Calculating Task ID
             </ToggleButton>
           </StyledToggleButtonGroup>
         </Paper>

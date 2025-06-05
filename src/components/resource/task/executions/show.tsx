@@ -49,7 +49,6 @@ import { ReactComponent as CheckLog } from '../../../../assets/images/resource/t
 import { ReactComponent as PieceLength } from '../../../../assets/images/job/preheat/piece-length.svg';
 import { ReactComponent as ContentForCalculatingTaskID } from '../../../../assets/images/resource/task/content-for-calculating-task-id.svg';
 
-
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))({
@@ -382,7 +381,7 @@ export default function ShowExecutions() {
           <Box className={styles.informationTitle}>
             <ContentForCalculatingTaskID className={styles.informationTitleIcon} />
             <Typography variant="body1" fontFamily="mabry-bold" component="div" className={styles.informationTitleText}>
-              Content for calculating task id
+              Content for Calculating Task ID
             </Typography>
           </Box>
           <Box width="70%">

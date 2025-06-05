@@ -41,6 +41,8 @@ import { ReactComponent as Pending } from '../../../assets/images/job/preheat/pe
 import { ReactComponent as ErrorLog } from '../../../assets/images/job/preheat/error-log.svg';
 import { ReactComponent as Application } from '../../../assets/images/resource/task/type.svg';
 import { ReactComponent as PieceLength } from '../../../assets/images/job/preheat/piece-length.svg';
+import { ReactComponent as Percentage } from '../../../assets/images/job/preheat/percentage.svg';
+import { ReactComponent as Count } from '../../../assets/images/job/preheat/count.svg';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -374,28 +376,54 @@ export default function ShowPreheat() {
                   <Typography variant="body2" component="div" fontFamily="mabry-bold">
                     {scope?.label || '-'}
                   </Typography>
-                  {preheat?.args?.count && (
-                    <>
-                      <Box sx={{ m: '0.4rem', backgroundColor: '#fff', height: '0.8rem', width: '0.08rem' }} />
-                      <Typography id="count" variant="body2" component="div" fontFamily="mabry-bold">
-                        {preheat?.args?.count}
-                      </Typography>
-                    </>
-                  )}
-                  {preheat?.args?.percentage && (
-                    <>
-                      <Box sx={{ m: '0.4rem', backgroundColor: '#fff', height: '0.8rem', width: '0.08rem' }} />
-                      <Typography id="percentage" variant="body2" component="div" fontFamily="mabry-bold">
-                        {preheat?.args?.percentage}%
-                      </Typography>
-                    </>
-                  )}
                 </Box>
               ) : (
                 '-'
               )}
             </Box>
           </Box>
+          {preheat?.args?.percentage && (
+            <Box className={styles.informationContainer}>
+              <Box className={styles.informationTitle}>
+                <Percentage className={styles.informationTitleIcon} />
+                <Typography
+                  variant="body1"
+                  fontFamily="mabry-bold"
+                  component="div"
+                  className={styles.informationTitleText}
+                >
+                  Percentage
+                </Typography>
+              </Box>
+              <Box id="percentage" className={styles.informationContent}>
+                <Typography variant="body2" component="div" fontFamily="mabry-bold">
+                  {preheat?.args?.percentage}%
+                </Typography>
+              </Box>
+            </Box>
+          )}
+
+          {preheat?.args?.count && (
+            <Box className={styles.informationContainer}>
+              <Box className={styles.informationTitle}>
+                <Count className={styles.informationTitleIcon} />
+                <Typography
+                  variant="body1"
+                  fontFamily="mabry-bold"
+                  component="div"
+                  className={styles.informationTitleText}
+                >
+                  Count
+                </Typography>
+              </Box>
+              <Box id="count" className={styles.informationContent}>
+                <Typography variant="body2" component="div" fontFamily="mabry-bold">
+                  {preheat?.args?.count}
+                </Typography>
+              </Box>
+            </Box>
+          )}
+
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
               <Tag className={styles.informationTitleIcon} />

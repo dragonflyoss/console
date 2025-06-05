@@ -45,20 +45,26 @@ describe('Create preheat', () => {
     cy.get('#select-scope').click();
     cy.get('#all_peers').click();
 
+    cy.get('#all').should('have.text', `Preheat to each peer in the P2P cluster.`);
+
     cy.get('#count-or-percentage').should('exist');
 
-    cy.get('#select-count').click();
-
-    cy.get('#percentage').click();
+    cy.get('#radio-percentage').click();
 
     cy.get('#percentage').click(100, 10);
 
     // Select count.
-    cy.get('#select-count').click();
+    cy.get('#radio-count').click();
 
     cy.get('#count').click();
 
     cy.get('#count').type('50');
+
+    // Scope select all seed peers.
+    cy.get('#select-scope').click();
+    cy.get('#all_seed_peers').click();
+
+    cy.get('#all').should('have.text', `Preheat to each seed peer in the P2P cluster.`);
   });
 
   it('click the `CANCEL button', () => {
@@ -349,6 +355,27 @@ describe('Create preheat', () => {
       cy.get('body').click('topLeft');
 
       cy.get('#url').type('https://docs');
+
+      // Should display message Piece Length the validation error.
+      cy.get('#select-scope').click();
+      cy.get('#all_peers').click();
+
+      cy.get('#radio-count').click();
+
+      cy.get('#count').should('have.value', '1');
+
+      cy.get('#count').clear();
+
+      cy.get('#count').type('0');
+
+      // Show verification error message.
+      cy.get('#count-helper-text').should('have.text', 'Fill in the characters, the length is 1-200.');
+
+      cy.get('#count').clear();
+
+      cy.get('#count').type('201');
+
+      cy.get('#count-helper-text').should('have.text', 'Fill in the characters, the length is 1-200.');
 
       // Should display message Piece Length the validation error.
       cy.get('#pieceLength').type('0');

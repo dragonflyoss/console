@@ -61,10 +61,10 @@
 
 .scope {
   width: 37rem;
-  padding: 1rem;
   margin: 1rem 0;
   border-radius: 0.25rem !important;
   background-color: var(--palette-background-paper) !important;
+  border-color: var(--palette-description-color) !important;
 }
 
 .countSelect {

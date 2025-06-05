@@ -131,7 +131,6 @@ export default function NewPreheat() {
   const [scope, setScope] = useState<string>('single_seed_peer');
   const [count, setCount] = useState<string>('all');
   const [filterHelperText, setFilterHelperText] = useState('Fill in the characters, the length is 0-100.');
-  const [checked, setChecked] = useState(false);
   const [countError, setCountError] = useState(false);
   const [percentage, setPercentage] = useState(50);
   const [search, setSearch] = useState<string | null>('args');
@@ -519,18 +518,18 @@ export default function NewPreheat() {
       const pieceLength = event.currentTarget.elements.pieceLength.value;
       const filters = filter.join('&');
 
-    let percentage = null;
-    let countValue = null;
+      let percentage = null;
+      let countValue = null;
 
-    if (count !== 'all') {
-      if (count === 'percentage') {
-        percentage = event.currentTarget.elements.scopePercentage.value;
-      } else if (count === 'count') {
-        countValue = event.currentTarget.elements.scopeCount.value;
+      if (count !== 'all') {
+        if (count === 'percentage') {
+          percentage = event.currentTarget.elements.scopePercentage.value;
+        } else if (count === 'count') {
+          countValue = event.currentTarget.elements.scopeCount.value;
+        }
       }
-    }
 
-    const data = new FormData(event.currentTarget);
+      const data = new FormData(event.currentTarget);
       if (filterText) {
         setFilterError(true);
         setFilterHelperText('Please press ENTER to end the filter creation');
@@ -557,7 +556,7 @@ export default function NewPreheat() {
       urlForm.syncError = !urlForm.validate(url as string);
 
       const urlValidate = URLs.every((item: { url: any; error: boolean }, index) => {
-        const isValid = headerURLValidate(item.url);
+        const isValid = URLValidate(item.url);
 
         const newURL = [...URLs];
         newURL[index].error = !isValid;
@@ -583,6 +582,8 @@ export default function NewPreheat() {
 
       urlList.push(url);
 
+      const validateCount = countValidate(countValue);
+
       const headerList: { [key: string]: string } = headers.reduce(
         (accumulator, currentValue) => ({ ...accumulator, [currentValue.key.key]: currentValue.value.value }),
         {},
@@ -604,7 +605,8 @@ export default function NewPreheat() {
           clusterIDValidate &&
           headerValidate &&
           urlValidate &&
-          Boolean(!filterText),
+          Boolean(!filterText) &&
+          (countValue ? validateCount : true),
       );
 
       const clusterSet = new Set(clusterName);
@@ -622,6 +624,8 @@ export default function NewPreheat() {
           filtered_query_params: filters,
           headers: headerList,
           scope: scope,
+          ...(countValue && count === 'count' && { count: Number(countValue) }),
+          ...(percentage && count === 'percentage' && { percentage: Number(percentage) }),
           ...(pieceLength && pieceLength !== 0 && { piece_length: pieceLength * 1024 * 1024 }),
         },
         scheduler_cluster_ids: clusterID,
@@ -651,22 +655,10 @@ export default function NewPreheat() {
         item.syncError = !item.validate(value as string);
       });
 
-    const urlValidate = URLs.every((item: { url: any; error: boolean }, index) => {
-      const isValid = URLValidate(item.url);
-      calculatingTaskIDList.setError(!calculatingTaskIDList.validate(contentForCalculatingTaskID as string));
-      calculatingTaskIDList.syncError = !calculatingTaskIDList.validate(contentForCalculatingTaskID as string);
-
       const urlList = URLs.map((item) => item.url);
 
       urlList.push(url);
 
-    const validateCount = countValidate(countValue);
-
-    const headerValidate = headers.every((item, index) => {
-      const isValidKey = headersKeyValidate(item.key.key);
-      const isValidValue = headersValueValidate(item.value.value);
-      const newURL = [...headers];
-      
       let clusterIDValidate = true;
 
       if (clusterName.length === 0) {
@@ -684,7 +676,7 @@ export default function NewPreheat() {
       urlForm.syncError = !urlForm.validate(url as string);
 
       const urlValidate = URLs.every((item: { url: any; error: boolean }, index) => {
-        const isValid = headerURLValidate(item.url);
+        const isValid = URLValidate(item.url);
 
         const newURL = [...URLs];
         newURL[index].error = !isValid;
@@ -693,47 +685,25 @@ export default function NewPreheat() {
         return isValid;
       });
 
+      informationForm.forEach((item) => {
+        const value = data.get(item.formProps.name);
+        item.setError(!item.validate(value as string));
+        item.syncError = !item.validate(value as string);
+      });
+
+      calculatingTaskIDList.setError(!calculatingTaskIDList.validate(contentForCalculatingTaskID));
+
+      calculatingTaskIDList.syncError = !calculatingTaskIDList.validate(contentForCalculatingTaskID);
+
       const canSubmit = Boolean(
         !informationForm.filter((item) => item.syncError).length &&
           !urlForm.syncError &&
+          !calculatingTaskIDList.syncError &&
           clusterIDValidate &&
           urlValidate &&
           !calculatingTaskIDList.syncError,
       );
 
-
-    const canSubmit = Boolean(
-      !informationForm.filter((item) => item.syncError).length &&
-        !argsForm.filter((item) => item.syncError).length &&
-        !urlForm.syncError &&
-        clusterIDValidate &&
-        headerValidate &&
-        urlValidate &&
-        Boolean(!filterText) &&
-        !validateCount,
-    );
-
-    const clusterSet = new Set(clusterName);
-
-    const clusterID = cluster.filter((item) => clusterSet.has(item.name)).map((item) => item.id);
-
-    const formDate = {
-      bio: bio,
-      type: 'preheat',
-      args: {
-        type: 'file',
-        urls: urlList,
-        tag: tag,
-        application: application,
-        filtered_query_params: filters,
-        headers: headerList,
-        scope: scope,
-        ...(countValue && count === 'count' && { count: Number(countValue) }),
-        ...(percentage && count === 'percentage' && { percentage: Number(percentage) }),
-        ...(pieceLength && pieceLength !== 0 && { piece_length: pieceLength * 1024 * 1024 }),
-      },
-      scheduler_cluster_ids: clusterID,
-    };
       const formDate = {
         bio: bio,
         type: 'preheat',
@@ -905,6 +875,7 @@ export default function NewPreheat() {
           <Box sx={{ width: '100%' }}>
             <TextField {...urlForm.formProps} color="success" className={styles.filterInput} size="small" />
           </Box>
+
           {URLs.map((item, index) => {
             return (
               <Box sx={{ display: 'inline-flex', alignItems: 'flex-start', m: '0.8rem 0' }}>
@@ -924,7 +895,7 @@ export default function NewPreheat() {
                     const newURL = [...URLs];
                     newURL[index].url = event.target.value;
 
-                    const isValid = headerURLValidate(event.target.value);
+                    const isValid = URLValidate(event.target.value);
                     newURL[index].error = !isValid;
 
                     setURLS(newURL);
@@ -937,34 +908,6 @@ export default function NewPreheat() {
                     height: '2.4rem',
                     p: '0.2rem',
                   }}
-                />
-              </Tooltip>
-            </Box>
-            <TextField {...urlForm.formProps} color="success" className={styles.filterInput} size="small" />
-            {URLs.map((item, index) => {
-              return (
-                <Box sx={{ display: 'inline-flex', alignItems: 'flex-start', m: '0.8rem 0' }}>
-                  <TextField
-                    color="success"
-                    id={`url-${index}`}
-                    key={index}
-                    size="small"
-                    label="URL"
-                    name="urls"
-                    value={item.url}
-                    error={item.error}
-                    helperText={item.error && 'Fill in the characters, the length is 1-1000.'}
-                    placeholder="Enter your URL"
-                    className={styles.urlInput}
-                    onChange={(event) => {
-                      const newURL = [...URLs];
-                      newURL[index].url = event.target.value;
-
-                      const isValid = URLValidate(event.target.value);
-                      newURL[index].error = !isValid;
-
-                      setURLS(newURL);
-                    }}
                   onClick={() => {
                     const newURL = [...URLs];
                     newURL.splice(index, 1);
@@ -978,26 +921,28 @@ export default function NewPreheat() {
               </Box>
             );
           })}
-          <Button
-            sx={{
-              '&.MuiButton-root': {
-                borderColor: 'var(--palette-description-color)',
-                color: 'var(--palette-description-color)',
-                borderStyle: 'dashed',
-              },
-              width: '37rem',
-              m: '1rem 0',
-            }}
-            variant="outlined"
-            id="add-url"
-            size="small"
-            startIcon={<AddIcon />}
-            onClick={() => {
-              setURLS([...URLs, { url: '', error: false }]);
-            }}
-          >
-            add URL
-          </Button>
+          <Box>
+            <Button
+              sx={{
+                '&.MuiButton-root': {
+                  borderColor: 'var(--palette-description-color)',
+                  color: 'var(--palette-description-color)',
+                  borderStyle: 'dashed',
+                },
+                width: '37rem',
+                m: '1rem 0',
+              }}
+              variant="outlined"
+              id="add-url"
+              size="small"
+              startIcon={<AddIcon />}
+              onClick={() => {
+                setURLS([...URLs, { url: '', error: false }]);
+              }}
+            >
+              add URL
+            </Button>
+          </Box>
         </Box>
         <Paper
           elevation={0}
@@ -1069,21 +1014,6 @@ export default function NewPreheat() {
         </Paper>
         {search === 'args' ? (
           <Box className={styles.title}>
-            {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
-                Args
-              </Typography>
-              <Tooltip title="Args used to pass additional configuration options to the preheat task." placement="top">
-                <HelpIcon
-                  sx={{
-                    color: 'var(--palette-grey-300Channel)',
-                    width: '0.8rem',
-                    height: '0.8rem',
-                    ':hover': { color: 'var(--palette-description-color)' },
-                  }}
-                />
-              </Tooltip>
-            </Box> */}
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {argsForm.map((item) => {
                 return item?.filterFormProps?.id === 'filteredQueryParams' ? (
@@ -1161,29 +1091,7 @@ export default function NewPreheat() {
                     </FormControl>
                     {scope !== 'single_seed_peer' ? (
                       <Paper variant="outlined" className={styles.scope} id="count-or-percentage">
-                        {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Typography variant="subtitle1" fontFamily="mabry-bold" mr="0.4rem">
-                            {scope === 'all_seed_peers' ? 'All Seed Peers' : scope === 'all_peers' ? 'All Peers' : ''}
-                          </Typography>
-                          <Tooltip
-                            title="By default, all peers are preheated. Users can select Percentage or count according to actual needs."
-                            placement="top"
-                          >
-                            <HelpIcon
-                              sx={{
-                                color: 'var(--palette-grey-300Channel)',
-                                width: '0.8rem',
-                                height: '0.8rem',
-                                ':hover': { color: 'var(--palette-description-color)' },
-                              }}
-                            />
-                          </Tooltip>
-                        </Box> */}
-
                         <FormControl sx={{ p: '0.8rem 1rem' }}>
-                          {/* <FormLabel id="demo-row-radio-buttons-group-label">
-                            {scope === 'all_seed_peers' ? 'All Seed Peers' : scope === 'all_peers' ? 'All Peers' : ''}
-                          </FormLabel> */}
                           <RadioGroup
                             row
                             aria-labelledby="demo-row-radio-buttons-group-label"
@@ -1242,38 +1150,7 @@ export default function NewPreheat() {
                             justifyContent: 'space-between',
                             p: '1.2rem 1rem',
                           }}
-                        >
-                          {/* <FormControl color="success" className={styles.countSelect} size="small">
-                            <InputLabel id="scope">
-                              {scope === 'all_seed_peers' ? 'All Seed Peers' : scope === 'all_peers' ? 'All Peers' : ''}
-                            </InputLabel>
-                            <Select
-                              id="select-count"
-                              label="percentage"
-                              value={count}
-                              onChange={(event) => {
-                                const selectedValues = event.target.value;
-                                const currentSelection = counList.find((scope) => scope.name === selectedValues);
-                                setCount(currentSelection?.name || '');
-                              }}
-                            >
-                              {counList.map((item: any) => (
-                                <MenuItem
-                                  id={item.name}
-                                  key={item.name}
-                                  value={item.name}
-                                  sx={{
-                                    m: '0.3rem',
-                                    borderRadius: '0.2rem',
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                  }}
-                                >
-                                  {item.label}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </FormControl> */}
+                        > 
                           {count === 'percentage' ? (
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                               <PrettoSlider

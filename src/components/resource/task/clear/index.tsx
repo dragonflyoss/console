@@ -410,6 +410,7 @@ export default function Clear() {
             aria-label="search"
             onClick={() => {
               setSearchTask('');
+              setSearchTaskISLodaing(false);
             }}
           >
             <ClearIcon />
@@ -422,6 +423,10 @@ export default function Clear() {
       onChange: (e: any) => {
         changeValidate(e.target.value, taskIDList);
         setSearchTask(e.target.value);
+
+        if (e.target.value === '') {
+          setSearchTaskISLodaing(false);
+        }
       },
     },
     syncError: false,
@@ -460,6 +465,7 @@ export default function Clear() {
             aria-label="search"
             onClick={() => {
               setSearchContentForCalculatingTaskID('');
+              setSearchContentForCalculatingTaskIDISLodaing(false);
             }}
           >
             <ClearIcon />
@@ -472,13 +478,17 @@ export default function Clear() {
       onChange: (e: any) => {
         changeValidate(e.target.value, calculatingTaskIDList);
         setSearchContentForCalculatingTaskID(e.target.value);
+
+        if (e.target.value === '') {
+          setSearchContentForCalculatingTaskIDISLodaing(false);
+        }
       },
     },
     syncError: false,
     setError: setContentForCalculatingTaskIDError,
 
     validate: (value: string) => {
-      const reg = /^.{1,1000}$/;
+      const reg = /^.{0,1000}$/;
       return reg.test(value);
     },
   };

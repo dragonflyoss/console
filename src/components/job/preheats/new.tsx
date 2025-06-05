@@ -25,6 +25,9 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  ToggleButtonGroup,
+  toggleButtonGroupClasses,
+  ToggleButton,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import DoNotDisturbOnOutlinedIcon from '@mui/icons-material/DoNotDisturbOnOutlined';
@@ -36,6 +39,23 @@ import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './new.module.css';
 import AddIcon from '@mui/icons-material/Add';
 import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
+import { ReactComponent as ContentForCalculatingTaskID } from '../../../assets/images/resource/task/content-for-calculating-task-id.svg';
+import { ReactComponent as Args } from '../../../assets/images/job/preheat/args.svg';
+
+const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
+  [`& .${toggleButtonGroupClasses.grouped}`]: {
+    margin: theme.spacing(0.7),
+    border: 0,
+    borderRadius: theme.shape.borderRadius,
+    [`&.${toggleButtonGroupClasses.disabled}`]: {
+      border: 0,
+    },
+  },
+  [`& .${toggleButtonGroupClasses.middleButton},& .${toggleButtonGroupClasses.lastButton}`]: {
+    marginLeft: -1,
+    border: 0,
+  },
+}));
 
 const PrettoSlider = styled(Slider)(({ theme }) => ({
   color: 'var(--palette-description-color)',
@@ -94,6 +114,7 @@ export default function NewPreheat() {
   const [bioError, setBioError] = useState(false);
   const [urlError, setURLError] = useState(false);
   const [tagError, setTagError] = useState(false);
+  const [contentForCalculatingTaskIDError, setContentForCalculatingTaskIDError] = useState(false);
   const [applicationError, setApplicationError] = useState(false);
   const [filterError, setFilterError] = useState(false);
   const [pieceLengthError, setPieceLengthError] = useState(false);
@@ -113,6 +134,7 @@ export default function NewPreheat() {
   const [checked, setChecked] = useState(false);
   const [countError, setCountError] = useState(false);
   const [percentage, setPercentage] = useState(50);
+  const [search, setSearch] = useState<string | null>('args');
 
   const navigate = useNavigate();
 
@@ -426,6 +448,30 @@ export default function NewPreheat() {
     { label: 'All Peers', name: 'all_peers' },
   ];
 
+  const calculatingTaskIDList = {
+    formProps: {
+      id: 'content-for-calculating-task-id',
+      label: 'Content for Calculating Task ID',
+      name: 'contentForCalculatingTaskID',
+      required: true,
+      autoComplete: 'family-name',
+      placeholder: 'Enter your content for calculating task id',
+      helperText: contentForCalculatingTaskIDError ? 'Fill in the characters, the length is 1-1000.' : '',
+      error: contentForCalculatingTaskIDError,
+
+      onChange: (e: any) => {
+        changeValidate(e.target.value, calculatingTaskIDList);
+      },
+    },
+    syncError: false,
+    setError: setContentForCalculatingTaskIDError,
+
+    validate: (value: string) => {
+      const reg = /^.{1,1000}$/;
+      return reg.test(value);
+    },
+  };
+
   const handleSelectScope = (event: SelectChangeEvent) => {
     const selectedValues = event.target.value;
     const currentSelection = scopeList.find((scope) => scope.name === selectedValues);
@@ -464,12 +510,14 @@ export default function NewPreheat() {
     event.preventDefault();
     const bio = event.currentTarget.elements.description.value;
     const url = event.currentTarget.elements.url.value;
-    const tag = event.currentTarget.elements.tag.value;
-    const application = event.currentTarget.elements.application.value;
+    const data = new FormData(event.currentTarget);
 
-    const filterText = event.currentTarget.elements.filteredQueryParams.value;
-    const pieceLength = event.currentTarget.elements.pieceLength.value;
-    const filters = filter.join('&');
+    if (search === 'args') {
+      const tag = event.currentTarget.elements.tag.value;
+      const application = event.currentTarget.elements.application.value;
+      const filterText = event.currentTarget.elements.filteredQueryParams.value;
+      const pieceLength = event.currentTarget.elements.pieceLength.value;
+      const filters = filter.join('&');
 
     let percentage = null;
     let countValue = null;
@@ -483,41 +531,134 @@ export default function NewPreheat() {
     }
 
     const data = new FormData(event.currentTarget);
+      if (filterText) {
+        setFilterError(true);
+        setFilterHelperText('Please press ENTER to end the filter creation');
+      } else {
+        setFilterError(false);
+        setFilterHelperText('Fill in the characters, the length is 0-100.');
+      }
 
-    if (filterText) {
-      setFilterError(true);
-      setFilterHelperText('Please press ENTER to end the filter creation');
-    } else {
-      setFilterError(false);
-      setFilterHelperText('Fill in the characters, the length is 0-100.');
-    }
-
-    urlForm.setError(!urlForm.validate(url as string));
-    urlForm.syncError = !urlForm.validate(url as string);
-
-    informationForm.forEach((item) => {
-      const value = data.get(item.formProps.name);
-      item.setError(!item.validate(value as string));
-      item.syncError = !item.validate(value as string);
-    });
-
-    argsForm.forEach((item) => {
-      if (item.formProps.name !== 'filteredQueryParams') {
+      informationForm.forEach((item) => {
         const value = data.get(item.formProps.name);
         item.setError(!item.validate(value as string));
         item.syncError = !item.validate(value as string);
+      });
+
+      argsForm.forEach((item) => {
+        if (item.formProps.name !== 'filteredQueryParams') {
+          const value = data.get(item.formProps.name);
+          item.setError(!item.validate(value as string));
+          item.syncError = !item.validate(value as string);
+        }
+      });
+
+      urlForm.setError(!urlForm.validate(url as string));
+      urlForm.syncError = !urlForm.validate(url as string);
+
+      const urlValidate = URLs.every((item: { url: any; error: boolean }, index) => {
+        const isValid = headerURLValidate(item.url);
+
+        const newURL = [...URLs];
+        newURL[index].error = !isValid;
+
+        setURLS(newURL);
+        return isValid;
+      });
+
+      const headerValidate = headers.every((item, index) => {
+        const isValidKey = headersKeyValidate(item.key.key);
+        const isValidValue = headersValueValidate(item.value.value);
+        const newURL = [...headers];
+
+        newURL[index].key.error = !isValidKey;
+        newURL[index].value.error = !isValidValue;
+
+        setheaders(newURL);
+
+        return isValidKey && isValidValue;
+      });
+
+      const urlList = URLs.map((item) => item.url);
+
+      urlList.push(url);
+
+      const headerList: { [key: string]: string } = headers.reduce(
+        (accumulator, currentValue) => ({ ...accumulator, [currentValue.key.key]: currentValue.value.value }),
+        {},
+      );
+
+      let clusterIDValidate = true;
+
+      if (clusterName.length === 0) {
+        setClusterError(true);
+        clusterIDValidate = false;
+      } else {
+        clusterIDValidate = true;
       }
-    });
+
+      const canSubmit = Boolean(
+        !informationForm.filter((item) => item.syncError).length &&
+          !argsForm.filter((item) => item.syncError).length &&
+          !urlForm.syncError &&
+          clusterIDValidate &&
+          headerValidate &&
+          urlValidate &&
+          Boolean(!filterText),
+      );
+
+      const clusterSet = new Set(clusterName);
+
+      const clusterID = cluster.filter((item) => clusterSet.has(item.name)).map((item) => item.id);
+
+      const formDate = {
+        bio: bio,
+        type: 'preheat',
+        args: {
+          type: 'file',
+          urls: urlList,
+          tag: tag,
+          application: application,
+          filtered_query_params: filters,
+          headers: headerList,
+          scope: scope,
+          ...(pieceLength && pieceLength !== 0 && { piece_length: pieceLength * 1024 * 1024 }),
+        },
+        scheduler_cluster_ids: clusterID,
+      };
+
+      if (canSubmit) {
+        try {
+          const job = await createJob({ ...formDate });
+          setLoadingButton(false);
+          navigate(`/jobs/preheats/${job.id}`);
+        } catch (error) {
+          if (error instanceof Error) {
+            setLoadingButton(false);
+            setErrorMessage(true);
+            setErrorMessageText(error.message);
+          }
+        }
+      } else {
+        setLoadingButton(false);
+      }
+    } else {
+      const contentForCalculatingTaskID = event.currentTarget.elements.contentForCalculatingTaskID.value;
+
+      informationForm.forEach((item) => {
+        const value = data.get(item.formProps.name);
+        item.setError(!item.validate(value as string));
+        item.syncError = !item.validate(value as string);
+      });
 
     const urlValidate = URLs.every((item: { url: any; error: boolean }, index) => {
       const isValid = URLValidate(item.url);
+      calculatingTaskIDList.setError(!calculatingTaskIDList.validate(contentForCalculatingTaskID as string));
+      calculatingTaskIDList.syncError = !calculatingTaskIDList.validate(contentForCalculatingTaskID as string);
 
-      const newURL = [...URLs];
-      newURL[index].error = !isValid;
+      const urlList = URLs.map((item) => item.url);
 
-      setURLS(newURL);
-      return isValid;
-    });
+      urlList.push(url);
 
     const validateCount = countValidate(countValue);
 
@@ -525,32 +666,41 @@ export default function NewPreheat() {
       const isValidKey = headersKeyValidate(item.key.key);
       const isValidValue = headersValueValidate(item.value.value);
       const newURL = [...headers];
+      
+      let clusterIDValidate = true;
 
-      newURL[index].key.error = !isValidKey;
-      newURL[index].value.error = !isValidValue;
+      if (clusterName.length === 0) {
+        setClusterError(true);
+        clusterIDValidate = false;
+      } else {
+        clusterIDValidate = true;
+      }
 
-      setheaders(newURL);
+      const clusterSet = new Set(clusterName);
 
-      return isValidKey && isValidValue;
-    });
+      const clusterID = cluster.filter((item) => clusterSet.has(item.name)).map((item) => item.id);
 
-    const urlList = URLs.map((item) => item.url);
+      urlForm.setError(!urlForm.validate(url as string));
+      urlForm.syncError = !urlForm.validate(url as string);
 
-    urlList.push(url);
+      const urlValidate = URLs.every((item: { url: any; error: boolean }, index) => {
+        const isValid = headerURLValidate(item.url);
 
-    const headerList: { [key: string]: string } = headers.reduce(
-      (accumulator, currentValue) => ({ ...accumulator, [currentValue.key.key]: currentValue.value.value }),
-      {},
-    );
+        const newURL = [...URLs];
+        newURL[index].error = !isValid;
 
-    let clusterIDValidate = true;
+        setURLS(newURL);
+        return isValid;
+      });
 
-    if (clusterName.length === 0) {
-      setClusterError(true);
-      clusterIDValidate = false;
-    } else {
-      clusterIDValidate = true;
-    }
+      const canSubmit = Boolean(
+        !informationForm.filter((item) => item.syncError).length &&
+          !urlForm.syncError &&
+          clusterIDValidate &&
+          urlValidate &&
+          !calculatingTaskIDList.syncError,
+      );
+
 
     const canSubmit = Boolean(
       !informationForm.filter((item) => item.syncError).length &&
@@ -584,21 +734,32 @@ export default function NewPreheat() {
       },
       scheduler_cluster_ids: clusterID,
     };
+      const formDate = {
+        bio: bio,
+        type: 'preheat',
+        args: {
+          type: 'file',
+          urls: urlList,
+          content_for_calculating_task_id: contentForCalculatingTaskID,
+        },
+        scheduler_cluster_ids: clusterID,
+      };
 
-    if (canSubmit) {
-      try {
-        const job = await createJob({ ...formDate });
-        setLoadingButton(false);
-        navigate(`/jobs/preheats/${job.id}`);
-      } catch (error) {
-        if (error instanceof Error) {
+      if (canSubmit) {
+        try {
+          const job = await createJob({ ...formDate });
           setLoadingButton(false);
-          setErrorMessage(true);
-          setErrorMessageText(error.message);
+          navigate(`/jobs/preheats/${job.id}`);
+        } catch (error) {
+          if (error instanceof Error) {
+            setLoadingButton(false);
+            setErrorMessage(true);
+            setErrorMessageText(error.message);
+          }
         }
+      } else {
+        setLoadingButton(false);
       }
-    } else {
-      setLoadingButton(false);
     }
   };
 
@@ -609,6 +770,12 @@ export default function NewPreheat() {
 
     setErrorMessage(false);
     setSuccessMessage(false);
+  };
+
+  const handleChangeSearch = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
+    if (newAlignment) {
+      setSearch(newAlignment);
+    }
   };
 
   return (
@@ -655,83 +822,120 @@ export default function NewPreheat() {
       </Breadcrumbs>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Box component="form" onSubmit={handleSubmit} noValidate>
-        <FormControl fullWidth>
-          <Box className={styles.title}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
-                Information
-              </Typography>
-              <Tooltip title="The information of preheat." placement="top">
-                <HelpIcon
-                  sx={{
-                    color: 'var(--palette-grey-300Channel)',
-                    width: '0.8rem',
-                    height: '0.8rem',
-                    ':hover': { color: 'var(--palette-description-color)' },
-                  }}
-                />
-              </Tooltip>
-            </Box>
-            {informationForm.map((item) => (
-              <TextField
-                color="success"
+        <Box className={styles.title}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              Information
+            </Typography>
+            <Tooltip title="The information of preheat." placement="top">
+              <HelpIcon
+                sx={{
+                  color: 'var(--palette-grey-300Channel)',
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  ':hover': { color: 'var(--palette-description-color)' },
+                }}
+              />
+            </Tooltip>
+          </Box>
+          {informationForm.map((item) => (
+            <TextField
+              color="success"
+              size="small"
+              key={item.formProps.name}
+              {...item.formProps}
+              className={styles.filterInput}
+            />
+          ))}
+        </Box>
+        <Box className={styles.title}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              Clusters
+            </Typography>
+            <Tooltip title="Used for clusters that need to be preheating." placement="top">
+              <HelpIcon
+                sx={{
+                  color: 'var(--palette-grey-300Channel)',
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  ':hover': { color: 'var(--palette-description-color)' },
+                }}
+              />
+            </Tooltip>
+          </Box>
+          <FormControl className={styles.textField} required size="small" error={clusterError}>
+            {clusterFrom.map((item) => (
+              <Autocomplete
+                freeSolo
+                multiple
+                disableClearable
+                {...item.scopesFormProps}
                 size="small"
-                key={item.formProps.name}
-                {...item.formProps}
-                className={styles.filterInput}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    InputProps={{
+                      ...params.InputProps,
+                    }}
+                    color="success"
+                    {...item.formProps}
+                  />
+                )}
               />
             ))}
+          </FormControl>
+        </Box>
+        <Box>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
+              URL
+            </Typography>
+            <Tooltip title="URL address used to specify the resource to be preheat." placement="top">
+              <HelpIcon
+                sx={{
+                  color: 'var(--palette-grey-300Channel)',
+                  width: '0.8rem',
+                  height: '0.8rem',
+                  ':hover': { color: 'var(--palette-description-color)' },
+                }}
+              />
+            </Tooltip>
           </Box>
-          <Box className={styles.title}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
-                Clusters
-              </Typography>
-              <Tooltip title="Used for clusters that need to be preheating." placement="top">
-                <HelpIcon
-                  sx={{
-                    color: 'var(--palette-grey-300Channel)',
-                    width: '0.8rem',
-                    height: '0.8rem',
-                    ':hover': { color: 'var(--palette-description-color)' },
+          <Box sx={{ width: '100%' }}>
+            <TextField {...urlForm.formProps} color="success" className={styles.filterInput} size="small" />
+          </Box>
+          {URLs.map((item, index) => {
+            return (
+              <Box sx={{ display: 'inline-flex', alignItems: 'flex-start', m: '0.8rem 0' }}>
+                <TextField
+                  color="success"
+                  id={`url-${index}`}
+                  key={index}
+                  size="small"
+                  label="URL"
+                  name="urls"
+                  value={item.url}
+                  error={item.error}
+                  helperText={item.error && 'Fill in the characters, the length is 1-1000.'}
+                  placeholder="Enter your URL"
+                  className={styles.urlInput}
+                  onChange={(event) => {
+                    const newURL = [...URLs];
+                    newURL[index].url = event.target.value;
+
+                    const isValid = headerURLValidate(event.target.value);
+                    newURL[index].error = !isValid;
+
+                    setURLS(newURL);
                   }}
                 />
-              </Tooltip>
-            </Box>
-            <FormControl className={styles.textField} required size="small" error={clusterError}>
-              {clusterFrom.map((item) => (
-                <Autocomplete
-                  freeSolo
-                  multiple
-                  disableClearable
-                  {...item.scopesFormProps}
-                  size="small"
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      InputProps={{
-                        ...params.InputProps,
-                      }}
-                      color="success"
-                      {...item.formProps}
-                    />
-                  )}
-                />
-              ))}
-            </FormControl>
-          </Box>
-          <Box>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
-                URL
-              </Typography>
-              <Tooltip title="URL address used to specify the resource to be preheat." placement="top">
-                <HelpIcon
+                <IconButton
+                  id={`clear-url-${index}`}
                   sx={{
-                    color: 'var(--palette-grey-300Channel)',
-                    width: '0.8rem',
-                    height: '0.8rem',
-                    ':hover': { color: 'var(--palette-description-color)' },
+                    width: '2.4rem',
+                    height: '2.4rem',
+                    p: '0.2rem',
                   }}
                 />
               </Tooltip>
@@ -761,50 +965,111 @@ export default function NewPreheat() {
 
                       setURLS(newURL);
                     }}
+                  onClick={() => {
+                    const newURL = [...URLs];
+                    newURL.splice(index, 1);
+                    setURLS(newURL);
+                  }}
+                >
+                  <DoNotDisturbOnOutlinedIcon
+                    sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--palette-button-color)' }}
                   />
-                  <IconButton
-                    id={`clear-url-${index}`}
-                    sx={{
-                      width: '2.4rem',
-                      height: '2.4rem',
-                      p: '0.2rem',
-                    }}
-                    onClick={() => {
-                      const newURL = [...URLs];
-                      newURL.splice(index, 1);
-                      setURLS(newURL);
-                    }}
-                  >
-                    <DoNotDisturbOnOutlinedIcon
-                      sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--palette-button-color)' }}
-                    />
-                  </IconButton>
-                </Box>
-              );
-            })}
-            <Button
-              sx={{
-                '&.MuiButton-root': {
-                  borderColor: 'var(--palette-description-color)',
-                  color: 'var(--palette-description-color)',
-                  borderStyle: 'dashed',
-                },
-                width: '37rem',
-                m: '1rem 0',
-              }}
-              variant="outlined"
-              id="add-url"
+                </IconButton>
+              </Box>
+            );
+          })}
+          <Button
+            sx={{
+              '&.MuiButton-root': {
+                borderColor: 'var(--palette-description-color)',
+                color: 'var(--palette-description-color)',
+                borderStyle: 'dashed',
+              },
+              width: '37rem',
+              m: '1rem 0',
+            }}
+            variant="outlined"
+            id="add-url"
+            size="small"
+            startIcon={<AddIcon />}
+            onClick={() => {
+              setURLS([...URLs, { url: '', error: false }]);
+            }}
+          >
+            add URL
+          </Button>
+        </Box>
+        <Paper
+          elevation={0}
+          sx={{
+            display: 'inline-flex',
+            flexWrap: 'wrap',
+            m: '1rem 0',
+            backgroundColor: 'var(--palette-grey-600Channel)',
+            borderRadius: '0.4rem',
+            overflow: 'hidden',
+          }}
+        >
+          <StyledToggleButtonGroup
+            size="small"
+            value={search}
+            exclusive
+            onChange={handleChangeSearch}
+            aria-label="Platform"
+          >
+            <ToggleButton
+              id="create-args"
+              value="args"
               size="small"
-              startIcon={<AddIcon />}
-              onClick={() => {
-                setURLS([...URLs, { url: '', error: false }]);
+              sx={{
+                '&.Mui-selected': {
+                  backgroundColor: 'var(--palette-save-color)',
+                  color: '#FFFFFF',
+                  boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
+                  '&:hover': {
+                    backgroundColor: 'var(--palette-save-color)',
+                  },
+                },
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                },
+                p: '0.3rem 0.5rem',
+                color: 'var(--palette-dark-400Channel)',
+                textTransform: 'none',
               }}
             >
-              add URL
-            </Button>
-          </Box>
+              <Args className={styles.contentForCalculatingTaskIDIcon} />
+              Arguments
+            </ToggleButton>
+            <ToggleButton
+              id="create-content-for-calculating-task-id"
+              value="content-for-calculating-task-id"
+              size="small"
+              sx={{
+                '&.Mui-selected': {
+                  backgroundColor: 'var(--palette-save-color)',
+                  color: '#FFFFFF',
+                  boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
+                  '&:hover': {
+                    backgroundColor: 'var(--palette-save-color)',
+                  },
+                },
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                },
+                p: '0.3rem 0.5rem',
+                color: 'var(--palette-dark-400Channel)',
+                textTransform: 'none',
+              }}
+            >
+              <ContentForCalculatingTaskID className={styles.contentForCalculatingTaskIDIcon} />
+              Content for Calculating Task ID
+            </ToggleButton>
+          </StyledToggleButtonGroup>
+        </Paper>
+        {search === 'args' ? (
           <Box className={styles.title}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
                 Args
               </Typography>
@@ -818,7 +1083,7 @@ export default function NewPreheat() {
                   }}
                 />
               </Tooltip>
-            </Box>
+            </Box> */}
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {argsForm.map((item) => {
                 return item?.filterFormProps?.id === 'filteredQueryParams' ? (
@@ -1222,18 +1487,22 @@ export default function NewPreheat() {
               </Button>
             )}
           </Box>
-          <Divider sx={{ mt: '1rem', mb: '1.5rem' }} />
-          <Box>
-            <CancelLoadingButton
-              id="cancel"
-              loading={loadingButton}
-              onClick={() => {
-                navigate('/jobs/preheats');
-              }}
-            />
-            <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />
+        ) : (
+          <Box key="content-for-calculating-task-id" sx={{ width: '37rem', height: '3rem', m: '0.8rem 0' }}>
+            <TextField fullWidth variant="outlined" size="small" {...calculatingTaskIDList.formProps} sx={{ p: 0 }} />
           </Box>
-        </FormControl>
+        )}
+        <Divider sx={{ mt: '1rem', mb: '1.5rem' }} />
+        <Box>
+          <CancelLoadingButton
+            id="cancel"
+            loading={loadingButton}
+            onClick={() => {
+              navigate('/jobs/preheats');
+            }}
+          />
+          <SavelLoadingButton loading={loadingButton} endIcon={<CheckCircleIcon />} id="save" text="Save" />
+        </Box>
       </Box>
     </Box>
   );

@@ -43,6 +43,7 @@ import { ReactComponent as Application } from '../../../assets/images/resource/t
 import { ReactComponent as PieceLength } from '../../../assets/images/job/preheat/piece-length.svg';
 import { ReactComponent as Percentage } from '../../../assets/images/job/preheat/percentage.svg';
 import { ReactComponent as Count } from '../../../assets/images/job/preheat/count.svg';
+import { ReactComponent as ContentForCalculatingTaskID } from '../../../assets/images/resource/task/content-for-calculating-task-id.svg';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -333,6 +334,38 @@ export default function ShowPreheat() {
                 -
               </Typography>
             )}
+          </Box>
+          <Box className={styles.informationContainer}>
+            <Box className={styles.informationTitle}>
+              <ContentForCalculatingTaskID className={styles.informationTitleIcon} />
+              <Typography
+                variant="body1"
+                fontFamily="mabry-bold"
+                component="div"
+                className={styles.informationTitleText}
+              >
+                Content for Calculating Task ID
+              </Typography>
+            </Box>
+            <Box width="70%">
+              <CustomWidthTooltip title={preheat?.args?.content_for_calculating_task_id || '-'} placement="bottom">
+                <Typography
+                  id="content-for-calculating-task-id"
+                  variant="body1"
+                  fontFamily="mabry-bold"
+                  component="div"
+                  className={styles.contentForCalculatingTaskID}
+                >
+                  {isLoading ? (
+                    <Skeleton sx={{ width: '4rem' }} />
+                  ) : preheat?.args?.content_for_calculating_task_id ? (
+                    preheat?.args?.content_for_calculating_task_id
+                  ) : (
+                    '-'
+                  )}
+                </Typography>
+              </CustomWidthTooltip>
+            </Box>
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>

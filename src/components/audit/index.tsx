@@ -167,7 +167,7 @@ export default function AuditLogs() {
         setSearchLodaing(false);
         navigate(`/audit`);
       }, 500),
-    [],
+    [navigate],
   );
 
   const changePath = useCallback(

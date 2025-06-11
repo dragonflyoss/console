@@ -130,28 +130,28 @@ export default function AuditLogs() {
     { lable: 'Unknown', name: 'UNKNOWN' },
   ];
 
-  const changeStatus = (event: { target: { value: SetStateAction<string> } }) => {
+  const handleSearchByStatus = (event: { target: { value: SetStateAction<string> } }) => {
     if (event.target.value) {
       setStatus(event.target.value);
       navigate(`/audit`);
     }
   };
 
-  const changeActorType = (event: { target: { value: SetStateAction<string> } }) => {
+  const handleSearchByActorType = (event: { target: { value: SetStateAction<string> } }) => {
     if (event.target.value) {
       setActorType(event.target.value);
       navigate(`/audit`);
     }
   };
 
-  const changeOperation = (event: { target: { value: SetStateAction<string> } }) => {
+  const handleSearchByOperation = (event: { target: { value: SetStateAction<string> } }) => {
     if (event.target.value) {
       setOperation(event.target.value);
       navigate(`/audit`);
     }
   };
 
-  const handleInputChange = useMemo(
+  const handleSearchByUser = useMemo(
     () =>
       debounce((value: string) => {
         setUser(value);
@@ -170,7 +170,7 @@ export default function AuditLogs() {
     [navigate],
   );
 
-  const changePath = useCallback(
+  const handleSearchByPath = useCallback(
     (newSearch: any) => {
       debounced(newSearch);
       setSearchLodaing(true);
@@ -208,7 +208,7 @@ export default function AuditLogs() {
           onChange={(e) => {
             const value = e.target.value;
             setSearchPath(value);
-            changePath(value);
+            handleSearchByPath(value);
           }}
           InputProps={{
             startAdornment: searchLodaing ? (
@@ -232,7 +232,7 @@ export default function AuditLogs() {
               sx={{ '& .MuiOutlinedInput-root.MuiInputBase-sizeSmall': { p: '0.5rem' } }}
               value={user}
               onInputChange={(_event, newInputValue) => {
-                handleInputChange(newInputValue);
+                handleSearchByUser(newInputValue);
               }}
               options={(Array.isArray(users) && users.map((option) => option?.name)) || ['']}
               renderInput={(params) => (
@@ -246,7 +246,7 @@ export default function AuditLogs() {
               <Select
                 id="operation-select"
                 value={operation}
-                label="changeStatus"
+                label="Operation"
                 open={openoperationSelect}
                 onClose={() => {
                   setOpenOperationSelect(false);
@@ -254,7 +254,7 @@ export default function AuditLogs() {
                 onOpen={() => {
                   setOpenOperationSelect(true);
                 }}
-                onChange={changeOperation}
+                onChange={handleSearchByOperation}
               >
                 {operationList.map((item) => (
                   <MenuItem
@@ -276,7 +276,7 @@ export default function AuditLogs() {
               <Select
                 id="actor-type-select"
                 value={actorType}
-                label="changeStatus"
+                label="Actor Type"
                 open={openActorTypeSelect}
                 onClose={() => {
                   setOpenActorTypeSelect(false);
@@ -284,7 +284,7 @@ export default function AuditLogs() {
                 onOpen={() => {
                   setOpenActorTypeSelect(true);
                 }}
-                onChange={changeActorType}
+                onChange={handleSearchByActorType}
               >
                 {actorTypeList.map((item) => (
                   <MenuItem
@@ -306,7 +306,7 @@ export default function AuditLogs() {
               <Select
                 id="states-select"
                 value={status}
-                label="changeStatus"
+                label="States"
                 open={openStatusSelect}
                 onClose={() => {
                   setOpenStatusSelect(false);
@@ -314,7 +314,7 @@ export default function AuditLogs() {
                 onOpen={() => {
                   setOpenStatusSelect(true);
                 }}
-                onChange={changeStatus}
+                onChange={handleSearchByStatus}
               >
                 {statusList.map((item) => (
                   <MenuItem

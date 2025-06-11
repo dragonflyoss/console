@@ -18,7 +18,7 @@ import {
   TextField,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
+import { SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './index.module.css';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../lib/constants';
 import { auditLogsResponse, getAuditLogs, getUsers, getUsersResponse } from '../../lib/api';
@@ -26,6 +26,7 @@ import Card from '../card';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getDatetime, useQuery } from '../../lib/utils';
 import { debounce } from 'lodash';
+import SearchCircularProgress from '../circular-progress';
 
 export default function AuditLogs() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -43,6 +44,7 @@ export default function AuditLogs() {
   const [user, setUser] = useState('');
   const [operation, setOperation] = useState('ALL');
   const [status, setStatus] = useState('ALL');
+  const [searchLodaing, setSearchLodaing] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -158,13 +160,22 @@ export default function AuditLogs() {
     [navigate],
   );
 
-  const changePath = useMemo(
+  const debounced = useMemo(
     () =>
-      debounce((value: string) => {
-        setSearch(value);
+      debounce(async (currentSearch) => {
+        setSearch(currentSearch);
+        setSearchLodaing(false);
         navigate(`/audit`);
-      }, 300),
-    [navigate],
+      }, 500),
+    [],
+  );
+
+  const changePath = useCallback(
+    (newSearch: any) => {
+      debounced(newSearch);
+      setSearchLodaing(true);
+    },
+    [debounced],
   );
 
   return (
@@ -200,7 +211,11 @@ export default function AuditLogs() {
             changePath(value);
           }}
           InputProps={{
-            startAdornment: (
+            startAdornment: searchLodaing ? (
+              <Box className={styles.searchIconContainer}>
+                <SearchCircularProgress />
+              </Box>
+            ) : (
               <Box className={styles.searchIconContainer}>
                 <SearchIcon sx={{ color: '#919EAB' }} />
               </Box>
@@ -208,7 +223,7 @@ export default function AuditLogs() {
           }}
         />
       </FormControl>
-      <Card>
+      <Card className={styles.card}>
         <Box className={styles.filterWrapper}>
           <FormControl size="small" className={styles.userFilter}>
             <Autocomplete
@@ -415,11 +430,19 @@ export default function AuditLogs() {
                         {item?.actor_name}
                       </Typography>
                     </TableCell>
-                    <TableCell align="center" id={`path-${item?.id}`}>
+                    <TableCell
+                      align="center"
+                      id={`path-${item?.id}`}
+                      sx={{
+                        whiteSpace: 'normal',
+                        wordBreak: 'break-word',
+                        overflowWrap: 'break-word',
+                      }}
+                    >
                       <Box
                         sx={{
                           backgroundColor: 'var(--palette-background-inactive)',
-                          p: '0.4rem 0.4rem',
+                          p: '0.2rem 0.4rem',
                           borderRadius: '4px',
                           display: 'inline-flex',
                           color: 'var(--palette-table-title-text-color)',

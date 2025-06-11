@@ -201,6 +201,7 @@ h5 {
 }
 
 .MuiPaper-root.MuiAutocomplete-paper {
+  box-shadow: none;
   background-color: var(--palette-background-menu);
   background-image: url(./assets/images/menu/cyan-blur.png), url(./assets/images/menu/red-blur.png);
   background-repeat: no-repeat, no-repeat;
@@ -211,6 +212,7 @@ h5 {
   background-position: right top, left bottom;
   border-radius: var(--menu-border-radius);
   overflow: inherit;
+  box-shadow: var(--custom-shadows-dropdown);
 }
 
 .MuiAutocomplete-option {

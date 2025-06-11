@@ -48,3 +48,8 @@
 .tableRow:last-child {
   border-bottom: none;
 }
+
+.card {
+  width: 100%;
+  /* overflow: auto !important; */
+}

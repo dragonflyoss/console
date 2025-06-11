@@ -309,24 +309,24 @@ export default function ShowPreheat() {
                       {preheat?.args?.urls?.[0] || '-'}
                     </Typography>
                   </CustomWidthTooltip>
-                ) : preheat?.args?.urls?.length > 1 ? (
-                  <Box className={styles.urlsWrapper}>
-                    {preheat?.args?.urls?.map((item, index) => (
-                      <CustomWidthTooltip key={index} title={item || '-'} placement="bottom">
-                        <Typography
-                          id={`url-${index}`}
-                          variant="body1"
-                          fontFamily="mabry-bold"
-                          className={styles.urls}
-                          component="div"
-                        >
-                          {item || '-'}
-                        </Typography>
-                      </CustomWidthTooltip>
-                    ))}
-                  </Box>
                 ) : (
-                  <>-</>
+                  preheat?.args?.urls?.length > 1 && (
+                    <Box className={styles.urlsWrapper}>
+                      {preheat?.args?.urls?.map((item, index) => (
+                        <CustomWidthTooltip key={index} title={item || '-'} placement="bottom">
+                          <Typography
+                            id={`url-${index}`}
+                            variant="body1"
+                            fontFamily="mabry-bold"
+                            className={styles.urls}
+                            component="div"
+                          >
+                            {item || '-'}
+                          </Typography>
+                        </CustomWidthTooltip>
+                      ))}
+                    </Box>
+                  )
                 )}
               </>
             )) || (
@@ -435,7 +435,6 @@ export default function ShowPreheat() {
               </Box>
             </Box>
           )}
-
           {preheat?.args?.count && (
             <Box className={styles.informationContainer}>
               <Box className={styles.informationTitle}>
@@ -456,7 +455,6 @@ export default function ShowPreheat() {
               </Box>
             </Box>
           )}
-
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
               <Tag className={styles.informationTitleIcon} />

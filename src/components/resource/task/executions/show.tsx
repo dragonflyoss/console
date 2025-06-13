@@ -515,7 +515,7 @@ export default function ShowExecutions() {
           </Typography>
         </Box>
       </Card>
-      {failure && Array.isArray(failure) && failure.length !== 0 ? (
+      {failure && Array.isArray(failure) && failure.length !== 0 && (
         <Box id="failure-tasks">
           <Box m="2.5rem 0 1.5rem 0" sx={{ display: 'flex', alignItems: 'center' }}>
             <Box
@@ -679,8 +679,6 @@ export default function ShowExecutions() {
             <></>
           )}
         </Box>
-      ) : (
-        <></>
       )}
     </Box>
   );

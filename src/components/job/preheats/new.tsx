@@ -114,24 +114,24 @@ export default function NewPreheat() {
   const [bioError, setBioError] = useState(false);
   const [urlError, setURLError] = useState(false);
   const [tagError, setTagError] = useState(false);
+  const [countError, setCountError] = useState(false);
+  const [clusterError, setClusterError] = useState(false);
   const [contentForCalculatingTaskIDError, setContentForCalculatingTaskIDError] = useState(false);
   const [applicationError, setApplicationError] = useState(false);
   const [filterError, setFilterError] = useState(false);
   const [pieceLengthError, setPieceLengthError] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
-  const [headers, setheaders] = useState<
+  const [headers, setHeaders] = useState<
     Array<{ key: { key: string; error: boolean }; value: { value: string; error: boolean } }>
   >([]);
   const [URLs, setURLS] = useState<Array<{ url: string; error: boolean }>>([]);
   const [cluster, setCluster] = useState([{ id: 0, name: '' }]);
-  const [clusterError, setClusterError] = useState(false);
   const [filter, setFilter] = useState([]);
   const [clusterName, setClusterName] = useState<string[]>([]);
   const [clusterHelperText, setClusterHelperText] = useState('Select at least one option.');
   const [scope, setScope] = useState<string>('single_seed_peer');
   const [count, setCount] = useState<string>('all');
   const [filterHelperText, setFilterHelperText] = useState('Fill in the characters, the length is 0-100.');
-  const [countError, setCountError] = useState(false);
   const [percentage, setPercentage] = useState(50);
   const [search, setSearch] = useState<string | null>('args');
 
@@ -395,7 +395,7 @@ export default function NewPreheat() {
     },
   ];
 
-  const clusterFrom = [
+  const clusterForm = [
     {
       enterMultiple: true,
       scopesFormProps: {
@@ -441,13 +441,7 @@ export default function NewPreheat() {
     },
   ];
 
-  const scopeList = [
-    { label: 'Single Seed Peer', name: 'single_seed_peer' },
-    { label: 'All Seed Peers', name: 'all_seed_peers' },
-    { label: 'All Peers', name: 'all_peers' },
-  ];
-
-  const calculatingTaskIDList = {
+  const calculatingTaskIDForm = {
     formProps: {
       id: 'content-for-calculating-task-id',
       label: 'Content for Calculating Task ID',
@@ -459,7 +453,7 @@ export default function NewPreheat() {
       error: contentForCalculatingTaskIDError,
 
       onChange: (e: any) => {
-        changeValidate(e.target.value, calculatingTaskIDList);
+        changeValidate(e.target.value, calculatingTaskIDForm);
       },
     },
     syncError: false,
@@ -471,11 +465,23 @@ export default function NewPreheat() {
     },
   };
 
+  const scopeList = [
+    { label: 'Single Seed Peer', name: 'single_seed_peer' },
+    { label: 'All Seed Peers', name: 'all_seed_peers' },
+    { label: 'All Peers', name: 'all_peers' },
+  ];
+
   const handleSelectScope = (event: SelectChangeEvent) => {
     const selectedValues = event.target.value;
     const currentSelection = scopeList.find((scope) => scope.name === selectedValues);
     setScope(currentSelection?.name || '');
     setCount('all');
+  };
+
+  const handleChangeSearch = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
+    if (newAlignment) {
+      setSearch(newAlignment);
+    }
   };
 
   const URLValidate = (value: any) => {
@@ -518,6 +524,8 @@ export default function NewPreheat() {
       const pieceLength = event.currentTarget.elements.pieceLength.value;
       const filters = filter.join('&');
 
+      const data = new FormData(event.currentTarget);
+
       let percentage = null;
       let countValue = null;
 
@@ -529,7 +537,6 @@ export default function NewPreheat() {
         }
       }
 
-      const data = new FormData(event.currentTarget);
       if (filterText) {
         setFilterError(true);
         setFilterHelperText('Please press ENTER to end the filter creation');
@@ -573,14 +580,14 @@ export default function NewPreheat() {
         newURL[index].key.error = !isValidKey;
         newURL[index].value.error = !isValidValue;
 
-        setheaders(newURL);
+        setHeaders(newURL);
 
         return isValidKey && isValidValue;
       });
 
       const urlList = URLs.map((item) => item.url);
 
-      urlList.push(url);
+      urlList.unshift(url);
 
       const validateCount = countValidate(countValue);
 
@@ -634,6 +641,7 @@ export default function NewPreheat() {
       if (canSubmit) {
         try {
           const job = await createJob({ ...formDate });
+
           setLoadingButton(false);
           navigate(`/jobs/preheats/${job.id}`);
         } catch (error) {
@@ -649,6 +657,14 @@ export default function NewPreheat() {
     } else {
       const contentForCalculatingTaskID = event.currentTarget.elements.contentForCalculatingTaskID.value;
 
+      let clusterIDValidate = true;
+
+      informationForm.forEach((item) => {
+        const value = data.get(item.formProps.name);
+        item.setError(!item.validate(value as string));
+        item.syncError = !item.validate(value as string);
+      });
+
       informationForm.forEach((item) => {
         const value = data.get(item.formProps.name);
         item.setError(!item.validate(value as string));
@@ -656,10 +672,7 @@ export default function NewPreheat() {
       });
 
       const urlList = URLs.map((item) => item.url);
-
-      urlList.push(url);
-
-      let clusterIDValidate = true;
+      urlList.unshift(url);
 
       if (clusterName.length === 0) {
         setClusterError(true);
@@ -669,7 +682,6 @@ export default function NewPreheat() {
       }
 
       const clusterSet = new Set(clusterName);
-
       const clusterID = cluster.filter((item) => clusterSet.has(item.name)).map((item) => item.id);
 
       urlForm.setError(!urlForm.validate(url as string));
@@ -685,23 +697,17 @@ export default function NewPreheat() {
         return isValid;
       });
 
-      informationForm.forEach((item) => {
-        const value = data.get(item.formProps.name);
-        item.setError(!item.validate(value as string));
-        item.syncError = !item.validate(value as string);
-      });
+      calculatingTaskIDForm.setError(!calculatingTaskIDForm.validate(contentForCalculatingTaskID));
 
-      calculatingTaskIDList.setError(!calculatingTaskIDList.validate(contentForCalculatingTaskID));
-
-      calculatingTaskIDList.syncError = !calculatingTaskIDList.validate(contentForCalculatingTaskID);
+      calculatingTaskIDForm.syncError = !calculatingTaskIDForm.validate(contentForCalculatingTaskID);
 
       const canSubmit = Boolean(
         !informationForm.filter((item) => item.syncError).length &&
           !urlForm.syncError &&
-          !calculatingTaskIDList.syncError &&
+          !calculatingTaskIDForm.syncError &&
           clusterIDValidate &&
           urlValidate &&
-          !calculatingTaskIDList.syncError,
+          !calculatingTaskIDForm.syncError,
       );
 
       const formDate = {
@@ -718,6 +724,7 @@ export default function NewPreheat() {
       if (canSubmit) {
         try {
           const job = await createJob({ ...formDate });
+
           setLoadingButton(false);
           navigate(`/jobs/preheats/${job.id}`);
         } catch (error) {
@@ -740,12 +747,6 @@ export default function NewPreheat() {
 
     setErrorMessage(false);
     setSuccessMessage(false);
-  };
-
-  const handleChangeSearch = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
-    if (newAlignment) {
-      setSearch(newAlignment);
-    }
   };
 
   return (
@@ -835,7 +836,7 @@ export default function NewPreheat() {
             </Tooltip>
           </Box>
           <FormControl className={styles.textField} required size="small" error={clusterError}>
-            {clusterFrom.map((item) => (
+            {clusterForm.map((item) => (
               <Autocomplete
                 freeSolo
                 multiple
@@ -1150,7 +1151,7 @@ export default function NewPreheat() {
                             justifyContent: 'space-between',
                             p: '1.2rem 1rem',
                           }}
-                        > 
+                        >
                           {count === 'percentage' ? (
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                               <PrettoSlider
@@ -1272,11 +1273,10 @@ export default function NewPreheat() {
                       onChange={(event) => {
                         const newHeaders = [...headers];
                         newHeaders[index].key.key = event.target.value;
-
                         const isValid = headersKeyValidate(event.target.value);
                         newHeaders[index].key.error = !isValid;
 
-                        setheaders(newHeaders);
+                        setHeaders(newHeaders);
                       }}
                     />
                     <TextField
@@ -1293,11 +1293,10 @@ export default function NewPreheat() {
                       onChange={(event) => {
                         const newHeaders = [...headers];
                         newHeaders[index].value.value = event.target.value;
-
                         const isValid = headersValueValidate(event.target.value);
                         newHeaders[index].value.error = !isValid;
 
-                        setheaders(newHeaders);
+                        setHeaders(newHeaders);
                       }}
                     />
                     <IconButton
@@ -1310,7 +1309,7 @@ export default function NewPreheat() {
                       onClick={() => {
                         const newheaders = [...headers];
                         newheaders.splice(index, 1);
-                        setheaders(newheaders);
+                        setHeaders(newheaders);
                       }}
                     >
                       <DoNotDisturbOnOutlinedIcon
@@ -1336,7 +1335,7 @@ export default function NewPreheat() {
                   size="small"
                   startIcon={<AddIcon />}
                   onClick={() => {
-                    setheaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
+                    setHeaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
                   }}
                 >
                   add headers
@@ -1357,7 +1356,7 @@ export default function NewPreheat() {
                 variant="outlined"
                 size="small"
                 onClick={() => {
-                  setheaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
+                  setHeaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
                 }}
               >
                 add headers
@@ -1366,7 +1365,7 @@ export default function NewPreheat() {
           </Box>
         ) : (
           <Box key="content-for-calculating-task-id" sx={{ width: '37rem', height: '3rem', m: '0.8rem 0' }}>
-            <TextField fullWidth variant="outlined" size="small" {...calculatingTaskIDList.formProps} sx={{ p: 0 }} />
+            <TextField fullWidth variant="outlined" size="small" {...calculatingTaskIDForm.formProps} sx={{ p: 0 }} />
           </Box>
         )}
         <Divider sx={{ mt: '1rem', mb: '1.5rem' }} />

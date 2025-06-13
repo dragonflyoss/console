@@ -3,8 +3,6 @@ import {
   Typography,
   Box,
   Pagination,
-  ThemeProvider,
-  createTheme,
   Chip,
   Link as RouterLink,
   Divider,

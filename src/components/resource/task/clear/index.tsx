@@ -216,7 +216,7 @@ export default function Clear() {
     },
   };
 
-  const formList = [
+  const urlForm = [
     {
       formProps: {
         id: 'pieceLength',
@@ -244,7 +244,7 @@ export default function Clear() {
           </Tooltip>
         ),
         onChange: (e: any) => {
-          changeValidate(e.target.value, formList[0]);
+          changeValidate(e.target.value, urlForm[0]);
           setSearchDada({ ...searchData, piece_length: e.target.value });
         },
       },
@@ -285,7 +285,7 @@ export default function Clear() {
         ),
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, formList[1]);
+          changeValidate(e.target.value, urlForm[1]);
           setSearchDada({ ...searchData, tag: e.target.value });
         },
       },
@@ -321,7 +321,7 @@ export default function Clear() {
         ),
 
         onChange: (e: any) => {
-          changeValidate(e.target.value, formList[2]);
+          changeValidate(e.target.value, urlForm[2]);
           setSearchDada({ ...searchData, application: e.target.value });
         },
       },
@@ -342,14 +342,14 @@ export default function Clear() {
         options: [],
 
         onChange: (_e: any, newValue: any) => {
-          if (!formList[3].formProps.error) {
+          if (!urlForm[3].formProps.error) {
             setSearchDada({ ...searchData, filtered_query_params: newValue.join('&') });
           }
         },
 
         onInputChange: (e: any) => {
           setFilterHelperText('Fill in the characters, the length is 0-100.');
-          changeValidate(e.target.value, formList[3]);
+          changeValidate(e.target.value, urlForm[3]);
         },
 
         renderTags: (value: any, getTagProps: any) =>
@@ -383,7 +383,7 @@ export default function Clear() {
     },
   ];
 
-  const taskIDList = {
+  const taskIDForm = {
     formProps: {
       id: 'task-id',
       label: 'Task ID',
@@ -421,7 +421,7 @@ export default function Clear() {
       },
 
       onChange: (e: any) => {
-        changeValidate(e.target.value, taskIDList);
+        changeValidate(e.target.value, taskIDForm);
         setSearchTask(e.target.value);
 
         if (e.target.value === '') {
@@ -438,7 +438,7 @@ export default function Clear() {
     },
   };
 
-  const calculatingTaskIDList = {
+  const calculatingTaskIDForm = {
     formProps: {
       id: 'content-for-calculating-task-id',
       label: 'Content for Calculating Task ID',
@@ -476,7 +476,7 @@ export default function Clear() {
       },
 
       onChange: (e: any) => {
-        changeValidate(e.target.value, calculatingTaskIDList);
+        changeValidate(e.target.value, calculatingTaskIDForm);
         setSearchContentForCalculatingTaskID(e.target.value);
 
         if (e.target.value === '') {
@@ -516,7 +516,7 @@ export default function Clear() {
       if (delet === 'DELETE') {
         if (schedulerClusterID && !deleteError) {
           if (task?.args?.url && task?.args?.url !== '') {
-            const formList = {
+            const urlForm = {
               args: {
                 url: task?.args?.url,
                 tag: task?.args?.tag,
@@ -529,7 +529,7 @@ export default function Clear() {
               type: 'delete_task',
             };
 
-            const tasks = await createTaskJob(formList);
+            const tasks = await createTaskJob(urlForm);
 
             if (tasks?.id) {
               setDeleteLoadingButton(false);
@@ -537,7 +537,7 @@ export default function Clear() {
               setOpenDeleteTask(false);
             }
           } else if (task?.args?.task_id) {
-            const formList = {
+            const urlForm = {
               args: {
                 task_id: task?.args?.task_id,
               },
@@ -545,14 +545,14 @@ export default function Clear() {
               type: 'delete_task',
             };
 
-            const tasks = await createTaskJob(formList);
+            const tasks = await createTaskJob(urlForm);
             if (tasks?.id) {
               setDeleteLoadingButton(false);
               navigate(`/resource/task/executions/${tasks?.id}`);
               setOpenDeleteTask(false);
             }
           } else if (task?.args?.content_for_calculating_task_id) {
-            const formList = {
+            const urlForm = {
               args: {
                 content_for_calculating_task_id: task?.args?.content_for_calculating_task_id,
               },
@@ -560,7 +560,7 @@ export default function Clear() {
               type: 'delete_task',
             };
 
-            const tasks = await createTaskJob(formList);
+            const tasks = await createTaskJob(urlForm);
             if (tasks?.id) {
               setDeleteLoadingButton(false);
               navigate(`/resource/task/executions/${tasks?.id}`);
@@ -596,11 +596,11 @@ export default function Clear() {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
 
-      const taskIDValue = data.get(taskIDList.formProps.name);
-      taskIDList.setError(!taskIDList.validate(taskIDValue as string));
-      taskIDList.syncError = !taskIDList.validate(taskIDValue as string);
+      const taskIDValue = data.get(taskIDForm.formProps.name);
+      taskIDForm.setError(!taskIDForm.validate(taskIDValue as string));
+      taskIDForm.syncError = !taskIDForm.validate(taskIDValue as string);
 
-      if (searchTask !== '' && !taskIDList.syncError) {
+      if (searchTask !== '' && !taskIDForm.syncError) {
         const data = {
           args: {
             task_id: searchTask,
@@ -636,7 +636,7 @@ export default function Clear() {
     const data = new FormData(event.currentTarget);
     const filterText = event.currentTarget.elements.filteredQueryParams?.value;
 
-    formList.forEach((item) => {
+    urlForm.forEach((item) => {
       const value = data.get(item.formProps.name);
       item.setError(!item.validate(value as string));
       item.syncError = !item.validate(value as string);
@@ -650,7 +650,7 @@ export default function Clear() {
       setFilterHelperText('Fill in the characters, the length is 0-100.');
     }
 
-    formList.forEach((item) => {
+    urlForm.forEach((item) => {
       if (item.formProps.name !== 'filteredQueryParams') {
         const value = data.get(item.formProps.name);
         item.setError(!item.validate(value as string));
@@ -665,7 +665,7 @@ export default function Clear() {
     urlList.syncError = !urlList.validate(urlValue as string);
 
     const canSubmit = Boolean(
-      !formList.filter((item) => item.syncError).length && Boolean(!filterText) && !urlList.syncError,
+      !urlForm.filter((item) => item.syncError).length && Boolean(!filterText) && !urlList.syncError,
     );
 
     const formDate = {
@@ -710,11 +710,11 @@ export default function Clear() {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
 
-      const taskIDValue = data.get(calculatingTaskIDList.formProps.name);
-      calculatingTaskIDList.setError(!calculatingTaskIDList.validate(taskIDValue as string));
-      calculatingTaskIDList.syncError = !calculatingTaskIDList.validate(taskIDValue as string);
+      const taskIDValue = data.get(calculatingTaskIDForm.formProps.name);
+      calculatingTaskIDForm.setError(!calculatingTaskIDForm.validate(taskIDValue as string));
+      calculatingTaskIDForm.syncError = !calculatingTaskIDForm.validate(taskIDValue as string);
 
-      if (searchContentForCalculatingTaskID !== '' && !calculatingTaskIDList.syncError) {
+      if (searchContentForCalculatingTaskID !== '' && !calculatingTaskIDForm.syncError) {
         const data = {
           args: {
             content_for_calculating_task_id: searchContentForCalculatingTaskID,
@@ -879,7 +879,7 @@ export default function Clear() {
       </Paper>
       {search === 'task-id' ? (
         <Box key="task-id" component="form" onSubmit={handleSearchByTaskID} sx={{ width: '38rem', height: '3rem' }}>
-          <TextField fullWidth variant="outlined" size="small" {...taskIDList.formProps} sx={{ p: 0 }} />
+          <TextField fullWidth variant="outlined" size="small" {...taskIDForm.formProps} sx={{ p: 0 }} />
         </Box>
       ) : search === 'content-for-calculating-task-id' ? (
         <Box
@@ -888,7 +888,7 @@ export default function Clear() {
           onSubmit={handleSearchBySearchContentForCalculatingTaskID}
           sx={{ width: '38rem', height: '3rem' }}
         >
-          <TextField fullWidth variant="outlined" size="small" {...calculatingTaskIDList.formProps} sx={{ p: 0 }} />
+          <TextField fullWidth variant="outlined" size="small" {...calculatingTaskIDForm.formProps} sx={{ p: 0 }} />
         </Box>
       ) : (
         <Box sx={{ position: 'relative', height: '3rem' }}>
@@ -916,7 +916,7 @@ export default function Clear() {
             {optional ? (
               <Box mt="1rem">
                 <Box className={styles.optionalContainer}>
-                  {formList.map((item) => {
+                  {urlForm.map((item) => {
                     return (
                       <Box key={item.formProps.id} className={styles.filterInput}>
                         <Box width="30%" display="flex" alignItems="center">

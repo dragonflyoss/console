@@ -27,14 +27,14 @@ import {
   Typography,
 } from '@mui/material';
 import HelpIcon from '@mui/icons-material/Help';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { createGCJob, getConfigs, getConfigsResponse, getGC, getGCReaonse, updateConfig } from '../../../lib/api';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './index.module.css';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Card from '../../card';
 import { formatDuring, formatTime, formatNano, getDatetime, getPaginatedList } from '../../../lib/utils';
-import _, { set } from 'lodash';
+import _ from 'lodash';
 import { MyContext } from '../../menu';
 import GC from '../../garbage-collection-animation';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -403,7 +403,7 @@ export default function AuditGC() {
                   </Alert>
                 </Box>
               ) : gcError ? (
-                <Paper id="execute-error" variant="outlined" className={styles.deleteInactiveWrapper}>
+                <Paper id="execute-error" variant="outlined" className={styles.gcErrorWrapper}>
                   <Typography variant="inherit" fontFamily="mabry-bold" pb="1rem">
                     Logs
                   </Typography>

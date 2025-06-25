@@ -409,7 +409,7 @@ export default function JobGC() {
                   </Alert>
                 </Box>
               ) : gcError ? (
-                <Paper id="execute-error" variant="outlined" className={styles.deleteInactiveWrapper}>
+                <Paper id="execute-error" variant="outlined" className={styles.gcErrorWrapper}>
                   <Typography variant="inherit" fontFamily="mabry-bold" pb="1rem">
                     Logs
                   </Typography>

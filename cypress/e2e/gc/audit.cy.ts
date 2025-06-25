@@ -42,6 +42,10 @@ describe('audit', () => {
     cy.get('#pagination').should('exist');
 
     cy.get('#trigger-119').should('have.text', 'Manual');
+
+    cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
+
+    cy.get('#id-97').should('have.text', 97);
   });
 
   it('when no data is loaded', () => {

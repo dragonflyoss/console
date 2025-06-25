@@ -155,7 +155,7 @@
   background: linear-gradient(to right, var(--palette-delete-button-color) 0%, transparent 100%);
 }
 
-.deleteInactiveWrapper {
+.gcErrorWrapper {
   padding: 1rem;
 }
 

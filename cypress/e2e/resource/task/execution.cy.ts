@@ -259,7 +259,7 @@ describe('Executions', () => {
         },
       );
 
-      cy.visit('resource/task/executions/6');
+      cy.visit('/resource/task/executions/6');
     });
 
     it('execution information should appear empty', () => {
@@ -309,7 +309,7 @@ describe('Executions', () => {
         },
       );
 
-      cy.visit('resource/task/executions/6');
+      cy.visit('/resource/task/executions/6');
     });
 
     it('show error message', () => {
@@ -333,7 +333,7 @@ describe('Executions', () => {
 
       // Show execution content for calculating task id.
       cy.get('#content-for-calculating-task-id').should('have.text', '-');
-      
+
       // Show execution url.
       cy.get('#url').should('have.text', '-');
 
@@ -354,6 +354,8 @@ describe('Executions', () => {
     });
 
     it('when the status is pending, execution API error response', () => {
+      cy.visit('/resource/task/executions/11');
+
       let interceptCount = 0;
 
       cy.intercept(
@@ -369,8 +371,6 @@ describe('Executions', () => {
           interceptCount++;
         },
       ).as('execution');
-
-      cy.visit('resource/task/executions/11');
 
       // Check for breadcrumb.
       cy.get('.MuiBreadcrumbs-ol').should('exist').and('contain', 11);

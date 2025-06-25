@@ -61,7 +61,7 @@ export default function AuditGC() {
   const [isLoading, setIsLoading] = useState(false);
   const [configs, setConfigs] = useState<getConfigsResponse[]>([]);
   const [auditLogTTL, setAudiLogTTL] = useState('');
-  const [auditLod, setAuditLod] = useState(0);
+  const [audit, setAudit] = useState(0);
   const [update, setUpdate] = useState(false);
   const [gcIsloading, setGcIsLoading] = useState(false);
   const [history, setHistory] = useState<getGCReaonse[]>([]);
@@ -151,7 +151,7 @@ export default function AuditGC() {
 
     setGCTTL(gcTTL());
     setAudiLogTTL(ttl.suffix);
-    setAuditLod(ttl.value);
+    setAudit(ttl.value);
   }, [configs]);
 
   const handleChangeTTL = async () => {
@@ -163,15 +163,15 @@ export default function AuditGC() {
     let validate = false;
 
     if (auditLogTTL === 'Days') {
-      validate = !maxTTLValidate.test(String(auditLod));
-      setTTLError(!maxTTLValidate.test(String(auditLod)));
+      validate = !maxTTLValidate.test(String(audit));
+      setTTLError(!maxTTLValidate.test(String(audit)));
     } else {
-      validate = !ttlValidate.test(String(auditLod));
-      setTTLError(!ttlValidate.test(String(auditLod)));
+      validate = !ttlValidate.test(String(audit));
+      setTTLError(!ttlValidate.test(String(audit)));
     }
 
     try {
-      const ttl = formatNano(Number(auditLod), auditLogTTL);
+      const ttl = formatNano(Number(audit), auditLogTTL);
 
       if (!validate && configs?.[0]?.id) {
         await updateConfig(String(configs?.[0]?.id), { value: `{"audit":{"ttl":${ttl}},"job":{"ttl":${gcTTL}}}` });
@@ -325,9 +325,9 @@ export default function AuditGC() {
                   type="number"
                   color="success"
                   sx={{ mr: '1rem', width: '14rem' }}
-                  value={auditLod}
+                  value={audit}
                   onChange={(e) => {
-                    setAuditLod(Number(e.target.value));
+                    setAudit(Number(e.target.value));
                   }}
                 />
                 <Select

@@ -284,7 +284,7 @@ export default function AuditGC() {
         </Box>
         <Divider />
         <DialogContent>
-          <Box p="0.5rem 0">
+          <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: '1rem' }}>
               <Typography variant="body2" fontFamily="mabry-bold" component="div" pr="0.3rem">
                 TTL

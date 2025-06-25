@@ -289,7 +289,7 @@ export default function JobGC() {
         </Box>
         <Divider />
         <DialogContent>
-          <Box p="0.5rem 0">
+          <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', pb: '1rem' }}>
               <Typography variant="body1" fontFamily="mabry-bold" component="div" pr="0.3rem">
                 TTL
@@ -306,7 +306,7 @@ export default function JobGC() {
                 variant="outlined"
                 type="number"
                 color="success"
-                sx={{ mr: '1rem', width: '7rem' }}
+                sx={{ mr: '0.8rem', width: '7rem' }}
                 value={job}
                 onChange={(e) => {
                   setJob(Number(e.target.value));

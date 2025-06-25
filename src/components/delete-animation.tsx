@@ -6,8 +6,12 @@ const Style = {
   width: '100%',
 };
 
-const DeleteAnimation = () => {
-  return <Lottie animationData={deleteAnimation} style={Style}></Lottie>;
+interface layoutProps {
+  className?: string;
+}
+
+const DeleteAnimation: React.FC<layoutProps> = ({ className }) => {
+  return <Lottie animationData={deleteAnimation} style={Style} className={className} />;
 };
 
 export default DeleteAnimation;

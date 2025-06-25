@@ -607,6 +607,21 @@ interface getTokensParams {
   per_page?: number;
 }
 
+interface user {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  email: string;
+  name: string;
+  avatar: string;
+  phone: string;
+  state: string;
+  location: string;
+  bio: string;
+  configs: null;
+}
+
 export interface getTokensResponse {
   id: number;
   created_at: string;
@@ -619,20 +634,7 @@ export interface getTokensResponse {
   state: string;
   expired_at: string;
   user_id: number;
-  user: {
-    id: number;
-    created_at: string;
-    updated_at: string;
-    is_del: number;
-    email: string;
-    name: string;
-    avatar: string;
-    phone: string;
-    state: string;
-    location: string;
-    bio: string;
-    configs: null;
-  };
+  user: user;
 }
 
 export async function getTokens(params?: getTokensParams): Promise<getTokensResponse[]> {
@@ -783,20 +785,7 @@ export interface JobsResponse {
     updated_at: string;
   };
   user_id: number;
-  user: {
-    id: number;
-    created_at: string;
-    updated_at: string;
-    is_del: number;
-    email: string;
-    name: string;
-    avatar: string;
-    phone: string;
-    state: string;
-    location: string;
-    bio: string;
-    configs: null | any;
-  };
+  user: user;
   seed_peer_clusters: any[];
   scheduler_clusters: scheduler_clusters[];
 }
@@ -1278,4 +1267,104 @@ export async function getAuditLogs(params: getAuditLogsParams): Promise<getAudit
   const totalPage = Number(links?.last?.page);
   const responses = { data: data, total_page: totalPage };
   return responses;
+}
+
+interface getConfigsParams {
+  page?: number;
+  per_page?: number;
+}
+
+export interface getConfigsResponse {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  name: string;
+  value: string;
+  bio: string;
+  user_id: number;
+  user: user;
+}
+
+export async function getConfigs(params: getConfigsParams): Promise<getConfigsResponse[]> {
+  const url = new URL(`/api/v1/configs?${queryString.stringify(params)}`, API_URL);
+
+  const response = await get(url);
+  return await response.json();
+}
+
+interface updateConfigRequset {
+  value: string;
+}
+
+export async function updateConfig(id: string, request: updateConfigRequset): Promise<getConfigsResponse> {
+  const url = new URL(`/api/v1/configs/${id}`, API_URL);
+  const response = await patch(url, request);
+  return await response.json();
+}
+
+interface createGCResquest {
+  type: string;
+  args: {
+    type: string;
+  };
+  user_id?: number;
+}
+
+interface createGCResponse {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  task_id: string;
+  bio: string;
+  type: 'gc';
+  state: string;
+  args: {
+    batch_size: number;
+    ttl: number;
+  };
+  result: {
+    purged: number;
+  };
+  user_id: number;
+  user: user;
+  seed_peer_clusters: [];
+  scheduler_clusters: Array<scheduler_clusters>;
+}
+
+export async function createGCJob(request: createGCResquest): Promise<createGCResponse> {
+  const url = new URL(`/api/v1/jobs`, API_URL);
+  const response = await post(url, request);
+  return await response.json();
+}
+
+export interface getGCReaonse {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  is_del: number;
+  task_id: string;
+  bio: string;
+  type: string;
+  state: string;
+  args: {
+    batch_size: number;
+    ttl: number;
+    type: string;
+  };
+  result: {
+    purged: number;
+  };
+  user_id: number;
+  user: user;
+  seed_peer_clusters: null;
+  scheduler_clusters: null;
+}
+
+export async function getGC(params: getJobsParams): Promise<getGCReaonse[]> {
+  const url = new URL(`/api/v1/jobs?${queryString.stringify(params)}&type=gc`, API_URL);
+
+  const response = await get(url);
+  return await response.json();
 }

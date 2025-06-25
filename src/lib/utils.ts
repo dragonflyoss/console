@@ -189,3 +189,66 @@ export const formatDuring = function (ps: number) {
 
   return result.trim();
 };
+
+export const formatTime = (ps: number = 0) => {
+  const millisecond = ps / 1e6;
+
+  const days = Math.floor(millisecond / (1000 * 60 * 60 * 24));
+  const remainingAfterDays = millisecond % (1000 * 60 * 60 * 24);
+
+  const hours = Math.floor(remainingAfterDays / (1000 * 60 * 60));
+  const remainingAfterHours = remainingAfterDays % (1000 * 60 * 60);
+
+  const minutes = Math.floor(remainingAfterHours / (1000 * 60));
+  const seconds = Math.floor((remainingAfterHours % (1000 * 60)) / 1000);
+
+  if (days > 0) {
+    return {
+      value: days,
+      suffix: 'Days',
+    };
+  }
+  if (hours > 0) {
+    return {
+      value: hours,
+      suffix: 'Hours',
+    };
+  }
+  if (minutes > 0) {
+    return {
+      value: minutes,
+      suffix: 'Minutes',
+    };
+  }
+  if (seconds > 0) {
+    return {
+      value: seconds,
+      suffix: 'Seconds',
+    };
+  }
+
+  return { value: 0, suffix: 'Seconds' };
+};
+
+export const formatNano = (value: number, suffix: string): number => {
+  let milliseconds = 0;
+
+  switch (suffix) {
+    case 'Days':
+      milliseconds = value * (24 * 60 * 60 * 1000);
+      break;
+    case 'Hours':
+      milliseconds = value * 60 * 60 * 1000;
+      break;
+    case 'Minutes':
+      milliseconds = value * 60 * 1000;
+      break;
+    case 'Seconds':
+      milliseconds = value * 1000;
+      break;
+    default:
+      throw new Error(`Unsupported suffix: ${suffix}`);
+  }
+
+  return milliseconds * 1e6;
+};

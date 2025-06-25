@@ -2,7 +2,7 @@ import Lottie from 'lottie-react';
 import gc from '../assets/lotties/gc.json';
 
 const Style = {
-  height: '9rem',
+  height: '8rem',
   width: '100%',
 };
 

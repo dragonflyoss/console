@@ -52,6 +52,7 @@ import { ReactComponent as GCHeader } from '../../../assets/images/gc/gc-header.
 import { ReactComponent as Edit } from '../../../assets/images/user/edit.svg';
 import { ReactComponent as Executions } from '../../../assets/images/resource/task/executions.svg';
 import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
+import { ReactComponent as DialogTTL } from '../../../assets/images/gc/dialog-ttl.svg';
 
 export default function AuditGC() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -284,59 +285,83 @@ export default function AuditGC() {
         </Box>
         <Divider />
         <DialogContent>
-          <Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: '1rem' }}>
-              <Typography variant="body2" fontFamily="mabry-bold" component="div" pr="0.3rem">
-                TTL
-              </Typography>
-              <Tooltip title="Keep the records in this interval" placement="top">
-                <HelpIcon className={styles.descriptionIcon} />
-              </Tooltip>
-            </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Box>
-              <TextField
-                id="audit-ttl-input"
-                name="audit"
-                size="small"
-                variant="outlined"
-                type="number"
-                color="success"
-                sx={{ mr: '0.8rem', width: '7rem' }}
-                value={auditLod}
-                onChange={(e) => {
-                  setAuditLod(Number(e.target.value));
-                }}
-              />
-              <Select
-                size="small"
-                name="auditUnit"
-                color="success"
-                id="audit-unit"
-                value={auditLogTTL}
-                onChange={(e) => {
-                  setAudiLogTTL(e.target.value);
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'column',
                 }}
               >
-                {unit.map((item) => (
-                  <MenuItem
-                    key={item}
-                    value={item}
-                    sx={{
-                      m: '0.3rem',
-                      borderRadius: '4px',
-                    }}
-                  >
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
-              <FormHelperText id="ttl-error" error>
-                {ttlError
-                  ? auditLogTTL === 'Days'
-                    ? 'Fill in the number, and the time value must be greater than 0 and less than 30 days.'
-                    : 'Fill in the number, the length is 1-1000.'
-                  : ''}
-              </FormHelperText>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderColor: '#D3D3D3',
+                    border: '0.1rem solid #D3D3D3',
+                    width: '2.8rem',
+                    height: '2.8rem',
+                    borderRadius: '0.3rem',
+                    mb: '.8rem',
+                  }}
+                >
+                  <DialogTTL className={styles.TTLICon} />
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: '1rem', justifyContent: 'center' }}>
+                  <Typography variant="subtitle1" fontFamily="mabry-bold" component="div" pr="0.3rem" pt="0.1rem">
+                    Keep the records in this interval
+                  </Typography>
+                </Box>
+              </Box>
+              <Box sx={{ display: 'flex', pt: '1rem' }}>
+                <TextField
+                  id="audit-ttl-input"
+                  name="audit"
+                  size="small"
+                  variant="outlined"
+                  type="number"
+                  color="success"
+                  sx={{ mr: '1rem', width: '14rem' }}
+                  value={auditLod}
+                  onChange={(e) => {
+                    setAuditLod(Number(e.target.value));
+                  }}
+                />
+                <Select
+                  size="small"
+                  name="auditUnit"
+                  color="success"
+                  id="audit-unit"
+                  sx={{ width: '14rem' }}
+                  value={auditLogTTL}
+                  onChange={(e) => {
+                    setAudiLogTTL(e.target.value);
+                  }}
+                >
+                  {unit.map((item) => (
+                    <MenuItem
+                      key={item}
+                      value={item}
+                      sx={{
+                        m: '0.3rem',
+                        borderRadius: '4px',
+                      }}
+                    >
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText id="ttl-error" error>
+                  {ttlError
+                    ? auditLogTTL === 'Days'
+                      ? 'Fill in the number, and the time value must be greater than 0 and less than 30 days.'
+                      : 'Fill in the number, the length is 1-1000.'
+                    : ''}
+                </FormHelperText>
+              </Box>
             </Box>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '2rem' }}>
@@ -388,7 +413,7 @@ export default function AuditGC() {
               {gcIsloading ? (
                 <Box id="execute-loading">
                   <GC />
-                  <Typography variant="subtitle1" component="div" fontFamily="mabry-bold" textAlign="center">
+                  <Typography variant="subtitle1" component="div" fontFamily="mabry-bold" textAlign="center" mb="1rem">
                     LOADING...
                   </Typography>
                 </Box>

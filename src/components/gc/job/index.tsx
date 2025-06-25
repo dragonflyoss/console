@@ -29,18 +29,15 @@ import {
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import {  useContext, useEffect, useRef, useState } from 'react';
 import { createGCJob, getConfigs, getConfigsResponse, getGC, getGCReaonse, updateConfig } from '../../../lib/api';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './index.module.css';
-import HelpIcon from '@mui/icons-material/Help';
 import Card from '../../card';
 import { formatDuring, formatTime, formatNano, getDatetime, getPaginatedList } from '../../../lib/utils';
-import { ReactComponent as Loading } from '../../../assets/images/gc/loading.svg';
 import _ from 'lodash';
 import { MyContext } from '../../menu';
 import GC from '../../garbage-collection-animation';
-import RecyclingIcon from '@mui/icons-material/Recycling';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteSuccessfullyAnimation from '../../deleted-successfully-animation';
 import { ReactComponent as DeleteWarning } from '../../../assets/images/cluster/delete-warning.svg';
@@ -55,6 +52,7 @@ import { ReactComponent as ErrorLast } from '../../../assets/images/gc/error-las
 import { ReactComponent as Edit } from '../../../assets/images/user/edit.svg';
 import { ReactComponent as Executions } from '../../../assets/images/resource/task/executions.svg';
 import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
+import { ReactComponent as DialogTTL } from '../../../assets/images/gc/dialog-ttl.svg';
 
 export default function JobGC() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -265,7 +263,6 @@ export default function JobGC() {
           '& .MuiDialog-paper': {
             minWidth: '32rem',
           },
-          position: 'absolute',
         }}
       >
         <Box className={styles.gcAuditHeaderWrapper}>
@@ -290,15 +287,38 @@ export default function JobGC() {
         <Divider />
         <DialogContent>
           <Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', pb: '1rem' }}>
-              <Typography variant="body1" fontFamily="mabry-bold" component="div" pr="0.3rem">
-                TTL
-              </Typography>
-              <Tooltip title="Keep the records in this interval" placement="top">
-                <HelpIcon className={styles.descriptionIcon} />
-              </Tooltip>
-            </Box>
             <Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderColor: '#D3D3D3',
+                    border: '0.1rem solid #D3D3D3',
+                    width: '2.8rem',
+                    height: '2.8rem',
+                    borderRadius: '0.3rem',
+                    mb: '.8rem',
+                  }}
+                >
+                  <DialogTTL className={styles.TTLICon} />
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: '1rem', justifyContent: 'center' }}>
+                  <Typography variant="subtitle1" fontFamily="mabry-bold" component="div" pr="0.3rem">
+                    Keep the records in this interval
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', pt: '1rem' }}>
               <TextField
                 id="job-ttl-input"
                 name="job"
@@ -306,7 +326,7 @@ export default function JobGC() {
                 variant="outlined"
                 type="number"
                 color="success"
-                sx={{ mr: '0.8rem', width: '7rem' }}
+                sx={{ mr: '1rem', width: '14rem' }}
                 value={job}
                 onChange={(e) => {
                   setJob(Number(e.target.value));
@@ -317,6 +337,7 @@ export default function JobGC() {
                 name="auditUnit"
                 color="success"
                 id="job-unit"
+                sx={{ width: '14rem' }}
                 value={jobUnit}
                 onChange={(e) => {
                   setJobUnit(e.target.value);
@@ -394,7 +415,7 @@ export default function JobGC() {
               {gcIsloading ? (
                 <Box id="execute-loading">
                   <GC />
-                  <Typography variant="subtitle1" component="div" fontFamily="mabry-bold" textAlign="center">
+                  <Typography variant="subtitle1" component="div" fontFamily="mabry-bold" textAlign="center" mb="1rem">
                     LOADING...
                   </Typography>
                 </Box>

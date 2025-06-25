@@ -22,8 +22,8 @@
 }
 
 .descriptionIcon {
-  width: 0.8rem !important ;
-  height: 0.8rem !important;
+  width: 0.9rem !important;
+  height: 0.9rem !important;
   color: var(--palette-grey-300Channel);
 }
 
@@ -163,4 +163,9 @@
   width: 1.2rem;
   height: 1.2rem;
   margin-right: 0.4rem;
+}
+
+.TTLICon {
+  width: 1.4rem;
+  height: 1.4rem;
 }

@@ -636,7 +636,7 @@ describe('Seed peers', () => {
       cy.get('#table').click();
 
       // Go to next page.
-      cy.get(':nth-child(6) > .MuiButtonBase-root').click();
+      cy.get('.MuiPagination-ul > :nth-child(6) > .MuiButtonBase-root').click();
       cy.get('#seed-peer-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '5');
 
       // Check if the total number of pages is 8.
@@ -961,7 +961,7 @@ describe('Seed peers', () => {
       cy.get('#inactive').should('have.text', 2);
     });
 
-    it('can Delete inactive instances', () => {
+    it('can delete inactive instances', () => {
       const seedPeers = [39, 38, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 11, 18, 19, 20, 21, 22, 9, 3];
 
       for (let i = 0; i < seedPeers.length; i++) {
@@ -1013,7 +1013,7 @@ describe('Seed peers', () => {
 
       cy.get('#failure').should('not.exist');
 
-      cy.wait(400 * seedPeers.length);
+      cy.wait(200 * seedPeers.length);
       // Show number of deleted seed peers.
       cy.get('.MuiAlert-message').should('have.text', 'You have successfully deleted 20 inactive seed peers!');
 

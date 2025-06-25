@@ -491,7 +491,7 @@ describe('Persistent Cache Tasks', () => {
     it('when you click refresh, the paginated results and page numbers remain unchanged.', () => {
       cy.get('#clusters-card').children().should('have.length', 9);
 
-      cy.get(':nth-child(6) > .MuiButtonBase-root').click();
+      cy.get('.MuiPagination-ul > :nth-child(6) > .MuiButtonBase-root').click();
 
       cy.get('#clusters-card').children().should('have.length', 1);
 

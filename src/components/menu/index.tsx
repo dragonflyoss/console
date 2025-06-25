@@ -31,6 +31,7 @@ import { ReactComponent as Developer } from '../../assets/images/menu/developer.
 import { ReactComponent as Job } from '../../assets/images/menu/job.svg';
 import { ReactComponent as User } from '../../assets/images/menu/user.svg';
 import { ReactComponent as Logs } from '../../assets/images/menu/audit-log.svg';
+import { ReactComponent as CleanUp } from '../../assets/images/menu/clean-up.svg';
 import { ReactComponent as Logo } from '../../assets/images/menu/logo.svg';
 import { ReactComponent as Expand } from '../../assets/images/menu/expand.svg';
 import { ReactComponent as Closure } from '../../assets/images/menu/closure.svg';
@@ -198,21 +199,7 @@ export default function Layout(props: any) {
       text: 'Cluster',
       icon: <Cluster className={styles.menuIcon} />,
     },
-    {
-      label: 'developer',
-      href: '/tokens',
-      text: 'Developer',
-      icon: <Developer className={styles.menuIcon} />,
-      expand: expandDeveloper,
-      setExpand: setExpandDeveloper,
-      menuProps: [
-        {
-          label: 'personal-access-tokens',
-          href: '/developer/personal-access-tokens',
-          text: 'Tokens',
-        },
-      ],
-    },
+
     {
       label: 'jobs',
       href: '/jobs',
@@ -253,6 +240,27 @@ export default function Layout(props: any) {
       href: '/audit',
       text: 'Audit',
       icon: <Logs className={styles.menuIcon} />,
+    },
+    {
+      label: 'gc',
+      href: '/gc/audit',
+      text: 'Garbage Collection',
+      icon: <CleanUp className={styles.menuIcon} />,
+    },
+    {
+      label: 'developer',
+      href: '/tokens',
+      text: 'Developer',
+      icon: <Developer className={styles.menuIcon} />,
+      expand: expandDeveloper,
+      setExpand: setExpandDeveloper,
+      menuProps: [
+        {
+          label: 'personal-access-tokens',
+          href: '/developer/personal-access-tokens',
+          text: 'Tokens',
+        },
+      ],
     },
   ];
 

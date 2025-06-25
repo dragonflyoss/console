@@ -30,6 +30,9 @@ import PersistentCacheTasksCluster from '../components/resource/persistent-cache
 import PersistentCacheTasks from '../components/resource/persistent-cache-task';
 import PersistentCacheTask from '../components/resource/persistent-cache-task/show';
 import Audit from '../components/audit';
+import GC from '../components/gc';
+import JobGC from '../components/gc/job';
+import AuditGC from '../components/gc/audit';
 import { useState, useEffect } from 'react';
 import { getJwtPayload } from '../lib/utils';
 import { getUserRoles } from '../lib/api';
@@ -97,6 +100,10 @@ function Main() {
         <Route path="/resource/persistent-cache-task/clusters/:id" element={<PersistentCacheTasks />} />
         <Route path="/resource/persistent-cache-task/clusters/:id/:id" element={<PersistentCacheTask />} />
         <Route path="/audit" element={<Audit />} />
+        <Route element={<GC />}>
+          <Route path="/gc/audit" element={<AuditGC />} />
+          <Route path="/gc/job" element={<JobGC />} />
+        </Route>
         {isRoot && <Route path="/users" element={<Users />} />}
         <Route path="/users/new" element={<NewUser />} />
       </Route>

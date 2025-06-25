@@ -576,7 +576,7 @@ describe('Schedulers', () => {
       cy.get('#pagination').should('exist');
       cy.get('#scheduler-pagination > .MuiPagination-ul').children().should('have.length', '8');
 
-      cy.get(':nth-child(6) > .MuiButtonBase-root').click();
+      cy.get('.MuiPagination-ul > :nth-child(6) > .MuiButtonBase-root').click();
 
       cy.get('#operation-4').click();
 
@@ -872,7 +872,7 @@ describe('Schedulers', () => {
       cy.get('#inactive').should('have.text', 5);
     });
 
-    it('can Delete inactive instances', () => {
+    it('can delete inactive instances', () => {
       const schedulers = [
         43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 29, 30, 31, 28, 27, 26, 25, 23, 24, 10, 11, 12, 13, 14, 15, 21,
         9, 8, 6, 4, 2, 22,
@@ -920,6 +920,7 @@ describe('Schedulers', () => {
       cy.get('body').click('topLeft');
       cy.get('#failure').should('not.exist');
 
+      cy.wait(200 * schedulers.length);
       // Show number of deleted schedulers.
       cy.get('.MuiAlert-message').should('have.text', 'You have successfully removed 34 inactive schedulers!');
 

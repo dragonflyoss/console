@@ -1,0 +1,842 @@
+[
+  {
+    "id": 119,
+    "created_at": "2025-06-23T05:12:15.991Z",
+    "updated_at": "2025-06-23T05:12:16.09Z",
+    "is_del": 0,
+    "task_id": "e1949b29-4bca-4591-8b54-d619373ae750",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 172800000000000,
+      "type": "audit"
+    },
+    "result": {
+      "purged": 10
+    },
+    "user_id": 1,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 118,
+    "created_at": "2025-06-23T05:12:15.991Z",
+    "updated_at": "2025-06-23T05:12:16.09Z",
+    "is_del": 0,
+    "task_id": "e1949b29-4bca-4591-8b54-d619373ae750",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 172800000000000,
+      "type": "audit"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 1,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 117,
+    "created_at": "2025-06-23T05:12:15.991Z",
+    "updated_at": "2025-06-23T05:12:16.09Z",
+    "is_del": 0,
+    "task_id": "e1949b29-4bca-4591-8b54-d619373ae750",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 172800000000000,
+      "type": "audit"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 1,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 117,
+    "created_at": "2025-06-23T06:06:47.959Z",
+    "updated_at": "2025-06-23T06:06:47.997Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 1123200000000000,
+      "type": "job"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 116,
+    "created_at": "2025-06-23T05:12:15.991Z",
+    "updated_at": "2025-06-23T05:12:16.09Z",
+    "is_del": 0,
+    "task_id": "e1949b29-4bca-4591-8b54-d619373ae750",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 172800000000000,
+      "type": "audit"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 1,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 115,
+    "created_at": "2025-06-23T04:34:36.417Z",
+    "updated_at": "2025-06-23T04:34:36.484Z",
+    "is_del": 0,
+    "task_id": "15a3dc57-14eb-4623-8d99-d2021647efb2",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 1123200000000000,
+      "type": "job"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 1,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 114,
+    "created_at": "2025-06-23T04:34:24.244Z",
+    "updated_at": "2025-06-23T04:34:24.4Z",
+    "is_del": 0,
+    "task_id": "8f2c5507-450e-45e2-bc52-ff3fcfae5bd4",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 1123200000000000,
+      "type": "job"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 1,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 113,
+    "created_at": "2025-06-23T03:17:40.93Z",
+    "updated_at": "2025-06-23T03:17:40.937Z",
+    "is_del": 0,
+    "task_id": "cdf743c3-ae45-4526-b8a9-574d17532491",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 7200000000000,
+      "type": "audit"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 1,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 112,
+    "created_at": "2025-06-23T03:17:32.362Z",
+    "updated_at": "2025-06-23T03:17:32.405Z",
+    "is_del": 0,
+    "task_id": "e68e1914-e2d2-447a-b6e9-c03a0032de7b",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 7200000000000,
+      "type": "audit"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 1,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 111,
+    "created_at": "2025-06-23T02:18:20.238Z",
+    "updated_at": "2025-06-23T02:18:20.249Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 1123200000000000,
+      "type": "job"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 110,
+    "created_at": "2025-06-23T02:18:19.755Z",
+    "updated_at": "2025-06-23T02:18:19.872Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 1123200000000000,
+      "type": "job"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 109,
+    "created_at": "2025-06-22T22:44:24.566Z",
+    "updated_at": "2025-06-22T22:44:24.643Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 1123200000000000,
+      "type": "job"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 108,
+    "created_at": "2025-06-22T22:44:24.445Z",
+    "updated_at": "2025-06-22T22:44:24.565Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 7200000000000,
+      "type": "audit"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 107,
+    "created_at": "2025-06-22T17:35:36.808Z",
+    "updated_at": "2025-06-22T17:35:36.815Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 7200000000000,
+      "type": "audit"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 106,
+    "created_at": "2025-06-22T17:35:36.807Z",
+    "updated_at": "2025-06-22T17:35:36.828Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 1123200000000000,
+      "type": "job"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 105,
+    "created_at": "2025-06-22T17:35:36.332Z",
+    "updated_at": "2025-06-22T17:35:36.436Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 1123200000000000,
+      "type": "job"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 104,
+    "created_at": "2025-06-22T17:35:36.33Z",
+    "updated_at": "2025-06-22T17:35:36.439Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 7200000000000,
+      "type": "audit"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 103,
+    "created_at": "2025-06-22T14:26:39.289Z",
+    "updated_at": "2025-06-22T14:26:39.356Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 1123200000000000,
+      "type": "job"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 102,
+    "created_at": "2025-06-22T11:17:59.604Z",
+    "updated_at": "2025-06-22T11:17:59.613Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 1123200000000000,
+      "type": "job"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 101,
+    "created_at": "2025-06-22T11:17:59.169Z",
+    "updated_at": "2025-06-22T11:17:59.559Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 1123200000000000,
+      "type": "job"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 100,
+    "created_at": "2025-06-22T07:27:00.54Z",
+    "updated_at": "2025-06-22T07:27:00.612Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 7200000000000,
+      "type": "audit"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 99,
+    "created_at": "2025-06-22T07:27:00.539Z",
+    "updated_at": "2025-06-22T07:27:00.578Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 1123200000000000,
+      "type": "job"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 98,
+    "created_at": "2025-06-22T04:22:46.333Z",
+    "updated_at": "2025-06-22T04:22:46.386Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 1123200000000000,
+      "type": "job"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  },
+  {
+    "id": 97,
+    "created_at": "2025-06-22T04:22:46.332Z",
+    "updated_at": "2025-06-22T04:22:46.376Z",
+    "is_del": 0,
+    "task_id": "audit",
+    "bio": "",
+    "type": "gc",
+    "state": "SUCCESS",
+    "args": {
+      "batch_size": 5000,
+      "ttl": 7200000000000,
+      "type": "audit"
+    },
+    "result": {
+      "purged": 0
+    },
+    "user_id": 0,
+    "user": {
+      "id": 0,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "0001-01-01T00:00:00Z",
+      "is_del": 0,
+      "email": "",
+      "name": "",
+      "avatar": "",
+      "phone": "",
+      "state": "",
+      "location": "",
+      "bio": "",
+      "configs": null
+    },
+    "seed_peer_clusters": null,
+    "scheduler_clusters": null
+  }
+]

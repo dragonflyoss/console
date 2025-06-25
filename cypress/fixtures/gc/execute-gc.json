@@ -1,0 +1,35 @@
+{
+  "id": 24,
+  "created_at": "2025-06-25T09:29:25.297Z",
+  "updated_at": "2025-06-25T09:29:25.327Z",
+  "is_del": 0,
+  "task_id": "f060ab6b-16a7-4ff9-80ed-d135bd53b4fa",
+  "bio": "",
+  "type": "gc",
+  "state": "SUCCESS",
+  "args": {
+    "batch_size": 5000,
+    "ttl": 1814400000000000,
+    "type": "audit"
+  },
+  "result": {
+    "purged": 10
+  },
+  "user_id": 1,
+  "user": {
+    "id": 0,
+    "created_at": "0001-01-01T00:00:00Z",
+    "updated_at": "0001-01-01T00:00:00Z",
+    "is_del": 0,
+    "email": "",
+    "name": "",
+    "avatar": "",
+    "phone": "",
+    "state": "",
+    "location": "",
+    "bio": "",
+    "configs": null
+  },
+  "seed_peer_clusters": null,
+  "scheduler_clusters": null
+}

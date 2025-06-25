@@ -876,7 +876,6 @@ export default function NewPreheat() {
           <Box sx={{ width: '100%' }}>
             <TextField {...urlForm.formProps} color="success" className={styles.filterInput} size="small" />
           </Box>
-
           {URLs.map((item, index) => {
             return (
               <Box sx={{ display: 'inline-flex', alignItems: 'flex-start', m: '0.8rem 0' }}>

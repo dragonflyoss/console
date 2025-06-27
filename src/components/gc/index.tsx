@@ -42,9 +42,6 @@ const AntTabs = styled(Tabs)({
 });
 
 export default function ClearingJob() {
-  const [successMessage, setSuccessMessage] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
-  const [errorMessageText, setErrorMessageText] = useState('');
   const [value, setValue] = useState(1);
 
   const location = useLocation();
@@ -61,29 +58,8 @@ export default function ClearingJob() {
     }
   }, [location.pathname]);
 
-  const handleClose = (_event: any, reason?: string) => {};
   return (
     <Box>
-      <Snackbar
-        open={successMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-          Submission successful!
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
       <Breadcrumbs
         separator={
           <Box

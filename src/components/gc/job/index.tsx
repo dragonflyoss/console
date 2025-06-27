@@ -206,20 +206,6 @@ export default function JobGC() {
     }
   };
 
-  const handleClose = (_event: any, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setErrorMessage(false);
-    setSuccessMessage(false);
-    setClearSuccess(false);
-    setOpenGCJob(false);
-    setGcIsLoading(false);
-    setOpenExecuteGC(false);
-    setGCError(false);
-  };
-
   const handleChangeTTL = async () => {
     setTTLLoading(true);
 
@@ -258,25 +244,46 @@ export default function JobGC() {
     }
   };
 
+  const handleClose = (_event: any, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setClearSuccess(false);
+    setOpenGCJob(false);
+    setGcIsLoading(false);
+    setOpenExecuteGC(false);
+    setGCError(false);
+  };
+
+  const onClose = (_event: any, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorMessage(false);
+    setSuccessMessage(false);
+  };
+
   return (
     <Box>
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
-        onClose={handleClose}
+        onClose={onClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+        <Alert onClose={onClose} severity="success" sx={{ width: '100%' }}>
           Submission successful!
         </Alert>
       </Snackbar>
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
-        onClose={handleClose}
+        onClose={onClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+        <Alert onClose={onClose} severity="error" sx={{ width: '100%' }}>
           {errorMessageText}
         </Alert>
       </Snackbar>

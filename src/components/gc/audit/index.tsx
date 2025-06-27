@@ -242,13 +242,20 @@ export default function AuditGC() {
       return;
     }
 
-    setErrorMessage(false);
-    setSuccessMessage(false);
     setClearSuccess(false);
     setOpenGCAudit(false);
     setOpenEditTTL(false);
-    setOpenEditTTL(false);
     setGCError(false);
+    setGcIsLoading(false);
+  };
+
+  const onClose = (_event: any, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorMessage(false);
+    setSuccessMessage(false);
   };
 
   return (
@@ -256,20 +263,20 @@ export default function AuditGC() {
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
-        onClose={handleClose}
+        onClose={onClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+        <Alert onClose={onClose} severity="success" sx={{ width: '100%' }}>
           Submission successful!
         </Alert>
       </Snackbar>
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
-        onClose={handleClose}
+        onClose={onClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+        <Alert onClose={onClose} severity="error" sx={{ width: '100%' }}>
           {errorMessageText}
         </Alert>
       </Snackbar>

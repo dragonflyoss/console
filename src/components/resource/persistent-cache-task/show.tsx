@@ -39,11 +39,13 @@ import { CancelLoadingButton, DeleteLoadingButton } from '../../loading-button';
 import { ReactComponent as SuccessTask } from '../../../assets/images/resource/persistent-cache-task/success-task.svg';
 import { ReactComponent as FailedTask } from '../../../assets/images/resource/persistent-cache-task/failed-task.svg';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { formatDuring, formatSize, getDatetime, getPaginatedList } from '../../../lib/utils';
+import { getDatetime, getPaginatedList } from '../../../lib/utils';
 import styles from './show.module.css';
 import _ from 'lodash';
 import CloseIcon from '@mui/icons-material/Close';
 import { DEFAULT_PERSISTENT_CACHE_TASK_PERRS_PAGE_SIZE } from '../../../lib/constants';
+import { filesize } from 'filesize';
+import ms from 'ms';
 
 export default function PersistentCachetask() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -364,7 +366,7 @@ export default function PersistentCachetask() {
                   {isLoading ? (
                     <Skeleton data-testid="execution-isloading" sx={{ width: '4rem' }} />
                   ) : persistentCacheTask?.ttl ? (
-                    formatDuring(persistentCacheTask?.ttl || 0)
+                    ms(persistentCacheTask?.ttl / 1000000, { long: true })
                   ) : (
                     '-'
                   )}
@@ -380,7 +382,7 @@ export default function PersistentCachetask() {
                   {isLoading ? (
                     <Skeleton sx={{ width: '4rem' }} />
                   ) : persistentCacheTask?.content_length ? (
-                    formatSize(String(persistentCacheTask?.content_length))
+                    filesize(persistentCacheTask?.content_length, { standard: 'jedec' })
                   ) : (
                     '-'
                   )}

@@ -36,7 +36,7 @@ describe('audit', () => {
   });
 
   it('when data is loaded', () => {
-    cy.get('#audit-ttl').should('have.text', '3 Days');
+    cy.get('#audit-ttl').should('have.text', '3 days');
 
     cy.get('#history').should('have.text', '11');
     cy.get('#pagination').should('exist');
@@ -171,8 +171,28 @@ describe('audit', () => {
   });
 
   it('can update ttl', () => {
-    cy.get('#audit-ttl').should('have.text', '3 Days');
+    cy.get('#audit-ttl').should('have.text', '3 days');
     cy.get('#update').click();
+
+    cy.get('#audit-ttl-input').clear();
+    cy.get('#audit-ttl-input').type('10');
+
+    cy.get('#ttl-error').should(
+      'have.text',
+      'Fill in the number, and the time value must be greater than 0 and less than 30 days.',
+    );
+
+    cy.get('#audit-unit').click();
+    cy.get('[data-value="hours"]').click();
+
+    cy.get('#audit-ttl-input').clear();
+    cy.get('#audit-ttl-input').type('200');
+
+    // Shou error.
+    cy.get('#ttl-error').should('have.text', 'Fill in the number, the length is 1-1000.');
+
+    cy.get('#audit-ttl-input').clear();
+    cy.get('#audit-ttl-input').type('1');
 
     cy.get('#audit-ttl-input').clear();
     cy.get('#audit-ttl-input').type('1');
@@ -206,11 +226,11 @@ describe('audit', () => {
 
     cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
 
-    cy.get('#audit-ttl').should('have.text', '21 Days');
+    cy.get('#audit-ttl').should('have.text', '21 days');
   });
 
   it('can no update ttl', () => {
-    cy.get('#audit-ttl').should('have.text', '3 Days');
+    cy.get('#audit-ttl').should('have.text', '3 days');
     cy.get('#update').click();
 
     cy.get('#audit-ttl-input').clear();

@@ -23,17 +23,15 @@ import {
   TableHead,
   TableRow,
   TextField,
-  Tooltip,
   Typography,
 } from '@mui/material';
-import HelpIcon from '@mui/icons-material/Help';
 import { useContext, useEffect, useState } from 'react';
 import { createGCJob, getConfigs, getConfigsResponse, getGC, getGCReaonse, updateConfig } from '../../../lib/api';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './index.module.css';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Card from '../../card';
-import { formatDuring, formatTime, formatNano, getDatetime, getPaginatedList } from '../../../lib/utils';
+import { getDatetime, getPaginatedList, parseTimeDuration } from '../../../lib/utils';
 import _ from 'lodash';
 import { MyContext } from '../../menu';
 import GC from '../../garbage-collection-animation';
@@ -53,6 +51,7 @@ import { ReactComponent as Edit } from '../../../assets/images/user/edit.svg';
 import { ReactComponent as Executions } from '../../../assets/images/resource/task/executions.svg';
 import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
 import { ReactComponent as DialogTTL } from '../../../assets/images/gc/dialog-ttl.svg';
+import ms from 'ms';
 
 export default function AuditGC() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -60,7 +59,7 @@ export default function AuditGC() {
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [configs, setConfigs] = useState<getConfigsResponse[]>([]);
-  const [auditLogTTL, setAudiLogTTL] = useState('');
+  const [auditLogTTL, setAuditUnit] = useState('');
   const [audit, setAudit] = useState(0);
   const [update, setUpdate] = useState(false);
   const [gcIsloading, setGcIsLoading] = useState(false);
@@ -76,12 +75,14 @@ export default function AuditGC() {
   const [gcError, setGCError] = useState(false);
   const [openEditTTL, setOpenEditTTL] = useState(false);
   const [ttlLoading, setTTLLoading] = useState(false);
-
   const [purgeds, setPurgeds] = useState(0);
-  const { user } = useContext(MyContext);
 
+  const { user } = useContext(MyContext);
   const userID = user?.id;
-  const unit = ['Days', 'Hours', 'Minutes'];
+
+  const unit = ['days', 'hours', 'minutes', 'seconds'];
+  const ttlValidate = /^(1000|[1-9]\d{2}|[1-9]\d|[1-9])$/;
+  const maxTTLValidate = /^(30|[12]\d|[1-9])$/;
 
   useEffect(() => {
     setIsLoading(true);
@@ -125,44 +126,61 @@ export default function AuditGC() {
   }, [page, history]);
 
   useEffect(() => {
-    const parseTTL = () => {
-      if (!configs || configs.length === 0) return 1;
+    try {
+      const auditTTL = () => {
+        if (!configs || configs.length === 0) return 0;
 
-      const valueStr = configs[0].value;
-      if (typeof valueStr !== 'string') return 1;
+        const valueStr = configs[0].value;
+        if (typeof valueStr !== 'string') return 0;
 
-      const parsed = JSON.parse(valueStr);
-      return parsed.audit?.ttl || 1;
-    };
+        const parsed = JSON.parse(valueStr);
+        return parsed.audit?.ttl || 0;
+      };
 
-    const gcTTL = () => {
-      if (!configs || configs.length === 0) return 1;
+      const jobTTL = () => {
+        if (!configs || configs.length === 0) return 0;
 
-      const valueStr = configs[0].value;
-      if (typeof valueStr !== 'string') return 1;
+        const valueStr = configs[0].value;
+        if (typeof valueStr !== 'string') return 0;
 
-      const parsed = JSON.parse(valueStr);
-      return parsed.job?.ttl || 1;
-    };
+        const parsed = JSON.parse(valueStr);
+        return parsed.job?.ttl || 0;
+      };
 
-    const ttl = formatTime(parseTTL());
+      setGCTTL(jobTTL());
+      if (auditTTL() !== 0) {
+        setJobTTL(auditTTL() && ms(auditTTL() / 1000000, { long: true }));
 
-    setJobTTL(formatDuring(parseTTL()));
+        const result = parseTimeDuration(auditTTL() && ms(auditTTL() / 1000000, { long: true }));
 
-    setGCTTL(gcTTL());
-    setAudiLogTTL(ttl.suffix);
-    setAudit(ttl.value);
+        setAuditUnit(result?.unit || '');
+        setAudit(Number(result?.number || 0));
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(true);
+        setErrorMessageText(error.message);
+      }
+    }
   }, [configs]);
+
+  const onChangeTTL = (number: number, unit: string) => {
+    let validate = false;
+    if (unit === 'days') {
+      validate = !maxTTLValidate.test(String(number));
+      setTTLError(!maxTTLValidate.test(String(number)));
+    } else {
+      validate = !ttlValidate.test(String(number));
+      setTTLError(!ttlValidate.test(String(number)));
+    }
+  };
 
   const handleChangeTTL = async () => {
     setTTLLoading(true);
 
-    const ttlValidate = /^(1000|[1-9]\d{2}|[1-9]\d|[1-9])$/;
-    const maxTTLValidate = /^(30|[12]\d|[1-9])$/;
-
     let validate = false;
 
-    if (auditLogTTL === 'Days') {
+    if (auditLogTTL === 'days') {
       validate = !maxTTLValidate.test(String(audit));
       setTTLError(!maxTTLValidate.test(String(audit)));
     } else {
@@ -171,7 +189,8 @@ export default function AuditGC() {
     }
 
     try {
-      const ttl = formatNano(Number(audit), auditLogTTL);
+      const formattedStr = `${audit}${auditLogTTL}`;
+      const ttl = ms(formattedStr as ms.StringValue) * 1000000;
 
       if (!validate && configs?.[0]?.id) {
         await updateConfig(String(configs?.[0]?.id), { value: `{"audit":{"ttl":${ttl}},"job":{"ttl":${gcTTL}}}` });
@@ -180,6 +199,8 @@ export default function AuditGC() {
         setUpdate(!update);
         setSuccessMessage(true);
         setOpenEditTTL(false);
+      } else {
+        setTTLLoading(false);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -285,87 +306,88 @@ export default function AuditGC() {
         </Box>
         <Divider />
         <DialogContent>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Box>
+          <Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column',
+              }}
+            >
               <Box
                 sx={{
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  flexDirection: 'column',
+                  borderColor: '#D3D3D3',
+                  border: '0.1rem solid #D3D3D3',
+                  width: '2.8rem',
+                  height: '2.8rem',
+                  borderRadius: '0.3rem',
+                  mb: '.8rem',
                 }}
               >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderColor: '#D3D3D3',
-                    border: '0.1rem solid #D3D3D3',
-                    width: '2.8rem',
-                    height: '2.8rem',
-                    borderRadius: '0.3rem',
-                    mb: '.8rem',
-                  }}
-                >
-                  <DialogTTL className={styles.TTLICon} />
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: '1rem', justifyContent: 'center' }}>
-                  <Typography variant="subtitle1" fontFamily="mabry-bold" component="div" pr="0.3rem" pt="0.1rem">
-                    Keep the records in this interval
-                  </Typography>
-                </Box>
+                <DialogTTL className={styles.TTLICon} />
               </Box>
-              <Box sx={{ display: 'flex', pt: '1rem' }}>
-                <TextField
-                  id="audit-ttl-input"
-                  name="audit"
-                  size="small"
-                  variant="outlined"
-                  type="number"
-                  color="success"
-                  sx={{ mr: '1rem', width: '14rem' }}
-                  value={audit}
-                  onChange={(e) => {
-                    setAudit(Number(e.target.value));
-                  }}
-                />
-                <Select
-                  size="small"
-                  name="auditUnit"
-                  color="success"
-                  id="audit-unit"
-                  sx={{ width: '14rem' }}
-                  value={auditLogTTL}
-                  onChange={(e) => {
-                    setAudiLogTTL(e.target.value);
-                  }}
-                >
-                  {unit.map((item) => (
-                    <MenuItem
-                      key={item}
-                      value={item}
-                      sx={{
-                        m: '0.3rem',
-                        borderRadius: '4px',
-                      }}
-                    >
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-                <FormHelperText id="ttl-error" error>
-                  {ttlError
-                    ? auditLogTTL === 'Days'
-                      ? 'Fill in the number, and the time value must be greater than 0 and less than 30 days.'
-                      : 'Fill in the number, the length is 1-1000.'
-                    : ''}
-                </FormHelperText>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: '1rem', justifyContent: 'center' }}>
+                <Typography variant="subtitle1" fontFamily="mabry-bold" component="div" pr="0.3rem" pt="0.1rem">
+                  Keep the records in this interval
+                </Typography>
               </Box>
             </Box>
+            <Box sx={{ display: 'flex', pt: '1rem', position: 'relative' }}>
+              <TextField
+                id="audit-ttl-input"
+                name="audit"
+                size="small"
+                variant="outlined"
+                type="number"
+                color="success"
+                sx={{ mr: '1rem', width: '14rem' }}
+                value={audit}
+                onChange={(e) => {
+                  setAudit(Number(e.target.value));
+                  onChangeTTL(Number(e.target.value), auditLogTTL);
+                }}
+              />
+              <Select
+                size="small"
+                name="auditUnit"
+                color="success"
+                id="audit-unit"
+                sx={{ width: '14rem' }}
+                value={auditLogTTL}
+                onChange={(e) => {
+                  setAuditUnit(e.target.value);
+
+                  onChangeTTL(audit, e.target.value);
+                }}
+              >
+                {unit.map((item) => (
+                  <MenuItem
+                    key={item}
+                    value={item}
+                    sx={{
+                      m: '0.3rem',
+                      borderRadius: '4px',
+                    }}
+                  >
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Box>
+            <FormHelperText id="ttl-error" error sx={{ pt: '0.5rem' }}>
+              {ttlError
+                ? auditLogTTL === 'days'
+                  ? 'Fill in the number, and the time value must be greater than 0 and less than 30 days.'
+                  : 'Fill in the number, the length is 1-1000.'
+                : ''}
+            </FormHelperText>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '2rem' }}>
-            <CancelLoadingButton loading={ttlLoading} id="cancel-ttl" onClick={onclose} />
+            <CancelLoadingButton loading={ttlLoading} id="cancel-ttl" onClick={handleClose} />
             <SavelLoadingButton
               loading={ttlLoading}
               endIcon={<CheckCircleIcon />}
@@ -448,6 +470,7 @@ export default function AuditGC() {
                     <AccordionSummary
                       expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
                       sx={{
+                        backgroundColor: '#32383f',
                         flexDirection: 'row-reverse',
                         '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
                           transform: 'rotate(90deg)',
@@ -460,7 +483,7 @@ export default function AuditGC() {
                       aria-controls="panel1d-content"
                       id="inactive-header"
                     >
-                      <Box display="flex" alignItems="center">
+                      <Box className={styles.errorLogHeader}>
                         <Failure className={styles.failureIcon} />
                         <Typography variant="body2" fontFamily="mabry-bold">
                           Error log
@@ -718,7 +741,7 @@ export default function AuditGC() {
                     </TableCell>
                     <TableCell align="center" id={`ttl-${item?.id}`}>
                       <Typography variant="body1" component="div">
-                        {formatDuring(item?.args?.ttl || '')}
+                        {ms(item?.args?.ttl / 100000, { long: true })}
                       </Typography>
                     </TableCell>
                     <TableCell align="center" id={`purged-${item?.port}`}>

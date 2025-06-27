@@ -154,6 +154,12 @@
 
 .gcErrorWrapper {
   padding: 1rem;
+  background-color: var(--palette-background-paper) !important;
+}
+
+.errorLogHeader {
+  display: flex;
+  align-items: center;
 }
 
 .failureIcon {

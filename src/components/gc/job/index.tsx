@@ -3,7 +3,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Alert,
-  Backdrop,
   Box,
   Button,
   Chip,
@@ -29,12 +28,12 @@ import {
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
-import {  useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { createGCJob, getConfigs, getConfigsResponse, getGC, getGCReaonse, updateConfig } from '../../../lib/api';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './index.module.css';
 import Card from '../../card';
-import { formatDuring, formatTime, formatNano, getDatetime, getPaginatedList } from '../../../lib/utils';
+import { getDatetime, getPaginatedList, parseTimeDuration } from '../../../lib/utils';
 import _ from 'lodash';
 import { MyContext } from '../../menu';
 import GC from '../../garbage-collection-animation';
@@ -53,6 +52,7 @@ import { ReactComponent as Edit } from '../../../assets/images/user/edit.svg';
 import { ReactComponent as Executions } from '../../../assets/images/resource/task/executions.svg';
 import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
 import { ReactComponent as DialogTTL } from '../../../assets/images/gc/dialog-ttl.svg';
+import ms from 'ms';
 
 export default function JobGC() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -60,7 +60,7 @@ export default function JobGC() {
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [configs, setConfigs] = useState<getConfigsResponse[]>([]);
-  const [jobUnit, setJobUnit] = useState('Days');
+  const [jobUnit, setJobUnit] = useState('days');
   const [job, setJob] = useState(0);
   const [update, setUpdate] = useState(false);
   const [gcIsloading, setGcIsLoading] = useState(false);
@@ -80,6 +80,10 @@ export default function JobGC() {
 
   const { user } = useContext(MyContext);
   const userID = user?.id;
+
+  const unit = ['days', 'hours', 'minutes', 'seconds'];
+  const ttlValidate = /^(1000|[1-9]\d{2}|[1-9]\d|[1-9])$/;
+  const maxTTLValidate = /^(30|[12]\d|[1-9])$/;
 
   useEffect(() => {
     setIsLoading(true);
@@ -123,36 +127,55 @@ export default function JobGC() {
   }, [page, history]);
 
   useEffect(() => {
-    const parseTTL = () => {
-      if (!configs || configs.length === 0) return 1;
+    try {
+      const jobTTL = () => {
+        if (!configs || configs.length === 0) return 0;
 
-      const valueStr = configs[0].value;
-      if (typeof valueStr !== 'string') return 1;
+        const valueStr = configs[0].value;
+        if (typeof valueStr !== 'string') return 0;
 
-      const parsed = JSON.parse(valueStr);
-      return parsed.job?.ttl || 1;
-    };
+        const parsed = JSON.parse(valueStr);
+        return parsed.job?.ttl || 0;
+      };
 
-    const auditTTL = () => {
-      if (!configs || configs.length === 0) return 1;
+      const auditTTL = () => {
+        if (!configs || configs.length === 0) return 0;
 
-      const valueStr = configs[0].value;
-      if (typeof valueStr !== 'string') return 1;
+        const valueStr = configs[0].value;
+        if (typeof valueStr !== 'string') return 0;
 
-      const parsed = JSON.parse(valueStr);
-      return parsed.audit?.ttl || 1;
-    };
+        const parsed = JSON.parse(valueStr);
+        return parsed.audit?.ttl || 0;
+      };
 
-    setAuditTTL(auditTTL());
-    setJobTTL(formatDuring(parseTTL()));
+      setAuditTTL(auditTTL());
 
-    const ttl = formatTime(parseTTL());
+      if (jobTTL() !== 0) {
+        setJobTTL(ms(jobTTL() / 1000000, { long: true }));
 
-    setJobUnit(ttl.suffix);
-    setJob(ttl.value);
+        const result = parseTimeDuration(ms(jobTTL() / 1000000, { long: true }));
+
+        setJobUnit(result?.unit || '');
+        setJob(Number(result?.number || 0));
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(true);
+        setErrorMessageText(error.message);
+      }
+    }
   }, [configs]);
 
-  const unit = ['Days', 'Hours', 'Minutes'];
+  const onChangeTTL = (number: number, unit: string) => {
+    let validate = false;
+    if (unit === 'days') {
+      validate = !maxTTLValidate.test(String(number));
+      setTTLError(!maxTTLValidate.test(String(number)));
+    } else {
+      validate = !ttlValidate.test(String(number));
+      setTTLError(!ttlValidate.test(String(number)));
+    }
+  };
 
   const handleSubmit = async () => {
     try {
@@ -183,13 +206,49 @@ export default function JobGC() {
     }
   };
 
+  const handleChangeTTL = async () => {
+    setTTLLoading(true);
+
+    let validate = false;
+
+    if (jobUnit === 'days') {
+      validate = !maxTTLValidate.test(String(job));
+      setTTLError(!maxTTLValidate.test(String(job)));
+    } else {
+      validate = !ttlValidate.test(String(job));
+      setTTLError(!ttlValidate.test(String(job)));
+    }
+
+    if (job !== 0 && jobUnit) {
+      try {
+        const formattedStr = `${job}${jobUnit}`;
+        const ttl = ms(formattedStr as ms.StringValue) * 1000000;
+
+        if (!validate && configs?.[0]?.id) {
+          await updateConfig(String(configs?.[0]?.id), { value: `{"audit":{"ttl":${auditTTL}},"job":{"ttl":${ttl}}}` });
+
+          setTTLLoading(false);
+          setUpdate(!update);
+          setSuccessMessage(true);
+          setOpenGCJob(false);
+        } else {
+          setTTLLoading(false);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          setTTLLoading(false);
+          setErrorMessage(true);
+          setErrorMessageText(error.message);
+        }
+      }
+    }
+  };
+
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    setErrorMessage(false);
-    setSuccessMessage(false);
     setClearSuccess(false);
     setOpenGCJob(false);
     setGcIsLoading(false);
@@ -197,39 +256,13 @@ export default function JobGC() {
     setGCError(false);
   };
 
-  const ttlValidate = /^(1000|[1-9]\d{2}|[1-9]\d|[1-9])$/;
-  const maxTTLValidate = /^(30|[12]\d|[1-9])$/;
-
-  const handleChangeTTL = async () => {
-    setTTLLoading(true);
-
-    let validate = false;
-
-    if (jobUnit === 'Days') {
-      validate = !maxTTLValidate.test(String(job));
-      setTTLError(!maxTTLValidate.test(String(job)));
-    } else {
-      validate = !ttlValidate.test(String(job));
-      setTTLError(!ttlValidate.test(String(job)));
+  const onClose = (_event: any, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
     }
-    try {
-      const ttl = formatNano(Number(job), jobUnit);
 
-      if (!validate && configs?.[0]?.id) {
-        await updateConfig(String(configs?.[0]?.id), { value: `{"audit":{"ttl":${auditTTL}},"job":{"ttl":${ttl}}}` });
-
-        setTTLLoading(false);
-        setUpdate(!update);
-        setSuccessMessage(true);
-        setOpenGCJob(false);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        setTTLLoading(false);
-        setErrorMessage(true);
-        setErrorMessageText(error.message);
-      }
-    }
+    setErrorMessage(false);
+    setSuccessMessage(false);
   };
 
   return (
@@ -237,20 +270,20 @@ export default function JobGC() {
       <Snackbar
         open={successMessage}
         autoHideDuration={3000}
-        onClose={handleClose}
+        onClose={onClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+        <Alert onClose={onClose} severity="success" sx={{ width: '100%' }}>
           Submission successful!
         </Alert>
       </Snackbar>
       <Snackbar
         open={errorMessage}
         autoHideDuration={3000}
-        onClose={handleClose}
+        onClose={onClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+        <Alert onClose={onClose} severity="error" sx={{ width: '100%' }}>
           {errorMessageText}
         </Alert>
       </Snackbar>
@@ -287,35 +320,33 @@ export default function JobGC() {
         <Divider />
         <DialogContent>
           <Box>
-            <Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column',
+              }}
+            >
               <Box
                 sx={{
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  flexDirection: 'column',
+                  borderColor: '#D3D3D3',
+                  border: '0.1rem solid #D3D3D3',
+                  width: '2.8rem',
+                  height: '2.8rem',
+                  borderRadius: '0.3rem',
+                  mb: '.8rem',
                 }}
               >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderColor: '#D3D3D3',
-                    border: '0.1rem solid #D3D3D3',
-                    width: '2.8rem',
-                    height: '2.8rem',
-                    borderRadius: '0.3rem',
-                    mb: '.8rem',
-                  }}
-                >
-                  <DialogTTL className={styles.TTLICon} />
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: '1rem', justifyContent: 'center' }}>
-                  <Typography variant="subtitle1" fontFamily="mabry-bold" component="div" pr="0.3rem">
-                    Keep the records in this interval
-                  </Typography>
-                </Box>
+                <DialogTTL className={styles.TTLICon} />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: '1rem', justifyContent: 'center' }}>
+                <Typography variant="subtitle1" fontFamily="mabry-bold" component="div" pr="0.3rem">
+                  Keep the records in this interval
+                </Typography>
               </Box>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', pt: '1rem' }}>
@@ -330,6 +361,7 @@ export default function JobGC() {
                 value={job}
                 onChange={(e) => {
                   setJob(Number(e.target.value));
+                  onChangeTTL(Number(e.target.value), jobUnit);
                 }}
               />
               <Select
@@ -341,6 +373,7 @@ export default function JobGC() {
                 value={jobUnit}
                 onChange={(e) => {
                   setJobUnit(e.target.value);
+                  onChangeTTL(job, e.target.value);
                 }}
               >
                 {unit.map((item) => (
@@ -356,17 +389,17 @@ export default function JobGC() {
                   </MenuItem>
                 ))}
               </Select>
-              <FormHelperText id="ttl-error" error>
-                {ttlError
-                  ? jobUnit === 'Days'
-                    ? 'Fill in the number, and the time value must be greater than 0 and less than 30 days.'
-                    : 'Fill in the number, the length is 1-1000.'
-                  : ''}
-              </FormHelperText>
             </Box>
+            <FormHelperText id="ttl-error" error sx={{ pt: '0.5rem' }}>
+              {ttlError
+                ? jobUnit === 'days'
+                  ? 'Fill in the number, and the time value must be greater than 0 and less than 30 days.'
+                  : 'Fill in the number, the length is 1-1000.'
+                : ''}
+            </FormHelperText>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: '2rem' }}>
-            <CancelLoadingButton loading={ttlLoading} id="cancel-ttl" onClick={onclose} />
+            <CancelLoadingButton loading={ttlLoading} id="cancel-ttl" onClick={handleClose} />
             <SavelLoadingButton
               loading={ttlLoading}
               endIcon={<CheckCircleIcon />}
@@ -450,6 +483,7 @@ export default function JobGC() {
                     <AccordionSummary
                       expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
                       sx={{
+                        backgroundColor: '#32383f',
                         flexDirection: 'row-reverse',
                         '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
                           transform: 'rotate(90deg)',
@@ -460,9 +494,9 @@ export default function JobGC() {
                         height: '2rem',
                       }}
                       aria-controls="panel1d-content"
-                      id="inactive-header"
+                      id="panel1d-header"
                     >
-                      <Box display="flex" alignItems="center">
+                      <Box className={styles.errorLogHeader}>
                         <Failure className={styles.failureIcon} />
                         <Typography variant="body2" fontFamily="mabry-bold">
                           Error log
@@ -476,7 +510,7 @@ export default function JobGC() {
                         backgroundColor: '#24292f',
                       }}
                     >
-                      <Typography sx={{ color: '#d0d7de' }}>Audit log execution failed.</Typography>
+                      <Typography sx={{ color: '#d0d7de' }}>Job execution failed.</Typography>
                     </AccordionDetails>
                   </Accordion>
                 </Paper>
@@ -715,7 +749,7 @@ export default function JobGC() {
                         </TableCell>
                         <TableCell align="center" id={`ip-${item?.id}`}>
                           <Typography variant="body1" component="div">
-                            {formatDuring(item?.args?.ttl || '')}
+                            {ms(item?.args?.ttl / 100000, { long: true })}
                           </Typography>
                         </TableCell>
                         <TableCell align="center" id={`port-${item?.port}`}>

@@ -660,6 +660,7 @@ export default function ShowCluster() {
                             <AccordionSummary
                               expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
                               sx={{
+                                backgroundColor: '#32383f',
                                 flexDirection: 'row-reverse',
                                 '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
                                   transform: 'rotate(90deg)',

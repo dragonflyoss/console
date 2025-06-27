@@ -55,8 +55,8 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#id').should('have.text', '2865345332');
       cy.get('#success-task').should('exist');
       cy.get('#persistent-replica-count').should('have.text', '2');
-      cy.get('#ttl').should('have.text', '7 Days');
-      cy.get('#content-length').should('have.text', '1.59 KiB');
+      cy.get('#ttl').should('have.text', '7 days');
+      cy.get('#content-length').should('have.text', '1.59 KB');
       cy.get('#piece-length').should('have.text', '4 MiB');
       cy.get('#application').should('have.text', 'application-1');
       cy.get('#tag').should('have.text', 'tag-1');

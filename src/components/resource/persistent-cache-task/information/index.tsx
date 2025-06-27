@@ -30,13 +30,7 @@ import {
   Pagination,
   Tooltip,
 } from '@mui/material';
-import {
-  formatDuring,
-  formatSize,
-  fuzzySearchPersistentCacheTask,
-  getPaginatedList,
-  useQuery,
-} from '../../../../lib/utils';
+import { fuzzySearchPersistentCacheTask, getPaginatedList, useQuery } from '../../../../lib/utils';
 import { deletePersistentCacheTask, getPersistentCacheTasksResponse } from '../../../../lib/api';
 import styles from './index.module.css';
 import Card from '../../../card';
@@ -63,6 +57,8 @@ import _ from 'lodash';
 import { DataContext } from '..';
 import { CancelLoadingButton, DeleteLoadingButton } from '../../../loading-button';
 import { DEFAULT_PAGE_SIZE } from '../../../../lib/constants';
+import { filesize } from 'filesize';
+import ms from 'ms';
 
 interface InformationProps {
   persistentCacheTasks: getPersistentCacheTasksResponse[];
@@ -648,11 +644,13 @@ export default function Information(props: InformationProps) {
                             </Typography>
                           </Box>
                           <Tooltip
-                            title={(item?.content_length && formatSize(item?.content_length)) || '-'}
+                            title={
+                              (item?.content_length && filesize(item?.content_length, { standard: 'jedec' })) || '-'
+                            }
                             placement="top"
                           >
                             <Typography id={`piece-length-${index}`} variant="caption" className={styles.tetailText}>
-                              {item?.content_length && formatSize(item?.content_length)}
+                              {item?.content_length && filesize(item?.content_length, { standard: 'jedec' })}
                             </Typography>
                           </Tooltip>
                         </Box>
@@ -795,7 +793,7 @@ export default function Information(props: InformationProps) {
                             {item?.persistent_replica_count}
                           </TableCell>
                           <TableCell id={`ttl-${item?.id}`} align="center">
-                            {formatDuring(item?.ttl)}
+                            {ms(item?.ttl, { long: true })}
                           </TableCell>
                           <TableCell id={`application-${item?.id}`} align="center">
                             {item?.application || '-'}

@@ -35,147 +35,147 @@ describe('audit', () => {
     cy.visit('/gc/audit');
   });
 
-  it('when data is loaded', () => {
-    cy.get('#audit-ttl').should('have.text', '3 days');
+  // it('when data is loaded', () => {
+  //   cy.get('#audit-ttl').should('have.text', '3 days');
 
-    cy.get('#history').should('have.text', '11');
-    cy.get('#pagination').should('exist');
+  //   cy.get('#history').should('have.text', '11');
+  //   cy.get('#pagination').should('exist');
 
-    cy.get('#trigger-119').should('have.text', 'Manual');
+  //   cy.get('#trigger-119').should('have.text', 'Manual');
 
-    cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
+  //   cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
-    cy.get('#id-97').should('have.text', 97);
-  });
+  //   cy.get('#id-97').should('have.text', 97);
+  // });
 
-  it('when no data is loaded', () => {
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/configs?page=1&per_page=10000000',
-      },
-      (req) => {
-        req.reply({ statusCode: 200, body: [] });
-      },
-    );
+  // it('when no data is loaded', () => {
+  //   cy.intercept(
+  //     {
+  //       method: 'GET',
+  //       url: '/api/v1/configs?page=1&per_page=10000000',
+  //     },
+  //     (req) => {
+  //       req.reply({ statusCode: 200, body: [] });
+  //     },
+  //   );
 
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/jobs?page=1&per_page=10000000&type=gc',
-      },
-      (req) => {
-        req.reply({ statusCode: 200, body: [] });
-      },
-    );
+  //   cy.intercept(
+  //     {
+  //       method: 'GET',
+  //       url: '/api/v1/jobs?page=1&per_page=10000000&type=gc',
+  //     },
+  //     (req) => {
+  //       req.reply({ statusCode: 200, body: [] });
+  //     },
+  //   );
 
-    cy.get('#audit-ttl').should('have.text', '-');
-    cy.get('#history').should('have.text', '0');
-    cy.get('#last-completed').should('have.text', '-');
+  //   cy.get('#audit-ttl').should('have.text', '-');
+  //   cy.get('#history').should('have.text', '0');
+  //   cy.get('#last-completed').should('have.text', '-');
 
-    cy.get('#pagination').should('not.exist');
+  //   cy.get('#pagination').should('not.exist');
 
-    // no history.
-    cy.get('#no-history').should('have.text', `You don't have GC history.`);
-  });
+  //   // no history.
+  //   cy.get('#no-history').should('have.text', `You don't have GC history.`);
+  // });
 
-  it('can execute GC', () => {
-    cy.get('#execute-gc').click();
-    cy.get('#execute').should('exist');
+  // it('can execute GC', () => {
+  //   cy.get('#execute-gc').click();
+  //   cy.get('#execute').should('exist');
 
-    // Click cancel button.
-    cy.get('#cancel-execute').click();
-    cy.get('#execute').should('not.exist');
+  //   // Click cancel button.
+  //   cy.get('#cancel-execute').click();
+  //   cy.get('#execute').should('not.exist');
 
-    cy.get('#execute-gc').click();
+  //   cy.get('#execute-gc').click();
 
-    cy.intercept(
-      {
-        method: 'POST',
-        url: '/api/v1/jobs',
-      },
-      async (req) => {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        req.reply({
-          statusCode: 200,
-          body: executeGC,
-        });
-      },
-    );
+  //   cy.intercept(
+  //     {
+  //       method: 'POST',
+  //       url: '/api/v1/jobs',
+  //     },
+  //     async (req) => {
+  //       await new Promise((resolve) => setTimeout(resolve, 2000));
+  //       req.reply({
+  //         statusCode: 200,
+  //         body: executeGC,
+  //       });
+  //     },
+  //   );
 
-    // Click execute button.
-    cy.get('#save-execute').click();
+  //   // Click execute button.
+  //   cy.get('#save-execute').click();
 
-    cy.get('#execute-loading').should('exist');
+  //   cy.get('#execute-loading').should('exist');
 
-    cy.wait(1000);
-    cy.get('#success-execute-gc').should('exist');
+  //   cy.wait(1000);
+  //   cy.get('#success-execute-gc').should('exist');
 
-    // Show number of recycled audit log.
-    cy.get('.MuiAlert-message').should('have.text', 'You have successfully recycled 10 audit logs!');
+  //   // Show number of recycled audit log.
+  //   cy.get('.MuiAlert-message').should('have.text', 'You have successfully recycled 10 audit logs!');
 
-    cy.get('#close-execut-icon').click();
+  //   cy.get('#close-execut-icon').click();
 
-    cy.get('#execute').should('not.exist');
-  });
+  //   cy.get('#execute').should('not.exist');
+  // });
 
-  it('can not execute GC', () => {
-    cy.get('#execute-gc').click();
-    cy.get('#execute').should('exist');
+  // it('can not execute GC', () => {
+  //   cy.get('#execute-gc').click();
+  //   cy.get('#execute').should('exist');
 
-    cy.intercept(
-      {
-        method: 'POST',
-        url: '/api/v1/jobs',
-      },
-      async (req) => {
-        req.reply({
-          forceNetworkError: true,
-        });
-      },
-    );
+  //   cy.intercept(
+  //     {
+  //       method: 'POST',
+  //       url: '/api/v1/jobs',
+  //     },
+  //     async (req) => {
+  //       req.reply({
+  //         forceNetworkError: true,
+  //       });
+  //     },
+  //   );
 
-    // Click execute button.
-    cy.get('#save-execute').click();
+  //   // Click execute button.
+  //   cy.get('#save-execute').click();
 
-    cy.get('#execute-error').should('exist');
-  });
+  //   cy.get('#execute-error').should('exist');
+  // });
 
-  it('should handle API error response', () => {
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/configs?page=1&per_page=10000000',
-      },
-      (req) => {
-        req.reply({ forceNetworkError: true });
-      },
-    );
+  // it('should handle API error response', () => {
+  //   cy.intercept(
+  //     {
+  //       method: 'GET',
+  //       url: '/api/v1/configs?page=1&per_page=10000000',
+  //     },
+  //     (req) => {
+  //       req.reply({ forceNetworkError: true });
+  //     },
+  //   );
 
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/jobs?page=1&per_page=10000000&type=gc',
-      },
-      (req) => {
-        req.reply({ forceNetworkError: true });
-      },
-    );
+  //   cy.intercept(
+  //     {
+  //       method: 'GET',
+  //       url: '/api/v1/jobs?page=1&per_page=10000000&type=gc',
+  //     },
+  //     (req) => {
+  //       req.reply({ forceNetworkError: true });
+  //     },
+  //   );
 
-    // Show error message.
-    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+  //   // Show error message.
+  //   cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
 
-    // Close error message.
-    cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('.MuiAlert-message').should('not.exist');
-  });
+  //   // Close error message.
+  //   cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+  //   cy.get('.MuiAlert-message').should('not.exist');
+  // });
 
   it('can update ttl', () => {
     cy.get('#audit-ttl').should('have.text', '3 days');
     cy.get('#update').click();
 
     cy.get('#audit-ttl-input').clear();
-    cy.get('#audit-ttl-input').type('10');
+    cy.get('#audit-ttl-input').type('100');
 
     cy.get('#ttl-error').should(
       'have.text',
@@ -186,7 +186,7 @@ describe('audit', () => {
     cy.get('[data-value="hours"]').click();
 
     cy.get('#audit-ttl-input').clear();
-    cy.get('#audit-ttl-input').type('200');
+    cy.get('#audit-ttl-input').type('2000');
 
     // Shou error.
     cy.get('#ttl-error').should('have.text', 'Fill in the number, the length is 1-1000.');

@@ -773,6 +773,9 @@ export default function NewCluster() {
                 className={styles.textField}
                 color="success"
                 size="small"
+                inputProps={{
+                  min: 0,
+                }}
                 required
                 key={item.formProps.name}
                 {...item.formProps}

@@ -1194,11 +1194,15 @@ export default function NewPreheat() {
                               defaultValue={1}
                               placeholder="Enter your count"
                               type="number"
+                              minRows={0}
                               error={countError}
                               helperText={countError && 'Fill in the characters, the length is 1-200.'}
                               onChange={(e) => {
                                 const validate = countValidate(e.target.value);
                                 setCountError(!validate);
+                              }}
+                              inputProps={{
+                                min: 0,
                               }}
                               InputProps={{
                                 endAdornment: (

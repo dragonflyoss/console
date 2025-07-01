@@ -175,7 +175,7 @@ describe('audit', () => {
     cy.get('#update').click();
 
     cy.get('#audit-ttl-input').clear();
-    cy.get('#audit-ttl-input').type('10');
+    cy.get('#audit-ttl-input').type('100');
 
     cy.get('#ttl-error').should(
       'have.text',
@@ -186,7 +186,7 @@ describe('audit', () => {
     cy.get('[data-value="hours"]').click();
 
     cy.get('#audit-ttl-input').clear();
-    cy.get('#audit-ttl-input').type('200');
+    cy.get('#audit-ttl-input').type('2000');
 
     // Shou error.
     cy.get('#ttl-error').should('have.text', 'Fill in the number, the length is 1-1000.');

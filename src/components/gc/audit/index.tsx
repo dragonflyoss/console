@@ -353,8 +353,11 @@ export default function AuditGC() {
                 color="success"
                 sx={{ mr: '1rem', width: '14rem' }}
                 value={audit}
-                onChange={(e) => {
-                  setAudit(Number(e.target.value));
+                inputProps={{
+                  min: 0,
+                }}
+                onChange={(e: any) => {
+                  setAudit(e.target.value);
                   onChangeTTL(Number(e.target.value), auditLogTTL);
                 }}
               />

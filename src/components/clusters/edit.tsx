@@ -851,6 +851,9 @@ export default function EditCluster() {
                 className={styles.textField}
                 color="success"
                 required
+                inputProps={{
+                  min: 0,
+                }}
                 key={item.formProps.name}
                 {...item.formProps}
               />

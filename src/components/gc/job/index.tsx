@@ -359,8 +359,11 @@ export default function JobGC() {
                 color="success"
                 sx={{ mr: '1rem', width: '14rem' }}
                 value={job}
-                onChange={(e) => {
-                  setJob(Number(e.target.value));
+                inputProps={{
+                  min: 0,
+                }}
+                onChange={(e: any) => {
+                  setJob(e.target.value);
                   onChangeTTL(Number(e.target.value), jobUnit);
                 }}
               />
@@ -373,7 +376,7 @@ export default function JobGC() {
                 value={jobUnit}
                 onChange={(e) => {
                   setJobUnit(e.target.value);
-                  onChangeTTL(job, e.target.value);
+                  onChangeTTL(Number(job), e.target.value);
                 }}
               >
                 {unit.map((item) => (

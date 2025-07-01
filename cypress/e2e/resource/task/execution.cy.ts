@@ -1,7 +1,7 @@
-import executions from '../../../fixtures/job/task/executions.json';
-import execution from '../../../fixtures/job/task/execution.json';
-import pendingExecution from '../../../fixtures/job/task/pending-execution.json';
-import failureExecution from '../../../fixtures/job/task/failure-execution.json';
+import executions from '../../../fixtures/resource/task/executions.json';
+import execution from '../../../fixtures/resource/task/execution.json';
+import pendingExecution from '../../../fixtures/resource/task/pending-execution.json';
+import failureExecution from '../../../fixtures/resource/task/failure-execution.json';
 
 describe('Executions', () => {
   beforeEach(() => {

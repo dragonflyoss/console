@@ -224,7 +224,7 @@ export default function Clear() {
         };
 
         pollClear();
-      }, 6000);
+      }, 60000);
 
       return () => {
         clearInterval(pollingInterval);
@@ -913,6 +913,8 @@ export default function Clear() {
     setOptional(false);
     setSearchTask('');
     setSearchDada({ url: '', tag: '', application: '', filtered_query_params: '', piece_length: 0 });
+    setSearchContentForCalculatingTaskID('');
+    setSearchImageManifest('');
   };
 
   const handlePageChange = (peerId: any, newPage: any) => {

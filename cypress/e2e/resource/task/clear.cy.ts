@@ -139,7 +139,7 @@ describe('Clear', () => {
 
       cy.get('#isLoading').should('be.exist');
 
-      cy.wait(12000);
+      cy.wait(120000);
 
       // Executed every 3 seconds, it should be executed 2 times after 6 seconds.
       cy.get('@cache').then(() => {
@@ -160,7 +160,7 @@ describe('Clear', () => {
         },
       );
 
-      cy.wait(6000);
+      cy.wait(60000);
 
       cy.get('#url').click();
 
@@ -401,7 +401,7 @@ describe('Clear', () => {
 
       cy.get('#isLoading').should('be.exist');
 
-      cy.wait(12000);
+      cy.wait(120000);
 
       // Executed every 1 minute and once after 1 minute.
       cy.get('@cache').then(() => {
@@ -429,7 +429,7 @@ describe('Clear', () => {
       );
 
       // Preheat API error response after three seconds.
-      cy.wait(6000);
+      cy.wait(60000);
     });
 
     it('delete cache API error response', () => {

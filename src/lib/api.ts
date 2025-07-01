@@ -982,7 +982,31 @@ export interface createTaskJobResponse {
   scheduler_clusters: Array<scheduler_clusters>;
 }
 
+interface layers {
+  url: string;
+}
+
+interface ImageDistributionpeers {
+  ip: string;
+  hostname: string;
+  layers: layers[];
+  scheduler_cluster_id: number;
+}
+
+export interface createGetImageDistributionJobResponse {
+  image: layers[];
+  peers: ImageDistributionpeers[];
+}
+
 export async function createTaskJob(request: createTaskJobResquest): Promise<createTaskJobResponse> {
+  const url = new URL(`/api/v1/jobs`, API_URL);
+  const response = await post(url, request);
+  return await response.json();
+}
+
+export async function createGetImageDistributionJob(
+  request: createTaskJobResquest,
+): Promise<createGetImageDistributionJobResponse> {
   const url = new URL(`/api/v1/jobs`, API_URL);
   const response = await post(url, request);
   return await response.json();

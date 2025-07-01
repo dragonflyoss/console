@@ -1,8 +1,9 @@
-import createTaskJob from '../../../fixtures/job/task/create-task-job.json';
-import task from '../../../fixtures/job/task/task.json';
-import pendingTask from '../../../fixtures/job/task/pending-task.json';
-import taskIDByTask from '../../../fixtures/job/task/task-id-by-task.json';
-import noTask from '../../../fixtures/job/task/no-task.json';
+import createTaskJob from '../../../fixtures/resource/task/create-task-job.json';
+import task from '../../../fixtures/resource/task/task.json';
+import pendingTask from '../../../fixtures/resource/task/pending-task.json';
+import taskIDByTask from '../../../fixtures/resource/task/task-id-by-task.json';
+import noTask from '../../../fixtures/resource/task/no-task.json';
+import ImageManifest from '../../../fixtures/resource/task/image-manifest-url-task.json';
 import _ from 'lodash';
 
 describe('Clear', () => {
@@ -138,7 +139,7 @@ describe('Clear', () => {
 
       cy.get('#isLoading').should('be.exist');
 
-      cy.wait(120000);
+      cy.wait(12000);
 
       // Executed every 3 seconds, it should be executed 2 times after 6 seconds.
       cy.get('@cache').then(() => {
@@ -159,7 +160,7 @@ describe('Clear', () => {
         },
       );
 
-      cy.wait(60000);
+      cy.wait(6000);
 
       cy.get('#url').click();
 
@@ -283,6 +284,42 @@ describe('Clear', () => {
       // Pagination should not be displayed.
       cy.get('#pagination-1').should('exist');
     });
+
+    it('can search by image manifest url', () => {
+      cy.get('#no-task').should('not.exist');
+
+      cy.get('#serach-image-manifest-url').click();
+
+      cy.intercept(
+        {
+          method: 'post',
+          url: '/api/v1/jobs',
+        },
+        async (req) => {
+          await new Promise((resolve) => setTimeout(resolve, 200));
+          req.reply({
+            statusCode: 200,
+            body: ImageManifest,
+          });
+        },
+      );
+
+      cy.get('#image-manifest-url').type('https://example.com/path/to/file{enter}');
+
+      // Show is loading.
+      cy.get('#isLoading').should('exist');
+
+      cy.get('#scheduler-id-0').should('exist', 'ID :  1');
+
+      cy.get('#isLoading').should('not.exist');
+
+      cy.get('#scheduler-1-hostname-0').should('have.text', 'kind-worker1');
+      cy.get('#scheduler-1-ip-0').should('have.text', '172.18.0.4');
+      cy.get('#scheduler-1-total-0').should('have.text', 'Total 2');
+
+      // Should display URL.
+      cy.get('#scheduler-1-url-0').click();
+    });
   });
 
   describe('should handle API error response', () => {
@@ -364,7 +401,7 @@ describe('Clear', () => {
 
       cy.get('#isLoading').should('be.exist');
 
-      cy.wait(120000);
+      cy.wait(12000);
 
       // Executed every 1 minute and once after 1 minute.
       cy.get('@cache').then(() => {
@@ -392,10 +429,10 @@ describe('Clear', () => {
       );
 
       // Preheat API error response after three seconds.
-      cy.wait(60000);
+      cy.wait(6000);
     });
 
-    it('Delete cache API error response', () => {
+    it('delete cache API error response', () => {
       // Search by task id.
       cy.get('#serach-task-id').click();
       cy.intercept(
@@ -433,6 +470,27 @@ describe('Clear', () => {
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
       cy.get('.MuiAlert-message').should('not.exist');
+    });
+
+    it('search by image manifest url API error response', () => {
+      cy.get('#no-task').should('not.exist');
+      cy.get('#serach-image-manifest-url').click();
+      cy.intercept(
+        {
+          method: 'post',
+          url: '/api/v1/jobs',
+        },
+        async (req) => {
+          await new Promise((resolve) => setTimeout(resolve, 200));
+          req.reply({
+            forceNetworkError: true,
+          });
+        },
+      );
+      cy.get('#image-manifest-url').type('https://example.com/path/to/file{enter}');
+
+      // Show error message.
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
     });
   });
 
@@ -625,10 +683,7 @@ describe('Clear', () => {
 
       cy.get('#searchByURL').click();
 
-      cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .css-70qvj9 > .css-1y3f2j > #schedulerTotal').should(
-        'contain',
-        '2',
-      );
+      cy.get('#scheduler-id-1').should('contain', '2');
 
       cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .MuiButtonBase-root').click();
 
@@ -698,10 +753,7 @@ describe('Clear', () => {
         'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916{enter}',
       );
 
-      cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .css-70qvj9 > .css-1y3f2j > #schedulerTotal').should(
-        'contain',
-        '2',
-      );
+      cy.get('#scheduler-id-1').should('contain', '2');
 
       cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .MuiButtonBase-root').click();
 
@@ -819,7 +871,7 @@ describe('Clear', () => {
         .and('have.text', 'Fill in the characters, the length is 0-1000.');
     });
 
-    it('try to verify url', () => {
+    it('try to verify content for calculating task id', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       const contentForCalculatingTaskID = _.times(1001, () => _.sample(characters)).join('');
 
@@ -830,6 +882,27 @@ describe('Clear', () => {
       cy.get('#content-for-calculating-task-id-helper-text')
         .should('be.visible')
         .and('have.text', 'Fill in the characters, the length is 0-1000.');
+    });
+
+    it('try to verify image manifest url', () => {
+      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const url = _.times(1001, () => _.sample(characters)).join('');
+
+      cy.get('#serach-image-manifest-url').click();
+
+      cy.get('#image-manifest-url').click();
+
+      // Should display message url the validation error.
+      cy.get('#image-manifest-url').type(`https://docs${url}`);
+
+      cy.get('#image-manifest-url-helper-text')
+        .should('be.visible')
+        .and('have.text', 'Fill in the characters, the length is 1-1000.');
+
+      cy.get('#image-manifest-url').clear();
+      cy.get('#image-manifest-url').type('https://docs');
+
+      cy.get('#image-manifest-url-helper-text').should('not.exist');
     });
   });
 });

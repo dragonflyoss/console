@@ -64,6 +64,160 @@ export default function NavTabs() {
     },
   });
 
+  const image = {
+    peers: [
+      {
+        peer: [
+          {
+            ip: '172.18.0.2',
+            hostname: 'kind-worker',
+            layers: [
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944',
+              },
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:871ab018db94b4ae7b137764837bc4504393a60656ba187189e985cd809064f7',
+              },
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1a1d290795d904815786e41d39a41dc1af5de68a9e9020baba8bd83b32d8f95',
+              },
+            ],
+          },
+          {
+            ip: '172.18.0.4',
+            hostname: 'kind-worker2',
+            layers: [
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944',
+              },
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:871ab018db94b4ae7b137764837bc4504393a60656ba187189e985cd809064f7',
+              },
+            ],
+          },
+          {
+            ip: '172.18.0.2',
+            hostname: 'kind-worker',
+            layers: [
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944',
+              },
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:871ab018db94b4ae7b137764837bc4504393a60656ba187189e985cd809064f7',
+              },
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1a1d290795d904815786e41d39a41dc1af5de68a9e9020baba8bd83b32d8f95',
+              },
+            ],
+          },
+          {
+            ip: '172.18.0.4',
+            hostname: 'kind-worker2',
+            layers: [
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944',
+              },
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:871ab018db94b4ae7b137764837bc4504393a60656ba187189e985cd809064f7',
+              },
+            ],
+          },
+          {
+            ip: '172.18.0.2',
+            hostname: 'kind-worker',
+            layers: [
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944',
+              },
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:871ab018db94b4ae7b137764837bc4504393a60656ba187189e985cd809064f7',
+              },
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1a1d290795d904815786e41d39a41dc1af5de68a9e9020baba8bd83b32d8f95',
+              },
+            ],
+          },
+          {
+            ip: '172.18.0.4',
+            hostname: 'kind-worker2',
+            layers: [
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944',
+              },
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:871ab018db94b4ae7b137764837bc4504393a60656ba187189e985cd809064f7',
+              },
+            ],
+          },
+        ],
+        scheduler_cluster_id: 1,
+      },
+      {
+        peer: [
+          {
+            ip: '172.18.0.3',
+            hostname: 'kind-worker3',
+            layers: [
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944',
+              },
+              {
+                url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:871ab018db94b4ae7b137764837bc4504393a60656ba187189e985cd809064f7',
+              },
+            ],
+          },
+        ],
+        scheduler_cluster_id: 2,
+      },
+    ],
+  };
+
+  const images = {
+    peers: [
+      {
+        ip: '172.18.0.2',
+        hostname: 'kind-worker',
+        layers: [
+          {
+            url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944',
+          },
+          {
+            url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:871ab018db94b4ae7b137764837bc4504393a60656ba187189e985cd809064f7',
+          },
+          {
+            url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1a1d290795d904815786e41d39a41dc1af5de68a9e9020baba8bd83b32d8f95',
+          },
+        ],
+      },
+      {
+        ip: '172.18.0.4',
+        hostname: 'kind-worker2',
+        layers: [
+          {
+            url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944',
+          },
+          {
+            url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:871ab018db94b4ae7b137764837bc4504393a60656ba187189e985cd809064f7',
+          },
+        ],
+        scheduler_cluster_id: 1,
+      },
+      {
+        ip: '172.18.0.3',
+        hostname: 'kind-worker3',
+        layers: [
+          {
+            url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944',
+          },
+          {
+            url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:871ab018db94b4ae7b137764837bc4504393a60656ba187189e985cd809064f7',
+          },
+        ],
+        scheduler_cluster_id: 2,
+      },
+    ],
+  };
+
   return (
     <Box>
       <Breadcrumbs

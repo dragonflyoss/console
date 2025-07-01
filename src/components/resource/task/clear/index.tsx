@@ -20,6 +20,9 @@ import {
   Pagination,
   useTheme,
   InputAdornment,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material';
 import styles from './index.module.css';
 import { useEffect, useState } from 'react';
@@ -27,7 +30,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import { getTaskJobResponse, createTaskJob, getTaskJob } from '../../../../lib/api';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { getTaskJobResponse, createTaskJob, getTaskJob, createGetImageDistributionJob } from '../../../../lib/api';
 import { getDatetime, getPaginatedList } from '../../../../lib/utils';
 import _ from 'lodash';
 import SearchTaskAnimation from '../../../search-task-animation';
@@ -46,6 +50,11 @@ import { ReactComponent as DarkNoTask } from '../../../../assets/images/resource
 import { ReactComponent as Delete } from '../../../../assets/images/cluster/delete.svg';
 import { ReactComponent as DeleteWarning } from '../../../../assets/images/cluster/delete-warning.svg';
 import { ReactComponent as ContentForCalculatingTaskID } from '../../../../assets/images/resource/task/content-for-calculating-task-id.svg';
+import { ReactComponent as ImageManifest } from '../../../../assets/images/resource/task/image-manifest.svg';
+import { ReactComponent as IP } from '../../../../assets/images/resource/task/clear-ip.svg';
+import { ReactComponent as Hostnames } from '../../../../assets/images/resource/task/clear-hostname.svg';
+import { ReactComponent as URL } from '../../../../assets/images/job/preheat/url.svg';
+import { ReactComponent as Total } from '../../../../assets/images/cluster/total.svg';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
@@ -62,17 +71,66 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   },
 }));
 
+type Layer = {
+  url: string;
+};
+
+type OriginalPeer = {
+  ip: string;
+  hostname: string;
+  layers: Layer[];
+  scheduler_cluster_id?: number;
+};
+
+type ClusteredPeer = {
+  peer: Omit<OriginalPeer, 'scheduler_cluster_id'>[];
+  scheduler_cluster_id: number;
+};
+
+type TransformedImage = {
+  peers: ClusteredPeer[];
+};
+
+function transformImages(images: { peers: OriginalPeer[] }): TransformedImage {
+  const clusters = new Map<number, Omit<OriginalPeer, 'scheduler_cluster_id'>[]>();
+
+  for (const peer of images.peers) {
+    const clusterId = peer.scheduler_cluster_id ?? 1;
+
+    if (!clusters.has(clusterId)) {
+      clusters.set(clusterId, []);
+    }
+
+    const cleanedPeer = {
+      ip: peer.ip,
+      hostname: peer.hostname,
+      layers: peer.layers,
+    };
+
+    clusters.get(clusterId)!.push(cleanedPeer);
+  }
+
+  const resultPeers: ClusteredPeer[] = Array.from(clusters.entries()).map(([id, peers]) => ({
+    peer: peers,
+    scheduler_cluster_id: id,
+  }));
+
+  return { peers: resultPeers };
+}
+
 export default function Clear() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [searchTaskISLodaing, setSearchTaskISLodaing] = useState(false);
   const [searchContentForCalculatingTaskIDISLodaing, setSearchContentForCalculatingTaskIDISLodaing] = useState(false);
+  const [searchImageManifestISLodaing, setSearchImageManifestISLodaing] = useState(false);
   const [searchIconISLodaing, setSearchIconISLodaing] = useState(false);
   const [openDeleteTask, setOpenDeleteTask] = useState(false);
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [searchTask, setSearchTask] = useState('');
   const [searchContentForCalculatingTaskID, setSearchContentForCalculatingTaskID] = useState('');
+  const [searchImageManifest, setSearchImageManifest] = useState('');
   const [task, setTask] = useState<getTaskJobResponse | any>();
   const [optional, setOptional] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
@@ -97,6 +155,8 @@ export default function Clear() {
     filtered_query_params: '',
     piece_length: 0,
   });
+  const [imageManifestURL, setImageManifestURL] = useState<TransformedImage>();
+  const [pageStates, setPageStates] = useState<any>({});
 
   const { url, tag, application, filtered_query_params } = searchData;
   const navigate = useNavigate();
@@ -164,7 +224,7 @@ export default function Clear() {
         };
 
         pollClear();
-      }, 60000);
+      }, 6000);
 
       return () => {
         clearInterval(pollingInterval);
@@ -493,6 +553,61 @@ export default function Clear() {
     },
   };
 
+  const imageManifestForm = {
+    formProps: {
+      id: 'image-manifest-url',
+      label: 'Image Manifest URL',
+      name: 'image-manifest-url',
+      required: true,
+      value: searchImageManifest,
+      autoComplete: 'family-name',
+      placeholder: 'Enter your image manifest URL',
+      helperText: contentForCalculatingTaskIDError ? 'Fill in the characters, the length is 1-1000.' : '',
+      error: contentForCalculatingTaskIDError,
+      InputProps: {
+        startAdornment: searchImageManifestISLodaing ? (
+          <Box className={styles.circularProgress}>
+            <SearchCircularProgress />
+          </Box>
+        ) : (
+          <Box className={styles.circularProgress}>
+            <SearchIcon sx={{ color: '#9BA0A6' }} />
+          </Box>
+        ),
+        endAdornment: searchImageManifest ? (
+          <IconButton
+            type="button"
+            aria-label="search"
+            onClick={() => {
+              setSearchImageManifest('');
+              setSearchImageManifestISLodaing(false);
+            }}
+          >
+            <ClearIcon />
+          </IconButton>
+        ) : (
+          <></>
+        ),
+      },
+
+      onChange: (e: any) => {
+        changeValidate(e.target.value, imageManifestForm);
+        setSearchImageManifest(e.target.value);
+
+        if (e.target.value === '') {
+          setSearchImageManifestISLodaing(false);
+        }
+      },
+    },
+    syncError: false,
+    setError: setContentForCalculatingTaskIDError,
+
+    validate: (value: string) => {
+      const reg = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s].{1,1000}$/;
+      return reg.test(value);
+    },
+  };
+
   const result =
     task?.result?.job_states?.map((item: any) => {
       return item.results ? item.results.map((resultItem: any) => resultItem) : [];
@@ -740,6 +855,39 @@ export default function Clear() {
     }
   };
 
+  const handleSearchByImageManifestURL = async (event: any) => {
+    setIsLoading(true);
+    setSearchImageManifestISLodaing(true);
+
+    try {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+
+      const form = {
+        args: {
+          url: searchImageManifest,
+        },
+        type: 'get_image_distribution',
+      };
+
+      const imageManifest = await createGetImageDistributionJob(form);
+
+      setSearchImageManifestISLodaing(false);
+
+      const res = transformImages(imageManifest);
+
+      setImageManifestURL(res);
+      setIsLoading(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(true);
+        setErrorMessageText(error.message);
+        setIsLoading(false);
+        setSearchImageManifestISLodaing(false);
+      }
+    }
+  };
+
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -771,6 +919,13 @@ export default function Clear() {
     setTaskPages((prevPages: any) => ({
       ...prevPages,
       [peerId]: newPage,
+    }));
+  };
+
+  const handleImagePageChange = (schedulerClusterId: any, page: any) => {
+    setPageStates((prev: any) => ({
+      ...prev,
+      [schedulerClusterId]: page,
     }));
   };
 
@@ -875,6 +1030,30 @@ export default function Clear() {
             <ContentForCalculatingTaskID className={styles.contentForCalculatingTaskIDIcon} />
             Search by Calculating Task ID
           </ToggleButton>
+          <ToggleButton
+            id="serach-image-manifest-url"
+            value="image-manifest-url"
+            size="small"
+            sx={{
+              '&.Mui-selected': {
+                backgroundColor: 'var(--palette-save-color)',
+                color: '#FFFFFF',
+                boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
+                '&:hover': {
+                  backgroundColor: 'var(--palette-save-color)',
+                },
+              },
+              '&:hover': {
+                backgroundColor: 'transparent',
+              },
+              p: '0.3rem 0.5rem',
+              color: 'var(--palette-dark-400Channel)',
+              textTransform: 'none',
+            }}
+          >
+            <ImageManifest className={styles.contentForCalculatingTaskIDIcon} />
+            Search by Image Manifest URL
+          </ToggleButton>
         </StyledToggleButtonGroup>
       </Paper>
       {search === 'task-id' ? (
@@ -890,6 +1069,15 @@ export default function Clear() {
         >
           <TextField fullWidth variant="outlined" size="small" {...calculatingTaskIDForm.formProps} sx={{ p: 0 }} />
         </Box>
+      ) : search === 'image-manifest-url' ? (
+        <Box
+          key="image-manifest-url"
+          component="form"
+          onSubmit={handleSearchByImageManifestURL}
+          sx={{ width: '38rem', height: '3rem' }}
+        >
+          <TextField fullWidth variant="outlined" size="small" {...imageManifestForm.formProps} sx={{ p: 0 }} />
+        </Box>
       ) : (
         <Box sx={{ position: 'relative', height: '3rem' }}>
           <Paper
@@ -902,6 +1090,7 @@ export default function Clear() {
               width: optional ? '45rem' : '36rem',
               position: 'absolute',
               backgroundColor: 'var(--palette-background-menu-paper)',
+              zIndex: '100001',
             }}
           >
             <TextField
@@ -1023,15 +1212,7 @@ export default function Clear() {
                             <Typography variant="subtitle1" mr="0.6rem" fontFamily="mabry-bold">
                               Scheduler Cluster
                             </Typography>
-                            <Box
-                              sx={{
-                                border: '1px solid #d5d2d2',
-                                p: '0.2rem 0.3rem',
-                                borderRadius: '0.2rem',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                              }}
-                            >
+                            <Box className={styles.schedulerClusterWrapper} id={`scheduler-id-${index}`}>
                               <SchedulerCluster className={styles.schedulerClusterIcon} />
                               <Typography
                                 id="schedulerTotal"
@@ -1242,6 +1423,150 @@ export default function Clear() {
             </Box>
           )}
         </Box>
+      ) : Array.isArray(imageManifestURL?.peers) ? (
+        imageManifestURL?.peers.length > 0 ? (
+          <Box>
+            <Typography variant="h6" m="1rem 0" fontFamily="mabry-bold">
+              Cache
+            </Typography>
+            {imageManifestURL?.peers.map((item, index) => {
+              const schedulerClusterId = item.scheduler_cluster_id;
+              const totalPage = Math.ceil(item.peer.length / 5);
+              const currentPage = pageStates[schedulerClusterId] || 1;
+              const paginatedPeers = getPaginatedList(item.peer, currentPage, 5);
+              return (
+                <Box mb="2rem" key={index}>
+                  <Card key={index} className={styles.imageManifestCard}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', p: '1rem' }}>
+                      <Typography variant="subtitle1" mr="0.6rem" fontFamily="mabry-bold">
+                        Scheduler Cluster
+                      </Typography>
+                      <Box className={styles.schedulerClusterWrapper} id={`scheduler-id-${index}`}>
+                        <SchedulerCluster className={styles.schedulerClusterIcon} />
+                        <Typography
+                          variant="subtitle2"
+                          fontFamily="mabry-bold"
+                          component="div"
+                          pl="0.3rem"
+                          lineHeight="1rem"
+                        >
+                          ID&nbsp;:&nbsp; {item?.scheduler_cluster_id || '0'}
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Divider />
+                    {paginatedPeers?.map((items, index) => {
+                      return (
+                        <Box key={index}>
+                          <Accordion
+                            disableGutters
+                            elevation={0}
+                            square
+                            sx={{
+                              '&:not(:last-child)': {
+                                borderBottom: 0,
+                              },
+                              '&:before': {
+                                display: 'none',
+                              },
+                              backgroundColor: 'var(--palette-background-paper)',
+                            }}
+                          >
+                            <AccordionSummary
+                              expandIcon={<ExpandMoreIcon />}
+                              aria-controls="panel1-content"
+                              id={`scheduler-${item?.scheduler_cluster_id}-url-${index}`}
+                            >
+                              <Box className={styles.imageManifestHeader}>
+                                <Box className={styles.hostnameContainer}>
+                                  <Box
+                                    className={styles.hostnameWrapper}
+                                    id={`scheduler-${item?.scheduler_cluster_id}-hostname-${index}`}
+                                  >
+                                    <Hostnames className={styles.hostnameIcon} />
+                                    <Typography variant="subtitle2" ml="0.4rem" fontFamily="mabry-bold">
+                                      {items?.hostname}
+                                    </Typography>
+                                  </Box>
+                                  <Box
+                                    className={styles.hostnameWrapper}
+                                    id={`scheduler-${item?.scheduler_cluster_id}-ip-${index}`}
+                                  >
+                                    <IP className={styles.hostnameIcon} />
+                                    <Typography variant="subtitle2" ml="0.4rem" fontFamily="mabry-bold">
+                                      {items?.ip}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  className={styles.totalContainer}
+                                  id={`scheduler-${item?.scheduler_cluster_id}-total-${index}`}
+                                >
+                                  <Total className={styles.totalIcon} />
+                                  <Typography component="span" variant="subtitle2" fontFamily="mabry-bold" pl="0.3rem">
+                                    {`Total ${items?.layers.length}`}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                            </AccordionSummary>
+                            <AccordionDetails
+                              key={index}
+                              sx={{
+                                padding: '1rem',
+                                backgroundColor: 'var(--palette-background-paper)',
+                              }}
+                            >
+                              <Box>
+                                <Typography component="div" variant="subtitle1" fontFamily="mabry-bold" mb="1rem">
+                                  URL
+                                </Typography>
+                                <Box className={styles.cardCantainer}>
+                                  {items?.layers.map((item: any, urlIndex: any) => (
+                                    <Box key={index} className={styles.urlsWrapper}>
+                                      <URL className={styles.urlIcon} />
+                                      <Tooltip title={item?.url || '-'} placement="top">
+                                        <Typography id={`url-${index}`} className={styles.url} variant="body2">
+                                          {item?.url}
+                                        </Typography>
+                                      </Tooltip>
+                                    </Box>
+                                  ))}
+                                </Box>
+                              </Box>
+                            </AccordionDetails>
+                          </Accordion>
+
+                          {index !== paginatedPeers.length - 1 && <Divider />}
+                        </Box>
+                      );
+                    })}
+                  </Card>
+                  {totalPage > 1 && (
+                    <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
+                      <Pagination
+                        id={`pagination-${index}`}
+                        count={Math.ceil(item.peer.length / 5)}
+                        page={currentPage}
+                        onChange={(e, page) => handleImagePageChange(schedulerClusterId, page)}
+                        color="primary"
+                        size="small"
+                      />
+                    </Box>
+                  )}
+                </Box>
+              );
+            })}
+          </Box>
+        ) : (
+          <Box id="no-task" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '6rem' }}>
+            <NoSearch className={styles.noSearch} />
+            <Box>
+              <Typography variant="h5" component="span">
+                You don't find any results!
+              </Typography>
+            </Box>
+          </Box>
+        )
       ) : (
         <Box
           sx={{

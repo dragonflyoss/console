@@ -1,8 +1,9 @@
-import createTaskJob from '../../../fixtures/job/task/create-task-job.json';
-import task from '../../../fixtures/job/task/task.json';
-import pendingTask from '../../../fixtures/job/task/pending-task.json';
-import taskIDByTask from '../../../fixtures/job/task/task-id-by-task.json';
-import noTask from '../../../fixtures/job/task/no-task.json';
+import createTaskJob from '../../../fixtures/resource/task/create-task-job.json';
+import task from '../../../fixtures/resource/task/task.json';
+import pendingTask from '../../../fixtures/resource/task/pending-task.json';
+import taskIDByTask from '../../../fixtures/resource/task/task-id-by-task.json';
+import noTask from '../../../fixtures/resource/task/no-task.json';
+import ImageManifest from '../../../fixtures/resource/task/image-manifest-url-task.json';
 import _ from 'lodash';
 
 describe('Clear', () => {
@@ -13,56 +14,95 @@ describe('Clear', () => {
     cy.viewport(1440, 1080);
   });
 
-  it('when no data is loaded', () => {
-    cy.get('#no-task').should('not.exist');
+  describe('when no data is loaded', () => {
+    it('when search by url has no data to load', () => {
+      cy.get('#no-task').should('not.exist');
 
-    cy.get('#light').should('exist');
-    cy.get('#no-task-image').should('not.exist');
+      cy.get('#light').should('exist');
+      cy.get('#no-task-image').should('not.exist');
 
-    // Click the Toggle Light button.
-    cy.get('#light').click();
-    cy.get('#light').should('have.class', 'Mui-selected');
+      // Click the Toggle Light button.
+      cy.get('#light').click();
+      cy.get('#light').should('have.class', 'Mui-selected');
 
-    // Check if it is switched to light mode.
-    cy.get('#main').should('have.css', 'background-color', 'rgb(244, 246, 248)');
+      // Check if it is switched to light mode.
+      cy.get('#main').should('have.css', 'background-color', 'rgb(244, 246, 248)');
 
-    cy.get('#no-task-image').should('exist');
+      cy.get('#no-task-image').should('exist');
 
-    cy.get('#dark-no-task-image').should('not.exist');
+      cy.get('#dark-no-task-image').should('not.exist');
 
-    cy.intercept(
-      {
-        method: 'post',
-        url: '/api/v1/jobs',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: createTaskJob,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/jobs/1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: noTask,
-        });
-      },
-    );
+      cy.intercept(
+        {
+          method: 'post',
+          url: '/api/v1/jobs',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: createTaskJob,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: noTask,
+          });
+        },
+      );
 
-    cy.get('#url').click();
+      cy.get('#url').click();
 
-    // Add url.
-    cy.get('#url').type('https://example.com/path/to/file');
+      // Add url.
+      cy.get('#url').type('https://example.com/path/to/file');
 
-    cy.get('#searchByURL').click();
+      cy.get('#searchByURL').click();
 
-    cy.get('#no-task').should('exist');
+      cy.get('#no-task').should('exist');
+    });
+
+    it('when search by image manifest url has no data to load', () => {
+      cy.get('#no-task').should('not.exist');
+
+      cy.get('#serach-image-manifest-url').click();
+
+      cy.intercept(
+        {
+          method: 'post',
+          url: '/api/v1/jobs',
+        },
+        async (req) => {
+          await new Promise((resolve) => setTimeout(resolve, 200));
+          req.reply({
+            statusCode: 200,
+            body: {
+              image: {
+                layers: [
+                  {
+                    url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:c7c72808bf776cd122bdaf4630a4a35ea319603d6a3b6cbffddd4c7fd6d2d269',
+                  },
+                  {
+                    url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:9986a736f7d3d24bb01b0a560fa0f19c4b57e56c646e1f998941529d28710e6b',
+                  },
+                ],
+              },
+              peers: [],
+            },
+          });
+        },
+      );
+
+      cy.get('#image-manifest-url').type('https://example.com/path/to/file{enter}');
+
+      // Shou You don't find any results!
+      cy.get('#no-image-manifest-URL-task').should('exist').and('contain', `You don't find any results!`);
+    });
   });
 
   describe('when data is loaded', () => {
@@ -283,6 +323,42 @@ describe('Clear', () => {
       // Pagination should not be displayed.
       cy.get('#pagination-1').should('exist');
     });
+
+    it('can search by image manifest url', () => {
+      cy.get('#no-task').should('not.exist');
+
+      cy.get('#serach-image-manifest-url').click();
+
+      cy.intercept(
+        {
+          method: 'post',
+          url: '/api/v1/jobs',
+        },
+        async (req) => {
+          await new Promise((resolve) => setTimeout(resolve, 200));
+          req.reply({
+            statusCode: 200,
+            body: ImageManifest,
+          });
+        },
+      );
+
+      cy.get('#image-manifest-url').type('https://example.com/path/to/file{enter}');
+
+      // Show is loading.
+      cy.get('#isLoading').should('exist');
+
+      // Display cache information.
+      cy.get('#blobs').should('have.text', 'Total: 5');
+      cy.get('#scheduler-id-0').should('exist', 'ID :  1');
+      cy.get('#isLoading').should('not.exist');
+      cy.get('#scheduler-1-hostname-0').should('have.text', 'kind-worker1');
+      cy.get('#scheduler-1-ip-0').should('have.text', '172.18.0.4');
+      cy.get('#scheduler-1-proportion-0').should('contain', '60.00%');
+
+      // Should display URL.
+      cy.get('#scheduler-1-url-0').click();
+    });
   });
 
   describe('should handle API error response', () => {
@@ -395,7 +471,7 @@ describe('Clear', () => {
       cy.wait(60000);
     });
 
-    it('Delete cache API error response', () => {
+    it('delete cache API error response', () => {
       // Search by task id.
       cy.get('#serach-task-id').click();
       cy.intercept(
@@ -433,6 +509,27 @@ describe('Clear', () => {
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
       cy.get('.MuiAlert-message').should('not.exist');
+    });
+
+    it('search by image manifest url API error response', () => {
+      cy.get('#no-task').should('not.exist');
+      cy.get('#serach-image-manifest-url').click();
+      cy.intercept(
+        {
+          method: 'post',
+          url: '/api/v1/jobs',
+        },
+        async (req) => {
+          await new Promise((resolve) => setTimeout(resolve, 200));
+          req.reply({
+            forceNetworkError: true,
+          });
+        },
+      );
+      cy.get('#image-manifest-url').type('https://example.com/path/to/file{enter}');
+
+      // Show error message.
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
     });
   });
 
@@ -625,10 +722,7 @@ describe('Clear', () => {
 
       cy.get('#searchByURL').click();
 
-      cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .css-70qvj9 > .css-1y3f2j > #schedulerTotal').should(
-        'contain',
-        '2',
-      );
+      cy.get('#scheduler-id-1').should('contain', '2');
 
       cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .MuiButtonBase-root').click();
 
@@ -698,10 +792,7 @@ describe('Clear', () => {
         'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916{enter}',
       );
 
-      cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .css-70qvj9 > .css-1y3f2j > #schedulerTotal').should(
-        'contain',
-        '2',
-      );
+      cy.get('#scheduler-id-1').should('contain', '2');
 
       cy.get(':nth-child(2) > .MuiPaper-root > .css-whqzh4 > .MuiButtonBase-root').click();
 
@@ -819,7 +910,7 @@ describe('Clear', () => {
         .and('have.text', 'Fill in the characters, the length is 0-1000.');
     });
 
-    it('try to verify url', () => {
+    it('try to verify content for calculating task id', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       const contentForCalculatingTaskID = _.times(1001, () => _.sample(characters)).join('');
 
@@ -830,6 +921,27 @@ describe('Clear', () => {
       cy.get('#content-for-calculating-task-id-helper-text')
         .should('be.visible')
         .and('have.text', 'Fill in the characters, the length is 0-1000.');
+    });
+
+    it('try to verify image manifest url', () => {
+      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const url = _.times(1001, () => _.sample(characters)).join('');
+
+      cy.get('#serach-image-manifest-url').click();
+
+      cy.get('#image-manifest-url').click();
+
+      // Should display message url the validation error.
+      cy.get('#image-manifest-url').type(`https://docs${url}`);
+
+      cy.get('#image-manifest-url-helper-text')
+        .should('be.visible')
+        .and('have.text', 'Fill in the characters, the length is 1-1000.');
+
+      cy.get('#image-manifest-url').clear();
+      cy.get('#image-manifest-url').type('https://docs');
+
+      cy.get('#image-manifest-url-helper-text').should('not.exist');
     });
   });
 });

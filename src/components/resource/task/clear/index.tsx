@@ -132,62 +132,6 @@ function transformImages(images: createGetImageDistributionJobResponse): Transfo
   return { peers: resultPeers, image: images.image };
 }
 
-const img = {
-  image: {
-    layers: [
-      {
-        url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:c7c72808bf776cd122bdaf4630a4a35ea319603d6a3b6cbffddd4c7fd6d2d269',
-      },
-      {
-        url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:9986a736f7d3d24bb01b0a560fa0f19c4b57e56c646e1f998941529d28710e6b',
-      },
-      {
-        url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:fdb99fa1c8f89464e911dce77afd5e26c6c09e9db625014431a4df3be4021359',
-      },
-      {
-        url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:fc5951fb196d09e569f4592b50e3a71ad01d11da229b8a500fea278eba0170c5',
-      },
-      {
-        url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:edbf1aa1d62d9c17605c1ee2d9dff43489bc0f8ae056367734386c35bfae226a',
-      },
-      {
-        url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f7307687fd72fb79eadd7f38f8cb9675b76480e32365a5d282a06f788944e9f2',
-      },
-    ],
-  },
-  peers: [
-    {
-      ip: '172.18.0.2',
-      hostname: 'kind-worker',
-      layers: [
-        {
-          url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:9986a736f7d3d24bb01b0a560fa0f19c4b57e56c646e1f998941529d28710e6b?token=abc123&format=json',
-        },
-        {
-          url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:fdb99fa1c8f89464e911dce77afd5e26c6c09e9db625014431a4df3be4021359',
-        },
-        {
-          url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:c7c72808bf776cd122bdaf4630a4a35ea319603d6a3b6cbffddd4c7fd6d2d269?token=abc123&format=json',
-        },
-      ],
-      scheduler_cluster_id: 1,
-    },
-    {
-      ip: '172.18.0.4',
-      hostname: 'kind-worker2',
-      layers: [
-        {
-          url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:fdb99fa1c8f89464e911dce77afd5e26c6c09e9db625014431a4df3be4021359',
-        },
-        {
-          url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:c7c72808bf776cd122bdaf4630a4a35ea319603d6a3b6cbffddd4c7fd6d2d269',
-        },
-      ],
-      scheduler_cluster_id: 1,
-    },
-  ],
-};
-
 export default function Clear() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
@@ -232,8 +176,6 @@ export default function Clear() {
   const { url, tag, application, filtered_query_params } = searchData;
   const navigate = useNavigate();
   const theme = useTheme();
-
-  const imagem = transformImages(img);
 
   useEffect(() => {
     const fetchJob = async () => {

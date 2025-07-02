@@ -122,9 +122,9 @@
 }
 
 .bolbWrapper {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   color: var(--palette-table-title-text-color);
 }
 
@@ -132,10 +132,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1.5rem;
-  height: 1.5rem;
   border-radius: 0.3rem;
   background-color: var(--palette-background-inactive);
+  padding: 0.2rem 0.4rem;
 }
 
 .hostnameContainer {
@@ -164,7 +163,7 @@
   border-color: var(--palette-palette-divider) !important;
   background-color: var(--palette-background-inactive) !important;
   border-radius: var(--menu-border-radius) !important;
-  padding: 0.6rem 0.6rem;
+  padding: 0.5rem 0.6rem;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -182,40 +181,15 @@
   color: var(--palette-detail-lable-color);
 }
 
-.clusterWrapper {
+.layerWrapper {
   display: flex;
   align-items: center;
   margin-bottom: 1.5rem;
 }
 
-.cluster {
-  width: 1.5rem;
-  height: 1.5rem;
-}
-
-.cardCantainer {
-  gap: calc(1.2rem);
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.bolbProportionContainer {
-  display: flex;
-  align-items: center;
-  padding: 0.3rem 0.5rem;
-  background-color: var(--palette-button-color) !important;
-  border-radius: var(--menu-border-radius) !important;
-  margin-right: 0.4rem;
-  color: var(--palette-scopes-icon-color);
-}
-
-.bolbIcon {
-  width: 1.2rem;
-  height: 1.2rem;
-}
-
-.bolbProportionText {
-  padding-left: 0.4rem;
+.layerIcon {
+  width: 1.4rem;
+  height: 1.4rem;
 }
 
 .bolbIconWrapper {
@@ -229,4 +203,29 @@
   padding: 0.4rem;
   background-color: var(--palette-background-paper) !important;
   box-shadow: var(--palette-card-box-shadow) !important;
+}
+
+.cardCantainer {
+  gap: calc(1.2rem);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.bolbProportionContainer {
+  display: flex;
+  align-items: center;
+  padding: 0.3rem 0.4rem;
+  background-color: var(--palette-button-color) !important;
+  border-radius: var(--menu-border-radius) !important;
+  margin-right: 0.4rem;
+  color: var(--palette-scopes-icon-color);
+}
+
+.bolbIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.bolbProportionText {
+  padding-left: 0.4rem;
 }

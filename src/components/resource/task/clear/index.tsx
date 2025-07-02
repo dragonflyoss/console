@@ -59,8 +59,6 @@ import { ReactComponent as ContentForCalculatingTaskID } from '../../../../asset
 import { ReactComponent as ImageManifest } from '../../../../assets/images/resource/task/image-manifest.svg';
 import { ReactComponent as IP } from '../../../../assets/images/resource/task/clear-ip.svg';
 import { ReactComponent as Hostnames } from '../../../../assets/images/resource/task/clear-hostname.svg';
-import { ReactComponent as URL } from '../../../../assets/images/job/preheat/url.svg';
-import { ReactComponent as Total } from '../../../../assets/images/cluster/total.svg';
 import { ReactComponent as Proportion } from '../../../../assets/images/resource/task/proportion.svg';
 
 import { ReactComponent as Layer } from '../../../../assets/images/resource/task/layer.svg';
@@ -105,7 +103,7 @@ type TransformedImage = {
   image: Image;
 };
 
-function transformImages(images: createGetImageDistributionJobResponse): TransformedImage {
+const transformImages = (images: createGetImageDistributionJobResponse): TransformedImage => {
   const clusters = new Map<number, Omit<OriginalPeer, 'scheduler_cluster_id'>[]>();
 
   for (const peer of images.peers || []) {
@@ -130,7 +128,7 @@ function transformImages(images: createGetImageDistributionJobResponse): Transfo
   }));
 
   return { peers: resultPeers, image: images.image };
-}
+};
 
 export default function Clear() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -1442,22 +1440,22 @@ export default function Clear() {
         imageManifestURL?.peers.length > 0 ? (
           <Box>
             <Box className={styles.cacheHeader}>
-              <Typography variant="h6" fontFamily="mabry-bold" mr="0.6rem">
+              <Typography variant="h6" fontFamily="mabry-bold">
                 Cache
               </Typography>
             </Box>
             <Box className={styles.bolbWrapper}>
-              <Typography variant="body2" fontFamily="mabry-bold" component="div" pr="0.3rem">
+              <Typography variant="body2" fontFamily="mabry-bold" component="div" pr="0.4rem">
                 Blobs
               </Typography>
               <Typography
                 id="blobs"
-                variant="body2"
+                variant="caption"
                 fontFamily="mabry-bold"
                 component="div"
                 className={styles.bolbText}
               >
-                {layer || 0}
+                {`Total: ${layer || 0}`}
               </Typography>
             </Box>
             {imageManifestURL?.peers.map((item, index) => {
@@ -1510,7 +1508,7 @@ export default function Clear() {
                             >
                               <Box className={styles.imageManifestHeader}>
                                 <Box className={styles.hostnameContainer}>
-                                  <Box width="16%">
+                                  <Box width="18%">
                                     <Box
                                       className={styles.hostnameWrapper}
                                       id={`scheduler-${item?.scheduler_cluster_id}-hostname-${peerIndex}`}
@@ -1536,8 +1534,13 @@ export default function Clear() {
                                   id={`scheduler-${item?.scheduler_cluster_id}-proportion-${peerIndex}`}
                                 >
                                   <Proportion className={styles.bolbIcon} />
-                                  <Typography component="div" variant="body2" className={styles.bolbProportionText}>
-                                    {`Bolb: ${((items?.layers?.length / layer) * 100).toFixed(2) || 0}%`}
+                                  <Typography
+                                    component="div"
+                                    variant="body2"
+                                    fontFamily="mabry-bold"
+                                    className={styles.bolbProportionText}
+                                  >
+                                    {`${((items?.layers?.length / layer) * 100).toFixed(2) || 0}%`}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -1550,25 +1553,25 @@ export default function Clear() {
                               }}
                             >
                               <Box>
-                                <Box className={styles.clusterWrapper}>
+                                <Box className={styles.layerWrapper}>
                                   <Paper variant="outlined" className={styles.bolbIconWrapper}>
-                                    <Layer className={styles.cluster} />
+                                    <Layer className={styles.layerIcon} />
                                   </Paper>
-                                  <Typography component="div" variant="body1" fontFamily="mabry-bold" ml="0.5rem">
-                                    Blob
+                                  <Typography component="div" variant="body2" fontFamily="mabry-bold" ml="0.5rem">
+                                    Blobs
                                   </Typography>
                                 </Box>
                                 <Box className={styles.cardCantainer}>
                                   {items?.layers.map((item: any, bolbIndex: any) => (
                                     <Box key={bolbIndex} className={styles.urlsWrapper}>
-                                      <Tooltip title={extractSHA256Regex(item?.url) || '-'} placement="top">
+                                      <Tooltip title={extractSHA256Regex(item?.url || '-') || '-'} placement="top">
                                         <Typography
                                           id={`url-${bolbIndex}`}
                                           className={styles.url}
                                           fontFamily="mabry-bold"
                                           variant="body2"
                                         >
-                                          {extractSHA256Regex(item?.url)}
+                                          {extractSHA256Regex(item?.url || '-') || '-'}
                                         </Typography>
                                       </Tooltip>
                                     </Box>

@@ -81,7 +81,19 @@ describe('Clear', () => {
           await new Promise((resolve) => setTimeout(resolve, 200));
           req.reply({
             statusCode: 200,
-            body: {},
+            body: {
+              image: {
+                layers: [
+                  {
+                    url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:c7c72808bf776cd122bdaf4630a4a35ea319603d6a3b6cbffddd4c7fd6d2d269',
+                  },
+                  {
+                    url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:9986a736f7d3d24bb01b0a560fa0f19c4b57e56c646e1f998941529d28710e6b',
+                  },
+                ],
+              },
+              peers: [],
+            },
           });
         },
       );
@@ -337,7 +349,7 @@ describe('Clear', () => {
       cy.get('#isLoading').should('exist');
 
       // Display cache information.
-      cy.get('#blobs').should('have.text', '5');
+      cy.get('#blobs').should('have.text', 'Total: 5');
       cy.get('#scheduler-id-0').should('exist', 'ID :  1');
       cy.get('#isLoading').should('not.exist');
       cy.get('#scheduler-1-hostname-0').should('have.text', 'kind-worker1');

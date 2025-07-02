@@ -1536,11 +1536,7 @@ export default function Clear() {
                                   id={`scheduler-${item?.scheduler_cluster_id}-proportion-${peerIndex}`}
                                 >
                                   <Proportion className={styles.bolbIcon} />
-                                  <Typography
-                                    component="span"
-                                    variant="subtitle2"
-                                    className={styles.bolbProportionText}
-                                  >
+                                  <Typography component="div" variant="body2" className={styles.bolbProportionText}>
                                     {`Bolb: ${((items?.layers?.length / layer) * 100).toFixed(2) || 0}%`}
                                   </Typography>
                                 </Box>

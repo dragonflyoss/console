@@ -168,3 +168,8 @@ export const parseTimeDuration = (input: string) => {
     };
   }
 };
+
+export const extractSHA256Regex = (url: string) => {
+  const match = url.match(/\/sha256:([a-f0-9]{64})/);
+  return match ? match[1] : null;
+};

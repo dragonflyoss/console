@@ -14,56 +14,83 @@ describe('Clear', () => {
     cy.viewport(1440, 1080);
   });
 
-  it('when no data is loaded', () => {
-    cy.get('#no-task').should('not.exist');
+  describe('when no data is loaded', () => {
+    it('when search by url has no data to load', () => {
+      cy.get('#no-task').should('not.exist');
 
-    cy.get('#light').should('exist');
-    cy.get('#no-task-image').should('not.exist');
+      cy.get('#light').should('exist');
+      cy.get('#no-task-image').should('not.exist');
 
-    // Click the Toggle Light button.
-    cy.get('#light').click();
-    cy.get('#light').should('have.class', 'Mui-selected');
+      // Click the Toggle Light button.
+      cy.get('#light').click();
+      cy.get('#light').should('have.class', 'Mui-selected');
 
-    // Check if it is switched to light mode.
-    cy.get('#main').should('have.css', 'background-color', 'rgb(244, 246, 248)');
+      // Check if it is switched to light mode.
+      cy.get('#main').should('have.css', 'background-color', 'rgb(244, 246, 248)');
 
-    cy.get('#no-task-image').should('exist');
+      cy.get('#no-task-image').should('exist');
 
-    cy.get('#dark-no-task-image').should('not.exist');
+      cy.get('#dark-no-task-image').should('not.exist');
 
-    cy.intercept(
-      {
-        method: 'post',
-        url: '/api/v1/jobs',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: createTaskJob,
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/jobs/1',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: noTask,
-        });
-      },
-    );
+      cy.intercept(
+        {
+          method: 'post',
+          url: '/api/v1/jobs',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: createTaskJob,
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: noTask,
+          });
+        },
+      );
 
-    cy.get('#url').click();
+      cy.get('#url').click();
 
-    // Add url.
-    cy.get('#url').type('https://example.com/path/to/file');
+      // Add url.
+      cy.get('#url').type('https://example.com/path/to/file');
 
-    cy.get('#searchByURL').click();
+      cy.get('#searchByURL').click();
 
-    cy.get('#no-task').should('exist');
+      cy.get('#no-task').should('exist');
+    });
+
+    it('when search by image manifest url has no data to load', () => {
+      cy.get('#no-task').should('not.exist');
+
+      cy.get('#serach-image-manifest-url').click();
+
+      cy.intercept(
+        {
+          method: 'post',
+          url: '/api/v1/jobs',
+        },
+        async (req) => {
+          await new Promise((resolve) => setTimeout(resolve, 200));
+          req.reply({
+            statusCode: 200,
+            body: {},
+          });
+        },
+      );
+
+      cy.get('#image-manifest-url').type('https://example.com/path/to/file{enter}');
+
+      // Shou You don't find any results!
+      cy.get('#no-image-manifest-URL-task').should('exist').and('contain', `You don't find any results!`);
+    });
   });
 
   describe('when data is loaded', () => {
@@ -309,13 +336,13 @@ describe('Clear', () => {
       // Show is loading.
       cy.get('#isLoading').should('exist');
 
+      // Display cache information.
+      cy.get('#blobs').should('have.text', '5');
       cy.get('#scheduler-id-0').should('exist', 'ID :  1');
-
       cy.get('#isLoading').should('not.exist');
-
       cy.get('#scheduler-1-hostname-0').should('have.text', 'kind-worker1');
       cy.get('#scheduler-1-ip-0').should('have.text', '172.18.0.4');
-      cy.get('#scheduler-1-total-0').should('have.text', 'Total 2');
+      cy.get('#scheduler-1-proportion-0').should('contain', '60.00%');
 
       // Should display URL.
       cy.get('#scheduler-1-url-0').click();

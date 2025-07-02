@@ -24,10 +24,13 @@
       "hostname": "kind-worker1",
       "layers": [
         {
-          "url": "https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1ffc4b5459e82dc8e7ddd1d1a2ec469e85a1f076090c22851a1f2ce6f71e1a6"
+          "url": "https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1ffc4b5459e82dc8e7ddd1d1a2ec469e85a1f076090c22851a1f2ce6f71e1a6?format=json"
         },
         {
           "url": "https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:c1d6d1b2d5a367259e6e51a7f4d1ccd66a28cc9940d6599d8a8ea9544dd4b4a8"
+        },
+        {
+          "url": "https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:c1d6d1b2d5a367259e6e51a7f4d1ccd66a28cc9940d6599d8a8ea9544dd4b4a7"
         }
       ],
       "scheduler_cluster_id": 1

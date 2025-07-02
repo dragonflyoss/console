@@ -31,8 +31,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { getTaskJobResponse, createTaskJob, getTaskJob, createGetImageDistributionJob } from '../../../../lib/api';
-import { getDatetime, getPaginatedList } from '../../../../lib/utils';
+import {
+  getTaskJobResponse,
+  createTaskJob,
+  getTaskJob,
+  createGetImageDistributionJob,
+  createGetImageDistributionJobResponse,
+} from '../../../../lib/api';
+import { extractSHA256Regex, getDatetime, getPaginatedList } from '../../../../lib/utils';
 import _ from 'lodash';
 import SearchTaskAnimation from '../../../search-task-animation';
 import { useNavigate } from 'react-router-dom';
@@ -55,6 +61,9 @@ import { ReactComponent as IP } from '../../../../assets/images/resource/task/cl
 import { ReactComponent as Hostnames } from '../../../../assets/images/resource/task/clear-hostname.svg';
 import { ReactComponent as URL } from '../../../../assets/images/job/preheat/url.svg';
 import { ReactComponent as Total } from '../../../../assets/images/cluster/total.svg';
+import { ReactComponent as Proportion } from '../../../../assets/images/resource/task/proportion.svg';
+
+import { ReactComponent as Layer } from '../../../../assets/images/resource/task/layer.svg';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
@@ -71,14 +80,18 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   },
 }));
 
-type Layer = {
+type Layers = {
   url: string;
+};
+
+type Image = {
+  layers: Layers[];
 };
 
 type OriginalPeer = {
   ip: string;
   hostname: string;
-  layers: Layer[];
+  layers: Layers[];
   scheduler_cluster_id?: number;
 };
 
@@ -89,12 +102,13 @@ type ClusteredPeer = {
 
 type TransformedImage = {
   peers: ClusteredPeer[];
+  image: Image;
 };
 
-function transformImages(images: { peers: OriginalPeer[] }): TransformedImage {
+function transformImages(images: createGetImageDistributionJobResponse): TransformedImage {
   const clusters = new Map<number, Omit<OriginalPeer, 'scheduler_cluster_id'>[]>();
 
-  for (const peer of images.peers) {
+  for (const peer of images.peers || []) {
     const clusterId = peer.scheduler_cluster_id ?? 1;
 
     if (!clusters.has(clusterId)) {
@@ -115,8 +129,64 @@ function transformImages(images: { peers: OriginalPeer[] }): TransformedImage {
     scheduler_cluster_id: id,
   }));
 
-  return { peers: resultPeers };
+  return { peers: resultPeers, image: images.image };
 }
+
+const img = {
+  image: {
+    layers: [
+      {
+        url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:c7c72808bf776cd122bdaf4630a4a35ea319603d6a3b6cbffddd4c7fd6d2d269',
+      },
+      {
+        url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:9986a736f7d3d24bb01b0a560fa0f19c4b57e56c646e1f998941529d28710e6b',
+      },
+      {
+        url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:fdb99fa1c8f89464e911dce77afd5e26c6c09e9db625014431a4df3be4021359',
+      },
+      {
+        url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:fc5951fb196d09e569f4592b50e3a71ad01d11da229b8a500fea278eba0170c5',
+      },
+      {
+        url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:edbf1aa1d62d9c17605c1ee2d9dff43489bc0f8ae056367734386c35bfae226a',
+      },
+      {
+        url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f7307687fd72fb79eadd7f38f8cb9675b76480e32365a5d282a06f788944e9f2',
+      },
+    ],
+  },
+  peers: [
+    {
+      ip: '172.18.0.2',
+      hostname: 'kind-worker',
+      layers: [
+        {
+          url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:9986a736f7d3d24bb01b0a560fa0f19c4b57e56c646e1f998941529d28710e6b?token=abc123&format=json',
+        },
+        {
+          url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:fdb99fa1c8f89464e911dce77afd5e26c6c09e9db625014431a4df3be4021359',
+        },
+        {
+          url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:c7c72808bf776cd122bdaf4630a4a35ea319603d6a3b6cbffddd4c7fd6d2d269?token=abc123&format=json',
+        },
+      ],
+      scheduler_cluster_id: 1,
+    },
+    {
+      ip: '172.18.0.4',
+      hostname: 'kind-worker2',
+      layers: [
+        {
+          url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:fdb99fa1c8f89464e911dce77afd5e26c6c09e9db625014431a4df3be4021359',
+        },
+        {
+          url: 'https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:c7c72808bf776cd122bdaf4630a4a35ea319603d6a3b6cbffddd4c7fd6d2d269',
+        },
+      ],
+      scheduler_cluster_id: 1,
+    },
+  ],
+};
 
 export default function Clear() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -156,11 +226,14 @@ export default function Clear() {
     piece_length: 0,
   });
   const [imageManifestURL, setImageManifestURL] = useState<TransformedImage>();
+  const [layer, setLayer] = useState(0);
   const [pageStates, setPageStates] = useState<any>({});
 
   const { url, tag, application, filtered_query_params } = searchData;
   const navigate = useNavigate();
   const theme = useTheme();
+
+  const imagem = transformImages(img);
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -861,7 +934,6 @@ export default function Clear() {
 
     try {
       event.preventDefault();
-      const data = new FormData(event.currentTarget);
 
       const form = {
         args: {
@@ -871,12 +943,11 @@ export default function Clear() {
       };
 
       const imageManifest = await createGetImageDistributionJob(form);
+      const imageManifestTask = transformImages(imageManifest);
 
+      setImageManifestURL(imageManifestTask);
+      setLayer(imageManifestTask?.image?.layers?.length || 0);
       setSearchImageManifestISLodaing(false);
-
-      const res = transformImages(imageManifest);
-
-      setImageManifestURL(res);
       setIsLoading(false);
     } catch (error) {
       if (error instanceof Error) {
@@ -985,6 +1056,30 @@ export default function Clear() {
             Search by URL
           </ToggleButton>
           <ToggleButton
+            id="serach-image-manifest-url"
+            value="image-manifest-url"
+            size="small"
+            sx={{
+              '&.Mui-selected': {
+                backgroundColor: 'var(--palette-save-color)',
+                color: '#FFFFFF',
+                boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
+                '&:hover': {
+                  backgroundColor: 'var(--palette-save-color)',
+                },
+              },
+              '&:hover': {
+                backgroundColor: 'transparent',
+              },
+              p: '0.3rem 0.5rem',
+              color: 'var(--palette-dark-400Channel)',
+              textTransform: 'none',
+            }}
+          >
+            <ImageManifest className={styles.contentForCalculatingTaskIDIcon} />
+            Search by Image Manifest URL
+          </ToggleButton>
+          <ToggleButton
             id="serach-task-id"
             value="task-id"
             size="small"
@@ -1031,30 +1126,6 @@ export default function Clear() {
           >
             <ContentForCalculatingTaskID className={styles.contentForCalculatingTaskIDIcon} />
             Search by Calculating Task ID
-          </ToggleButton>
-          <ToggleButton
-            id="serach-image-manifest-url"
-            value="image-manifest-url"
-            size="small"
-            sx={{
-              '&.Mui-selected': {
-                backgroundColor: 'var(--palette-save-color)',
-                color: '#FFFFFF',
-                boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
-                '&:hover': {
-                  backgroundColor: 'var(--palette-save-color)',
-                },
-              },
-              '&:hover': {
-                backgroundColor: 'transparent',
-              },
-              p: '0.3rem 0.5rem',
-              color: 'var(--palette-dark-400Channel)',
-              textTransform: 'none',
-            }}
-          >
-            <ImageManifest className={styles.contentForCalculatingTaskIDIcon} />
-            Search by Image Manifest URL
           </ToggleButton>
         </StyledToggleButtonGroup>
       </Paper>
@@ -1218,7 +1289,7 @@ export default function Clear() {
                               <SchedulerCluster className={styles.schedulerClusterIcon} />
                               <Typography
                                 id="schedulerTotal"
-                                variant="subtitle2"
+                                variant="caption"
                                 fontFamily="mabry-bold"
                                 component="div"
                                 pl="0.3rem"
@@ -1428,9 +1499,25 @@ export default function Clear() {
       ) : Array.isArray(imageManifestURL?.peers) ? (
         imageManifestURL?.peers.length > 0 ? (
           <Box>
-            <Typography variant="h6" m="1rem 0" fontFamily="mabry-bold">
-              Cache
-            </Typography>
+            <Box className={styles.cacheHeader}>
+              <Typography variant="h6" fontFamily="mabry-bold" mr="0.6rem">
+                Cache
+              </Typography>
+            </Box>
+            <Box className={styles.bolbWrapper}>
+              <Typography variant="body2" fontFamily="mabry-bold" component="div" pr="0.3rem">
+                Blobs
+              </Typography>
+              <Typography
+                id="blobs"
+                variant="body2"
+                fontFamily="mabry-bold"
+                component="div"
+                className={styles.bolbText}
+              >
+                {layer || 0}
+              </Typography>
+            </Box>
             {imageManifestURL?.peers.map((item, index) => {
               const schedulerClusterId = item.scheduler_cluster_id;
               const totalPage = Math.ceil(item.peer.length / 5);
@@ -1446,7 +1533,7 @@ export default function Clear() {
                       <Box className={styles.schedulerClusterWrapper} id={`scheduler-id-${index}`}>
                         <SchedulerCluster className={styles.schedulerClusterIcon} />
                         <Typography
-                          variant="subtitle2"
+                          variant="caption"
                           fontFamily="mabry-bold"
                           component="div"
                           pl="0.3rem"
@@ -1457,9 +1544,9 @@ export default function Clear() {
                       </Box>
                     </Box>
                     <Divider />
-                    {paginatedPeers?.map((items, index) => {
+                    {paginatedPeers?.map((items, peerIndex) => {
                       return (
-                        <Box key={index}>
+                        <Box key={peerIndex}>
                           <Accordion
                             disableGutters
                             elevation={0}
@@ -1477,22 +1564,24 @@ export default function Clear() {
                             <AccordionSummary
                               expandIcon={<ExpandMoreIcon />}
                               aria-controls="panel1-content"
-                              id={`scheduler-${item?.scheduler_cluster_id}-url-${index}`}
+                              id={`scheduler-${item?.scheduler_cluster_id}-url-${peerIndex}`}
                             >
                               <Box className={styles.imageManifestHeader}>
                                 <Box className={styles.hostnameContainer}>
-                                  <Box
-                                    className={styles.hostnameWrapper}
-                                    id={`scheduler-${item?.scheduler_cluster_id}-hostname-${index}`}
-                                  >
-                                    <Hostnames className={styles.hostnameIcon} />
-                                    <Typography variant="subtitle2" ml="0.4rem" fontFamily="mabry-bold">
-                                      {items?.hostname}
-                                    </Typography>
+                                  <Box width="16%">
+                                    <Box
+                                      className={styles.hostnameWrapper}
+                                      id={`scheduler-${item?.scheduler_cluster_id}-hostname-${peerIndex}`}
+                                    >
+                                      <Hostnames className={styles.hostnameIcon} />
+                                      <Typography variant="subtitle2" ml="0.4rem" fontFamily="mabry-bold">
+                                        {items?.hostname}
+                                      </Typography>
+                                    </Box>
                                   </Box>
                                   <Box
                                     className={styles.hostnameWrapper}
-                                    id={`scheduler-${item?.scheduler_cluster_id}-ip-${index}`}
+                                    id={`scheduler-${item?.scheduler_cluster_id}-ip-${peerIndex}`}
                                   >
                                     <IP className={styles.hostnameIcon} />
                                     <Typography variant="subtitle2" ml="0.4rem" fontFamily="mabry-bold">
@@ -1501,34 +1590,47 @@ export default function Clear() {
                                   </Box>
                                 </Box>
                                 <Box
-                                  className={styles.totalContainer}
-                                  id={`scheduler-${item?.scheduler_cluster_id}-total-${index}`}
+                                  className={styles.bolbProportionContainer}
+                                  id={`scheduler-${item?.scheduler_cluster_id}-proportion-${peerIndex}`}
                                 >
-                                  <Total className={styles.totalIcon} />
-                                  <Typography component="span" variant="subtitle2" fontFamily="mabry-bold" pl="0.3rem">
-                                    {`Total ${items?.layers.length}`}
+                                  <Proportion className={styles.bolbIcon} />
+                                  <Typography
+                                    component="span"
+                                    variant="subtitle2"
+                                    className={styles.bolbProportionText}
+                                  >
+                                    {`Bolb: ${((items?.layers?.length / layer) * 100).toFixed(2) || 0}%`}
                                   </Typography>
                                 </Box>
                               </Box>
                             </AccordionSummary>
                             <AccordionDetails
-                              key={index}
+                              key={peerIndex}
                               sx={{
                                 padding: '1rem',
                                 backgroundColor: 'var(--palette-background-paper)',
                               }}
                             >
                               <Box>
-                                <Typography component="div" variant="subtitle1" fontFamily="mabry-bold" mb="1rem">
-                                  URL
-                                </Typography>
+                                <Box className={styles.clusterWrapper}>
+                                  <Paper variant="outlined" className={styles.bolbIconWrapper}>
+                                    <Layer className={styles.cluster} />
+                                  </Paper>
+                                  <Typography component="div" variant="body1" fontFamily="mabry-bold" ml="0.5rem">
+                                    Blob
+                                  </Typography>
+                                </Box>
                                 <Box className={styles.cardCantainer}>
-                                  {items?.layers.map((item: any, urlIndex: any) => (
-                                    <Box key={index} className={styles.urlsWrapper}>
-                                      <URL className={styles.urlIcon} />
-                                      <Tooltip title={item?.url || '-'} placement="top">
-                                        <Typography id={`url-${index}`} className={styles.url} variant="body2">
-                                          {item?.url}
+                                  {items?.layers.map((item: any, bolbIndex: any) => (
+                                    <Box key={bolbIndex} className={styles.urlsWrapper}>
+                                      <Tooltip title={extractSHA256Regex(item?.url) || '-'} placement="top">
+                                        <Typography
+                                          id={`url-${bolbIndex}`}
+                                          className={styles.url}
+                                          fontFamily="mabry-bold"
+                                          variant="body2"
+                                        >
+                                          {extractSHA256Regex(item?.url)}
                                         </Typography>
                                       </Tooltip>
                                     </Box>
@@ -1537,8 +1639,7 @@ export default function Clear() {
                               </Box>
                             </AccordionDetails>
                           </Accordion>
-
-                          {index !== paginatedPeers.length - 1 && <Divider />}
+                          {peerIndex !== paginatedPeers.length - 1 && <Divider />}
                         </Box>
                       );
                     })}
@@ -1560,7 +1661,10 @@ export default function Clear() {
             })}
           </Box>
         ) : (
-          <Box id="no-task" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '6rem' }}>
+          <Box
+            id="no-image-manifest-URL-task"
+            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '6rem' }}
+          >
             <NoSearch className={styles.noSearch} />
             <Box>
               <Typography variant="h5" component="span">

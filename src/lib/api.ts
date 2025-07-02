@@ -994,7 +994,7 @@ interface ImageDistributionpeers {
 }
 
 export interface createGetImageDistributionJobResponse {
-  image: layers[];
+  image: { layers: layers[] };
   peers: ImageDistributionpeers[];
 }
 

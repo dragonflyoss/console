@@ -64,7 +64,7 @@
 
 .schedulerClusterWrapper {
   border: 1px solid #d5d2d2;
-  padding: 0.2rem 0.4rem;
+  padding: 0.1rem 0.3rem;
   border-radius: 0.3rem;
   display: inline-flex;
   align-items: center;
@@ -115,6 +115,29 @@
   width: 100%;
 }
 
+.cacheHeader {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.bolbWrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: var(--palette-table-title-text-color);
+}
+
+.bolbText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.3rem;
+  background-color: var(--palette-background-inactive);
+}
+
 .hostnameContainer {
   display: flex;
   align-items: center;
@@ -130,7 +153,6 @@
   display: inline-flex;
   padding: 0.3rem 0.5rem;
   align-items: center;
-  margin-right: 1rem;
 }
 
 .hostnameIcon {
@@ -142,7 +164,7 @@
   border-color: var(--palette-palette-divider) !important;
   background-color: var(--palette-background-inactive) !important;
   border-radius: var(--menu-border-radius) !important;
-  padding: 0.6rem 0.4rem;
+  padding: 0.6rem 0.6rem;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -155,31 +177,57 @@
 }
 
 .urlIcon {
-  height: 1.2rem !important;
+  width: 8%;
+  height: 1.4rem !important;
   color: var(--palette-detail-lable-color);
 }
 
+.clusterWrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.cluster {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .cardCantainer {
-  gap: calc(1rem);
+  gap: calc(1.2rem);
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
 
-.totalContainer {
+.bolbProportionContainer {
   display: flex;
   align-items: center;
   padding: 0.3rem;
-  background-color: var(--palette-grey-background-color) !important;
+  background-color: var(--palette-button-color) !important;
   border-radius: var(--menu-border-radius) !important;
   margin-right: 0.4rem;
+  color: var(--palette-scopes-icon-color);
 }
 
-.totalIcon {
+.bolbIcon {
   width: 1rem;
   height: 1rem;
+  /* color: var(--palette-description-color); */
 }
 
-.totalText {
-  color: var(--palette-description-color);
-  padding-left: 0.3rem;
+.bolbProportionText {
+  padding-left: 0.4rem;
+}
+
+.bolbIconWrapper {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 0.6rem !important;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+  z-index: 0;
+  color: var(--palette-color) !important;
+  background-image: none;
+  padding: 0.4rem;
+  background-color: var(--palette-background-paper) !important;
+  box-shadow: var(--palette-card-box-shadow) !important;
 }

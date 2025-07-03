@@ -731,12 +731,12 @@ export default function JobGC() {
                             }}
                           />
                         </TableCell>
-                        <TableCell align="center" id={`ip-${item?.id}`}>
+                        <TableCell align="center" id={`ttl-${item?.id}`}>
                           <Typography variant="body1" component="div">
-                            {ms(item?.args?.ttl / 100000, { long: true })}
+                            {ms(item?.args?.ttl / 1000000, { long: true }) || 0}
                           </Typography>
                         </TableCell>
-                        <TableCell align="center" id={`port-${item?.port}`}>
+                        <TableCell align="center" id={`purged-${item?.port}`}>
                           <Typography variant="body1" fontFamily="mabry-bold" component="div">
                             {item?.result?.purged}
                           </Typography>
@@ -761,7 +761,9 @@ export default function JobGC() {
                             {item?.state}
                           </Box>
                         </TableCell>
-                        <TableCell align="center">{getDatetime(item.created_at)}</TableCell>
+                        <TableCell align="center" id={`create-at-${item?.id}`}>
+                          {getDatetime(item.created_at)}
+                        </TableCell>
                       </TableRow>
                     );
                   })}

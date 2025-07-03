@@ -36,13 +36,19 @@ describe('audit', () => {
   });
 
   it('when data is loaded', () => {
+    // Show audit ttl.
     cy.get('#audit-ttl').should('have.text', '3 days');
 
+    // Show gc history.
     cy.get('#history').should('have.text', '11');
+
     cy.get('#pagination').should('exist');
 
+    // Display gc history information.
     cy.get('#trigger-119').should('have.text', 'Manual');
+    cy.get('#ttl-119').should('have.text', '2 days');
 
+    // Go to next page.
     cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
     cy.get('#id-97').should('have.text', 97);

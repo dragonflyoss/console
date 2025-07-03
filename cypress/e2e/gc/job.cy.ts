@@ -36,17 +36,22 @@ describe('audit', () => {
   });
 
   it('when data is loaded', () => {
+    // Displays the Job ttl.
     cy.get('#job-ttl').should('have.text', '13 days');
 
+    // Displays the GC history.
     cy.get('#history').should('have.text', '13');
     cy.get('#pagination').should('exist');
 
+    // Display gc history information.
     cy.get('#trigger-117').should('have.text', 'Manual');
 
     // Go to last page.
     cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 
+    // Display gc history information.
     cy.get('#id-101').should('have.text', 101);
+    cy.get('#ttl-101').should('have.text', '13 days');
   });
 
   it('when no data is loaded', () => {

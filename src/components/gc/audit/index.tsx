@@ -732,7 +732,7 @@ export default function AuditGC() {
                     </TableCell>
                     <TableCell align="center" id={`ttl-${item?.id}`}>
                       <Typography variant="body1" component="div">
-                        {ms(item?.args?.ttl / 100000, { long: true })}
+                        {ms(item?.args?.ttl / 1000000, { long: true }) || 0}
                       </Typography>
                     </TableCell>
                     <TableCell align="center" id={`purged-${item?.port}`}>

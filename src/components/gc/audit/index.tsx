@@ -314,36 +314,17 @@ export default function AuditGC() {
         <Divider />
         <DialogContent>
           <Box>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'column',
-              }}
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderColor: '#D3D3D3',
-                  border: '0.1rem solid #D3D3D3',
-                  width: '2.8rem',
-                  height: '2.8rem',
-                  borderRadius: '0.3rem',
-                  mb: '.8rem',
-                }}
-              >
-                <DialogTTL className={styles.TTLICon} />
+            <Box className={styles.ttlContainer}>
+              <Box className={styles.ttlWrapper}>
+                <DialogTTL className={styles.ttlICon} />
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: '1rem', justifyContent: 'center' }}>
+              <Box textAlign="center" mb="1rem">
                 <Typography variant="subtitle1" fontFamily="mabry-bold" component="div" pr="0.3rem" pt="0.1rem">
-                  Keep the records in this interval
+                  Keep records in
                 </Typography>
               </Box>
             </Box>
-            <Box sx={{ display: 'flex', pt: '1rem', position: 'relative' }}>
+            <Box className={styles.ttlInputWrapper}>
               <TextField
                 id="audit-ttl-input"
                 name="audit"

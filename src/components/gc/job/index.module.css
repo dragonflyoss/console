@@ -168,7 +168,31 @@
   margin-right: 0.4rem;
 }
 
-.TTLICon {
+.ttlContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.ttlWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d3d3d3;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 0.3rem;
+  margin-bottom: 0.8rem;
+}
+
+.ttlICon {
   width: 1.4rem;
   height: 1.4rem;
+}
+
+.ttlInputWrapper {
+  display: flex;
+  align-items: center;
+  padding-top: 1rem;
 }

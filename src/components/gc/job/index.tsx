@@ -733,7 +733,7 @@ export default function JobGC() {
                         </TableCell>
                         <TableCell align="center" id={`ttl-${item?.id}`}>
                           <Typography variant="body1" component="div">
-                            {ms(item?.args?.ttl / 1000000 || 0, { long: true })}
+                            {ms(item?.args?.ttl / 1000000, { long: true }) || 0}
                           </Typography>
                         </TableCell>
                         <TableCell align="center" id={`purged-${item?.port}`}>

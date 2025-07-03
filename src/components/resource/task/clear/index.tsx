@@ -870,6 +870,7 @@ export default function Clear() {
 
   const handleSearchByImageManifestURL = async (event: any) => {
     setIsLoading(true);
+    setTask({});
     setSearchImageManifestISLodaing(true);
 
     try {
@@ -1103,7 +1104,6 @@ export default function Clear() {
               width: optional ? '45rem' : '36rem',
               position: 'absolute',
               backgroundColor: 'var(--palette-background-menu-paper)',
-              zIndex: '100001',
             }}
           >
             <TextField

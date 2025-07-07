@@ -43,7 +43,6 @@ import { ReactComponent as Application } from '../../../assets/images/resource/t
 import { ReactComponent as PieceLength } from '../../../assets/images/job/preheat/piece-length.svg';
 import { ReactComponent as Percentage } from '../../../assets/images/job/preheat/percentage.svg';
 import { ReactComponent as Count } from '../../../assets/images/job/preheat/count.svg';
-import { ReactComponent as ContentForCalculatingTaskID } from '../../../assets/images/resource/task/content-for-calculating-task-id.svg';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -295,77 +294,43 @@ export default function ShowPreheat() {
                 URL
               </Typography>
             </Box>
-            {(preheat?.args?.urls !== null && Array.isArray(preheat?.args?.urls) && preheat?.args?.urls?.length > 0 && (
-              <>
-                {preheat?.args?.urls?.length === 1 ? (
-                  <CustomWidthTooltip title={preheat?.args?.urls?.[0] || '-'} placement="bottom">
+            {(Array.isArray(preheat?.args?.urls) && preheat?.args?.urls?.length > 0) || preheat?.args?.url ? (
+              <Box className={styles.urlsWrapper}>
+                {preheat?.args?.url && (
+                  <CustomWidthTooltip title={preheat?.args?.url || '-'} placement="bottom">
                     <Typography
                       id="url"
                       variant="body1"
                       fontFamily="mabry-bold"
                       component="div"
-                      className={styles.urlContent}
+                      className={styles.urls}
                     >
-                      {preheat?.args?.urls?.[0] || '-'}
+                      {preheat?.args?.url || '-'}
                     </Typography>
                   </CustomWidthTooltip>
-                ) : (
-                  preheat?.args?.urls?.length > 1 && (
-                    <Box className={styles.urlsWrapper}>
-                      {preheat?.args?.urls?.map((item, index) => (
-                        <CustomWidthTooltip key={index} title={item || '-'} placement="bottom">
-                          <Typography
-                            id={`url-${index}`}
-                            variant="body1"
-                            fontFamily="mabry-bold"
-                            className={styles.urls}
-                            component="div"
-                          >
-                            {item || '-'}
-                          </Typography>
-                        </CustomWidthTooltip>
-                      ))}
-                    </Box>
-                  )
                 )}
-              </>
-            )) || (
+                {preheat?.args?.urls !== null &&
+                  Array.isArray(preheat?.args?.urls) &&
+                  preheat?.args?.urls?.length > 0 &&
+                  preheat?.args?.urls?.map((item, index) => (
+                    <CustomWidthTooltip key={index} title={item || '-'} placement="bottom">
+                      <Typography
+                        id={`url-${index}`}
+                        variant="body1"
+                        fontFamily="mabry-bold"
+                        className={styles.urls}
+                        component="div"
+                      >
+                        {item || '-'}
+                      </Typography>
+                    </CustomWidthTooltip>
+                  ))}
+              </Box>
+            ) : (
               <Typography id="url" variant="body1" className={styles.informationContent}>
                 -
               </Typography>
             )}
-          </Box>
-          <Box className={styles.informationContainer}>
-            <Box className={styles.informationTitle}>
-              <ContentForCalculatingTaskID className={styles.informationTitleIcon} />
-              <Typography
-                variant="body1"
-                fontFamily="mabry-bold"
-                component="div"
-                className={styles.informationTitleText}
-              >
-                Content for Calculating Task ID
-              </Typography>
-            </Box>
-            <Box width="70%">
-              <CustomWidthTooltip title={preheat?.args?.content_for_calculating_task_id || '-'} placement="bottom">
-                <Typography
-                  id="content-for-calculating-task-id"
-                  variant="body1"
-                  fontFamily="mabry-bold"
-                  component="div"
-                  className={styles.contentForCalculatingTaskID}
-                >
-                  {isLoading ? (
-                    <Skeleton sx={{ width: '4rem' }} />
-                  ) : preheat?.args?.content_for_calculating_task_id ? (
-                    preheat?.args?.content_for_calculating_task_id
-                  ) : (
-                    '-'
-                  )}
-                </Typography>
-              </CustomWidthTooltip>
-            </Box>
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>

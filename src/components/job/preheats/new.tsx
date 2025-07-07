@@ -25,9 +25,6 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  ToggleButtonGroup,
-  toggleButtonGroupClasses,
-  ToggleButton,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import DoNotDisturbOnOutlinedIcon from '@mui/icons-material/DoNotDisturbOnOutlined';
@@ -39,23 +36,6 @@ import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './new.module.css';
 import AddIcon from '@mui/icons-material/Add';
 import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
-import { ReactComponent as ContentForCalculatingTaskID } from '../../../assets/images/resource/task/content-for-calculating-task-id.svg';
-import { ReactComponent as Args } from '../../../assets/images/job/preheat/args.svg';
-
-const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
-  [`& .${toggleButtonGroupClasses.grouped}`]: {
-    margin: theme.spacing(0.7),
-    border: 0,
-    borderRadius: theme.shape.borderRadius,
-    [`&.${toggleButtonGroupClasses.disabled}`]: {
-      border: 0,
-    },
-  },
-  [`& .${toggleButtonGroupClasses.middleButton},& .${toggleButtonGroupClasses.lastButton}`]: {
-    marginLeft: -1,
-    border: 0,
-  },
-}));
 
 const PrettoSlider = styled(Slider)(({ theme }) => ({
   color: 'var(--palette-description-color)',
@@ -116,7 +96,6 @@ export default function NewPreheat() {
   const [tagError, setTagError] = useState(false);
   const [countError, setCountError] = useState(false);
   const [clusterError, setClusterError] = useState(false);
-  const [contentForCalculatingTaskIDError, setContentForCalculatingTaskIDError] = useState(false);
   const [applicationError, setApplicationError] = useState(false);
   const [filterError, setFilterError] = useState(false);
   const [pieceLengthError, setPieceLengthError] = useState(false);
@@ -133,7 +112,6 @@ export default function NewPreheat() {
   const [count, setCount] = useState<string>('all');
   const [filterHelperText, setFilterHelperText] = useState('Fill in the characters, the length is 0-100.');
   const [percentage, setPercentage] = useState(50);
-  const [search, setSearch] = useState<string | null>('args');
 
   const navigate = useNavigate();
 
@@ -441,30 +419,6 @@ export default function NewPreheat() {
     },
   ];
 
-  const calculatingTaskIDForm = {
-    formProps: {
-      id: 'content-for-calculating-task-id',
-      label: 'Content for Calculating Task ID',
-      name: 'contentForCalculatingTaskID',
-      required: true,
-      autoComplete: 'family-name',
-      placeholder: 'Enter your content for calculating task id',
-      helperText: contentForCalculatingTaskIDError ? 'Fill in the characters, the length is 1-1000.' : '',
-      error: contentForCalculatingTaskIDError,
-
-      onChange: (e: any) => {
-        changeValidate(e.target.value, calculatingTaskIDForm);
-      },
-    },
-    syncError: false,
-    setError: setContentForCalculatingTaskIDError,
-
-    validate: (value: string) => {
-      const reg = /^.{1,1000}$/;
-      return reg.test(value);
-    },
-  };
-
   const scopeList = [
     { label: 'Single Seed Peer', name: 'single_seed_peer' },
     { label: 'All Seed Peers', name: 'all_seed_peers' },
@@ -476,12 +430,6 @@ export default function NewPreheat() {
     const currentSelection = scopeList.find((scope) => scope.name === selectedValues);
     setScope(currentSelection?.name || '');
     setCount('all');
-  };
-
-  const handleChangeSearch = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
-    if (newAlignment) {
-      setSearch(newAlignment);
-    }
   };
 
   const URLValidate = (value: any) => {
@@ -517,226 +465,139 @@ export default function NewPreheat() {
     const url = event.currentTarget.elements.url.value;
     const data = new FormData(event.currentTarget);
 
-    if (search === 'args') {
-      const tag = event.currentTarget.elements.tag.value;
-      const application = event.currentTarget.elements.application.value;
-      const filterText = event.currentTarget.elements.filteredQueryParams.value;
-      const pieceLength = event.currentTarget.elements.pieceLength.value;
-      const filters = filter.join('&');
+    const tag = event.currentTarget.elements.tag.value;
+    const application = event.currentTarget.elements.application.value;
+    const filterText = event.currentTarget.elements.filteredQueryParams.value;
+    const pieceLength = event.currentTarget.elements.pieceLength.value;
+    const filters = filter.join('&');
 
-      const data = new FormData(event.currentTarget);
+    let percentage = null;
+    let countValue = null;
 
-      let percentage = null;
-      let countValue = null;
-
-      if (count !== 'all') {
-        if (count === 'percentage') {
-          percentage = event.currentTarget.elements.scopePercentage.value;
-        } else if (count === 'count') {
-          countValue = event.currentTarget.elements.scopeCount.value;
-        }
+    if (count !== 'all') {
+      if (count === 'percentage') {
+        percentage = event.currentTarget.elements.scopePercentage.value;
+      } else if (count === 'count') {
+        countValue = event.currentTarget.elements.scopeCount.value;
       }
+    }
 
-      if (filterText) {
-        setFilterError(true);
-        setFilterHelperText('Please press ENTER to end the filter creation');
-      } else {
-        setFilterError(false);
-        setFilterHelperText('Fill in the characters, the length is 0-100.');
-      }
+    if (filterText) {
+      setFilterError(true);
+      setFilterHelperText('Please press ENTER to end the filter creation');
+    } else {
+      setFilterError(false);
+      setFilterHelperText('Fill in the characters, the length is 0-100.');
+    }
 
-      informationForm.forEach((item) => {
+    informationForm.forEach((item) => {
+      const value = data.get(item.formProps.name);
+      item.setError(!item.validate(value as string));
+      item.syncError = !item.validate(value as string);
+    });
+
+    argsForm.forEach((item) => {
+      if (item.formProps.name !== 'filteredQueryParams') {
         const value = data.get(item.formProps.name);
         item.setError(!item.validate(value as string));
         item.syncError = !item.validate(value as string);
-      });
-
-      argsForm.forEach((item) => {
-        if (item.formProps.name !== 'filteredQueryParams') {
-          const value = data.get(item.formProps.name);
-          item.setError(!item.validate(value as string));
-          item.syncError = !item.validate(value as string);
-        }
-      });
-
-      urlForm.setError(!urlForm.validate(url as string));
-      urlForm.syncError = !urlForm.validate(url as string);
-
-      const urlValidate = URLs.every((item: { url: any; error: boolean }, index) => {
-        const isValid = URLValidate(item.url);
-
-        const newURL = [...URLs];
-        newURL[index].error = !isValid;
-
-        setURLS(newURL);
-        return isValid;
-      });
-
-      const headerValidate = headers.every((item, index) => {
-        const isValidKey = headersKeyValidate(item.key.key);
-        const isValidValue = headersValueValidate(item.value.value);
-        const newURL = [...headers];
-
-        newURL[index].key.error = !isValidKey;
-        newURL[index].value.error = !isValidValue;
-
-        setHeaders(newURL);
-
-        return isValidKey && isValidValue;
-      });
-
-      const urlList = URLs.map((item) => item.url);
-
-      urlList.unshift(url);
-
-      const validateCount = countValidate(countValue);
-
-      const headerList: { [key: string]: string } = headers.reduce(
-        (accumulator, currentValue) => ({ ...accumulator, [currentValue.key.key]: currentValue.value.value }),
-        {},
-      );
-
-      let clusterIDValidate = true;
-
-      if (clusterName.length === 0) {
-        setClusterError(true);
-        clusterIDValidate = false;
-      } else {
-        clusterIDValidate = true;
       }
+    });
 
-      const canSubmit = Boolean(
-        !informationForm.filter((item) => item.syncError).length &&
-          !argsForm.filter((item) => item.syncError).length &&
-          !urlForm.syncError &&
-          clusterIDValidate &&
-          headerValidate &&
-          urlValidate &&
-          Boolean(!filterText) &&
-          (countValue ? validateCount : true),
-      );
+    urlForm.setError(!urlForm.validate(url as string));
+    urlForm.syncError = !urlForm.validate(url as string);
 
-      const clusterSet = new Set(clusterName);
+    const urlValidate = URLs.every((item: { url: any; error: boolean }, index) => {
+      const isValid = URLValidate(item.url);
 
-      const clusterID = cluster.filter((item) => clusterSet.has(item.name)).map((item) => item.id);
+      const newURL = [...URLs];
+      newURL[index].error = !isValid;
 
-      const formDate = {
-        bio: bio,
-        type: 'preheat',
-        args: {
-          type: 'file',
-          urls: urlList,
-          tag: tag,
-          application: application,
-          filtered_query_params: filters,
-          headers: headerList,
-          scope: scope,
-          ...(countValue && count === 'count' && { count: Number(countValue) }),
-          ...(percentage && count === 'percentage' && { percentage: Number(percentage) }),
-          ...(pieceLength && pieceLength !== 0 && { piece_length: pieceLength * 1024 * 1024 }),
-        },
-        scheduler_cluster_ids: clusterID,
-      };
+      setURLS(newURL);
+      return isValid;
+    });
 
-      if (canSubmit) {
-        try {
-          const job = await createJob({ ...formDate });
+    const headerValidate = headers.every((item, index) => {
+      const isValidKey = headersKeyValidate(item.key.key);
+      const isValidValue = headersValueValidate(item.value.value);
+      const newURL = [...headers];
 
-          setLoadingButton(false);
-          navigate(`/jobs/preheats/${job.id}`);
-        } catch (error) {
-          if (error instanceof Error) {
-            setLoadingButton(false);
-            setErrorMessage(true);
-            setErrorMessageText(error.message);
-          }
-        }
-      } else {
+      newURL[index].key.error = !isValidKey;
+      newURL[index].value.error = !isValidValue;
+
+      setHeaders(newURL);
+
+      return isValidKey && isValidValue;
+    });
+
+    const urlList = URLs.map((item) => item.url);
+
+    urlList.unshift(url);
+
+    const validateCount = countValidate(countValue);
+
+    const headerList: { [key: string]: string } = headers.reduce(
+      (accumulator, currentValue) => ({ ...accumulator, [currentValue.key.key]: currentValue.value.value }),
+      {},
+    );
+
+    let clusterIDValidate = true;
+
+    if (clusterName.length === 0) {
+      setClusterError(true);
+      clusterIDValidate = false;
+    } else {
+      clusterIDValidate = true;
+    }
+
+    const canSubmit = Boolean(
+      !informationForm.filter((item) => item.syncError).length &&
+        !argsForm.filter((item) => item.syncError).length &&
+        !urlForm.syncError &&
+        clusterIDValidate &&
+        headerValidate &&
+        urlValidate &&
+        Boolean(!filterText) &&
+        (countValue ? validateCount : true),
+    );
+
+    const clusterSet = new Set(clusterName);
+
+    const clusterID = cluster.filter((item) => clusterSet.has(item.name)).map((item) => item.id);
+
+    const formDate = {
+      bio: bio,
+      type: 'preheat',
+      args: {
+        type: 'file',
+        urls: urlList,
+        tag: tag,
+        application: application,
+        filtered_query_params: filters,
+        headers: headerList,
+        scope: scope,
+        ...(countValue && count === 'count' && { count: Number(countValue) }),
+        ...(percentage && count === 'percentage' && { percentage: Number(percentage) }),
+        ...(pieceLength && pieceLength !== 0 && { piece_length: pieceLength * 1024 * 1024 }),
+      },
+      scheduler_cluster_ids: clusterID,
+    };
+
+    if (canSubmit) {
+      try {
+        const job = await createJob({ ...formDate });
+
         setLoadingButton(false);
+        navigate(`/jobs/preheats/${job.id}`);
+      } catch (error) {
+        if (error instanceof Error) {
+          setLoadingButton(false);
+          setErrorMessage(true);
+          setErrorMessageText(error.message);
+        }
       }
     } else {
-      const contentForCalculatingTaskID = event.currentTarget.elements.contentForCalculatingTaskID.value;
-
-      let clusterIDValidate = true;
-
-      informationForm.forEach((item) => {
-        const value = data.get(item.formProps.name);
-        item.setError(!item.validate(value as string));
-        item.syncError = !item.validate(value as string);
-      });
-
-      informationForm.forEach((item) => {
-        const value = data.get(item.formProps.name);
-        item.setError(!item.validate(value as string));
-        item.syncError = !item.validate(value as string);
-      });
-
-      const urlList = URLs.map((item) => item.url);
-      urlList.unshift(url);
-
-      if (clusterName.length === 0) {
-        setClusterError(true);
-        clusterIDValidate = false;
-      } else {
-        clusterIDValidate = true;
-      }
-
-      const clusterSet = new Set(clusterName);
-      const clusterID = cluster.filter((item) => clusterSet.has(item.name)).map((item) => item.id);
-
-      urlForm.setError(!urlForm.validate(url as string));
-      urlForm.syncError = !urlForm.validate(url as string);
-
-      const urlValidate = URLs.every((item: { url: any; error: boolean }, index) => {
-        const isValid = URLValidate(item.url);
-
-        const newURL = [...URLs];
-        newURL[index].error = !isValid;
-
-        setURLS(newURL);
-        return isValid;
-      });
-
-      calculatingTaskIDForm.setError(!calculatingTaskIDForm.validate(contentForCalculatingTaskID));
-
-      calculatingTaskIDForm.syncError = !calculatingTaskIDForm.validate(contentForCalculatingTaskID);
-
-      const canSubmit = Boolean(
-        !informationForm.filter((item) => item.syncError).length &&
-          !urlForm.syncError &&
-          !calculatingTaskIDForm.syncError &&
-          clusterIDValidate &&
-          urlValidate &&
-          !calculatingTaskIDForm.syncError,
-      );
-
-      const formDate = {
-        bio: bio,
-        type: 'preheat',
-        args: {
-          type: 'file',
-          urls: urlList,
-          content_for_calculating_task_id: contentForCalculatingTaskID,
-        },
-        scheduler_cluster_ids: clusterID,
-      };
-
-      if (canSubmit) {
-        try {
-          const job = await createJob({ ...formDate });
-
-          setLoadingButton(false);
-          navigate(`/jobs/preheats/${job.id}`);
-        } catch (error) {
-          if (error instanceof Error) {
-            setLoadingButton(false);
-            setErrorMessage(true);
-            setErrorMessageText(error.message);
-          }
-        }
-      } else {
-        setLoadingButton(false);
-      }
+      setLoadingButton(false);
     }
   };
 
@@ -944,233 +805,30 @@ export default function NewPreheat() {
             </Button>
           </Box>
         </Box>
-        <Paper
-          elevation={0}
-          sx={{
-            display: 'inline-flex',
-            flexWrap: 'wrap',
-            m: '1rem 0',
-            backgroundColor: 'var(--palette-grey-600Channel)',
-            borderRadius: '0.4rem',
-            overflow: 'hidden',
-          }}
-        >
-          <StyledToggleButtonGroup
-            size="small"
-            value={search}
-            exclusive
-            onChange={handleChangeSearch}
-            aria-label="Platform"
-          >
-            <ToggleButton
-              id="create-args"
-              value="args"
-              size="small"
-              sx={{
-                '&.Mui-selected': {
-                  backgroundColor: 'var(--palette-save-color)',
-                  color: '#FFFFFF',
-                  boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
-                  '&:hover': {
-                    backgroundColor: 'var(--palette-save-color)',
-                  },
-                },
-                '&:hover': {
-                  backgroundColor: 'transparent',
-                },
-                p: '0.3rem 0.5rem',
-                color: 'var(--palette-dark-400Channel)',
-                textTransform: 'none',
-              }}
-            >
-              <Args className={styles.contentForCalculatingTaskIDIcon} />
-              Arguments
-            </ToggleButton>
-            <ToggleButton
-              id="create-content-for-calculating-task-id"
-              value="content-for-calculating-task-id"
-              size="small"
-              sx={{
-                '&.Mui-selected': {
-                  backgroundColor: 'var(--palette-save-color)',
-                  color: '#FFFFFF',
-                  boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
-                  '&:hover': {
-                    backgroundColor: 'var(--palette-save-color)',
-                  },
-                },
-                '&:hover': {
-                  backgroundColor: 'transparent',
-                },
-                p: '0.3rem 0.5rem',
-                color: 'var(--palette-dark-400Channel)',
-                textTransform: 'none',
-              }}
-            >
-              <ContentForCalculatingTaskID className={styles.contentForCalculatingTaskIDIcon} />
-              Content for Calculating Task ID
-            </ToggleButton>
-          </StyledToggleButtonGroup>
-        </Paper>
-        {search === 'args' ? (
-          <Box className={styles.title}>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-              {argsForm.map((item) => {
-                return item?.filterFormProps?.id === 'filteredQueryParams' ? (
-                  <Box key={item.formProps.id} sx={{ width: '100%' }}>
-                    <Autocomplete
-                      freeSolo
-                      multiple
-                      disableClearable
-                      {...item.filterFormProps}
-                      size="small"
-                      className={styles.filterInput}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          InputProps={{
-                            ...params.InputProps,
-                            endAdornment: (
-                              <>
-                                {params.InputProps.endAdornment}
-                                <Tooltip
-                                  title={
-                                    'By setting the filter parameter, you can specify the file type of the resource that needs to be preheated. The filter is used to generate a unique preheat task and filter unnecessary query parameters in the URL, separated by & characters.'
-                                  }
-                                  placement="top"
-                                >
-                                  <HelpIcon
-                                    sx={{
-                                      color: 'var(--palette-grey-300Channel)',
-                                      width: '0.8rem',
-                                      height: '0.8rem',
-                                      mr: '0.3rem',
-                                      ':hover': { color: 'var(--palette-description-color)' },
-                                    }}
-                                  />
-                                </Tooltip>
-                              </>
-                            ),
-                          }}
-                          color="success"
-                          {...item.formProps}
-                        />
-                      )}
-                    />
-                  </Box>
-                ) : item.formProps.id === 'pieceLength' ? (
-                  <Box>
-                    <TextField color="success" size="small" {...item.formProps} className={styles.pieceLengthInput} />
-                    <FormControl className={styles.selectInput} color="success" required size="small">
-                      <InputLabel id="scope">Scope</InputLabel>
-                      <Select
-                        id="select-scope"
-                        label="scope"
-                        value={scope}
-                        onChange={handleSelectScope}
-                        MenuProps={{
-                          PaperProps: {
-                            style: {
-                              maxHeight: '14rem',
-                              width: '18rem',
-                            },
-                          },
-                        }}
-                      >
-                        {scopeList.map((item: any) => (
-                          <MenuItem
-                            id={item.name}
-                            key={item.name}
-                            value={item.name}
-                            sx={{ m: '0.3rem', borderRadius: '0.2rem' }}
-                          >
-                            {item.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    {scope !== 'single_seed_peer' ? (
-                      <Paper variant="outlined" className={styles.scope} id="count-or-percentage">
-                        <FormControl sx={{ p: '0.8rem 1rem' }}>
-                          <RadioGroup
-                            row
-                            aria-labelledby="demo-row-radio-buttons-group-label"
-                            name="row-radio-buttons-group"
-                            value={count}
-                            onChange={(_e, newValue) => {
-                              setCount(newValue);
-                            }}
-                          >
-                            <FormControlLabel
-                              value="all"
-                              control={
-                                <Radio
-                                  sx={{ '&.MuiRadio-root': { color: 'var(--palette-description-color)' } }}
-                                  size="small"
-                                  id="radio-all"
-                                />
-                              }
-                              label="All"
-                            />
-                            <FormControlLabel
-                              value="percentage"
-                              control={
-                                <Radio
-                                  sx={{ '&.MuiRadio-root': { color: 'var(--palette-description-color)' } }}
-                                  size="small"
-                                  id="radio-percentage"
-                                />
-                              }
-                              label="Percentage"
-                            />
-                            <FormControlLabel
-                              value="count"
-                              control={
-                                <Radio
-                                  sx={{ '&.MuiRadio-root': { color: 'var(--palette-description-color)' } }}
-                                  size="small"
-                                  id="radio-count"
-                                />
-                              }
-                              label="Count"
-                            />
-                          </RadioGroup>
-                        </FormControl>
-                        <Divider
-                          sx={{
-                            borderStyle: 'dashed',
-                            borderColor: 'var(--palette-palette-divider)',
-                            borderWidth: '0px 0px thin',
-                          }}
-                        />
-                        <Box
-                          sx={{
-                            width: '100%',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            p: '1.2rem 1rem',
-                          }}
-                        >
-                          {count === 'percentage' ? (
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                              <PrettoSlider
-                                valueLabelDisplay="auto"
-                                aria-label="pretto slider"
-                                defaultValue={30}
-                                value={percentage}
-                                onChange={(event, newValue: any) => {
-                                  setPercentage(newValue);
-                                }}
-                                min={1}
-                                max={100}
-                                name="scopePercentage"
-                                id="percentage"
-                              />
-                              <Typography variant="body2" fontFamily="mabry-bold" ml="0.6rem">
-                                {percentage}%
-                              </Typography>
+        <Box className={styles.title}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+            {argsForm.map((item) => {
+              return item?.filterFormProps?.id === 'filteredQueryParams' ? (
+                <Box key={item.formProps.id} sx={{ width: '100%' }}>
+                  <Autocomplete
+                    freeSolo
+                    multiple
+                    disableClearable
+                    {...item.filterFormProps}
+                    size="small"
+                    className={styles.filterInput}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <>
+                              {params.InputProps.endAdornment}
                               <Tooltip
-                                title="Percentage is the percentage of peers to be preheated. It must be a value between 1 and 100 (inclusive) if provided."
+                                title={
+                                  'By setting the filter parameter, you can specify the file type of the resource that needs to be preheated. The filter is used to generate a unique preheat task and filter unnecessary query parameters in the URL, separated by & characters.'
+                                }
                                 placement="top"
                               >
                                 <HelpIcon
@@ -1178,199 +836,328 @@ export default function NewPreheat() {
                                     color: 'var(--palette-grey-300Channel)',
                                     width: '0.8rem',
                                     height: '0.8rem',
+                                    mr: '0.3rem',
                                     ':hover': { color: 'var(--palette-description-color)' },
-                                    ml: '0.6rem',
                                   }}
                                 />
                               </Tooltip>
-                            </Box>
-                          ) : count === 'count' ? (
-                            <TextField
-                              name="scopeCount"
-                              id="count"
-                              label="Count"
-                              size="small"
-                              color="success"
-                              defaultValue={1}
-                              placeholder="Enter your count"
-                              type="number"
-                              minRows={0}
-                              error={countError}
-                              helperText={countError && 'Fill in the characters, the length is 1-200.'}
-                              onChange={(e) => {
-                                const validate = countValidate(e.target.value);
-                                setCountError(!validate);
-                              }}
-                              inputProps={{
-                                min: 0,
-                              }}
-                              InputProps={{
-                                endAdornment: (
-                                  <Tooltip
-                                    title="Count is the number of peers to be preheated.  It must be a value between 1 and 200 (inclusive) if provided."
-                                    placement="top"
-                                  >
-                                    <HelpIcon
-                                      sx={{
-                                        color: 'var(--palette-grey-300Channel)',
-                                        width: '0.8rem',
-                                        height: '0.8rem',
-                                        ':hover': { color: 'var(--palette-description-color)' },
-                                      }}
-                                    />
-                                  </Tooltip>
-                                ),
-                              }}
-                              sx={{ width: '12rem' }}
-                            />
-                          ) : (
-                            <Typography variant="body2" id="all">
-                              {scope === 'all_seed_peers'
-                                ? 'Preheat to each seed peer in the P2P cluster.'
-                                : scope === 'all_peers'
-                                ? 'Preheat to each peer in the P2P cluster.'
-                                : ''}
-                            </Typography>
-                          )}
-                        </Box>
-                      </Paper>
-                    ) : (
-                      <></>
+                            </>
+                          ),
+                        }}
+                        color="success"
+                        {...item.formProps}
+                      />
                     )}
-                  </Box>
-                ) : (
-                  <Box key={item.formProps.id} sx={{ width: '100%' }}>
-                    <TextField color="success" size="small" {...item.formProps} className={styles.filterInput} />
-                  </Box>
-                );
-              })}
-            </Box>
-            {headers.length > 0 ? (
-              <Paper variant="outlined" id="header" className={styles.headersWrapper}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography variant="body1" fontFamily="mabry-bold" mr="0.4rem">
-                    Headers
-                  </Typography>
-                  <Tooltip title="Add headers for preheat request." placement="top">
-                    <HelpIcon
-                      sx={{
-                        color: 'var(--palette-grey-300Channel)',
-                        width: '0.8rem',
-                        height: '0.8rem',
-                        ':hover': { color: 'var(--palette-description-color)' },
-                      }}
-                    />
-                  </Tooltip>
+                  />
                 </Box>
-                {headers.map((item, index) => (
-                  <Grid key={index} sx={{ display: 'flex', alignItems: 'flex-start', mt: '1.5rem', mb: '0.5rem' }}>
-                    <TextField
-                      label="Key"
-                      color="success"
-                      size="small"
-                      id={`key-${index}`}
-                      value={item.key.key}
-                      error={item.key.error}
-                      helperText={item.key.error && 'Fill in the characters, the length is 1-100.'}
-                      className={styles.headersKeyInput}
-                      onChange={(event) => {
-                        const newHeaders = [...headers];
-                        newHeaders[index].key.key = event.target.value;
-                        const isValid = headersKeyValidate(event.target.value);
-                        newHeaders[index].key.error = !isValid;
-
-                        setHeaders(newHeaders);
-                      }}
-                    />
-                    <TextField
-                      label="Value"
-                      color="success"
-                      size="small"
-                      id={`value-${index}`}
-                      value={item.value.value}
-                      multiline
-                      maxRows={3}
-                      error={item.value.error}
-                      helperText={item.value.error && 'Fill in the characters, the length is 1-10000.'}
-                      className={styles.headersValueInput}
-                      onChange={(event) => {
-                        const newHeaders = [...headers];
-                        newHeaders[index].value.value = event.target.value;
-                        const isValid = headersValueValidate(event.target.value);
-                        newHeaders[index].value.error = !isValid;
-
-                        setHeaders(newHeaders);
-                      }}
-                    />
-                    <IconButton
-                      id={`clear-header-${index}`}
-                      sx={{
-                        width: '2.4rem',
-                        height: '2.4rem',
-                        p: '0.2rem',
-                      }}
-                      onClick={() => {
-                        const newheaders = [...headers];
-                        newheaders.splice(index, 1);
-                        setHeaders(newheaders);
+              ) : item.formProps.id === 'pieceLength' ? (
+                <Box>
+                  <TextField color="success" size="small" {...item.formProps} className={styles.pieceLengthInput} />
+                  <FormControl className={styles.selectInput} color="success" required size="small">
+                    <InputLabel id="scope">Scope</InputLabel>
+                    <Select
+                      id="select-scope"
+                      label="scope"
+                      value={scope}
+                      onChange={handleSelectScope}
+                      MenuProps={{
+                        PaperProps: {
+                          style: {
+                            maxHeight: '14rem',
+                            width: '18rem',
+                          },
+                        },
                       }}
                     >
-                      <DoNotDisturbOnOutlinedIcon
-                        sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--palette-button-color)' }}
+                      {scopeList.map((item: any) => (
+                        <MenuItem
+                          id={item.name}
+                          key={item.name}
+                          value={item.name}
+                          sx={{ m: '0.3rem', borderRadius: '0.2rem' }}
+                        >
+                          {item.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  {scope !== 'single_seed_peer' ? (
+                    <Paper variant="outlined" className={styles.scope} id="count-or-percentage">
+                      <FormControl sx={{ p: '0.8rem 1rem' }}>
+                        <RadioGroup
+                          row
+                          aria-labelledby="demo-row-radio-buttons-group-label"
+                          name="row-radio-buttons-group"
+                          value={count}
+                          onChange={(_e, newValue) => {
+                            setCount(newValue);
+                          }}
+                        >
+                          <FormControlLabel
+                            value="all"
+                            control={
+                              <Radio
+                                sx={{ '&.MuiRadio-root': { color: 'var(--palette-description-color)' } }}
+                                size="small"
+                                id="radio-all"
+                              />
+                            }
+                            label="All"
+                          />
+                          <FormControlLabel
+                            value="percentage"
+                            control={
+                              <Radio
+                                sx={{ '&.MuiRadio-root': { color: 'var(--palette-description-color)' } }}
+                                size="small"
+                                id="radio-percentage"
+                              />
+                            }
+                            label="Percentage"
+                          />
+                          <FormControlLabel
+                            value="count"
+                            control={
+                              <Radio
+                                sx={{ '&.MuiRadio-root': { color: 'var(--palette-description-color)' } }}
+                                size="small"
+                                id="radio-count"
+                              />
+                            }
+                            label="Count"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                      <Divider
+                        sx={{
+                          borderStyle: 'dashed',
+                          borderColor: 'var(--palette-palette-divider)',
+                          borderWidth: '0px 0px thin',
+                        }}
                       />
-                    </IconButton>
-                  </Grid>
-                ))}
-                <Button
-                  sx={{
-                    '&.MuiButton-root': {
-                      borderColor: 'var(--palette-description-color)',
-                      color: 'var(--palette-description-color)',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      borderStyle: 'dashed',
-                    },
-                    width: '32.6rem',
-                    mt: '1.5rem',
-                  }}
-                  id="add-headers"
-                  variant="outlined"
-                  size="small"
-                  startIcon={<AddIcon />}
-                  onClick={() => {
-                    setHeaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
-                  }}
-                >
-                  add headers
-                </Button>
-              </Paper>
-            ) : (
+                      <Box
+                        sx={{
+                          width: '100%',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          p: '1.2rem 1rem',
+                        }}
+                      >
+                        {count === 'percentage' ? (
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <PrettoSlider
+                              valueLabelDisplay="auto"
+                              aria-label="pretto slider"
+                              defaultValue={30}
+                              value={percentage}
+                              onChange={(event, newValue: any) => {
+                                setPercentage(newValue);
+                              }}
+                              min={1}
+                              max={100}
+                              name="scopePercentage"
+                              id="percentage"
+                            />
+                            <Typography variant="body2" fontFamily="mabry-bold" ml="0.6rem">
+                              {percentage}%
+                            </Typography>
+                            <Tooltip
+                              title="Percentage is the percentage of peers to be preheated. It must be a value between 1 and 100 (inclusive) if provided."
+                              placement="top"
+                            >
+                              <HelpIcon
+                                sx={{
+                                  color: 'var(--palette-grey-300Channel)',
+                                  width: '0.8rem',
+                                  height: '0.8rem',
+                                  ':hover': { color: 'var(--palette-description-color)' },
+                                  ml: '0.6rem',
+                                }}
+                              />
+                            </Tooltip>
+                          </Box>
+                        ) : count === 'count' ? (
+                          <TextField
+                            name="scopeCount"
+                            id="count"
+                            label="Count"
+                            size="small"
+                            color="success"
+                            defaultValue={1}
+                            placeholder="Enter your count"
+                            type="number"
+                            minRows={0}
+                            error={countError}
+                            helperText={countError && 'Fill in the characters, the length is 1-200.'}
+                            onChange={(e) => {
+                              const validate = countValidate(e.target.value);
+                              setCountError(!validate);
+                            }}
+                            inputProps={{
+                              min: 0,
+                            }}
+                            InputProps={{
+                              endAdornment: (
+                                <Tooltip
+                                  title="Count is the number of peers to be preheated.  It must be a value between 1 and 200 (inclusive) if provided."
+                                  placement="top"
+                                >
+                                  <HelpIcon
+                                    sx={{
+                                      color: 'var(--palette-grey-300Channel)',
+                                      width: '0.8rem',
+                                      height: '0.8rem',
+                                      ':hover': { color: 'var(--palette-description-color)' },
+                                    }}
+                                  />
+                                </Tooltip>
+                              ),
+                            }}
+                            sx={{ width: '12rem' }}
+                          />
+                        ) : (
+                          <Typography variant="body2" id="all">
+                            {scope === 'all_seed_peers'
+                              ? 'Preheat to each seed peer in the P2P cluster.'
+                              : scope === 'all_peers'
+                              ? 'Preheat to each peer in the P2P cluster.'
+                              : ''}
+                          </Typography>
+                        )}
+                      </Box>
+                    </Paper>
+                  ) : (
+                    <></>
+                  )}
+                </Box>
+              ) : (
+                <Box key={item.formProps.id} sx={{ width: '100%' }}>
+                  <TextField color="success" size="small" {...item.formProps} className={styles.filterInput} />
+                </Box>
+              );
+            })}
+          </Box>
+          {headers.length > 0 ? (
+            <Paper variant="outlined" id="header" className={styles.headersWrapper}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" fontFamily="mabry-bold" mr="0.4rem">
+                  Headers
+                </Typography>
+                <Tooltip title="Add headers for preheat request." placement="top">
+                  <HelpIcon
+                    sx={{
+                      color: 'var(--palette-grey-300Channel)',
+                      width: '0.8rem',
+                      height: '0.8rem',
+                      ':hover': { color: 'var(--palette-description-color)' },
+                    }}
+                  />
+                </Tooltip>
+              </Box>
+              {headers.map((item, index) => (
+                <Grid key={index} sx={{ display: 'flex', alignItems: 'flex-start', mt: '1.5rem', mb: '0.5rem' }}>
+                  <TextField
+                    label="Key"
+                    color="success"
+                    size="small"
+                    id={`key-${index}`}
+                    value={item.key.key}
+                    error={item.key.error}
+                    helperText={item.key.error && 'Fill in the characters, the length is 1-100.'}
+                    className={styles.headersKeyInput}
+                    onChange={(event) => {
+                      const newHeaders = [...headers];
+                      newHeaders[index].key.key = event.target.value;
+                      const isValid = headersKeyValidate(event.target.value);
+                      newHeaders[index].key.error = !isValid;
+
+                      setHeaders(newHeaders);
+                    }}
+                  />
+                  <TextField
+                    label="Value"
+                    color="success"
+                    size="small"
+                    id={`value-${index}`}
+                    value={item.value.value}
+                    multiline
+                    maxRows={3}
+                    error={item.value.error}
+                    helperText={item.value.error && 'Fill in the characters, the length is 1-10000.'}
+                    className={styles.headersValueInput}
+                    onChange={(event) => {
+                      const newHeaders = [...headers];
+                      newHeaders[index].value.value = event.target.value;
+                      const isValid = headersValueValidate(event.target.value);
+                      newHeaders[index].value.error = !isValid;
+
+                      setHeaders(newHeaders);
+                    }}
+                  />
+                  <IconButton
+                    id={`clear-header-${index}`}
+                    sx={{
+                      width: '2.4rem',
+                      height: '2.4rem',
+                      p: '0.2rem',
+                    }}
+                    onClick={() => {
+                      const newheaders = [...headers];
+                      newheaders.splice(index, 1);
+                      setHeaders(newheaders);
+                    }}
+                  >
+                    <DoNotDisturbOnOutlinedIcon
+                      sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--palette-button-color)' }}
+                    />
+                  </IconButton>
+                </Grid>
+              ))}
               <Button
                 sx={{
                   '&.MuiButton-root': {
-                    backgroundColor: 'var(--palette-description-color)',
                     borderColor: 'var(--palette-description-color)',
-                    color: '#FFF',
+                    color: 'var(--palette-description-color)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    borderStyle: 'dashed',
                   },
-                  width: '8rem',
-                  mt: '1rem',
+                  width: '32.6rem',
+                  mt: '1.5rem',
                 }}
                 id="add-headers"
                 variant="outlined"
                 size="small"
+                startIcon={<AddIcon />}
                 onClick={() => {
                   setHeaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
                 }}
               >
                 add headers
               </Button>
-            )}
-          </Box>
-        ) : (
-          <Box key="content-for-calculating-task-id" sx={{ width: '37rem', height: '3rem', m: '0.8rem 0' }}>
-            <TextField fullWidth variant="outlined" size="small" {...calculatingTaskIDForm.formProps} sx={{ p: 0 }} />
-          </Box>
-        )}
+            </Paper>
+          ) : (
+            <Button
+              sx={{
+                '&.MuiButton-root': {
+                  backgroundColor: 'var(--palette-description-color)',
+                  borderColor: 'var(--palette-description-color)',
+                  color: '#FFF',
+                },
+                width: '8rem',
+                mt: '1rem',
+              }}
+              id="add-headers"
+              variant="outlined"
+              size="small"
+              onClick={() => {
+                setHeaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
+              }}
+            >
+              add headers
+            </Button>
+          )}
+        </Box>
         <Divider sx={{ mt: '1rem', mb: '1.5rem' }} />
         <Box>
           <CancelLoadingButton

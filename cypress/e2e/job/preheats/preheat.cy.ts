@@ -114,9 +114,6 @@ describe('Preheat', () => {
       cy.get('#url-1').should('have.text', 'https://example.com/path/to/file/url-1');
       cy.get('#url-2').should('have.text', 'https://example.com/path/to/file/url-2');
 
-      // Show preheat content for calculating task id
-      cy.get('#content-for-calculating-task-id').should('have.text', '-');
-
       cy.get('#piece-length').should('have.text', '4 MiB');
 
       // Show preheat tag.
@@ -292,9 +289,6 @@ describe('Preheat', () => {
       // Show preheat url.
       cy.get('#url').should('have.text', '-');
 
-      // Show preheat content for calculating task id
-      cy.get('#content-for-calculating-task-id').should('have.text', '-');
-
       // Show preheat piece length.
       cy.get('#piece-length').should('have.text', '-');
 
@@ -306,6 +300,9 @@ describe('Preheat', () => {
 
       // Show preheat application.
       cy.get('#application').should('have.text', '-');
+
+      // Show preheat ips.
+      cy.get('#ips').should('have.text', '-');
 
       // Show preheat headers.
       cy.get('#headers').should('have.text', '-');
@@ -363,14 +360,14 @@ describe('Preheat', () => {
       // Show preheat url.
       cy.get('#url').should('have.text', '-');
 
-      // Show preheat content for calculating task id
-      cy.get('#content-for-calculating-task-id').should('have.text', '-');
-
       // Show preheat piece length.
       cy.get('#piece-length').should('have.text', '-');
 
       // Show preheat tag.
       cy.get('#tag').should('have.text', '-').should('have.text', '-');
+
+      // Show preheat ips.
+      cy.get('#ips').should('have.text', '-');
 
       // Show preheat headers.
       cy.get('#headers').should('have.text', '-');

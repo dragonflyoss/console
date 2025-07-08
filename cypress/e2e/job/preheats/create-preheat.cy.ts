@@ -1,8 +1,7 @@
 import clusters from '../../../fixtures/clusters/clusters.json';
 import preheats from '../../../fixtures/job/preheats/preheats.json';
-import createPreheat from '../../../fixtures/job/preheats/create-preheat.json';
-import ContentForCalculatingTaskIDPreheat from '../../../fixtures/job/preheats/create-preheat-content-for-calculating-task-id.json';
-
+import createPreheatFile from '../../../fixtures/job/preheats/create-preheat-file.json';
+import createPreheatImage from '../../../fixtures/job/preheats/create-preheat-image.json';
 import _ from 'lodash';
 
 describe('Create preheat', () => {
@@ -76,7 +75,7 @@ describe('Create preheat', () => {
     cy.url().should('include', '/jobs/preheats');
   });
 
-  it('can create preheat', () => {
+  it('can create preheat file', () => {
     cy.visit('/jobs/preheats');
     cy.get('#new-preheat').click();
 
@@ -118,7 +117,7 @@ describe('Create preheat', () => {
       (req) => {
         req.reply({
           statusCode: 200,
-          body: createPreheat,
+          body: createPreheatFile,
         });
       },
     );
@@ -131,7 +130,7 @@ describe('Create preheat', () => {
       (req) => {
         req.reply({
           statusCode: 200,
-          body: createPreheat,
+          body: createPreheatFile,
         });
       },
     );
@@ -153,13 +152,8 @@ describe('Create preheat', () => {
     cy.get('#application').should('have.text', 'application-1');
   });
 
-  it('can create preheat by calculating task id', () => {
-    cy.visit('/jobs/preheats');
-    cy.get('#new-preheat').click();
-
-    cy.url().should('include', '/jobs/preheats/new');
-
-    cy.get('.MuiTypography-h5').should('have.text', 'Create Preheat');
+  it('can create preheat image', () => {
+    cy.get('#preheat-image').click();
 
     cy.get('#description').type('create preheat');
 
@@ -167,16 +161,25 @@ describe('Create preheat', () => {
     cy.get('#cluster').type('cluster-1{enter}');
 
     cy.get('body').click('topLeft');
+
+    cy.get('#pieceLength').type('5');
+
+    // Select a scope.
+    cy.get('#select-scope').click();
+
+    cy.get('#all_seed_peers').click();
+
     // Add url.
     cy.get('#url').type('https://example.com/path/to/file');
 
-    cy.get('#add-url').click();
-    cy.get('#url-0').type('https://example.com/path/to/file/url-1');
+    cy.get('#name').type('root');
+    cy.get('#password').type('password');
 
-    // Click content for calculating task id button
-    cy.get('#create-content-for-calculating-task-id').click();
+    // Add tag.
+    cy.get('#tag').type('tag-1');
 
-    cy.get('#content-for-calculating-task-id').type('3870122509');
+    // Add application.
+    cy.get('#application').type('application-1');
 
     cy.intercept(
       {
@@ -186,7 +189,7 @@ describe('Create preheat', () => {
       (req) => {
         req.reply({
           statusCode: 200,
-          body: createPreheat,
+          body: createPreheatImage,
         });
       },
     );
@@ -194,24 +197,31 @@ describe('Create preheat', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/v1/jobs/12',
+        url: '/api/v1/jobs/13',
       },
       (req) => {
         req.reply({
           statusCode: 200,
-          body: ContentForCalculatingTaskIDPreheat,
+          body: createPreheatImage,
         });
       },
     );
 
     cy.get('#save').click();
 
-    // Displays successfully added preheat task.
-    cy.get('#id').should('have.text', '12');
+    // Should show preheat details.
+    cy.get('#description').should('have.text', 'create preheat');
     cy.get('#status').should('have.text', 'PENDING');
-    cy.get('#url-0').should('have.text', 'https://example.com/path/to/file/url-1');
-    cy.get('#url-1').should('have.text', 'https://example.com/path/to/file');
-    cy.get('#content-for-calculating-task-id').should('have.text', '3870122509');
+    cy.get('#type').should('have.text', 'Image');
+    cy.get('#url').should('have.text', 'https://ghcr.io/v2/dragonflyoss/scheduler/manifests/v2.1.0');
+    cy.get('#id').should('have.text', 13);
+    cy.get('#platform').should('have.text', 'Linux AMD64');
+    cy.get('#piece-length').should('have.text', '-');
+    cy.get('#scope').should('have.text', 'Single Seed Peer');
+    cy.get('#tag').should('have.text', 'tag-1');
+    cy.get('#application').should('have.text', 'application-1');
+    cy.get('#ips-0').should('have.text', '10.244.4.5');
+    cy.get('#ips-1').should('have.text', '10.244.4.3');
   });
 
   it('cannot to use cluster without scheduler for preheat', () => {
@@ -283,7 +293,7 @@ describe('Create preheat', () => {
       (req) => {
         req.reply({
           statusCode: 200,
-          body: createPreheat,
+          body: createPreheatFile,
         });
       },
     );
@@ -296,7 +306,7 @@ describe('Create preheat', () => {
       (req) => {
         req.reply({
           statusCode: 200,
-          body: createPreheat,
+          body: createPreheatFile,
         });
       },
     );
@@ -314,7 +324,7 @@ describe('Create preheat', () => {
   });
 
   describe('should handle API error response', () => {
-    it('unable to create preheat via arguments', () => {
+    it('creating a preheat file API error response', () => {
       cy.intercept(
         {
           method: 'POST',
@@ -343,23 +353,8 @@ describe('Create preheat', () => {
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
     });
 
-    it('unable to create preheat via calculating task id', () => {
-      cy.get('#description').type('create preheat');
-
-      // Select a cluster.
-      cy.get('#cluster').type('cluster-1{enter}');
-
-      cy.get('body').click('topLeft');
-      // Add url.
-      cy.get('#url').type('https://example.com/path/to/file');
-
-      cy.get('#add-url').click();
-      cy.get('#url-0').type('https://example.com/path/to/file/url-1');
-
-      // Click content for calculating task id button
-      cy.get('#create-content-for-calculating-task-id').click();
-
-      cy.get('#content-for-calculating-task-id').type('3870122509');
+    it('creating a preheat image API error response', () => {
+      cy.get('#preheat-image');
 
       cy.intercept(
         {
@@ -368,15 +363,34 @@ describe('Create preheat', () => {
         },
         (req) => {
           req.reply({
-            forceNetworkError: true,
+            statusCode: 500,
+            body: {
+              message:
+                'Get "https://index.docker.io/v2/": context deadline exceeded (Client.Timeout exceeded while awaiting headers)',
+            },
           });
         },
       );
 
+      cy.get('#cluster').click();
+      cy.contains('li', 'cluster-2').click();
+      cy.get('body').click('topLeft');
+
+      // Select a scope.
+      cy.get('#select-scope').click();
+      cy.get('#all_peers').click();
+
+      cy.get('#url').type('https://example.com/path/to/file');
+
       cy.get('#save').click();
 
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('.MuiAlert-message')
+        .should('be.visible')
+        .and(
+          'contain',
+          'Get "https://index.docker.io/v2/": context deadline exceeded (Client.Timeout exceeded while awaiting headers)',
+        );
     });
   });
 
@@ -445,7 +459,208 @@ describe('Create preheat', () => {
       cy.get('#url').clear();
     });
 
-    it('try to verify args', () => {
+    it('try to verify the preheat image args', () => {
+      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const url = _.times(1001, () => _.sample(characters)).join('');
+      const filter = _.times(101, () => _.sample(characters)).join('');
+
+      cy.get('#preheat-image').click();
+
+      // Select a cluster.
+      cy.get('#cluster').click();
+      cy.contains('li', 'cluster-1').click();
+      cy.get('body').click('topLeft');
+
+      cy.get('#url').type('https://docs');
+
+      // Should display message name the validation error.
+      cy.get('#name').type(filter);
+
+      // Show verification error message.
+      cy.get('#name-helper-text').should('have.text', 'Fill in the characters, the length is 0-100.');
+
+      cy.get('#name').clear();
+      cy.get('#name').type('root');
+
+      cy.get('#name-helper-text').should('not.exist');
+
+      // Should display message password the validation error.
+      cy.get('#password').type(filter);
+
+      // Show verification error message.
+      cy.get('#password-helper-text').should('have.text', 'Fill in the characters, the length is 0-100.');
+
+      cy.get('#password').clear();
+      cy.get('#password').type('root');
+
+      cy.get('#password-helper-text').should('not.exist');
+
+      // Should display message Piece Length the validation error.
+      cy.get('#select-scope').click();
+      cy.get('#all_peers').click();
+
+      cy.get('#radio-count').click();
+
+      cy.get('#count').should('have.value', '1');
+
+      cy.get('#count').clear();
+
+      cy.get('#count').type('0');
+
+      // Show verification error message.
+      cy.get('#count-helper-text').should('have.text', 'Fill in the characters, the length is 1-200.');
+
+      cy.get('#count').clear();
+
+      cy.get('#count').type('201');
+
+      cy.get('#count-helper-text').should('have.text', 'Fill in the characters, the length is 1-200.');
+
+      // Should display message Piece Length the validation error.
+      cy.get('#pieceLength').type('0');
+
+      // Show verification error message.
+      cy.get('#pieceLength-helper-text').should('have.text', 'Please enter a value between 4 and 1024 MiB.');
+
+      cy.get('#pieceLength').clear();
+      cy.get('#pieceLength-helper-text').should('not.eq');
+      cy.get('#pieceLength').type('1025');
+      cy.get('#save').click();
+
+      // Preheat creation failed, the page is still in preheat/new!
+      cy.url().should('include', '/jobs/preheats/new');
+
+      cy.get('#pieceLength-helper-text').should('exist');
+
+      // Should display message tag the validation error.
+      cy.get('#tag').type(url);
+
+      cy.get('#tag-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 0-1000.');
+
+      cy.get('#tag').clear();
+
+      // Should display message filter the validation error.
+      cy.get('#filteredQueryParams').type('filter');
+
+      cy.get('#save').click();
+
+      // Show verification error message.
+      cy.get('#filteredQueryParams-helper-text')
+        .should('be.visible')
+        .and('have.text', 'Please press ENTER to end the filter creation');
+
+      cy.get('#filteredQueryParams').clear();
+      cy.get('#filteredQueryParams').type('filter{enter}');
+
+      cy.get('#filteredQueryParams').type(filter);
+
+      // Show verification error message.
+      cy.get('#filteredQueryParams-helper-text')
+        .should('be.visible')
+        .and('have.text', 'Fill in the characters, the length is 0-100.');
+
+      // Should display message filter the validation error.
+      cy.get('#filteredQueryParams').type('filter');
+
+      cy.get('#save').click();
+
+      // Show verification error message.
+      cy.get('#filteredQueryParams-helper-text')
+        .should('be.visible')
+        .and('have.text', 'Please press ENTER to end the filter creation');
+
+      cy.get('#filteredQueryParams').clear();
+      cy.get('#filteredQueryParams').type('filter{enter}');
+
+      cy.get('#filteredQueryParams').type(filter);
+
+      // Show verification error message.
+      cy.get('#filteredQueryParams-helper-text')
+        .should('be.visible')
+        .and('have.text', 'Fill in the characters, the length is 0-100.');
+
+      // Should display message ips the validation error.
+      cy.get('#ips').type('ips');
+
+      cy.get('#save').click();
+
+      // Show verification error message.
+      cy.get('#ips-helper-text').should('be.visible').and('have.text', 'Please press ENTER to end the ips creation');
+
+      cy.get('#ips').clear();
+      cy.get('#ips').type('ips{enter}');
+
+      cy.get('#ips').type(filter);
+
+      // Show verification error message.
+      cy.get('#ips-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 0-100.');
+
+      cy.get('#save').click();
+
+      // Preheat creation failed, the page is still in preheat/new!
+      cy.url().should('include', '/jobs/preheats/new');
+    });
+
+    it('try to verify the preheat image header', () => {
+      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const key = _.times(101, () => _.sample(characters)).join('');
+
+      cy.get('#preheat-image').click();
+      // Select a cluster.
+      cy.get('#cluster').click();
+      cy.contains('li', 'cluster-1').click();
+      cy.get('body').click('topLeft');
+
+      // Add ure.
+      cy.get('#url').type('https://example.com/path/to/file');
+
+      // Click add header button.
+      cy.get('#add-headers').click();
+
+      cy.get('#header').children().should('have.length', 3);
+
+      // Verification passed.
+      cy.get('#key-0').type('key');
+      cy.get('#key-0-helper-text').should('not.exist');
+
+      // Incorrect header key entered.
+      cy.get('#key-0').clear();
+      cy.get('#key-0').type(key);
+
+      // Show header key verification error message.
+      cy.get('#key-0-helper-text')
+        .should('be.visible')
+        .and('have.text', 'Fill in the characters, the length is 1-100.');
+
+      cy.get('#save').click();
+
+      // Preheat creation failed, the page is still in preheat/new!
+      cy.url().should('include', '/jobs/preheats/new');
+
+      cy.get('#save').click();
+
+      cy.get('#value-0-helper-text').should('have.text', 'Fill in the characters, the length is 1-10000.');
+
+      cy.get('#value-0').type('key');
+
+      cy.get('#value-0-helper-text').should('not.exist');
+
+      // Preheat creation failed, the page is still in preheat/new!
+      cy.url().should('include', '/jobs/preheats/new');
+
+      // Add haeder.
+      cy.get('#header > .MuiButton-root').click();
+
+      // Check the number of headers.
+      cy.get('#header').children().should('have.length', 4);
+
+      // Delete header input box.
+      cy.get('#clear-header-1').click();
+
+      cy.get('#header').children().should('have.length', 3);
+    });
+
+    it('try to verify the preheat file args', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       const url = _.times(1001, () => _.sample(characters)).join('');
       const filter = _.times(101, () => _.sample(characters)).join('');
@@ -521,13 +736,49 @@ describe('Create preheat', () => {
         .should('be.visible')
         .and('have.text', 'Fill in the characters, the length is 0-100.');
 
+      // Should display message filter the validation error.
+      cy.get('#filteredQueryParams').type('filter');
+
+      cy.get('#save').click();
+
+      // Show verification error message.
+      cy.get('#filteredQueryParams-helper-text')
+        .should('be.visible')
+        .and('have.text', 'Please press ENTER to end the filter creation');
+
+      cy.get('#filteredQueryParams').clear();
+      cy.get('#filteredQueryParams').type('filter{enter}');
+
+      cy.get('#filteredQueryParams').type(filter);
+
+      // Show verification error message.
+      cy.get('#filteredQueryParams-helper-text')
+        .should('be.visible')
+        .and('have.text', 'Fill in the characters, the length is 0-100.');
+
+      // Should display message ips the validation error.
+      cy.get('#ips').type('ips');
+
+      cy.get('#save').click();
+
+      // Show verification error message.
+      cy.get('#ips-helper-text').should('be.visible').and('have.text', 'Please press ENTER to end the ips creation');
+
+      cy.get('#ips').clear();
+      cy.get('#ips').type('ips{enter}');
+
+      cy.get('#ips').type(filter);
+
+      // Show verification error message.
+      cy.get('#ips-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 0-100.');
+
       cy.get('#save').click();
 
       // Preheat creation failed, the page is still in preheat/new!
       cy.url().should('include', '/jobs/preheats/new');
     });
 
-    it('try to verify header', () => {
+    it('try to verify the preheat file header', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       const key = _.times(101, () => _.sample(characters)).join('');
 
@@ -583,40 +834,6 @@ describe('Create preheat', () => {
       cy.get('#clear-header-1').click();
 
       cy.get('#header').children().should('have.length', 3);
-    });
-
-    it('try to verify calculating task id', () => {
-      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      const contentForCalculatingTaskID = _.times(1001, () => _.sample(characters)).join('');
-
-      // Select a cluster.
-      cy.get('#cluster').click();
-      cy.contains('li', 'cluster-1').click();
-      cy.get('body').click('topLeft');
-
-      // Add url.
-      cy.get('#url').type('https://example.com/path/to/file');
-
-      // Click content for calculating task id button
-      cy.get('#create-content-for-calculating-task-id').click();
-
-      cy.get('#save').click();
-
-      // Show verification error message.
-      cy.get('#content-for-calculating-task-id-helper-text').should(
-        'have.text',
-        'Fill in the characters, the length is 1-1000.',
-      );
-
-      cy.get('#content-for-calculating-task-id').type('3870122509');
-      cy.get('#content-for-calculating-task-id-helper-text').should('not.exist');
-
-      cy.get('#content-for-calculating-task-id').clear();
-
-      cy.get('#content-for-calculating-task-id').type(contentForCalculatingTaskID);
-
-      // Show verification error message.
-      cy.get('#content-for-calculating-task-id-helper-text').should('exist');
     });
   });
 });

@@ -1,0 +1,56 @@
+{
+  "id": 13,
+  "created_at": "2025-07-08T12:22:42.892Z",
+  "updated_at": "2025-07-08T12:22:42.892Z",
+  "is_del": 0,
+  "task_id": "group_152f6ada-efea-4cd6-a269-5ebb784a633a",
+  "bio": "create preheat",
+  "type": "preheat",
+  "state": "PENDING",
+  "args": {
+    "application": "application-1",
+    "concurrent_count": 1000,
+    "count": null,
+    "filtered_query_params": "X-Amz-Algorithm\u0026X-Amz-Credential\u0026X-Amz-Date\u0026X-Amz-Expires\u0026X-Amz-SignedHeaders\u0026X-Amz-Signature\u0026X-Amz-Security-Token\u0026X-Amz-User-Agent\u0026X-Goog-Algorithm\u0026X-Goog-Credential\u0026X-Goog-Date\u0026X-Goog-Expires\u0026X-Goog-SignedHeaders\u0026X-Goog-Signature\u0026OSSAccessKeyId\u0026Expires\u0026Signature\u0026SecurityToken\u0026AccessKeyId\u0026Signature\u0026Expires\u0026X-Obs-Date\u0026X-Obs-Security-Token\u0026q-sign-algorithm\u0026q-ak\u0026q-sign-time\u0026q-key-time\u0026q-header-list\u0026q-url-param-list\u0026q-signature\u0026x-cos-security-token\u0026ns",
+    "headers": {},
+    "ips": [
+      "10.244.4.5",
+      "10.244.4.3",
+      "10.244.4.61",
+      "10.244.4.62",
+      "10.244.4.63",
+      "10.244.4.64",
+      "10.244.4.65",
+      "10.244.4.66",
+      "10.244.4.67",
+      "10.244.4.68",
+      "10.244.4.69",
+      "10.244.4.70",
+      "10.244.4.71"
+    ],
+    "load_to_cache": false,
+    "password": "root",
+    "percentage": null,
+    "piece_length": null,
+    "platform": "linux/amd64",
+    "scope": "single_seed_peer",
+    "tag": "tag-1",
+    "timeout": 3600000000000,
+    "type": "image",
+    "url": "https://ghcr.io/v2/dragonflyoss/scheduler/manifests/v2.1.0",
+    "urls": null,
+    "username": ""
+  },
+  "result": {
+    "created_at": "2025-05-28T08:43:48.634389458Z",
+    "group_uuid": "group_2d9ef907-744e-40c9-9943-3d14fd8cb389",
+    "job_states": null,
+    "state": "PENDING",
+    "updated_at": "2025-05-28T08:45:52.849258668Z"
+  },
+  "scheduler_clusters": [
+    {
+      "id": 1
+    }
+  ]
+}

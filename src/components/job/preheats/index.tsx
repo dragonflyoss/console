@@ -338,7 +338,7 @@ export default function Preheats() {
           <Box id="preheats-list">
             {Array.isArray(allPreheats) &&
               allPreheats.map((item, index) => {
-                return index !== allPreheats.length - 1 ? (
+                return (
                   <Box key={item.id} id={`list-${item.id}`}>
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                       <Box className={styles.information}>
@@ -350,9 +350,16 @@ export default function Preheats() {
                           <Pending id={`PENDING-${item.id}`} className={styles.pendingIcon} />
                         )}
                         <Box className={styles.informationContent}>
-                          <Typography id={`id-${item?.id}`} variant="body1" fontFamily="mabry-bold">
-                            {item.id}
-                          </Typography>
+                          <RouterLink
+                            component={Link}
+                            id={`preheat-${item?.id}`}
+                            to={`/jobs/preheats/${item?.id}`}
+                            underline="hover"
+                          >
+                            <Typography id={`id-${item?.id}`} variant="body1" fontFamily="mabry-bold">
+                              {item.id}
+                            </Typography>
+                          </RouterLink>
                           <Tooltip title={item.bio || '-'} placement="top" arrow>
                             <Typography
                               id={`description-${item?.id || 0}`}
@@ -385,59 +392,15 @@ export default function Preheats() {
                         </RouterLink>
                       </Box>
                     </Box>
-                    <Divider
-                      sx={{
-                        borderStyle: 'dashed',
-                        borderColor: 'var(--palette-palette-divider)',
-                        borderWidth: '0px 0px thin',
-                      }}
-                    />
-                  </Box>
-                ) : (
-                  <Box key={item.id} id={`list-${item.id}`} sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
-                    <Box className={styles.information}>
-                      {item?.result?.state === 'SUCCESS' ? (
-                        <Success id={`SUCCESS-${item.id}`} className={styles.statusIcon} />
-                      ) : item?.result?.state === 'FAILURE' ? (
-                        <Failure id={`FAILURE-${item.id}`} className={styles.statusIcon} />
-                      ) : (
-                        <Pending id={`PENDING-${item.id}`} className={styles.pendingIcon} />
-                      )}
-                      <Box className={styles.informationContent}>
-                        <Typography id={`id-${item?.id}`} variant="body1" fontFamily="mabry-bold">
-                          {item.id}
-                        </Typography>
-                        <Tooltip title={item.bio || '-'} placement="top" arrow>
-                          <Typography
-                            id={`description-${item?.id || 0}`}
-                            variant="body2"
-                            className={styles.description}
-                          >
-                            {item.bio || '-'}
-                          </Typography>
-                        </Tooltip>
-                      </Box>
-                    </Box>
-                    <Box width="30%">
-                      <Chip
-                        id={`created_at-${item?.id}`}
-                        avatar={<MoreTimeIcon />}
-                        label={getDatetime(item.created_at) || '-'}
-                        variant="outlined"
-                        size="small"
+                    {index !== allPreheats.length - 1 && (
+                      <Divider
+                        sx={{
+                          borderStyle: 'dashed',
+                          borderColor: 'var(--palette-palette-divider)',
+                          borderWidth: '0px 0px thin',
+                        }}
                       />
-                    </Box>
-                    <Box width="10%" sx={{ display: 'flex', justifyContent: 'center' }}>
-                      <RouterLink
-                        component={Link}
-                        id={`preheat-${item?.id}`}
-                        to={`/jobs/preheats/${item?.id}`}
-                        underline="hover"
-                        sx={{ color: 'var(--palette-description-color)' }}
-                      >
-                        <Detail className={styles.detailIcon} />
-                      </RouterLink>
-                    </Box>
+                    )}
                   </Box>
                 );
               })}

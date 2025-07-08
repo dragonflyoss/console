@@ -763,6 +763,7 @@ export interface JobsResponse {
     application: string;
     concurrent_count: number;
     headers: { [key: string]: string } | null;
+    ips: Array<string> | null;
     password: string;
     platform: string;
     scope: string;
@@ -828,6 +829,10 @@ interface createJobRequest {
     count?: number | null;
     percentage?: number | null;
     content_for_calculating_task_id?: string;
+    ips: Array<string> | null;
+    name: string;
+    password: string;
+    platform: string;
   };
   scheduler_cluster_ids: Array<number>;
 }

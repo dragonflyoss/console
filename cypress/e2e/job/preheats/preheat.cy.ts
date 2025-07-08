@@ -289,7 +289,6 @@ describe('Preheat', () => {
       // Show preheat url.
       cy.get('#url').should('have.text', '-');
 
-
       // Show preheat piece length.
       cy.get('#piece-length').should('have.text', '-');
 
@@ -301,6 +300,9 @@ describe('Preheat', () => {
 
       // Show preheat application.
       cy.get('#application').should('have.text', '-');
+
+      // Show preheat ips.
+      cy.get('#ips').should('have.text', '-');
 
       // Show preheat headers.
       cy.get('#headers').should('have.text', '-');
@@ -363,6 +365,9 @@ describe('Preheat', () => {
 
       // Show preheat tag.
       cy.get('#tag').should('have.text', '-').should('have.text', '-');
+
+      // Show preheat ips.
+      cy.get('#ips').should('have.text', '-');
 
       // Show preheat headers.
       cy.get('#headers').should('have.text', '-');

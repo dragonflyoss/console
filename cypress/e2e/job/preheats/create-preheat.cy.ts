@@ -221,7 +221,7 @@ describe('Create preheat', () => {
     cy.get('#tag').should('have.text', 'tag-1');
     cy.get('#application').should('have.text', 'application-1');
     cy.get('#ips-0').should('have.text', '10.244.4.5');
-    cy.get('#ips-1').should('have.text', '10.244.4.6');
+    cy.get('#ips-1').should('have.text', '10.244.4.3');
   });
 
   it('cannot to use cluster without scheduler for preheat', () => {

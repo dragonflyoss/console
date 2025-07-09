@@ -37,7 +37,7 @@
     "tag": "tag-1",
     "timeout": 3600000000000,
     "type": "image",
-    "url": "https://ghcr.io/v2/dragonflyoss/scheduler/manifests/v2.1.0",
+    "url": "https://example.com/manifests/v2.1.0",
     "urls": null,
     "username": ""
   },

@@ -830,7 +830,7 @@ interface createJobRequest {
     percentage?: number | null;
     content_for_calculating_task_id?: string;
     ips: Array<string> | null;
-    name: string;
+    username: string;
     password: string;
     platform: string;
   };

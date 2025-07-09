@@ -48,7 +48,6 @@ import { ReactComponent as Image } from '../../../assets/images/resource/task/im
 import { ReactComponent as File } from '../../../assets/images/job/preheat/file.svg';
 import { ReactComponent as IP } from '../../../assets/images/cluster/scheduler/scheduler-ip.svg';
 import { ReactComponent as Platform } from '../../../assets/images/job/preheat/platform.svg';
-
 import _ from 'lodash';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -249,7 +248,7 @@ export default function ShowPreheat() {
             <Box className={styles.statusContent}>
               {isLoading ? (
                 <Skeleton data-testid="preheat-isloading" sx={{ width: '4rem' }} />
-              ) : preheat?.result?.state ? (
+              ) : (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Box
                     sx={{
@@ -282,7 +281,7 @@ export default function ShowPreheat() {
                         color: '#FFF',
                       }}
                     >
-                      {preheat?.result?.state || ''}
+                      {preheat?.result?.state || 'PENDING'}
                     </Typography>
                     {preheat?.result?.state === 'FAILURE' ? (
                       <>
@@ -313,8 +312,6 @@ export default function ShowPreheat() {
                     )}
                   </Box>
                 </Box>
-              ) : (
-                '-'
               )}
             </Box>
           </Box>

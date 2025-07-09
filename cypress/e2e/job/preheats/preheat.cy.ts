@@ -155,12 +155,18 @@ describe('Preheat', () => {
       // Show preheat scope.
       cy.get('#scope').should('have.text', 'Single Seed Peer');
 
+      // Show preheat type.
+      cy.get('#type').should('have.text', 'Image');
+
       // Show preheat status.
       cy.get('#status')
         .should('have.text', 'SUCCESS')
         .and('have.css', 'background-color', 'rgb(34, 139, 34)')
         .find('#error-log-icon')
         .and('not.exist');
+
+      // Show preheat URL.
+      cy.get('#url').should('have.text', 'https://example.com/manifests/v2.1.0');
 
       // Show preheat headers.
       cy.get('#header-key-0').should('have.text', 'Authorization');
@@ -284,7 +290,7 @@ describe('Preheat', () => {
       cy.get('#description').should('have.text', '-');
 
       // Show preheat status.
-      cy.get('#status').should('not.exist');
+      cy.get('#status').should('contain', 'PENDING');
 
       // Show preheat url.
       cy.get('#url').should('have.text', '-');
@@ -355,7 +361,7 @@ describe('Preheat', () => {
       cy.get('#description').should('have.text', '-');
 
       // Show preheat status.
-      cy.get('#status').should('not.exist');
+      cy.get('#status').should('contain', 'PENDING');
 
       // Show preheat url.
       cy.get('#url').should('have.text', '-');

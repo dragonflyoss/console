@@ -172,7 +172,7 @@ describe('Create preheat', () => {
     // Add url.
     cy.get('#url').type('https://example.com/path/to/file');
 
-    cy.get('#name').type('root');
+    cy.get('#username').type('root');
     cy.get('#password').type('password');
 
     // Add tag.
@@ -213,7 +213,7 @@ describe('Create preheat', () => {
     cy.get('#description').should('have.text', 'create preheat');
     cy.get('#status').should('have.text', 'PENDING');
     cy.get('#type').should('have.text', 'Image');
-    cy.get('#url').should('have.text', 'https://ghcr.io/v2/dragonflyoss/scheduler/manifests/v2.1.0');
+    cy.get('#url').should('have.text', 'https://example.com/manifests/v2.1.0');
     cy.get('#id').should('have.text', 13);
     cy.get('#platform').should('have.text', 'Linux AMD64');
     cy.get('#piece-length').should('have.text', '-');
@@ -474,15 +474,15 @@ describe('Create preheat', () => {
       cy.get('#url').type('https://docs');
 
       // Should display message name the validation error.
-      cy.get('#name').type(filter);
+      cy.get('#username').type(filter);
 
       // Show verification error message.
-      cy.get('#name-helper-text').should('have.text', 'Fill in the characters, the length is 0-100.');
+      cy.get('#username-helper-text').should('have.text', 'Fill in the characters, the length is 0-100.');
 
-      cy.get('#name').clear();
-      cy.get('#name').type('root');
+      cy.get('#username').clear();
+      cy.get('#username').type('root');
 
-      cy.get('#name-helper-text').should('not.exist');
+      cy.get('#username-helper-text').should('not.exist');
 
       // Should display message password the validation error.
       cy.get('#password').type(filter);

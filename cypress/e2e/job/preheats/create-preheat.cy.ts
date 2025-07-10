@@ -100,7 +100,7 @@ describe('Create preheat', () => {
     //  Select a ips.
     cy.get('#radio-ips').click();
 
-    cy.get('#ips').type('102.131.1{enter}');
+    cy.get('#ips').type('10.0.0.8{enter}');
 
     // Add url.
     cy.get('#url').type('https://example.com/path/to/file');
@@ -176,7 +176,7 @@ describe('Create preheat', () => {
 
     cy.get('#radio-ips').click();
 
-    cy.get('#ips').type('12331.121.1{enter}');
+    cy.get('#ips').type('10.0.0.8{enter}');
 
     // Add url.
     cy.get('#url').type('https://example.com/path/to/file');
@@ -595,7 +595,7 @@ describe('Create preheat', () => {
       // Select ips.
       cy.get('#radio-ips').click();
 
-      cy.get('#ips').type('12331.121.1');
+      cy.get('#ips').type('10.0.0.8');
 
       cy.get('#save').click();
 
@@ -603,7 +603,7 @@ describe('Create preheat', () => {
       cy.get('#ips-helper-text').should('be.visible').and('have.text', 'Please press ENTER to end the ips creation');
 
       cy.get('#ips').clear();
-      cy.get('#ips').type('12331.121.1{enter}');
+      cy.get('#ips').type('10.0.0.8{enter}');
 
       cy.get('#ips').type(filter);
 
@@ -778,7 +778,7 @@ describe('Create preheat', () => {
       // Select ips.
       cy.get('#radio-ips').click();
 
-      cy.get('#ips').type('12331.121.1');
+      cy.get('#ips').type('10.0.0.8');
 
       cy.get('#save').click();
 
@@ -786,7 +786,7 @@ describe('Create preheat', () => {
       cy.get('#ips-helper-text').should('be.visible').and('have.text', 'Please press ENTER to end the ips creation');
 
       cy.get('#ips').clear();
-      cy.get('#ips').type('12331.121.1{enter}');
+      cy.get('#ips').type('10.0.0.8{enter}');
 
       cy.get('#ips').type(filter);
 

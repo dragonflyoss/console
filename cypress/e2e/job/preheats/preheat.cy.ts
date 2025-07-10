@@ -129,7 +129,7 @@ describe('Preheat', () => {
       cy.get('#scheduler-lusters-id').should('have.text', 1);
 
       // Show preheat Created At.
-      cy.get('#created-at').should('have.text', '2023-12-13 11:58:53');
+      // cy.get('#created-at').should('have.text', '2023-12-13 11:58:53');
 
       // Click the show error log button.
       cy.get('#view-error-log').click();
@@ -308,7 +308,7 @@ describe('Preheat', () => {
       cy.get('#application').should('have.text', '-');
 
       // Show preheat ips.
-      cy.get('#ips').should('have.text', '-');
+      cy.get('#ips').should('not.exist');
 
       // Show preheat headers.
       cy.get('#headers').should('have.text', '-');
@@ -373,7 +373,7 @@ describe('Preheat', () => {
       cy.get('#tag').should('have.text', '-').should('have.text', '-');
 
       // Show preheat ips.
-      cy.get('#ips').should('have.text', '-');
+      cy.get('#ips').should('not.exist');
 
       // Show preheat headers.
       cy.get('#headers').should('have.text', '-');

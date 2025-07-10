@@ -221,6 +221,53 @@ export default function NewPreheat() {
     },
   };
 
+  const ipsForm = {
+    filterFormProps: {
+      id: 'ips',
+      name: 'ips',
+      label: 'IPs',
+      value: ips,
+      options: [],
+      onChange: (_e: any, newValue: any) => {
+        if (!ipsForm.formProps.error) {
+          setIPs(newValue);
+        }
+      },
+      onInputChange: (e: any) => {
+        setIPsHelperText('Fill in the characters, the length is 0-100.');
+        changeValidate(e.target.value, ipsForm);
+      },
+
+      renderTags: (value: any, getTagProps: any) =>
+        value.map((option: any, index: any) => (
+          <Chip size="small" key={index} label={option} {...getTagProps({ index })} />
+        )),
+    },
+
+    formProps: {
+      id: 'ips',
+      name: 'ips',
+      label: 'IPs',
+      placeholder: 'Press the Enter key to confirm the entered value',
+      error: ipsError,
+      helperText: ipsError ? ipsHelperText : '',
+
+      onKeyDown: (e: any) => {
+        if (e.keyCode === 13) {
+          e.preventDefault();
+        }
+      },
+    },
+
+    syncError: false,
+    setError: setIPsError,
+
+    validate: (value: string) => {
+      const reg = /^(.{0,100})$/;
+      return reg.test(value);
+    },
+  };
+
   const argsForm = [
     {
       formProps: {
@@ -352,65 +399,19 @@ export default function NewPreheat() {
     },
     {
       filterFormProps: {
-        id: 'ips',
-        name: 'ips',
-        label: 'IPs',
-        value: ips,
-        options: [],
-        onChange: (_e: any, newValue: any) => {
-          if (!argsForm[3].formProps.error) {
-            setIPs(newValue);
-          }
-        },
-        onInputChange: (e: any) => {
-          setIPsHelperText('Fill in the characters, the length is 0-100.');
-          changeValidate(e.target.value, argsForm[3]);
-        },
-
-        renderTags: (value: any, getTagProps: any) =>
-          value.map((option: any, index: any) => (
-            <Chip size="small" key={index} label={option} {...getTagProps({ index })} />
-          )),
-      },
-
-      formProps: {
-        id: 'ips',
-        name: 'ips',
-        label: 'IPs',
-        placeholder: 'Press the Enter key to confirm the entered value',
-        error: ipsError,
-        helperText: ipsError ? ipsHelperText : '',
-
-        onKeyDown: (e: any) => {
-          if (e.keyCode === 13) {
-            e.preventDefault();
-          }
-        },
-      },
-
-      syncError: false,
-      setError: setIPsError,
-
-      validate: (value: string) => {
-        const reg = /^(.{0,100})$/;
-        return reg.test(value);
-      },
-    },
-    {
-      filterFormProps: {
         id: 'filteredQueryParams',
         name: 'filteredQueryParams',
         label: 'Filter Query Params',
         value: filter,
         options: [],
         onChange: (_e: any, newValue: any) => {
-          if (!argsForm[4].formProps.error) {
+          if (!argsForm[3].formProps.error) {
             setFilter(newValue);
           }
         },
         onInputChange: (e: any) => {
           setFilterHelperText('Fill in the characters, the length is 0-100.');
-          changeValidate(e.target.value, argsForm[4]);
+          changeValidate(e.target.value, argsForm[3]);
         },
 
         renderTags: (value: any, getTagProps: any) =>
@@ -645,65 +646,19 @@ export default function NewPreheat() {
     },
     {
       filterFormProps: {
-        id: 'ips',
-        name: 'ips',
-        label: 'IPs',
-        value: ips,
-        options: [],
-        onChange: (_e: any, newValue: any) => {
-          if (!imageArgsForm[5].formProps.error) {
-            setIPs(newValue);
-          }
-        },
-        onInputChange: (e: any) => {
-          setIPsHelperText('Fill in the characters, the length is 0-100.');
-          changeValidate(e.target.value, imageArgsForm[5]);
-        },
-
-        renderTags: (value: any, getTagProps: any) =>
-          value.map((option: any, index: any) => (
-            <Chip size="small" key={index} label={option} {...getTagProps({ index })} />
-          )),
-      },
-
-      formProps: {
-        id: 'ips',
-        name: 'ips',
-        label: 'IPs',
-        placeholder: 'Press the Enter key to confirm the entered value',
-        error: ipsError,
-        helperText: ipsError ? ipsHelperText : '',
-
-        onKeyDown: (e: any) => {
-          if (e.keyCode === 13) {
-            e.preventDefault();
-          }
-        },
-      },
-
-      syncError: false,
-      setError: setIPsError,
-
-      validate: (value: string) => {
-        const reg = /^(.{0,100})$/;
-        return reg.test(value);
-      },
-    },
-    {
-      filterFormProps: {
         id: 'filteredQueryParams',
         name: 'filteredQueryParams',
         label: 'Filter Query Params',
         value: filter,
         options: [],
         onChange: (_e: any, newValue: any) => {
-          if (!imageArgsForm[6].formProps.error) {
+          if (!imageArgsForm[5].formProps.error) {
             setFilter(newValue);
           }
         },
         onInputChange: (e: any) => {
           setFilterHelperText('Fill in the characters, the length is 0-100.');
-          changeValidate(e.target.value, imageArgsForm[6]);
+          changeValidate(e.target.value, imageArgsForm[5]);
         },
 
         renderTags: (value: any, getTagProps: any) =>
@@ -831,58 +786,22 @@ export default function NewPreheat() {
     const tag = event.currentTarget.elements.tag.value;
     const application = event.currentTarget.elements.application.value;
     const filterText = event.currentTarget.elements.filteredQueryParams.value;
-    const ipsText = event.currentTarget.elements.ips.value;
     const pieceLength = event.currentTarget.elements.pieceLength.value;
 
     let percentage = null;
     let countValue = null;
+    let ipsText = null;
+    let clusterIDValidate = true;
 
     if (count !== 'all') {
       if (count === 'percentage') {
         percentage = event.currentTarget.elements.scopePercentage.value;
       } else if (count === 'count') {
         countValue = event.currentTarget.elements.scopeCount.value;
+      } else if (count === 'ips') {
+        ipsText = event.currentTarget.elements.ips.value;
       }
     }
-
-    informationForm.forEach((item) => {
-      const value = data.get(item.formProps.name);
-      item.setError(!item.validate(value as string));
-      item.syncError = !item.validate(value as string);
-    });
-
-    const headerValidate = headers.every((item, index) => {
-      const isValidKey = headersKeyValidate(item.key.key);
-      const isValidValue = headersValueValidate(item.value.value);
-      const newURL = [...headers];
-
-      newURL[index].key.error = !isValidKey;
-      newURL[index].value.error = !isValidValue;
-
-      setHeaders(newURL);
-
-      return isValidKey && isValidValue;
-    });
-
-    let clusterIDValidate = true;
-
-    if (clusterName.length === 0) {
-      setClusterError(true);
-      clusterIDValidate = false;
-    } else {
-      clusterIDValidate = true;
-    }
-
-    const validateCount = countValidate(countValue);
-
-    const headerList: { [key: string]: string } = headers.reduce(
-      (accumulator, currentValue) => ({ ...accumulator, [currentValue.key.key]: currentValue.value.value }),
-      {},
-    );
-
-    const clusterSet = new Set(clusterName);
-    const clusterID = cluster.filter((item) => clusterSet.has(item.name)).map((item) => item.id);
-    const filters = filter.join('&');
 
     if (filterText) {
       setFilterError(true);
@@ -900,12 +819,49 @@ export default function NewPreheat() {
       setIPsHelperText('Fill in the characters, the length is 0-100.');
     }
 
+    if (clusterName.length === 0) {
+      setClusterError(true);
+      clusterIDValidate = false;
+    } else {
+      clusterIDValidate = true;
+    }
+
+    const headerValidate = headers.every((item, index) => {
+      const isValidKey = headersKeyValidate(item.key.key);
+      const isValidValue = headersValueValidate(item.value.value);
+      const newURL = [...headers];
+
+      newURL[index].key.error = !isValidKey;
+      newURL[index].value.error = !isValidValue;
+
+      setHeaders(newURL);
+
+      return isValidKey && isValidValue;
+    });
+
+    const validateCount = countValidate(countValue);
+
+    const headerList: { [key: string]: string } = headers.reduce(
+      (accumulator, currentValue) => ({ ...accumulator, [currentValue.key.key]: currentValue.value.value }),
+      {},
+    );
+
+    const clusterSet = new Set(clusterName);
+    const clusterID = cluster.filter((item) => clusterSet.has(item.name)).map((item) => item.id);
+    const filters = filter.join('&');
+
     urlForm.setError(!urlForm.validate(url as string));
     urlForm.syncError = !urlForm.validate(url as string);
 
+    informationForm.forEach((item) => {
+      const value = data.get(item.formProps.name);
+      item.setError(!item.validate(value as string));
+      item.syncError = !item.validate(value as string);
+    });
+
     if (search === 'file') {
       argsForm.forEach((item) => {
-        if (item.formProps.name !== 'filteredQueryParams' && item.formProps.name !== 'ips') {
+        if (item.formProps.name !== 'filteredQueryParams') {
           const value = data.get(item.formProps.name);
           item.setError(!item.validate(value as string));
           item.syncError = !item.validate(value as string);
@@ -930,6 +886,8 @@ export default function NewPreheat() {
         !informationForm.filter((item) => item.syncError).length &&
           !argsForm.filter((item) => item.syncError).length &&
           !urlForm.syncError &&
+          !ipsForm.syncError &&
+          !ipsText &&
           clusterIDValidate &&
           headerValidate &&
           urlValidate &&
@@ -947,9 +905,9 @@ export default function NewPreheat() {
           application: application,
           filtered_query_params: filters,
           headers: headerList,
-          ips: ips,
           scope: scope,
           ...(countValue && count === 'count' && { count: Number(countValue) }),
+          ...(ips.length > 0 && count === 'ips' && { ips: ips }),
           ...(percentage && count === 'percentage' && { percentage: Number(percentage) }),
           ...(pieceLength && pieceLength !== 0 && { piece_length: pieceLength * 1024 * 1024 }),
         },
@@ -990,6 +948,8 @@ export default function NewPreheat() {
           !urlForm.syncError &&
           clusterIDValidate &&
           headerValidate &&
+          !ipsForm.syncError &&
+          !ipsText &&
           Boolean(!filterText) &&
           Boolean(!ipsText) &&
           (countValue ? validateCount : true),
@@ -1004,12 +964,12 @@ export default function NewPreheat() {
           tag: tag,
           application: application,
           filtered_query_params: filters,
-          ips: ips,
           headers: headerList,
           username: username,
           password: password,
           platform: platform,
           scope: scope,
+          ...(ips.length > 0 && count === 'ips' && { ips: ips }),
           ...(countValue && count === 'count' && { count: Number(countValue) }),
           ...(percentage && count === 'percentage' && { percentage: Number(percentage) }),
           ...(pieceLength && pieceLength !== 0 && { piece_length: pieceLength * 1024 * 1024 }),
@@ -1210,9 +1170,10 @@ export default function NewPreheat() {
             </Tooltip>
           </Box>
           <FormControl className={styles.textField} required size="small" error={clusterError}>
-            {clusterForm.map((item) => (
+            {clusterForm.map((item, index) => (
               <Autocomplete
                 freeSolo
+                key={index}
                 multiple
                 disableClearable
                 {...item.scopesFormProps}
@@ -1255,7 +1216,7 @@ export default function NewPreheat() {
               </Box>
               {URLs.map((item, index) => {
                 return (
-                  <Box sx={{ display: 'inline-flex', alignItems: 'flex-start', m: '0.8rem 0' }}>
+                  <Box key={index} sx={{ display: 'inline-flex', alignItems: 'flex-start', m: '0.8rem 0' }}>
                     <TextField
                       color="success"
                       id={`url-${index}`}
@@ -1384,48 +1345,8 @@ export default function NewPreheat() {
                         )}
                       />
                     </Box>
-                  ) : item?.filterFormProps?.id === 'ips' ? (
-                    <Box key={item.formProps.id} sx={{ width: '100%' }}>
-                      <Autocomplete
-                        freeSolo
-                        multiple
-                        disableClearable
-                        {...item.filterFormProps}
-                        size="small"
-                        className={styles.filterInput}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            InputProps={{
-                              ...params.InputProps,
-                              endAdornment: (
-                                <>
-                                  {params.InputProps.endAdornment}
-                                  <Tooltip
-                                    title="By setting the IPs parameter, you can specify the IP address of the resource that needs to be preheated."
-                                    placement="top"
-                                  >
-                                    <HelpIcon
-                                      sx={{
-                                        color: 'var(--palette-grey-300Channel)',
-                                        width: '0.8rem',
-                                        height: '0.8rem',
-                                        mr: '0.3rem',
-                                        ':hover': { color: 'var(--palette-description-color)' },
-                                      }}
-                                    />
-                                  </Tooltip>
-                                </>
-                              ),
-                            }}
-                            color="success"
-                            {...item.formProps}
-                          />
-                        )}
-                      />
-                    </Box>
                   ) : item.formProps.id === 'pieceLength' ? (
-                    <Box sx={{ width: '100%' }}>
+                    <Box key={item.formProps.id} sx={{ width: '100%' }}>
                       <TextField color="success" size="small" {...item.formProps} className={styles.pieceLengthInput} />
                       <FormControl className={styles.selectInput} color="success" required size="small">
                         <InputLabel id="scope">Scope</InputLabel>
@@ -1477,6 +1398,17 @@ export default function NewPreheat() {
                                   />
                                 }
                                 label="All"
+                              />
+                              <FormControlLabel
+                                value="ips"
+                                control={
+                                  <Radio
+                                    sx={{ '&.MuiRadio-root': { color: 'var(--palette-description-color)' } }}
+                                    size="small"
+                                    id="radio-ips"
+                                  />
+                                }
+                                label="IPs"
                               />
                               <FormControlLabel
                                 value="percentage"
@@ -1573,7 +1505,9 @@ export default function NewPreheat() {
                                 InputProps={{
                                   endAdornment: (
                                     <Tooltip
-                                      title="Count is the number of peers to be preheated.  It must be a value between 1 and 200 (inclusive) if provided."
+                                      title={`Count is the number of ${
+                                        scope === 'all_seed_peers' ? 'seed peers' : 'peers'
+                                      } to be preheated. It must be a value between 1 and 200 (inclusive) if provided.`}
                                       placement="top"
                                     >
                                       <HelpIcon
@@ -1589,6 +1523,47 @@ export default function NewPreheat() {
                                 }}
                                 sx={{ width: '12rem' }}
                               />
+                            ) : count === 'ips' ? (
+                              <Box>
+                                <Autocomplete
+                                  freeSolo
+                                  multiple
+                                  disableClearable
+                                  {...ipsForm.filterFormProps}
+                                  size="small"
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      InputProps={{
+                                        ...params.InputProps,
+                                        endAdornment: (
+                                          <>
+                                            {params.InputProps.endAdornment}
+                                            <Tooltip
+                                              title={`By setting the IPs, can specify a ${
+                                                scope === 'all_seed_peers' ? 'seed peer' : 'peer'
+                                              } IP for preheating.`}
+                                              placement="top"
+                                            >
+                                              <HelpIcon
+                                                sx={{
+                                                  color: 'var(--palette-grey-300Channel)',
+                                                  width: '0.8rem',
+                                                  height: '0.8rem',
+                                                  mr: '0.3rem',
+                                                  ':hover': { color: 'var(--palette-description-color)' },
+                                                }}
+                                              />
+                                            </Tooltip>
+                                          </>
+                                        ),
+                                      }}
+                                      color="success"
+                                      {...ipsForm.formProps}
+                                    />
+                                  )}
+                                />
+                              </Box>
                             ) : (
                               <Typography variant="body2" id="all">
                                 {scope === 'all_seed_peers'
@@ -1837,46 +1812,6 @@ export default function NewPreheat() {
                         )}
                       />
                     </Box>
-                  ) : item?.filterFormProps?.id === 'ips' ? (
-                    <Box key={item.formProps.id} sx={{ width: '100%' }}>
-                      <Autocomplete
-                        freeSolo
-                        multiple
-                        disableClearable
-                        {...item.filterFormProps}
-                        size="small"
-                        className={styles.filterInput}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            InputProps={{
-                              ...params.InputProps,
-                              endAdornment: (
-                                <>
-                                  {params.InputProps.endAdornment}
-                                  <Tooltip
-                                    title="By setting the IPs parameter, you can specify the IP address of the resource that needs to be preheated."
-                                    placement="top"
-                                  >
-                                    <HelpIcon
-                                      sx={{
-                                        color: 'var(--palette-grey-300Channel)',
-                                        width: '0.8rem',
-                                        height: '0.8rem',
-                                        mr: '0.3rem',
-                                        ':hover': { color: 'var(--palette-description-color)' },
-                                      }}
-                                    />
-                                  </Tooltip>
-                                </>
-                              ),
-                            }}
-                            color="success"
-                            {...item.formProps}
-                          />
-                        )}
-                      />
-                    </Box>
                   ) : item.formProps.id === 'pieceLength' ? (
                     <Box sx={{ width: '100%' }}>
                       <TextField color="success" size="small" {...item.formProps} className={styles.pieceLengthInput} />
@@ -1930,6 +1865,17 @@ export default function NewPreheat() {
                                   />
                                 }
                                 label="All"
+                              />
+                              <FormControlLabel
+                                value="ips"
+                                control={
+                                  <Radio
+                                    sx={{ '&.MuiRadio-root': { color: 'var(--palette-description-color)' } }}
+                                    size="small"
+                                    id="radio-ips"
+                                  />
+                                }
+                                label="IPs"
                               />
                               <FormControlLabel
                                 value="percentage"
@@ -2026,7 +1972,9 @@ export default function NewPreheat() {
                                 InputProps={{
                                   endAdornment: (
                                     <Tooltip
-                                      title="Count is the number of peers to be preheated.  It must be a value between 1 and 200 (inclusive) if provided."
+                                      title={`Count is the number of ${
+                                        scope === 'all_seed_peers' ? 'seed peers' : 'peers'
+                                      } to be preheated. It must be a value between 1 and 200 (inclusive) if provided.`}
                                       placement="top"
                                     >
                                       <HelpIcon
@@ -2042,6 +1990,47 @@ export default function NewPreheat() {
                                 }}
                                 sx={{ width: '12rem' }}
                               />
+                            ) : count === 'ips' ? (
+                              <Box>
+                                <Autocomplete
+                                  freeSolo
+                                  multiple
+                                  disableClearable
+                                  {...ipsForm.filterFormProps}
+                                  size="small"
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      InputProps={{
+                                        ...params.InputProps,
+                                        endAdornment: (
+                                          <>
+                                            {params.InputProps.endAdornment}
+                                            <Tooltip
+                                              title={`By setting the IPs, can specify a ${
+                                                scope === 'all_seed_peers' ? 'seed peer' : 'peer'
+                                              } IP for preheating.`}
+                                              placement="top"
+                                            >
+                                              <HelpIcon
+                                                sx={{
+                                                  color: 'var(--palette-grey-300Channel)',
+                                                  width: '0.8rem',
+                                                  height: '0.8rem',
+                                                  mr: '0.3rem',
+                                                  ':hover': { color: 'var(--palette-description-color)' },
+                                                }}
+                                              />
+                                            </Tooltip>
+                                          </>
+                                        ),
+                                      }}
+                                      color="success"
+                                      {...ipsForm.formProps}
+                                    />
+                                  )}
+                                />
+                              </Box>
                             ) : (
                               <Typography variant="body2" id="all">
                                 {scope === 'all_seed_peers'

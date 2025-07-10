@@ -476,6 +476,39 @@ export default function ShowPreheat() {
               </Box>
             </Box>
           )}
+          {preheat?.args?.ips && Array.isArray(preheat?.args?.ips) && preheat?.args?.ips.length > 0 && (
+            <Box className={styles.informationContainer}>
+              <Box className={styles.informationTitle}>
+                <IP className={styles.informationTitleIcon} />
+                <Typography
+                  variant="body1"
+                  fontFamily="mabry-bold"
+                  component="div"
+                  className={styles.informationTitleText}
+                >
+                  IPs
+                </Typography>
+              </Box>
+              <Box id="ips" className={styles.schedulerClustersID}>
+                {(Array.isArray(preheat?.args?.ips) &&
+                  preheat?.args?.ips?.length > 0 &&
+                  preheat?.args?.ips?.map((item, index) => {
+                    return (
+                      <Box key={index} id={`ips-${index}`} className={styles.typeWrapper}>
+                        <Typography key={index} variant="body2" component="div">
+                          {isLoading ? (
+                            <Skeleton data-testid="preheat-isloading" sx={{ width: '3rem' }} />
+                          ) : (
+                            item || '-'
+                          )}
+                        </Typography>
+                      </Box>
+                    );
+                  })) ||
+                  '-'}
+              </Box>
+            </Box>
+          )}
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>
               <Tag className={styles.informationTitleIcon} />
@@ -525,33 +558,6 @@ export default function ShowPreheat() {
                 '-'
               )}
             </Typography>
-          </Box>
-          <Box className={styles.informationContainer}>
-            <Box className={styles.informationTitle}>
-              <IP className={styles.informationTitleIcon} />
-              <Typography
-                variant="body1"
-                fontFamily="mabry-bold"
-                component="div"
-                className={styles.informationTitleText}
-              >
-                IPs
-              </Typography>
-            </Box>
-            <Box id="ips" className={styles.schedulerClustersID}>
-              {(Array.isArray(preheat?.args?.ips) &&
-                preheat?.args?.ips?.length > 0 &&
-                preheat?.args?.ips?.map((item, index) => {
-                  return (
-                    <Box key={index} id={`ips-${index}`} className={styles.typeWrapper}>
-                      <Typography key={index} variant="body2" component="div">
-                        {isLoading ? <Skeleton data-testid="preheat-isloading" sx={{ width: '3rem' }} /> : item || '-'}
-                      </Typography>
-                    </Box>
-                  );
-                })) ||
-                '-'}
-            </Box>
           </Box>
           <Box className={styles.informationContainer}>
             <Box className={styles.informationTitle}>

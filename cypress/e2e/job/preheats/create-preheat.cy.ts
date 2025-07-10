@@ -97,6 +97,11 @@ describe('Create preheat', () => {
 
     cy.get('#all_seed_peers').click();
 
+    //  Select a ips.
+    cy.get('#radio-ips').click();
+
+    cy.get('#ips').type('10.0.0.8{enter}');
+
     // Add url.
     cy.get('#url').type('https://example.com/path/to/file');
 
@@ -168,6 +173,10 @@ describe('Create preheat', () => {
     cy.get('#select-scope').click();
 
     cy.get('#all_seed_peers').click();
+
+    cy.get('#radio-ips').click();
+
+    cy.get('#ips').type('10.0.0.8{enter}');
 
     // Add url.
     cy.get('#url').type('https://example.com/path/to/file');
@@ -580,7 +589,13 @@ describe('Create preheat', () => {
         .and('have.text', 'Fill in the characters, the length is 0-100.');
 
       // Should display message ips the validation error.
-      cy.get('#ips').type('ips');
+      cy.get('#select-scope').click();
+      cy.get('#all_peers').click();
+
+      // Select ips.
+      cy.get('#radio-ips').click();
+
+      cy.get('#ips').type('10.0.0.8');
 
       cy.get('#save').click();
 
@@ -588,7 +603,7 @@ describe('Create preheat', () => {
       cy.get('#ips-helper-text').should('be.visible').and('have.text', 'Please press ENTER to end the ips creation');
 
       cy.get('#ips').clear();
-      cy.get('#ips').type('ips{enter}');
+      cy.get('#ips').type('10.0.0.8{enter}');
 
       cy.get('#ips').type(filter);
 
@@ -757,7 +772,13 @@ describe('Create preheat', () => {
         .and('have.text', 'Fill in the characters, the length is 0-100.');
 
       // Should display message ips the validation error.
-      cy.get('#ips').type('ips');
+      cy.get('#select-scope').click();
+      cy.get('#all_seed_peers').click();
+
+      // Select ips.
+      cy.get('#radio-ips').click();
+
+      cy.get('#ips').type('10.0.0.8');
 
       cy.get('#save').click();
 
@@ -765,7 +786,7 @@ describe('Create preheat', () => {
       cy.get('#ips-helper-text').should('be.visible').and('have.text', 'Please press ENTER to end the ips creation');
 
       cy.get('#ips').clear();
-      cy.get('#ips').type('ips{enter}');
+      cy.get('#ips').type('10.0.0.8{enter}');
 
       cy.get('#ips').type(filter);
 

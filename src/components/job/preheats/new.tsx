@@ -1192,7 +1192,6 @@ export default function NewPreheat() {
             ))}
           </FormControl>
         </Box>
-
         {search === 'file' ? (
           <>
             <Box>

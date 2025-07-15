@@ -263,7 +263,7 @@ export default function PersonalAccessTokens() {
         <Card id="tokens-list">
           {Array.isArray(allTokens) &&
             allTokens.map((item, index) => {
-              return index !== allTokens.length - 1 ? (
+              return (
                 <Box key={item.id}>
                   <Box className={styles.tokenWrapper}>
                     <Box>
@@ -308,59 +308,15 @@ export default function PersonalAccessTokens() {
                       </Button>
                     </Box>
                   </Box>
-                  <Divider
-                    sx={{
-                      borderStyle: 'dashed',
-                      borderColor: 'var(--palette-palette-divider)',
-                      borderWidth: '0px 0px thin',
-                    }}
-                  />
-                </Box>
-              ) : (
-                <Box key={item.id}>
-                  <Box className={styles.tokenWrapper}>
-                    <Box>
-                      <Box className={styles.tokenNameWrapper}>
-                        <RouterLink
-                          id={item.name}
-                          component={Link}
-                          to={`/developer/personal-access-tokens/${item?.id}`}
-                          underline="hover"
-                          className={styles.tokenName}
-                        >
-                          {item.name}
-                        </RouterLink>
-                        <Typography id={`user-name-${item.id}`} variant="body2">
-                          &nbsp;—&nbsp;{item?.user?.name}
-                        </Typography>
-                      </Box>
-                      <Box className={styles.tokenExpires}>
-                        <Typography variant="body2" component="span" fontFamily="mabry-bold">
-                          Expires on&nbsp;
-                        </Typography>
-                        <Typography id={`expired-at-${item?.id}`} variant="body2" component="span">
-                          {formatDate(item?.expired_at) || ''}.
-                        </Typography>
-                      </Box>
-                    </Box>
-                    <Box>
-                      <Button
-                        size="small"
-                        id={`delete-token-${item?.id}`}
-                        sx={{
-                          background: 'var(--palette-button-color)',
-                          color: 'var(--palette-button-text-color)',
-                          ':hover': { backgroundColor: 'var(--palette-hover-button-text-color)' },
-                        }}
-                        variant="contained"
-                        onClick={() => {
-                          handleDeleteClose(item);
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </Box>
-                  </Box>
+                  {index !== allTokens.length - 1 && (
+                    <Divider
+                      sx={{
+                        borderStyle: 'dashed',
+                        borderColor: 'var(--palette-palette-divider)',
+                        borderWidth: '0px 0px thin',
+                      }}
+                    />
+                  )}
                 </Box>
               );
             })}

@@ -21,34 +21,6 @@
     "group_uuid": "group_bf122e8c-97af-41c1-937a-1fc390c074d6",
     "job_states": [
       {
-        "created_at": "2024-11-02T10:39:33.32490896Z",
-        "error": "",
-        "results": [
-          {
-            "peers": null,
-            "scheduler_cluster_id": 1
-          }
-        ],
-        "state": "SUCCESS",
-        "task_name": "get_task",
-        "task_uuid": "task_755c2749-aade-4dcc-bffb-a75cbb225bdf",
-        "ttl": 0
-      },
-      {
-        "created_at": "2024-11-02T10:39:33.32522671Z",
-        "error": "",
-        "results": [
-          {
-            "peers": null,
-            "scheduler_cluster_id": 1
-          }
-        ],
-        "state": "SUCCESS",
-        "task_name": "get_task",
-        "task_uuid": "task_39e7e095-db06-45c6-a04b-c8b4950221a4",
-        "ttl": 0
-      },
-      {
         "created_at": "2024-11-02T10:39:33.32540646Z",
         "error": "",
         "results": [
@@ -117,20 +89,6 @@
         "state": "SUCCESS",
         "task_name": "get_task",
         "task_uuid": "task_fc30bfaa-ac06-4eca-9388-fc61996e01b1",
-        "ttl": 0
-      },
-      {
-        "created_at": "2024-11-02T10:39:33.325636543Z",
-        "error": "",
-        "results": [
-          {
-            "peers": null,
-            "scheduler_cluster_id": 1
-          }
-        ],
-        "state": "SUCCESS",
-        "task_name": "get_task",
-        "task_uuid": "task_1b0efbad-a71d-473f-85d7-646800765dc0",
         "ttl": 0
       },
       {
@@ -245,66 +203,20 @@
     "state": "SUCCESS",
     "updated_at": "2024-11-02T10:39:33.334817876Z"
   },
-  "user_id": 0,
-  "user": {
-    "id": 0,
-    "created_at": "0001-01-01T00:00:00Z",
-    "updated_at": "0001-01-01T00:00:00Z",
-    "is_del": 0,
-    "email": "",
-    "name": "",
-    "avatar": "",
-    "phone": "",
-    "state": "",
-    "location": "",
-    "bio": "",
-    "configs": null
-  },
-  "seed_peer_clusters": [],
   "scheduler_clusters": [
     {
       "id": 1,
       "created_at": "2024-11-01T05:42:02Z",
       "updated_at": "2024-11-01T05:42:02Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "",
-      "config": {
-        "candidate_parent_limit": 4,
-        "filter_parent_limit": 15,
-        "job_rate_limit": 10
-      },
-      "client_config": {
-        "load_limit": 200
-      },
-      "scopes": {},
-      "is_default": true,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     {
       "id": 2,
       "created_at": "2024-11-01T05:42:02Z",
       "updated_at": "2024-11-01T05:42:02Z",
       "is_del": 0,
-      "name": "cluster-2",
-      "bio": "",
-      "config": {
-        "candidate_parent_limit": 4,
-        "filter_parent_limit": 15,
-        "job_rate_limit": 10
-      },
-      "client_config": {
-        "load_limit": 200
-      },
-      "scopes": {},
-      "is_default": true,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-2"
     }
   ]
 }

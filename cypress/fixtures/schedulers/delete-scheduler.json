@@ -17,16 +17,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -48,16 +39,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -79,16 +61,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -110,16 +83,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -141,16 +105,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -172,16 +127,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -203,16 +149,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -234,16 +171,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -265,16 +193,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -296,16 +215,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -327,16 +237,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -358,16 +259,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -389,16 +281,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -420,16 +303,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -451,16 +325,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -482,16 +347,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -513,16 +369,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -544,16 +391,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -575,16 +413,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -606,16 +435,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -637,16 +457,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -668,16 +479,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -699,16 +501,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -730,16 +523,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -761,16 +545,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -792,16 +567,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -823,16 +589,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -854,16 +611,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -885,16 +633,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -916,16 +655,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -947,16 +677,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -978,16 +699,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1009,16 +721,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1040,16 +743,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1071,16 +765,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1102,16 +787,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1133,16 +809,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1164,16 +831,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1195,16 +853,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1226,16 +875,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1257,16 +897,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1288,16 +919,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1319,16 +941,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1350,16 +963,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1381,16 +985,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1412,16 +1007,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1443,16 +1029,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1474,16 +1051,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1505,16 +1073,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   },
@@ -1536,16 +1095,7 @@
       "created_at": "2023-10-31T07:48:35Z",
       "updated_at": "2023-10-31T07:48:35Z",
       "is_del": 0,
-      "name": "cluster-1",
-      "bio": "this is cluster-1",
-      "config": null,
-      "client_config": null,
-      "scopes": null,
-      "is_default": false,
-      "seed_peer_clusters": null,
-      "schedulers": null,
-      "peers": null,
-      "jobs": null
+      "name": "cluster-1"
     },
     "models": null
   }

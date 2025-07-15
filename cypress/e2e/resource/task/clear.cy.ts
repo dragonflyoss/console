@@ -178,12 +178,12 @@ describe('Clear', () => {
 
       cy.get('#isLoading').should('be.exist');
 
-      cy.wait(120000);
+      cy.wait(59000);
 
       // Executed every 3 seconds, it should be executed 2 times after 6 seconds.
       cy.get('@cache').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(2, 1);
+        expect(interceptCount).to.be.closeTo(1, 0);
       });
 
       cy.intercept(
@@ -198,8 +198,6 @@ describe('Clear', () => {
           });
         },
       );
-
-      cy.wait(60000);
 
       cy.get('#url').click();
 
@@ -382,11 +380,11 @@ describe('Clear', () => {
       cy.get('#searchByURL').click();
 
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('.MuiAlert-message').should('not.exist');
+      cy.get('#error-message').should('not.exist');
 
       // Search by task id.
       cy.get('#serach-task-id').click();
@@ -396,11 +394,11 @@ describe('Clear', () => {
       );
 
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('.MuiAlert-message').should('not.exist');
+      cy.get('#error-message').should('not.exist');
     });
 
     it('when the status is pending, delete cache API error response', () => {
@@ -440,18 +438,12 @@ describe('Clear', () => {
 
       cy.get('#isLoading').should('be.exist');
 
-      cy.wait(120000);
+      cy.wait(59000);
 
       // Executed every 1 minute and once after 1 minute.
       cy.get('@cache').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(2, 1);
-      });
-
-      // Executed every 1 minute and once after 1 minute.
-      cy.get('@cache').then(() => {
-        expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(2, 1);
+        expect(interceptCount).to.be.closeTo(1, 0);
       });
 
       cy.intercept(
@@ -467,8 +459,8 @@ describe('Clear', () => {
         },
       );
 
-      // Preheat API error response after three seconds.
-      cy.wait(60000);
+      // Show error message.
+      cy.get('#error-message').should('be.visible').and('contain', 'Unauthorized');
     });
 
     it('delete cache API error response', () => {
@@ -504,11 +496,11 @@ describe('Clear', () => {
       );
 
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
+      cy.get('#error-message').should('be.visible').and('contain', 'Unauthorized');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('.MuiAlert-message').should('not.exist');
+      cy.get('#error-message').should('not.exist');
     });
 
     it('search by image manifest url API error response', () => {
@@ -529,7 +521,7 @@ describe('Clear', () => {
       cy.get('#image-manifest-url').type('https://example.com/path/to/file{enter}');
 
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
     });
   });
 
@@ -756,7 +748,7 @@ describe('Clear', () => {
       cy.url().should('include', '/resource/task/clear');
 
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
     });
 
     it('search by URL API error response should be handled', () => {
@@ -826,7 +818,7 @@ describe('Clear', () => {
       cy.url().should('include', '/resource/task/clear');
 
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
     });
   });
 

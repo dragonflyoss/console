@@ -7,58 +7,62 @@ describe('Executions', () => {
   beforeEach(() => {
     cy.signin();
 
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/jobs?page=1&per_page=10&type=delete_task',
-      },
-      (req) => {
-        req.reply((res: any) => {
-          const responseHeaders = {
-            ...res.headers,
-            Link: '</api/v1/jobs?page=1&per_page=10&state=FAILURE>;rel=prev,</api/v1/jobs?page=2&per_page=10&state=FAILURE>;rel=next,</api/v1/jobs?page=1&per_page=10&state=FAILURE>;rel=first,</api/v1/jobs?page=2&per_page=10&state=FAILURE>;rel=last',
-          };
-          res.send(200, executions, responseHeaders);
-        });
-      },
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/v1/jobs/9',
-      },
-      (req) => {
-        req.reply({
-          statusCode: 200,
-          body: execution,
-        });
-      },
-    );
-
-    cy.visit('/resource/task/executions');
+    cy.visit('/resource/task/executions/6');
     cy.viewport(1440, 1080);
   });
 
-  it('click the breadcrumb', () => {
-    // Show isloading.
-    cy.get('[data-testid="isloading"]').should('be.exist');
-
-    cy.get('#execution-9').click();
-
-    cy.url().should('include', '/resource/task/executions/9');
-
-    // Check for breadcrumb.
-    cy.get('.MuiBreadcrumbs-ol').should('exist').and('contain', 'Executions').and('contain', '9');
-
-    cy.get('.MuiBreadcrumbs-ol > :nth-child(5) > .MuiTypography-root').click();
-
-    cy.get('[data-testid="isloading"]').should('not.exist');
-
-    // Then I see that the current page is the executions page!
-    cy.url().should('include', '/resource/task/executions');
-  });
-
   describe('when data is loaded', () => {
+    beforeEach(() => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs?page=1&per_page=10&type=delete_task',
+        },
+        (req) => {
+          req.reply((res: any) => {
+            const responseHeaders = {
+              ...res.headers,
+              Link: '</api/v1/jobs?page=1&per_page=10&state=FAILURE>;rel=prev,</api/v1/jobs?page=2&per_page=10&state=FAILURE>;rel=next,</api/v1/jobs?page=1&per_page=10&state=FAILURE>;rel=first,</api/v1/jobs?page=2&per_page=10&state=FAILURE>;rel=last',
+            };
+            res.send(200, executions, responseHeaders);
+          });
+        },
+      );
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/jobs/9',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: execution,
+          });
+        },
+      );
+
+      cy.visit('/resource/task/executions');
+    });
+
+    it('click the breadcrumb', () => {
+      // Show isloading.
+      cy.get('[data-testid="isloading"]').should('be.exist');
+
+      cy.get('#execution-9').click();
+
+      cy.url().should('include', '/resource/task/executions/9');
+
+      // Check for breadcrumb.
+      cy.get('.MuiBreadcrumbs-ol').should('exist').and('contain', 'Executions').and('contain', '9');
+
+      cy.get('.MuiBreadcrumbs-ol > :nth-child(5) > .MuiTypography-root').click();
+
+      cy.get('[data-testid="isloading"]').should('not.exist');
+
+      // Then I see that the current page is the executions page!
+      cy.url().should('include', '/resource/task/executions');
+    });
+
     it('should display detailed execution failure information', () => {
       // Click the execution details button.
       cy.intercept(
@@ -208,12 +212,12 @@ describe('Executions', () => {
         .and('exist')
         .find('#error-log-icon')
         .and('not.exist');
-      cy.wait(120000);
+      cy.wait(59000);
 
       // Check how many times the API should be executed after six seconds.
       cy.get('@execution').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(4, 1);
+        expect(interceptCount).to.be.closeTo(2, 0);
       });
 
       cy.intercept(
@@ -228,9 +232,6 @@ describe('Executions', () => {
           });
         },
       );
-
-      // Execution fails after three seconds.
-      cy.wait(60000);
 
       // Show execution status.
       cy.get('#status')
@@ -258,8 +259,6 @@ describe('Executions', () => {
           });
         },
       );
-
-      cy.visit('/resource/task/executions/6');
     });
 
     it('execution information should appear empty', () => {
@@ -308,8 +307,6 @@ describe('Executions', () => {
           });
         },
       );
-
-      cy.visit('/resource/task/executions/6');
     });
 
     it('show error message', () => {
@@ -394,12 +391,12 @@ describe('Executions', () => {
 
       cy.get('#failure-tasks-list > :nth-child(1) > :nth-child(2)').should('have.text', '172.18.0.3');
 
-      cy.wait(120000);
+      cy.wait(59000);
 
       // Check how many times the API should be executed after six seconds.
       cy.get('@execution').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(4, 1);
+        expect(interceptCount).to.be.closeTo(2, 0);
       });
 
       cy.intercept(
@@ -414,9 +411,6 @@ describe('Executions', () => {
           });
         },
       );
-
-      // Execution API error response after three seconds.
-      cy.wait(60000);
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');

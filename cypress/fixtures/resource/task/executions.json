@@ -99,22 +99,6 @@
       "state": "PENDING",
       "updated_at": "2024-11-01T10:08:16.695602295Z"
     },
-    "user_id": 0,
-    "user": {
-      "id": 0,
-      "created_at": "0001-01-01T00:00:00Z",
-      "updated_at": "0001-01-01T00:00:00Z",
-      "is_del": 0,
-      "email": "",
-      "name": "",
-      "avatar": "",
-      "phone": "",
-      "state": "",
-      "location": "",
-      "bio": "",
-      "configs": null
-    },
-    "seed_peer_clusters": null,
     "scheduler_clusters": null
   },
   {
@@ -216,22 +200,6 @@
       "state": "FAILURE",
       "updated_at": "2024-11-01T10:08:16.695602295Z"
     },
-    "user_id": 0,
-    "user": {
-      "id": 0,
-      "created_at": "0001-01-01T00:00:00Z",
-      "updated_at": "0001-01-01T00:00:00Z",
-      "is_del": 0,
-      "email": "",
-      "name": "",
-      "avatar": "",
-      "phone": "",
-      "state": "",
-      "location": "",
-      "bio": "",
-      "configs": null
-    },
-    "seed_peer_clusters": null,
     "scheduler_clusters": null
   },
   {
@@ -325,22 +293,6 @@
       "state": "SUCCESS",
       "updated_at": "2024-11-01T10:03:18.70472913Z"
     },
-    "user_id": 0,
-    "user": {
-      "id": 0,
-      "created_at": "0001-01-01T00:00:00Z",
-      "updated_at": "0001-01-01T00:00:00Z",
-      "is_del": 0,
-      "email": "",
-      "name": "",
-      "avatar": "",
-      "phone": "",
-      "state": "",
-      "location": "",
-      "bio": "",
-      "configs": null
-    },
-    "seed_peer_clusters": null,
     "scheduler_clusters": null
   },
   {
@@ -434,22 +386,6 @@
       "state": "SUCCESS",
       "updated_at": "2024-11-01T10:00:19.091528713Z"
     },
-    "user_id": 0,
-    "user": {
-      "id": 0,
-      "created_at": "0001-01-01T00:00:00Z",
-      "updated_at": "0001-01-01T00:00:00Z",
-      "is_del": 0,
-      "email": "",
-      "name": "",
-      "avatar": "",
-      "phone": "",
-      "state": "",
-      "location": "",
-      "bio": "",
-      "configs": null
-    },
-    "seed_peer_clusters": null,
     "scheduler_clusters": null
   },
   {
@@ -543,22 +479,6 @@
       "state": "SUCCESS",
       "updated_at": "2024-11-01T09:57:01.559297719Z"
     },
-    "user_id": 0,
-    "user": {
-      "id": 0,
-      "created_at": "0001-01-01T00:00:00Z",
-      "updated_at": "0001-01-01T00:00:00Z",
-      "is_del": 0,
-      "email": "",
-      "name": "",
-      "avatar": "",
-      "phone": "",
-      "state": "",
-      "location": "",
-      "bio": "",
-      "configs": null
-    },
-    "seed_peer_clusters": null,
     "scheduler_clusters": null
   },
   {
@@ -646,22 +566,6 @@
       "state": "SUCCESS",
       "updated_at": "2024-11-01T09:54:04.895802304Z"
     },
-    "user_id": 0,
-    "user": {
-      "id": 0,
-      "created_at": "0001-01-01T00:00:00Z",
-      "updated_at": "0001-01-01T00:00:00Z",
-      "is_del": 0,
-      "email": "",
-      "name": "",
-      "avatar": "",
-      "phone": "",
-      "state": "",
-      "location": "",
-      "bio": "",
-      "configs": null
-    },
-    "seed_peer_clusters": null,
     "scheduler_clusters": null
   },
   {
@@ -749,22 +653,6 @@
       "state": "SUCCESS",
       "updated_at": "2024-11-01T09:34:14.319862503Z"
     },
-    "user_id": 0,
-    "user": {
-      "id": 0,
-      "created_at": "0001-01-01T00:00:00Z",
-      "updated_at": "0001-01-01T00:00:00Z",
-      "is_del": 0,
-      "email": "",
-      "name": "",
-      "avatar": "",
-      "phone": "",
-      "state": "",
-      "location": "",
-      "bio": "",
-      "configs": null
-    },
-    "seed_peer_clusters": null,
     "scheduler_clusters": null
   },
   {
@@ -852,22 +740,6 @@
       "state": "SUCCESS",
       "updated_at": "2024-11-01T09:32:30.011738344Z"
     },
-    "user_id": 0,
-    "user": {
-      "id": 0,
-      "created_at": "0001-01-01T00:00:00Z",
-      "updated_at": "0001-01-01T00:00:00Z",
-      "is_del": 0,
-      "email": "",
-      "name": "",
-      "avatar": "",
-      "phone": "",
-      "state": "",
-      "location": "",
-      "bio": "",
-      "configs": null
-    },
-    "seed_peer_clusters": null,
     "scheduler_clusters": null
   },
   {
@@ -955,22 +827,6 @@
       "state": "SUCCESS",
       "updated_at": "2024-11-01T09:28:11.790449835Z"
     },
-    "user_id": 0,
-    "user": {
-      "id": 0,
-      "created_at": "0001-01-01T00:00:00Z",
-      "updated_at": "0001-01-01T00:00:00Z",
-      "is_del": 0,
-      "email": "",
-      "name": "",
-      "avatar": "",
-      "phone": "",
-      "state": "",
-      "location": "",
-      "bio": "",
-      "configs": null
-    },
-    "seed_peer_clusters": null,
     "scheduler_clusters": null
   },
   {
@@ -1058,22 +914,6 @@
       "state": "SUCCESS",
       "updated_at": "2024-11-01T09:25:05.268218346Z"
     },
-    "user_id": 0,
-    "user": {
-      "id": 0,
-      "created_at": "0001-01-01T00:00:00Z",
-      "updated_at": "0001-01-01T00:00:00Z",
-      "is_del": 0,
-      "email": "",
-      "name": "",
-      "avatar": "",
-      "phone": "",
-      "state": "",
-      "location": "",
-      "bio": "",
-      "configs": null
-    },
-    "seed_peer_clusters": null,
     "scheduler_clusters": null
   }
 ]

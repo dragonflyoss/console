@@ -85,6 +85,13 @@ export default function Layout(props: any) {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [pageLoding, setPageLoding] = useState(false);
+  const [anchorElement, setAnchorElement] = useState(null);
+  const [firstLogin, setFirstLogin] = useState(false);
+  const [expandDeveloper, setExpandDeveloper] = useState(false);
+  const [expandJob, setExpandJob] = useState(false);
+  const [expandResource, setExpandResource] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [expandedMenu, setExpandedMenu] = useState<any | null>(null);
   const [user, setUser] = useState<getUserResponse>({
     id: 0,
     created_at: '',
@@ -98,13 +105,6 @@ export default function Layout(props: any) {
     location: '',
     bio: '',
   });
-  const [anchorElement, setAnchorElement] = useState(null);
-  const [firstLogin, setFirstLogin] = useState(false);
-  const [expandDeveloper, setExpandDeveloper] = useState(false);
-  const [expandJob, setExpandJob] = useState(false);
-  const [expandResource, setExpandResource] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [expandedMenu, setExpandedMenu] = useState<any | null>(null);
   const [compactLayout, setCompactLayout] = useState(() => {
     const storedValue = localStorage.getItem('compactLayout');
     return storedValue === 'true';

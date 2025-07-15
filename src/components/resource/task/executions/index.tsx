@@ -206,7 +206,7 @@ export default function Executions() {
           <Box id="executions-list">
             {executions &&
               executions.map((item, index) => {
-                return index !== executions.length - 1 ? (
+                return (
                   <Box key={item.id} id={`list-${item.id}`}>
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
                       <Box className={styles.statusContainer}>
@@ -249,53 +249,15 @@ export default function Executions() {
                         </RouterLink>
                       </Box>
                     </Box>
-                    <Divider
-                      sx={{
-                        borderStyle: 'dashed',
-                        borderColor: 'var(--palette-palette-divider)',
-                        borderWidth: '0px 0px thin',
-                      }}
-                    />
-                  </Box>
-                ) : (
-                  <Box key={item.id} id={`list-${item.id}`} className={styles.listWrapper}>
-                    <Box className={styles.statusContainer}>
-                      {item.result.state === 'SUCCESS' ? (
-                        <Success id={`SUCCESS-${item.id}`} className={styles.stateIcon} />
-                      ) : item.result.state === 'FAILURE' ? (
-                        <Failure id={`FAILURE-${item.id}`} className={styles.stateIcon} />
-                      ) : (
-                        <Pending id={`PENDING-${item.id}`} className={styles.pendingIcon} />
-                      )}
-                      <Box
-                        sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-                        ml="0.6rem"
-                      >
-                        <Typography variant="body1" fontFamily="mabry-bold">
-                          {item.id}
-                        </Typography>
-                        <Typography variant="body2">{item.args?.task_id || '-'}</Typography>
-                      </Box>
-                    </Box>
-                    <Box className={styles.timeContainer}>
-                      <Chip
-                        avatar={<MoreTimeIcon />}
-                        label={getDatetime(item.created_at) || '-'}
-                        variant="outlined"
-                        size="small"
+                    {index !== executions.length - 1 && (
+                      <Divider
+                        sx={{
+                          borderStyle: 'dashed',
+                          borderColor: 'var(--palette-palette-divider)',
+                          borderWidth: '0px 0px thin',
+                        }}
                       />
-                    </Box>
-                    <Box className={styles.iconButton}>
-                      <RouterLink
-                        component={Link}
-                        id={`execution-${item?.id}`}
-                        to={`/resource/task/executions/${item?.id}`}
-                        underline="hover"
-                        sx={{ color: 'var(--palette-description-color)' }}
-                      >
-                        <Detail className={styles.detailIcon} />
-                      </RouterLink>
-                    </Box>
+                    )}
                   </Box>
                 );
               })}

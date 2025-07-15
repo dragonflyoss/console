@@ -790,7 +790,7 @@ export default function ShowCluster() {
                         >
                           {Array.isArray(seedPeerInactive) &&
                             seedPeerInactive.map((item, index) => {
-                              return index !== seedPeerInactive.length - 1 ? (
+                              return (
                                 <Box key={item.id}>
                                   <ListItem className={styles.seedPeerInactiveList}>
                                     <MuiTooltip title={item.id || '-'} placement="top">
@@ -813,31 +813,7 @@ export default function ShowCluster() {
                                       </Typography>
                                     </MuiTooltip>
                                   </ListItem>
-                                  <hr className={styles.divider} />
-                                </Box>
-                              ) : (
-                                <Box key={item.id}>
-                                  <ListItem className={styles.seedPeerInactiveList}>
-                                    <MuiTooltip title={item.id || '-'} placement="top">
-                                      <Typography variant="body2" component="div" className={styles.seedPeerInactiveID}>
-                                        {item.id}
-                                      </Typography>
-                                    </MuiTooltip>
-                                    <MuiTooltip title={item.host_name || '-'} placement="top">
-                                      <Typography
-                                        variant="body2"
-                                        component="div"
-                                        className={styles.seedPeerInactiveHostname}
-                                      >
-                                        {item.host_name}
-                                      </Typography>
-                                    </MuiTooltip>
-                                    <MuiTooltip title={item.ip || '-'} placement="top">
-                                      <Typography variant="body2" component="div" className={styles.seedPeerInactiveIP}>
-                                        {item.ip}
-                                      </Typography>
-                                    </MuiTooltip>
-                                  </ListItem>
+                                  {index !== seedPeerInactive.length - 1 && <hr className={styles.divider} />}
                                 </Box>
                               );
                             })}

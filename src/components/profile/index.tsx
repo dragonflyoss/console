@@ -518,6 +518,19 @@ export default function Profile() {
   const cancelHandlePersonalInformation = async () => {
     setUsers(user);
     setShowPersonalInformation(true);
+    setUsers({ ...user });
+    setPhone(user.phone);
+    setPhoneError(false);
+    setBioError(false);
+    setLocationError(false);
+    setEmailError(false);
+  };
+
+  const cancelChangePassword = () => {
+    setPassword({ ...password, old_password: '', new_password: '' });
+    setOldPasswordError(false);
+    setNewPasswordError(false);
+    setConfirmNewPasswordErrorError(false);
   };
 
   const handleChangePassword = async (event: any) => {
@@ -559,10 +572,6 @@ export default function Profile() {
     } else {
       setPasswordLoadingButton(false);
     }
-  };
-
-  const cancelChangePassword = () => {
-    setPassword({ ...password, old_password: '', new_password: '' });
   };
 
   const handleClose = (_event: any, reason?: string) => {
@@ -611,31 +620,13 @@ export default function Profile() {
                 <Box className={styles.avatarWrapper} />
                 <Avatar alt="Remy Sharp" src={user?.avatar} className={styles.avatarContent} />
               </Box>
-              <Box sx={{ pl: '1rem', pt: '1.4rem' }}>
+              <Box className={styles.nameWrapper}>
                 <Typography id="name-title" variant="h5" color="#FFFFFF">
                   {users?.name || '-'}
                 </Typography>
-                <Paper
-                  // elevation={0}
-                  id="state"
-                  sx={{
-                    borderRadius: '0.2rem',
-                    // color: '#FFFFFF',
-                    // display: 'inline-flex',
-                    // alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '0.1rem 0.4rem',
-                    mt: '0.4rem',
-                    // boxShadow: 'var(--palette-card-box-shadow)',
-                    background: '#18230f',
-                    color: '#FFF',
-                  }}
-                >
+                <Box id="state" className={styles.userState}>
                   <Typography variant="body2">{_.upperFirst(user?.state) || ''}</Typography>
-                </Paper>
-                {/* <Typography id="name-title" variant="body2" color="#FFFFFF">
-                  {_.upperFirst(user?.state) || ''}
-                </Typography> */}
+                </Box>
               </Box>
             </Box>
           </Box>
@@ -646,7 +637,6 @@ export default function Profile() {
                 key="1"
                 iconPosition="start"
                 label="Profile"
-                sx={{ textTransform: 'none' }}
                 id="tab-profile"
                 value="1"
                 onClick={cancelChangePassword}
@@ -658,6 +648,7 @@ export default function Profile() {
                 label="Security"
                 id="tab-password"
                 value="2"
+                onClick={cancelHandlePersonalInformation}
               />
             </AntTabs>
           </Box>

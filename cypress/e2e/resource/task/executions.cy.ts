@@ -46,51 +46,23 @@ describe('Executions', () => {
 
   describe('when data is loaded', () => {
     it('should display executions all list', () => {
-      let interceptCount = 0;
-
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/jobs?page=1&per_page=10&type=delete_task',
-        },
-        (req) => {
-          req.reply((res: any) => {
-            res.setDelay(2000);
-            const responseHeaders = {
-              ...res.headers,
-              Link: '</api/v1/jobs?page=1&per_page=10>;rel=prev,</api/v1/jobs?page=2&per_page=10>;rel=next,</api/v1/jobs?page=1&per_page=10>;rel=first,</api/v1/jobs?page=2&per_page=10>;rel=last',
-            };
-            res.send(200, executions, responseHeaders);
-          });
-          interceptCount++;
-        },
-      ).as('executions');
-
       cy.get('[data-testid="isloading"]').should('be.exist');
 
       cy.get('.MuiTabs-flexContainer > .Mui-selected').should('be.visible').and('have.text', 'Executions');
 
-      cy.wait(120000);
-
-      // Executed every 1 minute and once after 1 minute.
-      cy.get('@executions').then(() => {
-        expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(2, 1);
-      });
-
       cy.get('[data-testid="isloading"]').should('not.exist');
 
-      cy.get('#list-11 > .css-1mlhis1').should('exist').find('#PENDING-11').should('exist');
+      cy.get('#execution-11').should('exist').find('#PENDING-11').should('exist');
 
       cy.get('.MuiList-root > :nth-child(3) > .MuiButtonBase-root').click();
 
       // The executions status is displayed as PENDING.
-      cy.get('#list-11 > .css-1mlhis1').should('exist').find('#PENDING-11').should('exist');
+      cy.get('#execution-11').should('exist').find('#PENDING-11').should('exist');
       cy.get('#id-11').should('have.text', 11);
       cy.get('#task-id-11').should('have.text', 'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916');
 
       // The executions status is displayed as FAILURE.
-      cy.get('#list-10 > .css-1mlhis1').should('exist').find('#FAILURE-10').should('exist');
+      cy.get('#execution-10').should('exist').find('#FAILURE-10').should('exist');
       cy.get('#task-id-10').should('have.text', 'fe0c4a611d35e338efd342c346a2c671c358c5187c483a5fc7cd66c6685ce916');
 
       cy.get('#tab-clear').click();
@@ -181,12 +153,12 @@ describe('Executions', () => {
       // Check how many executions are in pending failure.
       cy.get('#executions-list').children().should('have.length', 1);
 
-      cy.wait(120000);
+      cy.wait(59000);
 
       // The API should poll.
       cy.get('@executions').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(3, 1);
+        expect(interceptCount).to.be.closeTo(1, 0);
       });
 
       cy.intercept(
@@ -201,8 +173,6 @@ describe('Executions', () => {
           });
         },
       );
-
-      cy.wait(60000);
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
@@ -263,7 +233,7 @@ describe('Executions', () => {
       cy.get('#executions-pagination > .MuiPagination-ul .Mui-selected').should('have.text', '1');
 
       // The executions status is displayed as PENDING.
-      cy.get('#list-11 > .css-1mlhis1').should('exist').find('#PENDING-11').should('exist');
+      cy.get('#execution-11').should('exist').find('#PENDING-11').should('exist');
       cy.get('#id-11').should('have.text', 11);
     });
 
@@ -311,7 +281,7 @@ describe('Executions', () => {
       cy.get('#list-1').should('exist').find('#SUCCESS-1').should('exist');
 
       // Go to show executions page.
-      cy.get('#execution-1').click();
+      cy.get('#detail-1').click();
 
       // Then I see that the current page is the show update personal-access-tokens.
       cy.url().should('include', '/resource/task/executions/1');

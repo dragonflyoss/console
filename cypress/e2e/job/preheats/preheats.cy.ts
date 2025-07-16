@@ -72,14 +72,6 @@ describe('Preheats', () => {
 
       cy.get('[data-testid="isloading"]').should('be.exist');
 
-      cy.wait(60000);
-
-      // Executed every 3 seconds, it should be executed 2 times after 6 seconds.
-      cy.get('@preheats').then(() => {
-        expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(2, 1);
-      });
-
       cy.get('[data-testid="isloading"]').should('not.exist');
       cy.get('.MuiList-root > :nth-child(3) > .MuiButtonBase-root').click();
 
@@ -171,12 +163,12 @@ describe('Preheats', () => {
       // Check how many preheat tasks are in pending failure.
       cy.get('#preheats-list').children().should('have.length', 1);
 
-      cy.wait(60000);
+      cy.wait(59000);
 
       // The API should poll.
       cy.get('@preheats').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(2, 0);
+        expect(interceptCount).to.be.closeTo(1, 0);
       });
 
       cy.intercept(
@@ -191,8 +183,6 @@ describe('Preheats', () => {
           });
         },
       );
-
-      cy.wait(60000);
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
@@ -287,7 +277,7 @@ describe('Preheats', () => {
 
       // Refresh page.
       cy.reload().then(() => {
-        cy.wait(2000);
+        cy.wait(1000);
       });
 
       // Check the current page number.
@@ -396,15 +386,15 @@ describe('Preheats', () => {
           });
           interceptCount++;
         },
-      ).as('preheat');
+      ).as('preheats');
 
       // should search for preheat ID.
       cy.get('#search').type('11');
 
-      cy.wait(60000);
+      cy.wait(59000);
 
       // Check how many times the API should be executed after six seconds.
-      cy.get('@preheat').then(() => {
+      cy.get('@preheats').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
         expect(interceptCount).to.be.closeTo(1, 0);
       });

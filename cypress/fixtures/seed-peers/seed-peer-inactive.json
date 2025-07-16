@@ -19,10 +19,6 @@
     "updated_at": "0001-01-01T00:00:00Z",
     "is_del": 0,
     "name": "cluster-1",
-    "bio": "cluster-1",
-    "config": null,
-    "scheduler_clusters": null,
-    "seed_peer": null,
-    "jobs": null
+    "bio": "cluster-1"
   }
 }

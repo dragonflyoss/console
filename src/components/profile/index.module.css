@@ -75,6 +75,19 @@
   background: var(--palette-secondary-dark) !important;
 }
 
+.nameWrapper {
+  padding-left: 1rem;
+  padding-top: 1.5rem;
+}
+
+.userState {
+  margin-top: 0.4rem;
+  border-radius: 0.2rem;
+  padding: 0.1rem 0.4rem;
+  background: var(--palette-save-color);
+  color: #fff;
+}
+
 .informationHeader {
   display: flex;
   justify-content: space-between;

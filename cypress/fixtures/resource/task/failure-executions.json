@@ -99,22 +99,6 @@
       "state": "FAILURE",
       "updated_at": "2024-11-01T10:08:16.695602295Z"
     },
-    "user_id": 0,
-    "user": {
-      "id": 0,
-      "created_at": "0001-01-01T00:00:00Z",
-      "updated_at": "0001-01-01T00:00:00Z",
-      "is_del": 0,
-      "email": "",
-      "name": "",
-      "avatar": "",
-      "phone": "",
-      "state": "",
-      "location": "",
-      "bio": "",
-      "configs": null
-    },
-    "seed_peer_clusters": null,
     "scheduler_clusters": null
   }
 ]

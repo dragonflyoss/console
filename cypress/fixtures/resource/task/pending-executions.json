@@ -44,36 +44,6 @@
           "ttl": 0
         },
         {
-          "created_at": "2024-11-01T10:07:46.676642087Z",
-          "error": "",
-          "results": [
-            {
-              "failure_tasks": null,
-              "scheduler_cluster_id": 1,
-              "success_tasks": null
-            }
-          ],
-          "state": "SUCCESS",
-          "task_name": "delete_task",
-          "task_uuid": "task_9d8517d5-6dce-4b67-9733-6d184dea336d",
-          "ttl": 0
-        },
-        {
-          "created_at": "2024-11-01T10:07:46.67679192Z",
-          "error": "",
-          "results": [
-            {
-              "failure_tasks": null,
-              "scheduler_cluster_id": 1,
-              "success_tasks": null
-            }
-          ],
-          "state": "SUCCESS",
-          "task_name": "delete_task",
-          "task_uuid": "task_48fe538a-1c71-4af8-b9cb-b0619f27417d",
-          "ttl": 0
-        },
-        {
           "created_at": "2024-11-01T10:07:46.677193129Z",
           "error": "",
           "results": [
@@ -99,22 +69,6 @@
       "state": "PENDING",
       "updated_at": "2024-11-01T10:08:16.695602295Z"
     },
-    "user_id": 0,
-    "user": {
-      "id": 0,
-      "created_at": "0001-01-01T00:00:00Z",
-      "updated_at": "0001-01-01T00:00:00Z",
-      "is_del": 0,
-      "email": "",
-      "name": "",
-      "avatar": "",
-      "phone": "",
-      "state": "",
-      "location": "",
-      "bio": "",
-      "configs": null
-    },
-    "seed_peer_clusters": null,
     "scheduler_clusters": null
   }
 ]

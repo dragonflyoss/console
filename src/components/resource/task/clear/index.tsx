@@ -947,11 +947,11 @@ export default function Clear() {
     <Box>
       <Snackbar
         open={errorMessage}
-        autoHideDuration={3000}
+        autoHideDuration={30000}
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
           {errorMessageText}
         </Alert>
       </Snackbar>
@@ -1295,7 +1295,7 @@ export default function Clear() {
                         <Divider />
                         <Box id={`cache-${index}`}>
                           {currentPageData?.map((item: any, index: number) => {
-                            return index !== currentPageData.length - 1 ? (
+                            return (
                               <Box key={index} sx={{ p: '1rem', display: 'flex', alignItems: 'center' }}>
                                 <Box width="20%" sx={{ display: 'flex', alignItems: 'center', pb: '0.4rem' }}>
                                   <Box>
@@ -1346,61 +1346,7 @@ export default function Clear() {
                                     size="small"
                                   />
                                 </Box>
-                                <Divider />
-                              </Box>
-                            ) : (
-                              <Box key={index} sx={{ p: '1rem', display: 'flex', alignItems: 'center' }}>
-                                <Box width="20%" sx={{ display: 'flex', alignItems: 'center', pb: '0.4rem' }}>
-                                  <Box>
-                                    <Tooltip title={item?.hostname || '-'} placement="top">
-                                      <Typography variant="body1" mr="1rem">
-                                        {item?.hostname}
-                                      </Typography>
-                                    </Tooltip>
-                                  </Box>
-                                </Box>
-                                <Box width="35%">
-                                  <Tooltip title={item?.id || '-'} placement="top">
-                                    <Typography variant="body2" component="div" className={styles.text}>
-                                      {item?.id || '-'}
-                                    </Typography>
-                                  </Tooltip>
-                                </Box>
-                                <Box width="15%">
-                                  <Box className={styles.ipContainer}>
-                                    <Typography variant="subtitle2" component="div">
-                                      {item?.ip || '-'}
-                                    </Typography>
-                                  </Box>
-                                </Box>
-                                <Box width="15%">
-                                  <Chip
-                                    label={_.upperFirst(item?.host_type) || ''}
-                                    size="small"
-                                    variant="outlined"
-                                    sx={{
-                                      borderRadius: '0.2rem',
-                                      backgroundColor:
-                                        item?.host_type === 'super'
-                                          ? 'var( --palette-description-color)'
-                                          : 'var(--palette-button-color)',
-                                      color: item?.host_type === 'super' ? '#FFFFFF' : '#FFFFFF',
-                                      borderColor:
-                                        item?.host_type === 'super'
-                                          ? 'var( --palette-description-color)'
-                                          : 'var(--palette-button-color)',
-                                      fontWeight: 'bold',
-                                    }}
-                                  />
-                                </Box>
-                                <Box width="15%">
-                                  <Chip
-                                    avatar={<MoreTimeIcon />}
-                                    label={getDatetime(item?.created_at || '')}
-                                    variant="outlined"
-                                    size="small"
-                                  />
-                                </Box>
+                                {index !== currentPageData.length - 1 && <Divider />}
                               </Box>
                             );
                           })}

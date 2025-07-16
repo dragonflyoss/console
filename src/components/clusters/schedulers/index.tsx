@@ -1544,7 +1544,7 @@ export default function ShowCluster() {
                         >
                           {Array.isArray(schedulerInactive) &&
                             schedulerInactive.map((item, index) => {
-                              return index !== schedulerInactive.length - 1 ? (
+                              return (
                                 <Box key={item.id}>
                                   <ListItem className={styles.schedulerInactiveList}>
                                     <MuiTooltip title={item.id || '-'} placement="top">
@@ -1575,39 +1575,7 @@ export default function ShowCluster() {
                                       </Typography>
                                     </MuiTooltip>
                                   </ListItem>
-                                  <hr className={styles.divider} />
-                                </Box>
-                              ) : (
-                                <Box key={item.id}>
-                                  <ListItem className={styles.schedulerInactiveList}>
-                                    <MuiTooltip title={item.id || '-'} placement="top">
-                                      <Typography
-                                        variant="body2"
-                                        component="div"
-                                        className={styles.schedulerInactiveID}
-                                      >
-                                        {item.id}
-                                      </Typography>
-                                    </MuiTooltip>
-                                    <MuiTooltip title={item.host_name || '-'} placement="top">
-                                      <Typography
-                                        variant="body2"
-                                        component="div"
-                                        className={styles.schedulerInactiveHostname}
-                                      >
-                                        {item.host_name}
-                                      </Typography>
-                                    </MuiTooltip>
-                                    <MuiTooltip title={item.ip || '-'} placement="top">
-                                      <Typography
-                                        variant="body2"
-                                        component="div"
-                                        className={styles.schedulerInactiveIP}
-                                      >
-                                        {item.ip}
-                                      </Typography>
-                                    </MuiTooltip>
-                                  </ListItem>
+                                  {index !== schedulerInactive.length - 1 && <hr className={styles.divider} />}
                                 </Box>
                               );
                             })}

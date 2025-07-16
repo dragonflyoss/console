@@ -16,16 +16,7 @@
     "created_at": "0001-01-01T00:00:00Z",
     "updated_at": "0001-01-01T00:00:00Z",
     "is_del": 0,
-    "name": "",
-    "bio": "",
-    "config": null,
-    "client_config": null,
-    "scopes": null,
-    "is_default": false,
-    "seed_peer_clusters": null,
-    "schedulers": null,
-    "peers": null,
-    "jobs": null
+    "name": ""
   },
   "models": null
 }

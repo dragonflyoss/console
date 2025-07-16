@@ -68,8 +68,7 @@ function Main() {
 
   return (
     <Routes>
-      <Route path="*" element={<NotFound />} />
-      <Route path="" element={<Navigate to="/clusters" replace />} />
+      <Route path="/" element={<Navigate to="/clusters" replace />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route element={<Layout />}>
@@ -107,6 +106,7 @@ function Main() {
         {isRoot && <Route path="/users" element={<Users />} />}
         <Route path="/users/new" element={<NewUser />} />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

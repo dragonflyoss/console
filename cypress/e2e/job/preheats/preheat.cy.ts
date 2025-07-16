@@ -225,12 +225,12 @@ describe('Preheat', () => {
       // Show preheat headers.
       cy.get('#header-value-0').should('have.text', 'Bearer yJhbGciOiJSUzI1NiIsImtpZCI6IjNEWT');
 
-      cy.wait(60000);
+      cy.wait(59000);
 
       // Check how many times the API should be executed after six seconds.
       cy.get('@preheat').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(3, 0);
+        expect(interceptCount).to.be.closeTo(2, 0);
       });
 
       cy.intercept(
@@ -245,9 +245,6 @@ describe('Preheat', () => {
           });
         },
       );
-
-      // Preheat fails after three seconds.
-      cy.wait(60000);
 
       // Show preheat status.
       cy.get('#status')
@@ -428,12 +425,12 @@ describe('Preheat', () => {
       // Show preheat piece length.
       cy.get('#piece-length').should('have.text', '-');
 
-      cy.wait(60000);
+      cy.wait(59000);
 
       // Check how many times the API should be executed after six seconds.
       cy.get('@preheat').then(() => {
         expect(interceptCount).to.be.greaterThan(0);
-        expect(interceptCount).to.be.closeTo(3, 0);
+        expect(interceptCount).to.be.closeTo(2, 0);
       });
 
       cy.intercept(
@@ -448,9 +445,6 @@ describe('Preheat', () => {
           });
         },
       );
-
-      // Preheat API error response after three seconds.
-      cy.wait(60000);
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');

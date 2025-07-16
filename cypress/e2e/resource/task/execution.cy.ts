@@ -48,7 +48,7 @@ describe('Executions', () => {
       // Show isloading.
       cy.get('[data-testid="isloading"]').should('be.exist');
 
-      cy.get('#execution-9').click();
+      cy.get('#detail-9').click();
 
       cy.url().should('include', '/resource/task/executions/9');
 
@@ -81,7 +81,7 @@ describe('Executions', () => {
         },
       );
 
-      cy.get('#execution-10').click();
+      cy.get('#detail-10').click();
 
       cy.get('[data-testid="execution-isloading"]').should('be.exist');
 
@@ -128,7 +128,7 @@ describe('Executions', () => {
     });
 
     it('should display detailed execution success information', () => {
-      cy.get('#execution-9').click();
+      cy.get('#detail-9').click();
 
       // Check for breadcrumb.
       cy.get('.MuiBreadcrumbs-ol').should('exist').and('contain', 9);
@@ -196,7 +196,8 @@ describe('Executions', () => {
           interceptCount++;
         },
       ).as('execution');
-      cy.get('#execution-11').click();
+      
+      cy.get('#detail-11').click();
 
       // Check for breadcrumb.
       cy.get('.MuiBreadcrumbs-ol').should('exist').and('contain', 11);

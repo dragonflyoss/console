@@ -209,7 +209,7 @@ export default function Executions() {
                 return (
                   <Box key={item.id} id={`list-${item.id}`}>
                     <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
-                      <Box className={styles.statusContainer}>
+                      <Box id={`execution-${item.id}`} className={styles.statusContainer}>
                         {item.result.state === 'SUCCESS' ? (
                           <Success id={`SUCCESS-${item.id}`} className={styles.stateIcon} />
                         ) : item.result.state === 'FAILURE' ? (
@@ -240,7 +240,7 @@ export default function Executions() {
                       <Box className={styles.iconButton}>
                         <RouterLink
                           component={Link}
-                          id={`execution-${item?.id}`}
+                          id={`detail-${item?.id}`}
                           to={`/resource/task/executions/${item?.id}`}
                           underline="hover"
                           sx={{ color: 'var(--palette-description-color)' }}

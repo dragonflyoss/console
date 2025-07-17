@@ -1,5 +1,4 @@
 import {
-  Alert,
   Box,
   Button,
   Chip,
@@ -7,7 +6,6 @@ import {
   Pagination,
   Paper,
   Skeleton,
-  Snackbar,
   Tooltip,
   Typography,
   Autocomplete,
@@ -44,6 +42,7 @@ import { ReactComponent as NoCluster } from '../../assets/images/cluster/no-clus
 import { ReactComponent as Cluster } from '../../assets/images/cluster/cluster.svg';
 import { ReactComponent as Scheduler } from '../../assets/images/cluster/scheduler.svg';
 import { ReactComponent as SeedPeer } from '../../assets/images/cluster/seed-peer.svg';
+import ErrorHandler from '../error-handler';
 
 export default function Clusters() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -190,16 +189,7 @@ export default function Clusters() {
 
   return (
     <Box>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={30000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Box className={styles.clusterTitle}>
         <Typography variant="h5">Cluster</Typography>
         <Button

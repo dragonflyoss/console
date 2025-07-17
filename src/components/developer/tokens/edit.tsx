@@ -29,6 +29,7 @@ import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
 import Card from '../../card';
 import styles from './edit.module.css';
 import { ReactComponent as Token } from '../../../assets/images/tokens/key.svg';
+import ErrorHandler from '../../error-handler';
 
 export default function UpdateTokens() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -39,7 +40,6 @@ export default function UpdateTokens() {
   const [selectedTime, setSelectedTime] = useState('');
   const [expiredTime, setExpiredTime] = useState('');
   const [expiredTimeError, setExpiredTimeError] = useState(false);
-  // const [preheat, setPreheat] = useState(false);
   const [job, setJob] = useState(false);
   const [cluster, setCluster] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
@@ -56,20 +56,13 @@ export default function UpdateTokens() {
         autoComplete: 'family-name',
         placeholder: 'Enter your description',
         value: tokens.bio,
-        helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',
+        helperText: bioError ? 'Fill in the characters, the length is 0-400.' : '',
         error: bioError,
 
         InputProps: {
           endAdornment: (
             <Tooltip title="Personal access token description." placement="top">
-              <HelpIcon
-                sx={{
-                  color: 'var(--palette-grey-300Channel)',
-                  width: '0.8rem',
-                  height: '0.8rem',
-                  ':hover': { color: 'var(--palette-description-color)' },
-                }}
-              />
+              <HelpIcon className={styles.helpIcon} />
             </Tooltip>
           ),
         },
@@ -83,7 +76,7 @@ export default function UpdateTokens() {
       setError: setBioError,
 
       validate: (value: string) => {
-        const reg = /^.{0,1000}$/;
+        const reg = /^.{0,400}$/;
         return reg.test(value);
       },
     },
@@ -196,16 +189,7 @@ export default function UpdateTokens() {
           Submission successful!
         </Alert>
       </Snackbar>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Typography variant="h5">Update personal access token</Typography>
       <Breadcrumbs
         separator={
@@ -254,19 +238,12 @@ export default function UpdateTokens() {
       </Card>
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <FormControl fullWidth>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box className={styles.helpIconWrapper}>
             <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
               Information
             </Typography>
             <Tooltip title="  The information of personal access token." placement="top">
-              <HelpIcon
-                sx={{
-                  color: 'var(--palette-grey-300Channel)',
-                  width: '0.8rem',
-                  height: '0.8rem',
-                  ':hover': { color: 'var(--palette-description-color)' },
-                }}
-              />
+              <HelpIcon className={styles.helpIcon} />
             </Tooltip>
           </Box>
           {formList.map((item) => (
@@ -276,25 +253,18 @@ export default function UpdateTokens() {
               size="small"
               key={item.formProps.name}
               {...item.formProps}
-              sx={{ width: '36rem' }}
+              className={styles.descriptionTextField}
             />
           ))}
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: '1.4rem', mt: '1rem' }}>
+          <Box className={styles.helpIconWrapper}>
             <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
               Expiration
             </Typography>
             <Tooltip title="Expiration of personal access token." placement="top">
-              <HelpIcon
-                sx={{
-                  color: 'var(--palette-grey-300Channel)',
-                  width: '0.8rem',
-                  height: '0.8rem',
-                  ':hover': { color: 'var(--palette-description-color)' },
-                }}
-              />
+              <HelpIcon className={styles.helpIcon} />
             </Tooltip>
           </Box>
-          <FormControl size="small" color="success" error={expiredTimeError}>
+          <FormControl className={styles.expiration} size="small" color="success" error={expiredTimeError}>
             <InputLabel required id="demo-simple-select-label">
               Expiration
             </InputLabel>
@@ -321,61 +291,52 @@ export default function UpdateTokens() {
               </Typography>
             </Box>
           </FormControl>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: '0.8rem', mt: '1rem' }}>
+          <Box className={styles.helpIconWrapper}>
             <Typography variant="h6" fontFamily="mabry-bold" mr="0.4rem">
               Select scopes
             </Typography>
             <Tooltip title="Scopes define the access for personal tokens." placement="top">
-              <HelpIcon
-                sx={{
-                  color: 'var(--palette-grey-300Channel)',
-                  width: '0.8rem',
-                  height: '0.8rem',
-                  ':hover': { color: 'var(--palette-description-color)' },
-                }}
-              />
+              <HelpIcon className={styles.helpIcon} />
             </Tooltip>
           </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
+          <Box className={styles.scopesWrapper}>
             <FormGroup>
-              <Box display="flex" alignItems="center">
-                <Box width="10%">
-                  <FormControlLabel
-                    label="job"
-                    control={
-                      <Checkbox
-                        id="job"
-                        checked={job}
-                        onChange={(event: any) => {
-                          setJob(event.target.checked);
-                        }}
-                        sx={{ color: 'var(--palette-button-color)!important' }}
-                      />
-                    }
-                  />
-                </Box>
-                <Typography variant="body2" color="var(--palette-text-palette-text-secondary)" ml="1rem">
+              <Box className={styles.scopesCheckboxWrapper}>
+                <FormControlLabel
+                  className={styles.scopesCheckbox}
+                  label="job"
+                  control={
+                    <Checkbox
+                      id="job"
+                      checked={job}
+                      onChange={(event: any) => {
+                        setJob(event.target.checked);
+                      }}
+                      sx={{ color: 'var(--palette-button-color)!important' }}
+                    />
+                  }
+                />
+                <Typography variant="body2" className={styles.scopesCheckboxDescription}>
                   Full control of job. If you need to call preheat job through open API, it is recommended to use
                   preheat job.
                 </Typography>
               </Box>
-              <Box display="flex" alignItems="center">
-                <Box width="10%">
-                  <FormControlLabel
-                    label="cluster"
-                    control={
-                      <Checkbox
-                        id="cluster"
-                        checked={cluster}
-                        onChange={(event: any) => {
-                          setCluster(event.target.checked);
-                        }}
-                        sx={{ color: 'var(--palette-button-color)!important' }}
-                      />
-                    }
-                  />
-                </Box>
-                <Typography variant="body2" color="var(--palette-text-palette-text-secondary)" ml="1rem">
+              <Box className={styles.scopesCheckboxWrapper}>
+                <FormControlLabel
+                  className={styles.scopesCheckbox}
+                  label="cluster"
+                  control={
+                    <Checkbox
+                      id="cluster"
+                      checked={cluster}
+                      onChange={(event: any) => {
+                        setCluster(event.target.checked);
+                      }}
+                      sx={{ color: 'var(--palette-button-color)!important' }}
+                    />
+                  }
+                />
+                <Typography variant="body2" className={styles.scopesCheckboxDescription}>
                   Full control of cluster.
                 </Typography>
               </Box>

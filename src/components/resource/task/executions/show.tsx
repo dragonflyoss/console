@@ -48,6 +48,7 @@ import { ReactComponent as IP } from '../../../../assets/images/resource/task/ip
 import { ReactComponent as CheckLog } from '../../../../assets/images/resource/task/error-log.svg';
 import { ReactComponent as PieceLength } from '../../../../assets/images/job/preheat/piece-length.svg';
 import { ReactComponent as ContentForCalculatingTaskID } from '../../../../assets/images/resource/task/content-for-calculating-task-id.svg';
+import ErrorHandler from '../../../error-handler';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -177,16 +178,7 @@ export default function ShowExecutions() {
 
   return (
     <Box>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Drawer anchor="right" open={errorLog} onClose={handleClose}>
         <Box role="presentation" sx={{ width: '25rem', height: '100vh', backgroundColor: '#24292f' }}>
           <Typography id="error-log" variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#d0d7de' }}>

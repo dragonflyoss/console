@@ -231,11 +231,11 @@ describe('Update cluster', () => {
     cy.get('#save').click();
 
     // Show error message.
-    cy.get('#error-message').should('be.visible').and('contain', 'permission deny');
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'permission deny');
 
     // Close error message.
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('#error-message').should('not.exist');
+    cy.get('.MuiAlert-message').should('not.exist');
   });
 
   describe('should handle API error response', () => {
@@ -253,7 +253,7 @@ describe('Update cluster', () => {
       );
 
       // Show error message.
-      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
       cy.get('error-message').should('not.exist');
     });
@@ -272,14 +272,14 @@ describe('Update cluster', () => {
       cy.get('#save').click();
 
       // Show error message.
-      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
     });
   });
 
   describe('cannot update cluster with invalid attributes', () => {
     it('try to verify information', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      const description = _.times(1001, () => _.sample(characters)).join('');
+      const description = _.times(401, () => _.sample(characters)).join('');
 
       cy.get('#description').clear();
       cy.get('#description').type(description);
@@ -287,7 +287,7 @@ describe('Update cluster', () => {
       // Show verification error message.
       cy.get('#description-helper-text')
         .should('be.visible')
-        .and('contain', 'Fill in the characters, the length is 0-1000.');
+        .and('contain', 'Fill in the characters, the length is 0-400.');
 
       // Submit form when validation fails.
       cy.get('#save').click();

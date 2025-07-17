@@ -392,11 +392,11 @@ describe('audit', () => {
         },
       );
 
-      cy.get('#error-message').should('have.text', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('#error-message').should('not.exist');
+      cy.get('.MuiAlert-message').should('not.exist');
     });
 
     it('should handle audit API error response', () => {
@@ -412,11 +412,11 @@ describe('audit', () => {
         },
       );
 
-      cy.get('#error-message').should('have.text', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('#error-message').should('not.exist');
+      cy.get('.MuiAlert-message').should('not.exist');
     });
   });
 });

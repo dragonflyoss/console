@@ -1,7 +1,5 @@
 import {
-  Alert,
   Box,
-  Snackbar,
   Table,
   TableHead,
   Typography,
@@ -27,6 +25,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { getDatetime, useQuery } from '../../lib/utils';
 import { debounce } from 'lodash';
 import SearchCircularProgress from '../circular-progress';
+import ErrorHandler from '../error-handler';
 
 export default function AuditLogs() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -180,16 +179,7 @@ export default function AuditLogs() {
 
   return (
     <Box>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Typography variant="h5" mb="1.5rem">
         Audit Logs
       </Typography>

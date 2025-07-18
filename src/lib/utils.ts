@@ -3,7 +3,6 @@ import { decode, JwtPayload } from 'jsonwebtoken';
 import { getPeersResponse, getClusterResponse, getSchedulersResponse } from './api';
 import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
-import ms from 'ms';
 
 export function useQuery(): URLSearchParams {
   return new URLSearchParams(useLocation().search);

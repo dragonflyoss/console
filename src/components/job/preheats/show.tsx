@@ -49,6 +49,7 @@ import { ReactComponent as File } from '../../../assets/images/job/preheat/file.
 import { ReactComponent as IP } from '../../../assets/images/cluster/scheduler/scheduler-ip.svg';
 import { ReactComponent as Platform } from '../../../assets/images/job/preheat/platform.svg';
 import _ from 'lodash';
+import ErrorHandler from '../../error-handler';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -142,16 +143,7 @@ export default function ShowPreheat() {
 
   return (
     <Box>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Typography variant="h5" id="preheat-title">
         Preheat
       </Typography>

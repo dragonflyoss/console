@@ -24,6 +24,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import Card from '../card';
 import { ReactComponent as Information } from '../../assets/images/cluster/information-cluster.svg';
+import ErrorHandler from '../error-handler';
 
 export default function EditCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -43,7 +44,7 @@ export default function EditCluster() {
   const [loadingButton, setLoadingButton] = useState(false);
   const cidrsOptions = ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'];
   const [idcHelperText, setIDCHelperText] = useState('Fill in the characters, the length is 0-100.');
-  const [cidrsHelperText, setCIDRsHelperText] = useState('Fill in the characters, the length is 0-1000.');
+  const [cidrsHelperText, setCIDRsHelperText] = useState('Fill in the characters, the length is 0-400.');
   const [hostnamesHelperText, setHostnamesHelperText] = useState('Fill in the characters, the length is 1-30.');
   const [cluster, setCluster] = useState<getClusterResponse>({
     id: 0,
@@ -116,7 +117,7 @@ export default function EditCluster() {
         autoComplete: 'family-name',
         value: bio,
         placeholder: 'Please enter description',
-        helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',
+        helperText: bioError ? 'Fill in the characters, the length is 0-400.' : '',
         error: bioError,
 
         onChange: (e: any) => {
@@ -128,7 +129,7 @@ export default function EditCluster() {
       setError: setBioError,
 
       validate: (value: string) => {
-        const reg = /^.{0,1000}$/;
+        const reg = /^.{0,400}$/;
         return reg.test(value);
       },
     },
@@ -249,7 +250,7 @@ export default function EditCluster() {
         },
 
         onInputChange: (e: any) => {
-          setIDCHelperText('Fill in the characters, the length is 0-1000.');
+          setIDCHelperText('Fill in the characters, the length is 0-400.');
           changeValidate(e.target.value, scopesForm[2]);
         },
 
@@ -293,7 +294,7 @@ export default function EditCluster() {
       setError: setCIDRsError,
 
       validate: (value: string) => {
-        const reg = /^(.{0,1000})$/;
+        const reg = /^(.{0,400})$/;
         return reg.test(value);
       },
     },
@@ -313,7 +314,7 @@ export default function EditCluster() {
         },
 
         onInputChange: (e: any) => {
-          setHostnamesHelperText('Fill in the characters, the length is 0-1000.');
+          setHostnamesHelperText('Fill in the characters, the length is 0-400.');
           changeValidate(e.target.value, scopesForm[3]);
         },
 
@@ -697,16 +698,7 @@ export default function EditCluster() {
           Submission successful!
         </Alert>
       </Snackbar>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Typography variant="h5">Update Cluster</Typography>
       <Breadcrumbs
         separator={<Box className={styles.breadcrumbs} />}

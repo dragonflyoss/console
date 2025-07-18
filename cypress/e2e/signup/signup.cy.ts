@@ -39,11 +39,11 @@ describe('Signup', () => {
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
 
     // Show error message.
-    cy.get('#error-message').should('be.visible').and('contain', 'Conflict');
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
 
     // Close error message.
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('#error-message').should('not.exist');
+    cy.get('.MuiAlert-message').should('not.exist');
   });
 
   it('cannot create account with existing account', () => {
@@ -53,9 +53,9 @@ describe('Signup', () => {
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
 
     // Show error message.
-    cy.get('#error-message').should('be.visible').and('contain', 'Conflict');
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('#error-message').should('not.exist');
+    cy.get('.MuiAlert-message').should('not.exist');
   });
 
   it('click the password hide butto and confirm password hide butto', () => {
@@ -102,9 +102,9 @@ describe('Signup', () => {
     cy.get('#confirmPassword').type(`dragonfly1{enter}`);
 
     // Show error message.
-    cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('#error-message').should('not.exist');
+    cy.get('.MuiAlert-message').should('not.exist');
   });
 
   it('click the `Sign in` button', () => {

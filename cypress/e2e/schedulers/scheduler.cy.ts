@@ -206,11 +206,11 @@ describe('Scheduler', () => {
 
     it('show error message', () => {
       // Show error message.
-      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('#error-message').should('not.exist');
+      cy.get('.MuiAlert-message').should('not.exist');
     });
 
     it('unable to display breadcrumb', () => {

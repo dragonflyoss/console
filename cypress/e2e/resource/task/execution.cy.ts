@@ -196,7 +196,7 @@ describe('Executions', () => {
           interceptCount++;
         },
       ).as('execution');
-      
+
       cy.get('#detail-11').click();
 
       // Check for breadcrumb.

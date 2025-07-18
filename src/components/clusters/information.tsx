@@ -34,6 +34,7 @@ import { deleteCluster } from '../../lib/api';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getDatetime } from '../../lib/utils';
 import styles from './information.module.css';
+import ErrorHandler from '../error-handler';
 
 export default function Information() {
   const [openCIDRs, setOpenCIDRs] = useState(false);
@@ -120,16 +121,7 @@ export default function Information() {
           Submission successful!
         </Alert>
       </Snackbar>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert id="errorMessage" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Dialog
         open={openDeleteCluster}
         onClose={handleDeleteClose}
@@ -268,9 +260,7 @@ export default function Information() {
                     cluster?.scheduler_cluster_id || 0
                   )}
                 </Typography>
-                {isLoading ? (
-                  <></>
-                ) : (
+                {!isLoading && (
                   <IconButton
                     aria-label="copy"
                     sx={{
@@ -331,9 +321,7 @@ export default function Information() {
                     cluster?.seed_peer_cluster_id || 0
                   )}
                 </Typography>
-                {isLoading ? (
-                  <></>
-                ) : (
+                {!isLoading && (
                   <IconButton
                     aria-label="copy"
                     id="copy-seed-peer-cluster-id"

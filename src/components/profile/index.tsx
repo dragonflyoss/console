@@ -45,6 +45,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import { TabContext } from '@mui/lab';
 import _ from 'lodash';
 import { matchIsValidTel, MuiTelInput } from 'mui-tel-input';
+import ErrorHandler from '../error-handler';
 
 type StyledTabProps = Omit<TabProps, 'component'> & {};
 
@@ -183,7 +184,7 @@ export default function Profile() {
         maxRows: 2,
         autoComplete: 'family-name',
         placeholder: 'Enter your description',
-        helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',
+        helperText: bioError ? 'Fill in the characters, the length is 0-400.' : '',
         error: bioError,
         value: users.bio,
 
@@ -205,7 +206,7 @@ export default function Profile() {
       setError: setBioError,
 
       validate: (value: string) => {
-        const reg = /^.{0,1000}$/;
+        const reg = /^.{0,400}$/;
         return reg.test(value);
       },
     },
@@ -599,16 +600,7 @@ export default function Profile() {
           Submission successful!
         </Alert>
       </Snackbar>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Typography variant="h5" mb="2rem">
         My Profile
       </Typography>

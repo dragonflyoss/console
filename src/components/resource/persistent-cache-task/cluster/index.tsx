@@ -29,6 +29,7 @@ import Card from '../../../card';
 import SearchIcon from '@mui/icons-material/Search';
 import { fuzzySearch, getDatetime, getPaginatedList, useQuery } from '../../../../lib/utils';
 import SearchCircularProgress from '../../../circular-progress';
+import ErrorHandler from '../../../error-handler';
 
 export default function PersistentCacheTask() {
   const [cluster, setCluster] = useState<getClusterResponse[]>([]);
@@ -146,16 +147,7 @@ export default function PersistentCacheTask() {
 
   return (
     <Box>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Typography variant="h5" mb="1rem">
         Persistent Cache Tasks
       </Typography>

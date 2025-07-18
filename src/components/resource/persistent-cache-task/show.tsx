@@ -46,6 +46,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { DEFAULT_PERSISTENT_CACHE_TASK_PERRS_PAGE_SIZE } from '../../../lib/constants';
 import { filesize } from 'filesize';
 import ms from 'ms';
+import ErrorHandler from '../../error-handler';
 
 export default function PersistentCachetask() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -119,16 +120,6 @@ export default function PersistentCachetask() {
     }
   }, [persistentCacheTask?.peers, page, allPeers]);
 
-  const handleClose = (_event: any, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setErrorMessage(false);
-
-    setOpenDelete(false);
-  };
-
   const handleDelete = async (event: any) => {
     try {
       event.preventDefault();
@@ -156,18 +147,18 @@ export default function PersistentCachetask() {
     }
   };
 
+  const handleClose = (_event: any, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorMessage(false);
+    setOpenDelete(false);
+  };
+
   return (
-    <div>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+    <Box>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Dialog
         id="open-dialog"
         open={openDelete}
@@ -630,6 +621,6 @@ export default function PersistentCachetask() {
           </Box>
         )}
       </Box>
-    </div>
+    </Box>
   );
 }

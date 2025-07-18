@@ -62,6 +62,7 @@ import { ReactComponent as Hostnames } from '../../../../assets/images/resource/
 import { ReactComponent as Proportion } from '../../../../assets/images/resource/task/proportion.svg';
 
 import { ReactComponent as Layer } from '../../../../assets/images/resource/task/layer.svg';
+import ErrorHandler from '../../../error-handler';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   [`& .${toggleButtonGroupClasses.grouped}`]: {
@@ -337,7 +338,7 @@ export default function Clear() {
         value: tag,
         autoComplete: 'family-name',
         placeholder: 'Enter your tag',
-        helperText: tagError ? 'Fill in the characters, the length is 0-1000.' : '',
+        helperText: tagError ? 'Fill in the characters, the length is 0-400.' : '',
         error: tagError,
         InputProps: (
           <Tooltip
@@ -366,7 +367,7 @@ export default function Clear() {
       setError: setTagError,
 
       validate: (value: string) => {
-        const reg = /^.{0,1000}$/;
+        const reg = /^.{0,400}$/;
         return reg.test(value);
       },
     },
@@ -378,7 +379,7 @@ export default function Clear() {
         value: application,
         autoComplete: 'family-name',
         placeholder: 'Enter your application',
-        helperText: applicationError ? 'Fill in the characters, the length is 0-1000.' : '',
+        helperText: applicationError ? 'Fill in the characters, the length is 0-400.' : '',
         error: applicationError,
         InputProps: (
           <Tooltip title={'Caller application which is used for statistics and access control.'} placement="top">
@@ -402,7 +403,7 @@ export default function Clear() {
       setError: setApplicationError,
 
       validate: (value: string) => {
-        const reg = /^.{0,1000}$/;
+        const reg = /^.{0,400}$/;
         return reg.test(value);
       },
     },
@@ -465,7 +466,7 @@ export default function Clear() {
       value: searchTask,
       autoComplete: 'family-name',
       placeholder: 'Enter your task id',
-      helperText: taskIDError ? 'Fill in the characters, the length is 0-1000.' : '',
+      helperText: taskIDError ? 'Fill in the characters, the length is 0-400.' : '',
       error: taskIDError,
       InputProps: {
         startAdornment: searchTaskISLodaing ? (
@@ -506,7 +507,7 @@ export default function Clear() {
     setError: setTaskIDError,
 
     validate: (value: string) => {
-      const reg = /^.{0,1000}$/;
+      const reg = /^.{0,400}$/;
       return reg.test(value);
     },
   };
@@ -520,7 +521,7 @@ export default function Clear() {
       value: searchContentForCalculatingTaskID,
       autoComplete: 'family-name',
       placeholder: 'Enter your content for calculating task id',
-      helperText: contentForCalculatingTaskIDError ? 'Fill in the characters, the length is 0-1000.' : '',
+      helperText: contentForCalculatingTaskIDError ? 'Fill in the characters, the length is 0-400.' : '',
       error: contentForCalculatingTaskIDError,
       InputProps: {
         startAdornment: searchContentForCalculatingTaskIDISLodaing ? (
@@ -561,7 +562,7 @@ export default function Clear() {
     setError: setContentForCalculatingTaskIDError,
 
     validate: (value: string) => {
-      const reg = /^.{0,1000}$/;
+      const reg = /^.{0,400}$/;
       return reg.test(value);
     },
   };
@@ -575,7 +576,7 @@ export default function Clear() {
       value: searchImageManifest,
       autoComplete: 'family-name',
       placeholder: 'Enter your image manifest URL',
-      helperText: contentForCalculatingTaskIDError ? 'Fill in the characters, the length is 1-1000.' : '',
+      helperText: contentForCalculatingTaskIDError ? 'Fill in the characters, the length is 1-400.' : '',
       error: contentForCalculatingTaskIDError,
       InputProps: {
         startAdornment: searchImageManifestISLodaing ? (
@@ -616,7 +617,7 @@ export default function Clear() {
     setError: setContentForCalculatingTaskIDError,
 
     validate: (value: string) => {
-      const reg = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s].{1,1000}$/;
+      const reg = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s].{1,400}$/;
       return reg.test(value);
     },
   };
@@ -945,16 +946,7 @@ export default function Clear() {
 
   return (
     <Box>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={30000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Paper
         elevation={0}
         sx={{

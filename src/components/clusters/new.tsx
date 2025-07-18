@@ -21,6 +21,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Link, useNavigate } from 'react-router-dom';
 import { createCluster } from '../../lib/api';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
+import ErrorHandler from '../error-handler';
 
 export default function NewCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -43,8 +44,9 @@ export default function NewCluster() {
   const [loadingButton, setLoadingButton] = useState(false);
   const cidrsOptions = ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'];
   const [idcHelperText, setIDCHelperText] = useState('Fill in the characters, the length is 0-100.');
-  const [cidrsHelperText, setCIDRsHelperText] = useState('Fill in the characters, the length is 0-1000.');
+  const [cidrsHelperText, setCIDRsHelperText] = useState('Fill in the characters, the length is 0-400.');
   const [hostnamesHelperText, setHostnamesHelperText] = useState('Fill in the characters, the length is 1-30.');
+
   const navigate = useNavigate();
 
   const informationForm = [
@@ -80,7 +82,7 @@ export default function NewCluster() {
         maxRows: 2,
         autoComplete: 'family-name',
         placeholder: 'Enter a cluster description',
-        helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',
+        helperText: bioError ? 'Fill in the characters, the length is 0-400.' : '',
         error: bioError,
 
         onChange: (e: any) => {
@@ -91,7 +93,7 @@ export default function NewCluster() {
       setError: setBioError,
 
       validate: (value: string) => {
-        const reg = /^.{0,1000}$/;
+        const reg = /^.{0,400}$/;
         return reg.test(value);
       },
     },
@@ -212,7 +214,7 @@ export default function NewCluster() {
         },
 
         onInputChange: (e: any) => {
-          setIDCHelperText('Fill in the characters, the length is 0-1000.');
+          setIDCHelperText('Fill in the characters, the length is 0-400.');
           changeValidate(e.target.value, scopesForm[2]);
         },
 
@@ -259,7 +261,7 @@ export default function NewCluster() {
       setError: setCIDRsError,
 
       validate: (value: string) => {
-        const reg = /^(.{0,1000})$/;
+        const reg = /^(.{0,400})$/;
         return reg.test(value);
       },
     },
@@ -542,7 +544,7 @@ export default function NewCluster() {
       setCIDRsError(true);
     } else {
       setCIDRsError(false);
-      setCIDRsHelperText('Fill in the characters, the length is 0-1000.');
+      setCIDRsHelperText('Fill in the characters, the length is 0-400.');
     }
 
     if (hostnamesText) {
@@ -651,16 +653,7 @@ export default function NewCluster() {
           Submission successful!
         </Alert>
       </Snackbar>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Typography variant="h5" mb="1rem">
         Create Cluster
       </Typography>

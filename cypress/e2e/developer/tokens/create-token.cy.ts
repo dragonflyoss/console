@@ -209,7 +209,7 @@ describe('Create token', () => {
   it('cannot create token with invalid attributes', () => {
     const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const name = _.times(101, () => _.sample(characters)).join('');
-    const description = _.times(1001, () => _.sample(characters)).join('');
+    const description = _.times(401, () => _.sample(characters)).join('');
 
     // Should name message describing the validation error.
     cy.get('#name').type(name);
@@ -232,7 +232,7 @@ describe('Create token', () => {
     cy.get('#bio').type(description);
 
     // Show verification error message.
-    cy.get('#bio-helper-text').should('exist').and('have.text', 'Fill in the characters, the length is 0-1000.');
+    cy.get('#bio-helper-text').should('exist').and('have.text', 'Fill in the characters, the length is 0-400.');
     cy.get('#save').click();
 
     // Then I see that the current page is the developer/personal-access-tokens/new!

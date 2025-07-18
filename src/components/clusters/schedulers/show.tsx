@@ -1,14 +1,4 @@
-import {
-  Alert,
-  Box,
-  Breadcrumbs,
-  Chip,
-  Link as RouterLink,
-  Skeleton,
-  Snackbar,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Tooltip, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import { getScheduler, getSchedulerResponse } from '../../../lib/api';
@@ -26,6 +16,7 @@ import { ReactComponent as Features } from '../../../assets/images/cluster/sched
 import { ReactComponent as Port } from '../../../assets/images/cluster/scheduler/port.svg';
 import { ReactComponent as CreatedAt } from '../../../assets/images/cluster/scheduler/created-at.svg';
 import { ReactComponent as UpdatedAt } from '../../../assets/images/cluster/scheduler/updated-at.svg';
+import ErrorHandler from '../../error-handler';
 
 export default function Schedulers() {
   const [isLoading, setIsLoading] = useState(false);
@@ -69,16 +60,7 @@ export default function Schedulers() {
 
   return (
     <Box>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Typography variant="h5">Scheduler</Typography>
       <Breadcrumbs
         separator={

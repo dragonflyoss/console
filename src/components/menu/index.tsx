@@ -41,6 +41,7 @@ import { ReactComponent as SidebarClosure } from '../../assets/images/menu/sideb
 import { DarkMode, ShrinkDarkMode } from '../dark-layout';
 import Card from '../card';
 import _ from 'lodash';
+import ErrorHandler from '../error-handler';
 
 interface MyContextType {
   user: getUserResponse;
@@ -319,16 +320,7 @@ export default function Layout(props: any) {
             Please change the password in time for the first login!
           </Alert>
         </Snackbar>
-        <Snackbar
-          open={errorMessage}
-          autoHideDuration={3000}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        >
-          <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-            {errorMessageText}
-          </Alert>
-        </Snackbar>
+        <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
         {location.pathname === '/signin' || location.pathname === '/signup' ? (
           <main>{props.children}</main>
         ) : (

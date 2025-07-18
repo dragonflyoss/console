@@ -34,6 +34,7 @@ import { ReactComponent as Failure } from '../../../assets/images/job/preheat/fa
 import { ReactComponent as Pending } from '../../../assets/images/job/preheat/pending.svg';
 import { ReactComponent as Detail } from '../../../assets/images/job/preheat/detail.svg';
 import SearchCircularProgress from '../../circular-progress';
+import ErrorHandler from '../../error-handler';
 
 export default function Preheats() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -189,16 +190,7 @@ export default function Preheats() {
 
   return (
     <Box>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '1rem' }}>
         <Typography variant="h5">Preheats</Typography>
         <Button

@@ -190,9 +190,9 @@ describe('Create cluster', () => {
     cy.get('#name').type('cluster-1{enter}');
 
     // Show error message.
-    cy.get('#error-message').should('be.visible').and('contain', 'Conflict');
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Conflict');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('#error-message').should('not.exist');
+    cy.get('.MuiAlert-message').should('not.exist');
   });
 
   it('click the `CANCEL button', () => {
@@ -222,7 +222,7 @@ describe('Create cluster', () => {
     cy.get('#name').type('cluster-17{enter}');
 
     // Show error message.
-    cy.get('#error-message').should('be.visible').and('contain', 'permission deny');
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'permission deny');
 
     cy.get('#cancel').click();
 
@@ -242,14 +242,14 @@ describe('Create cluster', () => {
 
     cy.get('#name').type('cluster-17');
     cy.get('#save').click();
-    cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
   });
 
   describe('cannot create cluster with invalid attributes', () => {
     it('try to verify information', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       const name = _.times(41, () => _.sample(characters)).join('');
-      const description = _.times(1001, () => _.sample(characters)).join('');
+      const description = _.times(401, () => _.sample(characters)).join('');
 
       // Should display message name the validation error.
       cy.get('#save').click();
@@ -278,7 +278,7 @@ describe('Create cluster', () => {
       // Show verification error message.
       cy.get('#description-helper-text')
         .should('be.visible')
-        .and('contain', 'Fill in the characters, the length is 0-1000.');
+        .and('contain', 'Fill in the characters, the length is 0-400.');
       cy.get('#save').click();
       cy.url().should('include', '/clusters/new');
       cy.get('#description').clear();

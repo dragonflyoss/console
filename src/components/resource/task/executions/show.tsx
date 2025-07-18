@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getTaskJobResponse, getTaskJob } from '../../../../lib/api';
 import {
   Typography,
@@ -14,18 +14,16 @@ import {
   Accordion,
   Divider,
   Drawer,
-  createTheme,
-  ThemeProvider,
   TableHead,
   TableCell,
   TableRow,
   TableBody,
-  Snackbar,
-  Alert,
+  Link as RouterLink,
   tooltipClasses,
   styled,
   TooltipProps,
   Pagination,
+  Breadcrumbs,
 } from '@mui/material';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import styles from './show.module.css';
@@ -48,6 +46,7 @@ import { ReactComponent as IP } from '../../../../assets/images/resource/task/ip
 import { ReactComponent as CheckLog } from '../../../../assets/images/resource/task/error-log.svg';
 import { ReactComponent as PieceLength } from '../../../../assets/images/job/preheat/piece-length.svg';
 import { ReactComponent as ContentForCalculatingTaskID } from '../../../../assets/images/resource/task/content-for-calculating-task-id.svg';
+import ErrorHandler from '../../../error-handler';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -177,16 +176,26 @@ export default function ShowExecutions() {
 
   return (
     <Box>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      <Typography variant="h5" id="preheat-title">
+        Execution
+      </Typography>
+      <Breadcrumbs
+        separator={
+          <Box
+            sx={{ width: '0.3rem', height: '0.3rem', backgroundColor: '#919EAB', borderRadius: '50%', m: '0 0.4rem' }}
+          />
+        }
+        aria-label="breadcrumb"
+        sx={{ mb: '1.5rem', mt: '1rem' }}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+        <Typography color="text.primary">Resource</Typography>
+        <Typography color="text.primary">Task</Typography>
+        <RouterLink component={Link} underline="hover" color="inherit" to={`/resource/task/executions`}>
+          Executions
+        </RouterLink>
+        {params?.id ? <Typography color="inherit">{params?.id || '-'}</Typography> : ''}
+      </Breadcrumbs>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Drawer anchor="right" open={errorLog} onClose={handleClose}>
         <Box role="presentation" sx={{ width: '25rem', height: '100vh', backgroundColor: '#24292f' }}>
           <Typography id="error-log" variant="h6" fontFamily="mabry-bold" sx={{ p: '1rem', color: '#d0d7de' }}>
@@ -661,7 +670,7 @@ export default function ShowExecutions() {
               </TableBody>
             </Table>
           </Card>
-          {totalPages > 1 ? (
+          {totalPages > 1 && (
             <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
               <Pagination
                 count={totalPages}
@@ -675,8 +684,6 @@ export default function ShowExecutions() {
                 id="failure-tasks-pagination"
               />
             </Box>
-          ) : (
-            <></>
           )}
         </Box>
       )}

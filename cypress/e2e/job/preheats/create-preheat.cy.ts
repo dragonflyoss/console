@@ -406,7 +406,7 @@ describe('Create preheat', () => {
   describe('cannot create preheat with invalid attributes', () => {
     it('try to verify information', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      const description = _.times(1001, () => _.sample(characters)).join('');
+      const description = _.times(401, () => _.sample(characters)).join('');
 
       cy.get('#cluster').type('cluster-99{enter}');
       cy.get('#cluster-helper-text').should('have.text', 'cluster not found');
@@ -427,7 +427,7 @@ describe('Create preheat', () => {
       // Show verification error message.
       cy.get('#description-helper-text')
         .should('be.visible')
-        .and('have.text', 'Fill in the characters, the length is 0-1000.');
+        .and('have.text', 'Fill in the characters, the length is 0-400.');
 
       cy.get('#save').click();
     });
@@ -443,8 +443,6 @@ describe('Create preheat', () => {
 
       // Click add URL button.
       cy.get('#add-url').click();
-
-      // cy.get('#url-0').type('https://example.com/path/to/file/url-1');
 
       cy.get('#save').click();
 
@@ -470,7 +468,7 @@ describe('Create preheat', () => {
 
     it('try to verify the preheat image args', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      const url = _.times(1001, () => _.sample(characters)).join('');
+      const url = _.times(401, () => _.sample(characters)).join('');
       const filter = _.times(101, () => _.sample(characters)).join('');
 
       cy.get('#preheat-image').click();
@@ -544,7 +542,7 @@ describe('Create preheat', () => {
       // Should display message tag the validation error.
       cy.get('#tag').type(url);
 
-      cy.get('#tag-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 0-1000.');
+      cy.get('#tag-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 0-400.');
 
       cy.get('#tag').clear();
 
@@ -654,7 +652,7 @@ describe('Create preheat', () => {
 
       cy.get('#save').click();
 
-      cy.get('#value-0-helper-text').should('have.text', 'Fill in the characters, the length is 1-10000.');
+      cy.get('#value-0-helper-text').should('have.text', 'Fill in the characters, the length is 1-1000.');
 
       cy.get('#value-0').type('key');
 
@@ -727,7 +725,7 @@ describe('Create preheat', () => {
       // Should display message tag the validation error.
       cy.get('#tag').type(url);
 
-      cy.get('#tag-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 0-1000.');
+      cy.get('#tag-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 0-400.');
 
       cy.get('#tag').clear();
 
@@ -836,7 +834,7 @@ describe('Create preheat', () => {
 
       cy.get('#save').click();
 
-      cy.get('#value-0-helper-text').should('have.text', 'Fill in the characters, the length is 1-10000.');
+      cy.get('#value-0-helper-text').should('have.text', 'Fill in the characters, the length is 1-1000.');
 
       cy.get('#value-0').type('key');
 

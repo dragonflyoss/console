@@ -11,8 +11,6 @@ import {
   DialogContent,
   LinearProgress,
   Skeleton,
-  Snackbar,
-  Alert,
   Tooltip as MuiTooltip,
   IconButton,
   Link,
@@ -54,7 +52,7 @@ import { ReactComponent as Active } from '../../../assets/images/cluster/peer/ac
 import { ReactComponent as Export } from '../../../assets/images/cluster/peer/export.svg';
 import { ReactComponent as ExportFile } from '../../../assets/images/cluster/peer/export-file.svg';
 import { ReactComponent as Count } from '../../../assets/images/cluster/scheduler/number.svg';
-import { ColorModeContext } from '../../../App';
+import ErrorHandler from '../../error-handler';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 Chart.defaults.font.family = 'mabry-light';
@@ -86,7 +84,6 @@ export default function Peer() {
 
   const { cluster } = useContext(MyContext);
   const theme = useTheme();
-  const colorMode = useContext(ColorModeContext);
 
   useEffect(() => {
     (async function () {
@@ -429,16 +426,7 @@ export default function Peer() {
 
   return (
     <Box>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert id="alert-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Box className={styles.header}>
         <Box className={styles.headerTitle}>
           <Typography variant="h6" fontFamily="mabry-bold" pr="0.4rem">

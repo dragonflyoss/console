@@ -380,11 +380,11 @@ describe('Clear', () => {
       cy.get('#searchByURL').click();
 
       // Show error message.
-      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('#error-message').should('not.exist');
+      cy.get('.MuiAlert-message').should('not.exist');
 
       // Search by task id.
       cy.get('#serach-task-id').click();
@@ -394,11 +394,11 @@ describe('Clear', () => {
       );
 
       // Show error message.
-      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('#error-message').should('not.exist');
+      cy.get('.MuiAlert-message').should('not.exist');
     });
 
     it('when the status is pending, delete cache API error response', () => {
@@ -460,7 +460,7 @@ describe('Clear', () => {
       );
 
       // Show error message.
-      cy.get('#error-message').should('be.visible').and('contain', 'Unauthorized');
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
     });
 
     it('delete cache API error response', () => {
@@ -496,11 +496,11 @@ describe('Clear', () => {
       );
 
       // Show error message.
-      cy.get('#error-message').should('be.visible').and('contain', 'Unauthorized');
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('#error-message').should('not.exist');
+      cy.get('.MuiAlert-message').should('not.exist');
     });
 
     it('search by image manifest url API error response', () => {
@@ -521,7 +521,7 @@ describe('Clear', () => {
       cy.get('#image-manifest-url').type('https://example.com/path/to/file{enter}');
 
       // Show error message.
-      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
     });
   });
 
@@ -748,7 +748,7 @@ describe('Clear', () => {
       cy.url().should('include', '/resource/task/clear');
 
       // Show error message.
-      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
     });
 
     it('search by URL API error response should be handled', () => {
@@ -818,7 +818,7 @@ describe('Clear', () => {
       cy.url().should('include', '/resource/task/clear');
 
       // Show error message.
-      cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
     });
   });
 
@@ -826,6 +826,7 @@ describe('Clear', () => {
     it('try to verify url', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       const url = _.times(1001, () => _.sample(characters)).join('');
+      const tag = _.times(401, () => _.sample(characters)).join('');
       const filter = _.times(101, () => _.sample(characters)).join('');
 
       cy.get('#url').click();
@@ -842,9 +843,9 @@ describe('Clear', () => {
       cy.get('#url-helper-text').should('not.exist');
 
       // Should display message tag the validation error.
-      cy.get('#tag').type(url);
+      cy.get('#tag').type(tag);
 
-      cy.get('#tag-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 0-1000.');
+      cy.get('#tag-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 0-400.');
 
       cy.get('#tag').clear();
 
@@ -873,38 +874,38 @@ describe('Clear', () => {
       cy.get('#searchByURL').click();
 
       // Should display message application the validation error.
-      cy.get('#application').type(url);
+      cy.get('#application').type(tag);
 
       cy.get('#application-helper-text')
         .should('be.visible')
-        .and('have.text', 'Fill in the characters, the length is 0-1000.');
+        .and('have.text', 'Fill in the characters, the length is 0-400.');
 
       cy.get('#application').clear();
       cy.get('#searchByURL').click();
 
       cy.get('#serach-task-id').click();
 
-      cy.get('#task-id').type(`${url}{enter}`);
+      cy.get('#task-id').type(`${tag}{enter}`);
       cy.get('#task-id-helper-text')
         .should('be.visible')
-        .and('have.text', 'Fill in the characters, the length is 0-1000.');
+        .and('have.text', 'Fill in the characters, the length is 0-400.');
     });
 
     it('try to verify task id', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      const taskID = _.times(1001, () => _.sample(characters)).join('');
+      const taskID = _.times(401, () => _.sample(characters)).join('');
 
       cy.get('#serach-task-id').click();
 
       cy.get('#task-id').type(`${taskID}{enter}`);
       cy.get('#task-id-helper-text')
         .should('be.visible')
-        .and('have.text', 'Fill in the characters, the length is 0-1000.');
+        .and('have.text', 'Fill in the characters, the length is 0-400.');
     });
 
     it('try to verify content for calculating task id', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      const contentForCalculatingTaskID = _.times(1001, () => _.sample(characters)).join('');
+      const contentForCalculatingTaskID = _.times(401, () => _.sample(characters)).join('');
 
       cy.get('#serach-content-for-calculating-task-id').click();
 
@@ -912,12 +913,12 @@ describe('Clear', () => {
 
       cy.get('#content-for-calculating-task-id-helper-text')
         .should('be.visible')
-        .and('have.text', 'Fill in the characters, the length is 0-1000.');
+        .and('have.text', 'Fill in the characters, the length is 0-400.');
     });
 
     it('try to verify image manifest url', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      const url = _.times(1001, () => _.sample(characters)).join('');
+      const url = _.times(401, () => _.sample(characters)).join('');
 
       cy.get('#serach-image-manifest-url').click();
 
@@ -928,7 +929,7 @@ describe('Clear', () => {
 
       cy.get('#image-manifest-url-helper-text')
         .should('be.visible')
-        .and('have.text', 'Fill in the characters, the length is 1-1000.');
+        .and('have.text', 'Fill in the characters, the length is 1-400.');
 
       cy.get('#image-manifest-url').clear();
       cy.get('#image-manifest-url').type('https://docs');

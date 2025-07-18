@@ -53,6 +53,7 @@ import { ReactComponent as Executions } from '../../../assets/images/resource/ta
 import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
 import { ReactComponent as DialogTTL } from '../../../assets/images/gc/dialog-ttl.svg';
 import ms from 'ms';
+import ErrorHandler from '../../error-handler';
 
 export default function JobGC() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -277,16 +278,7 @@ export default function JobGC() {
           Submission successful!
         </Alert>
       </Snackbar>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={onClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={onClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={onClose} />
       <Dialog
         open={openGCJob}
         onClose={handleClose}
@@ -635,6 +627,11 @@ export default function JobGC() {
               </TableCell>
               <TableCell align="center" className={styles.tableHeader}>
                 <Typography variant="subtitle1" className={styles.tableHeaderText}>
+                  Executor
+                </Typography>
+              </TableCell>
+              <TableCell align="center" className={styles.tableHeader}>
+                <Typography variant="subtitle1" className={styles.tableHeaderText}>
                   Trigger
                 </Typography>
               </TableCell>
@@ -692,9 +689,11 @@ export default function JobGC() {
                 </TableCell>
               </TableRow>
             ) : currentHistory.length === 0 ? (
-              <TableCell id="no-history" colSpan={9} align="center" sx={{ border: 0 }}>
-                You don't have GC history.
-              </TableCell>
+              <TableRow>
+                <TableCell id="no-history" colSpan={9} align="center" sx={{ border: 0 }}>
+                  You don't have GC history.
+                </TableCell>
+              </TableRow>
             ) : (
               <>
                 {Array.isArray(currentHistory) &&
@@ -710,6 +709,11 @@ export default function JobGC() {
                       >
                         <TableCell align="center" id={`id-${item?.id}`}>
                           {item?.id}
+                        </TableCell>
+                        <TableCell align="center" id={`id-${item?.id}`}>
+                          <Typography variant="body1" fontFamily="mabry-bold">
+                            {item?.user?.name || '-'}
+                          </Typography>
                         </TableCell>
                         <TableCell align="center" id={`trigger-${item?.id}`}>
                           <Chip

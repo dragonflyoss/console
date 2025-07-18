@@ -22,6 +22,7 @@ import styles from './new.module.css';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { signUp } from '../../lib/api';
+import ErrorHandler from '../error-handler';
 
 export default function NewUser() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -123,7 +124,7 @@ export default function NewUser() {
         id: 'bio',
         placeholder: 'Enter your description',
         error: bioError,
-        helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',
+        helperText: bioError ? 'Fill in the characters, the length is 0-400.' : '',
 
         onChange: (e: any) => {
           changeValidate(e.target.value, formList[2]);
@@ -133,7 +134,7 @@ export default function NewUser() {
       setError: setBioError,
 
       validate: (value: string) => {
-        const reg = /^.{0,1000}$/;
+        const reg = /^.{0,400}$/;
         return reg.test(value);
       },
     },
@@ -336,16 +337,7 @@ export default function NewUser() {
           Submission successful!
         </Alert>
       </Snackbar>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Typography variant="h5">Create a new user</Typography>
       <Breadcrumbs
         sx={{ m: '1rem 0' }}

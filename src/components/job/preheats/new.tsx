@@ -42,6 +42,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { CancelLoadingButton, SavelLoadingButton } from '../../loading-button';
 import { ReactComponent as Image } from '../../../assets/images/resource/task/image-manifest.svg';
 import { ReactComponent as File } from '../../../assets/images/job/preheat/file.svg';
+import ErrorHandler from '../../error-handler';
 
 const PrettoSlider = styled(Slider)(({ theme }) => ({
   color: 'var(--palette-description-color)',
@@ -168,7 +169,7 @@ export default function NewPreheat() {
         maxRows: 2,
         autoComplete: 'family-bio',
         placeholder: 'Enter your description',
-        helperText: bioError ? 'Fill in the characters, the length is 0-1000.' : '',
+        helperText: bioError ? 'Fill in the characters, the length is 0-400.' : '',
         error: bioError,
         InputProps: {
           endAdornment: (
@@ -192,7 +193,7 @@ export default function NewPreheat() {
       setError: setBioError,
 
       validate: (value: string) => {
-        const reg = /^.{0,1000}$/;
+        const reg = /^.{0,400}$/;
         return reg.test(value);
       },
     },
@@ -324,7 +325,7 @@ export default function NewPreheat() {
         name: 'tag',
         autoComplete: 'family-tag',
         placeholder: 'Enter your tag',
-        helperText: tagError ? 'Fill in the characters, the length is 0-1000.' : '',
+        helperText: tagError ? 'Fill in the characters, the length is 0-400.' : '',
         error: tagError,
         InputProps: {
           endAdornment: (
@@ -353,7 +354,7 @@ export default function NewPreheat() {
       setError: setTagError,
 
       validate: (value: string) => {
-        const reg = /^.{0,1000}$/;
+        const reg = /^.{0,400}$/;
         return reg.test(value);
       },
     },
@@ -364,7 +365,7 @@ export default function NewPreheat() {
         name: 'application',
         autoComplete: 'family-application',
         placeholder: 'Enter your application',
-        helperText: applicationError ? 'Fill in the characters, the length is 0-1000.' : '',
+        helperText: applicationError ? 'Fill in the characters, the length is 0-400.' : '',
         error: applicationError,
         InputProps: {
           endAdornment: (
@@ -393,7 +394,7 @@ export default function NewPreheat() {
       setError: setApplicationError,
 
       validate: (value: string) => {
-        const reg = /^.{0,1000}$/;
+        const reg = /^.{0,400}$/;
         return reg.test(value);
       },
     },
@@ -571,7 +572,7 @@ export default function NewPreheat() {
         name: 'tag',
         autoComplete: 'family-tag',
         placeholder: 'Enter your tag',
-        helperText: tagError ? 'Fill in the characters, the length is 0-1000.' : '',
+        helperText: tagError ? 'Fill in the characters, the length is 0-400.' : '',
         error: tagError,
         InputProps: {
           endAdornment: (
@@ -600,7 +601,7 @@ export default function NewPreheat() {
       setError: setTagError,
 
       validate: (value: string) => {
-        const reg = /^.{0,1000}$/;
+        const reg = /^.{0,400}$/;
         return reg.test(value);
       },
     },
@@ -611,7 +612,7 @@ export default function NewPreheat() {
         name: 'application',
         autoComplete: 'family-application',
         placeholder: 'Enter your application',
-        helperText: applicationError ? 'Fill in the characters, the length is 0-1000.' : '',
+        helperText: applicationError ? 'Fill in the characters, the length is 0-400.' : '',
         error: applicationError,
         InputProps: {
           endAdornment: (
@@ -640,7 +641,7 @@ export default function NewPreheat() {
       setError: setApplicationError,
 
       validate: (value: string) => {
-        const reg = /^.{0,1000}$/;
+        const reg = /^.{0,400}$/;
         return reg.test(value);
       },
     },
@@ -762,7 +763,7 @@ export default function NewPreheat() {
   };
 
   const headersValueValidate = (value: any) => {
-    const regex = /^.{1,10000}$/;
+    const regex = /^.{1,1000}$/;
     return regex.test(value);
   };
 
@@ -1017,16 +1018,7 @@ export default function NewPreheat() {
           Submission successful!
         </Alert>
       </Snackbar>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Typography variant="h5" fontFamily="mabry-bold">
         Create Preheat
       </Typography>
@@ -1631,7 +1623,7 @@ export default function NewPreheat() {
                         multiline
                         maxRows={3}
                         error={item.value.error}
-                        helperText={item.value.error && 'Fill in the characters, the length is 1-10000.'}
+                        helperText={item.value.error && 'Fill in the characters, the length is 1-1000.'}
                         className={styles.headersValueInput}
                         onChange={(event) => {
                           const newHeaders = [...headers];
@@ -2098,7 +2090,7 @@ export default function NewPreheat() {
                         multiline
                         maxRows={3}
                         error={item.value.error}
-                        helperText={item.value.error && 'Fill in the characters, the length is 1-10000.'}
+                        helperText={item.value.error && 'Fill in the characters, the length is 1-1000.'}
                         className={styles.headersValueInput}
                         onChange={(event) => {
                           const newHeaders = [...headers];

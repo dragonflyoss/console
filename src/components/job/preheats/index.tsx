@@ -399,7 +399,7 @@ export default function Preheats() {
           </Box>
         )}
       </Card>
-      {preheatTotalPages > 1 ? (
+      {preheatTotalPages > 1 && (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
           <Pagination
             count={preheatTotalPages}
@@ -413,8 +413,6 @@ export default function Preheats() {
             id="preheat-pagination"
           />
         </Box>
-      ) : (
-        <></>
       )}
     </Box>
   );

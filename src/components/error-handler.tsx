@@ -10,7 +10,7 @@ const ErrorHandler = ({ errorMessage, errorMessageText, onClose }: ErrorHandlerP
   return (
     <Snackbar
       open={errorMessage}
-      autoHideDuration={30000}
+      autoHideDuration={3000}
       onClose={onClose}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
     >

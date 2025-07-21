@@ -15,12 +15,7 @@ import {
   Link as RouterLink,
   Chip,
   Pagination,
-  ThemeProvider,
-  createTheme,
-  Snackbar,
-  Alert,
   Skeleton,
-  Breadcrumbs,
 } from '@mui/material';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
 import Card from '../../../card';
@@ -257,7 +252,7 @@ export default function Executions() {
           </Box>
         )}
       </Card>
-      {totalPages > 1 ? (
+      {totalPages > 1 && (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
           <Pagination
             count={totalPages}
@@ -272,8 +267,6 @@ export default function Executions() {
             id="executions-pagination"
           />
         </Box>
-      ) : (
-        <></>
       )}
     </Box>
   );

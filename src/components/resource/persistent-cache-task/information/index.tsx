@@ -898,7 +898,7 @@ export default function Information(props: InformationProps) {
           </Table>
         </Card>
       )}
-      {totalPages > 1 ? (
+      {totalPages > 1 && (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
           <Pagination
             id="task-pagination"
@@ -920,8 +920,6 @@ export default function Information(props: InformationProps) {
             size="small"
           />
         </Box>
-      ) : (
-        <></>
       )}
       <Dialog
         open={openDelete}

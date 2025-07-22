@@ -4,29 +4,34 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab, { TabProps } from '@mui/material/Tab';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './index.module.css';
-import { ReactComponent as Clear } from '../../../assets/images/resource/task/clear-cache.svg';
-import { ReactComponent as Executions } from '../../../assets/images/resource/task/executions.svg';
+import { ReactComponent as ClearIcon } from '../../../assets/images/resource/task/clear-cache.svg';
+import { ReactComponent as ExecutionsIcon } from '../../../assets/images/resource/task/executions.svg';
+import Clear from './clear';
+import Executions from './executions';
+
+import { TabContext, TabPanel } from '@mui/lab';
 
 export default function NavTabs() {
-  const [value, setValue] = React.useState(1);
+  const [value, setValue] = useState('1');
 
   const location = useLocation();
   const params = useParams();
   const breadcrumbsColor = location.pathname.split('/').length || 0;
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: React.SetStateAction<string>) => {
     setValue(newValue);
   };
 
   useEffect(() => {
-    if (location.pathname.split('/')[3] === 'clear') {
-      setValue(0);
-    } else {
-      setValue(1);
+    if (params.key === 'clear') {
+      setValue('1');
     }
-  }, [location.pathname]);
+    if (params.key === 'executions') {
+      setValue('2');
+    }
+  }, [params]);
 
   type StyledTabProps = Omit<TabProps, 'component'> & {
     component?: React.ElementType;
@@ -77,7 +82,7 @@ export default function NavTabs() {
       >
         <Typography color="text.primary">Resource</Typography>
         <Typography color="text.primary">Task</Typography>
-        {location.pathname.split('/')[3] === 'executions' ? (
+        {params.key === 'executions' ? (
           <RouterLink
             component={Link}
             underline="hover"
@@ -91,32 +96,41 @@ export default function NavTabs() {
         )}
         {params?.id ? <Typography color="inherit">{params?.id || '-'}</Typography> : ''}
       </Breadcrumbs>
-      <AntTabs
-        value={value}
-        onChange={handleChange}
-        aria-label="nav tabs example"
-        sx={{ mb: '2rem' }}
-        scrollButtons="auto"
-      >
-        <AntTab
-          icon={<Clear className={styles.tabIcon} />}
-          iconPosition="start"
-          label="Clear"
-          component={Link}
-          to="/resource/task/clear"
-          sx={{ textTransform: 'none' }}
-          id="tab-clear"
-        />
-        <AntTab
-          icon={<Executions className={styles.tabIcon} />}
-          iconPosition="start"
-          label="Executions"
-          component={Link}
-          to="/resource/task/executions"
-          id="tab-executions"
-        />
-      </AntTabs>
-      <Outlet />
+      <TabContext value={value}>
+        <AntTabs
+          value={value}
+          onChange={handleChange}
+          aria-label="nav tabs example"
+          sx={{ mb: '2rem' }}
+          scrollButtons="auto"
+        >
+          <AntTab
+            icon={<ClearIcon className={styles.tabIcon} />}
+            iconPosition="start"
+            label="Clear"
+            component={Link}
+            to="/resource/task/clear"
+            sx={{ textTransform: 'none' }}
+            id="tab-clear"
+            value="1"
+          />
+          <AntTab
+            icon={<ExecutionsIcon className={styles.tabIcon} />}
+            iconPosition="start"
+            label="Executions"
+            component={Link}
+            to="/resource/task/executions"
+            id="tab-executions"
+            value="2"
+          />
+        </AntTabs>
+        <TabPanel value="1" key="1" sx={{ p: 0 }}>
+          <Clear />
+        </TabPanel>
+        <TabPanel value="2" key="1" sx={{ p: 0 }}>
+          <Executions />
+        </TabPanel>
+      </TabContext>
     </Box>
   );
 }

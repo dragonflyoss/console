@@ -254,7 +254,7 @@ describe('Profile', () => {
 
     it('cannot create user with invalid attributes', () => {
       const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      const description = _.times(1001, () => _.sample(characters)).join('');
+      const description = _.times(401, () => _.sample(characters)).join('');
       const location = _.times(101, () => _.sample(characters)).join('');
 
       cy.get('.MuiGrid-root > .MuiButtonBase-root').click();
@@ -264,7 +264,7 @@ describe('Profile', () => {
       cy.get('#bio').type(description);
 
       // Show verification error message.
-      cy.get('#bio-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 0-1000.');
+      cy.get('#bio-helper-text').should('be.visible').and('have.text', 'Fill in the characters, the length is 0-400.');
       cy.get('#save').click();
       cy.get('.css-1033rfx > .MuiTypography-root').should('exist').and('have.text', 'Update Personal Information');
 

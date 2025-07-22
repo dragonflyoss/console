@@ -15,6 +15,7 @@ import { setPageTitle } from '../../lib/utils';
 import { ReactComponent as Login } from '../../assets/images/login/login.svg';
 import { ReactComponent as PageLoading } from '../../assets/images/login/page-loading.svg';
 import { DarkMode } from '../dark-layout';
+import ErrorHandler from '../error-handler';
 
 export default function SignUp() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -222,17 +223,7 @@ export default function SignUp() {
 
   return (
     <Grid container className={styles.page}>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        id="error-message"
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Backdrop
         open={pageLoding}
         sx={{

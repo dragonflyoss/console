@@ -1,4 +1,4 @@
-import { Alert, Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Snackbar, Typography } from '@mui/material';
+import { Box, Breadcrumbs, Chip, Link as RouterLink, Skeleton, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getSeedPeer, getSeedPeerResponse } from '../../../lib/api';
 import { getDatetime } from '../../../lib/utils';
@@ -18,6 +18,7 @@ import { ReactComponent as DownloadPort } from '../../../assets/images/cluster/s
 import { ReactComponent as ObjectStoragePort } from '../../../assets/images/cluster/seed-peer/object-storage-port.svg';
 import { ReactComponent as CreatedAt } from '../../../assets/images/cluster/scheduler/created-at.svg';
 import { ReactComponent as UpdatedAt } from '../../../assets/images/cluster/scheduler/updated-at.svg';
+import ErrorHandler from '../../error-handler';
 
 export default function SeedPeer() {
   const [isLoading, setIsLoading] = useState(false);
@@ -61,16 +62,7 @@ export default function SeedPeer() {
 
   return (
     <Box>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Typography variant="h5">Seed-Peer</Typography>
       <Breadcrumbs
         separator={

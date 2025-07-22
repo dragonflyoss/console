@@ -196,7 +196,7 @@ describe('Executions', () => {
           interceptCount++;
         },
       ).as('execution');
-      
+
       cy.get('#detail-11').click();
 
       // Check for breadcrumb.
@@ -300,7 +300,7 @@ describe('Executions', () => {
       cy.intercept(
         {
           method: 'GET',
-          url: '/api/v1/jobs/6',
+          url: '/api/v1/jobs/10',
         },
         (req) => {
           req.reply({
@@ -308,6 +308,8 @@ describe('Executions', () => {
           });
         },
       );
+
+      cy.visit('/resource/task/executions/10');
     });
 
     it('show error message', () => {

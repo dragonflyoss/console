@@ -1,4 +1,4 @@
-import { Breadcrumbs, styled, Typography, Link as RouterLink, Snackbar, Alert } from '@mui/material';
+import { Breadcrumbs, styled, Typography, Link as RouterLink } from '@mui/material';
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import * as React from 'react';
 import Box from '@mui/material/Box';
@@ -11,6 +11,38 @@ import { ReactComponent as TabScheduler } from '../../assets/images/cluster/sche
 import { ReactComponent as TabSeedPeer } from '../../assets/images/cluster/seed-peer/tab-seed-peer.svg';
 import { ReactComponent as TabPeer } from '../../assets/images/cluster/peer/tab-peer.svg';
 import styles from './show.module.css';
+import ErrorHandler from '../error-handler';
+
+const AntTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} />)(({ theme }) => ({
+  textTransform: 'none',
+  minWidth: 0,
+  [theme.breakpoints.up('sm')]: {
+    minWidth: 0,
+  },
+  minHeight: '3rem',
+  fontWeight: theme.typography.fontWeightRegular,
+  color: 'var(--palette-grey-tab)',
+  padding: '0',
+  marginRight: '2rem',
+  fontFamily: 'mabry-bold',
+  fontSize: '0.9rem',
+  '&:hover': {
+    color: 'primary',
+    opacity: 1,
+  },
+  '&.Mui-selected': {
+    color: 'var(--palette-text-color)',
+    fontFamily: 'mabry-bold',
+  },
+}));
+
+const AntTabs = styled(Tabs)({
+  borderBottom: '1px solid var(--palette-tab-border-color)',
+  '& .MuiTabs-indicator': {
+    backgroundColor: 'var(--palette-text-color)',
+    borderRadius: '1rem',
+  },
+});
 
 interface MyContextType {
   cluster: getClusterResponse;
@@ -85,6 +117,7 @@ export default function NavTabs() {
     updated_at: '',
     is_default: false,
   });
+
   const location = useLocation();
   const params = useParams();
 
@@ -109,11 +142,11 @@ export default function NavTabs() {
   }, [params.id]);
 
   useEffect(() => {
-    if (location.pathname.split('/')[3] === 'schedulers') {
+    if (location.pathname?.split('/')?.[3] === 'schedulers') {
       setValue(1);
-    } else if (location.pathname.split('/')[3] === 'seed-peers') {
+    } else if (location.pathname?.split('/')?.[3] === 'seed-peers') {
       setValue(2);
-    } else if (location.pathname.split('/')[3] === 'peers') {
+    } else if (location.pathname?.split('/')?.[3] === 'peers') {
       setValue(3);
     } else {
       setValue(0);
@@ -123,37 +156,6 @@ export default function NavTabs() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
-  const AntTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} />)(({ theme }) => ({
-    textTransform: 'none',
-    minWidth: 0,
-    [theme.breakpoints.up('sm')]: {
-      minWidth: 0,
-    },
-    minHeight: '3rem',
-    fontWeight: theme.typography.fontWeightRegular,
-    color: 'var(--palette-grey-tab)',
-    padding: '0',
-    marginRight: '2rem',
-    fontFamily: 'mabry-bold',
-    fontSize: '0.9rem',
-    '&:hover': {
-      color: 'primary',
-      opacity: 1,
-    },
-    '&.Mui-selected': {
-      color: 'var(--palette-text-color)',
-      fontFamily: 'mabry-bold',
-    },
-  }));
-
-  const AntTabs = styled(Tabs)({
-    borderBottom: '1px solid var(--palette-tab-border-color)',
-    '& .MuiTabs-indicator': {
-      backgroundColor: 'var(--palette-text-color)',
-      borderRadius: '1rem',
-    },
-  });
 
   const tabList = [
     {
@@ -196,16 +198,7 @@ export default function NavTabs() {
 
   return (
     <MyContext.Provider value={{ cluster, isLoading }}>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert id="errorMessage" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Breadcrumbs
         separator={
           <Box
@@ -218,7 +211,7 @@ export default function NavTabs() {
         <RouterLink variant="body1" component={Link} underline="hover" color="text.primary" to={`/clusters`}>
           Cluster
         </RouterLink>
-        {location.pathname.split('/')[3] ? (
+        {location.pathname?.split('/')?.[3] ? (
           <RouterLink
             variant="body1"
             component={Link}
@@ -233,11 +226,11 @@ export default function NavTabs() {
             {cluster?.name || '-'}
           </Typography>
         )}
-        {location.pathname.split('/')[3] && (
+        {location.pathname?.split('/')?.[3] && (
           <Typography variant="body1" color="inherit">
-            {location.pathname.split('/')[3] === 'schedulers'
+            {location.pathname?.split('/')?.[3] === 'schedulers'
               ? 'Schedulers'
-              : location.pathname.split('/')[3] === 'seed-peers'
+              : location.pathname?.split('/')?.[3] === 'seed-peers'
               ? 'Seed Peers'
               : 'Peers'}
           </Typography>

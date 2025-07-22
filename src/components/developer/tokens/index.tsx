@@ -29,6 +29,7 @@ import { ReactComponent as Done } from '../../../assets/images/tokens/done.svg';
 import { ReactComponent as Copy } from '../../../assets/images/tokens/copy.svg';
 import { ReactComponent as IcContent } from '../../../assets/images/cluster/scheduler/ic-content.svg';
 import { ReactComponent as Delete } from '../../../assets/images/cluster/delete.svg';
+import ErrorHandler from '../../error-handler';
 
 export default function PersonalAccessTokens() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -139,8 +140,8 @@ export default function PersonalAccessTokens() {
   };
 
   const copyToken = () => {
-    setCopyToClipboard(newToken);
     setShowCopyIcon(true);
+    setCopyToClipboard(newToken);
 
     setTimeout(() => {
       setShowCopyIcon(false);
@@ -159,16 +160,7 @@ export default function PersonalAccessTokens() {
           Submission successful!
         </Alert>
       </Snackbar>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Box className={styles.titleContainer}>
         <Typography variant="h5" id="token-title">
           Personal access tokens
@@ -197,7 +189,7 @@ export default function PersonalAccessTokens() {
       <Typography variant="body2" mb="1.5rem" mt="1rem" color="var(--palette-text-palette-text-secondary)">
         Tokens you have generated that can be used to access the Dragonfly API.
       </Typography>
-      {showCopyColumn ? (
+      {showCopyColumn && (
         <Card id="copy-column" className={styles.copyToken}>
           <Typography variant="body2" mr="0.4rem">
             {newToken || ''}
@@ -231,8 +223,6 @@ export default function PersonalAccessTokens() {
             )}
           </IconButton>
         </Card>
-      ) : (
-        <></>
       )}
       {isLoading ? (
         <Card>

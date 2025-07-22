@@ -89,9 +89,9 @@ describe('Signin', () => {
     cy.get('form').submit();
 
     // Show error message.
-    cy.get('#error-message').should('be.visible').and('contain', 'Unauthorized');
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('#error-message').should('not.exist');
+    cy.get('.MuiAlert-message').should('not.exist');
   });
 
   it('try to signin with invalid account', () => {
@@ -100,9 +100,9 @@ describe('Signin', () => {
     cy.get('form').submit();
 
     // Show error message.
-    cy.get('#error-message').should('be.visible').and('contain', 'Unauthorized');
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Unauthorized');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('#error-message').should('not.exist');
+    cy.get('.MuiAlert-message').should('not.exist');
   });
 
   it('try to signin with guest user', () => {
@@ -172,9 +172,9 @@ describe('Signin', () => {
     cy.get('form').submit();
 
     // Show error message.
-    cy.get('#error-message').should('be.visible').and('contain', 'Failed to fetch');
+    cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
     cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-    cy.get('#error-message').should('not.exist');
+    cy.get('.MuiAlert-message').should('not.exist');
   });
 
   it('try to verify account and password', () => {

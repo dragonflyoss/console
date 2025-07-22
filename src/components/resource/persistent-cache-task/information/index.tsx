@@ -59,6 +59,7 @@ import { CancelLoadingButton, DeleteLoadingButton } from '../../../loading-butto
 import { DEFAULT_PAGE_SIZE } from '../../../../lib/constants';
 import { filesize } from 'filesize';
 import ms from 'ms';
+import ErrorHandler from '../../../error-handler';
 
 interface InformationProps {
   persistentCacheTasks: getPersistentCacheTasksResponse[];
@@ -275,16 +276,7 @@ export default function Information(props: InformationProps) {
           Submission successful!
         </Alert>
       </Snackbar>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert id="error-message" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Box className={styles.navigationContainer}>
         <Card className={styles.navigationWrapper}>
           <Box>
@@ -906,7 +898,7 @@ export default function Information(props: InformationProps) {
           </Table>
         </Card>
       )}
-      {totalPages > 1 ? (
+      {totalPages > 1 && (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
           <Pagination
             id="task-pagination"
@@ -928,8 +920,6 @@ export default function Information(props: InformationProps) {
             size="small"
           />
         </Box>
-      ) : (
-        <></>
       )}
       <Dialog
         open={openDelete}

@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import styles from './index.module.css';
 import { getDeleteTaskJob, getTaskJobResponse } from '../../../../lib/api';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getDatetime, useQuery } from '../../../../lib/utils';
 import { DEFAULT_PAGE_SIZE } from '../../../../lib/constants';
 import {
@@ -15,10 +15,6 @@ import {
   Link as RouterLink,
   Chip,
   Pagination,
-  ThemeProvider,
-  createTheme,
-  Snackbar,
-  Alert,
   Skeleton,
 } from '@mui/material';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
@@ -28,6 +24,7 @@ import { ReactComponent as Success } from '../../../../assets/images/job/preheat
 import { ReactComponent as Failure } from '../../../../assets/images/job/preheat/failure.svg';
 import { ReactComponent as Pending } from '../../../../assets/images/job/preheat/pending.svg';
 import { ReactComponent as Detail } from '../../../../assets/images/job/preheat/detail.svg';
+import ErrorHandler from '../../../error-handler';
 
 export default function Executions() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -134,16 +131,7 @@ export default function Executions() {
 
   return (
     <Box>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Card>
         <Box className={styles.titleContainer}>
           <Typography variant="body1" fontFamily="mabry-bold">
@@ -264,7 +252,7 @@ export default function Executions() {
           </Box>
         )}
       </Card>
-      {totalPages > 1 ? (
+      {totalPages > 1 && (
         <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '2rem' }}>
           <Pagination
             count={totalPages}
@@ -279,8 +267,6 @@ export default function Executions() {
             id="executions-pagination"
           />
         </Box>
-      ) : (
-        <></>
       )}
     </Box>
   );

@@ -13,6 +13,7 @@ import { TabContext, TabPanel } from '@mui/lab';
 import Information from './information';
 import Analytics from './analytics';
 import styles from './index.module.css';
+import ErrorHandler from '../../error-handler';
 
 type StyledTabProps = Omit<TabProps, 'component'> & {};
 
@@ -89,27 +90,17 @@ export default function PersistentCacheTask() {
     setValue(newValue);
   };
 
+  const handleClose = (_event: any, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorMessage(false);
+  };
+
   return (
     <DataContext.Provider value={{ setDeleteTask }}>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={() => {
-          setErrorMessage(false);
-        }}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert
-          id="error-message"
-          onClose={() => {
-            setErrorMessage(false);
-          }}
-          severity="error"
-          sx={{ width: '100%' }}
-        >
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Box>
         <Typography variant="h5" mb="1rem">
           Persistent Cache Tasks

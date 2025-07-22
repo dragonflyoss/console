@@ -93,6 +93,7 @@ import { ReactComponent as Features } from '../../../assets/images/cluster/featu
 import { ReactComponent as Preheat } from '../../../assets/images/cluster/preheat.svg';
 import { ReactComponent as Schedule } from '../../../assets/images/cluster/scheduler.svg';
 import { ReactComponent as Count } from '../../../assets/images/cluster/scheduler/number.svg';
+import ErrorHandler from '../../error-handler';
 
 function CircularProgressWithLabel(props: LinearProgressProps & { value: number }) {
   return (
@@ -170,28 +171,7 @@ export default function ShowCluster() {
   const page = query.get('page') ? parseInt(query.get('page') as string, 10) || 1 : 1;
   const search = query.get('search') ? (query.get('search') as string) : '';
   const statr = query.get('status') ? (query.get('status') as string) : 'all';
-
   const open = Boolean(anchorEl);
-
-  const handleMenuItemClick = (event: any) => {
-    setStatus(event.name);
-
-    const queryParts = [];
-    if (search) {
-      queryParts.push(`search=${search}`);
-    }
-
-    if (event.name !== 'all') {
-      queryParts.push(`status=${event.name}`);
-    }
-
-    const queryString = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
-
-    navigate(`${location.pathname}${queryString}`);
-
-    setSchedulerPage(1);
-    setAnchorEl(null);
-  };
 
   const { cluster } = useContext(MyContext);
 
@@ -311,6 +291,26 @@ export default function ShowCluster() {
 
   const schedulerInactive =
     Array.isArray(schedulerCount) && schedulerCount?.filter((item: any) => item?.state === 'inactive');
+
+  const handleMenuItemClick = (event: any) => {
+    setStatus(event.name);
+
+    const queryParts = [];
+    if (search) {
+      queryParts.push(`search=${search}`);
+    }
+
+    if (event.name !== 'all') {
+      queryParts.push(`status=${event.name}`);
+    }
+
+    const queryString = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
+
+    navigate(`${location.pathname}${queryString}`);
+
+    setSchedulerPage(1);
+    setAnchorEl(null);
+  };
 
   const handleClose = (_event: any, reason?: string) => {
     if (reason === 'clickaway') {
@@ -568,16 +568,7 @@ export default function ShowCluster() {
           Submission successful!
         </Alert>
       </Snackbar>
-      <Snackbar
-        open={errorMessage}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert id="errorMessage" onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {errorMessageText}
-        </Alert>
-      </Snackbar>
+      <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
       <Box className={styles.openDeleteInactiveDialog}>
         <Typography variant="h6" fontFamily="mabry-bold">
           Schedulers

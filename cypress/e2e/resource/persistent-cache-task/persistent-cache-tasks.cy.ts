@@ -299,7 +299,7 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#deleteTask').click();
 
       // Show error message.
-      cy.get('#error-message').should('have.text', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch');
     });
 
     it('when a task is removed, this task is the only task on the last page', () => {
@@ -444,7 +444,7 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#no-date-text').should('have.text', 'You have no clusters.');
 
       // Show error message.
-      cy.get('#error-message').should('have.text', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch');
     });
 
     it('persistent cache task API response error', () => {
@@ -454,11 +454,11 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#no-task').should('have.text', 'This scheduler cluster has no persistent cache task.');
 
       // Show error message.
-      cy.get('#error-message').should('have.text', 'Failed to fetch');
+      cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch');
 
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
 
-      cy.get('#error-message').should('not.exist');
+      cy.get('.MuiAlert-message').should('not.exist');
 
       cy.get('#table').click();
 

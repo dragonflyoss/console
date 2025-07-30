@@ -16,7 +16,7 @@ import {
   TextField,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './index.module.css';
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../lib/constants';
 import { auditLogsResponse, getAuditLogs, getUsers, getUsersResponse } from '../../lib/api';
@@ -256,7 +256,7 @@ export default function AuditLogs() {
                     value={item.name}
                     id={item.name}
                   >
-                    <Typography variant="body2">{item.lable}</Typography>
+                    {item.lable}
                   </MenuItem>
                 ))}
               </Select>
@@ -286,7 +286,7 @@ export default function AuditLogs() {
                     value={item.name}
                     id={item.name}
                   >
-                    <Typography variant="body2">{item.lable}</Typography>
+                    {item.lable}
                   </MenuItem>
                 ))}
               </Select>
@@ -316,7 +316,7 @@ export default function AuditLogs() {
                     value={item.name}
                     id={item.name}
                   >
-                    <Typography variant="body2">{item.lable}</Typography>
+                    {item.lable}
                   </MenuItem>
                 ))}
               </Select>

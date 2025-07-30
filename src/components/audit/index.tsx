@@ -255,7 +255,9 @@ export default function AuditLogs() {
                     key={item.name}
                     value={item.name}
                     id={item.name}
-                  ></MenuItem>
+                  >
+                    {item.lable}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -283,7 +285,9 @@ export default function AuditLogs() {
                     key={item.name}
                     value={item.name}
                     id={item.name}
-                  ></MenuItem>
+                  >
+                    {item.lable}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -311,7 +315,9 @@ export default function AuditLogs() {
                     key={item.name}
                     value={item.name}
                     id={item.name}
-                  ></MenuItem>
+                  >
+                    {item.lable}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>

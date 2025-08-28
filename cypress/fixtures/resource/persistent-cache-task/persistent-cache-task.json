@@ -70,13 +70,13 @@
           "used_percent": 1
         },
         "network": {
-          "download_rate": 1000,
-          "download_rate_limit": 4000,
+          "rx_bandwidth": 1000,
+          "max_rx_bandwidth": 4000,
           "idc": "HangZhou",
           "location": "HangZhou",
           "tcp_connection_count": 2,
-          "upload_rate": 1000,
-          "upload_rate_limit": 20000,
+          "tx_bandwidth": 1000,
+          "max_tx_bandwidth": 20000,
           "upload_tcp_connection_count": 4
         },
         "os": "ios",
@@ -152,13 +152,13 @@
           "used_percent": 1
         },
         "network": {
-          "download_rate": 1000,
-          "download_rate_limit": 4000,
+          "rx_bandwidth": 1000,
+          "max_rx_bandwidth": 4000,
           "idc": "HangZhou",
           "location": "HangZhou",
           "tcp_connection_count": 2,
-          "upload_rate": 1000,
-          "upload_rate_limit": 20000,
+          "tx_bandwidth": 1000,
+          "max_tx_bandwidth": 20000,
           "upload_tcp_connection_count": 4
         },
         "os": "ios",
@@ -234,13 +234,13 @@
           "used_percent": 1
         },
         "network": {
-          "download_rate": 1000,
-          "download_rate_limit": 4000,
+          "rx_bandwidth": 1000,
+          "max_rx_bandwidth": 4000,
           "idc": "HangZhou",
           "location": "HangZhou",
           "tcp_connection_count": 2,
-          "upload_rate": 1000,
-          "upload_rate_limit": 20000,
+          "tx_bandwidth": 1000,
+          "max_tx_bandwidth": 20000,
           "upload_tcp_connection_count": 4
         },
         "os": "Linux",
@@ -316,13 +316,13 @@
           "used_percent": 1
         },
         "network": {
-          "download_rate": 1000,
-          "download_rate_limit": 4000,
+          "rx_bandwidth": 1000,
+          "max_rx_bandwidth": 4000,
           "idc": "HangZhou",
           "location": "HangZhou",
           "tcp_connection_count": 2,
-          "upload_rate": 1000,
-          "upload_rate_limit": 20000,
+          "tx_bandwidth": 1000,
+          "max_tx_bandwidth": 20000,
           "upload_tcp_connection_count": 4
         },
         "os": "ios",
@@ -398,13 +398,13 @@
           "used_percent": 1
         },
         "network": {
-          "download_rate": 1000,
-          "download_rate_limit": 4000,
+          "rx_bandwidth": 1000,
+          "max_rx_bandwidth": 4000,
           "idc": "HangZhou",
           "location": "HangZhou",
           "tcp_connection_count": 2,
-          "upload_rate": 1000,
-          "upload_rate_limit": 20000,
+          "tx_bandwidth": 1000,
+          "max_tx_bandwidth": 20000,
           "upload_tcp_connection_count": 4
         },
         "os": "ios",
@@ -480,13 +480,13 @@
           "used_percent": 1
         },
         "network": {
-          "download_rate": 1000,
-          "download_rate_limit": 4000,
+          "rx_bandwidth": 1000,
+          "max_rx_bandwidth": 4000,
           "idc": "HangZhou",
           "location": "HangZhou",
           "tcp_connection_count": 2,
-          "upload_rate": 1000,
-          "upload_rate_limit": 20000,
+          "tx_bandwidth": 1000,
+          "max_tx_bandwidth": 20000,
           "upload_tcp_connection_count": 4
         },
         "os": "ios",

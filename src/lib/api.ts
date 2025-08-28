@@ -1186,13 +1186,13 @@ export interface persistentCacheTasksPeersResponse {
       used_percent: number;
     };
     network: {
-      download_rate: number;
-      download_rate_limit: number;
+      rx_bandwidth: number;
+      max_rx_bandwidth: number;
       idc: string;
       location: string;
       tcp_connection_count: number;
-      upload_rate: number;
-      upload_rate_limit: number;
+      tx_bandwidth: number;
+      max_tx_bandwidth: number;
       upload_tcp_connection_count: number;
     };
     os: string;

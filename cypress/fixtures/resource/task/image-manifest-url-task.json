@@ -22,7 +22,7 @@
     {
       "ip": "172.18.0.4",
       "hostname": "kind-worker1",
-      "layers": [
+      "cached_layers": [
         {
           "url": "https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1ffc4b5459e82dc8e7ddd1d1a2ec469e85a1f076090c22851a1f2ce6f71e1a6?format=json"
         },
@@ -38,7 +38,7 @@
     {
       "ip": "172.18.0.4",
       "hostname": "kind-worker2",
-      "layers": [
+      "cached_layers": [
         {
           "url": "https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944"
         },
@@ -51,7 +51,7 @@
     {
       "ip": "172.18.0.4",
       "hostname": "kind-worker3",
-      "layers": [
+      "cached_layers": [
         {
           "url": "https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1ffc4b5459e82dc8e7ddd1d1a2ec469e85a1f076090c22851a1f2ce6f71e1a6"
         },
@@ -64,7 +64,7 @@
     {
       "ip": "172.18.0.4",
       "hostname": "kind-worker4",
-      "layers": [
+      "cached_layers": [
         {
           "url": "https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944"
         },
@@ -77,7 +77,7 @@
     {
       "ip": "172.18.0.4",
       "hostname": "kind-worker5",
-      "layers": [
+      "cached_layers": [
         {
           "url": "https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1ffc4b5459e82dc8e7ddd1d1a2ec469e85a1f076090c22851a1f2ce6f71e1a6"
         },
@@ -90,7 +90,7 @@
     {
       "ip": "172.18.0.4",
       "hostname": "kind-worker6",
-      "layers": [
+      "cached_layers": [
         {
           "url": "https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944"
         },
@@ -103,7 +103,7 @@
     {
       "ip": "172.18.0.3",
       "hostname": "kind-worker7",
-      "layers": [
+      "cached_layers": [
         {
           "url": "https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944"
         },
@@ -116,7 +116,7 @@
     {
       "ip": "172.18.0.3",
       "hostname": "kind-worker8",
-      "layers": [
+      "cached_layers": [
         {
           "url": "https://ghcr.io/v2/dragonflyoss/scheduler/blobs/sha256:f1f1039835051ecc04909f939530e86a20f02d2ce5ad7a81c0fa3616f7303944"
         },

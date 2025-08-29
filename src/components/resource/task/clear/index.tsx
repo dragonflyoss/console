@@ -90,7 +90,7 @@ type Image = {
 type OriginalPeer = {
   ip: string;
   hostname: string;
-  layers: Layers[];
+  cached_layers: Layers[];
   scheduler_cluster_id?: number;
 };
 
@@ -117,7 +117,7 @@ const transformImages = (images: createGetImageDistributionJobResponse): Transfo
     const cleanedPeer = {
       ip: peer.ip,
       hostname: peer.hostname,
-      layers: peer.layers,
+      cached_layers: peer.cached_layers,
     };
 
     clusters.get(clusterId)!.push(cleanedPeer);
@@ -1478,7 +1478,7 @@ export default function Clear() {
                                     fontFamily="mabry-bold"
                                     className={styles.bolbProportionText}
                                   >
-                                    {`${((items?.layers?.length / layer) * 100).toFixed(2) || 0}%`}
+                                    {`${((items?.cached_layers?.length / layer) * 100).toFixed(2) || 0}%`}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -1500,7 +1500,7 @@ export default function Clear() {
                                   </Typography>
                                 </Box>
                                 <Box className={styles.cardCantainer}>
-                                  {items?.layers.map((item: any, bolbIndex: any) => (
+                                  {items?.cached_layers.map((item: any, bolbIndex: any) => (
                                     <Box key={bolbIndex} className={styles.urlsWrapper}>
                                       <Tooltip title={extractSHA256Regex(item?.url || '-') || '-'} placement="top">
                                         <Typography

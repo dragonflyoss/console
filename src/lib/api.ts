@@ -994,7 +994,7 @@ interface layers {
 interface ImageDistributionpeers {
   ip: string;
   hostname: string;
-  layers: layers[];
+  cached_layers: layers[];
   scheduler_cluster_id: number;
 }
 

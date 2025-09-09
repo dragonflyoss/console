@@ -7,11 +7,11 @@ import Clusters from '../components/clusters';
 import EditCluster from '../components/clusters/edit';
 import NewCluster from '../components/clusters/new';
 import Cluster from '../components/clusters/information';
-import SeedPeers from '../components/clusters/seed-peers';
+// import SeedPeers from '../components/clusters/seed-peers';
 import Schedulers from '../components/clusters/schedulers/index';
 import ShowCluster from '../components/clusters/show';
 import ShowScheduler from '../components/clusters/schedulers/show';
-import ShowSeedPeer from '../components/clusters/seed-peers/show';
+// import ShowSeedPeer from '../components/clusters/seed-peers/show';
 import Peers from '../components/clusters/peers';
 import Profile from '../components/profile';
 import Users from '../components/users';
@@ -74,11 +74,11 @@ function Main() {
         <Route element={<ShowCluster />}>
           <Route path="/clusters/:id" element={<Cluster />} />
           <Route path="/clusters/:id/schedulers" element={<Schedulers />} />
-          <Route path="/clusters/:id/seed-peers" element={<SeedPeers />} />
+          {/* <Route path="/clusters/:id/seed-peers" element={<SeedPeers />} /> */}
           <Route path="/clusters/:id/peers" element={<Peers />} />
         </Route>
         <Route path="/clusters/:id/schedulers/:id" element={<ShowScheduler />} />
-        <Route path="/clusters/:id/seed-peers/:id" element={<ShowSeedPeer />} />
+        {/* <Route path="/clusters/:id/seed-peers/:id" element={<ShowSeedPeer />} /> */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/developer/personal-access-tokens" element={<Tokens />} />
         <Route path="/developer/personal-access-tokens/new" element={<NewTokens />} />

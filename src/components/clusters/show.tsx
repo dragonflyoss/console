@@ -8,7 +8,7 @@ import { createContext, useEffect, useState } from 'react';
 import { getCluster, getClusterResponse } from '../../lib/api';
 import { ReactComponent as TabCluster } from '../../assets/images/cluster/tab-cluster.svg';
 import { ReactComponent as TabScheduler } from '../../assets/images/cluster/scheduler/tab-scheduler.svg';
-import { ReactComponent as TabSeedPeer } from '../../assets/images/cluster/seed-peer/tab-seed-peer.svg';
+// import { ReactComponent as TabSeedPeer } from '../../assets/images/cluster/seed-peer/tab-seed-peer.svg';
 import { ReactComponent as TabPeer } from '../../assets/images/cluster/peer/tab-peer.svg';
 import styles from './show.module.css';
 import ErrorHandler from '../error-handler';
@@ -144,8 +144,8 @@ export default function NavTabs() {
   useEffect(() => {
     if (location.pathname?.split('/')?.[3] === 'schedulers') {
       setValue(1);
-    } else if (location.pathname?.split('/')?.[3] === 'seed-peers') {
-      setValue(2);
+    // } else if (location.pathname?.split('/')?.[3] === 'seed-peers') {
+    //   setValue(2);
     } else if (location.pathname?.split('/')?.[3] === 'peers') {
       setValue(3);
     } else {
@@ -172,13 +172,13 @@ export default function NavTabs() {
       component: Link,
       to: `/clusters/${params.id}/schedulers`,
     },
-    {
-      id: 'tab-cluster',
-      icon: <TabSeedPeer className={styles.tableIcon} />,
-      label: 'Seed Peers',
-      component: Link,
-      to: `/clusters/${params.id}/seed-peers`,
-    },
+    // {
+    //   id: 'tab-cluster',
+    //   icon: <TabSeedPeer className={styles.tableIcon} />,
+    //   label: 'Seed Peers',
+    //   component: Link,
+    //   to: `/clusters/${params.id}/seed-peers`,
+    // },
     {
       id: 'tab-cluster',
       icon: <TabPeer className={styles.tableIcon} />,
@@ -230,8 +230,8 @@ export default function NavTabs() {
           <Typography variant="body1" color="inherit">
             {location.pathname?.split('/')?.[3] === 'schedulers'
               ? 'Schedulers'
-              : location.pathname?.split('/')?.[3] === 'seed-peers'
-              ? 'Seed Peers'
+              //     : location.pathname?.split('/')?.[3] === 'seed-peers'
+              // ? 'Seed Peers'
               : 'Peers'}
           </Typography>
         )}

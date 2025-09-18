@@ -1,6 +1,7 @@
 {
   "name": "console",
   "version": "1.0.0",
+  "homepage": ".",
   "description": "Dragonfly console is the front-end console of dragonfly, through which you can easily configure clusters and view cluster information.",
   "license": "Apache-2.0",
   "keywords": [

@@ -27,11 +27,11 @@
 }
 
 .clusterIcon {
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 1.5rem;
+  height: 1.5rem;
   position: absolute;
-  left: 0.8rem;
-  top: 0.3rem;
+  left: 0.55rem;
+  top: 0.1rem;
   color: var(--palette-grey-200Channel);
 }
 

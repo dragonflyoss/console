@@ -355,7 +355,7 @@ export default function NewUser() {
           New user
         </Typography>
       </Breadcrumbs>
-      <Box component="form" onSubmit={handleSubmit} sx={{ mt: '2rem' }}>
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: '2rem' }} noValidate>
         <Divider sx={{ mt: 2, mb: 2 }} />
         <Box className={styles.form}>
           {formList.map((item) =>

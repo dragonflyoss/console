@@ -382,7 +382,7 @@ describe('Create cluster', () => {
       cy.get('#peerLoadLimit-helper-text').should('not.exist');
 
       // Should display candidate parent limit the validation error message.
-      cy.get('#candidateParentLimit').invoke('val').should('eq', '4');
+      cy.get('#candidateParentLimit').invoke('val').should('eq', '3');
       cy.get('#candidateParentLimit').clear();
       cy.get('#candidateParentLimit').type('21');
       cy.get('#candidateParentLimit-helper-text')

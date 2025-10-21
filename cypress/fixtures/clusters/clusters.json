@@ -12,7 +12,7 @@
     "scheduler_cluster_id": 1,
     "seed_peer_cluster_id": 1,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40,
       "job_rate_limit": 10
     },
@@ -38,7 +38,7 @@
     "scheduler_cluster_id": 2,
     "seed_peer_cluster_id": 2,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -63,7 +63,7 @@
     "scheduler_cluster_id": 3,
     "seed_peer_cluster_id": 3,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -113,7 +113,7 @@
     "scheduler_cluster_id": 5,
     "seed_peer_cluster_id": 5,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -138,7 +138,7 @@
     "scheduler_cluster_id": 6,
     "seed_peer_cluster_id": 6,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -163,7 +163,7 @@
     "scheduler_cluster_id": 7,
     "seed_peer_cluster_id": 7,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -188,7 +188,7 @@
     "scheduler_cluster_id": 8,
     "seed_peer_cluster_id": 8,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -213,7 +213,7 @@
     "scheduler_cluster_id": 9,
     "seed_peer_cluster_id": 9,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -238,7 +238,7 @@
     "scheduler_cluster_id": 10,
     "seed_peer_cluster_id": 10,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -263,7 +263,7 @@
     "scheduler_cluster_id": 11,
     "seed_peer_cluster_id": 11,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -288,7 +288,7 @@
     "scheduler_cluster_id": 12,
     "seed_peer_cluster_id": 12,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -313,7 +313,7 @@
     "scheduler_cluster_id": 13,
     "seed_peer_cluster_id": 13,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -338,7 +338,7 @@
     "scheduler_cluster_id": 14,
     "seed_peer_cluster_id": 14,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -363,7 +363,7 @@
     "scheduler_cluster_id": 15,
     "seed_peer_cluster_id": 15,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -388,7 +388,7 @@
     "scheduler_cluster_id": 16,
     "seed_peer_cluster_id": 16,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -413,7 +413,7 @@
     "scheduler_cluster_id": 17,
     "seed_peer_cluster_id": 17,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -438,7 +438,7 @@
     "scheduler_cluster_id": 18,
     "seed_peer_cluster_id": 18,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -463,7 +463,7 @@
     "scheduler_cluster_id": 19,
     "seed_peer_cluster_id": 19,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -488,7 +488,7 @@
     "scheduler_cluster_id": 20,
     "seed_peer_cluster_id": 20,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -513,7 +513,7 @@
     "scheduler_cluster_id": 21,
     "seed_peer_cluster_id": 21,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -538,7 +538,7 @@
     "scheduler_cluster_id": 22,
     "seed_peer_cluster_id": 22,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -563,7 +563,7 @@
     "scheduler_cluster_id": 23,
     "seed_peer_cluster_id": 23,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -588,7 +588,7 @@
     "scheduler_cluster_id": 24,
     "seed_peer_cluster_id": 24,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -613,7 +613,7 @@
     "scheduler_cluster_id": 25,
     "seed_peer_cluster_id": 25,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -638,7 +638,7 @@
     "scheduler_cluster_id": 26,
     "seed_peer_cluster_id": 26,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -663,7 +663,7 @@
     "scheduler_cluster_id": 27,
     "seed_peer_cluster_id": 27,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -688,7 +688,7 @@
     "scheduler_cluster_id": 28,
     "seed_peer_cluster_id": 28,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -713,7 +713,7 @@
     "scheduler_cluster_id": 29,
     "seed_peer_cluster_id": 29,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -738,7 +738,7 @@
     "scheduler_cluster_id": 30,
     "seed_peer_cluster_id": 30,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -763,7 +763,7 @@
     "scheduler_cluster_id": 31,
     "seed_peer_cluster_id": 31,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -788,7 +788,7 @@
     "scheduler_cluster_id": 32,
     "seed_peer_cluster_id": 32,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -813,7 +813,7 @@
     "scheduler_cluster_id": 33,
     "seed_peer_cluster_id": 33,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -838,7 +838,7 @@
     "scheduler_cluster_id": 34,
     "seed_peer_cluster_id": 34,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -863,7 +863,7 @@
     "scheduler_cluster_id": 35,
     "seed_peer_cluster_id": 35,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -888,7 +888,7 @@
     "scheduler_cluster_id": 36,
     "seed_peer_cluster_id": 36,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {
@@ -913,7 +913,7 @@
     "scheduler_cluster_id": 37,
     "seed_peer_cluster_id": 37,
     "scheduler_cluster_config": {
-      "candidate_parent_limit": 4,
+      "candidate_parent_limit": 3,
       "filter_parent_limit": 40
     },
     "seed_peer_cluster_config": {

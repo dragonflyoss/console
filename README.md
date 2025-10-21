@@ -11,7 +11,7 @@ through which you can easily configure clusters and view cluster information.
 
 ## Documentation
 
-You can find the full documentation on the [d7y.io][d7y.io].
+You can find the full documentation on the [d7y.io](d7y.io).
 
 ## Community
 

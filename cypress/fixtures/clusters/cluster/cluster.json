@@ -11,7 +11,7 @@
   "scheduler_cluster_id": 1,
   "seed_peer_cluster_id": 1,
   "scheduler_cluster_config": {
-    "candidate_parent_limit": 4,
+    "candidate_parent_limit": 3,
     "filter_parent_limit": 40,
     "job_rate_limit": 15
   },

@@ -414,7 +414,7 @@ export default function NewCluster() {
         type: 'number',
         autoComplete: 'family-name',
         placeholder: 'Please enter Candidate parent limit',
-        defaultValue: 4,
+        defaultValue: 3,
         helperText: candidateParentLimitError ? 'Fill in the number, the length is 1-20.' : '',
         error: candidateParentLimitError,
 

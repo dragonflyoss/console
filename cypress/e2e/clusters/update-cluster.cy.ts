@@ -49,7 +49,7 @@ describe('Update cluster', () => {
     // Show config.
     cy.get('#seedPeerLoadLimit').should('have.value', 300);
     cy.get('#peerLoadLimit').should('have.value', 51);
-    cy.get('#candidateParentLimit').should('have.value', 4);
+    cy.get('#candidateParentLimit').should('have.value', 3);
     cy.get('#filterParentLimit').should('have.value', 40);
     cy.get('#jobRateLimit').should('have.value', 15);
   });

@@ -205,7 +205,7 @@ describe('Cluster', () => {
     it('can display config', () => {
       cy.get('#seed-peer-load-limit').should('be.visible').and('have.text', '300');
       cy.get('#peer-load-limit').should('be.visible').and('have.text', '51');
-      cy.get('#candidate-parent-limit').should('be.visible').and('have.text', '4');
+      cy.get('#candidate-parent-limit').should('be.visible').and('have.text', '3');
       cy.get('#filter-parent-limit').should('be.visible').and('have.text', '40');
       cy.get('#job-rate-limit').should('be.visible').and('have.text', '15');
     });
@@ -268,7 +268,7 @@ describe('Cluster', () => {
               scheduler_cluster_id: 1,
               seed_peer_cluster_id: 1,
               scheduler_cluster_config: {
-                candidate_parent_limit: 4,
+                candidate_parent_limit: 3,
                 filter_parent_limit: 15,
                 job_rate_limit: 100,
               },
@@ -331,7 +331,7 @@ describe('Cluster', () => {
     it('unable to display config', () => {
       cy.get('#seed-peer-load-limit').should('have.text', 500);
       cy.get('#peer-load-limit').should('have.text', 200);
-      cy.get('#candidate-parent-limit').should('have.text', 4);
+      cy.get('#candidate-parent-limit').should('have.text', 3);
       cy.get('#filter-parent-limit').should('be.visible').and('have.text', 15);
       cy.get('#job-rate-limit').should('have.text', 100);
     });

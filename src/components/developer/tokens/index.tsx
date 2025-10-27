@@ -118,6 +118,11 @@ export default function PersonalAccessTokens() {
       setToken(token);
       setIsLoading(false);
 
+      if (token.length === 0 && newToken) {
+        setShowCopyColumn(false);
+        setNewToken('');
+      }
+
       setSuccessMessage(true);
       setOpenDeletToken(false);
     } catch (error) {
@@ -157,7 +162,7 @@ export default function PersonalAccessTokens() {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-          Submission successful!
+          Token deleted successfully!
         </Alert>
       </Snackbar>
       <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />

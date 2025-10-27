@@ -472,8 +472,11 @@ export default function Users() {
                     <Menu
                       anchorEl={anchorElement}
                       id="account-menu"
-                      open={Boolean(anchorElement)}
-                      onClose={closeAllPopups}
+                      open={Boolean(anchorElement) && selectedRow === item}
+                      onClose={() => {
+                        setSelectedRow(null);
+                        closeAllPopups();
+                      }}
                       anchorOrigin={{
                         vertical: 'bottom',
                         horizontal: 'right',
@@ -508,7 +511,7 @@ export default function Users() {
                             Detail
                           </Typography>
                         </MenuItem>
-                        {selectedRow?.name !== 'root' && (
+                        {selectedRow?.name !== 'root' && selectedRow === item && (
                           <MenuItem
                             sx={{ borderRadius: 'var(--menu-border-radius)' }}
                             id={`edit-${selectedRow?.name}`}

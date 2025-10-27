@@ -51,6 +51,8 @@ import { ReactComponent as Edit } from '../../../assets/images/user/edit.svg';
 import { ReactComponent as Executions } from '../../../assets/images/resource/task/executions.svg';
 import { ReactComponent as Failure } from '../../../assets/images/job/preheat/failure.svg';
 import { ReactComponent as DialogTTL } from '../../../assets/images/gc/dialog-ttl.svg';
+import { ReactComponent as IcContent } from '../../../assets/images/cluster/scheduler/ic-content.svg';
+
 import ms from 'ms';
 import ErrorHandler from '../../error-handler';
 
@@ -428,7 +430,7 @@ export default function AuditGC() {
                   <Box sx={{ position: 'absolute', top: '3rem', right: '10rem' }}>
                     <DeleteSuccessfullyAnimation />
                   </Box>
-                  <Alert variant="outlined" severity="success">
+                  <Alert variant="filled" severity="success">
                     You have successfully recycled {purgeds} audit logs!
                   </Alert>
                 </Box>
@@ -691,7 +693,10 @@ export default function AuditGC() {
             ) : history.length === 0 ? (
               <TableRow>
                 <TableCell id="no-history" colSpan={9} align="center" sx={{ border: 0 }}>
-                  You don't have GC history.
+                  <IcContent className={styles.nodataIcon} />
+                  <Typography id="no-audit-table" variant="h6" className={styles.nodataText}>
+                    You don't have GC history.
+                  </Typography>
                 </TableCell>
               </TableRow>
             ) : (

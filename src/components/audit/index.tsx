@@ -26,6 +26,7 @@ import { getDatetime, useQuery } from '../../lib/utils';
 import { debounce } from 'lodash';
 import SearchCircularProgress from '../circular-progress';
 import ErrorHandler from '../error-handler';
+import { ReactComponent as IcContent } from '../../assets/images/cluster/scheduler/ic-content.svg';
 
 export default function AuditLogs() {
   const [errorMessage, setErrorMessage] = useState(false);
@@ -401,7 +402,10 @@ export default function AuditLogs() {
               </TableRow>
             ) : logs.length === 0 ? (
               <TableCell id="no-audit-table" colSpan={9} align="center" sx={{ border: 0 }}>
-                You don't have audit logs.
+                <IcContent className={styles.nodataIcon} />
+                <Typography id="no-audit-table" variant="h6" className={styles.nodataText}>
+                  You don't have audit logs.
+                </Typography>
               </TableCell>
             ) : (
               Array.isArray(logs) &&

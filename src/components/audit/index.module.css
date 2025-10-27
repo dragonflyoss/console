@@ -52,3 +52,13 @@
 .card {
   width: 100%;
 }
+
+.nodataIcon {
+  max-width: 10rem;
+  height: 10rem;
+}
+
+.nodataText {
+  color: var(--palette-text-disabled);
+  font-family: 'mabry-bold';
+}

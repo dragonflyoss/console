@@ -217,7 +217,7 @@ export default function SignIn() {
               <Box className={styles.createAccountWrapper}>
                 <Grid>
                   <Typography component="span" fontFamily="-moz-initial">
-                    New to Dragnfly?
+                    New to Dragonfly?
                   </Typography>
                   <RouterLink
                     id="create-account"

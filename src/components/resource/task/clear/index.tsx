@@ -970,11 +970,11 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--palette-save-color)',
+                backgroundColor: '#205d3b',
                 color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--palette-save-color)',
+                  backgroundColor: '#1a4a2f',
                 },
               },
               '&:hover': {
@@ -994,11 +994,11 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--palette-save-color)',
+                backgroundColor: '#205d3b',
                 color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--palette-save-color)',
+                  backgroundColor: '#1a4a2f',
                 },
               },
               '&:hover': {
@@ -1018,11 +1018,11 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--palette-save-color)',
+                backgroundColor: '#205d3b',
                 color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--palette-save-color)',
+                  backgroundColor: '#1a4a2f',
                 },
               },
               '&:hover': {
@@ -1042,11 +1042,11 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--palette-save-color)',
+                backgroundColor: '#205d3b',
                 color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--palette-save-color)',
+                  backgroundColor: '#1a4a2f',
                 },
               },
               '&:hover': {

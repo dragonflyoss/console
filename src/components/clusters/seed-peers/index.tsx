@@ -1392,7 +1392,7 @@ export default function ShowCluster() {
                         <Box sx={{ position: 'absolute', top: '3rem', right: '13rem' }}>
                           <DeleteSuccessfullyAnimation />
                         </Box>
-                        <Alert variant="outlined" severity="success">
+                        <Alert variant="filled" severity="success">
                           You have successfully deleted {deleteInactiveSeedPeerSuccessful || '0'} inactive seed peers!
                         </Alert>
                       </Box>

@@ -210,7 +210,7 @@ describe('Tokens', () => {
       cy.get('[data-testid="isloading"]').should('be.exist');
 
       // Delete success message.
-      cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
+      cy.get('.MuiAlert-message').should('have.text', 'Token deleted successfully!');
 
       cy.get('[data-testid="isloading"]').should('not.exist');
 
@@ -258,7 +258,7 @@ describe('Tokens', () => {
       cy.wait('@delete');
 
       // Delete success message.
-      cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
+      cy.get('.MuiAlert-message').should('have.text', 'Token deleted successfully!');
 
       // Check if the token exists.
       cy.get('#root-11').should('not.exist');

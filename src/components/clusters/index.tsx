@@ -286,7 +286,7 @@ export default function Clusters() {
             <Statistics className={styles.statistics} />
           </Box>
         </Card>
-        <Card className={styles.clusterContainer}>
+        {/* <Card className={styles.clusterContainer}>
           <Box display="flex" alignItems="flex-end">
             <Box className={styles.clusterIconContainer}>
               <Round className={styles.clusterSmallCircleIcon} />
@@ -323,7 +323,7 @@ export default function Clusters() {
             </Box>
             <Statistics className={styles.statistics} />
           </Box>
-        </Card>
+        </Card> */}
       </Grid>
       <Box className={styles.searchContainer}>
         <Autocomplete

@@ -1449,7 +1449,7 @@ export default function ShowCluster() {
                         <Box sx={{ position: 'absolute', top: '3rem', right: '13rem' }}>
                           <DeleteSuccessfullyAnimation />
                         </Box>
-                        <Alert variant="outlined" severity="success">
+                        <Alert variant="filled" severity="success">
                           You have successfully removed {deleteInactiveSchedulerSuccessful || '0'} inactive schedulers!
                         </Alert>
                       </Box>

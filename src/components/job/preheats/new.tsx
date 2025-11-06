@@ -141,6 +141,7 @@ export default function NewPreheat() {
   const [percentage, setPercentage] = useState(50);
   const [search, setSearch] = useState('file');
   const [platform, setPlatform] = useState('linux/amd64');
+  
 
   const formRef = useRef<HTMLFormElement | null>(null);
   const navigate = useNavigate();
@@ -1075,11 +1076,11 @@ export default function NewPreheat() {
               size="small"
               sx={{
                 '&.Mui-selected': {
-                  backgroundColor: 'var(--palette-save-color)',
+                  backgroundColor: '#205d3b',
                   color: '#FFFFFF',
                   boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                   '&:hover': {
-                    backgroundColor: 'var(--palette-save-color)',
+                    backgroundColor: '#1a4a2f',
                   },
                 },
                 '&:hover': {
@@ -1099,11 +1100,11 @@ export default function NewPreheat() {
               size="small"
               sx={{
                 '&.Mui-selected': {
-                  backgroundColor: 'var(--palette-save-color)',
+                  backgroundColor: '#205d3b',
                   color: '#FFFFFF',
                   boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                   '&:hover': {
-                    backgroundColor: 'var(--palette-save-color)',
+                    backgroundColor: '#1a4a2f',
                   },
                 },
                 '&:hover': {

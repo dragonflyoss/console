@@ -76,7 +76,7 @@ describe('Schedulers', () => {
       cy.get('#state-7')
         .should('be.visible')
         .and('contain', 'Active')
-        .and('have.css', 'background-color', 'rgb(0, 129, 112)');
+        .and('have.css', 'background-color', 'rgb(32, 93, 59)');
 
       // Show features.
       cy.get('#features-7').should('be.visible').and('contain', 'Schedule');
@@ -109,7 +109,7 @@ describe('Schedulers', () => {
       cy.get('#card-state-50')
         .should('be.visible')
         .and('have.text', 'Active')
-        .and('have.css', 'background-color', 'rgba(0, 129, 112, 0.2)');
+        .and('have.css', 'background-color', 'rgba(35, 155, 86, 0.2)');
       cy.get('.MuiPagination-ul > :nth-child(4) > .MuiButtonBase-root').click();
       cy.get('#card-hostname-scheduler-41').should('be.visible').and('have.text', 'scheduler-41');
       // Show status.

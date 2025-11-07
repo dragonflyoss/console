@@ -752,7 +752,10 @@ export default function Information(props: InformationProps) {
               ) : persistentCacheTasksCount.length === 0 ? (
                 <TableRow>
                   <TableCell id="no-task-table" colSpan={9} align="center" sx={{ border: 0 }}>
-                    This scheduler cluster has no persistent cache task.
+                    <IcContent className={styles.nodataIcon} />
+                    <Typography id="no-task" variant="h6" className={styles.nodataText}>
+                      This scheduler cluster has no persistent cache task.
+                    </Typography>
                   </TableCell>
                 </TableRow>
               ) : (

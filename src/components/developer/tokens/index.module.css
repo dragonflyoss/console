@@ -27,7 +27,8 @@
 }
 
 .tokenName {
-  color: var(--palette-description-color) !important;
+  color: #fff !important;
+  font-weight: 1000 !important;
 }
 
 .tokenExpires {

@@ -76,7 +76,7 @@ describe('Schedulers', () => {
       cy.get('#state-7')
         .should('be.visible')
         .and('contain', 'Active')
-        .and('have.css', 'background-color', 'rgb(32, 93, 59)');
+        .and('have.css', 'background-color', 'rgb(8, 118, 103)');
 
       // Show features.
       cy.get('#features-7').should('be.visible').and('contain', 'Schedule');

@@ -11,14 +11,14 @@
 body {
   color: #18230f !important;
   background-color: rgba(255, 255, 255, 0.9) !important;
-  --palette-description-color: #205d3b;
-  --palette-text-color: #205d3b;
+  --palette-description-color: #087667;
+  --palette-text-color: #087667;
   --palette-color: #18230f;
   --palette-button-text-color: #fff;
-  --palette-button-color: #205d3b;
+  --palette-button-color: #087667;
   --palette-secondary-dark: #18230f;
-  --palette-sign-hover-button-text-color: #1a4a2f;
-  --palette-hover-button-text-color: #1a4a2f;
+  --palette-sign-hover-button-text-color: #065f54;
+  --palette-hover-button-text-color: #065f54;
   --palette-delete-button-color: #d42536;
   --palette-delete-button-hover-color: #d42537b8;
   --palette-button-loading-color: #dedede;
@@ -35,7 +35,7 @@ body {
   --palette-menu-background-color: rgba(145 158 171 / 0.16);
   --palette-grey-background-color: #00a76f1a;
   --palette-sidebar-expand-background-color: rgba(255, 255, 255, 0.9);
-  --palette-hover-menu-background-color: #48c97926;
+  --palette-hover-menu-background-color: #08766726;
   --palette-background-menu-paper: #fff;
   --palette-header-background-color: #f9fafb;
   --palette-sidebar-background-color: #f4f6f8;
@@ -97,8 +97,8 @@ body {
   --palette-main-background-paper: #0d121e;
   --palette-color: rgba(255, 255, 255, 0.7);
   --palette-secondary-dark: #ececec;
-  --palette-description-color: #205d3b;
-  --palette-text-color: #205d3b;
+  --palette-description-color: #087667;
+  --palette-text-color: #087667;
   --palette-background-paper: #1f2430;
   --palette-profile-background-paper: #1f2430;
   --palette-sidebar-user-background-paper: #161b23;
@@ -107,7 +107,7 @@ body {
   --palette-menu-background-color: rgba(145 158 171 / 0.16);
   --palette-grey-background-color: rgba(35, 155, 86, 0.2);
   --palette-sidebar-expand-background-color: #2a2f3b;
-  --palette-hover-menu-background-color: #239b5626;
+  --palette-hover-menu-background-color: #08766726;
   --palette-background-menu: rgba(28, 37, 46);
   --palette-text-secondary: #919eab;
   --palette-header-background-color: #161b23;
@@ -117,9 +117,9 @@ body {
   --paletteexpandable-sidebar-navigation: #303540;
   --palette-grey-tab: #6b7681;
   --palette-button-text-color: rgba(255, 255, 255, 0.8);
-  --palette-button-color: #205d3b;
-  --palette-sign-hover-button-text-color: #1a4a2f;
-  --palette-hover-button-text-color: #1a4a2f;
+  --palette-button-color: #087667;
+  --palette-sign-hover-button-text-color: #065f54;
+  --palette-hover-button-text-color: #065f54;
   --palette-save-color: #161b23;
   --palette-calcel-hover-corlor: rgba(145 158 171 / 0.3);
   --palette-calcel-background-color: rgba(145 158 171 / 0.2);

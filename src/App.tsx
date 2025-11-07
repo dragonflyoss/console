@@ -37,17 +37,17 @@ function App() {
             primary: mode === 'light' ? '#1C293A' : 'rgba(255, 255, 255, 0.8)',
           },
           success: {
-            main: '#205d3b',
-            light: '#205d3b',
-            dark: '#205d3b',
+            main: '#087667',
+            light: '#087667',
+            dark: '#087667',
           },
           warning:{
             main:'#ffcb31'
           },
           secondary: {
-            main: '#205d3b',
-            light: '#205d3b',
-            dark: '#205d3b',
+            main: '#087667',
+            light: '#087667',
+            dark: '#087667',
           },
         },
         typography: {

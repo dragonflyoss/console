@@ -581,7 +581,14 @@ export default function ShowCluster() {
             onClick={() => {
               setOpenDeleteInactive(true);
             }}
-            className={styles.button}
+          sx={{
+              background: 'var(--palette-button-color)',
+              ':hover': {
+                backgroundColor: 'var( --palette-hover-button-text-color)',
+                borderColor: 'var( --palette-hover-button-text-color)',
+              },
+              color: 'var(--palette-button-text-color)',
+            }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
             DELETE INACTIVE INSTANCES

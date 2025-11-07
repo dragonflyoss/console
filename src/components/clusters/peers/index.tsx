@@ -460,8 +460,8 @@ export default function Peer() {
             sx={{
               background: 'var(--palette-button-color)',
               ':hover': {
-                backgroundColor: 'var(--palette-button-color)',
-                borderColor: 'var(--palette-button-color)',
+                backgroundColor: 'var( --palette-hover-button-text-color)',
+                borderColor: 'var( --palette-hover-button-text-color)',
               },
               color: 'var(--palette-button-text-color)',
               mr: '1rem',
@@ -482,8 +482,8 @@ export default function Peer() {
             sx={{
               background: 'var(--palette-button-color)',
               ':hover': {
-                backgroundColor: 'var(--palette-button-color)',
-                borderColor: 'var(--palette-button-color)',
+                backgroundColor: 'var( --palette-hover-button-text-color)',
+                borderColor: 'var( --palette-hover-button-text-color)',
               },
               color: 'var(--palette-button-text-color)',
             }}

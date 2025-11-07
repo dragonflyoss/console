@@ -141,6 +141,7 @@ export default function NewPreheat() {
   const [percentage, setPercentage] = useState(50);
   const [search, setSearch] = useState('file');
   const [platform, setPlatform] = useState('linux/amd64');
+  
 
   const formRef = useRef<HTMLFormElement | null>(null);
   const navigate = useNavigate();
@@ -1075,11 +1076,11 @@ export default function NewPreheat() {
               size="small"
               sx={{
                 '&.Mui-selected': {
-                  backgroundColor: 'var(--palette-save-color)',
+                  backgroundColor: 'var(--palette-button-color)',
                   color: '#FFFFFF',
                   boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                   '&:hover': {
-                    backgroundColor: 'var(--palette-save-color)',
+                    backgroundColor: 'var(--palette-hover-button-text-color)',
                   },
                 },
                 '&:hover': {
@@ -1099,11 +1100,11 @@ export default function NewPreheat() {
               size="small"
               sx={{
                 '&.Mui-selected': {
-                  backgroundColor: 'var(--palette-save-color)',
+                  backgroundColor: 'var(--palette-button-color)',
                   color: '#FFFFFF',
                   boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                   '&:hover': {
-                    backgroundColor: 'var(--palette-save-color)',
+                    backgroundColor: 'var(--palette-hover-button-text-color)',
                   },
                 },
                 '&:hover': {
@@ -1679,13 +1680,13 @@ export default function NewPreheat() {
               ) : (
                 <Button
                   sx={{
-                    '&.MuiButton-root': {
-                      backgroundColor: 'var(--palette-description-color)',
-                      borderColor: 'var(--palette-description-color)',
-                      color: '#FFF',
+                    background: 'var(--palette-button-color)',
+                    borderColor: 'var(--palette-description-color)',
+                    ':hover': {
+                      backgroundColor: 'var( --palette-hover-button-text-color)',
                     },
                     width: '8rem',
-                    mt: '1rem',
+                    mr: '1rem',
                   }}
                   id="add-headers"
                   variant="outlined"

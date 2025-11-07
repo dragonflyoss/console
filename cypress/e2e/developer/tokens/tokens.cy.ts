@@ -210,7 +210,7 @@ describe('Tokens', () => {
       cy.get('[data-testid="isloading"]').should('be.exist');
 
       // Delete success message.
-      cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
+      cy.get('.MuiAlert-message').should('have.text', 'Token deleted successfully!');
 
       cy.get('[data-testid="isloading"]').should('not.exist');
 
@@ -258,7 +258,7 @@ describe('Tokens', () => {
       cy.wait('@delete');
 
       // Delete success message.
-      cy.get('.MuiAlert-message').should('have.text', 'Submission successful!');
+      cy.get('.MuiAlert-message').should('have.text', 'Token deleted successfully!');
 
       // Check if the token exists.
       cy.get('#root-11').should('not.exist');
@@ -312,6 +312,55 @@ describe('Tokens', () => {
 
       // Show error message.
       cy.get('.MuiAlert-message').should('have.text', 'Failed to fetch');
+    });
+
+    it('should hide copy column when deleting last token and no tokens remain', () => {
+      // Simulate the presence of newToken in localStorage
+      cy.window().then((win) => {
+        win.localStorage.setItem('token', '"test-token-value"');
+      });
+
+      // Reload the page to trigger localStorage check in useEffect
+      cy.reload();
+      
+      // Confirm copy column exists
+      cy.get('#copy-column').should('be.visible');
+
+      // Click delete button
+      cy.get('#delete-token-11').click();
+
+      cy.intercept(
+        {
+          method: 'DELETE',
+          url: '/api/v1/personal-access-tokens/11',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+          });
+        },
+      );
+
+      // Simulate returning an empty array after deletion
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/personal-access-tokens?page=1&per_page=10000000',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: [],
+          });
+        },
+      ).as('deleteToken');
+
+      // Click confirm delete
+      cy.get('#delete').click();
+      cy.wait('@deleteToken');
+
+      // Confirm copy column is hidden
+      cy.get('#copy-column').should('not.exist');
     });
   });
 });

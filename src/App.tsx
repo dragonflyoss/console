@@ -37,14 +37,17 @@ function App() {
             primary: mode === 'light' ? '#1C293A' : 'rgba(255, 255, 255, 0.8)',
           },
           success: {
-            main: '#1f7d53',
-            light: '#1f7d53',
-            dark: '#008170',
+            main: '#087667',
+            light: '#087667',
+            dark: '#087667',
+          },
+          warning:{
+            main:'#ffcb31'
           },
           secondary: {
-            main: '#1f7d53',
-            light: '#1f7d53',
-            dark: '#008170',
+            main: '#087667',
+            light: '#087667',
+            dark: '#087667',
           },
         },
         typography: {
@@ -57,6 +60,11 @@ function App() {
                 backgroundColor: 'var(--palette-profile-background-paper)',
                 backgroundImage: 'none',
               },
+            },
+          },
+          MuiAlert: {
+            defaultProps: {
+              variant: 'filled',
             },
           },
         },

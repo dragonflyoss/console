@@ -103,7 +103,7 @@ describe('Scheduler', () => {
       cy.get('#status')
         .should('be.visible')
         .and('contain', 'Active')
-        .and('have.css', 'background-color', 'rgb(0, 129, 112)');
+        .and('have.css', 'background-color', 'rgb(8, 118, 103)');
 
       // Displays the scheduler features.
       cy.get('#features').should('be.visible').and('contain', 'Schedule').and('contain', 'Preheat');

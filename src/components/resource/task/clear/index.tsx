@@ -970,11 +970,11 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--palette-save-color)',
+                backgroundColor: 'var(--palette-button-color)',
                 color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--palette-save-color)',
+                  backgroundColor: 'var(--palette-hover-button-text-color)',
                 },
               },
               '&:hover': {
@@ -994,11 +994,11 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--palette-save-color)',
+                backgroundColor: 'var(--palette-button-color)',
                 color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--palette-save-color)',
+                  backgroundColor: 'var(--palette-hover-button-text-color)',
                 },
               },
               '&:hover': {
@@ -1017,12 +1017,12 @@ export default function Clear() {
             value="task-id"
             size="small"
             sx={{
-              '&.Mui-selected': {
-                backgroundColor: 'var(--palette-save-color)',
+               '&.Mui-selected': {
+                backgroundColor: 'var(--palette-button-color)',
                 color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--palette-save-color)',
+                  backgroundColor: 'var(--palette-hover-button-text-color)',
                 },
               },
               '&:hover': {
@@ -1042,11 +1042,11 @@ export default function Clear() {
             size="small"
             sx={{
               '&.Mui-selected': {
-                backgroundColor: 'var(--palette-save-color)',
+                backgroundColor: 'var(--palette-button-color)',
                 color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
                 '&:hover': {
-                  backgroundColor: 'var(--palette-save-color)',
+                  backgroundColor: 'var(--palette-hover-button-text-color)',
                 },
               },
               '&:hover': {

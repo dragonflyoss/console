@@ -133,7 +133,7 @@ describe('Users', () => {
       // Click detail button.
       cy.get('#action-root').click();
 
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #detail-root').click();
+      cy.get('#detail-root').click();
 
       // Display user lucy details.
       cy.get('.MuiDrawer-root > .MuiPaper-root').should('be.visible');
@@ -167,7 +167,7 @@ describe('Users', () => {
         },
       );
 
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #detail-jack').click();
+      cy.get('#detail-jack').click();
 
       cy.get('[data-testid="detail-isloading"]').should('be.exist');
 
@@ -188,7 +188,7 @@ describe('Users', () => {
     it('can display update user', () => {
       // Click update user button.
       cy.get('#action-lucy').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-lucy').click();
+      cy.get('#edit-lucy').click();
 
       // Check role.
       cy.get('#role-root').should('be.checked').check({ force: true });
@@ -196,7 +196,7 @@ describe('Users', () => {
       cy.get('body').click('topLeft');
 
       cy.get('#action-jack').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-jack').click();
+      cy.get('#edit-jack').click();
 
       cy.get('#role-root').should('not.be.checked');
       cy.get('#role-guest').should('be.checked').check({ force: true });
@@ -301,7 +301,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-jack').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #detail-jack').click();
+      cy.get('#detail-jack').click();
 
       // Display user jack details.
       cy.get('#id').should('have.text', 0);
@@ -431,7 +431,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-lucy').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-lucy').click();
+      cy.get('#edit-lucy').click();
 
       cy.get('#role-root').should('be.checked').check({ force: true });
       cy.get('#role-guest').should('not.be.checked');
@@ -455,7 +455,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-lucy').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-lucy').click();
+      cy.get('#edit-lucy').click();
 
       // Change success message.
       cy.get('.MuiAlert-message').should('be.visible').and('have.text', 'Submission successful!');
@@ -504,7 +504,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-jack').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-jack').click();
+      cy.get('#edit-jack').click();
 
       // Check if role is guest.
       cy.get('#role-root').should('not.be.checked');
@@ -529,7 +529,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-jack').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-jack').click();
+      cy.get('#edit-jack').click();
 
       // Check if role is root.
       cy.get('#role-root').should('be.checked').check({ force: true });
@@ -591,7 +591,7 @@ describe('Users', () => {
 
       // Click edit button.
       cy.get('#action-lucy').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-lucy').click();
+      cy.get('#edit-lucy').click();
 
       cy.get('#role-root').should('be.checked').check({ force: true });
       cy.get('#role-guest').should('not.be.checked');
@@ -617,7 +617,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-lucy').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-lucy').click();
+      cy.get('#edit-lucy').click();
 
       // Check role.
       cy.get('#role-root').should('not.be.checked');
@@ -659,7 +659,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-lucy').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-lucy').click();
+      cy.get('#edit-lucy').click();
 
       // Show error message.
       cy.get('.MuiAlert-message').should('be.visible').and('have.text', 'Failed to fetch');
@@ -706,7 +706,7 @@ describe('Users', () => {
       );
 
       cy.get('#action-lucy').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .users_menu__4L0WC > #edit-lucy').click();
+      cy.get('#edit-lucy').click();
 
       // Check if role is root.
       cy.get('#role-root').should('be.checked').check({ force: true });

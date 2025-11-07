@@ -157,7 +157,15 @@ export default function Information() {
             }}
             size="small"
             variant="contained"
-            className={styles.button}
+            sx={{
+              background: 'var(--palette-button-color)',
+              ':hover': {
+                backgroundColor: 'var( --palette-hover-button-text-color)',
+                borderColor: 'var( --palette-hover-button-text-color)',
+              },
+              color: 'var(--palette-button-text-color)',
+              mr: '1rem',
+            }}
           >
             <Edit className={styles.updateClusterIcon} />
             Update
@@ -169,7 +177,15 @@ export default function Information() {
             onClick={() => {
               setOpenDeleteCluster(true);
             }}
-            className={styles.button}
+            sx={{
+              background: 'var(--palette-button-color)',
+              ':hover': {
+                backgroundColor: 'var( --palette-hover-button-text-color)',
+                borderColor: 'var( --palette-hover-button-text-color)',
+              },
+              color: 'var(--palette-button-text-color)',
+              mr: '1rem',
+            }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
             Delete

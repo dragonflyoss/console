@@ -581,7 +581,14 @@ export default function ShowCluster() {
             onClick={() => {
               setOpenDeleteInactive(true);
             }}
-            className={styles.button}
+          sx={{
+              background: 'var(--palette-button-color)',
+              ':hover': {
+                backgroundColor: 'var( --palette-hover-button-text-color)',
+                borderColor: 'var( --palette-hover-button-text-color)',
+              },
+              color: 'var(--palette-button-text-color)',
+            }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
             DELETE INACTIVE INSTANCES
@@ -1449,7 +1456,7 @@ export default function ShowCluster() {
                         <Box sx={{ position: 'absolute', top: '3rem', right: '13rem' }}>
                           <DeleteSuccessfullyAnimation />
                         </Box>
-                        <Alert variant="outlined" severity="success">
+                        <Alert variant="filled" severity="success">
                           You have successfully removed {deleteInactiveSchedulerSuccessful || '0'} inactive schedulers!
                         </Alert>
                       </Box>

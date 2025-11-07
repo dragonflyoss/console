@@ -147,7 +147,7 @@ export default function NavTabs() {
     // } else if (location.pathname?.split('/')?.[3] === 'seed-peers') {
     //   setValue(2);
     } else if (location.pathname?.split('/')?.[3] === 'peers') {
-      setValue(3);
+      setValue(2);
     } else {
       setValue(0);
     }

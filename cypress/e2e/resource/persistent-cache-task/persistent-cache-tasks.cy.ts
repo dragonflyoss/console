@@ -239,11 +239,12 @@ describe('Persistent Cache Tasks', () => {
     });
 
     it('can the delet persistent cache task', () => {
-      cy.get('#operation-0').click({force: true});
+      cy.get('#operation-3810320977').click({force: true});
 
       cy.get('#delete-task').should('not.exist');
 
       // Wait for menu to be visible and click delete option
+      cy.get('.MuiMenu-paper').should('be.visible');
       cy.get('#delete-3810320977').click({force: true});
       cy.get('#delete-task').should('exist');
 
@@ -296,9 +297,9 @@ describe('Persistent Cache Tasks', () => {
     });
 
     it('should handle API error response', () => {
-      cy.get('#operation-0').click({force: true});
+      cy.get('#operation-3810320977').click({force: true});
       cy.get('body').click('topLeft');
-      cy.get('#operation-0').click({force: true});
+      cy.get('#operation-3810320977').click({force: true});
 
       cy.get('#delete-task').should('not.exist');
 
@@ -334,9 +335,10 @@ describe('Persistent Cache Tasks', () => {
 
       cy.url().should('include', '/resource/persistent-cache-task/clusters/1?page=3');
 
-      cy.get('#operation-0').click({force: true});
+      cy.get('#operation-2865345332').click({force: true});
 
       // Wait for menu to be visible and click delete option
+      cy.get('.MuiMenu-paper').should('be.visible');
       cy.get('#delete-2865345332').should('be.visible').click({force: true});
 
       cy.intercept(
@@ -389,9 +391,10 @@ describe('Persistent Cache Tasks', () => {
 
       cy.url().should('include', '/resource/persistent-cache-task/clusters/1?page=2');
 
-      cy.get('#operation-8').click({force: true});
+      cy.get('#operation-2865345332').click({force: true});
 
       // Wait for menu to be visible and click delete option
+      cy.get('.MuiMenu-paper').should('be.visible');
       cy.get('#delete-2865345332').should('be.visible').click({force: true});
 
       cy.intercept(

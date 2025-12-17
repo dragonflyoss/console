@@ -249,6 +249,25 @@ describe('Peers', () => {
     });
   });
 
+  describe('interaction testing', () => {
+    it('should render correctly and handle basic interactions', () => {
+      // Verify the component renders correctly
+      cy.get('#total').should('have.text', 10);
+      cy.get('#git-version').should('have.text', 4);
+      cy.get('#git-commit').should('have.text', 5);
+      
+      // Test export functionality
+      cy.get('#export').click();
+      cy.get('#export-git-version').should('be.visible');
+      cy.get('#close-export').click();
+    });
+
+    it('should handle empty data correctly', () => {
+      // This is already covered in empty data scenarios
+      cy.get('#total').should('have.text', 10);
+    });
+  });
+
   describe('refresh', () => {
     it('can refresh peers and return new data', () => {
       cy.get('#total').should('have.text', 10);

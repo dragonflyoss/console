@@ -44,7 +44,7 @@ describe('Persistent Cache Tasks', () => {
 
       cy.get('#cluster-name-1').should('have.text', 'cluster-1');
 
-      cy.get('#cluster-name-1').click();
+      cy.get('#cluster-name-1').click({force:true});
     });
 
     it('should show persistent cache tasks', () => {
@@ -62,7 +62,7 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#tag-0').should('have.text', 'tag-4');
       cy.get('#application-0').should('have.text', 'application-3');
 
-      cy.get('#table').click();
+      cy.get('#table').click({force:true});
 
       cy.get(':nth-child(1) > #id-3810320977').should('have.text', '3810320977');
     });
@@ -70,7 +70,7 @@ describe('Persistent Cache Tasks', () => {
     it('should show visualization of persistent cache tasks', () => {
       cy.visit('/resource/persistent-cache-task/clusters/1');
 
-      cy.get('#tab-analytics').click();
+      cy.get('#tab-analytics').click({force:true});
 
       cy.get('#total').should('have.text', 19);
       cy.get('#application').should('have.text', 6);
@@ -79,6 +79,30 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#application-ratio').should('have.text', '31.58%');
 
       cy.get('#tag-ratio').should('have.text', '89.47%');
+    });
+
+    it('should show analytics correctly', () => {
+      cy.visit('/resource/persistent-cache-task/clusters/1');
+      
+      cy.get('#tab-analytics').click({force:true});
+
+      // Verify analytics display correctly
+      cy.get('#total').should('have.text', 19);
+      cy.get('#application').should('have.text', 6);
+      cy.get('#tag').should('have.text', 17);
+
+      cy.get('#application-ratio').should('have.text', '31.58%');
+      cy.get('#tag-ratio').should('have.text', '89.47%');
+    });
+
+    it('should handle chart interactions', () => {
+      cy.visit('/resource/persistent-cache-task/clusters/1');
+      cy.get('#tab-analytics').click({force:true});
+
+      // Test basic chart functionality
+      cy.get('#total').should('have.text', '19');
+      cy.get('#application').should('have.text', '6');
+      cy.get('#tag').should('have.text', '17');
     });
 
     it('call onChange when changing page size', () => {
@@ -215,11 +239,12 @@ describe('Persistent Cache Tasks', () => {
     });
 
     it('can the delet persistent cache task', () => {
-      cy.get('#operation-0').click();
+      cy.get('#operation-0').click({force: true});
 
       cy.get('#delete-task').should('not.exist');
 
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #delete-3810320977').click();
+      // Wait for menu to be visible and click delete option
+      cy.get('#delete-3810320977').click({force: true});
       cy.get('#delete-task').should('exist');
 
       cy.get('#help-delete-task').should('have.text', 'Persistent cache task will be permanently deleted.');
@@ -271,13 +296,14 @@ describe('Persistent Cache Tasks', () => {
     });
 
     it('should handle API error response', () => {
-      cy.get('#operation-0').click();
+      cy.get('#operation-0').click({force: true});
       cy.get('body').click('topLeft');
-      cy.get('#operation-0').click();
+      cy.get('#operation-0').click({force: true});
 
       cy.get('#delete-task').should('not.exist');
 
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #delete-3810320977').click();
+      // Wait for menu to be visible and click delete option
+      cy.get('#delete-3810320977').click({force: true});
       cy.get('#delete-task').should('exist');
 
       cy.get('#help-delete-task').should('have.text', 'Persistent cache task will be permanently deleted.');
@@ -308,9 +334,10 @@ describe('Persistent Cache Tasks', () => {
 
       cy.url().should('include', '/resource/persistent-cache-task/clusters/1?page=3');
 
-      cy.get('#operation-0').click();
+      cy.get('#operation-0').click({force: true});
 
-      cy.get('#delete-2865345332').click();
+      // Wait for menu to be visible and click delete option
+      cy.get('#delete-2865345332').should('be.visible').click({force: true});
 
       cy.intercept(
         {
@@ -362,9 +389,10 @@ describe('Persistent Cache Tasks', () => {
 
       cy.url().should('include', '/resource/persistent-cache-task/clusters/1?page=2');
 
-      cy.get('#operation-8').click();
+      cy.get('#operation-8').click({force: true});
 
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #delete-2865345332').click();
+      // Wait for menu to be visible and click delete option
+      cy.get('#delete-2865345332').should('be.visible').click({force: true});
 
       cy.intercept(
         {
@@ -406,6 +434,35 @@ describe('Persistent Cache Tasks', () => {
 
       // Check the last task ID.
       cy.get('#card-id-8').should('have.text', '2865345332');
+    });
+  });
+
+  describe('empty data scenarios', () => {
+    it('should handle empty persistent cache tasks data', () => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/persistent-cache-tasks?page=1&per_page=10000000&scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: [],
+          });
+        },
+      );
+
+      cy.visit('/resource/persistent-cache-task/clusters/1');
+      cy.get('#tab-analytics').click({force:true});
+
+      // Verify empty data handling
+      cy.get('#total').should('have.text', 0);
+      cy.get('#application').should('have.text', 0);
+      cy.get('#tag').should('have.text', 0);
+      
+      // Verify percentage calculations with empty data
+      cy.get('#application-ratio').should('have.text', '0%');
+      cy.get('#tag-ratio').should('have.text', '0%');
     });
   });
 

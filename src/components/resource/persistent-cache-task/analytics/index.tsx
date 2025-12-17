@@ -131,7 +131,7 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
       cutout: application.length === 1 ? '40%' : '68%',
       animation: { animateRotate: true, duration: 1000, easing: 'easeOutCubic' },
     }),
-    [theme.palette.mode, theme.palette.text.primary],
+    [theme.palette.mode, theme.palette.text.primary, application.length],
   );
 
   const createBarData = (data: { name: string; count: number }[], label: string) => ({

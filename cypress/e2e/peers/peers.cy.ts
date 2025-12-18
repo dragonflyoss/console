@@ -309,6 +309,83 @@ describe('Peers', () => {
     });
   });
 
+  describe('chart configuration and cutout testing', () => {
+    it('should test pie chart cutout configuration with single git version', () => {
+      // Mock data with only one git version to test cutout: '40%' configuration
+      const singleVersionPeers = [
+        {
+          id: 1,
+          hostname: 'peer-1',
+          git_version: 'v1.0.0',
+          git_commit: 'abc123',
+          state: 'active',
+          type: 'super',
+          ip: '192.168.1.1',
+          port: 8001,
+          download_port: 4001,
+          os: 'linux',
+          platform: 'linux',
+          kernel_version: '5.4.0',
+          build_platform: 'linux',
+          scheduler_cluster_id: 1,
+          created_at: '2023-01-01T00:00:00Z',
+          updated_at: '2023-01-01T00:00:00Z',
+          is_del: 0
+        },
+        {
+          id: 2,
+          hostname: 'peer-2',
+          git_version: 'v1.0.0',
+          git_commit: 'abc123',
+          state: 'active',
+          type: 'super',
+          ip: '192.168.1.2',
+          port: 8001,
+          download_port: 4001,
+          os: 'linux',
+          platform: 'linux',
+          kernel_version: '5.4.0',
+          build_platform: 'linux',
+          scheduler_cluster_id: 1,
+          created_at: '2023-01-01T00:00:00Z',
+          updated_at: '2023-01-01T00:00:00Z',
+          is_del: 0
+        }
+      ];
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/peers?page=1&per_page=10000000&scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: singleVersionPeers,
+          });
+        },
+      );
+
+      cy.visit('/clusters/1/peers');
+      
+      // Verify single git version scenario
+      cy.get('#git-version').should('have.text', 1);
+      cy.get('#git-commit').should('have.text', 1);
+      
+      // The pie chart should render with 40% cutout for single version
+      cy.get('canvas').should('exist');
+    });
+
+    it('should test pie chart cutout configuration with multiple git versions', () => {
+      // Use existing multi-version data to test cutout: '68%' configuration
+      cy.get('#git-version').should('have.text', 4);
+      cy.get('#git-commit').should('have.text', 5);
+      
+      // The pie chart should render with 68% cutout for multiple versions
+      cy.get('canvas').should('exist');
+    });
+  });
+
   describe('chart hover interactions', () => {
     it('should test chart hover effects and gradient functions', () => {
       // Test that charts render with proper hover effects

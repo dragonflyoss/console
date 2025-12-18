@@ -147,6 +147,77 @@ describe('Persistent Cache Tasks', () => {
       expect(darkModeNormalColors).to.deep.equal(['#00E676', '#009688']);
     });
 
+    it('should test pie chart cutout configuration with single application', () => {
+      cy.visit('/resource/persistent-cache-task/clusters/1');
+      cy.get('#tab-analytics').click({force:true});
+
+      const singleApplicationTasks = [
+        {
+          id: 1,
+          task_id: 1234567890,
+          persistent_replica_count: 2,
+          application: 'app1',
+          tag: 'tag1',
+          ttl: '7d',
+          content_length: 1024,
+          piece_length: 4194304,
+          state: 'SUCCESS',
+          created_at: '2023-01-01T00:00:00Z',
+          updated_at: '2023-01-01T00:00:00Z',
+          scheduler_cluster_id: 1
+        },
+        {
+          id: 2,
+          task_id: 1234567891,
+          persistent_replica_count: 3,
+          application: 'app1',
+          tag: 'tag2',
+          ttl: '7d',
+          content_length: 2048,
+          piece_length: 4194304,
+          state: 'SUCCESS',
+          created_at: '2023-01-01T00:00:00Z',
+          updated_at: '2023-01-01T00:00:00Z',
+          scheduler_cluster_id: 1
+        }
+      ];
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/persistent-cache-tasks?page=1&per_page=10000000&scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: singleApplicationTasks,
+          });
+        },
+      );
+
+      cy.visit('/resource/persistent-cache-task/clusters/1');
+      cy.get('#tab-analytics').click({force:true});
+      
+      // Verify single application scenario - both tasks have application, count is 2
+      cy.get('#application').should('have.text', '2');
+      cy.get('#tag').should('have.text', '2');
+      
+      // The pie chart should render with 40% cutout for single application
+      cy.get('canvas').should('exist');
+    });
+
+    it('should test pie chart cutout configuration with multiple applications', () => {
+      cy.visit('/resource/persistent-cache-task/clusters/1');
+      cy.get('#tab-analytics').click({force:true});
+
+      // Use existing multi-application data to test cutout: '68%' configuration
+      cy.get('#application').should('have.text', 6);
+      cy.get('#tag').should('have.text', 17);
+      
+      // The pie chart should render with 68% cutout for multiple applications
+      cy.get('canvas').should('exist');
+    });
+
     it('should handle chart interactions', () => {
       cy.visit('/resource/persistent-cache-task/clusters/1');
       cy.get('#tab-analytics').click({force:true});

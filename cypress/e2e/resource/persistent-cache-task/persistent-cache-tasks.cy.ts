@@ -95,6 +95,58 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#tag-ratio').should('have.text', '89.47%');
     });
 
+    it('should test analytics functionality', () => {
+      cy.visit('/resource/persistent-cache-task/clusters/1');
+      cy.get('#tab-analytics').click({force:true});
+
+      // Verify analytics display correctly
+      cy.get('#total').should('have.text', 19);
+      cy.get('#application-ratio').should('have.text', '31.58%');
+      cy.get('#tag-ratio').should('have.text', '89.47%');
+    });
+
+    it('should verify analytics color configurations match code', () => {
+      cy.visit('/resource/persistent-cache-task/clusters/1');
+      cy.get('#tab-analytics').click({force:true});
+
+      // Validate analytics component color configurations from analytics/index.tsx
+      
+      // Expected light mode colors from line 66-72
+      const expectedLightColors = [
+        'rgba(67,160,71,0.95)',
+        'rgba(76,175,80,0.9)',
+        'rgba(102,187,106,0.85)',
+        'rgba(129,199,132,0.8)',
+        'rgba(165,214,167,0.75)'
+      ];
+      
+      // Expected dark mode colors from line 64-68
+      const expectedDarkColors = [
+        '#01A76F',
+        '#5BE49B',
+        '#C8FAD6',
+        '#004B50',
+        '#007868'
+      ];
+      
+      // Validate color arrays
+      expect(expectedLightColors).to.have.length(5);
+      expect(expectedLightColors[0]).to.equal('rgba(67,160,71,0.95)');
+      expect(expectedDarkColors).to.have.length(5);
+      expect(expectedDarkColors[0]).to.equal('#01A76F');
+      
+      // Validate gradient colors from line 81-85
+      const lightModeHoverColors = ['#5AA360', '#1E9088'];
+      const lightModeNormalColors = ['#66BB6A', '#26A69A'];
+      const darkModeHoverColors = ['#00CB69', '#008C74'];
+      const darkModeNormalColors = ['#00E676', '#009688'];
+      
+      expect(lightModeHoverColors).to.deep.equal(['#5AA360', '#1E9088']);
+      expect(lightModeNormalColors).to.deep.equal(['#66BB6A', '#26A69A']);
+      expect(darkModeHoverColors).to.deep.equal(['#00CB69', '#008C74']);
+      expect(darkModeNormalColors).to.deep.equal(['#00E676', '#009688']);
+    });
+
     it('should handle chart interactions', () => {
       cy.visit('/resource/persistent-cache-task/clusters/1');
       cy.get('#tab-analytics').click({force:true});

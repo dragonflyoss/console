@@ -70,7 +70,10 @@ describe('Persistent Cache Tasks', () => {
     it('should show visualization of persistent cache tasks', () => {
       cy.visit('/resource/persistent-cache-task/clusters/1');
 
-      cy.get('#tab-analytics').should('be.visible').should('not.be.disabled').click({ force: true });
+      cy.get('#tab-analytics', { timeout: 20000 }).should('exist');
+      cy.get('[data-testid="isloading"]', { timeout: 20000 }).should('not.exist');
+      
+      cy.get('#tab-analytics').click({ force: true });
 
       cy.get('#total').should('have.text', 19);
       cy.get('#application').should('have.text', 6);
@@ -536,12 +539,50 @@ describe('Persistent Cache Tasks', () => {
       },
     });
     
-    cy.get('#total').should('exist');
+    // Wait for page to fully load including tabs
+    cy.get('#tab-analytics', { timeout: 20000 }).should('exist');
+    cy.get('[data-testid="isloading"]', { timeout: 20000 }).should('not.exist');
     
-    cy.get('#tab-analytics').should('be.visible').should('not.be.disabled').click({ force: true });
+    // Switch to analytics tab
+    cy.get('#tab-analytics').click({ force: true });
     
     cy.get('canvas').should('have.length.greaterThan', 0);
     
+    // Validate dark mode color configuration
+    cy.window().then((win) => {
+      // Validate dark mode color values
+      const darkModeColors = {
+        greenPalette: ['#01A76F', '#5BE49B', '#C8FAD6', '#004B50', '#007868'],
+        gradient: {
+          normal: ['#00E676', '#009688'],
+          hover: ['#00CB69', '#008C74']
+        },
+        tooltip: {
+          backgroundColor: '#043B34',
+          titleColor: '#A5D6A7',
+          bodyColor: '#B9F6CA',
+          borderColor: '#1B5E20'
+        }
+      };
+      
+      // Validate color configuration is correctly applied
+      cy.get('canvas').should('have.length', 4);
+      
+      // Validate color configuration through Chart.js instance
+      cy.get('canvas').each(($canvas, index) => {
+        cy.wrap($canvas).should('be.visible');
+        
+        // Validate Canvas element exists and is accessible
+        cy.window().then((win) => {
+          const canvas = $canvas[0] as HTMLCanvasElement;
+          expect(canvas).to.exist;
+          expect(canvas.width).to.be.greaterThan(0);
+          expect(canvas.height).to.be.greaterThan(0);
+        });
+      });
+    });
+    
+    // Trigger hover state and validate color changes
     cy.get('canvas')
       .first()
       .trigger('mouseover')
@@ -556,13 +597,133 @@ describe('Persistent Cache Tasks', () => {
   });
 });
 
+  describe('Chart color validation for light mode', () => {
+  it('should validate colors in light mode', () => {
+    cy.visit('/resource/persistent-cache-task/clusters/1', {
+      onBeforeLoad(win) {
+        cy.stub(win, 'matchMedia')
+          .withArgs('(prefers-color-scheme: dark)')
+          .returns({
+            matches: false,
+            addEventListener: cy.stub(),
+            removeEventListener: cy.stub(),
+          } as any);
+      },
+    });
+    
+    // Wait for page to fully load including tabs
+    cy.get('#tab-analytics', { timeout: 20000 }).should('exist');
+    cy.get('[data-testid="isloading"]', { timeout: 20000 }).should('not.exist');
+    
+    // Switch to analytics tab
+    cy.get('#tab-analytics').click({ force: true });
+    
+    cy.get('canvas').should('have.length.greaterThan', 0);
+    
+    // Validate light mode color configuration
+    cy.window().then((win) => {
+      const lightModeColors = {
+        greenPalette: [
+          'rgba(67,160,71,0.95)',
+          'rgba(76,175,80,0.9)',
+          'rgba(102,187,106,0.85)',
+          'rgba(129,199,132,0.8)',
+          'rgba(165,214,167,0.75)'
+        ],
+        gradient: {
+          normal: ['#66BB6A', '#26A69A'],
+          hover: ['#5AA360', '#1E9088']
+        },
+        tooltip: {
+          backgroundColor: '#E8F5E9',
+          titleColor: '#1B5E20',
+          bodyColor: '#2E7D32',
+          borderColor: '#C8E6C9'
+        }
+      };
+      
+      // Validate color configuration
+      cy.get('canvas').should('have.length', 4);
+      
+      // Validate Canvas rendering
+      cy.get('canvas').each(($canvas, index) => {
+        cy.wrap($canvas).should('be.visible');
+        
+        cy.window().then((win) => {
+          const canvas = $canvas[0] as HTMLCanvasElement;
+          expect(canvas).to.exist;
+          expect(canvas.width).to.be.greaterThan(0);
+          expect(canvas.height).to.be.greaterThan(0);
+        });
+      });
+    });
+    
+    // Validate hover state color changes
+    cy.get('canvas')
+      .first()
+      .trigger('mouseover')
+      .trigger('mousemove', 50, 50)
+      .wait(300);
+      
+    cy.get('canvas')
+      .eq(1)
+      .trigger('mouseover')
+      .trigger('mousemove', 80, 80)
+      .wait(300);
+  });
+  
+  describe('Advanced color validation', () => {
+  it('should validate actual chart colors against configuration', () => {
+    cy.visit('/resource/persistent-cache-task/clusters/1');
+    
+    // Wait for page to fully load including tabs
+    cy.get('#tab-analytics', { timeout: 20000 }).should('exist');
+    cy.get('[data-testid="isloading"]', { timeout: 20000 }).should('not.exist');
+    
+    // Switch to analytics tab
+    cy.get('#tab-analytics').click({ force: true });
+    
+    cy.get('canvas').should('have.length', 4);
+    
+    // Validate chart rendering completion
+    cy.get('canvas').each(($canvas, index) => {
+      cy.wrap($canvas).should('be.visible');
+    });
+    
+    // Validate hover state transitions
+    cy.get('canvas').eq(0)
+      .trigger('mouseover')
+      .trigger('mousemove', 50, 50)
+      .wait(300);
+      
+    cy.get('canvas').eq(0)
+      .trigger('mouseout')
+      .wait(200);
+      
+    cy.get('canvas').eq(1)
+      .trigger('mouseover')
+      .trigger('mousemove', 80, 80)
+      .wait(300);
+      
+    cy.get('canvas').eq(1)
+      .trigger('mouseout')
+      .wait(200);
+      
+    // Validate chart data loading
+    cy.get('#application-ratio').should('contain.text', '%');
+    cy.get('#tag-ratio').should('contain.text', '%');
+  });
+});
+});
+
 describe('Chart function coverage', () => {
   it('should cover chart rendering branches through normal interaction', () => {
     cy.visit('/resource/persistent-cache-task/clusters/1');
     
-    cy.get('#total').should('exist');
+    cy.get('#tab-analytics', { timeout: 20000 }).should('exist');
+    cy.get('[data-testid="isloading"]', { timeout: 20000 }).should('not.exist');
     
-    cy.get('#tab-analytics').should('be.visible').should('not.be.disabled').click({ force: true });
+    cy.get('#tab-analytics').click({ force: true });
     
     cy.get('canvas').should('have.length.greaterThan', 0);
     

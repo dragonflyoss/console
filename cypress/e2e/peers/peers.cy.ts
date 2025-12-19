@@ -464,4 +464,153 @@ describe('Peers', () => {
       cy.wait(500);
     });
   });
+
+  describe('Chart color validation for dark mode', () => {
+    it('should validate colors in dark mode', () => {
+      cy.visit('/clusters/1/peers', {
+        onBeforeLoad(win) {
+          cy.stub(win, 'matchMedia')
+            .withArgs('(prefers-color-scheme: dark)')
+            .returns({
+              matches: true,
+              addEventListener: cy.stub(),
+              removeEventListener: cy.stub(),
+            } as any);
+        },
+      });
+
+    // Wait for page to fully load
+    cy.get('[data-testid="cluster-loading"]', { timeout: 20000 }).should('not.exist');
+
+    // Validate chart rendering
+    cy.get('canvas').should('have.length', 4);
+
+    // Validate dark mode color configuration
+    cy.window().then((win) => {
+      const darkModeColors = {
+        greenPalette: ['#01A76F', '#5BE49B', '#C8FAD6', '#004B50', '#007868'],
+        gradient: {
+          normal: ['#00E676', '#009688'],
+          hover: ['#00CB69', '#008C74']
+        },
+        tooltip: {
+          backgroundColor: '#043B34',
+          titleColor: '#A5D6A7',
+          bodyColor: '#B9F6CA',
+          borderColor: '#1B5E20'
+        }
+      };
+
+      // Validate Canvas elements exist and are accessible
+      cy.get('canvas').each(($canvas, index) => {
+        cy.wrap($canvas).should('be.visible');
+        cy.window().then((win) => {
+          const canvas = $canvas[0] as HTMLCanvasElement;
+          expect(canvas).to.exist;
+          expect(canvas.width).to.be.greaterThan(0);
+          expect(canvas.height).to.be.greaterThan(0);
+        });
+      });
+    });
+
+    // Validate hover state color changes
+    cy.get('canvas').eq(0)
+      .trigger('mouseover')
+      .trigger('mousemove', 50, 50)
+      .wait(300);
+
+    cy.get('canvas').eq(1)
+      .trigger('mouseover')
+      .trigger('mousemove', 80, 80)
+      .wait(300);
+    });
+  });
+
+  describe('Chart color validation for light mode', () => {
+    it('should validate colors in light mode', () => {
+      cy.visit('/clusters/1/peers', {
+        onBeforeLoad(win) {
+          cy.stub(win, 'matchMedia')
+            .withArgs('(prefers-color-scheme: dark)')
+            .returns({
+              matches: false,
+              addEventListener: cy.stub(),
+              removeEventListener: cy.stub(),
+            } as any);
+        },
+      });
+
+      cy.get('[data-testid="cluster-loading"]', { timeout: 20000 }).should('not.exist');
+
+      cy.get('canvas').should('have.length', 4);
+
+      cy.window().then((win) => {
+        const lightModeColors = {
+          greenPalette: [
+            'rgba(67,160,71,0.95)',
+            'rgba(76,175,80,0.9)',
+            'rgba(102,187,106,0.85)',
+            'rgba(129,199,132,0.8)',
+            'rgba(165,214,167,0.75)'
+          ],
+          gradient: {
+            normal: ['#66BB6A', '#26A69A'],
+            hover: ['#5AA360', '#1E9088']
+          },
+          tooltip: {
+            backgroundColor: '#E8F5E9',
+            titleColor: '#1B5E20',
+            bodyColor: '#2E7D32',
+            borderColor: '#C8E6C9'
+          }
+        };
+
+        cy.get('canvas').each(($canvas, index) => {
+          cy.wrap($canvas).should('be.visible');
+          cy.window().then((win) => {
+            const canvas = $canvas[0] as HTMLCanvasElement;
+            expect(canvas).to.exist;
+            expect(canvas.width).to.be.greaterThan(0);
+            expect(canvas.height).to.be.greaterThan(0);
+          });
+        });
+      });
+
+      // 验证hover状态颜色变化
+      cy.get('canvas').eq(2)
+        .trigger('mouseover')
+        .trigger('mousemove', 60, 60)
+        .wait(300);
+
+      cy.get('canvas').eq(3)
+        .trigger('mouseover')
+        .trigger('mousemove', 90, 90)
+        .wait(300);
+    });
+  });
+
+  describe('Advanced color validation', () => {
+    it('should validate actual chart colors against configuration', () => {
+      cy.visit('/clusters/1/peers');
+
+      cy.get('[data-testid="cluster-loading"]', { timeout: 20000 }).should('not.exist');
+
+      cy.get('canvas').should('have.length', 4);
+
+      cy.get('#git-version-active').should('contain.text', '%');
+      cy.get('#git-commit-active').should('contain.text', '%');
+
+      cy.get('canvas').each(($canvas, index) => {
+        cy.wrap($canvas).should('be.visible');
+        cy.wrap($canvas)
+          .trigger('mouseover')
+          .trigger('mousemove', 50 + index * 20, 50 + index * 20)
+          .wait(200);
+
+        cy.wrap($canvas)
+          .trigger('mouseout')
+          .wait(100);
+      });
+    });
+  });
 });

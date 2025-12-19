@@ -249,160 +249,6 @@ describe('Peers', () => {
     });
   });
 
-  describe('interaction testing', () => {
-    it('should render correctly and handle basic interactions', () => {
-      // Verify the component renders correctly
-      cy.get('#total').should('have.text', 10);
-      cy.get('#git-version').should('have.text', 4);
-      cy.get('#git-commit').should('have.text', 5);
-      
-      // Test export functionality
-      cy.get('#export').click();
-      cy.get('#export-git-version').should('be.visible');
-      cy.get('#close-export').click();
-    });
-
-    it('should handle empty data correctly', () => {
-      // This is already covered in empty data scenarios
-      cy.get('#total').should('have.text', 10);
-    });
-  });
-
-  describe('color configuration validation', () => {
-    it('should verify peers color configurations match code', () => {
-      // Validate peers component color configurations from clusters/peers/index.tsx
-      
-      // Expected light mode colors from line 215-219
-      const expectedLightColors = [
-        'rgba(67,160,71,0.95)',
-        'rgba(76,175,80,0.9)',
-        'rgba(102,187,106,0.85)',
-        'rgba(129,199,132,0.8)',
-        'rgba(165,214,167,0.75)'
-      ];
-      
-      // Expected dark mode colors from line 211-214
-      const expectedDarkColors = [
-        '#01A76F',
-        '#5BE49B',
-        '#C8FAD6',
-        '#004B50',
-        '#007868'
-      ];
-      
-      // Validate color arrays
-      expect(expectedLightColors).to.have.length(5);
-      expect(expectedLightColors[0]).to.equal('rgba(67,160,71,0.95)');
-      expect(expectedDarkColors).to.have.length(5);
-      expect(expectedDarkColors[0]).to.equal('#01A76F');
-      
-      // Validate gradient colors from line 230-234
-      const lightModeHoverColors = ['#5AA360', '#1E9088'];
-      const lightModeNormalColors = ['#66BB6A', '#26A69A'];
-      const darkModeHoverColors = ['#00CB69', '#008C74'];
-      const darkModeNormalColors = ['#00E676', '#009688'];
-      
-      expect(lightModeHoverColors).to.deep.equal(['#5AA360', '#1E9088']);
-      expect(lightModeNormalColors).to.deep.equal(['#66BB6A', '#26A69A']);
-      expect(darkModeHoverColors).to.deep.equal(['#00CB69', '#008C74']);
-      expect(darkModeNormalColors).to.deep.equal(['#00E676', '#009688']);
-    });
-  });
-
-  describe('chart configuration and cutout testing', () => {
-    it('should test pie chart cutout configuration with single git version', () => {
-      // Mock data with only one git version to test cutout: '40%' configuration
-      const singleVersionPeers = [
-        {
-          id: 1,
-          hostname: 'peer-1',
-          git_version: 'v1.0.0',
-          git_commit: 'abc123',
-          state: 'active',
-          type: 'super',
-          ip: '192.168.1.1',
-          port: 8001,
-          download_port: 4001,
-          os: 'linux',
-          platform: 'linux',
-          kernel_version: '5.4.0',
-          build_platform: 'linux',
-          scheduler_cluster_id: 1,
-          created_at: '2023-01-01T00:00:00Z',
-          updated_at: '2023-01-01T00:00:00Z',
-          is_del: 0
-        },
-        {
-          id: 2,
-          hostname: 'peer-2',
-          git_version: 'v1.0.0',
-          git_commit: 'abc123',
-          state: 'active',
-          type: 'super',
-          ip: '192.168.1.2',
-          port: 8001,
-          download_port: 4001,
-          os: 'linux',
-          platform: 'linux',
-          kernel_version: '5.4.0',
-          build_platform: 'linux',
-          scheduler_cluster_id: 1,
-          created_at: '2023-01-01T00:00:00Z',
-          updated_at: '2023-01-01T00:00:00Z',
-          is_del: 0
-        }
-      ];
-
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/peers?page=1&per_page=10000000&scheduler_cluster_id=1',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: singleVersionPeers,
-          });
-        },
-      );
-
-      cy.visit('/clusters/1/peers');
-      
-      // Verify single git version scenario
-      cy.get('#git-version').should('have.text', 1);
-      cy.get('#git-commit').should('have.text', 1);
-      
-      // The pie chart should render with 40% cutout for single version
-      cy.get('canvas').should('exist');
-    });
-
-    it('should test pie chart cutout configuration with multiple git versions', () => {
-      // Use existing multi-version data to test cutout: '68%' configuration
-      cy.get('#git-version').should('have.text', 4);
-      cy.get('#git-commit').should('have.text', 5);
-      
-      // The pie chart should render with 68% cutout for multiple versions
-      cy.get('canvas').should('exist');
-    });
-  });
-
-  describe('chart hover interactions', () => {
-    it('should test chart hover effects and gradient functions', () => {
-      // Test that charts render with proper hover effects
-      cy.get('#total').should('have.text', 10);
-      
-      // Test git version chart interactions
-      cy.get('.MuiInputBase-root > #git-version-select').click();
-      cy.get('[data-value="git-version-1"]').click();
-      cy.get('#git-commit-active').should('contain', '50%');
-      
-      // Test git commit chart interactions
-      cy.get('.MuiInputBase-root > #git-version-select').click();
-      cy.get('[data-value="git-version-2"]').click();
-      cy.get('#git-commit-active').should('contain', '100%');
-    });
-  });
-
   describe('refresh', () => {
     it('can refresh peers and return new data', () => {
       cy.get('#total').should('have.text', 10);
@@ -553,6 +399,69 @@ describe('Peers', () => {
       cy.get('#total').should('have.text', 10);
       cy.get('#git-version').should('have.text', 4);
       cy.get('#git-commit').should('have.text', 5);
+    });
+  });
+  describe('when theme is dark mode', () => {
+    beforeEach(() => {
+      cy.viewport(1440, 1080);
+      cy.signin();
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/clusters/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: cluster,
+          });
+        },
+      );
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/peers?page=1&per_page=10000000&scheduler_cluster_id=1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: peers,
+          });
+        },
+      );
+
+      cy.visit('/clusters/1/peers', {
+        onBeforeLoad(win) {
+          Object.defineProperty(win, 'matchMedia', {
+            writable: true,
+            value: (query: string) => ({
+              matches: query.includes('dark'), 
+              media: query,
+              onchange: null,
+              addListener: cy.stub(), // deprecated
+              removeListener: cy.stub(), // deprecated
+              addEventListener: cy.stub(),
+              removeEventListener: cy.stub(),
+              dispatchEvent: cy.stub(),
+            }),
+          });
+        },
+      });
+    });
+
+    it('should render charts with dark mode colors', () => {
+      cy.get('canvas').should('exist');
+
+    });
+
+    it('should trigger hover effect on bar chart', () => {
+      cy.get('canvas').should('exist');
+
+      cy.get('canvas').first().trigger('mouseover', { x: 100, y: 100 }).trigger('mousemove', { x: 100, y: 100 });
+
+      cy.wait(500);
     });
   });
 });

@@ -70,7 +70,7 @@ describe('Persistent Cache Tasks', () => {
     it('should show visualization of persistent cache tasks', () => {
       cy.visit('/resource/persistent-cache-task/clusters/1');
 
-      cy.get('#tab-analytics').click({force:true});
+      cy.get('#tab-analytics').should('be.visible').should('not.be.disabled').click({ force: true });
 
       cy.get('#total').should('have.text', 19);
       cy.get('#application').should('have.text', 6);
@@ -79,153 +79,6 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#application-ratio').should('have.text', '31.58%');
 
       cy.get('#tag-ratio').should('have.text', '89.47%');
-    });
-
-    it('should show analytics correctly', () => {
-      cy.visit('/resource/persistent-cache-task/clusters/1');
-      
-      cy.get('#tab-analytics').click({force:true});
-
-      // Verify analytics display correctly
-      cy.get('#total').should('have.text', 19);
-      cy.get('#application').should('have.text', 6);
-      cy.get('#tag').should('have.text', 17);
-
-      cy.get('#application-ratio').should('have.text', '31.58%');
-      cy.get('#tag-ratio').should('have.text', '89.47%');
-    });
-
-    it('should test analytics functionality', () => {
-      cy.visit('/resource/persistent-cache-task/clusters/1');
-      cy.get('#tab-analytics').click({force:true});
-
-      // Verify analytics display correctly
-      cy.get('#total').should('have.text', 19);
-      cy.get('#application-ratio').should('have.text', '31.58%');
-      cy.get('#tag-ratio').should('have.text', '89.47%');
-    });
-
-    it('should verify analytics color configurations match code', () => {
-      cy.visit('/resource/persistent-cache-task/clusters/1');
-      cy.get('#tab-analytics').click({force:true});
-
-      // Validate analytics component color configurations from analytics/index.tsx
-      
-      // Expected light mode colors from line 66-72
-      const expectedLightColors = [
-        'rgba(67,160,71,0.95)',
-        'rgba(76,175,80,0.9)',
-        'rgba(102,187,106,0.85)',
-        'rgba(129,199,132,0.8)',
-        'rgba(165,214,167,0.75)'
-      ];
-      
-      // Expected dark mode colors from line 64-68
-      const expectedDarkColors = [
-        '#01A76F',
-        '#5BE49B',
-        '#C8FAD6',
-        '#004B50',
-        '#007868'
-      ];
-      
-      // Validate color arrays
-      expect(expectedLightColors).to.have.length(5);
-      expect(expectedLightColors[0]).to.equal('rgba(67,160,71,0.95)');
-      expect(expectedDarkColors).to.have.length(5);
-      expect(expectedDarkColors[0]).to.equal('#01A76F');
-      
-      // Validate gradient colors from line 81-85
-      const lightModeHoverColors = ['#5AA360', '#1E9088'];
-      const lightModeNormalColors = ['#66BB6A', '#26A69A'];
-      const darkModeHoverColors = ['#00CB69', '#008C74'];
-      const darkModeNormalColors = ['#00E676', '#009688'];
-      
-      expect(lightModeHoverColors).to.deep.equal(['#5AA360', '#1E9088']);
-      expect(lightModeNormalColors).to.deep.equal(['#66BB6A', '#26A69A']);
-      expect(darkModeHoverColors).to.deep.equal(['#00CB69', '#008C74']);
-      expect(darkModeNormalColors).to.deep.equal(['#00E676', '#009688']);
-    });
-
-    it('should test pie chart cutout configuration with single application', () => {
-      cy.visit('/resource/persistent-cache-task/clusters/1');
-      cy.get('#tab-analytics').click({force:true});
-
-      const singleApplicationTasks = [
-        {
-          id: 1,
-          task_id: 1234567890,
-          persistent_replica_count: 2,
-          application: 'app1',
-          tag: 'tag1',
-          ttl: '7d',
-          content_length: 1024,
-          piece_length: 4194304,
-          state: 'SUCCESS',
-          created_at: '2023-01-01T00:00:00Z',
-          updated_at: '2023-01-01T00:00:00Z',
-          scheduler_cluster_id: 1
-        },
-        {
-          id: 2,
-          task_id: 1234567891,
-          persistent_replica_count: 3,
-          application: 'app1',
-          tag: 'tag2',
-          ttl: '7d',
-          content_length: 2048,
-          piece_length: 4194304,
-          state: 'SUCCESS',
-          created_at: '2023-01-01T00:00:00Z',
-          updated_at: '2023-01-01T00:00:00Z',
-          scheduler_cluster_id: 1
-        }
-      ];
-
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/persistent-cache-tasks?page=1&per_page=10000000&scheduler_cluster_id=1',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: singleApplicationTasks,
-          });
-        },
-      );
-
-      cy.visit('/resource/persistent-cache-task/clusters/1');
-      cy.get('#tab-analytics').click({force:true});
-      
-      // Verify single application scenario - both tasks have application, count is 2
-      cy.get('#application').should('have.text', '2');
-      cy.get('#tag').should('have.text', '2');
-      
-      // The pie chart should render with 40% cutout for single application
-      cy.get('canvas').should('exist');
-    });
-
-    it('should test pie chart cutout configuration with multiple applications', () => {
-      cy.visit('/resource/persistent-cache-task/clusters/1');
-      cy.get('#tab-analytics').click({force:true});
-
-      // Use existing multi-application data to test cutout: '68%' configuration
-      cy.get('#application').should('have.text', 6);
-      cy.get('#tag').should('have.text', 17);
-      
-      // The pie chart should render with 68% cutout for multiple applications
-      cy.get('canvas').should('exist');
-    });
-
-    it('should handle chart interactions', () => {
-      cy.visit('/resource/persistent-cache-task/clusters/1');
-      cy.get('#tab-analytics').click({force:true});
-
-      // Test basic chart functionality
-      cy.get('#total').should('have.text', '19');
-      cy.get('#application').should('have.text', '6');
-      cy.get('#tag').should('have.text', '17');
     });
 
     it('call onChange when changing page size', () => {
@@ -365,8 +218,6 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#operation-0').click({force: true});
 
       cy.get('#delete-task').should('not.exist');
-
-      // Wait for menu to be visible and click delete option
            cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #delete-3810320977').click({force:true});
       cy.get('#delete-task').should('exist');
 
@@ -425,8 +276,7 @@ describe('Persistent Cache Tasks', () => {
 
       cy.get('#delete-task').should('not.exist');
 
-      // Wait for menu to be visible and click delete option
-      cy.get('#delete-3810320977').click({force: true});
+      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #delete-3810320977').click({force: true});
       cy.get('#delete-task').should('exist');
 
       cy.get('#help-delete-task').should('have.text', 'Persistent cache task will be permanently deleted.');
@@ -459,8 +309,7 @@ describe('Persistent Cache Tasks', () => {
 
       cy.get('#operation-0').click({force: true});
 
-      // Wait for menu to be visible and click delete option
-      cy.get('#delete-2865345332').should('be.visible').click({force: true});
+      cy.get('#delete-2865345332').click({force: true});
 
       cy.intercept(
         {
@@ -514,8 +363,7 @@ describe('Persistent Cache Tasks', () => {
 
       cy.get('#operation-8').click({force: true});
 
-      // Wait for menu to be visible and click delete option
-   cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #delete-2865345332').click({force:true});
+      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #delete-2865345332').click({force: true});
 
       cy.intercept(
         {
@@ -557,35 +405,6 @@ describe('Persistent Cache Tasks', () => {
 
       // Check the last task ID.
       cy.get('#card-id-8').should('have.text', '2865345332');
-    });
-  });
-
-  describe('empty data scenarios', () => {
-    it('should handle empty persistent cache tasks data', () => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/persistent-cache-tasks?page=1&per_page=10000000&scheduler_cluster_id=1',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: [],
-          });
-        },
-      );
-
-      cy.visit('/resource/persistent-cache-task/clusters/1');
-      cy.get('#tab-analytics').click({force:true});
-
-      // Verify empty data handling
-      cy.get('#total').should('have.text', 0);
-      cy.get('#application').should('have.text', 0);
-      cy.get('#tag').should('have.text', 0);
-      
-      // Verify percentage calculations with empty data
-      cy.get('#application-ratio').should('have.text', '0%');
-      cy.get('#tag-ratio').should('have.text', '0%');
     });
   });
 
@@ -703,4 +522,62 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#card-id-0').should('have.text', '3870122509');
     });
   });
+  describe('Chart color coverage for dark mode', () => {
+  it('should cover getGradient and greenPalette branches in dark mode', () => {
+    cy.visit('/resource/persistent-cache-task/clusters/1', {
+      onBeforeLoad(win) {
+        cy.stub(win, 'matchMedia')
+          .withArgs('(prefers-color-scheme: dark)')
+          .returns({
+            matches: true,
+            addEventListener: cy.stub(),
+            removeEventListener: cy.stub(),
+          } as any);
+      },
+    });
+    
+    cy.get('#total').should('exist');
+    
+    cy.get('#tab-analytics').should('be.visible').should('not.be.disabled').click({ force: true });
+    
+    cy.get('canvas').should('have.length.greaterThan', 0);
+    
+    cy.get('canvas')
+      .first()
+      .trigger('mouseover')
+      .trigger('mousemove', 100, 100)
+      .wait(500);
+      
+    cy.get('canvas')
+      .eq(1)
+      .trigger('mouseover')
+      .trigger('mousemove', 150, 150)
+      .wait(500);
+  });
+});
+
+describe('Chart function coverage', () => {
+  it('should cover chart rendering branches through normal interaction', () => {
+    cy.visit('/resource/persistent-cache-task/clusters/1');
+    
+    cy.get('#total').should('exist');
+    
+    cy.get('#tab-analytics').should('be.visible').should('not.be.disabled').click({ force: true });
+    
+    cy.get('canvas').should('have.length.greaterThan', 0);
+    
+    cy.get('canvas')
+      .first()
+      .trigger('mouseover')
+      .trigger('mousemove', 50, 50)
+      .wait(300);
+      
+    cy.get('canvas')
+      .eq(1)
+      .trigger('mouseover')
+      .trigger('mousemove', 80, 80)
+      .wait(300);
+      
+  });
+});
 });

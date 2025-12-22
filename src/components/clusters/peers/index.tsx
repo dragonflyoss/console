@@ -208,34 +208,7 @@ export default function Peer() {
     setExportGitCommit(filteredByCommit);
   }, [exportSelectedVersion, exportSelectedCommit, peer]);
 
-  const greenPalette = useMemo(
-    () =>
-      theme.palette.mode === 'dark'
-        ? ['#01A76F', '#5BE49B', '#C8FAD6', '#004B50', '#007868']
-        : [
-            'rgba(67,160,71,0.95)',
-            'rgba(76,175,80,0.9)',
-            'rgba(102,187,106,0.85)',
-            'rgba(129,199,132,0.8)',
-            'rgba(165,214,167,0.75)',
-          ],
-    [theme.palette.mode],
-  );
 
-  const getGradient = (ctx: CanvasRenderingContext2D, isHover = false) => {
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    const colors =
-      theme.palette.mode === 'dark'
-        ? isHover
-          ? ['#00CB69', '#008C74']
-          : ['#00E676', '#009688']
-        : isHover
-        ? ['#5AA360', '#1E9088']
-        : ['#66BB6A', '#26A69A'];
-    gradient.addColorStop(0, colors[0]);
-    gradient.addColorStop(1, colors[1]);
-    return gradient;
-  };
 
   const barOptions: ChartOptions<'bar'> = useMemo(
     () => ({
@@ -289,8 +262,26 @@ export default function Peer() {
       {
         label,
         data: data.map((i) => i.count),
-        backgroundColor: (ctx: any) => getGradient(ctx.chart.ctx),
-        hoverBackgroundColor: (ctx: any) => getGradient(ctx.chart.ctx, true),
+        backgroundColor: (ctx: any) => {
+          const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
+          const colors =
+            theme.palette.mode === 'dark'
+              ? ['#00E676', '#009688']
+              : ['#66BB6A', '#26A69A'];
+          gradient.addColorStop(0, colors[0]);
+          gradient.addColorStop(1, colors[1]);
+          return gradient;
+        },
+        hoverBackgroundColor: (ctx: any) => {
+          const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
+          const colors =
+            theme.palette.mode === 'dark'
+              ? ['#00CB69', '#008C74']
+              : ['#5AA360', '#1E9088'];
+          gradient.addColorStop(0, colors[0]);
+          gradient.addColorStop(1, colors[1]);
+          return gradient;
+        },
         borderRadius: 6,
         barPercentage: 0.6,
       },
@@ -303,7 +294,15 @@ export default function Peer() {
       {
         label,
         data: data.map((i) => i.count),
-        backgroundColor: greenPalette,
+        backgroundColor: theme.palette.mode === 'dark'
+          ? ['#01A76F', '#5BE49B', '#C8FAD6', '#004B50', '#007868']
+          : [
+              'rgba(67,160,71,0.95)',
+              'rgba(76,175,80,0.9)',
+              'rgba(102,187,106,0.85)',
+              'rgba(129,199,132,0.8)',
+              'rgba(165,214,167,0.75)',
+            ],
         borderWidth: 2,
         borderColor: theme.palette.background.paper,
         hoverOffset: 8,

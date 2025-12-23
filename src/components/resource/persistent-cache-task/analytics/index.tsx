@@ -107,28 +107,22 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
     [theme.palette.mode, theme.palette.text.primary, application.length],
   );
 
-  const createBarData = (data: { name: string; count: number }[], label: string) => ({
-    labels: data.map((i) => i.name),
+  const applicationBar = {
+    labels: application.map((i) => i.name),
     datasets: [
       {
-        label,
-        data: data.map((i) => i.count),
+        label: 'Application',
+        data: application.map((i) => i.count),
         backgroundColor: (ctx: any) => {
           const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
-          const colors =
-            theme.palette.mode === 'dark'
-              ? ['#00E676', '#009688']
-              : ['#66BB6A', '#26A69A'];
+          const colors = theme.palette.mode === 'dark' ? ['#00E676', '#009688'] : ['#66BB6A', '#26A69A'];
           gradient.addColorStop(0, colors[0]);
           gradient.addColorStop(1, colors[1]);
           return gradient;
         },
         hoverBackgroundColor: (ctx: any) => {
           const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
-          const colors =
-            theme.palette.mode === 'dark'
-              ? ['#00CB69', '#008C74']
-              : ['#5AA360', '#1E9088'];
+          const colors = theme.palette.mode === 'dark' ? ['#00CB69', '#008C74'] : ['#5AA360', '#1E9088'];
           gradient.addColorStop(0, colors[0]);
           gradient.addColorStop(1, colors[1]);
           return gradient;
@@ -137,34 +131,76 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
         barPercentage: 0.6,
       },
     ],
-  });
-
-  const createDoughnutData = (data: { name: string; count: number }[], label: string) => ({
-    labels: data.map((i) => i.name),
+  };
+  const tagBar = {
+    labels: tag.map((i) => i.name),
     datasets: [
       {
-        label,
-        data: data.map((i) => i.count),
-        backgroundColor: theme.palette.mode === 'dark'
-          ? ['#01A76F', '#5BE49B', '#C8FAD6', '#004B50', '#007868']
-          : [
-              'rgba(67,160,71,0.95)',
-              'rgba(76,175,80,0.9)',
-              'rgba(102,187,106,0.85)',
-              'rgba(129,199,132,0.8)',
-              'rgba(165,214,167,0.75)',
-            ],
+        label: 'Tag',
+        data: tag.map((i) => i.count),
+        backgroundColor: (ctx: any) => {
+          const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
+          const colors = theme.palette.mode === 'dark' ? ['#00E676', '#009688'] : ['#66BB6A', '#26A69A'];
+          gradient.addColorStop(0, colors[0]);
+          gradient.addColorStop(1, colors[1]);
+          return gradient;
+        },
+        hoverBackgroundColor: (ctx: any) => {
+          const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
+          const colors = theme.palette.mode === 'dark' ? ['#00CB69', '#008C74'] : ['#5AA360', '#1E9088'];
+          gradient.addColorStop(0, colors[0]);
+          gradient.addColorStop(1, colors[1]);
+          return gradient;
+        },
+        borderRadius: 6,
+        barPercentage: 0.6,
+      },
+    ],
+  };
+  const applicationDoughnut = {
+    labels: application.map((i) => i.name),
+    datasets: [
+      {
+        label: 'Application',
+        data: application.map((i) => i.count),
+        backgroundColor:
+          theme.palette.mode === 'dark'
+            ? ['#01A76F', '#5BE49B', '#C8FAD6', '#004B50', '#007868']
+            : [
+                'rgba(67,160,71,0.95)',
+                'rgba(76,175,80,0.9)',
+                'rgba(102,187,106,0.85)',
+                'rgba(129,199,132,0.8)',
+                'rgba(165,214,167,0.75)',
+              ],
         borderWidth: 2,
         borderColor: theme.palette.background.paper,
         hoverOffset: 8,
       },
     ],
-  });
-
-  const applicationBar = createBarData(application, 'Application');
-  const tagBar = createBarData(tag, 'Tag');
-  const applicationDoughnut = createDoughnutData(application, 'Application');
-  const tagDoughnut = createDoughnutData(tag, 'Tag');
+  };
+  const tagDoughnut = {
+    labels: tag.map((i) => i.name),
+    datasets: [
+      {
+        label: 'Tag',
+        data: tag.map((i) => i.count),
+        backgroundColor:
+          theme.palette.mode === 'dark'
+            ? ['#01A76F', '#5BE49B', '#C8FAD6', '#004B50', '#007868']
+            : [
+                'rgba(67,160,71,0.95)',
+                'rgba(76,175,80,0.9)',
+                'rgba(102,187,106,0.85)',
+                'rgba(129,199,132,0.8)',
+                'rgba(165,214,167,0.75)',
+              ],
+        borderWidth: 2,
+        borderColor: theme.palette.background.paper,
+        hoverOffset: 8,
+      },
+    ],
+  };
 
   const renderSkeletonOrCount = (isLoading: boolean, id: string, count: number) =>
     isLoading ? (
@@ -229,114 +265,113 @@ export default function Analytics({ persistentCacheTasks, isLoading }: Informati
         {/* Application Visualization */}
         <Box className={styles.visualizationWrapper}>
           <Box className={styles.dashboard}>
-          <Card className={styles.barContainer}>
-            <Box className={styles.barTitle}>
-              <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold' }}>
-                Persistent cache tasks Statistics <span style={{ color: '#8a8a8a' }}>by Application</span>
-              </Typography>
-              <MuiTooltip title="Number of Persistent cache tasks under different Application" placement="top">
-                <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
-              </MuiTooltip>
-            </Box>
-            <Bar options={barOptions} data={applicationBar} />
-          </Card>
-          <Card className={styles.doughnutContainer}>
-            <Box>
-              <Box className={styles.doughnutTitle}>
-                <Typography variant="subtitle2" sx={{ fontFamily: 'mabry-bold' }}>
+            <Card className={styles.barContainer}>
+              <Box className={styles.barTitle}>
+                <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold' }}>
                   Persistent cache tasks Statistics <span style={{ color: '#8a8a8a' }}>by Application</span>
                 </Typography>
                 <MuiTooltip title="Number of Persistent cache tasks under different Application" placement="top">
                   <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                 </MuiTooltip>
               </Box>
-              <Divider className={styles.divider} />
-              <Box className={styles.pieWrapper}>
-                <Pie options={doughnutOptions} data={applicationDoughnut} />
-              </Box>
-            </Box>
-            <Box className={styles.tagContainer}>
-              <Success className={styles.tagIcon} />
-              <Box sx={{ width: '100%' }}>
-                <Box className={styles.tagContent}>
-                  <Typography variant="subtitle2" fontFamily="mabry-light">
-                    Application
+              <Bar options={barOptions} data={applicationBar} />
+            </Card>
+            <Card className={styles.doughnutContainer}>
+              <Box>
+                <Box className={styles.doughnutTitle}>
+                  <Typography variant="subtitle2" sx={{ fontFamily: 'mabry-bold' }}>
+                    Persistent cache tasks Statistics <span style={{ color: '#8a8a8a' }}>by Application</span>
                   </Typography>
-                  <Typography id="application-ratio" variant="subtitle1" fontFamily="mabry-bold">
-                    {isLoading ? <Skeleton width="2rem" /> : `${applicationPercentage || 0}%`}
-                  </Typography>
+                  <MuiTooltip title="Number of Persistent cache tasks under different Application" placement="top">
+                    <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
+                  </MuiTooltip>
                 </Box>
-                <LinearProgress
-                  sx={{
-                    bgcolor: '#e0e0e0',
-                    '& .MuiLinearProgress-bar': {
-                      bgcolor: 'var(--palette-description-color)',
-                    },
-                  }}
-                  variant="determinate"
-                  value={applicationPercentage || 0}
-                />
+                <Divider className={styles.divider} />
+                <Box className={styles.pieWrapper}>
+                  <Pie options={doughnutOptions} data={applicationDoughnut} />
+                </Box>
               </Box>
-            </Box>
-          </Card>
+              <Box className={styles.tagContainer}>
+                <Success className={styles.tagIcon} />
+                <Box sx={{ width: '100%' }}>
+                  <Box className={styles.tagContent}>
+                    <Typography variant="subtitle2" fontFamily="mabry-light">
+                      Application
+                    </Typography>
+                    <Typography id="application-ratio" variant="subtitle1" fontFamily="mabry-bold">
+                      {isLoading ? <Skeleton width="2rem" /> : `${applicationPercentage || 0}%`}
+                    </Typography>
+                  </Box>
+                  <LinearProgress
+                    sx={{
+                      bgcolor: '#e0e0e0',
+                      '& .MuiLinearProgress-bar': {
+                        bgcolor: 'var(--palette-description-color)',
+                      },
+                    }}
+                    variant="determinate"
+                    value={applicationPercentage || 0}
+                  />
+                </Box>
+              </Box>
+            </Card>
           </Box>
         </Box>
 
         {/* Tag Visualization */}
         <Box className={styles.visualizationWrapper} mt="2rem">
           <Box className={styles.dashboard}>
-
-          <Card className={styles.barContainer}>
-            <Box className={styles.barTitle}>
-              <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold' }}>
-                Persistent cache task Statistics <span style={{ color: '#8a8a8a' }}>by Tag</span>
-              </Typography>
-              <MuiTooltip title="Number of persistent cache tasks under different tag" placement="top">
-                <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
-              </MuiTooltip>
-            </Box>
-            <Bar options={barOptions} data={tagBar} />
-          </Card>
-
-          <Card className={styles.doughnutContainer}>
-            <Box>
-              <Box className={styles.doughnutTitle}>
-                <Typography variant="subtitle2" sx={{ fontFamily: 'mabry-bold' }}>
-                  Persistent cache tasks Statistics <span style={{ color: '#8a8a8a' }}>by Tag</span>
+            <Card className={styles.barContainer}>
+              <Box className={styles.barTitle}>
+                <Typography variant="subtitle1" sx={{ fontFamily: 'mabry-bold' }}>
+                  Persistent cache task Statistics <span style={{ color: '#8a8a8a' }}>by Tag</span>
                 </Typography>
                 <MuiTooltip title="Number of persistent cache tasks under different tag" placement="top">
                   <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
                 </MuiTooltip>
               </Box>
-              <Divider className={styles.divider} />
-              <Box className={styles.pieWrapper}>
-                <Pie options={doughnutOptions} data={tagDoughnut} />
-              </Box>
-            </Box>
-            <Box className={styles.tagContainer}>
-              <Success className={styles.tagIcon} />
-              <Box sx={{ width: '100%' }}>
-                <Box className={styles.tagContent}>
-                  <Typography variant="subtitle2" fontFamily="mabry-light">
-                    Tag
+              <Bar options={barOptions} data={tagBar} />
+            </Card>
+
+            <Card className={styles.doughnutContainer}>
+              <Box>
+                <Box className={styles.doughnutTitle}>
+                  <Typography variant="subtitle2" sx={{ fontFamily: 'mabry-bold' }}>
+                    Persistent cache tasks Statistics <span style={{ color: '#8a8a8a' }}>by Tag</span>
                   </Typography>
-                  <Typography id="tag-ratio" variant="subtitle1" fontFamily="mabry-bold">
-                    {isLoading ? <Skeleton width="2rem" /> : `${tagPercentage || 0}%`}
-                  </Typography>
+                  <MuiTooltip title="Number of persistent cache tasks under different tag" placement="top">
+                    <HelpOutlineOutlinedIcon className={styles.descriptionIcon} />
+                  </MuiTooltip>
                 </Box>
-                <LinearProgress
-                  sx={{
-                    bgcolor: '#e0e0e0',
-                    '& .MuiLinearProgress-bar': {
-                      bgcolor: 'var(--palette-description-color)',
-                    },
-                  }}
-                  variant="determinate"
-                  value={tagPercentage || 0}
-                />
+                <Divider className={styles.divider} />
+                <Box className={styles.pieWrapper}>
+                  <Pie options={doughnutOptions} data={tagDoughnut} />
+                </Box>
               </Box>
-            </Box>
-          </Card>
+              <Box className={styles.tagContainer}>
+                <Success className={styles.tagIcon} />
+                <Box sx={{ width: '100%' }}>
+                  <Box className={styles.tagContent}>
+                    <Typography variant="subtitle2" fontFamily="mabry-light">
+                      Tag
+                    </Typography>
+                    <Typography id="tag-ratio" variant="subtitle1" fontFamily="mabry-bold">
+                      {isLoading ? <Skeleton width="2rem" /> : `${tagPercentage || 0}%`}
+                    </Typography>
+                  </Box>
+                  <LinearProgress
+                    sx={{
+                      bgcolor: '#e0e0e0',
+                      '& .MuiLinearProgress-bar': {
+                        bgcolor: 'var(--palette-description-color)',
+                      },
+                    }}
+                    variant="determinate"
+                    value={tagPercentage || 0}
+                  />
+                </Box>
+              </Box>
+            </Card>
           </Box>
         </Box>
       </Box>

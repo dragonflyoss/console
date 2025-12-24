@@ -441,6 +441,11 @@ describe('Users', () => {
 
       cy.get('#save').click();
 
+      // Change success message.
+      cy.get('.MuiAlert-message').should('be.visible').and('have.text', 'Submission successful!');
+      cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
+      cy.get('.MuiAlert-message').should('not.exist');
+
       cy.intercept(
         {
           method: 'GET',
@@ -456,11 +461,6 @@ describe('Users', () => {
 
       cy.get('#action-lucy').click();
       cy.get('#edit-lucy').click();
-
-      // Change success message.
-      cy.get('.MuiAlert-message').should('be.visible').and('have.text', 'Submission successful!');
-      cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
-      cy.get('.MuiAlert-message').should('not.exist');
 
       // Check role.
       cy.get('#role-root').should('not.be.checked');
@@ -514,6 +514,7 @@ describe('Users', () => {
       cy.get('#role-root').click();
       cy.get('#save').click();
       cy.get('.MuiAlert-message').should('be.visible').and('have.text', 'Submission successful!');
+      cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
 
       cy.intercept(
         {

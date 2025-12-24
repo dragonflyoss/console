@@ -1761,7 +1761,7 @@ export default function ShowCluster() {
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box className={styles.featuresIconWrapper}>
                 <Box className={styles.featuresIconContainer}>
-                  <Schedule className={styles.featuresIcon} />
+                  <Schedule style={{width:'3rem',height:'3rem'}} className={styles.featuresIcon} />
                 </Box>
               </Box>
               <Box>

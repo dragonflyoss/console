@@ -54,7 +54,7 @@ import { ReactComponent as DetailRole } from '../../assets/images/user/detail-ro
 import { ReactComponent as Email } from '../../assets/images/user/email.svg';
 import { ReactComponent as Phone } from '../../assets/images/user/phone.svg';
 import { ReactComponent as Location } from '../../assets/images/user/location.svg';
-import { ReactComponent as CreatedAt } from '../../assets/images/user/created-at.svg';
+import { ReactComponent as CreatedAt } from '../../assets/images/job/preheat/created-at.svg';
 import { ReactComponent as UpdatedAt } from '../../assets/images/user/updated-at.svg';
 import { ReactComponent as Root } from '../../assets/images/user/root.svg';
 import { ReactComponent as Guest } from '../../assets/images/user/guest.svg';

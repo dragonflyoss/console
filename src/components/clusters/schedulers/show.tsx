@@ -15,7 +15,7 @@ import { ReactComponent as Status } from '../../../assets/images/cluster/schedul
 import { ReactComponent as Features } from '../../../assets/images/cluster/scheduler/features.svg';
 import { ReactComponent as Port } from '../../../assets/images/cluster/scheduler/port.svg';
 import { ReactComponent as CreatedAt } from '../../../assets/images/cluster/scheduler/created-at.svg';
-import { ReactComponent as UpdatedAt } from '../../../assets/images/cluster/scheduler/updated-at.svg';
+import { ReactComponent as UpdatedAt } from '../../../assets/images/user/updated-at.svg';
 import ErrorHandler from '../../error-handler';
 
 export default function Schedulers() {

@@ -40,7 +40,7 @@ import { ReactComponent as CreatedAt } from '../../../../assets/images/job/prehe
 import { ReactComponent as Failure } from '../../../../assets/images/job/preheat/failure.svg';
 import { ReactComponent as Pending } from '../../../../assets/images/job/preheat/pending.svg';
 import { ReactComponent as ErrorLog } from '../../../../assets/images/job/preheat/error-log.svg';
-import { ReactComponent as TaskID } from '../../../../assets/images/resource/task/task-id.svg';
+import { ReactComponent as TaskID } from '../../../../assets/images/cluster/id.svg';
 import { ReactComponent as Application } from '../../../../assets/images/resource/task/type.svg';
 import { ReactComponent as IP } from '../../../../assets/images/resource/task/ip.svg';
 import { ReactComponent as CheckLog } from '../../../../assets/images/resource/task/error-log.svg';

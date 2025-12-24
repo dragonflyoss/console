@@ -24,7 +24,7 @@ import { ReactComponent as Copy } from '../../assets/images/tokens/copy.svg';
 import { ReactComponent as Edit } from '../../assets/images/user/edit.svg';
 import { ReactComponent as Location } from '../../assets/images/cluster/location.svg';
 import { ReactComponent as IDC } from '../../assets/images/cluster/idc.svg';
-import { ReactComponent as Total } from '../../assets/images/cluster/total.svg';
+import { ReactComponent as Total } from '../../assets/images/cluster/peer/total.svg';
 import { ReactComponent as CIDRs } from '../../assets/images/cluster/cidrs.svg';
 import { ReactComponent as Hostnames } from '../../assets/images/cluster/hostnames.svg';
 import { ReactComponent as Delete } from '../../assets/images/cluster/delete.svg';

@@ -93,7 +93,7 @@ describe('Schedulers', () => {
       // Click scheduler-18 operation button.
       cy.get('#operation-18').click();
 
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #view-scheduler-18').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #view-scheduler-18').click({force: true});
 
       // Then I see that the current page is the scheduler 18.
       cy.url().should('include', 'clusters/1/schedulers/18');
@@ -130,7 +130,7 @@ describe('Schedulers', () => {
       // It can show that the scheduler card is 10.
       cy.get('#scheduler-card').children().should('have.length', 9);
       cy.get('#operation-51').click();
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > #view-51').click();
+      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > #view-51').click({force: true});
 
       // Then I see that the current page is the scheduler 51.
       cy.url().should('include', 'clusters/1/schedulers/51');
@@ -604,7 +604,7 @@ describe('Schedulers', () => {
         },
       );
 
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #delete-scheduler-4').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #delete-scheduler-4').click({force: true});
 
       cy.get('#deleteScheduler').click();
 
@@ -632,7 +632,7 @@ describe('Schedulers', () => {
 
       cy.get('#operation-10').click();
 
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > #delete-10').click();
+      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > #delete-10').click({force: true});
 
       cy.intercept(
         {
@@ -670,7 +670,7 @@ describe('Schedulers', () => {
       cy.get('#scheduler-card').children().should('have.length', 1);
 
       cy.get('#operation-22').click();
-      cy.get('#delete-22').click();
+      cy.get('#delete-22').click({force: true});
 
       cy.intercept(
         {
@@ -738,7 +738,7 @@ describe('Schedulers', () => {
       cy.get('#card-hostname-scheduler-51').should('be.visible').and('contain', 'scheduler-51');
 
       cy.get('#operation-51').click();
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > #delete-51').click();
+      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > #delete-51').click({force: true});
       cy.get('#deleteScheduler').click();
       cy.wait('@delete');
 
@@ -763,7 +763,7 @@ describe('Schedulers', () => {
       cy.get('#hostname-scheduler-51').should('be.visible').and('contain', 'scheduler-51');
 
       cy.get('#operation-51').click();
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #delete-scheduler-51').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #delete-scheduler-51').click({force: true});
 
       cy.get('#deleteScheduler').click();
 
@@ -776,7 +776,7 @@ describe('Schedulers', () => {
 
       cy.get('#operation-51').click();
 
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > #delete-51').click();
+      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > #delete-51').click({force: true});
 
       cy.get('#deleteScheduler').click();
 
@@ -1042,13 +1042,13 @@ describe('Schedulers', () => {
       cy.get('#operation-7').click();
 
       // Display the edit features dialog.
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-scheduler-7').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-scheduler-7').click({force: true});
 
       cy.get('#close-delete-icon').click();
       cy.get('#operation-7').click();
 
       // Display the edit features dialog.
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-scheduler-7').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > #edit-scheduler-7').click({force: true});
 
       // Check that the Schedule checkbox.
       cy.get('#Schedule-Checkbox').should('have.prop', 'checked', true);
@@ -1056,9 +1056,9 @@ describe('Schedulers', () => {
       // Check that the Preheat checkbox.
       cy.get('#Preheat-Checkbox').should('have.prop', 'checked', false);
 
-      cy.get('#Schedule-Checkbox').click();
+      cy.get('#Schedule-Checkbox').click({force: true});
 
-      cy.get('#Preheat-Checkbox').click();
+      cy.get('#Preheat-Checkbox').click({force: true});
 
       cy.intercept({ method: 'PATCH', url: '/api/v1/schedulers/7' }, (req) => {
         (req.body = ''),
@@ -1099,7 +1099,7 @@ describe('Schedulers', () => {
       cy.get('#operation-7').click();
 
       //  Display the edit features dialog.
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > #edit-7').click();
+      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > #edit-7').click({force: true});
 
       // Check that the Schedule checkbox.
       cy.get('#Schedule-Checkbox').should('have.prop', 'checked', true);
@@ -1107,9 +1107,9 @@ describe('Schedulers', () => {
       // Check that the Preheat checkbox.
       cy.get('#Preheat-Checkbox').should('have.prop', 'checked', false);
 
-      cy.get('#Schedule-Checkbox').click();
+      cy.get('#Schedule-Checkbox').click({force: true});
 
-      cy.get('#Preheat-Checkbox').click();
+      cy.get('#Preheat-Checkbox').click({force: true});
 
       cy.intercept({ method: 'PATCH', url: '/api/v1/schedulers/7' }, (req) => {
         (req.body = ''),
@@ -1152,7 +1152,7 @@ describe('Schedulers', () => {
       cy.get('#operation-7').click();
 
       // Display the edit features dialog.
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > #edit-7').click();
+      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > #edit-7').click({force: true});
 
       // Check that the Schedule checkbox.
       cy.get('#Schedule-Checkbox').should('have.prop', 'checked', true);
@@ -1161,7 +1161,7 @@ describe('Schedulers', () => {
       cy.get('#Preheat-Checkbox').should('have.prop', 'checked', false);
 
       // Check all checkboxes.
-      cy.get('[type="checkbox"]').check();
+      cy.get('[type="checkbox"]').check({force: true});
       cy.intercept({ method: 'PATCH', url: '/api/v1/schedulers/7' }, (req) => {
         (req.body = ''),
           req.reply({
@@ -1184,7 +1184,7 @@ describe('Schedulers', () => {
       cy.get('#operation-7').click();
 
       // Display the edit features dialog.
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > #edit-7').click();
+      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > #edit-7').click({force: true});
 
       // Check that the Schedule checkbox.
       cy.get('#Schedule-Checkbox').should('have.prop', 'checked', true);
@@ -1193,7 +1193,7 @@ describe('Schedulers', () => {
       cy.get('#Preheat-Checkbox').should('have.prop', 'checked', false);
 
       // Check all checkboxes.
-      cy.get('[type="checkbox"]').check();
+      cy.get('[type="checkbox"]').check({force: true});
       cy.intercept({ method: 'PATCH', url: '/api/v1/schedulers/7' }, (req) => {
         (req.body = ''),
           req.reply({

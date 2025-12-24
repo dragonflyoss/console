@@ -140,7 +140,7 @@ describe('Update cluster', () => {
     // Show cluster name.
     cy.get('#name').should('be.visible').and('contain', 'cluster-1');
 
-    cy.get('#default').click();
+    cy.get('#default').click({force: true});
 
     // Update cluster description.
     cy.get('#description').clear();

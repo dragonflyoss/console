@@ -61,7 +61,7 @@ export default function JobGC() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [configs, setConfigs] = useState<getConfigsResponse[]>([]);
   const [jobUnit, setJobUnit] = useState('days');
   const [job, setJob] = useState(0);

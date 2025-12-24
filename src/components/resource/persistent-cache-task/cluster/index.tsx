@@ -34,7 +34,7 @@ import ErrorHandler from '../../../error-handler';
 export default function PersistentCacheTask() {
   const [cluster, setCluster] = useState<getClusterResponse[]>([]);
   const [errorMessage, setErrorMessage] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [clusterPage, setClusterPage] = useState(1);
   const [searchIconISLodaing, setSearchIconISLodaing] = useState(false);
@@ -200,8 +200,15 @@ export default function PersistentCacheTask() {
           />
         </Stack>
       </Box>
-      {isLoading ? (
-        <Box id="clustersCard" className={styles.loadingCard}>
+      {!isLoading && Array.isArray(clusterCount) && clusterCount.length === 0 ? (
+        <Card id="no-date" className={styles.noData}>
+          <IcContent className={styles.nodataIcon} />
+          <Typography id="no-date-text" variant="h6" className={styles.nodataText}>
+            You have no clusters.
+          </Typography>
+        </Card>
+      ) : isLoading ? (
+        <Box id="clustersCard" className={styles.cardCantainer}>
           <Card className={styles.card}>
             <Box p="1.2rem">
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -250,13 +257,6 @@ export default function PersistentCacheTask() {
             </Box>
           </Card>
         </Box>
-      ) : Array.isArray(clusterCount) && clusterCount.length === 0 ? (
-        <Card id="no-date" className={styles.noData}>
-          <IcContent className={styles.nodataIcon} />
-          <Typography id="no-date-text" variant="h6" className={styles.nodataText}>
-            You have no clusters.
-          </Typography>
-        </Card>
       ) : Array.isArray(allClusters) && allClusters.length === 0 ? (
         <Box id="no-clusters" className={styles.noClusterContainer}>
           <NoCluster className={styles.noClusterIcon} />

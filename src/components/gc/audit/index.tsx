@@ -60,7 +60,7 @@ export default function AuditGC() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [configs, setConfigs] = useState<getConfigsResponse[]>([]);
   const [auditLogTTL, setAuditUnit] = useState('');
   const [audit, setAudit] = useState(0);

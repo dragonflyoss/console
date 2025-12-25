@@ -18,6 +18,7 @@
     "lint": "react-scripts lint",
     "cy:open": "npx cypress open",
     "cy:run": "npx cypress run --headed",
+    "cy:run:parallel": "npx cypress run --headed",
     "coverage:verify": "npx nyc report --check-coverage true --lines 10"
   },
   "dependencies": {

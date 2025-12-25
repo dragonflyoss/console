@@ -8,7 +8,6 @@ jobs:
     strategy:
       matrix:
         containers: [1, 2, 3]
-      fail-fast: false
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -28,22 +27,17 @@ jobs:
           start: yarn start
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
+          command: npm run cy:run:parallel
         env:
           CI: true
-          SPLIT: 3
-          SPLIT_INDEX: ${{ matrix.containers - 1 }}
           DEBUG: 'cypress-split,find-cypress-specs'
+          SPLIT: ${{ strategy.job-total }}
+          SPLIT_INDEX: ${{ strategy.job-index }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_JOB: ${{ github.job }}
           
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-  # This job is used for branch protection rule
-  cypress-run-status:
-    runs-on: ubuntu-22.04
-    needs: cypress-run
-    if: always()
-    steps:
-      - name: Mark cypress-run as successful
-        run: echo "All Cypress tests completed successfully"

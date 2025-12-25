@@ -5,6 +5,9 @@ on: push
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        containers: [0, 1, 2]
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -24,7 +27,16 @@ jobs:
           start: yarn start
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
-
+          command: npm run cy:run:parallel
+        env:
+          CI: true
+          DEBUG: 'cypress-split,find-cypress-specs'
+          SPLIT: 3
+          SPLIT_INDEX: ${{ matrix.containers }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_JOB: ${{ github.job }}
+          
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         env:

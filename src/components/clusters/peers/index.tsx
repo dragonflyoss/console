@@ -33,7 +33,7 @@ import { Bar, Pie } from 'react-chartjs-2';
 import { getPeers, getPeersResponse, getSyncPeers } from '../../../lib/api';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useMemo } from 'react';
 import { MAX_PAGE_SIZE } from '../../../lib/constants';
 import styles from './inde.module.css';
 import { exportCSVFile } from '../../../lib/utils';
@@ -53,6 +53,7 @@ import { ReactComponent as Export } from '../../../assets/images/cluster/peer/ex
 import { ReactComponent as ExportFile } from '../../../assets/images/cluster/peer/export-file.svg';
 import { ReactComponent as Count } from '../../../assets/images/cluster/scheduler/number.svg';
 import ErrorHandler from '../../error-handler';
+import type { ChartOptions } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 Chart.defaults.font.family = 'mabry-light';
@@ -207,87 +208,116 @@ export default function Peer() {
     setExportGitCommit(filteredByCommit);
   }, [exportSelectedVersion, exportSelectedCommit, peer]);
 
-  const barOptions = {
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-    scales: {
-      x: {
-        grid: { color: 'rgba(0, 0, 0, 0)' },
-      },
-    },
+  const greenPalette = useMemo(
+    () =>
+      theme.palette.mode === 'dark'
+        ? ['#01A76F', '#5BE49B', '#C8FAD6', '#004B50', '#007868']
+        // istanbul ignore next
+        : [
+            'rgba(67,160,71,0.95)',
+            'rgba(76,175,80,0.9)',
+            'rgba(102,187,106,0.85)',
+            'rgba(129,199,132,0.8)',
+            'rgba(165,214,167,0.75)',
+          ],
+    [theme.palette.mode],
+  );
+// istanbul ignore next
+  const getGradient = (ctx: CanvasRenderingContext2D, isHover = false) => {
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    const colors =
+      theme.palette.mode === 'dark'
+      // istanbul ignore next
+        ? isHover
+          ? ['#00CB69', '#008C74']
+          : ['#00E676', '#009688']
+        : isHover
+        ? ['#5AA360', '#1E9088']
+        : ['#66BB6A', '#26A69A'];
+    gradient.addColorStop(0, colors[0]);
+    gradient.addColorStop(1, colors[1]);
+    return gradient;
   };
 
-  const doughnutOptions = {
-    plugins: {
-      legend: {
-        position: 'bottom' as 'bottom',
+  const barOptions: ChartOptions<'bar'> = useMemo(
+    () => ({
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: theme.palette.mode === 'dark' ? '#043B34' : '#E8F5E9',
+          titleColor: theme.palette.mode === 'dark' ? '#A5D6A7' : '#1B5E20',
+          bodyColor: theme.palette.mode === 'dark' ? '#B9F6CA' : '#2E7D32',
+          borderWidth: 1,
+          borderColor: theme.palette.mode === 'dark' ? '#1B5E20' : '#C8E6C9',
+          cornerRadius: 6,
+        },
       },
-    },
-  };
+      scales: {
+        x: { grid: { color: 'rgba(0,0,0,0)' }, ticks: { color: theme.palette.text.secondary } },
+        y: {
+          grid: { color: theme.palette.mode === 'dark' ? '#004D40' : '#E0F2F1' },
+          ticks: { color: theme.palette.text.secondary },
+        },
+      },
+      elements: { bar: { borderRadius: 6 } },
+      hover: { mode: 'nearest', intersect: true },
+      animation: { duration: 800, easing: 'easeOutQuart' },
+    }),
+    [theme.palette.mode, theme.palette.text.secondary],
+  );
 
-  const gitVersionBar = {
-    labels: gitVersion.map((item) => item.name),
+  const doughnutOptions: ChartOptions<'pie'> = useMemo(
+    () => ({
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { color: theme.palette.text.primary, padding: 12, font: { size: 13 } },
+        },
+        tooltip: {
+          backgroundColor: theme.palette.mode === 'dark' ? '#043B34' : '#E8F5E9',
+          titleColor: theme.palette.mode === 'dark' ? '#A5D6A7' : '#1B5E20',
+          bodyColor: theme.palette.mode === 'dark' ? '#B9F6CA' : '#2E7D32',
+        },
+      },
+      cutout: gitVersion.length === 1 ? '40%' : '68%',
+      animation: { animateRotate: true, duration: 1000, easing: 'easeOutCubic' },
+    }),
+    [theme.palette.mode, theme.palette.text.primary, gitVersion.length],
+  );
+
+  const createBarData = (data: { name: string; count: number }[], label: string) => ({
+    labels: data.map((i) => i.name),
     datasets: [
       {
-        data: gitVersion.map((item) => item.count),
-        backgroundColor: theme.palette.mode === 'dark' ? '#01A76F' : 'rgb(31, 125, 83)',
-        borderRadius: 5,
+        label,
+        data: data.map((i) => i.count),
+        backgroundColor: (ctx: any) => getGradient(ctx.chart.ctx),
+        // istanbul ignore next
+        hoverBackgroundColor: (ctx: any) => getGradient(ctx.chart.ctx, true),
+        borderRadius: 6,
         barPercentage: 0.6,
       },
     ],
-  };
+  });
 
-  const doughnutBackgroundColor = [
-    'rgb(31, 125, 83)',
-    'rgba(31, 125, 83,0.8)',
-    'rgba(31, 125, 83,0.6)',
-    'rgba(31, 125, 83,0.4)',
-    'rgba(31, 125, 83,0.2)',
-  ];
-
-  const darkDoughnutBackgroundColor = ['#01A76F', '#5BE49B', '#C8FAD6', '#004B50', '#007868'];
-
-  const gitVersionDoughnut = {
-    labels: gitVersion.map((item) => item.name),
+  const createDoughnutData = (data: { name: string; count: number }[], label: string) => ({
+    labels: data.map((i) => i.name),
     datasets: [
       {
-        label: 'Git Version',
-        data: gitVersion.map((item) => item.count),
-        backgroundColor: theme.palette.mode === 'dark' ? darkDoughnutBackgroundColor : doughnutBackgroundColor,
-        borderWidth: 0,
-        borderColor: 'rgba(255, 255, 255, 0.6)',
+        label,
+        data: data.map((i) => i.count),
+        backgroundColor: greenPalette,
+        borderWidth: 2,
+        borderColor: theme.palette.background.paper,
+        hoverOffset: 8,
       },
     ],
-  };
+  });
 
-  const gitCommitBar = {
-    labels: gitCommit.map((item) => item.name),
-    datasets: [
-      {
-        data: gitCommit.map((item) => item.count),
-        backgroundColor: theme.palette.mode === 'dark' ? '#01A76F' : 'rgb(31, 125, 83)',
-        borderWidth: 0,
-        borderRadius: 5,
-        barPercentage: 0.6,
-      },
-    ],
-  };
-
-  const gitCommitDoughnut = {
-    labels: gitCommit.map((item) => item.name),
-    datasets: [
-      {
-        label: 'Git Commit',
-        data: gitCommit.map((item) => item.count),
-        backgroundColor: theme.palette.mode === 'dark' ? darkDoughnutBackgroundColor : doughnutBackgroundColor,
-        borderWidth: 0,
-        borderColor: 'rgba(255, 255, 255, 0.6)',
-      },
-    ],
-  };
+  const gitVersionBar = createBarData(gitVersion, 'Git Version');
+  const gitVersionDoughnut = createDoughnutData(gitVersion, 'Git Version');
+  const gitCommitBar = createBarData(gitCommit, 'Git Commit');
+  const gitCommitDoughnut = createDoughnutData(gitCommit, 'Git Commit');
 
   const ExportCSV = async () => {
     setLoadingButton(true);

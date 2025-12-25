@@ -40,7 +40,7 @@ import { ReactComponent as ClusterID } from '../../assets/images/cluster/id.svg'
 import { ReactComponent as IcContent } from '../../assets/images/cluster/scheduler/ic-content.svg';
 import { ReactComponent as NoCluster } from '../../assets/images/cluster/no-cluster.svg';
 import { ReactComponent as Cluster } from '../../assets/images/cluster/cluster.svg';
-import { ReactComponent as Scheduler } from '../../assets/images/cluster/scheduler.svg';
+import { ReactComponent as Scheduler } from '../../assets/images/cluster/scheduler/tab-scheduler.svg';
 import { ReactComponent as SeedPeer } from '../../assets/images/cluster/seed-peer.svg';
 import ErrorHandler from '../error-handler';
 
@@ -360,29 +360,31 @@ export default function Clusters() {
       </Box>
       <Box>
         {isLoading ? (
-          <Box id="clustersCard" className={styles.loadingCard}>
-            <Card>
-              <Box className={styles.clusterNameWrapper}>
-                <Box display="flex" mb="0.5rem" alignItems="flex-start">
-                  <ClusterID className={styles.idIcon} />
-                  <Skeleton data-testid="isloading" sx={{ width: '1rem', ml: '0.4rem' }} />
+          <Box id="clustersCard" className={styles.cardCantainer}>
+            {Array.from({ length: 1 }).map((_, index) => (
+              <Card key={index} className={styles.card}>
+                <Box className={styles.clusterNameWrapper}>
+                  <Box display="flex" mb="0.5rem" alignItems="flex-start">
+                    <ClusterID className={styles.idIcon} />
+                    <Skeleton data-testid="isloading" sx={{ width: '1rem', ml: '0.4rem' }} />
+                  </Box>
+                  <Typography variant="h6" className={styles.nameText}>
+                    <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
+                  </Typography>
+                  <Box display="flex">
+                    <Skeleton data-testid="isloading" sx={{ width: '15rem' }} />
+                  </Box>
                 </Box>
-                <Typography variant="h6" className={styles.nameText}>
-                  <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
-                </Typography>
-                <Box display="flex">
-                  <Skeleton data-testid="isloading" sx={{ width: '15rem' }} />
+                <Divider className={styles.divider} />
+                <Box className={styles.clusterDefaultWrapper}>
+                  <Skeleton data-testid="isloading" sx={{ width: '4rem', height: '1.4rem', mb: '0.8rem' }} />
+                  <Box className={styles.creatTimeContainer}>
+                    <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
+                    <Skeleton variant="circular" width={40} height={40} />
+                  </Box>
                 </Box>
-              </Box>
-              <Divider className={styles.divider} />
-              <Box className={styles.clusterDefaultWrapper}>
-                <Skeleton data-testid="isloading" sx={{ width: '4rem', height: '1.4rem', mb: '0.8rem' }} />
-                <Box className={styles.creatTimeContainer}>
-                  <Skeleton data-testid="isloading" sx={{ width: '6rem' }} />
-                  <Skeleton variant="circular" width={40} height={40} />
-                </Box>
-              </Box>
-            </Card>
+              </Card>
+            ))}
           </Box>
         ) : Array.isArray(clusterCount) && clusterCount.length === 0 ? (
           <Card className={styles.noData}>

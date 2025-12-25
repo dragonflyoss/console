@@ -31,7 +31,7 @@ export default function Executions() {
   const [errorMessageText, setErrorMessageText] = useState('');
   const [executionsPage, setExecutionsPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState<string>('ALL');
   const [shouldPoll, setShouldPoll] = useState(false);
   const [openStatusSelect, setOpenStatusSelect] = useState(false);
@@ -165,7 +165,14 @@ export default function Executions() {
           </FormControl>
         </Box>
         <Divider />
-        {isLoading ? (
+        {!isLoading && executions && executions.length === 0 ? (
+          <Box id="no-executions" className={styles.noData}>
+            <IcContent className={styles.nodataIcon} />
+            <Typography variant="h6" className={styles.nodataText}>
+              You don't have any executions.
+            </Typography>
+          </Box>
+        ) : isLoading ? (
           <Box>
             <Box className={styles.isLoadingWrapper}>
               <Box className={styles.statusContainer}>
@@ -182,13 +189,6 @@ export default function Executions() {
                 <Skeleton data-testid="isloading" variant="circular" width="2em" height="2em" />
               </Box>
             </Box>
-          </Box>
-        ) : executions && executions.length === 0 ? (
-          <Box id="no-executions" className={styles.noData}>
-            <IcContent className={styles.nodataIcon} />
-            <Typography variant="h6" className={styles.nodataText}>
-              You don't have any executions.
-            </Typography>
           </Box>
         ) : (
           <Box id="executions-list">

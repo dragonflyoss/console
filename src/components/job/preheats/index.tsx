@@ -40,7 +40,7 @@ export default function Preheats() {
   const [errorMessage, setErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState('');
   const [preheatTotalPages, setPreheatTotalPages] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState<string>('ALL');
   const [shouldPoll, setShouldPoll] = useState(false);
   const [openStatusSelect, setOpenStatusSelect] = useState(false);
@@ -300,7 +300,14 @@ export default function Preheats() {
           </FormControl>
         </Box>
         <Divider />
-        {isLoading ? (
+        {!isLoading && allPreheats.length === 0 ? (
+          <Box className={styles.noData}>
+            <IcContent className={styles.nodataIcon} />
+            <Typography id="no-preheat" variant="h6" className={styles.nodataText}>
+              You don't have any preheat tasks.
+            </Typography>
+          </Box>
+        ) : isLoading ? (
           <Box>
             <Box sx={{ display: 'flex', p: '0.8rem', alignItems: 'center' }}>
               <Box className={styles.information}>
@@ -318,13 +325,6 @@ export default function Preheats() {
               </Box>
             </Box>
             <Divider />
-          </Box>
-        ) : allPreheats.length === 0 ? (
-          <Box className={styles.noData}>
-            <IcContent className={styles.nodataIcon} />
-            <Typography id="no-preheat" variant="h6" className={styles.nodataText}>
-              You don't have any preheat tasks.
-            </Typography>
           </Box>
         ) : (
           <Box id="preheats-list">

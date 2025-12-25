@@ -42,6 +42,7 @@ import { DarkMode, ShrinkDarkMode } from '../dark-layout';
 import Card from '../card';
 import _ from 'lodash';
 import ErrorHandler from '../error-handler';
+import GlobalAlertPortal from '../GlobalAlertPortal';
 
 interface MyContextType {
   user: getUserResponse;
@@ -88,9 +89,9 @@ export default function Layout(props: any) {
   const [pageLoding, setPageLoding] = useState(false);
   const [anchorElement, setAnchorElement] = useState(null);
   const [firstLogin, setFirstLogin] = useState(false);
-  const [expandDeveloper, setExpandDeveloper] = useState(false);
-  const [expandJob, setExpandJob] = useState(false);
-  const [expandResource, setExpandResource] = useState(false);
+  const [expandDeveloper, setExpandDeveloper] = useState(() => localStorage.getItem('expandDeveloper') === 'true');
+  const [expandJob, setExpandJob] = useState(() => localStorage.getItem('expandJob') === 'true');
+  const [expandResource, setExpandResource] = useState(() => localStorage.getItem('expandResource') === 'true');
   const [progress, setProgress] = useState(0);
   const [expandedMenu, setExpandedMenu] = useState<any | null>(null);
   const [user, setUser] = useState<getUserResponse>({
@@ -106,76 +107,71 @@ export default function Layout(props: any) {
     location: '',
     bio: '',
   });
-  const [compactLayout, setCompactLayout] = useState(() => {
-    const storedValue = localStorage.getItem('compactLayout');
-    return storedValue === 'true';
-  });
+  const [compactLayout, setCompactLayout] = useState(() => localStorage.getItem('compactLayout') === 'true');
 
   const openProfile = Boolean(anchorElement);
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    (async function () {
+    const loadUserData = async () => {
       try {
-        setPageLoding(true);
-        setProgress(0);
-
-        const interval = setInterval(() => {
-          setProgress((prev) => {
-            if (prev >= 30) {
-              clearInterval(interval);
-              return prev;
-            }
-            return prev + 10;
-          });
-        }, 10);
-
         const payload = getJwtPayload();
         setPageTitle(location.pathname);
 
-        if (payload?.id) {
-          const user = await getUser(payload?.id);
-          const role = localStorage.getItem('role');
-
-          if (role) {
-            setRole(role);
-          } else {
-            const userRoles = await getUserRoles(payload?.id);
-            const role = userRoles.includes(ROLE_ROOT) ? ROLE_ROOT : ROLE_GUEST;
-
-            setRole(role);
-            localStorage.setItem('role', role);
-          }
-
-          setUser(user);
-
-          clearInterval(interval);
-          setProgress(30);
-
-          const secondInterval = setInterval(() => {
-            setProgress((prev) => {
-              if (prev > 200) {
-                clearInterval(secondInterval);
-                setPageLoding(false);
-                return prev;
-              }
-              return prev + 10;
-            });
-          }, 20);
-        } else {
+        if (!payload?.id) {
           setPageLoding(false);
           navigate('/signin');
+          return;
         }
-      } catch (error) {
-        if (error instanceof Error) {
-          setPageLoding(false);
-          setErrorMessage(true);
-          setErrorMessageText(error.message);
-        }
-      }
-    })();
 
+        const cachedUser = localStorage.getItem('cachedUser');
+        const cachedRole = localStorage.getItem('role');
+        const cachedUserId = localStorage.getItem('cachedUserId');
+
+        if (cachedUser && cachedRole && cachedUserId === payload.id.toString()) {
+          setUser(JSON.parse(cachedUser));
+          setRole(cachedRole);
+          setPageLoding(false);
+          return;
+        }
+
+        setPageLoding(true);
+        setProgress(0);
+
+        const progressInterval = setInterval(() => {
+          setProgress(prev => (prev >= 90 ? prev : prev + 10));
+        }, 50);
+
+        const [userData, userRoles] = await Promise.all([
+          getUser(payload.id),
+          getUserRoles(payload.id)
+        ]);
+
+        const userRole = localStorage.getItem('role') || 
+                       (userRoles.includes(ROLE_ROOT) ? ROLE_ROOT : ROLE_GUEST);
+
+        setUser(userData);
+        setRole(userRole);
+        setPageLoding(false);
+
+        localStorage.setItem('cachedUser', JSON.stringify(userData));
+        localStorage.setItem('cachedUserId', payload.id.toString());
+        if (!localStorage.getItem('role')) {
+          localStorage.setItem('role', userRole);
+        }
+
+        clearInterval(progressInterval);
+        setProgress(100);
+
+      } catch (error) {
+        setPageLoding(false);
+        setErrorMessage(true);
+        setErrorMessageText(error instanceof Error ? error.message : 'Failed to load user data');
+      }
+    };
+
+    loadUserData();
     if (location.state?.firstLogin) {
       setFirstLogin(true);
     }
@@ -186,11 +182,15 @@ export default function Layout(props: any) {
   };
 
   useEffect(() => {
-    localStorage.setItem('compactLayout', compactLayout ? 'true' : 'false');
-  }, [compactLayout]);
+    localStorage.setItem('compactLayout', String(compactLayout));
+    localStorage.setItem('expandDeveloper', String(expandDeveloper));
+    localStorage.setItem('expandJob', String(expandJob));
+    localStorage.setItem('expandResource', String(expandResource));
+  }, [compactLayout, expandDeveloper, expandJob, expandResource]);
 
   const handleUserUpdate = (newUser: getUserResponse) => {
     setUser(newUser);
+    localStorage.setItem('cachedUser', JSON.stringify(newUser));
   };
 
   const menu = [
@@ -279,6 +279,9 @@ export default function Layout(props: any) {
 
     try {
       await signOut();
+      localStorage.removeItem('cachedUser');
+      localStorage.removeItem('cachedUserId');
+      localStorage.removeItem('role');
       setPageLoding(true);
       navigate('/signin');
     } catch (error) {
@@ -308,18 +311,24 @@ export default function Layout(props: any) {
         ) : (
           <></>
         )}
-        <Snackbar
-          open={firstLogin}
-          autoHideDuration={60000}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          onClose={handleClose}
-          sx={{ alignItems: 'center' }}
-          id="change-password-warning"
-        >
-          <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
-            Please change the password in time for the first login!
-          </Alert>
-        </Snackbar>
+        <GlobalAlertPortal>
+          <Snackbar
+            open={firstLogin}
+            autoHideDuration={60000}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            onClose={handleClose}
+            sx={{ 
+              alignItems: 'center',
+              pointerEvents: 'auto',
+              zIndex: 9999,
+            }}
+            id="change-password-warning"
+          >
+            <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+              Please change the password in time for the first login!
+            </Alert>
+          </Snackbar>
+        </GlobalAlertPortal>
         <ErrorHandler errorMessage={errorMessage} errorMessageText={errorMessageText} onClose={handleClose} />
         {location.pathname === '/signin' || location.pathname === '/signup' ? (
           <main>{props.children}</main>

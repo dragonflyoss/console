@@ -109,7 +109,7 @@ describe('Persistent Cache Tasks', () => {
       cy.get('#scheduler-cluster-1').click();
 
       cy.get('#operation-0').click();
-      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #view-3810320977').click();
+      cy.get(':nth-child(11) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #view-3810320977').click({force:true});
 
       // Then I see that the current page is the persistent cache task details!
       cy.url().should('include', '/resource/persistent-cache-task/clusters/1/3810320977');
@@ -122,7 +122,7 @@ describe('Persistent Cache Tasks', () => {
 
       cy.get('#operation-3810320977').click();
 
-      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #view-3810320977').click();
+      cy.get(':nth-child(12) > .MuiPaper-root > .MuiList-root > .information_menu__CXV1V > #view-3810320977').click({force:true});
 
       // Then I see that the current page is the persistent cache task details!
       cy.url().should('include', '/resource/persistent-cache-task/clusters/1/3810320977');

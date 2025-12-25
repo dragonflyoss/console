@@ -29,6 +29,7 @@ import PersistentCacheTasks from '../components/resource/persistent-cache-task';
 import PersistentCacheTask from '../components/resource/persistent-cache-task/show';
 import Audit from '../components/audit';
 import GC from '../components/gc';
+import TransitionRoute from '../components/TransitionRoute';
 import { useState, useEffect } from 'react';
 import { getJwtPayload } from '../lib/utils';
 import { getUserRoles } from '../lib/api';
@@ -63,40 +64,38 @@ function Main() {
   }, [location]);
 
   return (
-    <Routes>
+    <Routes location={location} key={location.pathname}>
       <Route path="/" element={<Navigate to="/clusters" replace />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route element={<Layout />}>
-        <Route path="/clusters" element={<Clusters />} />
-        <Route path="/clusters/new" element={<NewCluster />} />
-        <Route path="/clusters/:id/edit" element={<EditCluster />} />
+        <Route path="/clusters" element={<TransitionRoute><Clusters /></TransitionRoute>} />
+        <Route path="/clusters/new" element={<TransitionRoute><NewCluster /></TransitionRoute>} />
+        <Route path="/clusters/:id/edit" element={<TransitionRoute><EditCluster /></TransitionRoute>} />
         <Route element={<ShowCluster />}>
-          <Route path="/clusters/:id" element={<Cluster />} />
-          <Route path="/clusters/:id/schedulers" element={<Schedulers />} />
-          {/* <Route path="/clusters/:id/seed-peers" element={<SeedPeers />} /> */}
-          <Route path="/clusters/:id/peers" element={<Peers />} />
+          <Route path="/clusters/:id" element={<TransitionRoute><Cluster /></TransitionRoute>} />
+          <Route path="/clusters/:id/schedulers" element={<TransitionRoute><Schedulers /></TransitionRoute>} />
+          <Route path="/clusters/:id/peers" element={<TransitionRoute><Peers /></TransitionRoute>} />
         </Route>
-        <Route path="/clusters/:id/schedulers/:id" element={<ShowScheduler />} />
-        {/* <Route path="/clusters/:id/seed-peers/:id" element={<ShowSeedPeer />} /> */}
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/developer/personal-access-tokens" element={<Tokens />} />
-        <Route path="/developer/personal-access-tokens/new" element={<NewTokens />} />
-        <Route path="/developer/personal-access-tokens/:id" element={<EditTokens />} />
-        <Route path="/jobs/preheats" element={<Preheats />} />
-        <Route path="/jobs/preheats/new" element={<NewPreheat />} />
-        <Route path="/jobs/preheats/:id" element={<ShowPreheat />} />
-        <Route path="/resource/task/:key" element={<Task />} />
-        <Route path="/resource/task/executions/:id" element={<ShowTask />} />
-        <Route path="/resource/persistent-cache-task" element={<PersistentCacheTasksCluster />} />
-        <Route path="/resource/persistent-cache-task/clusters/:id" element={<PersistentCacheTasks />} />
-        <Route path="/resource/persistent-cache-task/clusters/:id/:id" element={<PersistentCacheTask />} />
-        <Route path="/audit" element={<Audit />} />
-        <Route path="/gc/:key" element={<GC />} />
-        {isRoot && <Route path="/users" element={<Users />} />}
-        <Route path="/users/new" element={<NewUser />} />
+        <Route path="/clusters/:id/schedulers/:id" element={<TransitionRoute><ShowScheduler /></TransitionRoute>} />
+        <Route path="/profile" element={<TransitionRoute><Profile /></TransitionRoute>} />
+        <Route path="/developer/personal-access-tokens" element={<TransitionRoute><Tokens /></TransitionRoute>} />
+        <Route path="/developer/personal-access-tokens/new" element={<TransitionRoute><NewTokens /></TransitionRoute>} />
+        <Route path="/developer/personal-access-tokens/:id" element={<TransitionRoute><EditTokens /></TransitionRoute>} />
+        <Route path="/jobs/preheats" element={<TransitionRoute><Preheats /></TransitionRoute>} />
+        <Route path="/jobs/preheats/new" element={<TransitionRoute><NewPreheat /></TransitionRoute>} />
+        <Route path="/jobs/preheats/:id" element={<TransitionRoute><ShowPreheat /></TransitionRoute>} />
+        <Route path="/resource/task/:key" element={<TransitionRoute><Task /></TransitionRoute>} />
+        <Route path="/resource/task/executions/:id" element={<TransitionRoute><ShowTask /></TransitionRoute>} />
+        <Route path="/resource/persistent-cache-task" element={<TransitionRoute><PersistentCacheTasksCluster /></TransitionRoute>} />
+        <Route path="/resource/persistent-cache-task/clusters/:id" element={<TransitionRoute><PersistentCacheTasks /></TransitionRoute>} />
+        <Route path="/resource/persistent-cache-task/clusters/:id/:id" element={<TransitionRoute><PersistentCacheTask /></TransitionRoute>} />
+        <Route path="/audit" element={<TransitionRoute><Audit /></TransitionRoute>} />
+        <Route path="/gc/:key" element={<TransitionRoute><GC /></TransitionRoute>} />
+        {isRoot && <Route path="/users" element={<TransitionRoute><Users /></TransitionRoute>} />}
+        <Route path="/users/new" element={<TransitionRoute><NewUser /></TransitionRoute>} />
       </Route>
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={<TransitionRoute><NotFound /></TransitionRoute>} />
     </Routes>
   );
 }

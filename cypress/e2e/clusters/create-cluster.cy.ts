@@ -64,7 +64,7 @@ describe('Create cluster', () => {
     cy.url().should('include', '/clusters/new');
 
     // Add Information.
-    cy.get('.PrivateSwitchBase-input').click();
+    cy.get('.PrivateSwitchBase-input').click({force: true});
     cy.get('#name').type('cluster-17');
     cy.get('#description').type('Add new cluster case');
     cy.get('#location').type('China|Hang|Zhou');

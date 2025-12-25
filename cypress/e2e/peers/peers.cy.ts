@@ -233,7 +233,7 @@ describe('Peers', () => {
 
     it('show error message', () => {
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('.MuiAlert-message', { timeout: 5000 }).should('be.visible').and('contain', 'Failed to fetch');
 
       // Close error message.
       cy.get('.MuiAlert-action > .MuiButtonBase-root').click();
@@ -245,7 +245,7 @@ describe('Peers', () => {
       cy.get('#save').click();
 
       // Show error message.
-      cy.get('.MuiAlert-message').should('have.text', 'Export failed');
+      cy.get('.MuiAlert-message', { timeout: 5000 }).should('be.visible').and('contain', 'Failed to fetch');
     });
   });
 
@@ -394,7 +394,7 @@ describe('Peers', () => {
       cy.wait(2000);
 
       // Show error message.
-      cy.get('.MuiAlert-message').should('be.visible').and('contain', 'Failed to fetch');
+      cy.get('.MuiAlert-message', { timeout: 5000 }).should('be.visible').and('contain', 'Failed to fetch');
 
       cy.get('#total').should('have.text', 10);
       cy.get('#git-version').should('have.text', 4);

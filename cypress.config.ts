@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress';
+import cypressSplit from 'cypress-split';
 
 export default defineConfig({
   // setupNodeEvents can be defined in either
@@ -6,6 +7,7 @@ export default defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
       require('@cypress/code-coverage/task')(on, config);
+      cypressSplit(on, config);
       // include any other plugin code...
 
       // It's IMPORTANT to return the config object

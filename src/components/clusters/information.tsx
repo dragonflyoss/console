@@ -447,7 +447,7 @@ export default function Information() {
             <Card className={styles.cidrsContainer}>
               <Box className={styles.scopesTitle}>
                 <Box className={styles.cidrsTitle}>
-                  <IDC className={styles.scopesIcon} />
+                  <IDC style={{width:'1.2rem',height:'1.2rem'}}  className={styles.scopesIcon} />
                   <Typography variant="body2" component="p" className={styles.scopesLable}>
                     IDC
                   </Typography>

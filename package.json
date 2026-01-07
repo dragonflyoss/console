@@ -12,6 +12,7 @@
   "repository": "git@github.com:dragonflyoss/console.git",
   "scripts": {
     "start": "react-app-rewired -r @cypress/instrument-cra start",
+    "start:dev":"export REACT_APP_API_URL=http://fe.alipay.net:8080&&PORT=3000 HOST=fe.alipay.net yarn start",
     "build": "BUILD_PATH='./dist' react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",

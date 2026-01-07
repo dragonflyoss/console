@@ -2,6 +2,7 @@ import clusters from '../../fixtures/clusters/clusters.json';
 import seedPeers from '../../fixtures/seed-peers/seed-peers.json';
 import schedulers from '../../fixtures/schedulers/schedulers.json';
 
+//test menu
 describe('Menu', () => {
   beforeEach(() => {
     cy.viewport(1440, 1080);

@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        containers: [0, 1, 2, 3, 4]
+        containers: [0, 1, 2, 3, 4, 5, 6, 7]
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -31,7 +31,7 @@ jobs:
         env:
           CI: true
           DEBUG: 'cypress-split,find-cypress-specs'
-          SPLIT: 5
+          SPLIT: 8
           SPLIT_INDEX: ${{ matrix.containers }}
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}

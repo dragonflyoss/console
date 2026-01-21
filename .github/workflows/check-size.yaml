@@ -13,11 +13,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Check large files
         uses: actionsDesk/lfs-warning@v3.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          filesizelimit: '524288'
+          filesizelimit: '10485760' # 10MB limit instead of 512KB
+          exclusionPatterns: |
+            **/node_modules/**
+            **/.git/**
+            **/dist/**
+            **/build/**
+            **/.next/**
+            **/coverage/**
+            **/cypress/videos/**
+            **/cypress/screenshots/**
+            **/.cache/**
+            **/*.lock

@@ -1,0 +1,45 @@
+#!/bin/bash
+# 预提交钩子 - 检查大文件
+
+MAX_FILE_SIZE=10485760  # 10MB in bytes
+
+# 获取将要提交的文件列表
+files=$(git diff --cached --name-only --diff-filter=A)
+
+if [ -z "$files" ]; then
+    exit 0
+fi
+
+# 检查每个文件的大小
+for file in $files; do
+    if [ -f "$file" ]; then
+        file_size=$(stat -c%s "$file" 2>/dev/null || stat -f%z "$file" 2>/dev/null || echo 0)
+        
+        if [ "$file_size" -gt "$MAX_FILE_SIZE" ]; then
+            echo "❌ 错误: 文件 '$file' 大小为 $(($file_size / 1024 / 1024))MB，超过了限制 10MB"
+            echo "💡 建议:"
+            echo "   1. 使用 Git LFS: git lfs track '$file'"
+            echo "   2. 或者从提交中移除该文件"
+            echo "   3. 检查 .gitignore 是否正确配置"
+            exit 1
+        fi
+    fi
+done
+
+# 检查node_modules是否被意外添加
+if echo "$files" | grep -q "^node_modules/"; then
+    echo "❌ 错误: node_modules 目录不应该被提交到git"
+    echo "💡 建议: 将 node_modules/ 添加到 .gitignore 文件中"
+    exit 1
+fi
+
+# 检查构建产物是否被意外添加
+build_files=$(echo "$files" | grep -E "\.(zip|tar\.gz|tgz|mp4|mov|avi|psd|ai|sketch)$" || true)
+if [ -n "$build_files" ]; then
+    echo "⚠️  警告: 检测到以下大文件类型:"
+    echo "$build_files"
+    echo "💡 建议: 考虑使用 Git LFS 或将这些文件添加到 .gitignore"
+fi
+
+echo "✅ 文件大小检查通过"
+exit 0

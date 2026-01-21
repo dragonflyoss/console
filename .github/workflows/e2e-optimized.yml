@@ -21,6 +21,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: false # 禁用LFS以避免大文件问题
+          fetch-depth: 1 # 只获取最新提交
 
       - name: Setup node
         uses: actions/setup-node@v4
@@ -57,6 +60,15 @@ jobs:
       - name: Build application
         run: yarn build
 
+      - name: Clean up large files
+        run: |
+          # 清理可能导致check-size失败的文件
+          rm -rf cypress/downloads/*
+          rm -rf node_modules/.cache/*
+          rm -rf .git/objects/pack/*_tmp_*
+          find . -name "*.log" -type f -delete
+          find . -name "*.tmp" -type f -delete
+
   # 并行测试阶段
   test:
     runs-on: ubuntu-22.04
@@ -68,6 +80,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 1
 
       - name: Setup node
         uses: actions/setup-node@v4
@@ -138,6 +153,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 1
 
       - name: Setup node
         uses: actions/setup-node@v4

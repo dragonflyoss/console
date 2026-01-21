@@ -8,10 +8,6 @@ jobs:
     strategy:
       matrix:
         containers: [0, 1, 2, 3, 4]
-    env:
-      NODE_ENV: production
-      YARN_ENABLE_LOCKFILE: false
-      YARN_ENABLE_IMMUTABLE_INSTALLS: false
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -21,31 +17,17 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: deps-${{ runner.os }}-${{ hashFiles('package.json') }}-${{ github.sha }}
-          restore-keys: |
-            deps-${{ runner.os }}-${{ hashFiles('package.json') }}-
-
       - name: Install dependencies
-        run: yarn install --no-lockfile
+        run: yarn install --force
 
-      - name: Build application
-        run: yarn build
-        env:
-          NODE_ENV: production
-          GENERATE_SOURCEMAP: false
-
-      - name: Start server
-        run: yarn start &
-
-      - name: Wait for server
-        run: npx wait-on http://localhost:3000 --timeout 120000
-
-      - name: Run Cypress tests
-        run: yarn cy:run:parallel
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          build: yarn build
+          start: yarn start
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+          command: npm run cy:run:parallel
         env:
           CI: true
           DEBUG: 'cypress-split,find-cypress-specs'

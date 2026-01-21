@@ -15,7 +15,12 @@ export default defineConfig({
       return config;
     },
     baseUrl: 'http://localhost:3000',
+    video: false,
+    // screenshot: false,
+    viewportWidth: 1280,
+    viewportHeight: 720,
   },
-  defaultCommandTimeout: 15000,
-  responseTimeout: 60000,
+  defaultCommandTimeout: 10000,
+  responseTimeout: 30000,
+  pageLoadTimeout: 60000,
 });

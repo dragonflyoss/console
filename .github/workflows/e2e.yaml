@@ -16,9 +16,21 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '18.x'
+          cache: 'yarn'
+
+      - name: Cache build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ~/.cache
+            node_modules/.cache
+          key: ${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
 
       - name: Install dependencies
-        run: yarn install --force
+        run: yarn install --frozen-lockfile --prefer-offline
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
@@ -28,6 +40,8 @@ jobs:
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
           command: npm run cy:run:parallel
+          browser: chrome
+          record: false
         env:
           CI: true
           DEBUG: 'cypress-split,find-cypress-specs'

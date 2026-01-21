@@ -12,6 +12,7 @@ jobs:
       YARN_ENABLE_IMMUTABLE_INSTALLS: false
       YARN_NODE_LINKER: node-modules
       YARN_ENABLE_PROGRESS_BARS: false
+      YARN_ENABLE_LOCKFILE: false
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -20,7 +21,6 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '18.x'
-          cache: 'yarn'
 
       - name: Cache yarn cache
         uses: actions/cache@v4
@@ -28,12 +28,12 @@ jobs:
           path: |
             ~/.cache/yarn
             node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
 
       - name: Install dependencies
-        run: yarn install --immutable --inline-builds --mode=skip-build
+        run: yarn install --no-lockfile --silent
 
       - name: Build application
         run: yarn build

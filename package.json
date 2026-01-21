@@ -20,6 +20,8 @@
     "cy:open": "npx cypress open",
     "cy:run": "npx cypress run --headed",
     "cy:run:parallel": "npx cypress run --headed",
+    "cy:run:fast": "npx cypress run --browser chrome --config video=false,screenshot=false",
+    "cy:run:smoke": "npx cypress run --spec 'cypress/e2e/smoke/**/*.cy.js' --browser chrome --config video=false,screenshot=false",
     "coverage:verify": "npx nyc report --check-coverage true --lines 10"
   },
   "dependencies": {

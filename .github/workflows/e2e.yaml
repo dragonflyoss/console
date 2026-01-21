@@ -1,43 +1,92 @@
 name: E2E Test
 
-on: push
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
     strategy:
+      fail-fast: false
       matrix:
-        containers: [0, 1, 2]
+        containers: [0, 1, 2, 3]
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Setup node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '18'
+          cache: 'yarn'
+
+      - name: Cache Cypress binary
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-cypress-
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            ~/.cache/yarn
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
 
       - name: Install dependencies
-        run: yarn install --force
+        run: yarn install --frozen-lockfile --prefer-offline
+
+      - name: Cache build
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next
+            build
+            dist
+          key: build-${{ runner.os }}-${{ hashFiles('**/yarn.lock', '**/package.json', 'src/**', 'public/**') }}
+          restore-keys: |
+            build-${{ runner.os }}-
+
+      - name: Build application
+        run: yarn build
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          build: yarn build
+          install: false
+          build: echo "Build cached, skipping"
           start: yarn start
           wait-on: 'http://localhost:3000'
-          wait-on-timeout: 120
+          wait-on-timeout: 60
           command: npm run cy:run:parallel
+          browser: chrome
+          record: true
+          parallel: true
         env:
           CI: true
           DEBUG: 'cypress-split,find-cypress-specs'
-          SPLIT: 3
+          SPLIT: 4
           SPLIT_INDEX: ${{ matrix.containers }}
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
           GITHUB_JOB: ${{ github.job }}
-          
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
+        if: always()
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

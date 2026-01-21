@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Cache Cypress binary
         uses: actions/cache@v4
@@ -40,13 +40,13 @@ jobs:
         with:
           path: |
             node_modules
-            ~/.cache/yarn
-          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+            ~/.npm
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
             node-modules-${{ runner.os }}-
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --prefer-offline
+        run: npm ci
 
       - name: Cache build
         uses: actions/cache@v4
@@ -55,19 +55,19 @@ jobs:
             .next
             build
             dist
-          key: build-${{ runner.os }}-${{ hashFiles('**/yarn.lock', '**/package.json', 'src/**', 'public/**') }}
+          key: build-${{ runner.os }}-${{ hashFiles('**/package.json', 'src/**', 'public/**') }}
           restore-keys: |
             build-${{ runner.os }}-
 
       - name: Build application
-        run: yarn build
+        run: npm run build
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
           install: false
           build: echo "Build cached, skipping"
-          start: yarn start
+          start: npm start
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 60
           command: npm run cy:run:parallel

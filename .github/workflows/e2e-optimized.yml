@@ -73,7 +73,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Restore Cypress binary cache
         uses: actions/cache@v4
@@ -86,11 +86,11 @@ jobs:
         with:
           path: |
             node_modules
-            ~/.cache/yarn
-          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+            ~/.npm
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/package.json') }}
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --prefer-offline
+        run: npm ci
 
       - name: Restore build cache
         uses: actions/cache@v4
@@ -99,7 +99,7 @@ jobs:
             .next
             build
             dist
-          key: build-${{ runner.os }}-${{ hashFiles('**/yarn.lock', '**/package.json', 'src/**', 'public/**') }}
+          key: build-${{ runner.os }}-${{ hashFiles('**/package.json', 'src/**', 'public/**') }}
 
       - name: Cypress run
         uses: cypress-io/github-action@v6

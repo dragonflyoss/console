@@ -29,16 +29,23 @@ jobs:
           restore-keys: |
             deps-${{ runner.os }}-${{ hashFiles('package.json') }}-
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          build: yarn build
-          start: yarn start
-          wait-on: 'http://localhost:3000'
-          wait-on-timeout: 120
-          command: yarn cy:run:parallel
-          browser: chrome
-          record: false
+      - name: Install dependencies
+        run: yarn install --no-lockfile
+
+      - name: Build application
+        run: yarn build
+        env:
+          NODE_ENV: production
+          GENERATE_SOURCEMAP: false
+
+      - name: Start server
+        run: yarn start &
+
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000 --timeout 120000
+
+      - name: Run Cypress tests
+        run: yarn cy:run:parallel
         env:
           CI: true
           DEBUG: 'cypress-split,find-cypress-specs'

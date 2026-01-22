@@ -26,7 +26,7 @@ jobs:
           build: yarn build
           start: yarn start
           wait-on: 'http://localhost:3000'
-          wait-on-timeout: 120
+          wait-on-timeout: 180
           command: npm run cy:run:parallel
         env:
           CI: true

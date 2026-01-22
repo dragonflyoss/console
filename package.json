@@ -12,14 +12,13 @@
   "repository": "git@github.com:dragonflyoss/console.git",
   "scripts": {
     "start": "react-app-rewired -r @cypress/instrument-cra start",
-    "start:dev":"export REACT_APP_API_URL=http://fe.alipay.net:8080&&PORT=3000 HOST=fe.alipay.net yarn start",
     "build": "BUILD_PATH='./dist' react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "lint": "react-scripts lint",
     "cy:open": "npx cypress open",
     "cy:run": "npx cypress run --headed",
-    "cy:run:parallel": "npx cypress run --headed --browser chrome",
+    "cy:run:parallel": "npx cypress run --headed",
     "coverage:verify": "npx nyc report --check-coverage true --lines 10"
   },
   "dependencies": {

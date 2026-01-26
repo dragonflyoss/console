@@ -2,6 +2,7 @@ import clusters from '../../fixtures/clusters/clusters.json';
 import seedPeers from '../../fixtures/seed-peers/seed-peers.json';
 import schedulers from '../../fixtures/schedulers/schedulers.json';
 
+//test menu
 describe('Menu', () => {
   beforeEach(() => {
     cy.viewport(1440, 1080);
@@ -236,13 +237,18 @@ describe('Menu', () => {
       // Then I see that the current page is the task!
       cy.url().should('include', '/resource/task/clear');
 
-      cy.get('#resource').click();
-      cy.get('#persistent-cache-task').click();
+      // Expand menu before accessing persistent-cache-task
+      cy.get('#expand').should('be.visible').click();
+      cy.get('#closure').should('be.visible');
+
+      cy.get('#resource').should('be.visible').click();
+      cy.get('#persistent-cache-task').should('be.visible').click();
 
       // Then I see that the current page is the task persistent cache!
       cy.url().should('include', '/resource/persistent-cache-task');
 
-      // Go to user page.
+      // Collapse menu again for users page
+      cy.get('#closure').should('exist').click();
       cy.get('#users').click();
 
       // Then I see that the current page is the users!

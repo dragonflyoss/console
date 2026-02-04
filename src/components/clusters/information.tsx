@@ -218,7 +218,7 @@ export default function Information() {
             <Box className={styles.clusterWrap}>
               <Box className={styles.clusterTitle}>
                 <Typography variant="body2" component="div" className={styles.configLable}>
-                  Set as default cluster
+                  Set as Default Cluster
                 </Typography>
                 <MuiTooltip
                   title="When peer does not find a matching cluster based on scopes, the default cluster will be used."
@@ -253,7 +253,7 @@ export default function Information() {
             <Box className={styles.clusterWrap}>
               <Box className={styles.clusterTitle}>
                 <Typography variant="body2" component="div" className={styles.configLable}>
-                  Scheduler cluster ID
+                  Scheduler Cluster ID
                 </Typography>
                 <MuiTooltip
                   title="When the scheduler is deployed, the schedulerClusterID must be filled with this scheduler cluster ID in scheduler configuration. In this way, the scheduler will become the scheduling service of this cluster."
@@ -311,7 +311,7 @@ export default function Information() {
                 )}
               </Box>
             </Box>
-            <Box className={styles.clusterWrap}>
+            {/* <Box className={styles.clusterWrap}>
               <Box className={styles.clusterTitle}>
                 <Typography variant="body2" component="div" className={styles.configLable}>
                   Seed peer cluster ID
@@ -371,7 +371,7 @@ export default function Information() {
                   </IconButton>
                 )}
               </Box>
-            </Box>
+            </Box> */}
             <Box className={styles.clusterWrap}>
               <Box className={styles.clusterTitle}>
                 <Typography variant="body2" component="div" className={styles.configLable}>
@@ -447,7 +447,7 @@ export default function Information() {
             <Card className={styles.cidrsContainer}>
               <Box className={styles.scopesTitle}>
                 <Box className={styles.cidrsTitle}>
-                  <IDC style={{width:'1.2rem',height:'1.2rem'}}  className={styles.scopesIcon} />
+                  <IDC style={{ width: '1.2rem', height: '1.2rem' }} className={styles.scopesIcon} />
                   <Typography variant="body2" component="p" className={styles.scopesLable}>
                     IDC
                   </Typography>

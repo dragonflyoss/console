@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import styles from './edit.module.css';
 import HelpIcon from '@mui/icons-material/Help';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getCluster, updateCluster, getClusterResponse } from '../../lib/api';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -25,6 +25,7 @@ import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import Card from '../card';
 import { ReactComponent as Information } from '../../assets/images/cluster/information-cluster.svg';
 import ErrorHandler from '../error-handler';
+import BlackList from './blacklist';
 
 export default function EditCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -75,6 +76,7 @@ export default function EditCluster() {
   });
   const navigate = useNavigate();
   const params = useParams();
+  const blacklistRef = useRef<{ getBlacklist: () => { peerBlockList: any; seedPeerBlockList: any } }>();
 
   const {
     bio,
@@ -93,7 +95,41 @@ export default function EditCluster() {
 
         if (typeof params.id === 'string') {
           const cluster = await getCluster(params.id);
-          setCluster(cluster);
+          setCluster({
+            ...cluster,
+            // peer_cluster_config: {
+            //   load_limit: 200,
+            //   block_list: {
+            //     task: {
+            //       download: {
+            //         urls: ['http://127.0.0.1:8081/small'],
+            //         tags: ['v1'],
+            //       },
+            //     },
+            //     persistent_task: {
+            //       upload: {
+            //         applications: ['ios'],
+            //       },
+            //     },
+            //   },
+            // },
+            // seed_peer_cluster_config: {
+            //   load_limit: 2000,
+            //   block_list: {
+            //     task: {
+            //       download: {
+            //         urls: ['http://127.0.0.1:8081/small'],
+            //         tags: ['v1'],
+            //       },
+            //     },
+            //     persistent_task: {
+            //       upload: {
+            //         applications: ['ios'],
+            //       },
+            //     },
+            //   },
+            // },
+          });
           setIsLoading(false);
         }
       } catch (error) {
@@ -639,18 +675,23 @@ export default function EditCluster() {
 
     const canSubmit = Boolean(
       !informationForm.filter((item) => item.syncError).length &&
-        !scopesForm.filter((item) => item.syncError).length &&
-        !configForm.filter((item) => item.syncError).length &&
-        Boolean(!idcText) &&
-        Boolean(!cidrsText) &&
-        Boolean(!hostnamesText),
+      !scopesForm.filter((item) => item.syncError).length &&
+      !configForm.filter((item) => item.syncError).length &&
+      Boolean(!idcText) &&
+      Boolean(!cidrsText) &&
+      Boolean(!hostnamesText),
     );
+    const { peerBlockList, seedPeerBlockList } = blacklistRef.current?.getBlacklist() || {
+      peerBlockList: {},
+      seedPeerBlockList: {},
+    };
 
     const formdata = {
       is_default: is_default,
       bio: String(bio),
       peer_cluster_config: {
         load_limit: Number(load_limit),
+        ...(Object.keys(peerBlockList).length > 0 && { block_list: peerBlockList }),
       },
       scheduler_cluster_config: {
         candidate_parent_limit: Number(candidate_parent_limit),
@@ -665,6 +706,7 @@ export default function EditCluster() {
       },
       seed_peer_cluster_config: {
         load_limit: Number(seed_peer_cluster_config.load_limit),
+        ...(Object.keys(seedPeerBlockList).length > 0 && { block_list: seedPeerBlockList }),
       },
     };
 
@@ -851,6 +893,7 @@ export default function EditCluster() {
               />
             ))}
           </Grid>
+          <BlackList ref={blacklistRef} clusterInfo={cluster} />
         </Box>
         <Divider sx={{ mt: '1rem', mb: '2rem' }} />
         <Box>

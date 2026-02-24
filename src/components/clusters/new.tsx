@@ -15,13 +15,14 @@ import {
   Link as RouterLink,
 } from '@mui/material';
 import styles from './new.module.css';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import HelpIcon from '@mui/icons-material/Help';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Link, useNavigate } from 'react-router-dom';
 import { createCluster } from '../../lib/api';
 import { CancelLoadingButton, SavelLoadingButton } from '../loading-button';
 import ErrorHandler from '../error-handler';
+import BlackList from './blacklist';
 
 export default function NewCluster() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -46,6 +47,7 @@ export default function NewCluster() {
   const [idcHelperText, setIDCHelperText] = useState('Fill in the characters, the length is 0-100.');
   const [cidrsHelperText, setCIDRsHelperText] = useState('Fill in the characters, the length is 0-400.');
   const [hostnamesHelperText, setHostnamesHelperText] = useState('Fill in the characters, the length is 1-30.');
+  const blacklistRef = useRef<{ getBlacklist: () => { peerBlockList: any; seedPeerBlockList: any } }>();
 
   const navigate = useNavigate();
 
@@ -579,17 +581,23 @@ export default function NewCluster() {
 
     const canSubmit = Boolean(
       !informationForm.filter((item) => item.syncError).length &&
-        !scopesForm.filter((item) => item.syncError).length &&
-        !configForm.filter((item) => item.syncError).length &&
-        Boolean(!idcText) &&
-        Boolean(!cidrsText) &&
-        Boolean(!hostnamesText),
+      !scopesForm.filter((item) => item.syncError).length &&
+      !configForm.filter((item) => item.syncError).length &&
+      Boolean(!idcText) &&
+      Boolean(!cidrsText) &&
+      Boolean(!hostnamesText),
     );
+
+    const { peerBlockList, seedPeerBlockList } = blacklistRef.current?.getBlacklist() || {
+      peerBlockList: {},
+      seedPeerBlockList: {},
+    };
 
     const formData = {
       name: String(name),
       peer_cluster_config: {
         load_limit: Number(peerLoadLimit),
+        ...(Object.keys(peerBlockList).length > 0 && { block_list: peerBlockList }),
       },
       scheduler_cluster_config: {
         candidate_parent_limit: Number(candidateParentLimit),
@@ -598,6 +606,7 @@ export default function NewCluster() {
       },
       seed_peer_cluster_config: {
         load_limit: Number(seedPeerLoadLimit),
+        ...(Object.keys(seedPeerBlockList).length > 0 && { block_list: seedPeerBlockList }),
       },
       bio: description,
       is_default: isDefault,
@@ -608,6 +617,11 @@ export default function NewCluster() {
         hostnames: hostnames,
       },
     };
+    // let a = 1;
+    // if (a > 0) {
+    //   console.log(formData);
+    //   return;
+    // }
 
     if (canSubmit) {
       try {
@@ -775,6 +789,7 @@ export default function NewCluster() {
               />
             ))}
           </Grid>
+          <BlackList ref={blacklistRef} />
         </Box>
         <Divider sx={{ mt: '1rem', mb: '2rem' }} />
         <Box>

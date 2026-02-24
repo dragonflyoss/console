@@ -234,9 +234,11 @@ export interface getClusterResponse {
   };
   seed_peer_cluster_config: {
     load_limit: number;
+    block_list?: Record<string, any>;
   };
   peer_cluster_config: {
     load_limit: number;
+    block_list?: Record<string, any>;
   };
   created_at: string;
   updated_at: string;

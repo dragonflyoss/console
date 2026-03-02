@@ -318,10 +318,10 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
           size="small"
           sx={{
             marginLeft: '0.25rem',
-            backgroundColor: 'var(--palette-button-color)',
+            background: 'var(--palette-button-color)',
             color: 'var(--palette-button-text-color)',
-            '&:hover': {
-              backgroundColor: 'var(--palette-button-hover-color)',
+            ':hover': {
+              backgroundColor: 'var(--palette-hover-button-text-color)',
             },
             '&.Mui-disabled': {
               backgroundColor: 'var(--palette-action-disabledBackground)',
@@ -484,13 +484,14 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
                   <Button
                     size="small"
+                    variant="outlined"
                     sx={{
                       minWidth: 70,
-                      color: 'var(--palette-error-main)',
-                      borderColor: 'var(--palette-error-main)',
-                      '&:hover': {
-                        backgroundColor: 'var(--palette-error-light)',
-                        color: 'var(--palette-error-contrastText)',
+                      color: 'var(--palette-delete-button-color)',
+                      borderColor: 'var(--palette-delete-button-color)',
+                      ':hover': {
+                        backgroundColor: 'var(--palette-delete-button-hover-color)',
+                        color: 'var(--palette-common-white)',
                       },
                     }}
                     onClick={() => handleRemoveBlacklist(index)}

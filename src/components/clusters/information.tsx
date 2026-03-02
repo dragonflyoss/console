@@ -47,6 +47,7 @@ export default function Information() {
   const [errorMessageText, setErrorMessageText] = useState('');
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [openDeleteCluster, setOpenDeleteCluster] = useState(false);
+  const [openBlacklistDialog, setOpenBlacklistDialog] = useState(false);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -108,6 +109,96 @@ export default function Information() {
       }
     }
   };
+
+  // 数据转换函数，将 blacklist 配置转换为展示格式
+  const reverseBlacklistFromData = (
+    peerClusterConfig: { block_list?: any },
+    seedPeerClusterConfig: { block_list?: any },
+  ) => {
+    const result: Array<{
+      type: string;
+      config: string;
+      subConfig: string;
+      options: string[];
+      optionValues: Record<string, string[]>;
+    }> = [];
+
+    // 处理 peer_cluster_config.block_list (Client 类型)
+    const peerBlockList = peerClusterConfig?.block_list;
+    if (peerBlockList && typeof peerBlockList === 'object') {
+      Object.keys(peerBlockList).forEach((config) => {
+        const configData = peerBlockList[config];
+        if (configData && typeof configData === 'object') {
+          Object.keys(configData).forEach((subConfig) => {
+            const subConfigData = configData[subConfig];
+            if (subConfigData && typeof subConfigData === 'object') {
+              const options: string[] = [];
+              const optionValues: Record<string, string[]> = {};
+
+              Object.keys(subConfigData).forEach((key) => {
+                const optionName = key.charAt(0).toUpperCase() + key.slice(1);
+                if (Array.isArray(subConfigData[key])) {
+                  options.push(optionName);
+                  optionValues[optionName] = subConfigData[key];
+                }
+              });
+
+              if (options.length > 0) {
+                result.push({
+                  type: 'Client',
+                  config: config === 'persistent_task' ? 'persistent_cache_task' : config,
+                  subConfig,
+                  options,
+                  optionValues,
+                });
+              }
+            }
+          });
+        }
+      });
+    }
+
+    // 处理 seed_peer_cluster_config.block_list (Seed Client 类型)
+    const seedPeerBlockList = seedPeerClusterConfig?.block_list;
+    if (seedPeerBlockList && typeof seedPeerBlockList === 'object') {
+      Object.keys(seedPeerBlockList).forEach((config) => {
+        const configData = seedPeerBlockList[config];
+        if (configData && typeof configData === 'object') {
+          Object.keys(configData).forEach((subConfig) => {
+            const subConfigData = configData[subConfig];
+            if (subConfigData && typeof subConfigData === 'object') {
+              const options: string[] = [];
+              const optionValues: Record<string, string[]> = {};
+
+              Object.keys(subConfigData).forEach((key) => {
+                const optionName = key.charAt(0).toUpperCase() + key.slice(1);
+                options.push(optionName);
+                optionValues[optionName] = Array.isArray(subConfigData[key]) ? subConfigData[key] : [];
+              });
+
+              if (options.length > 0) {
+                result.push({
+                  type: 'Seed Client',
+                  config: config === 'persistent_task' ? 'persistent_cache_task' : config,
+                  subConfig,
+                  options,
+                  optionValues,
+                });
+              }
+            }
+          });
+        }
+      });
+    }
+
+    return result;
+  };
+
+  // 获取转换后的数据
+  const blacklistData = reverseBlacklistFromData(
+    cluster?.peer_cluster_config || {},
+    cluster?.seed_peer_cluster_config || {},
+  );
 
   return (
     <Box>
@@ -867,9 +958,89 @@ export default function Information() {
                 </Typography>
               )}
             </Box>
+            <Box className={styles.configContent}>
+              <Box className={styles.configContentTitle}>
+                <Typography variant="body2" component="div" className={styles.configLable}>
+                  Blacklist
+                </Typography>
+                <MuiTooltip
+                  title="Blacklist configuration for P2P downloads. Blocks specified applications, URLs, tags or priorities."
+                  placement="top"
+                >
+                  <HelpIcon className={styles.descriptionIcon} />
+                </MuiTooltip>
+              </Box>
+              {isLoading ? (
+                <Box sx={{ width: '20%' }}>
+                  <Skeleton data-testid="cluster-loading" />
+                </Box>
+              ) : blacklistData.length > 0 ? (
+                <Box>
+                  {blacklistData.slice(0, 2).map((item, index) => (
+                    <Box key={index} className={styles.blacklistItem}>
+                      <Typography variant="caption" className={styles.blacklistType}>
+                        {item.type} / {item.config} / {item.subConfig}
+                      </Typography>
+                      <Typography variant="caption" className={styles.blacklistSummary}>
+                        {item.options.join(', ')}
+                      </Typography>
+                    </Box>
+                  ))}
+                  {blacklistData.length > 2 && (
+                    <Button
+                      size="small"
+                      onClick={() => setOpenBlacklistDialog(true)}
+                      sx={{
+                        p: 0,
+                        minWidth: 'auto',
+                        color: 'var(--palette-button-color)',
+                        '&:hover': {
+                          backgroundColor: 'transparent',
+                        },
+                      }}
+                    >
+                      View More ({blacklistData.length - 2})
+                    </Button>
+                  )}
+                </Box>
+              ) : (
+                <Typography variant="body2" className={styles.configText}>
+                  -
+                </Typography>
+              )}
+            </Box>
           </Card>
         </Box>
       </Box>
+      <Dialog maxWidth="md" fullWidth open={openBlacklistDialog} onClose={() => setOpenBlacklistDialog(false)}>
+        <DialogTitle>Blacklist Configuration</DialogTitle>
+        <DialogContent dividers>
+          <Box className={styles.blacklistDialogContainer}>
+            {blacklistData.map((item, index) => (
+              <Box key={index} className={styles.blacklistDialogItem}>
+                <Box className={styles.blacklistDialogTitle}>
+                  <Typography variant="body1" className={styles.blacklistConfigTitle}>
+                    {item.type} / {item.config} / {item.subConfig}
+                  </Typography>
+                </Box>
+                <Box className={styles.blacklistOptionsContainer}>
+                  {item.options.map((option) => (
+                    <Box key={option} className={styles.blacklistOptionItem}>
+                      <Typography variant="caption" className={styles.blacklistOptionLabel}>
+                        {option}:
+                      </Typography>
+                      <Typography variant="caption" className={styles.blacklistOptionValue}>
+                        {item.optionValues[option]?.join(', ') || '-'}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+            ))}
+            {blacklistData.length === 0 && <Typography variant="body2">No blacklist configuration.</Typography>}
+          </Box>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

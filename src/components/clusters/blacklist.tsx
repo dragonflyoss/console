@@ -1,8 +1,19 @@
-import { Autocomplete, Box, Button, TextField, Tooltip, Typography } from '@mui/material';
+import { Autocomplete, Box, Button, Grid, TextField, Tooltip, Typography } from '@mui/material';
 import { forwardRef, memo, Ref, useEffect, useImperativeHandle, useState } from 'react';
 import HelpIcon from '@mui/icons-material/Help';
 import styles from './new.module.css';
 import AddIcon from '@mui/icons-material/Add';
+
+interface BlacklistItem {
+  type: string;
+  config: string;
+  subConfig: string;
+  applications: string[];
+  urls: string[];
+  tags: string[];
+  priorities: string[];
+}
+
 interface Props {
   clusterInfo?: {
     seed_peer_cluster_config: Record<string, any>;
@@ -10,10 +21,24 @@ interface Props {
     [x: string]: any;
   };
 }
+
+// URL 正则校验
+const URL_PATTERN = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
+
+const isValidURL = (value: string): boolean => {
+  return URL_PATTERN.test(value);
+};
+
+const priorityOptions = [
+  { value: '1', label: 'Level 1' },
+  { value: '2', label: 'Level 2' },
+  { value: '3', label: 'Level 3' },
+  { value: '4', label: 'Level 4' },
+  { value: '5', label: 'Level 5' },
+];
+
 const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) => {
-  const [blacklist, setBlacklist] = useState<
-    { type: string; config: string; subConfig: string; options: string[]; optionValues: Record<string, string[]> }[]
-  >([]);
+  const [blacklist, setBlacklist] = useState<BlacklistItem[]>([]);
 
   // 获取重复的组合信息
   const getDuplicateInfo = () => {
@@ -33,7 +58,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     combinations.forEach((indices, key) => {
       if (indices.length > 1) {
         indices.forEach((index) => {
-          duplicates.set(index, 'This combination already exists');
+          duplicates.set(index, 'Duplicate combination: ' + key.replace(/-/g, ' + '));
         });
       }
     });
@@ -53,10 +78,17 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     });
   };
 
+  // Task Type 选项配置
+  const taskTypeOptions = [
+    { value: 'task', label: 'Task' },
+    { value: 'persistent_cache_task', label: 'Persistent Cache Task' },
+    { value: 'persistent_task', label: 'Persistent Task' },
+  ];
+
   // 获取配置选项
   const getConfigOptions = (type: string) => {
     if (!type) return [];
-    return ['task', 'persistent_cache_task', 'persistent_task'];
+    return taskTypeOptions;
   };
 
   // 获取子配置选项
@@ -70,35 +102,17 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     return ['download', 'upload'];
   };
 
-  // 获取多选选项
-  const getOptions = (subConfig: string) => {
-    const baseOptions = ['Applications', 'URLs', 'Tags'];
-    if (subConfig === 'download') {
-      return [...baseOptions, 'Priorities'];
-    }
-    return baseOptions;
-  };
-
   // 获取所有 Type 选项（不再过滤已存在的类型）
   const getAvailableTypes = () => {
     return blacklistTypeOptions;
   };
 
   const handleAddBlacklist = () => {
-    const newType = blacklistTypeOptions[0];
-    const newConfig = '';
-    const newSubConfig = '';
-
-    // 检查是否已存在相同的组合
-    if (isCombinationExists(newType, newConfig, newSubConfig)) {
-      // 如果存在，则使用空值创建，让用户手动选择
-      setBlacklist([...blacklist, { type: '', config: '', subConfig: '', options: [], optionValues: {} }]);
-    } else {
-      setBlacklist([
-        ...blacklist,
-        { type: newType, config: newConfig, subConfig: newSubConfig, options: [], optionValues: {} },
-      ]);
-    }
+    // 始终添加空条目，让用户手动选择
+    setBlacklist([
+      ...blacklist,
+      { type: '', config: '', subConfig: '', applications: [], urls: [], tags: [], priorities: [] },
+    ]);
   };
 
   const handleRemoveBlacklist = (index: number) => {
@@ -128,10 +142,18 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
       }
     } else if (field === 'subConfig') {
       newSubConfig = value;
+
+      // 当设置 subConfig 时，检查完整的组合是否重复
+      if (newType && newConfig && newSubConfig) {
+        if (isCombinationExists(newType, newConfig, newSubConfig, index)) {
+          // 如果会导致重复，则不更新
+          return;
+        }
+      }
     }
 
-    // 检查是否会导致重复组合（仅当三个字段都有值时检查）
-    if (newType && newConfig && newSubConfig) {
+    // 对于 config 字段，也要检查是否会创建重复组合
+    if (field === 'config' && newType && newConfig && newSubConfig) {
       if (isCombinationExists(newType, newConfig, newSubConfig, index)) {
         // 如果会导致重复，则不更新
         return;
@@ -145,23 +167,20 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
         type: newType,
         config: newConfig,
         subConfig: newSubConfig,
-        options: [],
-        optionValues: {},
+        // 保留用户已填写的数据，不清空
       };
     } else if (field === 'config') {
       newBlacklist[index] = {
         ...newBlacklist[index],
         config: newConfig,
         subConfig: newSubConfig,
-        options: [],
-        optionValues: {},
+        // 保留用户已填写的数据，不清空
       };
     } else if (field === 'subConfig') {
       newBlacklist[index] = {
         ...newBlacklist[index],
         subConfig: newSubConfig,
-        options: [],
-        optionValues: {},
+        // 保留用户已填写的数据，不清空
       };
     } else {
       newBlacklist[index] = { ...newBlacklist[index], [field]: value };
@@ -171,12 +190,20 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
   };
 
   // 处理blacklist数据转换
-  const processBlacklist = (blacklist: any) => {
+  const processBlacklist = (blacklist: BlacklistItem[]) => {
     const peerBlockList: any = {};
     const seedPeerBlockList: any = {};
 
-    blacklist.forEach((item: any) => {
-      if (!item.type || !item.config || !item.subConfig || !item.options || item.options.length === 0) {
+    blacklist.forEach((item) => {
+      if (!item.type || !item.config || !item.subConfig) {
+        return;
+      }
+
+      // 检查是否有任何选项有值
+      const hasAnyOption =
+        item.applications.length > 0 || item.urls.length > 0 || item.tags.length > 0 || item.priorities.length > 0;
+
+      if (!hasAnyOption) {
         return;
       }
 
@@ -191,13 +218,19 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
         targetBlockList[configKey][item.subConfig] = {};
       }
 
-      item.options.forEach((option: any) => {
-        const values = item.optionValues[option] || [];
-        const key = option.toLowerCase();
-        if (values.length > 0) {
-          targetBlockList[configKey][item.subConfig][key] = values;
-        }
-      });
+      if (item.applications.length > 0) {
+        targetBlockList[configKey][item.subConfig]['applications'] = item.applications;
+      }
+      if (item.urls.length > 0) {
+        targetBlockList[configKey][item.subConfig]['urls'] = item.urls;
+      }
+      if (item.tags.length > 0) {
+        targetBlockList[configKey][item.subConfig]['tags'] = item.tags;
+      }
+      if (item.priorities.length > 0) {
+        // 将 priorities 从字符串数组转换为整数数组
+        targetBlockList[configKey][item.subConfig]['priorities'] = item.priorities.map((p) => parseInt(p, 10));
+      }
     });
 
     return { peerBlockList, seedPeerBlockList };
@@ -207,14 +240,8 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
   const reverseBlacklistFromData = (
     peerClusterConfig: { block_list?: any },
     seedPeerClusterConfig: { block_list?: any },
-  ) => {
-    const result: Array<{
-      type: string;
-      config: string;
-      subConfig: string;
-      options: string[];
-      optionValues: Record<string, string[]>;
-    }> = [];
+  ): BlacklistItem[] => {
+    const result: BlacklistItem[] = [];
 
     // 处理 peer_cluster_config.block_list (Client 类型)
     const peerBlockList = peerClusterConfig?.block_list;
@@ -225,25 +252,25 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
           Object.keys(configData).forEach((subConfig) => {
             const subConfigData = configData[subConfig];
             if (subConfigData && typeof subConfigData === 'object') {
-              const options: string[] = [];
-              const optionValues: Record<string, string[]> = {};
+              const item: BlacklistItem = {
+                type: 'Client',
+                config: config === 'persistent_task' ? 'persistent_cache_task' : config,
+                subConfig,
+                applications: Array.isArray(subConfigData['applications']) ? subConfigData['applications'] : [],
+                urls: Array.isArray(subConfigData['urls']) ? subConfigData['urls'] : [],
+                tags: Array.isArray(subConfigData['tags']) ? subConfigData['tags'] : [],
+                priorities: Array.isArray(subConfigData['priorities'])
+                  ? subConfigData['priorities'].map((p: number) => String(p))
+                  : [],
+              };
 
-              Object.keys(subConfigData).forEach((key) => {
-                const optionName = key.charAt(0).toUpperCase() + key.slice(1);
-                if (Array.isArray(subConfigData[key])) {
-                  options.push(optionName);
-                  optionValues[optionName] = subConfigData[key];
-                }
-              });
-
-              if (options.length > 0) {
-                result.push({
-                  type: 'Client',
-                  config: config === 'persistent_task' ? 'persistent_cache_task' : config,
-                  subConfig,
-                  options,
-                  optionValues,
-                });
+              if (
+                item.applications.length > 0 ||
+                item.urls.length > 0 ||
+                item.tags.length > 0 ||
+                item.priorities.length > 0
+              ) {
+                result.push(item);
               }
             }
           });
@@ -260,23 +287,25 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
           Object.keys(configData).forEach((subConfig) => {
             const subConfigData = configData[subConfig];
             if (subConfigData && typeof subConfigData === 'object') {
-              const options: string[] = [];
-              const optionValues: Record<string, string[]> = {};
+              const item: BlacklistItem = {
+                type: 'Seed Client',
+                config: config === 'persistent_task' ? 'persistent_cache_task' : config,
+                subConfig,
+                applications: Array.isArray(subConfigData['applications']) ? subConfigData['applications'] : [],
+                urls: Array.isArray(subConfigData['urls']) ? subConfigData['urls'] : [],
+                tags: Array.isArray(subConfigData['tags']) ? subConfigData['tags'] : [],
+                priorities: Array.isArray(subConfigData['priorities'])
+                  ? subConfigData['priorities'].map((p: number) => String(p))
+                  : [],
+              };
 
-              Object.keys(subConfigData).forEach((key) => {
-                const optionName = key.charAt(0).toUpperCase() + key.slice(1);
-                options.push(optionName);
-                optionValues[optionName] = Array.isArray(subConfigData[key]) ? subConfigData[key] : [];
-              });
-
-              if (options.length > 0) {
-                result.push({
-                  type: 'Seed Client',
-                  config: config === 'persistent_task' ? 'persistent_cache_task' : config,
-                  subConfig,
-                  options,
-                  optionValues,
-                });
+              if (
+                item.applications.length > 0 ||
+                item.urls.length > 0 ||
+                item.tags.length > 0 ||
+                item.priorities.length > 0
+              ) {
+                result.push(item);
               }
             }
           });
@@ -310,37 +339,20 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
         <Typography variant="h6" className={styles.titleText}>
           Blocklist
         </Typography>
-        <Tooltip title=" The configuration for P2P downloads." placement="top">
+        <Tooltip
+          title="Blacklist configuration for P2P downloads. Blocks specified applications, URLs, tags or task priorities to restrict download sources."
+          placement="top"
+        >
           <HelpIcon className={styles.descriptionIcon} />
         </Tooltip>
-        <Button
-          id="create-cluster"
-          size="small"
-          sx={{
-            marginLeft: '0.25rem',
-            background: 'var(--palette-button-color)',
-            color: 'var(--palette-button-text-color)',
-            ':hover': {
-              backgroundColor: 'var(--palette-hover-button-text-color)',
-            },
-            '&.Mui-disabled': {
-              backgroundColor: 'var(--palette-action-disabledBackground)',
-              color: 'var(--palette-action-disabled)',
-            },
-          }}
-          variant="contained"
-          onClick={handleAddBlacklist}
-          disabled={false}
-        >
-          <AddIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-          <div style={{ paddingTop: '0.25rem' }}>Add blacklist ({blacklist.length})</div>
-        </Button>
       </Box>
       <Box sx={{ mt: 1, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
         {blacklist.length > 0 &&
           blacklist.map((item, index) => {
             const duplicateInfo = getDuplicateInfo();
             const duplicateError = duplicateInfo.get(index);
+            const isSubConfigDownload = item.subConfig === 'download';
+
             return (
               <Box
                 key={`${index}-${item.type}`}
@@ -352,7 +364,8 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                   boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
                 }}
               >
-                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mb: 1 }}>
+                {/* 第一行: Type | Config | Sub Config */}
+                <Box sx={{ display: 'flex', gap: 1, mb: 1.5 }}>
                   <Autocomplete
                     size="small"
                     options={getAvailableTypes()}
@@ -361,38 +374,81 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Type"
-                        placeholder="Select type"
-                        sx={{ minWidth: 100 }}
+                        label="Service"
+                        placeholder="Select service"
                         color="success"
                         required={true}
                         error={item.type === '' || !!duplicateError}
-                        helperText={duplicateError || (item.type === '' ? 'Type is required' : '')}
+                        helperText={duplicateError || (item.type === '' ? 'Service is required' : '')}
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <Tooltip
+                              title="The service type for blacklist configuration, Client or Seed Client."
+                              placement="top"
+                            >
+                              <HelpIcon className={styles.descriptionIcon} />
+                            </Tooltip>
+                          ),
+                        }}
                       />
                     )}
-                    sx={{ flex: 1 }}
+                    sx={{
+                      flex: 1,
+                      '& .MuiOutlinedInput-root': {
+                        paddingRight: '14px !important',
+                      },
+                    }}
                   />
                   <Autocomplete
                     size="small"
                     options={getConfigOptions(item.type)}
-                    value={item.config}
-                    onChange={(_e, newValue) => handleUpdateBlacklist(index, 'config', newValue || '')}
+                    value={taskTypeOptions.find((opt) => opt.value === item.config) || null}
+                    onChange={(_e, newValue) => {
+                      const value = newValue ? (typeof newValue === 'string' ? newValue : newValue.value) : '';
+                      handleUpdateBlacklist(index, 'config', value);
+                    }}
+                    getOptionLabel={(option) => {
+                      if (typeof option === 'string') {
+                        const found = taskTypeOptions.find((opt) => opt.value === option);
+                        return found ? found.label : option;
+                      }
+                      return option.label;
+                    }}
+                    isOptionEqualToValue={(option, value) => {
+                      if (typeof value === 'string') {
+                        return option.value === value;
+                      }
+                      return option.value === value.value;
+                    }}
                     disabled={!item.type}
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Config"
-                        placeholder="Select config"
-                        sx={{ minWidth: 100 }}
+                        label="Task Type"
+                        placeholder="Select task type"
                         color="success"
                         required={item.type !== ''}
                         error={(item.type !== '' && item.config === '') || !!duplicateError}
                         helperText={
-                          duplicateError || (item.type !== '' && item.config === '' ? 'Config is required' : '')
+                          duplicateError || (item.type !== '' && item.config === '' ? 'Task Type is required' : '')
                         }
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <Tooltip title="The type of task to apply blacklist configuration." placement="top">
+                              <HelpIcon className={styles.descriptionIcon} />
+                            </Tooltip>
+                          ),
+                        }}
                       />
                     )}
-                    sx={{ flex: 1 }}
+                    sx={{
+                      flex: 1,
+                      '& .MuiOutlinedInput-root': {
+                        paddingRight: '14px !important',
+                      },
+                    }}
                   />
                   <Autocomplete
                     size="small"
@@ -403,85 +459,215 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Sub Config"
-                        placeholder="Select sub config"
-                        sx={{ minWidth: 100 }}
+                        label="Feature"
+                        placeholder="Select feature"
                         color="success"
                         required={item.type !== '' && item.config !== ''}
                         error={(item.type !== '' && item.config !== '' && item.subConfig === '') || !!duplicateError}
                         helperText={
                           duplicateError ||
-                          (item.type !== '' && item.config !== '' && item.subConfig === ''
-                            ? 'Sub Config is required'
-                            : '')
+                          (item.type !== '' && item.config !== '' && item.subConfig === '' ? 'Feature is required' : '')
                         }
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <Tooltip title="The feature to apply blacklist: download or upload." placement="top">
+                              <HelpIcon className={styles.descriptionIcon} />
+                            </Tooltip>
+                          ),
+                        }}
                       />
                     )}
-                    sx={{ flex: 1 }}
-                  />
-                  <Autocomplete
-                    size="small"
-                    multiple
-                    freeSolo
-                    options={getOptions(item.subConfig)}
-                    value={item.options || []}
-                    onChange={(_e, newValue) => handleUpdateBlacklist(index, 'options', newValue || [])}
-                    disabled={!item.type || !item.config || !item.subConfig}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Options"
-                        placeholder="Select options or press Enter to add custom"
-                        sx={{ minWidth: 150 }}
-                        color="success"
-                        required={item.type !== '' && item.config !== '' && item.subConfig !== ''}
-                        error={
-                          item.type !== '' &&
-                          item.config !== '' &&
-                          item.subConfig !== '' &&
-                          (!item.options || item.options.length === 0)
-                        }
-                        helperText={
-                          item.type !== '' &&
-                          item.config !== '' &&
-                          item.subConfig !== '' &&
-                          (!item.options || item.options.length === 0)
-                            ? 'At least one option is required'
-                            : ''
-                        }
-                      />
-                    )}
-                    sx={{ flex: 1.5 }}
+                    sx={{
+                      flex: 1,
+                      '& .MuiOutlinedInput-root': {
+                        paddingRight: '14px !important',
+                      },
+                    }}
                   />
                 </Box>
-                {item.options && item.options.length > 0 && (
-                  <Box sx={{ mt: 1.5, display: 'flex', flexDirection: 'column', gap: 1 }}>
-                    {item.options.map((option) => (
+
+                {/* 第二行+: Applications | URLs | Tags | Priorities (两列Grid布局) */}
+                <Grid container spacing={1.5}>
+                  {/* 第三行: Applications | URLs */}
+                  <Grid size={{ xs: 12, md: 6 }}>
+                    <Autocomplete
+                      size="small"
+                      multiple
+                      freeSolo
+                      options={[]}
+                      value={item.applications}
+                      onChange={(_e, newValue) => handleUpdateBlacklist(index, 'applications', newValue || [])}
+                      disabled={!item.type || !item.config || !item.subConfig}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Applications"
+                          placeholder="Enter values or press Enter to add"
+                          color="success"
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <Tooltip
+                                title="Block downloads for specific applications. Enter application names."
+                                placement="top"
+                              >
+                                <HelpIcon className={styles.descriptionIcon} />
+                              </Tooltip>
+                            ),
+                          }}
+                        />
+                      )}
+                      sx={{
+                        width: '100%',
+                        '& .MuiOutlinedInput-root': {
+                          paddingRight: '14px !important',
+                        },
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, md: 6 }}>
+                    <Autocomplete
+                      size="small"
+                      multiple
+                      freeSolo
+                      options={[]}
+                      value={item.urls}
+                      onChange={(_e, newValue) => {
+                        // 校验每个新输入的值是否是合法 URL
+                        const validatedValues = (newValue || []).filter((v) => {
+                          // 如果是从选项中选择的（不太可能，因为options是空数组），直接放行
+                          if (typeof v !== 'string') return true;
+                          // 对自由输入的值进行 URL 校验
+                          return isValidURL(v);
+                        });
+                        handleUpdateBlacklist(index, 'urls', validatedValues);
+                      }}
+                      disabled={!item.type || !item.config || !item.subConfig}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="URLs"
+                          placeholder="Enter URL and press Enter"
+                          color="success"
+                          helperText={
+                            params.inputProps.value &&
+                            !isValidURL(String(params.inputProps.value || '')) &&
+                            String(params.inputProps.value || '').length > 3
+                              ? 'Please enter a valid URL'
+                              : ''
+                          }
+                          error={
+                            params.inputProps.value
+                              ? !isValidURL(String(params.inputProps.value || '')) &&
+                                String(params.inputProps.value || '').length > 3
+                              : false
+                          }
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <Tooltip
+                                title="Block downloads for specific URLs. Enter valid URL patterns."
+                                placement="top"
+                              >
+                                <HelpIcon className={styles.descriptionIcon} />
+                              </Tooltip>
+                            ),
+                          }}
+                        />
+                      )}
+                      sx={{
+                        width: '100%',
+                        '& .MuiOutlinedInput-root': {
+                          paddingRight: '14px !important',
+                        },
+                      }}
+                    />
+                  </Grid>
+
+                  {/* 第四行: Tags | Priorities (仅当 subConfig 是 download 时显示) */}
+                  <Grid size={{ xs: 12, md: 6 }}>
+                    <Autocomplete
+                      size="small"
+                      multiple
+                      freeSolo
+                      options={[]}
+                      value={item.tags}
+                      onChange={(_e, newValue) => handleUpdateBlacklist(index, 'tags', newValue || [])}
+                      disabled={!item.type || !item.config || !item.subConfig}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Tags"
+                          placeholder="Enter values or press Enter to add"
+                          color="success"
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <Tooltip title="Block downloads for specific tags. Enter tag values." placement="top">
+                                <HelpIcon className={styles.descriptionIcon} />
+                              </Tooltip>
+                            ),
+                          }}
+                        />
+                      )}
+                      sx={{
+                        width: '100%',
+                        '& .MuiOutlinedInput-root': {
+                          paddingRight: '14px !important',
+                        },
+                      }}
+                    />
+                  </Grid>
+                  {isSubConfigDownload ? (
+                    <Grid size={{ xs: 12, md: 6 }}>
                       <Autocomplete
-                        key={option}
                         size="small"
                         multiple
-                        freeSolo
-                        options={[]}
-                        value={item.optionValues[option] || []}
+                        options={priorityOptions}
+                        value={item.priorities
+                          .map((p) => priorityOptions.find((opt) => opt.value === p))
+                          .filter((opt): opt is (typeof priorityOptions)[0] => opt !== undefined)}
                         onChange={(_e, newValue) => {
-                          const newOptionValues = { ...item.optionValues };
-                          newOptionValues[option] = newValue || [];
-                          handleUpdateBlacklist(index, 'optionValues', newOptionValues);
+                          const values = newValue.map((v) => v.value);
+                          handleUpdateBlacklist(index, 'priorities', values);
                         }}
+                        getOptionLabel={(option) => option.label}
+                        isOptionEqualToValue={(option, value) => option.value === value.value}
+                        disabled={!item.type || !item.config || !item.subConfig}
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label={option}
-                            placeholder={`Enter ${option} values or press Enter to add custom`}
+                            label="Priorities"
+                            placeholder="Select priorities"
                             color="success"
+                            InputProps={{
+                              ...params.InputProps,
+                              endAdornment: (
+                                <Tooltip
+                                  title="Block downloads for specific task priorities. Select priority levels (1-5)."
+                                  placement="top"
+                                >
+                                  <HelpIcon className={styles.descriptionIcon} />
+                                </Tooltip>
+                              ),
+                            }}
                           />
                         )}
+                        sx={{
+                          width: '100%',
+                          '& .MuiOutlinedInput-root': {
+                            paddingRight: '14px !important',
+                          },
+                        }}
                       />
-                    ))}
-                  </Box>
-                )}
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
+                    </Grid>
+                  ) : (
+                    <Grid size={{ xs: 12, md: 6 }} />
+                  )}
+                </Grid>
+
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1.5 }}>
                   <Button
                     size="small"
                     variant="outlined"
@@ -502,6 +688,27 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
               </Box>
             );
           })}
+      </Box>
+
+      {/* ADD BLACKLIST 按钮 - 弱化样式，单独一行 */}
+      <Box sx={{ mt: 2 }}>
+        <Button
+          id="create-cluster"
+          size="small"
+          variant="outlined"
+          sx={{
+            borderColor: 'var(--palette-button-color)',
+            color: 'var(--palette-button-color)',
+            ':hover': {
+              borderColor: 'var(--palette-hover-button-text-color)',
+              backgroundColor: 'transparent',
+            },
+          }}
+          onClick={handleAddBlacklist}
+        >
+          <AddIcon fontSize="small" sx={{ mr: '0.4rem' }} />
+          <div style={{ paddingTop: '0.25rem' }}>Add blacklist ({blacklist.length})</div>
+        </Button>
       </Box>
     </>
   );

@@ -617,6 +617,7 @@ export default function NewCluster() {
         hostnames: hostnames,
       },
     };
+
     // let a = 1;
     // if (a > 0) {
     //   console.log(formData);

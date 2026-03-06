@@ -986,7 +986,7 @@ export default function Information() {
                       </Typography>
                     </Box>
                   ))}
-                  {blacklistData.length > 2 && (
+                  {blacklistData.length > 0 && (
                     <Button
                       size="small"
                       onClick={() => setOpenBlacklistDialog(true)}
@@ -999,7 +999,7 @@ export default function Information() {
                         },
                       }}
                     >
-                      View More ({blacklistData.length - 2})
+                      {blacklistData.length > 2 ? `View More (${blacklistData.length - 2})` : 'View Details'}
                     </Button>
                   )}
                 </Box>

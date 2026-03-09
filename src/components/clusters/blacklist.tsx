@@ -346,7 +346,29 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
           <HelpIcon className={styles.descriptionIcon} />
         </Tooltip>
       </Box>
-      <Box sx={{ mt: 1, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+
+      {/* ADD BLACKLIST 按钮 - 移到列表上方 */}
+      <Box sx={{ mt: 1, mb: 1.5 }}>
+        <Button
+          id="create-cluster"
+          size="small"
+          variant="outlined"
+          sx={{
+            borderColor: 'var(--palette-button-color)',
+            color: 'var(--palette-button-color)',
+            ':hover': {
+              borderColor: 'var(--palette-hover-button-text-color)',
+              backgroundColor: 'transparent',
+            },
+          }}
+          onClick={handleAddBlacklist}
+        >
+          <AddIcon fontSize="small" sx={{ mr: '0.4rem' }} />
+          <div style={{ paddingTop: '0.25rem' }}>Add blacklist ({blacklist.length})</div>
+        </Button>
+      </Box>
+
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
         {blacklist.length > 0 &&
           blacklist.map((item, index) => {
             const duplicateInfo = getDuplicateInfo();
@@ -688,27 +710,6 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
               </Box>
             );
           })}
-      </Box>
-
-      {/* ADD BLACKLIST 按钮 - 弱化样式，单独一行 */}
-      <Box sx={{ mt: 2 }}>
-        <Button
-          id="create-cluster"
-          size="small"
-          variant="outlined"
-          sx={{
-            borderColor: 'var(--palette-button-color)',
-            color: 'var(--palette-button-color)',
-            ':hover': {
-              borderColor: 'var(--palette-hover-button-text-color)',
-              backgroundColor: 'transparent',
-            },
-          }}
-          onClick={handleAddBlacklist}
-        >
-          <AddIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-          <div style={{ paddingTop: '0.25rem' }}>Add blacklist ({blacklist.length})</div>
-        </Button>
       </Box>
     </>
   );

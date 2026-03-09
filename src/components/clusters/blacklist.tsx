@@ -23,7 +23,7 @@ interface Props {
 }
 
 // URL 正则校验
-const URL_PATTERN = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
+const URL_PATTERN = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/[^\s]*)?$/;
 
 const isValidURL = (value: string): boolean => {
   return URL_PATTERN.test(value);

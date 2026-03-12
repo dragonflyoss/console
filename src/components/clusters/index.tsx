@@ -206,7 +206,7 @@ export default function Clusters() {
           }}
         >
           <AddIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-          Add cluster
+          <div style={{ paddingTop: '0.25rem' }}>Add cluster</div>
         </Button>
       </Box>
       <Grid className={styles.clusterHeaderContainer}>

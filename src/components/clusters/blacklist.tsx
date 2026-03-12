@@ -443,7 +443,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                           ...params.InputProps,
                           endAdornment: (
                             <Tooltip
-                              title="The service type for blacklist configuration, Client or Seed Client."
+                              title="Select the type of service node this blacklist rule applies to."
                               placement="top"
                             >
                               <HelpIcon className={styles.descriptionIcon} />
@@ -499,7 +499,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                         InputProps={{
                           ...params.InputProps,
                           endAdornment: (
-                            <Tooltip title="The type of task to apply blacklist configuration." placement="top">
+                            <Tooltip title="Select the type of task this blacklist rule applies to." placement="top">
                               <HelpIcon className={styles.descriptionIcon} />
                             </Tooltip>
                           ),
@@ -540,7 +540,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                         InputProps={{
                           ...params.InputProps,
                           endAdornment: (
-                            <Tooltip title="The feature to apply blacklist: download or upload." placement="top">
+                            <Tooltip title="Select the operation to block for matched tasks." placement="top">
                               <HelpIcon className={styles.descriptionIcon} />
                             </Tooltip>
                           ),
@@ -585,7 +585,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                             ...params.InputProps,
                             endAdornment: (
                               <Tooltip
-                                title="Block downloads for specific applications. Enter application names."
+                                title="Specify the application names to which this blacklist rule applies."
                                 placement="top"
                               >
                                 <HelpIcon className={styles.descriptionIcon} />
@@ -657,7 +657,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                             ...params.InputProps,
                             endAdornment: (
                               <Tooltip
-                                title="Block downloads for specific URLs. Enter valid URL patterns."
+                                title="Specify one or more URL patterns using regular expressions (regex) to match against task URLs."
                                 placement="top"
                               >
                                 <HelpIcon className={styles.descriptionIcon} />
@@ -709,7 +709,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                           InputProps={{
                             ...params.InputProps,
                             endAdornment: (
-                              <Tooltip title="Block downloads for specific tags. Enter tag values." placement="top">
+                              <Tooltip title="Specify tags to match against task tags." placement="top">
                                 <HelpIcon className={styles.descriptionIcon} />
                               </Tooltip>
                             ),
@@ -765,7 +765,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                               ...params.InputProps,
                               endAdornment: (
                                 <Tooltip
-                                  title="Block downloads for specific task priorities. Select priority levels (1-5)."
+                                  title="Specify the task priority levels to which this blacklist rule applies."
                                   placement="top"
                                 >
                                   <HelpIcon className={styles.descriptionIcon} />

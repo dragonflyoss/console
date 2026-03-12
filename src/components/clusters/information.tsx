@@ -11,12 +11,11 @@ import {
   Button,
   Alert,
 } from '@mui/material';
-
 import Dialog from '@mui/material/Dialog';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Card from '../card';
 import HelpIcon from '@mui/icons-material/Help';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect, useRef, useMemo } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { MyContext } from './show';
 import { ReactComponent as InformationCluster } from '../../assets/images/cluster/information-cluster.svg';
@@ -48,7 +47,7 @@ export default function Information() {
   const [errorMessageText, setErrorMessageText] = useState('');
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [openDeleteCluster, setOpenDeleteCluster] = useState(false);
-  const [openBlacklistDialog, setOpenBlacklistDialog] = useState(false);
+  const isInitializedRef = useRef(false);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -136,12 +135,14 @@ export default function Information() {
               const options: string[] = [];
               const optionValues: Record<string, string[]> = {};
 
-              Object.keys(subConfigData).forEach((key) => {
-                const optionName = key.charAt(0).toUpperCase() + key.slice(1);
-                if (Array.isArray(subConfigData[key])) {
-                  options.push(optionName);
-                  optionValues[optionName] = subConfigData[key];
-                }
+              // 定义所有可能的选项类型
+              const allOptionTypes = ['Applications', 'Urls', 'Tags', 'Priorities'];
+
+              // 遍历所有选项类型
+              allOptionTypes.forEach((optionType) => {
+                const key = optionType.charAt(0).toLowerCase() + optionType.slice(1); // 转换为小写首字母
+                options.push(optionType);
+                optionValues[optionType] = Array.isArray(subConfigData[key]) ? subConfigData[key] : [];
               });
 
               if (options.length > 0) {
@@ -171,10 +172,14 @@ export default function Information() {
               const options: string[] = [];
               const optionValues: Record<string, string[]> = {};
 
-              Object.keys(subConfigData).forEach((key) => {
-                const optionName = key.charAt(0).toUpperCase() + key.slice(1);
-                options.push(optionName);
-                optionValues[optionName] = Array.isArray(subConfigData[key]) ? subConfigData[key] : [];
+              // 定义所有可能的选项类型
+              const allOptionTypes = ['Applications', 'Urls', 'Tags', 'Priorities'];
+
+              // 遍历所有选项类型
+              allOptionTypes.forEach((optionType) => {
+                const key = optionType.charAt(0).toLowerCase() + optionType.slice(1); // 转换为小写首字母
+                options.push(optionType);
+                optionValues[optionType] = Array.isArray(subConfigData[key]) ? subConfigData[key] : [];
               });
 
               if (options.length > 0) {
@@ -200,6 +205,134 @@ export default function Information() {
     cluster?.peer_cluster_config || {},
     cluster?.seed_peer_cluster_config || {},
   );
+
+  // 定义固定的组合模板结构
+  const groupBlacklistData = useMemo(() => {
+    // 定义服务类型和任务类型
+    const serviceTypes: Array<{ name: string; source: 'peer' | 'seed' }> = [
+      { name: 'Client', source: 'peer' },
+      { name: 'Seed Client', source: 'seed' },
+    ];
+
+    const taskTypes = [
+      { config: 'task', display: 'Task' },
+      { config: 'persistent_cache_task', display: 'Persistent Cache Task' },
+      { config: 'persistent_task', display: 'Persistent Task' },
+    ];
+
+    // 定义每个任务类型对应的 subConfig
+    const subConfigsByTaskType: Record<string, string[]> = {
+      task: ['download'],
+      persistent_cache_task: ['download', 'upload'],
+      persistent_task: ['download', 'upload'],
+    };
+
+    // 初始化空数据结构
+    const groupedData: Array<{
+      serviceType: string;
+      taskTypeGroups: Array<{
+        taskType: string;
+        subConfigs: Array<{
+          subConfig: string;
+          data: {
+            applications: string[];
+            urls: string[];
+            tags: string[];
+            priorities: string[];
+          };
+          isEmpty: boolean;
+        }>;
+      }>;
+    }> = [];
+
+    // 遍历服务类型
+    serviceTypes.forEach((serviceType) => {
+      const taskTypeGroups: Array<{
+        taskType: string;
+        subConfigs: Array<{
+          subConfig: string;
+          data: {
+            applications: string[];
+            urls: string[];
+            tags: string[];
+            priorities: string[];
+          };
+          isEmpty: boolean;
+        }>;
+      }> = [];
+
+      // 遍历任务类型
+      taskTypes.forEach((taskType) => {
+        const subConfigs: Array<{
+          subConfig: string;
+          data: {
+            applications: string[];
+            urls: string[];
+            tags: string[];
+            priorities: string[];
+          };
+          isEmpty: boolean;
+        }> = [];
+
+        // 遍历 subConfig
+        subConfigsByTaskType[taskType.config].forEach((subConfig) => {
+          // 从 blacklistData 中查找匹配的数据
+          const matchedItem = blacklistData.find(
+            (item) => item.type === serviceType.name && item.config === taskType.config && item.subConfig === subConfig,
+          );
+
+          // 如果找到匹配项，使用其数据；否则使用空数据
+          const data = matchedItem
+            ? {
+                applications: matchedItem.optionValues['Applications'] || [],
+                urls: matchedItem.optionValues['Urls'] || [],
+                tags: matchedItem.optionValues['Tags'] || [],
+                priorities: matchedItem.optionValues['Priorities'] || [],
+              }
+            : {
+                applications: [],
+                urls: [],
+                tags: [],
+                priorities: [],
+              };
+
+          // 检查是否为空（所有字段都为空）
+          const isEmpty =
+            data.applications.length === 0 &&
+            data.urls.length === 0 &&
+            data.tags.length === 0 &&
+            data.priorities.length === 0;
+
+          // 只添加有数据的配置
+          if (!isEmpty) {
+            subConfigs.push({
+              subConfig,
+              data,
+              isEmpty,
+            });
+          }
+        });
+
+        // 只有当该任务类型有配置时才添加
+        if (subConfigs.length > 0) {
+          taskTypeGroups.push({
+            taskType: taskType.display,
+            subConfigs,
+          });
+        }
+      });
+
+      // 只有当该服务类型有任务类型配置时才添加
+      if (taskTypeGroups.length > 0) {
+        groupedData.push({
+          serviceType: serviceType.name,
+          taskTypeGroups,
+        });
+      }
+    });
+
+    return groupedData;
+  }, [blacklistData]);
 
   return (
     <Box>
@@ -260,7 +393,7 @@ export default function Information() {
             }}
           >
             <Edit className={styles.updateClusterIcon} />
-            Update
+            <div style={{ paddingTop: '0.25rem' }}>Update</div>
           </Button>
           <Button
             variant="contained"
@@ -280,7 +413,7 @@ export default function Information() {
             }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-            Delete
+            <div style={{ paddingTop: '0.25rem' }}>Delete</div>
           </Button>
         </Box>
       </Box>
@@ -959,89 +1092,76 @@ export default function Information() {
                 </Typography>
               )}
             </Box>
-            <Box className={styles.configContent}>
-              <Box className={styles.configContentTitle}>
-                <Typography variant="body2" component="div" className={styles.configLable}>
-                  Blacklist
-                </Typography>
-                <MuiTooltip
-                  title="Blacklist configuration for P2P downloads. Blocks specified applications, URLs, tags or priorities."
-                  placement="top"
-                >
-                  <HelpIcon className={styles.descriptionIcon} />
-                </MuiTooltip>
-              </Box>
-              {isLoading ? (
-                <Box sx={{ width: '20%' }}>
-                  <Skeleton data-testid="cluster-loading" />
-                </Box>
-              ) : blacklistData.length > 0 ? (
-                <Box>
-                  {blacklistData.slice(0, 2).map((item, index) => (
-                    <Box key={index} className={styles.blacklistItem}>
-                      <Typography variant="caption" className={styles.blacklistType}>
-                        {item.type} / {item.config} / {item.subConfig}
-                      </Typography>
-                      <Typography variant="caption" className={styles.blacklistSummary}>
-                        {item.options.join(', ')}
-                      </Typography>
-                    </Box>
-                  ))}
-                  {blacklistData.length > 0 && (
-                    <Button
-                      size="small"
-                      onClick={() => setOpenBlacklistDialog(true)}
-                      sx={{
-                        p: 0,
-                        minWidth: 'auto',
-                        color: 'var(--palette-button-color)',
-                        '&:hover': {
-                          backgroundColor: 'transparent',
-                        },
-                      }}
-                    >
-                      {blacklistData.length > 2 ? `View More (${blacklistData.length - 2})` : 'View Details'}
-                    </Button>
-                  )}
-                </Box>
-              ) : (
-                <Typography variant="body2" className={styles.configText}>
-                  -
-                </Typography>
-              )}
-            </Box>
           </Card>
         </Box>
       </Box>
-      <Dialog maxWidth="md" fullWidth open={openBlacklistDialog} onClose={() => setOpenBlacklistDialog(false)}>
-        <DialogTitle>Blacklist Configuration</DialogTitle>
-        <DialogContent dividers>
-          <Box className={styles.blacklistDialogContainer}>
-            {blacklistData.map((item, index) => (
-              <Box key={index} className={styles.blacklistDialogItem}>
-                <Box className={styles.blacklistDialogTitle}>
-                  <Typography variant="body1" className={styles.blacklistConfigTitle}>
-                    {item.type} / {item.config} / {item.subConfig}
-                  </Typography>
-                </Box>
-                <Box className={styles.blacklistOptionsContainer}>
-                  {item.options.map((option) => (
-                    <Box key={option} className={styles.blacklistOptionItem}>
-                      <Typography variant="caption" className={styles.blacklistOptionLabel}>
-                        {option}:
-                      </Typography>
-                      <Typography variant="caption" className={styles.blacklistOptionValue}>
-                        {item.optionValues[option]?.join(', ') || '-'}
-                      </Typography>
+      <Box className={styles.blacklistSection}>
+        <Box className={styles.blacklistWrapper}>
+          <Typography variant="body1" className={styles.informationTitle}>
+            Blacklist
+          </Typography>
+          <MuiTooltip
+            title="Blacklist configuration for P2P downloads. Blocks specified applications, URLs, tags or priorities."
+            placement="top"
+          >
+            <HelpIcon className={styles.descriptionIcon} />
+          </MuiTooltip>
+        </Box>
+
+        <Box>
+          {groupBlacklistData.length > 0 ? (
+            groupBlacklistData.map((serviceTypeGroup, serviceIndex) => (
+              <Box key={`service-${serviceIndex}`} className={styles.serviceTypeSection}>
+                <Typography className={styles.serviceTypeTitle}>{serviceTypeGroup.serviceType}</Typography>
+                {serviceTypeGroup.taskTypeGroups.map((taskTypeGroup, taskIndex) => (
+                  <Box key={`task-${serviceIndex}-${taskIndex}`} className={styles.taskTypeSection}>
+                    <Typography className={styles.taskTypeTitle}>{taskTypeGroup.taskType}</Typography>
+                    <Box className={styles.taskTypeCardsGrid}>
+                      {taskTypeGroup.subConfigs.map((subConfig, subIndex) => (
+                        <Card key={`sub-${serviceIndex}-${taskIndex}-${subIndex}`} className={styles.blacklistCard}>
+                          <Box className={styles.blacklistCardHeader}>
+                            <Typography className={styles.blacklistCardTitle}>
+                              {subConfig.subConfig.charAt(0).toUpperCase() + subConfig.subConfig.slice(1)}
+                            </Typography>
+                          </Box>
+                          <Box className={styles.blacklistCardContent}>
+                            <Box className={styles.blacklistOptionPair}>
+                              <Typography className={styles.blacklistOptionName}>Applications</Typography>
+                              <Typography className={styles.blacklistOptionValues}>
+                                {subConfig.data.applications.join(', ') || '-'}
+                              </Typography>
+                            </Box>
+                            <Box className={styles.blacklistOptionPair}>
+                              <Typography className={styles.blacklistOptionName}>Urls</Typography>
+                              <Typography className={styles.blacklistOptionValues}>
+                                {subConfig.data.urls.join(', ') || '-'}
+                              </Typography>
+                            </Box>
+                            <Box className={styles.blacklistOptionPair}>
+                              <Typography className={styles.blacklistOptionName}>Tags</Typography>
+                              <Typography className={styles.blacklistOptionValues}>
+                                {subConfig.data.tags.join(', ') || '-'}
+                              </Typography>
+                            </Box>
+                            <Box className={styles.blacklistOptionPair}>
+                              <Typography className={styles.blacklistOptionName}>Priorities</Typography>
+                              <Typography className={styles.blacklistOptionValues}>
+                                {subConfig.data.priorities.join(', ') || '-'}
+                              </Typography>
+                            </Box>
+                          </Box>
+                        </Card>
+                      ))}
                     </Box>
-                  ))}
-                </Box>
+                  </Box>
+                ))}
               </Box>
-            ))}
-            {blacklistData.length === 0 && <Typography variant="body2">No blacklist configuration.</Typography>}
-          </Box>
-        </DialogContent>
-      </Dialog>
+            ))
+          ) : (
+            <Typography className={styles.blacklistEmpty}>No blacklist configuration.</Typography>
+          )}
+        </Box>
+      </Box>
     </Box>
   );
 }

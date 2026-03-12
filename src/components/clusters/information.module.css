@@ -271,6 +271,8 @@
 .informationTitle {
   font-family: 'mabry-bold' !important;
   margin-right: 0.4rem !important;
+  font-size: 1.2rem;
+  color: var(--palette-text-color);
 }
 
 .configTitle {
@@ -337,71 +339,263 @@
   padding: 0.4rem 0.8rem;
 }
 
-/* Blacklist 样式 */
-.blacklistItem {
-  padding: 0.4rem 0;
-  border-left: 2px solid var(--palette-button-color);
-  padding-left: 0.5rem;
-  margin-bottom: 0.4rem;
+/* Blacklist 独立板块样式 */
+.blacklistSection {
+  margin-top: 2rem;
+  width: 100%;
+  padding: 0 0.5rem;
 }
 
-.blacklistType {
-  color: var(--palette-description-color);
-  font-family: 'mabry-bold' !important;
-  display: block;
+/* Blacklist标题区容器 */
+.blacklistWrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--palette-divider-color);
+  position: relative;
 }
 
-.blacklistSummary {
-  color: var(--palette-text-secondary);
-  display: block;
-  margin-top: 0.2rem;
+.blacklistWrapper::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--palette-button-color) 0%, transparent 100%);
 }
 
-/* Blacklist Dialog 样式 */
-.blacklistDialogContainer {
+/* Blacklist内容网格容器 */
+.blacklistContentContainer {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Blacklist卡片容器 */
+.blacklistCard {
+  padding: 1.2rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  min-height: 10rem;
+  position: relative;
+  transition: all 0.3s ease;
+  border: 1px solid var(--palette-divider-color);
+  border-radius: 8px;
+  background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.blacklistDialogItem {
-  background-color: var(--palette-background-inactive);
-  padding: 1rem;
-  border-radius: 0.5rem;
+.blacklistCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 122, 255, 0.3);
 }
 
-.blacklistDialogTitle {
+/* 卡片标题区 */
+.blacklistCardHeader {
   padding-bottom: 0.8rem;
-  border-bottom: 1px solid var(--palette-divider-color);
+  border-bottom: 2px solid var(--palette-divider-color);
   margin-bottom: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
 }
 
-.blacklistConfigTitle {
+.blacklistCardHeader::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: var(--palette-button-color);
+  border-radius: 1px;
+}
+
+.blacklistCardTitle {
   font-family: 'mabry-bold' !important;
   color: var(--palette-button-color);
+  font-size: 1rem;
+  letter-spacing: 0.5px;
 }
 
-.blacklistOptionsContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+/* 选项内容区 */
+.blacklistCardContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   gap: 0.8rem;
 }
 
-.blacklistOptionItem {
-  background-color: var(--palette-paper);
+/* 选项对布局 */
+.blacklistOptionPair {
+  display: flex;
+  flex-direction: column;
   padding: 0.6rem;
-  border-radius: 0.3rem;
+  background: var(--palette-grey-background-color);
+  border-radius: 4px;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
 }
 
-.blacklistOptionLabel {
+.blacklistOptionPair:hover {
+  background: linear-gradient(135deg, var(--palette-grey-background-color) 0%, rgba(0, 122, 255, 0.03) 100%);
+  border-left-color: rgba(0, 122, 255, 0.5);
+}
+
+.blacklistOptionName {
+  font-size: 0.8rem;
   font-family: 'mabry-bold' !important;
   color: var(--palette-table-title-text-color);
-  display: block;
   margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
-.blacklistOptionValue {
+.blacklistOptionValues {
+  font-size: 0.8rem;
   color: var(--palette-text-secondary);
-  word-break: break-all;
-  line-height: 1.4;
+  line-height: 1.5;
+  word-break: break-word;
+  padding-left: 0.5rem;
+  border-left: 2px solid var(--palette-divider-color);
+}
+
+/* 无配置提示 */
+.blacklistEmpty {
+  color: var(--palette-text-secondary);
+  padding: 2rem;
+  text-align: center;
+}
+
+/* 服务类型区块样式 */
+.serviceTypeSection {
+  margin-bottom: 2.5rem;
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.03) 0%, rgba(0, 122, 255, 0.06) 100%);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 122, 255, 0.15);
+}
+
+.serviceTypeTitle {
+  font-family: 'mabry-bold' !important;
+  font-size: 1.35rem;
+  color: var(--palette-button-color);
+  padding: 0.6rem 0;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.5px;
+}
+
+.serviceTypeTitle::before {
+  content: '';
+  position: absolute;
+  left: -0.5rem;
+  width: 4px;
+  height: 70%;
+  background: linear-gradient(180deg, var(--palette-button-color) 0%, rgba(0, 122, 255, 0.6) 100%);
+  border-radius: 2px;
+}
+
+/* 任务类型区块样式 */
+.taskTypeSection {
+  margin-bottom: 1.8rem;
+}
+
+.taskTypeTitle {
+  font-family: 'mabry-bold' !important;
+  font-size: 1.1rem;
+  color: var(--palette-text-color);
+  padding: 0.6rem 0;
+  margin-bottom: 1.2rem;
+  border-bottom: 2px solid rgba(0, 122, 255, 0.2);
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.taskTypeTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--palette-button-color) 0%, transparent 100%);
+}
+
+/* 任务类型卡片网格布局 */
+.taskTypeCardsGrid {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+
+
+/* 大屏幕 (>= 2049px) */
+@media only screen and (min-width: 2049px) {
+  .blacklistContentContainer {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .taskTypeCardsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .serviceTypeSection {
+    padding: 1.8rem;
+  }
+}
+
+/* 中大屏幕 (1600px - 2048px) */
+@media only screen and (min-width: 1600px) and (max-width: 2048px) {
+  .blacklistContentContainer {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .taskTypeCardsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 中屏幕 (1200px - 1599px) */
+@media only screen and (min-width: 1200px) and (max-width: 1599px) {
+  .blacklistContentContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .taskTypeCardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 小屏幕 (< 1200px) */
+@media only screen and (max-width: 1199px) {
+  .blacklistContentContainer {
+    grid-template-columns: 1fr;
+  }
+  .taskTypeCardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .serviceTypeSection {
+    padding: 1rem;
+  }
+}
+
+/* 超小屏幕 (< 768px) */
+@media only screen and (max-width: 768px) {
+  .taskTypeCardsGrid {
+    grid-template-columns: 1fr;
+  }
+  .serviceTypeTitle {
+    font-size: 1.2rem;
+  }
+  .taskTypeTitle {
+    font-size: 1rem;
+  }
+  .blacklistCard {
+    min-height: auto;
+  }
 }

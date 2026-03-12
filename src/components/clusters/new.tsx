@@ -793,7 +793,7 @@ export default function NewCluster() {
           <BlackList ref={blacklistRef} />
         </Box>
         <Divider sx={{ mt: '1rem', mb: '2rem' }} />
-        <Box>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <CancelLoadingButton
             id="cancel"
             loading={loadingButton}

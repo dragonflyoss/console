@@ -1,5 +1,6 @@
 import { Autocomplete, Box, Button, Grid, TextField, Tooltip, Typography } from '@mui/material';
 import { forwardRef, memo, Ref, useEffect, useImperativeHandle, useState } from 'react';
+import DeleteIcon from '@mui/icons-material/Delete';
 import HelpIcon from '@mui/icons-material/Help';
 import styles from './new.module.css';
 import AddIcon from '@mui/icons-material/Add';
@@ -23,7 +24,8 @@ interface Props {
 }
 
 // URL 正则校验
-const URL_PATTERN = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/[^\s]*)?$/;
+const URL_PATTERN =
+  /^(https?:\/\/)?(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(?::\d{1,5})?(?:\/[^\s]*)?$/;
 
 const isValidURL = (value: string): boolean => {
   return URL_PATTERN.test(value);
@@ -68,6 +70,32 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
 
   const blacklistTypeOptions = ['Client', 'Seed Client'];
 
+  // 检查是否所有可能的组合都已被使用
+  const isAllCombinationsUsed = () => {
+    const taskTypeOptions = [
+      { value: 'task', label: 'Task' },
+      { value: 'persistent_cache_task', label: 'Persistent Cache Task' },
+      { value: 'persistent_task', label: 'Persistent Task' },
+    ];
+
+    // 遍历所有可能的组合
+    for (const type of blacklistTypeOptions) {
+      for (const taskType of taskTypeOptions) {
+        const subConfigs = taskType.value === 'task' ? ['download'] : ['download', 'upload'];
+
+        for (const subConfig of subConfigs) {
+          // 如果存在一个未被使用的组合，则返回 false
+          if (!isCombinationExists(type, taskType.value, subConfig)) {
+            return false;
+          }
+        }
+      }
+    }
+
+    // 所有组合都已被使用
+    return true;
+  };
+
   // 检查type+config+subconfig组合是否已存在
   const isCombinationExists = (type: string, config: string, subConfig: string, excludeIndex?: number) => {
     return blacklist.some((item, index) => {
@@ -86,20 +114,24 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
   ];
 
   // 获取配置选项
-  const getConfigOptions = (type: string) => {
+  const getConfigOptions = (type: string, excludeIndex?: number) => {
     if (!type) return [];
-    return taskTypeOptions;
+
+    // 过滤掉会导致重复的 config 选项
+    return taskTypeOptions.filter((option) => {
+      const possibleSubConfigs = getSubConfigOptions(type, option.value, excludeIndex);
+      return possibleSubConfigs.length > 0; // 只要有一个可用的 subConfig 就显示
+    });
   };
 
   // 获取子配置选项
-  const getSubConfigOptions = (type: string, config: string) => {
+  const getSubConfigOptions = (type: string, config: string, excludeIndex?: number) => {
     if (!type || !config) return [];
 
-    // 如果config是task，则只返回download
-    if (config === 'task') {
-      return ['download'];
-    }
-    return ['download', 'upload'];
+    let options = config === 'task' ? ['download'] : ['download', 'upload'];
+
+    // 过滤掉已存在的组合
+    return options.filter((subConfig) => !isCombinationExists(type, config, subConfig, excludeIndex));
   };
 
   // 获取所有 Type 选项（不再过滤已存在的类型）
@@ -353,18 +385,19 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
           id="create-cluster"
           size="small"
           variant="outlined"
+          disabled={isAllCombinationsUsed()}
           sx={{
             borderColor: 'var(--palette-button-color)',
             color: 'var(--palette-button-color)',
             ':hover': {
               borderColor: 'var(--palette-hover-button-text-color)',
-              backgroundColor: 'transparent',
+              backgroundColor: 'var(--palette-action-hover)',
             },
           }}
           onClick={handleAddBlacklist}
         >
           <AddIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-          <div style={{ paddingTop: '0.25rem' }}>Add blacklist ({blacklist.length})</div>
+          <div style={{ paddingTop: '0.25rem' }}>Add blacklist</div>
         </Button>
       </Box>
 
@@ -378,12 +411,13 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
             return (
               <Box
                 key={`${index}-${item.type}`}
+                data-testid="blacklist-item"
                 sx={{
-                  border: '1px solid var(--palette-divider-color)',
+                  border: '1px solid rgba(0, 0, 0, 0.08)',
                   borderRadius: 1,
                   p: 1.5,
-                  backgroundColor: 'var(--palette-background-paper)',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
                 }}
               >
                 {/* 第一行: Type | Config | Sub Config */}
@@ -401,7 +435,10 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                         color="success"
                         required={true}
                         error={item.type === '' || !!duplicateError}
-                        helperText={duplicateError || (item.type === '' ? 'Service is required' : '')}
+                        helperText={duplicateError || (item.type === '' ? 'Service is required' : ' ')}
+                        FormHelperTextProps={{
+                          sx: { minHeight: '1.25rem' },
+                        }}
                         InputProps={{
                           ...params.InputProps,
                           endAdornment: (
@@ -423,8 +460,9 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                     }}
                   />
                   <Autocomplete
+                    key={`${index}-${item.type}`}
                     size="small"
-                    options={getConfigOptions(item.type)}
+                    options={getConfigOptions(item.type, index)}
                     value={taskTypeOptions.find((opt) => opt.value === item.config) || null}
                     onChange={(_e, newValue) => {
                       const value = newValue ? (typeof newValue === 'string' ? newValue : newValue.value) : '';
@@ -453,8 +491,11 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                         required={item.type !== ''}
                         error={(item.type !== '' && item.config === '') || !!duplicateError}
                         helperText={
-                          duplicateError || (item.type !== '' && item.config === '' ? 'Task Type is required' : '')
+                          duplicateError || (item.type !== '' && item.config === '' ? 'Task Type is required' : ' ')
                         }
+                        FormHelperTextProps={{
+                          sx: { minHeight: '1.25rem' },
+                        }}
                         InputProps={{
                           ...params.InputProps,
                           endAdornment: (
@@ -473,8 +514,9 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                     }}
                   />
                   <Autocomplete
+                    key={`${index}-${item.type}-${item.config}`}
                     size="small"
-                    options={getSubConfigOptions(item.type, item.config)}
+                    options={getSubConfigOptions(item.type, item.config, index)}
                     value={item.subConfig}
                     onChange={(_e, newValue) => handleUpdateBlacklist(index, 'subConfig', newValue || '')}
                     disabled={!item.type || !item.config}
@@ -488,8 +530,13 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                         error={(item.type !== '' && item.config !== '' && item.subConfig === '') || !!duplicateError}
                         helperText={
                           duplicateError ||
-                          (item.type !== '' && item.config !== '' && item.subConfig === '' ? 'Feature is required' : '')
+                          (item.type !== '' && item.config !== '' && item.subConfig === ''
+                            ? 'Feature is required'
+                            : ' ')
                         }
+                        FormHelperTextProps={{
+                          sx: { minHeight: '1.25rem' },
+                        }}
                         InputProps={{
                           ...params.InputProps,
                           endAdornment: (
@@ -527,6 +574,13 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                           label="Applications"
                           placeholder="Enter values or press Enter to add"
                           color="success"
+                          helperText=" "
+                          FormHelperTextProps={{
+                            sx: { minHeight: '1.25rem' },
+                          }}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
                           InputProps={{
                             ...params.InputProps,
                             endAdornment: (
@@ -543,7 +597,15 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                       sx={{
                         width: '100%',
                         '& .MuiOutlinedInput-root': {
+                          minHeight: '3.25rem',
                           paddingRight: '14px !important',
+                          backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                          '&:hover': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                          },
+                          '&.Mui-focused': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                          },
                         },
                       }}
                     />
@@ -577,8 +639,14 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                             !isValidURL(String(params.inputProps.value || '')) &&
                             String(params.inputProps.value || '').length > 3
                               ? 'Please enter a valid URL'
-                              : ''
+                              : ' '
                           }
+                          FormHelperTextProps={{
+                            sx: { minHeight: '1.25rem' },
+                          }}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
                           error={
                             params.inputProps.value
                               ? !isValidURL(String(params.inputProps.value || '')) &&
@@ -601,7 +669,15 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                       sx={{
                         width: '100%',
                         '& .MuiOutlinedInput-root': {
+                          minHeight: '3.25rem',
                           paddingRight: '14px !important',
+                          backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                          '&:hover': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                          },
+                          '&.Mui-focused': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                          },
                         },
                       }}
                     />
@@ -623,6 +699,13 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                           label="Tags"
                           placeholder="Enter values or press Enter to add"
                           color="success"
+                          helperText=" "
+                          FormHelperTextProps={{
+                            sx: { minHeight: '1.25rem' },
+                          }}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
                           InputProps={{
                             ...params.InputProps,
                             endAdornment: (
@@ -636,7 +719,15 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                       sx={{
                         width: '100%',
                         '& .MuiOutlinedInput-root': {
+                          minHeight: '3.25rem',
                           paddingRight: '14px !important',
+                          backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                          '&:hover': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                          },
+                          '&.Mui-focused': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                          },
                         },
                       }}
                     />
@@ -663,6 +754,13 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                             label="Priorities"
                             placeholder="Select priorities"
                             color="success"
+                            helperText=" "
+                            FormHelperTextProps={{
+                              sx: { minHeight: '1.25rem' },
+                            }}
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
                             InputProps={{
                               ...params.InputProps,
                               endAdornment: (
@@ -679,7 +777,15 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                         sx={{
                           width: '100%',
                           '& .MuiOutlinedInput-root': {
+                            minHeight: '3.25rem',
                             paddingRight: '14px !important',
+                            backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                            '&:hover': {
+                              backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                            },
+                            '&.Mui-focused': {
+                              backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                            },
                           },
                         }}
                       />
@@ -694,7 +800,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                     size="small"
                     variant="outlined"
                     sx={{
-                      minWidth: 70,
+                      minWidth: 85,
                       color: 'var(--palette-delete-button-color)',
                       borderColor: 'var(--palette-delete-button-color)',
                       ':hover': {
@@ -704,7 +810,8 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                     }}
                     onClick={() => handleRemoveBlacklist(index)}
                   >
-                    Remove
+                    <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
+                    <div style={{ paddingTop: '0.25rem' }}>Delete</div>
                   </Button>
                 </Box>
               </Box>

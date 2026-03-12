@@ -37,7 +37,7 @@ export const CancelLoadingButton: React.FC<cancelLoadingButtonProps> = ({ loadin
     onClick={onClick}
     {...rest}
   >
-    Cancel
+    <div style={{ paddingTop: '0.25rem' }}>Cancel</div>
   </Button>
 );
 
@@ -92,7 +92,7 @@ export const SavelLoadingButton: React.FC<saveLoadingButtonProps> = ({
       onClick={handleClick}
       {...rest}
     >
-      {text}
+      <div style={{ paddingTop: '0.25rem' }}>{text}</div>
     </Button>
   );
 };
@@ -140,7 +140,7 @@ export const DeleteLoadingButton: React.FC<saveLoadingButtonProps> = ({
       onClick={handleClick}
       {...rest}
     >
-      {text}
+      <div style={{ paddingTop: '0.25rem' }}>{text}</div>
     </Button>
   );
 };

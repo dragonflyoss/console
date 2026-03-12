@@ -581,7 +581,7 @@ export default function ShowCluster() {
             onClick={() => {
               setOpenDeleteInactive(true);
             }}
-          sx={{
+            sx={{
               background: 'var(--palette-button-color)',
               ':hover': {
                 backgroundColor: 'var( --palette-hover-button-text-color)',
@@ -591,7 +591,7 @@ export default function ShowCluster() {
             }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-            DELETE INACTIVE INSTANCES
+            <div style={{ paddingTop: '0.25rem' }}>DELETE INACTIVE INSTANCES</div>
           </Button>
         </MuiTooltip>
       </Box>
@@ -1761,7 +1761,7 @@ export default function ShowCluster() {
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box className={styles.featuresIconWrapper}>
                 <Box className={styles.featuresIconContainer}>
-                  <Schedule style={{width:'3rem',height:'3rem'}} className={styles.featuresIcon} />
+                  <Schedule style={{ width: '3rem', height: '3rem' }} className={styles.featuresIcon} />
                 </Box>
               </Box>
               <Box>

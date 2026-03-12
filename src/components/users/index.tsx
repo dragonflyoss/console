@@ -297,7 +297,7 @@ export default function Users() {
           }}
         >
           <AddIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-          Add User
+          <div style={{ paddingTop: '0.25rem' }}>Add User</div>
         </Button>
       </Box>
       <Box className={styles.searchWrapper}>

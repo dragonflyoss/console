@@ -1280,7 +1280,7 @@ export default function NewPreheat() {
                     setURLS([...URLs, { url: '', error: false }]);
                   }}
                 >
-                  add URL
+                  <div style={{ paddingTop: '0.25rem' }}>add URL</div>
                 </Button>
               </Box>
             </Box>
@@ -1684,7 +1684,7 @@ export default function NewPreheat() {
                       setHeaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
                     }}
                   >
-                    add headers
+                    <div style={{ paddingTop: '0.25rem' }}>add headers</div>
                   </Button>
                 </Paper>
               ) : (
@@ -1705,7 +1705,7 @@ export default function NewPreheat() {
                     setHeaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
                   }}
                 >
-                  add headers
+                  <div style={{ paddingTop: '0.25rem' }}>add headers</div>
                 </Button>
               )}
             </Box>
@@ -2151,7 +2151,7 @@ export default function NewPreheat() {
                       setHeaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
                     }}
                   >
-                    add headers
+                    <div style={{ paddingTop: '0.25rem' }}>add headers</div>
                   </Button>
                 </Paper>
               ) : (

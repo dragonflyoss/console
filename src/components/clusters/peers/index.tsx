@@ -212,8 +212,8 @@ export default function Peer() {
     () =>
       theme.palette.mode === 'dark'
         ? ['#01A76F', '#5BE49B', '#C8FAD6', '#004B50', '#007868']
-        // istanbul ignore next
-        : [
+        : // istanbul ignore next
+          [
             'rgba(67,160,71,0.95)',
             'rgba(76,175,80,0.9)',
             'rgba(102,187,106,0.85)',
@@ -222,18 +222,18 @@ export default function Peer() {
           ],
     [theme.palette.mode],
   );
-// istanbul ignore next
+  // istanbul ignore next
   const getGradient = (ctx: CanvasRenderingContext2D, isHover = false) => {
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
     const colors =
       theme.palette.mode === 'dark'
-      // istanbul ignore next
-        ? isHover
+        ? // istanbul ignore next
+          isHover
           ? ['#00CB69', '#008C74']
           : ['#00E676', '#009688']
         : isHover
-        ? ['#5AA360', '#1E9088']
-        : ['#66BB6A', '#26A69A'];
+          ? ['#5AA360', '#1E9088']
+          : ['#66BB6A', '#26A69A'];
     gradient.addColorStop(0, colors[0]);
     gradient.addColorStop(1, colors[1]);
     return gradient;
@@ -504,7 +504,7 @@ export default function Peer() {
               refresh ? <RefreshLoading className={styles.refreshIcon} /> : <Refresh className={styles.refreshIcon} />
             }
           >
-            refresh
+            <div style={{ paddingTop: '0.25rem' }}>refresh</div>
           </Button>
           <Button
             id="export"
@@ -523,7 +523,7 @@ export default function Peer() {
             }}
             startIcon={<GetAppIcon />}
           >
-            Export
+            <div style={{ paddingTop: '0.25rem' }}>Export</div>
           </Button>
         </Box>
       </Box>

@@ -1,0 +1,12 @@
+{
+  "githubRemote": "origin2",
+  "internalRemote": "origin",
+  "githubEmail": "2018770090@qq.com",
+  "internalEmail": "yjl516914@digital-engine.com",
+  "githubUser": "Yang1998-jiale",
+  "internalUser": "杨佳乐",
+  "emailValidation": {
+    "internalDomain": "@digital-engine.com",
+    "allowedPatterns": ["@digital-engine.com", "@alipay.com"]
+  }
+}

@@ -240,7 +240,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
       }
 
       const targetBlockList = item.type === 'Client' ? peerBlockList : seedPeerBlockList;
-      const configKey = item.config === 'persistent_cache_task' ? 'persistent_task' : item.config;
+      const configKey = item.config;
 
       if (!targetBlockList[configKey]) {
         targetBlockList[configKey] = {};
@@ -286,7 +286,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
             if (subConfigData && typeof subConfigData === 'object') {
               const item: BlacklistItem = {
                 type: 'Client',
-                config: config === 'persistent_task' ? 'persistent_cache_task' : config,
+                config,
                 subConfig,
                 applications: Array.isArray(subConfigData['applications']) ? subConfigData['applications'] : [],
                 urls: Array.isArray(subConfigData['urls']) ? subConfigData['urls'] : [],
@@ -321,7 +321,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
             if (subConfigData && typeof subConfigData === 'object') {
               const item: BlacklistItem = {
                 type: 'Seed Client',
-                config: config === 'persistent_task' ? 'persistent_cache_task' : config,
+                config,
                 subConfig,
                 applications: Array.isArray(subConfigData['applications']) ? subConfigData['applications'] : [],
                 urls: Array.isArray(subConfigData['urls']) ? subConfigData['urls'] : [],
@@ -519,6 +519,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                     options={getSubConfigOptions(item.type, item.config, index)}
                     value={item.subConfig}
                     onChange={(_e, newValue) => handleUpdateBlacklist(index, 'subConfig', newValue || '')}
+                    getOptionLabel={(option) => option.charAt(0).toUpperCase() + option.slice(1)}
                     disabled={!item.type || !item.config}
                     renderInput={(params) => (
                       <TextField

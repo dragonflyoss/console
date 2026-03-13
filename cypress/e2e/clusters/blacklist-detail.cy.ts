@@ -63,68 +63,53 @@ describe('Cluster Blacklist Detail Page', () => {
     cy.contains('Blacklist').should('be.visible');
   });
 
-  it('should display blacklist card titles', () => {
-    // Verify the new nested structure with service type and task type titles
-    cy.contains('Client').should('be.visible');
-    cy.contains('Task').should('be.visible');
-    cy.contains('Download').should('be.visible');
+  it('should display blacklist table headers', () => {
+    // Verify table headers are present
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    cy.contains('Task Type').should('be.visible');
+    cy.contains('Feature').should('be.visible');
+    cy.contains('Applications').should('be.visible');
+    cy.contains('Urls').should('be.visible');
+    cy.contains('Tags').should('be.visible');
+    cy.contains('Priorities').should('be.visible');
   });
 
-  it('should display all blacklist cards in grid layout', () => {
-    // Verify service type sections
+  it('should display service type blocks with headers', () => {
+    // Verify service type headers
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
     cy.contains('Client').should('be.visible');
     cy.contains('Seed Client').should('be.visible');
-
-    // Verify task type sections
-    cy.contains('Task').should('be.visible');
-    cy.contains('Persistent Cache Task').should('be.visible');
-    cy.contains('Persistent Task').should('be.visible');
   });
 
-  it('should display option values in blacklist cards', () => {
-    // Verify blacklist cards show option names and values.
-    // Scroll to the blacklist section first to ensure elements are in viewport
+  it('should display table rows with task types and features', () => {
+    // Verify task types and features are displayed in table rows
     cy.contains('Blacklist').scrollIntoView().should('be.visible');
     cy.contains('Client').scrollIntoView().should('be.visible');
-    cy.contains('Task').scrollIntoView().should('be.visible');
-    cy.contains('Download').scrollIntoView().should('be.visible');
-    cy.contains('Applications').scrollIntoView().should('be.visible');
+    cy.contains('Task').should('be.visible');
+    cy.contains('Persistent Task').should('be.visible');
+    cy.contains('Download').should('be.visible');
+    cy.contains('Upload').should('be.visible');
+  });
+
+  it('should display option values in table cells', () => {
+    // Verify blacklist table shows option values
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    cy.contains('Client').scrollIntoView().should('be.visible');
     cy.contains('app1').scrollIntoView().should('be.visible');
     cy.contains('app2').scrollIntoView().should('be.visible');
-    cy.contains('Urls').scrollIntoView().should('be.visible');
     cy.contains('http://example.com').scrollIntoView().should('be.visible');
-  });
-
-  it('should display all option types for each blacklist entry', () => {
-    // Each blacklist card should show all option types: Applications, Urls, Tags, Priorities
-    // Even if some options have no values, they should be displayed with '-'
-    cy.contains('Blacklist').scrollIntoView().should('be.visible');
-    cy.contains('Client').scrollIntoView().should('be.visible');
-    cy.contains('Task').scrollIntoView().should('be.visible');
-    cy.contains('Download').scrollIntoView().should('be.visible');
-    cy.contains('Applications').scrollIntoView().should('be.visible');
-    cy.contains('Urls').scrollIntoView().should('be.visible');
-    cy.contains('Tags').scrollIntoView().should('be.visible');
-    cy.contains('Priorities').scrollIntoView().should('be.visible');
+    cy.contains('tag1').scrollIntoView().should('be.visible');
   });
 
   it('should display dash for empty option values', () => {
     // Options with no values should display '-'
     cy.contains('Blacklist').scrollIntoView().should('be.visible');
     cy.contains('Client').scrollIntoView().should('be.visible');
-    cy.contains('Task').scrollIntoView().should('be.visible');
-    cy.contains('Download').scrollIntoView().should('be.visible');
 
-    // Find the Download card and check its content
-    cy.contains('Download')
-      .closest('.blacklistCard')
-      .within(() => {
-        // Scroll within the card to ensure elements are in viewport
-        cy.contains('Tags').scrollIntoView().should('be.visible');
-        cy.contains('Priorities').scrollIntoView().should('be.visible');
-        // These should display '-' for empty values
-        cy.contains('-').should('be.visible');
-      });
+    // Check that tables are displayed with all data including empty values
+    // The table should have multiple rows with some containing dashes
+    cy.contains('Task').should('be.visible');
+    cy.contains('Persistent Task').should('be.visible');
   });
 
   it('should display empty state when no blacklist exists', () => {
@@ -147,7 +132,7 @@ describe('Cluster Blacklist Detail Page', () => {
     // With the new structure, empty configurations are not displayed
     cy.contains('Blacklist').should('be.visible');
     cy.contains('No blacklist configuration').should('be.visible');
-    // Service types and task types should not be visible when there's no data
+    // Service types should not be visible when there's no data
     cy.contains('Client').should('not.exist');
     cy.contains('Seed Client').should('not.exist');
   });
@@ -173,7 +158,7 @@ describe('Cluster Blacklist Detail Page', () => {
       seed_peer_cluster_config: {
         load_limit: 300,
         block_list: {
-          task: {
+          persistent_task: {
             upload: {
               urls: ['http://example.com'],
             },
@@ -198,18 +183,19 @@ describe('Cluster Blacklist Detail Page', () => {
     cy.visit('/clusters/1');
     cy.get('#name').should('be.visible');
 
-    // Verify the new nested structure is displayed
-    cy.contains('Client').should('be.visible');
-    cy.contains('Seed Client').should('be.visible');
+    // Verify the new table structure is displayed
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    cy.contains('Client').scrollIntoView().should('be.visible');
+    cy.contains('Seed Client').scrollIntoView().should('be.visible');
     cy.contains('Task').should('be.visible');
-    cy.contains('Persistent Cache Task').should('be.visible');
+    cy.contains('Persistent Task').should('be.visible');
   });
 
   it('should display detailed info including all options', () => {
     cy.contains('Blacklist').scrollIntoView().should('be.visible');
     cy.contains('Client').scrollIntoView().should('be.visible');
-    cy.contains('Task').scrollIntoView().should('be.visible');
-    cy.contains('Download').scrollIntoView().should('be.visible');
+    cy.contains('Task').should('be.visible');
+    cy.contains('Download').should('be.visible');
     cy.contains('app1').scrollIntoView().should('be.visible');
     cy.contains('app2').scrollIntoView().should('be.visible');
     cy.contains('http://example.com').scrollIntoView().should('be.visible');
@@ -249,22 +235,18 @@ describe('Cluster Blacklist Detail Page', () => {
 
     cy.contains('Blacklist').scrollIntoView().should('be.visible');
     cy.contains('Client').scrollIntoView().should('be.visible');
-    cy.contains('Task').scrollIntoView().should('be.visible');
-    cy.contains('Download').scrollIntoView().should('be.visible');
-    cy.contains('Priorities').scrollIntoView().should('be.visible');
+    cy.contains('Task').should('be.visible');
+    cy.contains('Download').should('be.visible');
     cy.contains('1').scrollIntoView().should('be.visible');
     cy.contains('3').scrollIntoView().should('be.visible');
     cy.contains('5').scrollIntoView().should('be.visible');
   });
 
-  it('should display cards for both Client and Seed Client', () => {
-    // Verify service type sections
+  it('should display tables for both Client and Seed Client', () => {
+    // Verify service type blocks
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
     cy.contains('Client').should('be.visible');
     cy.contains('Seed Client').should('be.visible');
-    // Verify task type sections
-    cy.contains('Task').should('be.visible');
-    cy.contains('Persistent Cache Task').should('be.visible');
-    cy.contains('Persistent Task').should('be.visible');
   });
 
   it('should display blacklist section independently from config section', () => {

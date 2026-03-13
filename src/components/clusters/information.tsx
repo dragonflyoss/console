@@ -10,6 +10,11 @@ import {
   Snackbar,
   Button,
   Alert,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
 } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -148,7 +153,7 @@ export default function Information() {
               if (options.length > 0) {
                 result.push({
                   type: 'Client',
-                  config: config === 'persistent_task' ? 'persistent_cache_task' : config,
+                  config,
                   subConfig,
                   options,
                   optionValues,
@@ -185,7 +190,7 @@ export default function Information() {
               if (options.length > 0) {
                 result.push({
                   type: 'Seed Client',
-                  config: config === 'persistent_task' ? 'persistent_cache_task' : config,
+                  config,
                   subConfig,
                   options,
                   optionValues,
@@ -206,10 +211,25 @@ export default function Information() {
     cluster?.seed_peer_cluster_config || {},
   );
 
-  // 定义固定的组合模板结构
+  // 定义黑名单表格行数据结构
+  interface BlacklistTableRow {
+    taskType: string; // 'Task' | 'Persistent Cache Task' | 'Persistent Task'
+    feature: string; // 'download' | 'upload'
+    applications: string[];
+    urls: string[];
+    tags: string[];
+    priorities: string[];
+  }
+
+  interface ServiceTypeGroup {
+    serviceType: 'Client' | 'Seed Client';
+    rows: BlacklistTableRow[];
+  }
+
+  // 将嵌套结构扁平化为表格行数据
   const groupBlacklistData = useMemo(() => {
     // 定义服务类型和任务类型
-    const serviceTypes: Array<{ name: string; source: 'peer' | 'seed' }> = [
+    const serviceTypes: Array<{ name: 'Client' | 'Seed Client'; source: 'peer' | 'seed' }> = [
       { name: 'Client', source: 'peer' },
       { name: 'Seed Client', source: 'seed' },
     ];
@@ -227,53 +247,14 @@ export default function Information() {
       persistent_task: ['download', 'upload'],
     };
 
-    // 初始化空数据结构
-    const groupedData: Array<{
-      serviceType: string;
-      taskTypeGroups: Array<{
-        taskType: string;
-        subConfigs: Array<{
-          subConfig: string;
-          data: {
-            applications: string[];
-            urls: string[];
-            tags: string[];
-            priorities: string[];
-          };
-          isEmpty: boolean;
-        }>;
-      }>;
-    }> = [];
+    const groupedData: ServiceTypeGroup[] = [];
 
     // 遍历服务类型
     serviceTypes.forEach((serviceType) => {
-      const taskTypeGroups: Array<{
-        taskType: string;
-        subConfigs: Array<{
-          subConfig: string;
-          data: {
-            applications: string[];
-            urls: string[];
-            tags: string[];
-            priorities: string[];
-          };
-          isEmpty: boolean;
-        }>;
-      }> = [];
+      const rows: BlacklistTableRow[] = [];
 
       // 遍历任务类型
       taskTypes.forEach((taskType) => {
-        const subConfigs: Array<{
-          subConfig: string;
-          data: {
-            applications: string[];
-            urls: string[];
-            tags: string[];
-            priorities: string[];
-          };
-          isEmpty: boolean;
-        }> = [];
-
         // 遍历 subConfig
         subConfigsByTaskType[taskType.config].forEach((subConfig) => {
           // 从 blacklistData 中查找匹配的数据
@@ -303,30 +284,25 @@ export default function Information() {
             data.tags.length === 0 &&
             data.priorities.length === 0;
 
-          // 只添加有数据的配置
+          // 只添加有数据的行
           if (!isEmpty) {
-            subConfigs.push({
-              subConfig,
-              data,
-              isEmpty,
+            rows.push({
+              taskType: taskType.display,
+              feature: subConfig,
+              applications: data.applications,
+              urls: data.urls,
+              tags: data.tags,
+              priorities: data.priorities,
             });
           }
         });
-
-        // 只有当该任务类型有配置时才添加
-        if (subConfigs.length > 0) {
-          taskTypeGroups.push({
-            taskType: taskType.display,
-            subConfigs,
-          });
-        }
       });
 
-      // 只有当该服务类型有任务类型配置时才添加
-      if (taskTypeGroups.length > 0) {
+      // 只有当该服务类型有数据时才添加
+      if (rows.length > 0) {
         groupedData.push({
           serviceType: serviceType.name,
-          taskTypeGroups,
+          rows,
         });
       }
     });
@@ -1111,51 +1087,63 @@ export default function Information() {
         <Box>
           {groupBlacklistData.length > 0 ? (
             groupBlacklistData.map((serviceTypeGroup, serviceIndex) => (
-              <Box key={`service-${serviceIndex}`} className={styles.serviceTypeSection}>
-                <Typography className={styles.serviceTypeTitle}>{serviceTypeGroup.serviceType}</Typography>
-                {serviceTypeGroup.taskTypeGroups.map((taskTypeGroup, taskIndex) => (
-                  <Box key={`task-${serviceIndex}-${taskIndex}`} className={styles.taskTypeSection}>
-                    <Typography className={styles.taskTypeTitle}>{taskTypeGroup.taskType}</Typography>
-                    <Box className={styles.taskTypeCardsGrid}>
-                      {taskTypeGroup.subConfigs.map((subConfig, subIndex) => (
-                        <Card key={`sub-${serviceIndex}-${taskIndex}-${subIndex}`} className={styles.blacklistCard}>
-                          <Box className={styles.blacklistCardHeader}>
-                            <Typography className={styles.blacklistCardTitle}>
-                              {subConfig.subConfig.charAt(0).toUpperCase() + subConfig.subConfig.slice(1)}
-                            </Typography>
-                          </Box>
-                          <Box className={styles.blacklistCardContent}>
-                            <Box className={styles.blacklistOptionPair}>
-                              <Typography className={styles.blacklistOptionName}>Applications</Typography>
-                              <Typography className={styles.blacklistOptionValues}>
-                                {subConfig.data.applications.join(', ') || '-'}
-                              </Typography>
-                            </Box>
-                            <Box className={styles.blacklistOptionPair}>
-                              <Typography className={styles.blacklistOptionName}>Urls</Typography>
-                              <Typography className={styles.blacklistOptionValues}>
-                                {subConfig.data.urls.join(', ') || '-'}
-                              </Typography>
-                            </Box>
-                            <Box className={styles.blacklistOptionPair}>
-                              <Typography className={styles.blacklistOptionName}>Tags</Typography>
-                              <Typography className={styles.blacklistOptionValues}>
-                                {subConfig.data.tags.join(', ') || '-'}
-                              </Typography>
-                            </Box>
-                            <Box className={styles.blacklistOptionPair}>
-                              <Typography className={styles.blacklistOptionName}>Priorities</Typography>
-                              <Typography className={styles.blacklistOptionValues}>
-                                {subConfig.data.priorities.join(', ') || '-'}
-                              </Typography>
-                            </Box>
-                          </Box>
-                        </Card>
-                      ))}
-                    </Box>
-                  </Box>
-                ))}
-              </Box>
+              <Card key={`service-${serviceIndex}`} className={styles.blacklistServiceBlock}>
+                <Box className={styles.blacklistServiceHeader}>
+                  <Typography className={styles.blacklistServiceTitle}>{serviceTypeGroup.serviceType}</Typography>
+                </Box>
+                <Table className={styles.blacklistTable}>
+                  <TableHead className={styles.blacklistTableHead}>
+                    <TableRow>
+                      <TableCell className={styles.blacklistTableHeader}>Task Type</TableCell>
+                      <TableCell className={styles.blacklistTableHeader}>Feature</TableCell>
+                      <TableCell className={styles.blacklistTableHeader}>Applications</TableCell>
+                      <TableCell className={styles.blacklistTableHeader}>Urls</TableCell>
+                      <TableCell className={styles.blacklistTableHeader}>Tags</TableCell>
+                      <TableCell className={styles.blacklistTableHeader}>Priorities</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {serviceTypeGroup.rows.map((row, rowIndex) => (
+                      <TableRow key={`row-${serviceIndex}-${rowIndex}`} className={styles.blacklistTableRow}>
+                        <TableCell className={`${styles.blacklistTableCell} ${styles.blacklistTableTaskType}`}>
+                          {row.taskType}
+                        </TableCell>
+                        <TableCell className={styles.blacklistTableCell}>
+                          <span className={styles.blacklistTableFeature}>{row.feature}</span>
+                        </TableCell>
+                        <TableCell className={styles.blacklistTableCell}>
+                          {row.applications.length > 0 ? (
+                            row.applications.join(', ')
+                          ) : (
+                            <span className={styles.blacklistOptionEmpty}>-</span>
+                          )}
+                        </TableCell>
+                        <TableCell className={styles.blacklistTableCell}>
+                          {row.urls.length > 0 ? (
+                            row.urls.join(', ')
+                          ) : (
+                            <span className={styles.blacklistOptionEmpty}>-</span>
+                          )}
+                        </TableCell>
+                        <TableCell className={styles.blacklistTableCell}>
+                          {row.tags.length > 0 ? (
+                            row.tags.join(', ')
+                          ) : (
+                            <span className={styles.blacklistOptionEmpty}>-</span>
+                          )}
+                        </TableCell>
+                        <TableCell className={styles.blacklistTableCell}>
+                          {row.priorities.length > 0 ? (
+                            row.priorities.join(', ')
+                          ) : (
+                            <span className={styles.blacklistOptionEmpty}>-</span>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Card>
             ))
           ) : (
             <Typography className={styles.blacklistEmpty}>No blacklist configuration.</Typography>

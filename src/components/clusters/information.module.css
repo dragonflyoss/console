@@ -366,104 +366,6 @@
   background: linear-gradient(90deg, var(--palette-button-color) 0%, transparent 100%);
 }
 
-/* Blacklist内容网格容器 */
-.blacklistContentContainer {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(4, 1fr);
-}
-
-/* Blacklist卡片容器 */
-.blacklistCard {
-  padding: 1.2rem;
-  display: flex;
-  flex-direction: column;
-  min-height: 10rem;
-  position: relative;
-  transition: all 0.3s ease;
-  border: 1px solid var(--palette-divider-color);
-  border-radius: 8px;
-  background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.blacklistCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-  border-color: rgba(0, 122, 255, 0.3);
-}
-
-/* 卡片标题区 */
-.blacklistCardHeader {
-  padding-bottom: 0.8rem;
-  border-bottom: 2px solid var(--palette-divider-color);
-  margin-bottom: 0.8rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-}
-
-.blacklistCardHeader::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 30px;
-  height: 2px;
-  background: var(--palette-button-color);
-  border-radius: 1px;
-}
-
-.blacklistCardTitle {
-  font-family: 'mabry-bold' !important;
-  color: var(--palette-button-color);
-  font-size: 1rem;
-  letter-spacing: 0.5px;
-}
-
-/* 选项内容区 */
-.blacklistCardContent {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-
-/* 选项对布局 */
-.blacklistOptionPair {
-  display: flex;
-  flex-direction: column;
-  padding: 0.6rem;
-  background: var(--palette-grey-background-color);
-  border-radius: 4px;
-  border-left: 3px solid transparent;
-  transition: all 0.2s ease;
-}
-
-.blacklistOptionPair:hover {
-  background: linear-gradient(135deg, var(--palette-grey-background-color) 0%, rgba(0, 122, 255, 0.03) 100%);
-  border-left-color: rgba(0, 122, 255, 0.5);
-}
-
-.blacklistOptionName {
-  font-size: 0.8rem;
-  font-family: 'mabry-bold' !important;
-  color: var(--palette-table-title-text-color);
-  margin-bottom: 0.3rem;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-.blacklistOptionValues {
-  font-size: 0.8rem;
-  color: var(--palette-text-secondary);
-  line-height: 1.5;
-  word-break: break-word;
-  padding-left: 0.5rem;
-  border-left: 2px solid var(--palette-divider-color);
-}
-
 /* 无配置提示 */
 .blacklistEmpty {
   color: var(--palette-text-secondary);
@@ -471,131 +373,135 @@
   text-align: center;
 }
 
-/* 服务类型区块样式 */
-.serviceTypeSection {
-  margin-bottom: 2.5rem;
-  background: linear-gradient(135deg, rgba(0, 122, 255, 0.03) 0%, rgba(0, 122, 255, 0.06) 100%);
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 1px solid rgba(0, 122, 255, 0.15);
-}
-
-.serviceTypeTitle {
-  font-family: 'mabry-bold' !important;
-  font-size: 1.35rem;
-  color: var(--palette-button-color);
-  padding: 0.6rem 0;
+/* 服务类型区块 */
+.blacklistServiceBlock {
   margin-bottom: 1.5rem;
-  position: relative;
-  display: flex;
-  align-items: center;
-  letter-spacing: 0.5px;
+  overflow: hidden;
 }
 
-.serviceTypeTitle::before {
-  content: '';
-  position: absolute;
-  left: -0.5rem;
-  width: 4px;
-  height: 70%;
-  background: linear-gradient(180deg, var(--palette-button-color) 0%, rgba(0, 122, 255, 0.6) 100%);
-  border-radius: 2px;
+.blacklistServiceHeader {
+  padding: 1rem 1.2rem;
+  background: linear-gradient(90deg, var(--palette-grey-background-color) 0%, transparent 100%);
+  border-bottom: 2px solid var(--palette-button-color);
+  margin-bottom: 0;
 }
 
-/* 任务类型区块样式 */
-.taskTypeSection {
-  margin-bottom: 1.8rem;
-}
-
-.taskTypeTitle {
+.blacklistServiceTitle {
   font-family: 'mabry-bold' !important;
   font-size: 1.1rem;
   color: var(--palette-text-color);
-  padding: 0.6rem 0;
-  margin-bottom: 1.2rem;
-  border-bottom: 2px solid rgba(0, 122, 255, 0.2);
-  display: flex;
-  align-items: center;
-  position: relative;
 }
 
-.taskTypeTitle::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--palette-button-color) 0%, transparent 100%);
+/* 表格样式 */
+.blacklistTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 
-/* 任务类型卡片网格布局 */
-.taskTypeCardsGrid {
-  display: grid;
-  gap: 1.2rem;
-  grid-template-columns: repeat(4, 1fr);
+.blacklistTableHead {
+  background-color: var(--palette-grey-background-color);
 }
 
-
-
-/* 大屏幕 (>= 2049px) */
-@media only screen and (min-width: 2049px) {
-  .blacklistContentContainer {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  .taskTypeCardsGrid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  .serviceTypeSection {
-    padding: 1.8rem;
-  }
+.blacklistTableHeader {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  font-family: 'mabry-bold' !important;
+  font-size: 0.85rem;
+  color: var(--palette-table-title-text-color);
+  border-bottom: 1px solid var(--palette-divider-color);
 }
 
-/* 中大屏幕 (1600px - 2048px) */
-@media only screen and (min-width: 1600px) and (max-width: 2048px) {
-  .blacklistContentContainer {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .taskTypeCardsGrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+/* 固定列宽，确保 Client 和 Seed Client 表格对齐 */
+.blacklistTableHeader:nth-child(1) {
+  width: 18%;
 }
 
-/* 中屏幕 (1200px - 1599px) */
-@media only screen and (min-width: 1200px) and (max-width: 1599px) {
-  .blacklistContentContainer {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .taskTypeCardsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.blacklistTableHeader:nth-child(2) {
+  width: 10%;
 }
 
-/* 小屏幕 (< 1200px) */
+.blacklistTableHeader:nth-child(3) {
+  width: 18%;
+}
+
+.blacklistTableHeader:nth-child(4) {
+  width: 18%;
+}
+
+.blacklistTableHeader:nth-child(5) {
+  width: 18%;
+}
+
+.blacklistTableHeader:nth-child(6) {
+  width: 18%;
+}
+
+.blacklistTableRow {
+  border-bottom: 1px solid var(--palette-divider-color);
+}
+
+.blacklistTableRow:hover {
+  background-color: rgba(0, 122, 255, 0.03);
+}
+
+.blacklistTableCell {
+  padding: 0.8rem 1rem;
+  font-size: 0.85rem;
+  color: var(--palette-text-secondary);
+  border-bottom: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.blacklistTableTaskType {
+  font-family: 'mabry-bold' !important;
+  color: var(--palette-text-color);
+}
+
+.blacklistTableFeature {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  background-color: var(--palette-button-color);
+  color: white;
+}
+
+.blacklistOptionEmpty {
+  color: var(--palette-text-secondary);
+  opacity: 0.5;
+}
+
+/* 小屏幕隐藏次要列 */
 @media only screen and (max-width: 1199px) {
-  .blacklistContentContainer {
-    grid-template-columns: 1fr;
+  .blacklistTableHeader:nth-child(n+4),
+  .blacklistTableCell:nth-child(n+4) {
+    display: none;
   }
-  .taskTypeCardsGrid {
-    grid-template-columns: repeat(2, 1fr);
+  /* 小屏幕时调整剩余列宽 */
+  .blacklistTableHeader:nth-child(1) {
+    width: 25%;
   }
-  .serviceTypeSection {
-    padding: 1rem;
+  .blacklistTableHeader:nth-child(2) {
+    width: 15%;
+  }
+  .blacklistTableHeader:nth-child(3) {
+    width: 30%;
   }
 }
 
-/* 超小屏幕 (< 768px) */
 @media only screen and (max-width: 768px) {
-  .taskTypeCardsGrid {
-    grid-template-columns: 1fr;
+  .blacklistTableHeader:nth-child(n+3),
+  .blacklistTableCell:nth-child(n+3) {
+    display: none;
   }
-  .serviceTypeTitle {
-    font-size: 1.2rem;
+  /* 超小屏幕时调整剩余列宽 */
+  .blacklistTableHeader:nth-child(1) {
+    width: 35%;
   }
-  .taskTypeTitle {
-    font-size: 1rem;
-  }
-  .blacklistCard {
-    min-height: auto;
+  .blacklistTableHeader:nth-child(2) {
+    width: 20%;
   }
 }

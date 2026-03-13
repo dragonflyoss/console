@@ -59,140 +59,157 @@ describe('Blacklist functionality', () => {
       // Wait for the page to be fully loaded.
       cy.get('#name').should('be.visible');
       cy.contains('Blocklist').should('be.visible');
-      cy.contains('Add blacklist (0)').should('be.visible');
+      cy.contains('Add blacklist').should('be.visible');
     });
 
-    // it('should display blacklist section with title and add button', () => {
-    //   cy.contains('Blocklist').should('be.visible');
-    //   cy.contains('Add blacklist (0)').should('be.visible');
-    // });
+    it('should display blacklist section with title and add button', () => {
+      cy.contains('Blocklist').should('be.visible');
+      cy.contains('Add blacklist').should('be.visible');
+    });
 
-    // it('should add blacklist entry when clicking add button', () => {
-    //   cy.contains('Add blacklist (0)').click();
+    it('should add blacklist entry when clicking add button', () => {
+      cy.contains('Add blacklist').click();
 
-    //   // After clicking, button text should update and form fields should appear.
-    //   cy.contains('Add blacklist (1)').should('be.visible');
-    //   cy.contains('label', 'Service').should('be.visible');
-    // });
+      // After clicking, form fields should appear.
+      cy.contains('label', 'Service').should('be.visible');
+    });
 
-    // it('should display form fields when blacklist entry is added', () => {
-    //   cy.contains('Add blacklist (0)').click();
+    it('should display form fields when blacklist entry is added', () => {
+      cy.contains('Add blacklist').click();
 
-    //   cy.get('.MuiAutocomplete-root').should('exist');
-    //   cy.contains('label', 'Service').should('be.visible');
-    //   cy.contains('label', 'Task Type').should('be.visible');
-    //   cy.contains('label', 'Feature').should('be.visible');
-    // });
+      cy.get('.MuiAutocomplete-root').should('exist');
+      cy.contains('label', 'Service').should('be.visible');
+      cy.contains('label', 'Task Type').should('be.visible');
+      cy.contains('label', 'Feature').should('be.visible');
+    });
 
-    // it('should allow adding multiple blacklist entries', () => {
-    //   // Add first entry.
-    //   cy.contains('Add blacklist (0)').click();
-    //   cy.contains('Add blacklist (1)').should('be.visible');
+    it('should allow adding multiple blacklist entries', () => {
+      // Add first entry.
+      cy.contains('Add blacklist').click();
+      cy.get('[data-testid="blacklist-item"]').should('have.length', 1);
 
-    //   // Add second entry.
-    //   cy.contains('Add blacklist (1)').click();
-    //   cy.contains('Add blacklist (2)').should('be.visible');
-    // });
+      // Add second entry.
+      cy.contains('Add blacklist').click();
+      cy.get('[data-testid="blacklist-item"]').should('have.length', 2);
+    });
 
-    // it('should show validation error for required fields', () => {
-    //   cy.contains('Add blacklist (0)').scrollIntoView().click();
+    it('should show validation error for required fields', () => {
+      cy.contains('Add blacklist').scrollIntoView().click();
 
-    //   // Service field should show required error when empty.
-    //   cy.contains('Service is required').should('be.visible');
-    // });
+      // Service field should show required error when empty.
+      cy.contains('Service is required').should('be.visible');
+    });
 
-    // it('should show Task Type field when Service is selected', () => {
-    //   cy.contains('Add blacklist (0)').scrollIntoView().click();
+    it('should show Task Type field when Service is selected', () => {
+      cy.contains('Add blacklist').scrollIntoView().click();
 
-    //   // Select Service - use more precise selector to target the Service field in blacklist
-    //   cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
-    //   cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).should('be.visible');
-    //   cy.get('.MuiAutocomplete-popper [role="option"]').contains('Client', { timeout: 10000 }).should('be.visible').click();
-    //   cy.get('.MuiAutocomplete-popper').should('not.exist');
+      // Select Service - use more precise selector to target the Service field in blacklist
+      cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
+      cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).should('be.visible');
+      cy.get('.MuiAutocomplete-popper [role="option"]')
+        .contains('Client', { timeout: 10000 })
+        .should('be.visible')
+        .click();
+      cy.get('.MuiAutocomplete-popper').should('not.exist');
 
-    //   // Task Type field should be enabled when Service is selected.
-    //   cy.contains('label', 'Task Type').should('be.visible');
-    //   cy.contains('label', 'Task Type')
-    //     .closest('.MuiAutocomplete-root')
-    //     .should('exist')
-    //     .find('input')
-    //     .should('not.be.disabled');
-    // });
+      // Task Type field should be enabled when Service is selected.
+      cy.contains('label', 'Task Type').should('be.visible');
+      cy.contains('label', 'Task Type')
+        .closest('.MuiAutocomplete-root')
+        .should('exist')
+        .find('input')
+        .should('not.be.disabled');
+    });
 
-    // it('should show Feature field when Service and Task Type are selected', () => {
-    //   cy.contains('Add blacklist (0)').scrollIntoView().click();
+    it('should show Feature field when Service and Task Type are selected', () => {
+      cy.contains('Add blacklist').scrollIntoView().click();
 
-    //   // Select Service.
-    //   cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
-    //   cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).should('be.visible');
-    //   cy.get('.MuiAutocomplete-popper [role="option"]').contains('Client', { timeout: 10000 }).should('be.visible').click();
-    //   cy.get('.MuiAutocomplete-popper').should('not.exist');
+      // Select Service.
+      cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
+      cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).should('be.visible');
+      cy.get('.MuiAutocomplete-popper [role="option"]')
+        .contains('Client', { timeout: 10000 })
+        .should('be.visible')
+        .click();
+      cy.get('.MuiAutocomplete-popper').should('not.exist');
 
-    //   // Select Task Type.
-    //   cy.contains('label', 'Task Type').closest('.MuiAutocomplete-root').should('exist').click();
-    //   cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).should('be.visible');
-    //   cy.get('.MuiAutocomplete-popper [role="option"]').contains('Task', { timeout: 10000 }).should('be.visible').click();
-    //   cy.get('.MuiAutocomplete-popper').should('not.exist');
+      // Select Task Type.
+      cy.contains('label', 'Task Type').closest('.MuiAutocomplete-root').should('exist').click();
+      cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).should('be.visible');
+      cy.get('.MuiAutocomplete-popper [role="option"]')
+        .contains('Task', { timeout: 10000 })
+        .should('be.visible')
+        .click();
+      cy.get('.MuiAutocomplete-popper').should('not.exist');
 
-    //   // Feature field should be enabled when Service and Task Type are selected.
-    //   cy.contains('label', 'Feature').should('be.visible');
-    //   cy.contains('label', 'Feature').closest('.MuiAutocomplete-root').find('input').should('not.be.disabled');
-    // });
+      // Feature field should be enabled when Service and Task Type are selected.
+      cy.contains('label', 'Feature').should('be.visible');
+      cy.contains('label', 'Feature').closest('.MuiAutocomplete-root').find('input').should('not.be.disabled');
+    });
 
-    // it('should disable Task Type when Service is not selected', () => {
-    //   cy.contains('Add blacklist (0)').scrollIntoView().click();
+    it('should disable Task Type when Service is not selected', () => {
+      cy.contains('Add blacklist').scrollIntoView().click();
 
-    //   // Task Type should be disabled when Service is not selected.
-    //   // Check the input element's disabled attribute
-    //   cy.contains('label', 'Task Type').closest('.MuiAutocomplete-root').find('input').should('be.disabled');
-    // });
+      // Task Type should be disabled when Service is not selected.
+      // Check the input element's disabled attribute
+      cy.contains('label', 'Task Type').closest('.MuiAutocomplete-root').find('input').should('be.disabled');
+    });
 
-    // it('should disable Feature when Task Type is not selected', () => {
-    //   cy.contains('Add blacklist (0)').scrollIntoView().click();
+    it('should disable Feature when Task Type is not selected', () => {
+      cy.contains('Add blacklist').scrollIntoView().click();
 
-    //   // Select Service only.
-    //   cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
-    //   cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).should('be.visible');
-    //   cy.get('.MuiAutocomplete-popper [role="option"]').contains('Client', { timeout: 10000 }).should('be.visible').click();
-    //   cy.get('.MuiAutocomplete-popper').should('not.exist');
+      // Select Service only.
+      cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
+      cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).should('be.visible');
+      cy.get('.MuiAutocomplete-popper [role="option"]')
+        .contains('Client', { timeout: 10000 })
+        .should('be.visible')
+        .click();
+      cy.get('.MuiAutocomplete-popper').should('not.exist');
 
-    //   // Feature should be disabled when Task Type is not selected.
-    //   cy.contains('label', 'Feature').closest('.MuiAutocomplete-root').find('input').should('be.disabled');
-    // });
+      // Feature should be disabled when Task Type is not selected.
+      cy.contains('label', 'Feature').closest('.MuiAutocomplete-root').find('input').should('be.disabled');
+    });
 
-    // it('should disable option fields when type/config/subConfig not fully selected', () => {
-    //   cy.contains('Add blacklist (0)').scrollIntoView().click();
+    it('should disable option fields when type/config/subConfig not fully selected', () => {
+      cy.contains('Add blacklist').scrollIntoView().click();
 
-    //   // Applications, URLs, Tags should be disabled.
-    //   cy.contains('label', 'Applications').parent().find('input').should('be.disabled');
-    //   cy.contains('label', 'URLs').parent().find('input').should('be.disabled');
-    //   cy.contains('label', 'Tags').parent().find('input').should('be.disabled');
-    // });
+      // Applications, URLs, Tags should be disabled.
+      cy.contains('label', 'Applications').parent().find('input').should('be.disabled');
+      cy.contains('label', 'URLs').parent().find('input').should('be.disabled');
+      cy.contains('label', 'Tags').parent().find('input').should('be.disabled');
+    });
 
-    // it('should enable option fields when all selectors are filled', () => {
-    //   cy.contains('Add blacklist (0)').scrollIntoView().click();
+    it('should enable option fields when all selectors are filled', () => {
+      cy.contains('Add blacklist').scrollIntoView().click();
 
-    //   // Select Service.
-    //   cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
-    //   cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).should('be.visible');
-    //   cy.get('.MuiAutocomplete-popper [role="option"]').contains('Client', { timeout: 10000 }).should('be.visible').click();
-    //   cy.get('.MuiAutocomplete-popper').should('not.exist');
+      // Select Service.
+      cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
+      cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).should('be.visible');
+      cy.get('.MuiAutocomplete-popper [role="option"]')
+        .contains('Client', { timeout: 10000 })
+        .should('be.visible')
+        .click();
+      cy.get('.MuiAutocomplete-popper').should('not.exist');
 
-    //   // Select Task Type.
-    //   cy.contains('label', 'Task Type').closest('.MuiAutocomplete-root').should('exist').click();
-    //   cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).should('be.visible');
-    //   cy.get('.MuiAutocomplete-popper [role="option"]').contains('Task', { timeout: 10000 }).should('be.visible').click();
-    //   cy.get('.MuiAutocomplete-popper').should('not.exist');
+      // Select Task Type.
+      cy.contains('label', 'Task Type').closest('.MuiAutocomplete-root').should('exist').click();
+      cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).should('be.visible');
+      cy.get('.MuiAutocomplete-popper [role="option"]')
+        .contains('Task', { timeout: 10000 })
+        .should('be.visible')
+        .click();
+      cy.get('.MuiAutocomplete-popper').should('not.exist');
 
-    //   // Task type 'task' auto-sets Feature to 'download', so all selectors are filled.
-    //   // Applications, URLs, Tags should now be enabled.
-    //   cy.contains('label', 'Applications').parent().find('input').should('not.be.disabled');
-    //   cy.contains('label', 'URLs').parent().find('input').should('not.be.disabled');
-    //   cy.contains('label', 'Tags').parent().find('input').should('not.be.disabled');
-    // });
+      // Task type 'task' auto-sets Feature to 'download', so all selectors are filled.
+      // Applications, URLs, Tags should now be enabled.
+      cy.contains('label', 'Applications').parent().find('input').should('not.be.disabled');
+      cy.contains('label', 'URLs').parent().find('input').should('not.be.disabled');
+      cy.contains('label', 'Tags').parent().find('input').should('not.be.disabled');
+    });
 
     it('should auto-set Feature to download when Task is selected', () => {
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       // Select Service - 使用更稳定的选择器策略
       cy.contains('label', 'Service').parent().find('input').first().as('serviceInput');
@@ -219,7 +236,7 @@ describe('Blacklist functionality', () => {
     });
 
     it('should reset Config and SubConfig when Service changes', () => {
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       // Select Client
       cy.contains('label', 'Service').parent().find('input').first().as('serviceInput');
@@ -253,7 +270,7 @@ describe('Blacklist functionality', () => {
     });
 
     it('should prevent duplicate Service + Task Type + Feature combination', () => {
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       // Create first entry: Client / Task / download
       cy.contains('label', 'Service').parent().find('input').first().as('serviceInput1');
@@ -269,12 +286,14 @@ describe('Blacklist functionality', () => {
       cy.get('@taskInput1').type('Task', { force: true });
       cy.get('.MuiAutocomplete-popper').should('be.visible');
       cy.get('.MuiAutocomplete-popper').contains('Task').should('be.visible').click();
+      // Wait for the popper to close after selection
+      cy.get('.MuiAutocomplete-popper').should('not.exist');
 
       // Feature auto-set to download
       cy.contains('label', 'Feature').parent().find('input').first().should('have.value', 'download');
 
       // Create second entry with same combination
-      cy.contains('Add blacklist (1)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
       // Wait for the new blacklist item to be fully rendered
       cy.get('[data-testid="blacklist-item"]').should('have.length', 2);
 
@@ -289,28 +308,70 @@ describe('Blacklist functionality', () => {
       // Move out of .within() to find the popper which is rendered at body level
       cy.get('.MuiAutocomplete-popper').should('be.visible');
       cy.get('.MuiAutocomplete-popper').contains('Client').should('be.visible').click();
+      // Wait for the popper to close after selection
+      cy.get('.MuiAutocomplete-popper').should('not.exist');
 
       // Wait for Service selection to be processed and options to update
-      // 使用更稳定的选择器:在特定的blacklist item中查找Service字段
       cy.get('[data-testid="blacklist-item"]')
         .eq(1)
         .within(() => {
           cy.contains('Service').parent().find('input').first().should('have.value', 'Client');
         });
 
-      // Task option should not be available due to duplicate combination
+      // Wait for React state to propagate and component to re-render
+      // This ensures the Task Type options are updated based on the new Service selection
+      cy.wait(500);
+
+      // Try to select Task for the second entry
+      // According to the component logic (getConfigOptions function):
+      // - When a task type has no available subConfig combinations, it should NOT appear in dropdown
+      // - For 'Task' type, the only Feature is 'download' which is already used by first entry
+      // - So 'Task' should be filtered out from the dropdown options
       cy.get('[data-testid="blacklist-item"]')
         .eq(1)
         .within(() => {
-          cy.contains('label', 'Task Type').parent().find('input').first().click();
+          // Ensure Task Type field is enabled before clicking
+          cy.contains('label', 'Task Type').parent().find('input').first().should('not.be.disabled').click();
         });
       // Move out of .within() to find the popper
       cy.get('.MuiAutocomplete-popper').should('be.visible');
-      cy.get('.MuiAutocomplete-popper').contains('Task').should('not.exist');
+
+      // Wait for dropdown options to be fully rendered
+      cy.get('.MuiAutocomplete-popper [role="listbox"]').should('be.visible');
+
+      // Wait for options to be filtered (Task should be hidden because it's already used)
+      // Use a custom command or retry logic to verify Task is not in the available options
+      cy.get('.MuiAutocomplete-popper [role="option"]').should('exist');
+
+      // Verify that 'Task' option is NOT available in the dropdown
+      // because its only Feature 'download' combination already exists
+      // Use should('not.exist') with extended timeout to allow for filtering to complete
+      cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).within(() => {
+        cy.get('[role="option"]').should(($options) => {
+          // Verify that none of the options contain 'Task'
+          const optionTexts = $options.map((i, el) => Cypress.$(el).text()).get();
+          expect(optionTexts).to.not.include('Task');
+        });
+      });
+
+      // Verify that other options are still available
+      // Persistent Cache Task and Persistent Task should have available combinations
+      cy.get('.MuiAutocomplete-popper').contains('Persistent Cache Task').should('be.visible');
+      cy.get('.MuiAutocomplete-popper').contains('Persistent Task').should('be.visible');
+
+      // Close the dropdown by clicking outside or pressing escape
+      cy.get('body').click(0, 0);
+
+      // Verify that the Task Type field remains empty (no selection made)
+      cy.get('[data-testid="blacklist-item"]')
+        .eq(1)
+        .within(() => {
+          cy.contains('label', 'Task Type').parent().find('input').first().should('have.value', '');
+        });
     });
 
     it('should show download and upload options for Persistent Cache Task', () => {
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       // Select Service
       cy.contains('label', 'Service').parent().find('input').first().as('serviceInput');
@@ -337,7 +398,7 @@ describe('Blacklist functionality', () => {
     });
 
     it('should show download and upload options for Persistent Task', () => {
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       // Select Service.
       cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
@@ -359,7 +420,7 @@ describe('Blacklist functionality', () => {
     });
 
     it('should only show download option for Task type', () => {
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       // Select Service.
       cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
@@ -381,7 +442,7 @@ describe('Blacklist functionality', () => {
     });
 
     it('should filter out invalid URLs', () => {
-      cy.contains('Add blacklist (0)').click();
+      cy.contains('Add blacklist').click();
 
       // Fill required fields.
       cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
@@ -403,7 +464,7 @@ describe('Blacklist functionality', () => {
     });
 
     it('should accept valid URLs', () => {
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       // Fill required fields.
       cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
@@ -434,7 +495,7 @@ describe('Blacklist functionality', () => {
     });
 
     it('should show Priorities field only when Feature is download', () => {
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       // Fill required fields.
       cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
@@ -458,7 +519,7 @@ describe('Blacklist functionality', () => {
     });
 
     it('should not show Priorities field when Feature is upload', () => {
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       // Fill required fields.
       cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
@@ -482,7 +543,7 @@ describe('Blacklist functionality', () => {
     });
 
     it('should allow selecting Priority levels', () => {
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       // Fill required fields with download feature.
       cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
@@ -515,7 +576,7 @@ describe('Blacklist functionality', () => {
     });
 
     it('should allow adding Seed Client blacklist entry', () => {
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       // Select Seed Client.
       cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
@@ -547,7 +608,7 @@ describe('Blacklist functionality', () => {
     });
 
     it('should handle Persistent Task type with correct mapping (persistent_cache_task to persistent_task)', () => {
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       // Select Client Service.
       cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
@@ -656,7 +717,7 @@ describe('Blacklist functionality', () => {
     });
 
     it('should create cluster with complete blacklist configuration', () => {
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       // Select Service
       cy.contains('label', 'Service').parent().find('input').first().as('serviceInput');
@@ -794,7 +855,7 @@ describe('Blacklist functionality', () => {
 
     it('should create cluster with both Client and Seed Client blacklists', () => {
       // Add Client blacklist.
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
       cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).should('be.visible');
@@ -818,9 +879,14 @@ describe('Blacklist functionality', () => {
 
       // Add Seed Client blacklist.
       // Second entry has Service label at index 1 (after first entry's labels).
-      cy.contains('Add blacklist (1)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
-      cy.contains('label', 'Service', { timeout: 10000 }).eq(1).parent().find('.MuiAutocomplete-root').click();
+      // Get the second blacklist item and interact with its fields
+      cy.get('[data-testid="blacklist-item"]', { timeout: 10000 })
+        .eq(1)
+        .within(() => {
+          cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
+        });
       cy.get('.MuiAutocomplete-popper', { timeout: 10000 }).should('be.visible');
       cy.get('.MuiAutocomplete-popper [role="option"]')
         .contains('Seed Client', { timeout: 10000 })
@@ -828,24 +894,25 @@ describe('Blacklist functionality', () => {
         .click();
       cy.get('.MuiAutocomplete-popper').should('not.exist');
 
-      cy.contains('label', 'Task Type', { timeout: 10000 })
+      cy.get('[data-testid="blacklist-item"]', { timeout: 10000 })
         .eq(1)
-        .closest('.MuiAutocomplete-root')
-        .should('exist')
-        .click();
+        .within(() => {
+          cy.contains('label', 'Task Type').closest('.MuiAutocomplete-root').should('exist').click();
+        });
       cy.get('.MuiAutocomplete-popper').should('be.visible');
       cy.get('.MuiAutocomplete-popper').contains('Persistent Cache Task').should('be.visible').click();
 
-      cy.contains('label', 'Feature', { timeout: 10000 })
+      cy.get('[data-testid="blacklist-item"]', { timeout: 10000 })
         .eq(1)
-        .closest('.MuiAutocomplete-root')
-        .should('exist')
-        .click();
+        .within(() => {
+          cy.contains('label', 'Feature').closest('.MuiAutocomplete-root').should('exist').click();
+        });
       cy.get('.MuiAutocomplete-popper').should('be.visible');
       cy.get('.MuiAutocomplete-popper').contains('upload').should('be.visible').click();
 
       // Upload does not show Priorities, so: Tags label for second entry.
-      cy.contains('label', 'Tags', { timeout: 10000 }).eq(1).parent().find('input').type('tag1{enter}');
+      // Note: cy.contains() only returns the first matching element, so we use cy.get().filter() to get all matching labels
+      cy.get('label').filter(':contains("Tags")').eq(1).parent().find('input').type('tag1{enter}');
 
       // Create cluster.
       cy.get('#name').type('cluster-both-blacklists');
@@ -927,25 +994,25 @@ describe('Blacklist functionality', () => {
 
     it('should remove blacklist entry and update count', () => {
       // Add two entries.
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
-      cy.contains('Add blacklist (1)').should('be.visible');
+      cy.contains('Add blacklist').scrollIntoView().click();
+      cy.get('[data-testid="blacklist-item"]').should('have.length', 1);
 
-      cy.contains('Add blacklist (1)').scrollIntoView().click();
-      cy.contains('Add blacklist (2)').should('be.visible');
+      cy.contains('Add blacklist').scrollIntoView().click();
+      cy.get('[data-testid="blacklist-item"]').should('have.length', 2);
 
       // Remove first entry.
-      cy.contains('Remove').first().click();
-      cy.contains('Add blacklist (1)').should('be.visible');
+      cy.contains('Delete').first().click();
+      cy.get('[data-testid="blacklist-item"]').should('have.length', 1);
 
       // Remove remaining entry.
-      cy.contains('Remove').first().click();
-      cy.contains('Add blacklist (0)').should('be.visible');
+      cy.contains('Delete').first().click();
+      cy.get('[data-testid="blacklist-item"]').should('have.length', 0);
     });
 
     it('should allow creating cluster with blacklist configuration', () => {
       cy.get('#name').type('cluster-with-blacklist');
 
-      cy.contains('Add blacklist (0)').scrollIntoView().click();
+      cy.contains('Add blacklist').scrollIntoView().click();
 
       // Select Service.
       cy.contains('label', 'Service').closest('.MuiAutocomplete-root').should('exist').click();
@@ -1086,16 +1153,16 @@ describe('Blacklist functionality', () => {
 
     it('should display existing blacklist configuration', () => {
       cy.contains('Blocklist').should('be.visible');
-      cy.contains('Add blacklist (2)', { timeout: 10000 }).should('be.visible');
+      cy.get('[data-testid="blacklist-item"]', { timeout: 10000 }).should('have.length', 2);
     });
 
     it('should have blacklist form fields', () => {
-      cy.contains('Add blacklist (2)', { timeout: 10000 }).should('be.visible');
+      cy.get('[data-testid="blacklist-item"]', { timeout: 10000 }).should('have.length', 2);
       cy.get('.MuiAutocomplete-root').should('have.length.greaterThan', 0);
     });
 
     it('should allow modifying existing blacklist entry', () => {
-      cy.contains('Add blacklist (2)', { timeout: 10000 }).should('be.visible');
+      cy.get('[data-testid="blacklist-item"]', { timeout: 10000 }).should('have.length', 2);
 
       // Add a new application to the first entry's Applications field.
       cy.contains('label', 'Applications').parent().find('input').type('app3{enter}');
@@ -1105,18 +1172,18 @@ describe('Blacklist functionality', () => {
     });
 
     it('should allow removing existing blacklist entry', () => {
-      cy.contains('Add blacklist (2)', { timeout: 10000 }).should('be.visible');
+      cy.get('[data-testid="blacklist-item"]', { timeout: 10000 }).should('have.length', 2);
 
-      cy.contains('Remove').first().click();
-      cy.contains('Add blacklist (1)').should('be.visible');
+      cy.contains('Delete').first().click();
+      cy.get('[data-testid="blacklist-item"]').should('have.length', 1);
     });
 
     it('should update cluster with modified blacklist', () => {
-      cy.contains('Add blacklist (2)', { timeout: 10000 }).should('be.visible');
+      cy.get('[data-testid="blacklist-item"]', { timeout: 10000 }).should('have.length', 2);
 
       // Remove first entry.
-      cy.contains('Remove').first().click();
-      cy.contains('Add blacklist (1)').should('be.visible');
+      cy.contains('Delete').first().click();
+      cy.get('[data-testid="blacklist-item"]').should('have.length', 1);
 
       cy.intercept(
         {
@@ -1140,16 +1207,16 @@ describe('Blacklist functionality', () => {
     });
 
     it('should allow adding new blacklist entry in edit mode', () => {
-      cy.contains('Add blacklist (2)', { timeout: 10000 }).should('be.visible');
+      cy.get('[data-testid="blacklist-item"]', { timeout: 10000 }).should('have.length', 2);
 
-      cy.contains('Add blacklist (2)').scrollIntoView().click();
-      cy.contains('Add blacklist (3)', { timeout: 10000 }).should('be.visible');
+      cy.contains('Add blacklist').scrollIntoView().click();
+      cy.get('[data-testid="blacklist-item"]', { timeout: 10000 }).should('have.length', 3);
     });
 
     it('should load persistent_task from API and display as Persistent Cache Task', () => {
       // The cluster has persistent_task in seed_peer_cluster_config.
       // The UI should display it as "Persistent Cache Task".
-      cy.contains('Add blacklist (2)', { timeout: 10000 }).should('be.visible');
+      cy.get('[data-testid="blacklist-item"]', { timeout: 10000 }).should('have.length', 2);
 
       // Wait for the blacklist forms to be fully loaded and rendered
       cy.get('.MuiAutocomplete-root', { timeout: 10000 }).should('have.length.greaterThan', 0);
@@ -1158,14 +1225,17 @@ describe('Blacklist functionality', () => {
       // First entry has download (7 autocompletes: Service, TaskType, Feature, Apps, URLs, Tags, Priorities).
       // Second entry starts with Task Type label at index 1.
       // Need to ensure Service field is properly loaded before accessing Task Type
-      cy.contains('label', 'Service', { timeout: 10000 })
+      // Note: cy.contains() only returns the first matching element, so we use cy.get().filter() to get all matching labels
+      cy.get('label')
+        .filter(':contains("Service")')
         .eq(1)
         .closest('.MuiAutocomplete-root')
         .within(() => {
           cy.get('input').should('have.value', 'Seed Client');
         });
 
-      cy.contains('label', 'Task Type', { timeout: 10000 })
+      cy.get('label')
+        .filter(':contains("Task Type")')
         .eq(1)
         .closest('.MuiAutocomplete-root')
         .within(() => {
@@ -1174,7 +1244,7 @@ describe('Blacklist functionality', () => {
     });
 
     it('should convert Persistent Cache Task to persistent_task on update', () => {
-      cy.contains('Add blacklist (2)', { timeout: 10000 }).should('be.visible');
+      cy.get('[data-testid="blacklist-item"]', { timeout: 10000 }).should('have.length', 2);
 
       cy.intercept(
         {
@@ -1230,14 +1300,14 @@ describe('Blacklist functionality', () => {
 
       cy.visit('/clusters/1/edit');
       cy.get('#name').should('be.visible');
-      cy.contains('Add blacklist (1)', { timeout: 10000 }).should('be.visible');
+      cy.get('[data-testid="blacklist-item"]', { timeout: 10000 }).should('have.length', 1);
 
       // Priorities should be displayed as chips (Level 1, Level 3).
       cy.contains('label', 'Priorities').parent().find('.MuiChip-root').should('have.length', 2);
     });
 
     it('should filter out invalid URLs when editing', () => {
-      cy.contains('Add blacklist (2)', { timeout: 10000 }).should('be.visible');
+      cy.get('[data-testid="blacklist-item"]', { timeout: 10000 }).should('have.length', 2);
 
       // Try to add invalid URL to the first entry's URLs field.
       cy.contains('label', 'URLs').parent().find('input').type('invalid-url{enter}');

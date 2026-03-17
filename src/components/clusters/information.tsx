@@ -288,7 +288,7 @@ export default function Information() {
           if (!isEmpty) {
             rows.push({
               taskType: taskType.display,
-              feature: subConfig,
+              feature: subConfig.charAt(0).toUpperCase() + subConfig.slice(1),
               applications: data.applications,
               urls: data.urls,
               tags: data.tags,

@@ -45,7 +45,6 @@ import { ReactComponent as RefreshLoading } from '../../../assets/images/cluster
 import { ReactComponent as Refresh } from '../../../assets/images/cluster/peer/refresh.svg';
 import { ReactComponent as RefreshDialog } from '../../../assets/images/cluster/peer/refresh-dialog.svg';
 import { ReactComponent as DeleteWarning } from '../../../assets/images/cluster/delete-warning.svg';
-import { ReactComponent as Total } from '../../../assets/images/cluster/peer/total.svg';
 import { ReactComponent as GitVersion } from '../../../assets/images/cluster/peer/git-versions.svg';
 import { ReactComponent as GitCommit } from '../../../assets/images/cluster/peer/git-commits.svg';
 import { ReactComponent as Active } from '../../../assets/images/cluster/peer/active.svg';
@@ -528,32 +527,6 @@ export default function Peer() {
         </Box>
       </Box>
       <Box className={styles.navigationContainer}>
-        <Card className={styles.navigationWrapper}>
-          <Box className={styles.navigationContent}>
-            <Box>
-              <Typography variant="subtitle2" fontFamily="mabry-bold" color="var(--palette-table-title-text-color)">
-                Total
-              </Typography>
-              {isLoading ? (
-                <Skeleton height={40} data-testid="cluster-loading" width="2rem" />
-              ) : (
-                <Typography id="total" variant="h5" fontFamily="mabry-bold" p="0.5rem 0">
-                  {peer.length}
-                </Typography>
-              )}
-              <Box className={styles.navigationCount}>
-                <span className={styles.navigationCountIcon}>
-                  <Count />
-                </span>
-                <Typography variant="body2" color="var(--palette-table-title-text-color)">
-                  number of peers
-                </Typography>
-              </Box>
-            </Box>
-            <Box className={styles.navigation}></Box>
-            <Total className={styles.navigationIcon} />
-          </Box>
-        </Card>
         <Card className={styles.navigationWrapper}>
           <Box className={styles.navigationContent}>
             <Box>

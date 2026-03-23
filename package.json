@@ -84,7 +84,7 @@
     "react-app-rewired": "^2.2.1",
     "react-chartjs-2": "^5.2.0",
     "react-use": "^17.4.0",
-    "typescript": "^5.2.2"
+    "typescript": "^6.0.2"
   },
   "eslintConfig": {
     "extends": [

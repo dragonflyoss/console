@@ -5,7 +5,7 @@
   "description": "Dragonfly console is the front-end console of dragonfly, through which you can easily configure clusters and view cluster information.",
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=20.19.0",
+    "node": ">=20.0.0",
     "yarn": ">=1.22.0"
   },
   "keywords": [

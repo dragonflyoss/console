@@ -618,12 +618,6 @@ export default function NewCluster() {
       },
     };
 
-    // let a = 1;
-    // if (a > 0) {
-    //   console.log(formData);
-    //   return;
-    // }
-
     if (canSubmit) {
       try {
         const cluster = await createCluster({ ...formData });

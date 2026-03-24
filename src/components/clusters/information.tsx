@@ -20,7 +20,7 @@ import Dialog from '@mui/material/Dialog';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Card from '../card';
 import HelpIcon from '@mui/icons-material/Help';
-import { useContext, useState, useEffect, useRef, useMemo } from 'react';
+import { useContext, useState, useMemo } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { MyContext } from './show';
 import { ReactComponent as InformationCluster } from '../../assets/images/cluster/information-cluster.svg';
@@ -57,7 +57,6 @@ export default function Information() {
   const [errorMessageText, setErrorMessageText] = useState('');
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [openDeleteCluster, setOpenDeleteCluster] = useState(false);
-  const isInitializedRef = useRef(false);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -517,67 +516,7 @@ export default function Information() {
                 )}
               </Box>
             </Box>
-            {/* <Box className={styles.clusterWrap}>
-              <Box className={styles.clusterTitle}>
-                <Typography variant="body2" component="div" className={styles.configLable}>
-                  Seed peer cluster ID
-                </Typography>
-                <MuiTooltip
-                  title="When the seed peer is deployed, the clusterID must be filled with this seed peer cluster ID in scheduler configuration. In this way, the seed peer will become the seed peer service of this cluster."
-                  placement="top"
-                >
-                  <HelpIcon className={styles.descriptionIcon} />
-                </MuiTooltip>
-              </Box>
-              <Box className={styles.schedulerClusterID}>
-                <Typography
-                  id="seed-peer-cluster-id"
-                  variant="body2"
-                  component="div"
-                  mr="0.5rem"
-                  className={styles.clusterContent}
-                >
-                  {isLoading ? (
-                    <Skeleton data-testid="cluster-loading" className={styles.loading} />
-                  ) : (
-                    cluster?.seed_peer_cluster_id || 0
-                  )}
-                </Typography>
-                {!isLoading && (
-                  <IconButton
-                    aria-label="copy"
-                    id="copy-seed-peer-cluster-id"
-                    sx={{
-                      width: '1.2rem',
-                      height: '1.2rem',
-                      p: 0,
-                    }}
-                    onClick={() => {
-                      copyClusterID('seedPeerClusterID', cluster?.seed_peer_cluster_id || 0);
-                    }}
-                  >
-                    {showSeedPeerClusterIDCopyIcon ? (
-                      <MuiTooltip
-                        placement="top"
-                        PopperProps={{
-                          disablePortal: true,
-                        }}
-                        open={showSeedPeerClusterIDCopyIcon}
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        title="copied!"
-                        id="seedPeerClusterIDTooltip"
-                      >
-                        <Done id="seedPeerClusterDoneIcon" className={styles.copyIcon} />
-                      </MuiTooltip>
-                    ) : (
-                      <Copy id="seedPeerClusterIDCopyIcon" className={styles.copyIcon} />
-                    )}
-                  </IconButton>
-                )}
-              </Box>
-            </Box> */}
+
             <Box className={styles.clusterWrap}>
               <Box className={styles.clusterTitle}>
                 <Typography variant="body2" component="div" className={styles.configLable}>

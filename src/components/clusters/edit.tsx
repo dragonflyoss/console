@@ -97,38 +97,6 @@ export default function EditCluster() {
           const cluster = await getCluster(params.id);
           setCluster({
             ...cluster,
-            // peer_cluster_config: {
-            //   load_limit: 200,
-            //   block_list: {
-            //     task: {
-            //       download: {
-            //         urls: ['http://127.0.0.1:8081/small'],
-            //         tags: ['v1'],
-            //       },
-            //     },
-            //     persistent_task: {
-            //       upload: {
-            //         applications: ['ios'],
-            //       },
-            //     },
-            //   },
-            // },
-            // seed_peer_cluster_config: {
-            //   load_limit: 2000,
-            //   block_list: {
-            //     task: {
-            //       download: {
-            //         urls: ['http://127.0.0.1:8081/small'],
-            //         tags: ['v1'],
-            //       },
-            //     },
-            //     persistent_task: {
-            //       upload: {
-            //         applications: ['ios'],
-            //       },
-            //     },
-            //   },
-            // },
           });
           setIsLoading(false);
         }

@@ -93,9 +93,6 @@ describe('Cluster', () => {
 
       // Displays the scheduler cluster ID.
       cy.get('#scheduler-cluster-id').should('be.visible').and('contain', '1');
-
-      // Note: seed-peer-cluster-id element has been commented out in the UI
-      // cy.get('#seed-peer-cluster-id').should('be.visible').and('contain', '1');
     });
 
     it('can display scopes', () => {
@@ -223,18 +220,6 @@ describe('Cluster', () => {
 
       // Display successful copy icon.
       cy.get('#schedulerClusterIDCopyIcon').should('exist');
-
-      // Let's check the copied text - skip clipboard check due to permissions
-      // cy.window()
-      //   .its('navigator.clipboard')
-      //   .then((clip) => clip.readText())
-      //   .should('equal', '1');
-
-      // Note: seed-peer-cluster-id copy button has been commented out in the UI
-      // cy.get('#copy-seed-peer-cluster-id').click();
-      // cy.get('#seedPeerClusterIDCopyIcon').should('exist');
-      // cy.wait(1000);
-      // cy.get('#seedPeerClusterIDCopyIcon').should('exist');
     });
   });
 
@@ -298,8 +283,6 @@ describe('Cluster', () => {
       cy.get('#description').should('have.text', '-');
       cy.get('#default').should('have.text', 'Yes');
       cy.get('#scheduler-cluster-id').should('have.text', '1');
-      // Note: seed-peer-cluster-id element has been commented out in the UI
-      // cy.get('#seed-peer-cluster-id').should('have.text', '1');
     });
 
     it('unable to display scopes', () => {

@@ -451,8 +451,17 @@
   color: var(--palette-text-secondary);
   border-bottom: none;
   overflow: hidden;
-  text-overflow: ellipsis;
+  max-width: 0;
+}
+
+.blacklistCellText {
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
+  font-size: 0.85rem;
+  color: var(--palette-text-secondary);
 }
 
 .blacklistTableTaskType {

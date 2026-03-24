@@ -41,6 +41,11 @@ import { getDatetime } from '../../lib/utils';
 import styles from './information.module.css';
 import ErrorHandler from '../error-handler';
 
+// 格式化优先级显示
+const formatPriority = (priority: string): string => {
+  return `Level ${priority}`;
+};
+
 export default function Information() {
   const [openCIDRs, setOpenCIDRs] = useState(false);
   const [openIDC, setOpenIDC] = useState(false);
@@ -1112,32 +1117,66 @@ export default function Information() {
                           <span className={styles.blacklistTableFeature}>{row.feature}</span>
                         </TableCell>
                         <TableCell className={styles.blacklistTableCell}>
-                          {row.applications.length > 0 ? (
-                            row.applications.join(', ')
-                          ) : (
-                            <span className={styles.blacklistOptionEmpty}>-</span>
-                          )}
+                          <Typography variant="body2" className={styles.blacklistCellText}>
+                            <MuiTooltip
+                              title={row.applications.length > 0 ? row.applications.join(', ') : '-'}
+                              placement="top"
+                            >
+                              <span>
+                                {row.applications.length > 0 ? (
+                                  row.applications.join(', ')
+                                ) : (
+                                  <span className={styles.blacklistOptionEmpty}>-</span>
+                                )}
+                              </span>
+                            </MuiTooltip>
+                          </Typography>
                         </TableCell>
                         <TableCell className={styles.blacklistTableCell}>
-                          {row.urls.length > 0 ? (
-                            row.urls.join(', ')
-                          ) : (
-                            <span className={styles.blacklistOptionEmpty}>-</span>
-                          )}
+                          <Typography variant="body2" className={styles.blacklistCellText}>
+                            <MuiTooltip title={row.urls.length > 0 ? row.urls.join(', ') : '-'} placement="top">
+                              <span>
+                                {row.urls.length > 0 ? (
+                                  row.urls.join(', ')
+                                ) : (
+                                  <span className={styles.blacklistOptionEmpty}>-</span>
+                                )}
+                              </span>
+                            </MuiTooltip>
+                          </Typography>
                         </TableCell>
                         <TableCell className={styles.blacklistTableCell}>
-                          {row.tags.length > 0 ? (
-                            row.tags.join(', ')
-                          ) : (
-                            <span className={styles.blacklistOptionEmpty}>-</span>
-                          )}
+                          <Typography variant="body2" className={styles.blacklistCellText}>
+                            <MuiTooltip title={row.tags.length > 0 ? row.tags.join(', ') : '-'} placement="top">
+                              <span>
+                                {row.tags.length > 0 ? (
+                                  row.tags.join(', ')
+                                ) : (
+                                  <span className={styles.blacklistOptionEmpty}>-</span>
+                                )}
+                              </span>
+                            </MuiTooltip>
+                          </Typography>
                         </TableCell>
                         <TableCell className={styles.blacklistTableCell}>
-                          {row.priorities.length > 0 ? (
-                            row.priorities.join(', ')
-                          ) : (
-                            <span className={styles.blacklistOptionEmpty}>-</span>
-                          )}
+                          <Typography variant="body2" className={styles.blacklistCellText}>
+                            <MuiTooltip
+                              title={
+                                row.priorities.length > 0
+                                  ? row.priorities.map((p) => formatPriority(p)).join(', ')
+                                  : '-'
+                              }
+                              placement="top"
+                            >
+                              <span>
+                                {row.priorities.length > 0 ? (
+                                  row.priorities.map((p) => formatPriority(p)).join(', ')
+                                ) : (
+                                  <span className={styles.blacklistOptionEmpty}>-</span>
+                                )}
+                              </span>
+                            </MuiTooltip>
+                          </Typography>
                         </TableCell>
                       </TableRow>
                     ))}

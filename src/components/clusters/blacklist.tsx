@@ -1,24 +1,42 @@
 import { Autocomplete, Box, Button, Grid, TextField, Tooltip, Typography } from '@mui/material';
-import { forwardRef, memo, Ref, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, memo, Ref, useEffect, useImperativeHandle, useState, useMemo, useCallback } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import HelpIcon from '@mui/icons-material/Help';
 import styles from './new.module.css';
 import AddIcon from '@mui/icons-material/Add';
+import type { BlockListConfig } from '../../lib/api';
 
+/**
+ * 黑名单配置项
+ * 用于前端表单展示和编辑
+ */
 interface BlacklistItem {
+  /** 类型: Client 或 Seed Client */
   type: string;
+  /** 任务配置类型: task, persistent_cache_task, persistent_task */
   config: string;
+  /** 子配置类型: download, upload */
   subConfig: string;
+  /** 应用名称列表 */
   applications: string[];
+  /** URL 正则表达式列表 */
   urls: string[];
+  /** 标签列表 */
   tags: string[];
+  /** 优先级列表 (字符串格式,用于表单) */
   priorities: string[];
 }
 
 interface Props {
   clusterInfo?: {
-    seed_peer_cluster_config: Record<string, any>;
-    peer_cluster_config: Record<string, any>;
+    seed_peer_cluster_config?: {
+      load_limit?: number;
+      block_list?: BlockListConfig;
+    };
+    peer_cluster_config?: {
+      load_limit?: number;
+      block_list?: BlockListConfig;
+    };
     [x: string]: any;
   };
 }
@@ -39,11 +57,389 @@ const priorityOptions = [
   { value: '5', label: 'Level 5' },
 ];
 
+// 任务类型选项类型定义
+interface TaskTypeOption {
+  value: string;
+  label: string;
+}
+
+const taskTypeOptions: TaskTypeOption[] = [
+  { value: 'task', label: 'Task' },
+  { value: 'persistent_cache_task', label: 'Persistent Cache Task' },
+  { value: 'persistent_task', label: 'Persistent Task' },
+];
+
+// 黑名单类型选项
+const blacklistTypeOptions = ['Client', 'Seed Client'] as const;
+
+const AUTOCOMPLETE_TEXTFIELD_SX = {
+  width: '100%',
+  '& .MuiOutlinedInput-root': {
+    minHeight: '3.25rem',
+    paddingRight: '14px !important',
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    '&:hover': {
+      backgroundColor: 'rgba(255, 255, 255, 0.06)',
+    },
+    '&.Mui-focused': {
+      backgroundColor: 'rgba(255, 255, 255, 0.06)',
+    },
+  },
+} as const;
+
+const AUTOCOMPLETE_SX = {
+  flex: 1,
+  '& .MuiOutlinedInput-root': {
+    paddingRight: '14px !important',
+  },
+} as const;
+
+const FORM_HELPER_TEXT_SX = { minHeight: '1.25rem' } as const;
+
+interface BlacklistItemCardProps {
+  item: BlacklistItem;
+  index: number;
+  duplicateError?: string;
+  onUpdate: (index: number, field: string, value: any) => void;
+  onRemove: (index: number) => void;
+  getAvailableTypes: () => string[];
+  getConfigOptions: (type: string, excludeIndex?: number) => TaskTypeOption[];
+  getSubConfigOptions: (type: string, config: string, excludeIndex?: number) => string[];
+}
+
+const BlacklistItemCard = memo(
+  ({
+    item,
+    index,
+    duplicateError,
+    onUpdate,
+    onRemove,
+    getAvailableTypes,
+    getConfigOptions,
+    getSubConfigOptions,
+  }: BlacklistItemCardProps) => {
+    const isSubConfigDownload = item.subConfig === 'download';
+
+    // 优先级选择器的值转换
+    const priorityValue = useMemo(
+      () =>
+        item.priorities
+          .map((p) => priorityOptions.find((opt) => opt.value === p))
+          .filter((opt): opt is (typeof priorityOptions)[0] => opt !== undefined),
+      [item.priorities],
+    );
+
+    // 统一的更新处理器
+    const handleFieldUpdate = useCallback(
+      (field: string, value: any) => {
+        onUpdate(index, field, value);
+      },
+      [index, onUpdate],
+    );
+
+    // 统一的删除处理器
+    const handleRemove = useCallback(() => {
+      onRemove(index);
+    }, [index, onRemove]);
+
+    // URL 校验处理器
+    const handleURLsChange = useCallback(
+      (_e: any, newValue: string[]) => {
+        const validatedValues = (newValue || []).filter((v) => {
+          if (typeof v !== 'string') return true;
+          return isValidURL(v);
+        });
+        handleFieldUpdate('urls', validatedValues);
+      },
+      [handleFieldUpdate],
+    );
+
+    // 优先级变更处理器
+    const handlePrioritiesChange = useCallback(
+      (_e: any, newValue: Array<{ value: string; label: string }>) => {
+        const values = newValue.map((v) => v.value);
+        handleFieldUpdate('priorities', values);
+      },
+      [handleFieldUpdate],
+    );
+
+    // 公共的 TextField 渲染函数
+    const renderTextField = useCallback(
+      (
+        params: any,
+        label: string,
+        placeholder: string,
+        tooltip: string,
+        required: boolean,
+        error: boolean,
+        helperText: string,
+        shrink?: boolean,
+      ) => (
+        <TextField
+          {...params}
+          label={label}
+          placeholder={placeholder}
+          color="success"
+          required={required}
+          error={error}
+          helperText={helperText}
+          FormHelperTextProps={{ sx: FORM_HELPER_TEXT_SX }}
+          InputLabelProps={shrink ? { shrink: true } : undefined}
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <Tooltip title={tooltip} placement="top">
+                <HelpIcon className={styles.descriptionIcon} />
+              </Tooltip>
+            ),
+          }}
+        />
+      ),
+      [],
+    );
+
+    // 第一行字段是否禁用
+    const isFirstRowDisabled = !item.type || !item.config || !item.subConfig;
+
+    return (
+      <Box
+        key={`${index}-${item.type}`}
+        data-testid="blacklist-item"
+        sx={{
+          border: '1px solid rgba(0, 0, 0, 0.08)',
+          borderRadius: 1,
+          p: 1.5,
+          backgroundColor: 'rgba(255, 255, 255, 0.02)',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+        }}
+      >
+        {/* 第一行: Type | Config | Sub Config */}
+        <Box sx={{ display: 'flex', gap: 1, mb: 1.5 }}>
+          <Autocomplete
+            size="small"
+            options={getAvailableTypes()}
+            value={item.type}
+            onChange={(_e, newValue) => handleFieldUpdate('type', newValue || '')}
+            renderInput={(params) =>
+              renderTextField(
+                params,
+                'Service',
+                'Select service',
+                'Select the type of service node this blacklist rule applies to.',
+                true,
+                item.type === '' || !!duplicateError,
+                duplicateError || (item.type === '' ? 'Service is required' : ' '),
+              )
+            }
+            sx={AUTOCOMPLETE_SX}
+          />
+          <Autocomplete
+            key={`${index}-${item.type}`}
+            size="small"
+            options={getConfigOptions(item.type, index)}
+            value={taskTypeOptions.find((opt) => opt.value === item.config) || null}
+            onChange={(_e, newValue) => {
+              const value = newValue ? (typeof newValue === 'string' ? newValue : newValue.value) : '';
+              handleFieldUpdate('config', value);
+            }}
+            getOptionLabel={(option) => {
+              if (typeof option === 'string') {
+                const found = taskTypeOptions.find((opt) => opt.value === option);
+                return found ? found.label : option;
+              }
+              return option.label;
+            }}
+            isOptionEqualToValue={(option, value) => {
+              if (typeof value === 'string') {
+                return option.value === value;
+              }
+              return option.value === value.value;
+            }}
+            disabled={!item.type}
+            renderInput={(params) =>
+              renderTextField(
+                params,
+                'Task Type',
+                'Select task type',
+                'Select the type of task this blacklist rule applies to.',
+                item.type !== '',
+                (item.type !== '' && item.config === '') || !!duplicateError,
+                duplicateError || (item.type !== '' && item.config === '' ? 'Task Type is required' : ' '),
+              )
+            }
+            sx={AUTOCOMPLETE_SX}
+          />
+          <Autocomplete
+            key={`${index}-${item.type}-${item.config}`}
+            size="small"
+            options={getSubConfigOptions(item.type, item.config, index)}
+            value={item.subConfig}
+            onChange={(_e, newValue) => handleFieldUpdate('subConfig', newValue || '')}
+            getOptionLabel={(option) => option.charAt(0).toUpperCase() + option.slice(1)}
+            disabled={!item.type || !item.config}
+            renderInput={(params) =>
+              renderTextField(
+                params,
+                'Feature',
+                'Select feature',
+                'Select the operation to block for matched tasks.',
+                item.type !== '' && item.config !== '',
+                (item.type !== '' && item.config !== '' && item.subConfig === '') || !!duplicateError,
+                duplicateError ||
+                  (item.type !== '' && item.config !== '' && item.subConfig === '' ? 'Feature is required' : ' '),
+              )
+            }
+            sx={AUTOCOMPLETE_SX}
+          />
+        </Box>
+
+        {/* 第二行+: Applications | URLs | Tags | Priorities */}
+        <Grid container spacing={1.5}>
+          {/* Applications */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Autocomplete
+              size="small"
+              multiple
+              freeSolo
+              options={[]}
+              value={item.applications}
+              onChange={(_e, newValue) => handleFieldUpdate('applications', newValue || [])}
+              disabled={isFirstRowDisabled}
+              renderInput={(params) =>
+                renderTextField(
+                  params,
+                  'Applications',
+                  'Enter values or press Enter to add',
+                  'Specify the application names to which this blacklist rule applies.',
+                  false,
+                  false,
+                  ' ',
+                  true,
+                )
+              }
+              sx={AUTOCOMPLETE_TEXTFIELD_SX}
+            />
+          </Grid>
+
+          {/* URLs */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Autocomplete
+              size="small"
+              multiple
+              freeSolo
+              options={[]}
+              value={item.urls}
+              onChange={handleURLsChange}
+              disabled={isFirstRowDisabled}
+              renderInput={(params) => {
+                const inputValue = String(params.inputProps.value || '');
+                const isInvalid = inputValue.length > 3 && !isValidURL(inputValue);
+
+                return renderTextField(
+                  params,
+                  'URLs',
+                  'Enter URL and press Enter',
+                  'Specify one or more URL patterns using regular expressions (regex) to match against task URLs.',
+                  false,
+                  isInvalid,
+                  isInvalid ? 'Please enter a valid URL' : ' ',
+                  true,
+                );
+              }}
+              sx={AUTOCOMPLETE_TEXTFIELD_SX}
+            />
+          </Grid>
+
+          {/* Tags */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Autocomplete
+              size="small"
+              multiple
+              freeSolo
+              options={[]}
+              value={item.tags}
+              onChange={(_e, newValue) => handleFieldUpdate('tags', newValue || [])}
+              disabled={isFirstRowDisabled}
+              renderInput={(params) =>
+                renderTextField(
+                  params,
+                  'Tags',
+                  'Enter values or press Enter to add',
+                  'Specify tags to match against task tags.',
+                  false,
+                  false,
+                  ' ',
+                  true,
+                )
+              }
+              sx={AUTOCOMPLETE_TEXTFIELD_SX}
+            />
+          </Grid>
+
+          {/* Priorities - 仅当 subConfig 是 download 时显示 */}
+          {isSubConfigDownload ? (
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Autocomplete
+                size="small"
+                multiple
+                options={priorityOptions}
+                value={priorityValue}
+                onChange={handlePrioritiesChange}
+                getOptionLabel={(option) => option.label}
+                isOptionEqualToValue={(option, value) => option.value === value.value}
+                disabled={isFirstRowDisabled}
+                renderInput={(params) =>
+                  renderTextField(
+                    params,
+                    'Priorities',
+                    'Select priorities',
+                    'Specify the task priority levels to which this blacklist rule applies.',
+                    false,
+                    false,
+                    ' ',
+                    true,
+                  )
+                }
+                sx={AUTOCOMPLETE_TEXTFIELD_SX}
+              />
+            </Grid>
+          ) : (
+            <Grid size={{ xs: 12, md: 6 }} />
+          )}
+        </Grid>
+
+        {/* 删除按钮 */}
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1.5 }}>
+          <Button
+            size="small"
+            variant="outlined"
+            sx={{
+              minWidth: 85,
+              color: 'var(--palette-delete-button-color)',
+              borderColor: 'var(--palette-delete-button-color)',
+              ':hover': {
+                backgroundColor: 'var(--palette-delete-button-hover-color)',
+                color: 'var(--palette-common-white)',
+              },
+            }}
+            onClick={handleRemove}
+          >
+            <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
+            <div style={{ paddingTop: '0.25rem' }}>Delete</div>
+          </Button>
+        </Box>
+      </Box>
+    );
+  },
+);
+
+BlacklistItemCard.displayName = 'BlacklistItemCard';
+
 const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) => {
   const [blacklist, setBlacklist] = useState<BlacklistItem[]>([]);
 
   // 获取重复的组合信息
-  const getDuplicateInfo = () => {
+  const duplicateInfo = useMemo(() => {
     const combinations = new Map<string, number[]>();
 
     blacklist.forEach((item, index) => {
@@ -66,25 +462,58 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     });
 
     return duplicates;
-  };
+  }, [blacklist]);
 
-  const blacklistTypeOptions = ['Client', 'Seed Client'];
+  // 检查type+config+subconfig组合是否已存在
+  const isCombinationExists = useCallback(
+    (type: string, config: string, subConfig: string, excludeIndex?: number) => {
+      return blacklist.some((item, index) => {
+        if (excludeIndex !== undefined && index === excludeIndex) {
+          return false;
+        }
+        return item.type === type && item.config === config && item.subConfig === subConfig;
+      });
+    },
+    [blacklist],
+  );
+
+  // 获取子配置选项
+  const getSubConfigOptions = useCallback(
+    (type: string, config: string, excludeIndex?: number) => {
+      if (!type || !config) return [];
+
+      let options = config === 'task' ? ['download'] : ['download', 'upload'];
+
+      return options.filter((subConfig) => !isCombinationExists(type, config, subConfig, excludeIndex));
+    },
+    [isCombinationExists],
+  );
+
+  // 获取配置选项
+  const getConfigOptions = useCallback(
+    (type: string, excludeIndex?: number) => {
+      if (!type) return [];
+
+      return taskTypeOptions.filter((option) => {
+        const possibleSubConfigs = getSubConfigOptions(type, option.value, excludeIndex);
+        return possibleSubConfigs.length > 0;
+      });
+    },
+    [getSubConfigOptions],
+  );
+
+  // 获取所有 Type 选项 - blacklistTypeOptions 是常量，无需 useCallback
+  const getAvailableTypes = useCallback(() => {
+    return [...blacklistTypeOptions];
+  }, []);
 
   // 检查是否所有可能的组合都已被使用
-  const isAllCombinationsUsed = () => {
-    const taskTypeOptions = [
-      { value: 'task', label: 'Task' },
-      { value: 'persistent_cache_task', label: 'Persistent Cache Task' },
-      { value: 'persistent_task', label: 'Persistent Task' },
-    ];
-
-    // 遍历所有可能的组合
+  const isAllCombinationsUsed = useMemo(() => {
     for (const type of blacklistTypeOptions) {
       for (const taskType of taskTypeOptions) {
         const subConfigs = taskType.value === 'task' ? ['download'] : ['download', 'upload'];
 
         for (const subConfig of subConfigs) {
-          // 如果存在一个未被使用的组合，则返回 false
           if (!isCombinationExists(type, taskType.value, subConfig)) {
             return false;
           }
@@ -92,139 +521,95 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
       }
     }
 
-    // 所有组合都已被使用
     return true;
-  };
+  }, [isCombinationExists]);
 
-  // 检查type+config+subconfig组合是否已存在
-  const isCombinationExists = (type: string, config: string, subConfig: string, excludeIndex?: number) => {
-    return blacklist.some((item, index) => {
-      if (excludeIndex !== undefined && index === excludeIndex) {
-        return false;
-      }
-      return item.type === type && item.config === config && item.subConfig === subConfig;
-    });
-  };
-
-  // Task Type 选项配置
-  const taskTypeOptions = [
-    { value: 'task', label: 'Task' },
-    { value: 'persistent_cache_task', label: 'Persistent Cache Task' },
-    { value: 'persistent_task', label: 'Persistent Task' },
-  ];
-
-  // 获取配置选项
-  const getConfigOptions = (type: string, excludeIndex?: number) => {
-    if (!type) return [];
-
-    // 过滤掉会导致重复的 config 选项
-    return taskTypeOptions.filter((option) => {
-      const possibleSubConfigs = getSubConfigOptions(type, option.value, excludeIndex);
-      return possibleSubConfigs.length > 0; // 只要有一个可用的 subConfig 就显示
-    });
-  };
-
-  // 获取子配置选项
-  const getSubConfigOptions = (type: string, config: string, excludeIndex?: number) => {
-    if (!type || !config) return [];
-
-    let options = config === 'task' ? ['download'] : ['download', 'upload'];
-
-    // 过滤掉已存在的组合
-    return options.filter((subConfig) => !isCombinationExists(type, config, subConfig, excludeIndex));
-  };
-
-  // 获取所有 Type 选项（不再过滤已存在的类型）
-  const getAvailableTypes = () => {
-    return blacklistTypeOptions;
-  };
-
-  const handleAddBlacklist = () => {
-    // 始终添加空条目，让用户手动选择
+  const handleAddBlacklist = useCallback(() => {
     setBlacklist([
       ...blacklist,
       { type: '', config: '', subConfig: '', applications: [], urls: [], tags: [], priorities: [] },
     ]);
-  };
+  }, [blacklist]);
 
-  const handleRemoveBlacklist = (index: number) => {
-    const newBlacklist = [...blacklist];
-    newBlacklist.splice(index, 1);
-    setBlacklist(newBlacklist);
-  };
+  const handleRemoveBlacklist = useCallback((index: number) => {
+    setBlacklist((prev) => {
+      const newBlacklist = [...prev];
+      newBlacklist.splice(index, 1);
+      return newBlacklist;
+    });
+  }, []);
 
-  const handleUpdateBlacklist = (index: number, field: string, value: any) => {
-    const newBlacklist = [...blacklist];
-    const currentItem = newBlacklist[index];
+  const handleUpdateBlacklist = useCallback(
+    (index: number, field: string, value: any) => {
+      setBlacklist((prev) => {
+        const newBlacklist = [...prev];
+        const currentItem = newBlacklist[index];
 
-    // 构建新的值
-    let newType = currentItem.type;
-    let newConfig = currentItem.config;
-    let newSubConfig = currentItem.subConfig;
+        let newType = currentItem.type;
+        let newConfig = currentItem.config;
+        let newSubConfig = currentItem.subConfig;
 
-    if (field === 'type') {
-      newType = value;
-      newConfig = '';
-      newSubConfig = '';
-    } else if (field === 'config') {
-      newConfig = value;
-      newSubConfig = '';
-      if (value === 'task') {
-        newSubConfig = 'download';
-      }
-    } else if (field === 'subConfig') {
-      newSubConfig = value;
+        if (field === 'type') {
+          newType = value;
+          newConfig = '';
+          newSubConfig = '';
+        } else if (field === 'config') {
+          newConfig = value;
+          newSubConfig = '';
+          if (value === 'task') {
+            newSubConfig = 'download';
+          }
+        } else if (field === 'subConfig') {
+          newSubConfig = value;
 
-      // 当设置 subConfig 时，检查完整的组合是否重复
-      if (newType && newConfig && newSubConfig) {
-        if (isCombinationExists(newType, newConfig, newSubConfig, index)) {
-          // 如果会导致重复，则不更新
-          return;
+          // 检查完整的组合是否重复
+          if (newType && newConfig && newSubConfig) {
+            if (isCombinationExists(newType, newConfig, newSubConfig, index)) {
+              return prev; // 不更新
+            }
+          }
         }
-      }
-    }
 
-    // 对于 config 字段，也要检查是否会创建重复组合
-    if (field === 'config' && newType && newConfig && newSubConfig) {
-      if (isCombinationExists(newType, newConfig, newSubConfig, index)) {
-        // 如果会导致重复，则不更新
-        return;
-      }
-    }
+        // 对于 config 字段，检查是否会创建重复组合
+        if (field === 'config' && newType && newConfig && newSubConfig) {
+          if (isCombinationExists(newType, newConfig, newSubConfig, index)) {
+            return prev; // 不更新
+          }
+        }
 
-    // 应用更新
-    if (field === 'type') {
-      newBlacklist[index] = {
-        ...newBlacklist[index],
-        type: newType,
-        config: newConfig,
-        subConfig: newSubConfig,
-        // 保留用户已填写的数据，不清空
-      };
-    } else if (field === 'config') {
-      newBlacklist[index] = {
-        ...newBlacklist[index],
-        config: newConfig,
-        subConfig: newSubConfig,
-        // 保留用户已填写的数据，不清空
-      };
-    } else if (field === 'subConfig') {
-      newBlacklist[index] = {
-        ...newBlacklist[index],
-        subConfig: newSubConfig,
-        // 保留用户已填写的数据，不清空
-      };
-    } else {
-      newBlacklist[index] = { ...newBlacklist[index], [field]: value };
-    }
+        // 应用更新
+        if (field === 'type') {
+          newBlacklist[index] = {
+            ...newBlacklist[index],
+            type: newType,
+            config: newConfig,
+            subConfig: newSubConfig,
+          };
+        } else if (field === 'config') {
+          newBlacklist[index] = {
+            ...newBlacklist[index],
+            config: newConfig,
+            subConfig: newSubConfig,
+          };
+        } else if (field === 'subConfig') {
+          newBlacklist[index] = {
+            ...newBlacklist[index],
+            subConfig: newSubConfig,
+          };
+        } else {
+          newBlacklist[index] = { ...newBlacklist[index], [field]: value };
+        }
 
-    setBlacklist(newBlacklist);
-  };
+        return newBlacklist;
+      });
+    },
+    [isCombinationExists],
+  );
 
   // 处理blacklist数据转换
   const processBlacklist = (blacklist: BlacklistItem[]) => {
-    const peerBlockList: any = {};
-    const seedPeerBlockList: any = {};
+    const peerBlockList: BlockListConfig = {};
+    const seedPeerBlockList: BlockListConfig = {};
 
     blacklist.forEach((item) => {
       if (!item.type || !item.config || !item.subConfig) {
@@ -246,22 +631,22 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
         targetBlockList[configKey] = {};
       }
 
-      if (!targetBlockList[configKey][item.subConfig]) {
-        targetBlockList[configKey][item.subConfig] = {};
+      if (!targetBlockList[configKey]![item.subConfig]) {
+        targetBlockList[configKey]![item.subConfig] = {};
       }
 
       if (item.applications.length > 0) {
-        targetBlockList[configKey][item.subConfig]['applications'] = item.applications;
+        targetBlockList[configKey]![item.subConfig]!.applications = item.applications;
       }
       if (item.urls.length > 0) {
-        targetBlockList[configKey][item.subConfig]['urls'] = item.urls;
+        targetBlockList[configKey]![item.subConfig]!.urls = item.urls;
       }
       if (item.tags.length > 0) {
-        targetBlockList[configKey][item.subConfig]['tags'] = item.tags;
+        targetBlockList[configKey]![item.subConfig]!.tags = item.tags;
       }
       if (item.priorities.length > 0) {
         // 将 priorities 从字符串数组转换为整数数组
-        targetBlockList[configKey][item.subConfig]['priorities'] = item.priorities.map((p) => parseInt(p, 10));
+        targetBlockList[configKey]![item.subConfig]!.priorities = item.priorities.map((p) => parseInt(p, 10));
       }
     });
 
@@ -270,8 +655,8 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
 
   // 逆向转换：将 API 返回的 block_list 数据转换回原始格式
   const reverseBlacklistFromData = (
-    peerClusterConfig: { block_list?: any },
-    seedPeerClusterConfig: { block_list?: any },
+    peerClusterConfig?: { block_list?: BlockListConfig },
+    seedPeerClusterConfig?: { block_list?: BlockListConfig },
   ): BlacklistItem[] => {
     const result: BlacklistItem[] = [];
 
@@ -350,7 +735,10 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
 
   useImperativeHandle(ref, () => ({
     getBlacklist: () => processBlacklist(blacklist),
-    setBlacklist: (peerClusterConfig: { block_list?: any }, seedPeerClusterConfig: { block_list?: any }) => {
+    setBlacklist: (
+      peerClusterConfig?: { block_list?: BlockListConfig },
+      seedPeerClusterConfig?: { block_list?: BlockListConfig },
+    ) => {
       const reversed = reverseBlacklistFromData(peerClusterConfig, seedPeerClusterConfig);
       setBlacklist(reversed);
     },
@@ -379,13 +767,13 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
         </Tooltip>
       </Box>
 
-      {/* ADD BLACKLIST 按钮 - 移到列表上方 */}
+      {/* ADD BLACKLIST 按钮 */}
       <Box sx={{ mt: 1, mb: 1.5 }}>
         <Button
           id="create-cluster"
           size="small"
           variant="outlined"
-          disabled={isAllCombinationsUsed()}
+          disabled={isAllCombinationsUsed}
           sx={{
             borderColor: 'var(--palette-button-color)',
             color: 'var(--palette-button-color)',
@@ -402,422 +790,19 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
       </Box>
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-        {blacklist.length > 0 &&
-          blacklist.map((item, index) => {
-            const duplicateInfo = getDuplicateInfo();
-            const duplicateError = duplicateInfo.get(index);
-            const isSubConfigDownload = item.subConfig === 'download';
-
-            return (
-              <Box
-                key={`${index}-${item.type}`}
-                data-testid="blacklist-item"
-                sx={{
-                  border: '1px solid rgba(0, 0, 0, 0.08)',
-                  borderRadius: 1,
-                  p: 1.5,
-                  backgroundColor: 'rgba(255, 255, 255, 0.02)',
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
-                }}
-              >
-                {/* 第一行: Type | Config | Sub Config */}
-                <Box sx={{ display: 'flex', gap: 1, mb: 1.5 }}>
-                  <Autocomplete
-                    size="small"
-                    options={getAvailableTypes()}
-                    value={item.type}
-                    onChange={(_e, newValue) => handleUpdateBlacklist(index, 'type', newValue || '')}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Service"
-                        placeholder="Select service"
-                        color="success"
-                        required={true}
-                        error={item.type === '' || !!duplicateError}
-                        helperText={duplicateError || (item.type === '' ? 'Service is required' : ' ')}
-                        FormHelperTextProps={{
-                          sx: { minHeight: '1.25rem' },
-                        }}
-                        InputProps={{
-                          ...params.InputProps,
-                          endAdornment: (
-                            <Tooltip
-                              title="Select the type of service node this blacklist rule applies to."
-                              placement="top"
-                            >
-                              <HelpIcon className={styles.descriptionIcon} />
-                            </Tooltip>
-                          ),
-                        }}
-                      />
-                    )}
-                    sx={{
-                      flex: 1,
-                      '& .MuiOutlinedInput-root': {
-                        paddingRight: '14px !important',
-                      },
-                    }}
-                  />
-                  <Autocomplete
-                    key={`${index}-${item.type}`}
-                    size="small"
-                    options={getConfigOptions(item.type, index)}
-                    value={taskTypeOptions.find((opt) => opt.value === item.config) || null}
-                    onChange={(_e, newValue) => {
-                      const value = newValue ? (typeof newValue === 'string' ? newValue : newValue.value) : '';
-                      handleUpdateBlacklist(index, 'config', value);
-                    }}
-                    getOptionLabel={(option) => {
-                      if (typeof option === 'string') {
-                        const found = taskTypeOptions.find((opt) => opt.value === option);
-                        return found ? found.label : option;
-                      }
-                      return option.label;
-                    }}
-                    isOptionEqualToValue={(option, value) => {
-                      if (typeof value === 'string') {
-                        return option.value === value;
-                      }
-                      return option.value === value.value;
-                    }}
-                    disabled={!item.type}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Task Type"
-                        placeholder="Select task type"
-                        color="success"
-                        required={item.type !== ''}
-                        error={(item.type !== '' && item.config === '') || !!duplicateError}
-                        helperText={
-                          duplicateError || (item.type !== '' && item.config === '' ? 'Task Type is required' : ' ')
-                        }
-                        FormHelperTextProps={{
-                          sx: { minHeight: '1.25rem' },
-                        }}
-                        InputProps={{
-                          ...params.InputProps,
-                          endAdornment: (
-                            <Tooltip title="Select the type of task this blacklist rule applies to." placement="top">
-                              <HelpIcon className={styles.descriptionIcon} />
-                            </Tooltip>
-                          ),
-                        }}
-                      />
-                    )}
-                    sx={{
-                      flex: 1,
-                      '& .MuiOutlinedInput-root': {
-                        paddingRight: '14px !important',
-                      },
-                    }}
-                  />
-                  <Autocomplete
-                    key={`${index}-${item.type}-${item.config}`}
-                    size="small"
-                    options={getSubConfigOptions(item.type, item.config, index)}
-                    value={item.subConfig}
-                    onChange={(_e, newValue) => handleUpdateBlacklist(index, 'subConfig', newValue || '')}
-                    getOptionLabel={(option) => option.charAt(0).toUpperCase() + option.slice(1)}
-                    disabled={!item.type || !item.config}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Feature"
-                        placeholder="Select feature"
-                        color="success"
-                        required={item.type !== '' && item.config !== ''}
-                        error={(item.type !== '' && item.config !== '' && item.subConfig === '') || !!duplicateError}
-                        helperText={
-                          duplicateError ||
-                          (item.type !== '' && item.config !== '' && item.subConfig === ''
-                            ? 'Feature is required'
-                            : ' ')
-                        }
-                        FormHelperTextProps={{
-                          sx: { minHeight: '1.25rem' },
-                        }}
-                        InputProps={{
-                          ...params.InputProps,
-                          endAdornment: (
-                            <Tooltip title="Select the operation to block for matched tasks." placement="top">
-                              <HelpIcon className={styles.descriptionIcon} />
-                            </Tooltip>
-                          ),
-                        }}
-                      />
-                    )}
-                    sx={{
-                      flex: 1,
-                      '& .MuiOutlinedInput-root': {
-                        paddingRight: '14px !important',
-                      },
-                    }}
-                  />
-                </Box>
-
-                {/* 第二行+: Applications | URLs | Tags | Priorities (两列Grid布局) */}
-                <Grid container spacing={1.5}>
-                  {/* 第三行: Applications | URLs */}
-                  <Grid size={{ xs: 12, md: 6 }}>
-                    <Autocomplete
-                      size="small"
-                      multiple
-                      freeSolo
-                      options={[]}
-                      value={item.applications}
-                      onChange={(_e, newValue) => handleUpdateBlacklist(index, 'applications', newValue || [])}
-                      disabled={!item.type || !item.config || !item.subConfig}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Applications"
-                          placeholder="Enter values or press Enter to add"
-                          color="success"
-                          helperText=" "
-                          FormHelperTextProps={{
-                            sx: { minHeight: '1.25rem' },
-                          }}
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                          InputProps={{
-                            ...params.InputProps,
-                            endAdornment: (
-                              <Tooltip
-                                title="Specify the application names to which this blacklist rule applies."
-                                placement="top"
-                              >
-                                <HelpIcon className={styles.descriptionIcon} />
-                              </Tooltip>
-                            ),
-                          }}
-                        />
-                      )}
-                      sx={{
-                        width: '100%',
-                        '& .MuiOutlinedInput-root': {
-                          minHeight: '3.25rem',
-                          paddingRight: '14px !important',
-                          backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                          '&:hover': {
-                            backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                          },
-                          '&.Mui-focused': {
-                            backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                          },
-                        },
-                      }}
-                    />
-                  </Grid>
-                  <Grid size={{ xs: 12, md: 6 }}>
-                    <Autocomplete
-                      size="small"
-                      multiple
-                      freeSolo
-                      options={[]}
-                      value={item.urls}
-                      onChange={(_e, newValue) => {
-                        // 校验每个新输入的值是否是合法 URL
-                        const validatedValues = (newValue || []).filter((v) => {
-                          // 如果是从选项中选择的（不太可能，因为options是空数组），直接放行
-                          if (typeof v !== 'string') return true;
-                          // 对自由输入的值进行 URL 校验
-                          return isValidURL(v);
-                        });
-                        handleUpdateBlacklist(index, 'urls', validatedValues);
-                      }}
-                      disabled={!item.type || !item.config || !item.subConfig}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="URLs"
-                          placeholder="Enter URL and press Enter"
-                          color="success"
-                          helperText={
-                            params.inputProps.value &&
-                            !isValidURL(String(params.inputProps.value || '')) &&
-                            String(params.inputProps.value || '').length > 3
-                              ? 'Please enter a valid URL'
-                              : ' '
-                          }
-                          FormHelperTextProps={{
-                            sx: { minHeight: '1.25rem' },
-                          }}
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                          error={
-                            params.inputProps.value
-                              ? !isValidURL(String(params.inputProps.value || '')) &&
-                                String(params.inputProps.value || '').length > 3
-                              : false
-                          }
-                          InputProps={{
-                            ...params.InputProps,
-                            endAdornment: (
-                              <Tooltip
-                                title="Specify one or more URL patterns using regular expressions (regex) to match against task URLs."
-                                placement="top"
-                              >
-                                <HelpIcon className={styles.descriptionIcon} />
-                              </Tooltip>
-                            ),
-                          }}
-                        />
-                      )}
-                      sx={{
-                        width: '100%',
-                        '& .MuiOutlinedInput-root': {
-                          minHeight: '3.25rem',
-                          paddingRight: '14px !important',
-                          backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                          '&:hover': {
-                            backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                          },
-                          '&.Mui-focused': {
-                            backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                          },
-                        },
-                      }}
-                    />
-                  </Grid>
-
-                  {/* 第四行: Tags | Priorities (仅当 subConfig 是 download 时显示) */}
-                  <Grid size={{ xs: 12, md: 6 }}>
-                    <Autocomplete
-                      size="small"
-                      multiple
-                      freeSolo
-                      options={[]}
-                      value={item.tags}
-                      onChange={(_e, newValue) => handleUpdateBlacklist(index, 'tags', newValue || [])}
-                      disabled={!item.type || !item.config || !item.subConfig}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Tags"
-                          placeholder="Enter values or press Enter to add"
-                          color="success"
-                          helperText=" "
-                          FormHelperTextProps={{
-                            sx: { minHeight: '1.25rem' },
-                          }}
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                          InputProps={{
-                            ...params.InputProps,
-                            endAdornment: (
-                              <Tooltip title="Specify tags to match against task tags." placement="top">
-                                <HelpIcon className={styles.descriptionIcon} />
-                              </Tooltip>
-                            ),
-                          }}
-                        />
-                      )}
-                      sx={{
-                        width: '100%',
-                        '& .MuiOutlinedInput-root': {
-                          minHeight: '3.25rem',
-                          paddingRight: '14px !important',
-                          backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                          '&:hover': {
-                            backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                          },
-                          '&.Mui-focused': {
-                            backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                          },
-                        },
-                      }}
-                    />
-                  </Grid>
-                  {isSubConfigDownload ? (
-                    <Grid size={{ xs: 12, md: 6 }}>
-                      <Autocomplete
-                        size="small"
-                        multiple
-                        options={priorityOptions}
-                        value={item.priorities
-                          .map((p) => priorityOptions.find((opt) => opt.value === p))
-                          .filter((opt): opt is (typeof priorityOptions)[0] => opt !== undefined)}
-                        onChange={(_e, newValue) => {
-                          const values = newValue.map((v) => v.value);
-                          handleUpdateBlacklist(index, 'priorities', values);
-                        }}
-                        getOptionLabel={(option) => option.label}
-                        isOptionEqualToValue={(option, value) => option.value === value.value}
-                        disabled={!item.type || !item.config || !item.subConfig}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Priorities"
-                            placeholder="Select priorities"
-                            color="success"
-                            helperText=" "
-                            FormHelperTextProps={{
-                              sx: { minHeight: '1.25rem' },
-                            }}
-                            InputLabelProps={{
-                              shrink: true,
-                            }}
-                            InputProps={{
-                              ...params.InputProps,
-                              endAdornment: (
-                                <Tooltip
-                                  title="Specify the task priority levels to which this blacklist rule applies."
-                                  placement="top"
-                                >
-                                  <HelpIcon className={styles.descriptionIcon} />
-                                </Tooltip>
-                              ),
-                            }}
-                          />
-                        )}
-                        sx={{
-                          width: '100%',
-                          '& .MuiOutlinedInput-root': {
-                            minHeight: '3.25rem',
-                            paddingRight: '14px !important',
-                            backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                            '&:hover': {
-                              backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                            },
-                            '&.Mui-focused': {
-                              backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                            },
-                          },
-                        }}
-                      />
-                    </Grid>
-                  ) : (
-                    <Grid size={{ xs: 12, md: 6 }} />
-                  )}
-                </Grid>
-
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1.5 }}>
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    sx={{
-                      minWidth: 85,
-                      color: 'var(--palette-delete-button-color)',
-                      borderColor: 'var(--palette-delete-button-color)',
-                      ':hover': {
-                        backgroundColor: 'var(--palette-delete-button-hover-color)',
-                        color: 'var(--palette-common-white)',
-                      },
-                    }}
-                    onClick={() => handleRemoveBlacklist(index)}
-                  >
-                    <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-                    <div style={{ paddingTop: '0.25rem' }}>Delete</div>
-                  </Button>
-                </Box>
-              </Box>
-            );
-          })}
+        {blacklist.map((item, index) => (
+          <BlacklistItemCard
+            key={`${index}-${item.type}`}
+            item={item}
+            index={index}
+            duplicateError={duplicateInfo.get(index)}
+            onUpdate={handleUpdateBlacklist}
+            onRemove={handleRemoveBlacklist}
+            getAvailableTypes={getAvailableTypes}
+            getConfigOptions={getConfigOptions}
+            getSubConfigOptions={getSubConfigOptions}
+          />
+        ))}
       </Box>
     </>
   );

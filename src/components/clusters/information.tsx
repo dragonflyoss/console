@@ -28,6 +28,7 @@ import { ReactComponent as Done } from '../../assets/images/tokens/done.svg';
 import { ReactComponent as Copy } from '../../assets/images/tokens/copy.svg';
 import { ReactComponent as Edit } from '../../assets/images/user/edit.svg';
 import { ReactComponent as Location } from '../../assets/images/cluster/location.svg';
+import type { BlockListConfig } from '../../lib/api';
 import { ReactComponent as IDC } from '../../assets/images/cluster/idc.svg';
 import { ReactComponent as Total } from '../../assets/images/cluster/peer/total.svg';
 import { ReactComponent as CIDRs } from '../../assets/images/cluster/cidrs.svg';
@@ -42,8 +43,70 @@ import styles from './information.module.css';
 import ErrorHandler from '../error-handler';
 
 // 格式化优先级显示
-const formatPriority = (priority: string): string => {
+const formatPriority = (priority: number): string => {
   return `Level ${priority}`;
+};
+
+// 选项类型映射：显示名称 -> 字段名
+const OPTION_TYPE_MAP: Record<string, string> = {
+  Applications: 'applications',
+  Urls: 'urls',
+  Tags: 'tags',
+  Priorities: 'priorities',
+};
+
+// 黑名单数据项类型定义
+interface BlacklistDataItem {
+  type: 'Client' | 'Seed Client';
+  config: string;
+  subConfig: string;
+  options: string[];
+  optionValues: Record<string, string[] | number[]>;
+}
+
+// 提取黑名单选项数据
+const extractOptions = (subConfigData: Record<string, unknown>): Record<string, string[] | number[]> => {
+  const optionValues: Record<string, string[] | number[]> = {};
+
+  Object.entries(OPTION_TYPE_MAP).forEach(([displayName, fieldName]) => {
+    const value = subConfigData[fieldName];
+    optionValues[displayName] = Array.isArray(value) ? value : [];
+  });
+
+  return optionValues;
+};
+
+// 处理单个 block_list 配置
+const processBlockList = (
+  blockList: BlockListConfig | undefined,
+  serviceType: 'Client' | 'Seed Client',
+): BlacklistDataItem[] => {
+  if (!blockList || typeof blockList !== 'object') {
+    return [];
+  }
+
+  const items: BlacklistDataItem[] = [];
+
+  Object.entries(blockList).forEach(([config, configData]) => {
+    if (!configData || typeof configData !== 'object') return;
+
+    Object.entries(configData).forEach(([subConfig, subConfigData]) => {
+      if (!subConfigData || typeof subConfigData !== 'object') return;
+
+      const optionValues = extractOptions(subConfigData as Record<string, unknown>);
+      const options = Object.keys(OPTION_TYPE_MAP);
+
+      items.push({
+        type: serviceType,
+        config,
+        subConfig,
+        options,
+        optionValues,
+      });
+    });
+  });
+
+  return items;
 };
 
 export default function Information() {
@@ -120,100 +183,12 @@ export default function Information() {
   };
 
   // 数据转换函数，将 blacklist 配置转换为展示格式
-  const reverseBlacklistFromData = (
-    peerClusterConfig: { block_list?: any },
-    seedPeerClusterConfig: { block_list?: any },
-  ) => {
-    const result: Array<{
-      type: string;
-      config: string;
-      subConfig: string;
-      options: string[];
-      optionValues: Record<string, string[]>;
-    }> = [];
+  const reverseBlacklistFromData = useMemo(() => {
+    const clientItems = processBlockList(cluster?.peer_cluster_config?.block_list, 'Client');
+    const seedClientItems = processBlockList(cluster?.seed_peer_cluster_config?.block_list, 'Seed Client');
 
-    // 处理 peer_cluster_config.block_list (Client 类型)
-    const peerBlockList = peerClusterConfig?.block_list;
-    if (peerBlockList && typeof peerBlockList === 'object') {
-      Object.keys(peerBlockList).forEach((config) => {
-        const configData = peerBlockList[config];
-        if (configData && typeof configData === 'object') {
-          Object.keys(configData).forEach((subConfig) => {
-            const subConfigData = configData[subConfig];
-            if (subConfigData && typeof subConfigData === 'object') {
-              const options: string[] = [];
-              const optionValues: Record<string, string[]> = {};
-
-              // 定义所有可能的选项类型
-              const allOptionTypes = ['Applications', 'Urls', 'Tags', 'Priorities'];
-
-              // 遍历所有选项类型
-              allOptionTypes.forEach((optionType) => {
-                const key = optionType.charAt(0).toLowerCase() + optionType.slice(1); // 转换为小写首字母
-                options.push(optionType);
-                optionValues[optionType] = Array.isArray(subConfigData[key]) ? subConfigData[key] : [];
-              });
-
-              if (options.length > 0) {
-                result.push({
-                  type: 'Client',
-                  config,
-                  subConfig,
-                  options,
-                  optionValues,
-                });
-              }
-            }
-          });
-        }
-      });
-    }
-
-    // 处理 seed_peer_cluster_config.block_list (Seed Client 类型)
-    const seedPeerBlockList = seedPeerClusterConfig?.block_list;
-    if (seedPeerBlockList && typeof seedPeerBlockList === 'object') {
-      Object.keys(seedPeerBlockList).forEach((config) => {
-        const configData = seedPeerBlockList[config];
-        if (configData && typeof configData === 'object') {
-          Object.keys(configData).forEach((subConfig) => {
-            const subConfigData = configData[subConfig];
-            if (subConfigData && typeof subConfigData === 'object') {
-              const options: string[] = [];
-              const optionValues: Record<string, string[]> = {};
-
-              // 定义所有可能的选项类型
-              const allOptionTypes = ['Applications', 'Urls', 'Tags', 'Priorities'];
-
-              // 遍历所有选项类型
-              allOptionTypes.forEach((optionType) => {
-                const key = optionType.charAt(0).toLowerCase() + optionType.slice(1); // 转换为小写首字母
-                options.push(optionType);
-                optionValues[optionType] = Array.isArray(subConfigData[key]) ? subConfigData[key] : [];
-              });
-
-              if (options.length > 0) {
-                result.push({
-                  type: 'Seed Client',
-                  config,
-                  subConfig,
-                  options,
-                  optionValues,
-                });
-              }
-            }
-          });
-        }
-      });
-    }
-
-    return result;
-  };
-
-  // 获取转换后的数据
-  const blacklistData = reverseBlacklistFromData(
-    cluster?.peer_cluster_config || {},
-    cluster?.seed_peer_cluster_config || {},
-  );
+    return [...clientItems, ...seedClientItems];
+  }, [cluster?.peer_cluster_config?.block_list, cluster?.seed_peer_cluster_config?.block_list]);
 
   // 定义黑名单表格行数据结构
   interface BlacklistTableRow {
@@ -222,7 +197,7 @@ export default function Information() {
     applications: string[];
     urls: string[];
     tags: string[];
-    priorities: string[];
+    priorities: number[];
   }
 
   interface ServiceTypeGroup {
@@ -261,24 +236,25 @@ export default function Information() {
       taskTypes.forEach((taskType) => {
         // 遍历 subConfig
         subConfigsByTaskType[taskType.config].forEach((subConfig) => {
-          // 从 blacklistData 中查找匹配的数据
-          const matchedItem = blacklistData.find(
-            (item) => item.type === serviceType.name && item.config === taskType.config && item.subConfig === subConfig,
+          // 从 reverseBlacklistFromData 中查找匹配的数据
+          const matchedItem = reverseBlacklistFromData.find(
+            (item: BlacklistDataItem) =>
+              item.type === serviceType.name && item.config === taskType.config && item.subConfig === subConfig,
           );
 
           // 如果找到匹配项，使用其数据；否则使用空数据
           const data = matchedItem
             ? {
-                applications: matchedItem.optionValues['Applications'] || [],
-                urls: matchedItem.optionValues['Urls'] || [],
-                tags: matchedItem.optionValues['Tags'] || [],
-                priorities: matchedItem.optionValues['Priorities'] || [],
+                applications: (matchedItem.optionValues['Applications'] || []) as string[],
+                urls: (matchedItem.optionValues['Urls'] || []) as string[],
+                tags: (matchedItem.optionValues['Tags'] || []) as string[],
+                priorities: (matchedItem.optionValues['Priorities'] || []) as number[],
               }
             : {
-                applications: [],
-                urls: [],
-                tags: [],
-                priorities: [],
+                applications: [] as string[],
+                urls: [] as string[],
+                tags: [] as string[],
+                priorities: [] as number[],
               };
 
           // 检查是否为空（所有字段都为空）
@@ -312,7 +288,7 @@ export default function Information() {
     });
 
     return groupedData;
-  }, [blacklistData]);
+  }, [reverseBlacklistFromData]);
 
   return (
     <Box>

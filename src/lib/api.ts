@@ -215,6 +215,64 @@ interface getClustersParams {
   name?: string;
 }
 
+/**
+ * 任务类型配置枚举
+ * - task: 普通任务
+ * - persistent_cache_task: 持久化缓存任务
+ * - persistent_task: 持久化任务
+ */
+export type TaskConfigType = 'task' | 'persistent_cache_task' | 'persistent_task';
+
+/**
+ * 子配置类型枚举
+ * - download: 下载任务
+ * - upload: 上传任务
+ */
+export type SubConfigType = 'download' | 'upload';
+
+/**
+ * 黑名单过滤规则
+ * 用于匹配需要屏蔽的任务特征
+ */
+export interface BlockListFilter {
+  /** 应用名称列表 */
+  applications?: string[];
+  /** URL 正则表达式模式列表 */
+  urls?: string[];
+  /** 标签列表 */
+  tags?: string[];
+  /** 优先级列表 (1-5) */
+  priorities?: number[];
+  /** 索引签名，支持动态属性访问 */
+  [key: string]: string[] | number[] | undefined;
+}
+
+/**
+ * 黑名单配置结构
+ * 按任务类型和子配置类型组织过滤规则
+ *
+ * @example
+ * {
+ *   "task": {
+ *     "download": {
+ *       "applications": ["app1", "app2"],
+ *       "urls": ["https://example.com/.*"],
+ *       "tags": ["tag1"],
+ *       "priorities": [1, 2]
+ *     }
+ *   }
+ * }
+ */
+export interface BlockListConfig {
+  /** 任务配置类型的过滤规则映射 */
+  [configType: string]:
+    | {
+        /** 子配置类型的过滤规则映射 */
+        [subConfig: string]: BlockListFilter;
+      }
+    | undefined;
+}
+
 export interface getClusterResponse {
   id: number;
   name: string;
@@ -234,11 +292,11 @@ export interface getClusterResponse {
   };
   seed_peer_cluster_config: {
     load_limit: number;
-    block_list?: Record<string, any>;
+    block_list?: BlockListConfig;
   };
   peer_cluster_config: {
     load_limit: number;
-    block_list?: Record<string, any>;
+    block_list?: BlockListConfig;
   };
   created_at: string;
   updated_at: string;

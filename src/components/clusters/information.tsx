@@ -120,6 +120,8 @@ export default function Information() {
   const [errorMessageText, setErrorMessageText] = useState('');
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [openDeleteCluster, setOpenDeleteCluster] = useState(false);
+  const [openUrlsDialog, setOpenUrlsDialog] = useState(false);
+  const [currentUrls, setCurrentUrls] = useState<string[] | null>(null);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -1012,26 +1014,56 @@ export default function Information() {
                   <Typography className={styles.blacklistServiceTitle}>{serviceTypeGroup.serviceType}</Typography>
                 </Box>
                 <Table className={styles.blacklistTable}>
-                  <TableHead className={styles.blacklistTableHead}>
+                  <TableHead
+                    className={styles.blacklistTableHead}
+                    sx={{ backgroundColor: 'var(--palette-table-title-color)' }}
+                  >
                     <TableRow>
-                      <TableCell className={styles.blacklistTableHeader}>Task Type</TableCell>
-                      <TableCell className={styles.blacklistTableHeader}>Feature</TableCell>
-                      <TableCell className={styles.blacklistTableHeader}>Applications</TableCell>
-                      <TableCell className={styles.blacklistTableHeader}>Urls</TableCell>
-                      <TableCell className={styles.blacklistTableHeader}>Tags</TableCell>
-                      <TableCell className={styles.blacklistTableHeader}>Priorities</TableCell>
+                      <TableCell align="center" className={styles.blacklistTableHeader}>
+                        <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
+                          Task Type
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center" className={styles.blacklistTableHeader}>
+                        <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
+                          Feature
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center" className={styles.blacklistTableHeader}>
+                        <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
+                          Applications
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center" className={styles.blacklistTableHeader}>
+                        <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
+                          Urls
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center" className={styles.blacklistTableHeader}>
+                        <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
+                          Tags
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center" className={styles.blacklistTableHeader}>
+                        <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
+                          Priorities
+                        </Typography>
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {serviceTypeGroup.rows.map((row, rowIndex) => (
                       <TableRow key={`row-${serviceIndex}-${rowIndex}`} className={styles.blacklistTableRow}>
-                        <TableCell className={`${styles.blacklistTableCell} ${styles.blacklistTableTaskType}`}>
+                        <TableCell
+                          align="center"
+                          className={`${styles.blacklistTableCell} ${styles.blacklistTableTaskType}`}
+                        >
                           {row.taskType}
                         </TableCell>
-                        <TableCell className={styles.blacklistTableCell}>
+                        <TableCell align="center" className={styles.blacklistTableCell}>
                           <span className={styles.blacklistTableFeature}>{row.feature}</span>
                         </TableCell>
-                        <TableCell className={styles.blacklistTableCell}>
+                        <TableCell align="center" className={styles.blacklistTableCell}>
                           <Typography variant="body2" className={styles.blacklistCellText}>
                             <MuiTooltip
                               title={row.applications.length > 0 ? row.applications.join(', ') : '-'}
@@ -1047,20 +1079,35 @@ export default function Information() {
                             </MuiTooltip>
                           </Typography>
                         </TableCell>
-                        <TableCell className={styles.blacklistTableCell}>
-                          <Typography variant="body2" className={styles.blacklistCellText}>
-                            <MuiTooltip title={row.urls.length > 0 ? row.urls.join(', ') : '-'} placement="top">
-                              <span>
-                                {row.urls.length > 0 ? (
-                                  row.urls.join(', ')
-                                ) : (
-                                  <span className={styles.blacklistOptionEmpty}>-</span>
+                        <TableCell align="center" className={styles.blacklistTableCell}>
+                          <Box className={styles.blacklistUrlCell}>
+                            {row.urls.length === 0 ? (
+                              <Typography variant="body2" className={styles.blacklistOptionEmpty}>
+                                -
+                              </Typography>
+                            ) : (
+                              <>
+                                {row.urls.slice(0, 4).map((url, index) => (
+                                  <Typography key={index} variant="body2" className={styles.blacklistUrlItem}>
+                                    {url}
+                                  </Typography>
+                                ))}
+                                {row.urls.length > 4 && (
+                                  <button
+                                    className={styles.blacklistUrlMoreButton}
+                                    onClick={() => {
+                                      setCurrentUrls(row.urls);
+                                      setOpenUrlsDialog(true);
+                                    }}
+                                  >
+                                    More
+                                  </button>
                                 )}
-                              </span>
-                            </MuiTooltip>
-                          </Typography>
+                              </>
+                            )}
+                          </Box>
                         </TableCell>
-                        <TableCell className={styles.blacklistTableCell}>
+                        <TableCell align="center" className={styles.blacklistTableCell}>
                           <Typography variant="body2" className={styles.blacklistCellText}>
                             <MuiTooltip title={row.tags.length > 0 ? row.tags.join(', ') : '-'} placement="top">
                               <span>
@@ -1073,7 +1120,7 @@ export default function Information() {
                             </MuiTooltip>
                           </Typography>
                         </TableCell>
-                        <TableCell className={styles.blacklistTableCell}>
+                        <TableCell align="center" className={styles.blacklistTableCell}>
                           <Typography variant="body2" className={styles.blacklistCellText}>
                             <MuiTooltip
                               title={
@@ -1104,6 +1151,16 @@ export default function Information() {
           )}
         </Box>
       </Box>
+      <Dialog maxWidth="sm" fullWidth open={openUrlsDialog} onClose={() => setOpenUrlsDialog(false)}>
+        <DialogTitle>URLs</DialogTitle>
+        <DialogContent dividers className={styles.blacklistUrlDialogContainer}>
+          {currentUrls?.map((url, index) => (
+            <Typography key={index} className={styles.blacklistUrlDialogItem}>
+              {url}
+            </Typography>
+          ))}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }

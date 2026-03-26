@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Grid, TextField, Tooltip, Typography } from '@mui/material';
+import { Autocomplete, Box, Button, Grid, TextField, Tooltip, Typography, Paper } from '@mui/material';
 import { forwardRef, memo, Ref, useEffect, useImperativeHandle, useState, useMemo, useCallback } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import HelpIcon from '@mui/icons-material/Help';
@@ -202,15 +202,22 @@ const BlacklistItemCard = memo(
     const isFirstRowDisabled = !item.type || !item.config || !item.subConfig;
 
     return (
-      <Box
+      <Paper
         key={`${index}-${item.type}`}
         data-testid="blacklist-item"
+        elevation={0}
         sx={{
-          border: '1px solid rgba(0, 0, 0, 0.08)',
-          borderRadius: 1,
           p: 1.5,
           backgroundColor: 'rgba(255, 255, 255, 0.02)',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+          border: '1px solid',
+          borderColor: 'divider',
+          boxShadow: 'var(--palette-card-box-shadow)',
+          transition: 'all 0.2s ease-in-out',
+          '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.04)',
+            borderColor: 'var(--palette-button-color)',
+            boxShadow: '0 2px 8px rgba(0, 122, 255, 0.1)',
+          },
         }}
       >
         {/* 第一行: Type | Config | Sub Config */}
@@ -428,7 +435,7 @@ const BlacklistItemCard = memo(
             <div style={{ paddingTop: '0.25rem' }}>Delete</div>
           </Button>
         </Box>
-      </Box>
+      </Paper>
     );
   },
 );

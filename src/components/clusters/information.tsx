@@ -15,7 +15,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Chip,
   styled,
 } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
@@ -79,12 +78,12 @@ const BlacklistAntTabs = styled(Tabs)({
 });
 
 // Priority 颜色映射: Level 1 (最高) -> Level 5 (最低)
-const PRIORITY_COLORS: Record<number, { bg: string; text: string }> = {
-  1: { bg: 'rgba(255, 72, 66, 0.12)', text: '#B72136' },
-  2: { bg: 'rgba(255, 152, 0, 0.12)', text: '#B76E00' },
-  3: { bg: 'rgba(54, 179, 126, 0.12)', text: '#1B806A' },
-  4: { bg: 'rgba(24, 144, 255, 0.12)', text: '#0958A5' },
-  5: { bg: 'rgba(145, 158, 171, 0.12)', text: '#637381' },
+const PRIORITY_COLORS: Record<number, { bg: string; text: string; border: string }> = {
+  1: { bg: 'rgba(255, 72, 66, 0.08)', text: '#B72136', border: 'rgba(255, 72, 66, 0.24)' },
+  2: { bg: 'rgba(255, 152, 0, 0.08)', text: '#B76E00', border: 'rgba(255, 152, 0, 0.24)' },
+  3: { bg: 'rgba(54, 179, 126, 0.08)', text: '#1B806A', border: 'rgba(54, 179, 126, 0.24)' },
+  4: { bg: 'rgba(24, 144, 255, 0.08)', text: '#0958A5', border: 'rgba(24, 144, 255, 0.24)' },
+  5: { bg: 'rgba(145, 158, 171, 0.08)', text: '#637381', border: 'rgba(145, 158, 171, 0.24)' },
 };
 
 // 格式化优先级显示
@@ -1153,19 +1152,17 @@ export default function Information() {
                               {row.priorities.map((p, pIdx) => {
                                 const colorCfg = PRIORITY_COLORS[p] || PRIORITY_COLORS[5];
                                 return (
-                                  <Chip
+                                  <span
                                     key={pIdx}
-                                    label={formatPriority(p)}
-                                    size="small"
-                                    sx={{
+                                    className={styles.blacklistPriorityTag}
+                                    style={{
                                       backgroundColor: colorCfg.bg,
                                       color: colorCfg.text,
-                                      fontFamily: 'mabry-bold',
-                                      fontSize: '0.75rem',
-                                      height: '1.5rem',
-                                      '& .MuiChip-label': { px: '0.5rem' },
+                                      borderColor: colorCfg.border,
                                     }}
-                                  />
+                                  >
+                                    {formatPriority(p)}
+                                  </span>
                                 );
                               })}
                             </Box>

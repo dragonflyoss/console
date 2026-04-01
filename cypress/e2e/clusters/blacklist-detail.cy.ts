@@ -272,4 +272,657 @@ describe('Cluster Blacklist Detail Page', () => {
         cy.get('.MuiSvgIcon-root').should('be.visible');
       });
   });
+
+  it('should switch between Client and Seed Client tabs', () => {
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+
+    // 默认应该显示 Client tab
+    cy.contains('Client').should('have.attr', 'aria-selected', 'true');
+    cy.contains('Seed Client').should('have.attr', 'aria-selected', 'false');
+
+    // 点击 Seed Client tab
+    cy.contains('Seed Client').click();
+    cy.contains('Seed Client').should('have.attr', 'aria-selected', 'true');
+    cy.contains('Client').should('have.attr', 'aria-selected', 'false');
+
+    // 应该显示 Seed Client 的数据
+    cy.contains('Persistent Task').should('be.visible');
+    cy.contains('Download').should('be.visible');
+
+    // 切换回 Client tab
+    cy.contains('Client').click();
+    cy.contains('Client').should('have.attr', 'aria-selected', 'true');
+    cy.contains('Task').should('be.visible');
+    cy.contains('app1').should('be.visible');
+  });
+
+  it('should display +N more button when URLs exceed 3', () => {
+    const clusterWithManyUrls = {
+      ...cluster,
+      peer_cluster_config: {
+        load_limit: 51,
+        block_list: {
+          task: {
+            download: {
+              urls: ['http://url1.com', 'http://url2.com', 'http://url3.com', 'http://url4.com', 'http://url5.com'],
+            },
+          },
+        },
+      },
+    };
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: clusterWithManyUrls,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get('#name').should('be.visible');
+
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    cy.contains('Client').scrollIntoView().should('be.visible');
+
+    // 应该显示前3个 URL
+    cy.contains('http://url1.com').should('be.visible');
+    cy.contains('http://url2.com').should('be.visible');
+    cy.contains('http://url3.com').should('be.visible');
+
+    // 应该显示 "+2 more" 按钮
+    cy.contains('+2 more').should('be.visible');
+  });
+
+  it('should open URLs dialog when clicking +N more button', () => {
+    const clusterWithManyUrls = {
+      ...cluster,
+      peer_cluster_config: {
+        load_limit: 51,
+        block_list: {
+          task: {
+            download: {
+              urls: ['http://url1.com', 'http://url2.com', 'http://url3.com', 'http://url4.com'],
+            },
+          },
+        },
+      },
+    };
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: clusterWithManyUrls,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get('#name').should('be.visible');
+
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    cy.contains('+1 more').click();
+
+    // 对话框应该打开
+    cy.get('[role="dialog"]').should('be.visible');
+    cy.contains('URLs').should('be.visible');
+    cy.contains('4 URLs').should('be.visible');
+
+    // 应该显示所有 URL
+    cy.contains('http://url1.com').should('be.visible');
+    cy.contains('http://url2.com').should('be.visible');
+    cy.contains('http://url3.com').should('be.visible');
+    cy.contains('http://url4.com').should('be.visible');
+
+    // 按 Escape 关闭对话框
+    cy.get('body').type('{esc}');
+    cy.get('[role="dialog"]').should('not.exist');
+  });
+
+  it('should display priority tags with correct colors', () => {
+    const clusterWithPriorities = {
+      ...cluster,
+      peer_cluster_config: {
+        load_limit: 51,
+        block_list: {
+          task: {
+            download: {
+              priorities: [1, 2, 3, 4, 5],
+            },
+          },
+        },
+      },
+    };
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: clusterWithPriorities,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get('#name').should('be.visible');
+
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    cy.contains('Client').scrollIntoView().should('be.visible');
+
+    // 应该显示所有优先级标签
+    cy.contains('Level 1').should('be.visible');
+    cy.contains('Level 2').should('be.visible');
+    cy.contains('Level 3').should('be.visible');
+    cy.contains('Level 4').should('be.visible');
+    cy.contains('Level 5').should('be.visible');
+  });
+
+  it('should display empty state when Client tab has no data', () => {
+    const clusterWithOnlySeedClient = {
+      ...cluster,
+      peer_cluster_config: {
+        load_limit: 51,
+        block_list: {},
+      },
+      seed_peer_cluster_config: {
+        load_limit: 300,
+        block_list: {
+          persistent_task: {
+            download: {
+              priorities: [1, 2],
+            },
+          },
+        },
+      },
+    };
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: clusterWithOnlySeedClient,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get('#name').should('be.visible');
+
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+
+    // Client tab 应该显示空状态
+    cy.contains('Client').click();
+    cy.contains('No blacklist configuration for Client').should('be.visible');
+
+    // Seed Client tab 应该有数据
+    cy.contains('Seed Client').click();
+    cy.contains('Persistent Task').should('be.visible');
+  });
+
+  it('should display empty state when Seed Client tab has no data', () => {
+    const clusterWithOnlyClient = {
+      ...cluster,
+      peer_cluster_config: {
+        load_limit: 51,
+        block_list: {
+          task: {
+            download: {
+              applications: ['app1'],
+            },
+          },
+        },
+      },
+      seed_peer_cluster_config: {
+        load_limit: 300,
+        block_list: {},
+      },
+    };
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: clusterWithOnlyClient,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get('#name').should('be.visible');
+
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+
+    // Client tab 应该有数据
+    cy.contains('Client').click();
+    cy.contains('app1').should('be.visible');
+
+    // Seed Client tab 应该显示空状态
+    cy.contains('Seed Client').click();
+    cy.contains('No blacklist configuration for Seed Client').should('be.visible');
+  });
+
+  it('should display dash for empty applications, tags, and priorities', () => {
+    const clusterWithPartialData = {
+      ...cluster,
+      peer_cluster_config: {
+        load_limit: 51,
+        block_list: {
+          task: {
+            download: {
+              // 只有 applications,其他字段为空
+              applications: ['app1'],
+              urls: [],
+              tags: [],
+              priorities: [],
+            },
+          },
+        },
+      },
+    };
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: clusterWithPartialData,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get('#name').should('be.visible');
+
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    cy.contains('Client').scrollIntoView().should('be.visible');
+
+    // 应该显示 applications
+    cy.contains('app1').should('be.visible');
+
+    // 应该在表格中显示短横线 (Tags, Priorities 和 Urls 列)
+    cy.get('table').within(() => {
+      // 检查是否有短横线显示(表示空值)
+      cy.contains('-').should('exist');
+    });
+  });
+
+  it('should handle persistent_cache_task task type', () => {
+    const clusterWithPersistentCache = {
+      ...cluster,
+      peer_cluster_config: {
+        load_limit: 51,
+        block_list: {
+          persistent_cache_task: {
+            download: {
+              applications: ['cache-app'],
+            },
+            upload: {
+              tags: ['cache-tag'],
+            },
+          },
+        },
+      },
+    };
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: clusterWithPersistentCache,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get('#name').should('be.visible');
+
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    cy.contains('Client').scrollIntoView().should('be.visible');
+
+    // 应该显示 Persistent Cache Task
+    cy.contains('Persistent Cache Task').should('be.visible');
+    cy.contains('cache-app').should('be.visible');
+    cy.contains('cache-tag').should('be.visible');
+  });
+
+  it('should not display task type when all options are empty', () => {
+    const clusterWithEmptyOptions = {
+      ...cluster,
+      peer_cluster_config: {
+        load_limit: 51,
+        block_list: {
+          task: {
+            download: {
+              applications: [],
+              urls: [],
+              tags: [],
+              priorities: [],
+            },
+          },
+        },
+      },
+    };
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: clusterWithEmptyOptions,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get('#name').should('be.visible');
+
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+
+    // 应该显示空状态，因为所有选项都为空
+    cy.contains('No blacklist configuration').should('be.visible');
+  });
+
+  it('should display tooltip on hover for applications and tags', () => {
+    const clusterWithTooltip = {
+      ...cluster,
+      peer_cluster_config: {
+        load_limit: 51,
+        block_list: {
+          task: {
+            download: {
+              applications: ['app1', 'app2', 'app3'],
+              tags: ['tag1', 'tag2'],
+            },
+          },
+        },
+      },
+    };
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: clusterWithTooltip,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get('#name').should('be.visible');
+
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    cy.contains('Client').scrollIntoView().should('be.visible');
+
+    // Hover over applications 应该显示 tooltip
+    cy.contains('app1 / app2 / app3').trigger('mouseover');
+    cy.get('.MuiTooltip-tooltip').should('contain', 'app1 / app2 / app3');
+  });
+
+  it('should copy URL from dialog', () => {
+    const clusterWithManyUrls = {
+      ...cluster,
+      peer_cluster_config: {
+        load_limit: 51,
+        block_list: {
+          task: {
+            download: {
+              urls: ['http://url1.com', 'http://url2.com', 'http://url3.com', 'http://url4.com'],
+            },
+          },
+        },
+      },
+    };
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: clusterWithManyUrls,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get('#name').should('be.visible');
+
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    cy.contains('+1 more').click();
+
+    // 对话框应该打开
+    cy.get('[role="dialog"]').should('be.visible');
+
+    // 点击复制按钮 - IconButton 不包含文本,直接点击第一个 IconButton
+    cy.get('[role="dialog"]').within(() => {
+      cy.get('button.MuiIconButton-root').first().click();
+    });
+
+    // 验证对话框仍然可见
+    cy.get('[role="dialog"]').should('be.visible');
+  });
+
+  it('should close URL dialog when clicking close button', () => {
+    const clusterWithManyUrls = {
+      ...cluster,
+      peer_cluster_config: {
+        load_limit: 51,
+        block_list: {
+          task: {
+            download: {
+              urls: ['http://url1.com', 'http://url2.com', 'http://url3.com', 'http://url4.com'],
+            },
+          },
+        },
+      },
+    };
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: clusterWithManyUrls,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get('#name').should('be.visible');
+
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    cy.contains('+1 more').click();
+
+    // 对话框应该打开
+    cy.get('[role="dialog"]').should('be.visible');
+
+    // 点击对话框外部关闭
+    cy.get('[role="dialog"]').click({ force: true });
+  });
+
+  it('should display URL count in dialog header', () => {
+    const clusterWithManyUrls = {
+      ...cluster,
+      peer_cluster_config: {
+        load_limit: 51,
+        block_list: {
+          task: {
+            download: {
+              urls: ['http://url1.com', 'http://url2.com', 'http://url3.com', 'http://url4.com', 'http://url5.com'],
+            },
+          },
+        },
+      },
+    };
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: clusterWithManyUrls,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get('#name').should('be.visible');
+
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    cy.contains('+2 more').click();
+
+    // 对话框应该显示正确的 URL 数量
+    cy.get('[role="dialog"]').should('be.visible');
+    cy.contains('5 URLs').should('be.visible');
+  });
+
+  it('should display exactly 3 URLs when there are 3 URLs', () => {
+    const clusterWithThreeUrls = {
+      ...cluster,
+      peer_cluster_config: {
+        load_limit: 51,
+        block_list: {
+          task: {
+            download: {
+              urls: ['http://url1.com', 'http://url2.com', 'http://url3.com'],
+            },
+          },
+        },
+      },
+    };
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: clusterWithThreeUrls,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get('#name').should('be.visible');
+
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    cy.contains('Client').scrollIntoView().should('be.visible');
+
+    // 应该显示所有3个 URL
+    cy.contains('http://url1.com').should('be.visible');
+    cy.contains('http://url2.com').should('be.visible');
+    cy.contains('http://url3.com').should('be.visible');
+
+    // 不应该显示 "+N more" 按钮
+    cy.contains('more').should('not.exist');
+  });
+
+  it('should handle mixed task types and features correctly', () => {
+    const clusterWithMixedData = {
+      ...cluster,
+      peer_cluster_config: {
+        load_limit: 51,
+        block_list: {
+          task: {
+            download: {
+              applications: ['task-app'],
+            },
+          },
+          persistent_cache_task: {
+            download: {
+              tags: ['cache-tag'],
+            },
+            upload: {
+              priorities: [1, 2],
+            },
+          },
+          persistent_task: {
+            upload: {
+              urls: ['http://persistent.com'],
+            },
+          },
+        },
+      },
+    };
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/v1/clusters/1',
+      },
+      (req) => {
+        req.reply({
+          statusCode: 200,
+          body: clusterWithMixedData,
+        });
+      },
+    );
+
+    cy.visit('/clusters/1');
+    cy.get('#name').should('be.visible');
+
+    cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    cy.contains('Client').scrollIntoView().should('be.visible');
+
+    // 应该显示所有任务类型
+    cy.contains('Task').should('be.visible');
+    cy.contains('Persistent Cache Task').should('be.visible');
+    cy.contains('Persistent Task').should('be.visible');
+
+    // 应该显示所有 feature
+    cy.contains('Download').should('be.visible');
+    cy.contains('Upload').should('be.visible');
+
+    // 验证数据
+    cy.contains('task-app').should('be.visible');
+    cy.contains('cache-tag').should('be.visible');
+    cy.contains('Level 1').should('be.visible');
+    cy.contains('http://persistent.com').should('be.visible');
+  });
 });

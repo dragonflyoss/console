@@ -39,10 +39,7 @@ describe('Peers', () => {
   });
 
   describe('when data is loaded', () => {
-    it('displays the total number of peers and git version number, as well as the number of git commit', () => {
-      // should display the total number of peers.
-      cy.get('#total').should('have.text', 10);
-
+    it('displays the git version number and the number of git commit', () => {
       //  should display the git version number of peers.
       cy.get('#git-version').should('have.text', 4);
 
@@ -173,10 +170,7 @@ describe('Peers', () => {
       );
     });
 
-    it('displays the total number of peers and git version number, as well as the number of git commit', () => {
-      // should display the total number of peers.
-      cy.get('#total').should('have.text', 0);
-
+    it('displays the git version number and the number of git commit', () => {
       //  should display the git version number of peers.
       cy.get('#git-version').should('have.text', 0);
 
@@ -214,10 +208,7 @@ describe('Peers', () => {
       cy.visit('/clusters/1/peers');
     });
 
-    it('displays the total number of peers and git version number, as well as the number of git commit', () => {
-      // should display the total number of peers.
-      cy.get('#total').should('have.text', 0);
-
+    it('displays the git version number and the number of git commit', () => {
       //  should display the git version number of peers.
       cy.get('#git-version').should('have.text', 0);
 
@@ -251,7 +242,6 @@ describe('Peers', () => {
 
   describe('refresh', () => {
     it('can refresh peers and return new data', () => {
-      cy.get('#total').should('have.text', 10);
       cy.get('#git-version').should('have.text', 4);
       cy.get('#git-commit').should('have.text', 5);
 
@@ -300,13 +290,11 @@ describe('Peers', () => {
 
       cy.wait(2000);
 
-      cy.get('#total').should('have.text', 14);
       cy.get('#git-version').should('have.text', 6);
       cy.get('#git-commit').should('have.text', 7);
     });
 
     it('not can refresh peers and return new data', () => {
-      cy.get('#total').should('have.text', 10);
       cy.get('#git-version').should('have.text', 4);
       cy.get('#git-commit').should('have.text', 5);
 
@@ -339,13 +327,11 @@ describe('Peers', () => {
 
       cy.get('.MuiAlert-message').should('have.text', 'scheduler cluster id 7: record not found');
 
-      cy.get('#total').should('have.text', 10);
       cy.get('#git-version').should('have.text', 4);
       cy.get('#git-commit').should('have.text', 5);
     });
 
     it('can refresh peer fetch data error', () => {
-      cy.get('#total').should('have.text', 10);
       cy.get('#git-version').should('have.text', 4);
       cy.get('#git-commit').should('have.text', 5);
 
@@ -396,7 +382,6 @@ describe('Peers', () => {
       // Show error message.
       cy.get('.MuiAlert-message', { timeout: 5000 }).should('be.visible').and('contain', 'Failed to fetch');
 
-      cy.get('#total').should('have.text', 10);
       cy.get('#git-version').should('have.text', 4);
       cy.get('#git-commit').should('have.text', 5);
     });

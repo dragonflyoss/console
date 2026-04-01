@@ -539,7 +539,6 @@ export default function Information() {
                 )}
               </Box>
             </Box>
-
             <Box className={styles.clusterWrap}>
               <Box className={styles.clusterTitle}>
                 <Typography variant="body2" component="div" className={styles.configLable}>
@@ -553,6 +552,7 @@ export default function Information() {
                 {isLoading ? <Skeleton className={styles.loading} /> : getDatetime(cluster.created_at)}
               </Typography>
             </Box>
+            <Box className={styles.clusterWrap} />
           </Box>
         </Card>
         <Box className={styles.wrapper}>
@@ -1073,12 +1073,18 @@ export default function Information() {
                     sx={{ backgroundColor: 'var(--palette-table-title-color)' }}
                   >
                     <TableRow>
-                      <TableCell align="center" className={`${styles.blacklistTableHeader} ${styles.blacklistColTaskType}`}>
+                      <TableCell
+                        align="center"
+                        className={`${styles.blacklistTableHeader} ${styles.blacklistColTaskType}`}
+                      >
                         <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
                           Task Type
                         </Typography>
                       </TableCell>
-                      <TableCell align="center" className={`${styles.blacklistTableHeader} ${styles.blacklistColFeature}`}>
+                      <TableCell
+                        align="center"
+                        className={`${styles.blacklistTableHeader} ${styles.blacklistColFeature}`}
+                      >
                         <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
                           Feature
                         </Typography>
@@ -1114,37 +1120,33 @@ export default function Information() {
                         >
                           {row.taskType}
                         </TableCell>
-                        <TableCell align="center" className={`${styles.blacklistTableCell} ${styles.blacklistColFeature}`}>
+                        <TableCell
+                          align="center"
+                          className={`${styles.blacklistTableCell} ${styles.blacklistColFeature}`}
+                        >
                           <span className={styles.blacklistTableFeature}>{row.feature}</span>
                         </TableCell>
                         <TableCell align="center" className={styles.blacklistTableCell}>
-                          <Typography variant="body2" className={styles.blacklistCellText}>
-                            <MuiTooltip
-                              title={row.applications.length > 0 ? row.applications.join(', ') : '-'}
-                              placement="top"
-                            >
-                              <span>
-                                {row.applications.length > 0 ? (
-                                  row.applications.join(', ')
-                                ) : (
-                                  <span className={styles.blacklistOptionEmpty}>-</span>
-                                )}
-                              </span>
+                          {row.applications.length > 0 ? (
+                            <MuiTooltip title={row.applications.join(' / ')} placement="top">
+                              <Typography variant="body2" className={styles.blacklistSlashText}>
+                                {row.applications.join(' / ')}
+                              </Typography>
                             </MuiTooltip>
-                          </Typography>
+                          ) : (
+                            <span className={styles.blacklistOptionEmpty}>-</span>
+                          )}
                         </TableCell>
                         <TableCell align="center" className={styles.blacklistTableCell}>
-                          <Typography variant="body2" className={styles.blacklistCellText}>
-                            <MuiTooltip title={row.tags.length > 0 ? row.tags.join(', ') : '-'} placement="top">
-                              <span>
-                                {row.tags.length > 0 ? (
-                                  row.tags.join(', ')
-                                ) : (
-                                  <span className={styles.blacklistOptionEmpty}>-</span>
-                                )}
-                              </span>
+                          {row.tags.length > 0 ? (
+                            <MuiTooltip title={row.tags.join(' / ')} placement="top">
+                              <Typography variant="body2" className={styles.blacklistSlashText}>
+                                {row.tags.join(' / ')}
+                              </Typography>
                             </MuiTooltip>
-                          </Typography>
+                          ) : (
+                            <span className={styles.blacklistOptionEmpty}>-</span>
+                          )}
                         </TableCell>
                         <TableCell align="center" className={styles.blacklistTableCell}>
                           {row.priorities.length > 0 ? (
@@ -1178,16 +1180,17 @@ export default function Information() {
                               </Typography>
                             ) : (
                               <>
-                                {row.urls.slice(0, 3).map((url, index) => (
-                                  <Box key={index} className={styles.blacklistUrlItemCard}>
-                                    <span className={styles.blacklistUrlIndex}>{index + 1}</span>
-                                    <MuiTooltip title={url} placement="top">
-                                      <Typography variant="body2" className={styles.blacklistUrlText}>
-                                        {url}
-                                      </Typography>
+                                <Box className={styles.blacklistUrlTagsWrapper}>
+                                  {row.urls.slice(0, 3).map((url, index) => (
+                                    <MuiTooltip key={index} title={url} placement="top">
+                                      <Paper elevation={0} className={styles.blacklistUrlTag}>
+                                        <Typography variant="body2" className={styles.blacklistUrlTagText}>
+                                          {url}
+                                        </Typography>
+                                      </Paper>
                                     </MuiTooltip>
-                                  </Box>
-                                ))}
+                                  ))}
+                                </Box>
                                 {row.urls.length > 3 && (
                                   <button
                                     className={styles.blacklistUrlMoreButton}
@@ -1211,9 +1214,7 @@ export default function Information() {
             })}
 
             {/* 当前tab没有数据时显示空状态 */}
-            {!groupBlacklistData.some(
-              (g) => (g.serviceType === 'Client' ? 0 : 1) === blacklistTabValue,
-            ) && (
+            {!groupBlacklistData.some((g) => (g.serviceType === 'Client' ? 0 : 1) === blacklistTabValue) && (
               <Typography className={styles.blacklistEmpty}>
                 No blacklist configuration for {blacklistTabValue === 0 ? 'Client' : 'Seed Client'}.
               </Typography>
@@ -1223,15 +1224,52 @@ export default function Information() {
           <Typography className={styles.blacklistEmpty}>No blacklist configuration.</Typography>
         )}
       </Box>
-      <Dialog maxWidth="sm" fullWidth open={openUrlsDialog} onClose={() => setOpenUrlsDialog(false)}>
-        <DialogTitle>URLs</DialogTitle>
-        <DialogContent dividers className={styles.blacklistUrlDialogContainer}>
-          {currentUrls?.map((url, index) => (
-            <Box key={index} className={styles.blacklistUrlItemCard}>
-              <span className={styles.blacklistUrlIndex}>{index + 1}</span>
-              <Typography className={styles.blacklistUrlDialogText}>{url}</Typography>
+      <Dialog maxWidth="md" fullWidth open={openUrlsDialog} onClose={() => setOpenUrlsDialog(false)}>
+        <DialogTitle>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Hostnames style={{ width: 20, height: 20 }} />
+              <Typography variant="h6" sx={{ fontFamily: 'mabry-bold' }}>
+                URLs
+              </Typography>
             </Box>
-          ))}
+            <Typography
+              variant="caption"
+              sx={{
+                backgroundColor: 'var(--palette-button-color)',
+                color: 'white',
+                padding: '4px 12px',
+                borderRadius: '12px',
+                fontSize: '0.75rem',
+                fontFamily: 'mabry-bold',
+              }}
+            >
+              {currentUrls?.length || 0} URLs
+            </Typography>
+          </Box>
+        </DialogTitle>
+        <DialogContent dividers sx={{ padding: '1rem 1.5rem !important' }}>
+          <Box className={styles.urlDialogList}>
+            {currentUrls?.map((url, index) => (
+              <Box key={index} className={styles.urlDialogItem}>
+                <Box className={styles.urlDialogIndex}>{index + 1}</Box>
+                <Box className={styles.urlDialogContent}>
+                  <Typography variant="body2" className={styles.urlDialogText}>
+                    {url}
+                  </Typography>
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      setCopyToClipboard(url);
+                    }}
+                    className={styles.urlDialogCopyButton}
+                  >
+                    <Copy className={styles.copyIcon} />
+                  </IconButton>
+                </Box>
+              </Box>
+            ))}
+          </Box>
         </DialogContent>
       </Dialog>
     </Box>

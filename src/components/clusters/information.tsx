@@ -385,6 +385,7 @@ export default function Information() {
                 {isLoading ? <Skeleton className={styles.loading} /> : getDatetime(cluster.created_at)}
               </Typography>
             </Box>
+            <Box className={styles.clusterWrap} />
           </Box>
         </Card>
         <Box className={styles.wrapper}>

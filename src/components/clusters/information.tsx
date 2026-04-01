@@ -15,7 +15,11 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Chip,
+  styled,
 } from '@mui/material';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import Dialog from '@mui/material/Dialog';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Card from '../card';
@@ -41,6 +45,47 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { getDatetime } from '../../lib/utils';
 import styles from './information.module.css';
 import ErrorHandler from '../error-handler';
+
+// Blacklist Tabs 样式 - 与 show.tsx 中的 AntTabs/AntTab 保持一致
+const BlacklistAntTab = styled(Tab)(({ theme }) => ({
+  textTransform: 'none',
+  minWidth: 0,
+  [theme.breakpoints.up('sm')]: {
+    minWidth: 0,
+  },
+  minHeight: '2.8rem',
+  fontWeight: theme.typography.fontWeightRegular,
+  color: 'var(--palette-grey-tab)',
+  padding: '0',
+  marginRight: '2rem',
+  fontFamily: 'mabry-bold',
+  fontSize: '0.85rem',
+  '&:hover': {
+    color: 'primary',
+    opacity: 1,
+  },
+  '&.Mui-selected': {
+    color: 'var(--palette-text-color)',
+    fontFamily: 'mabry-bold',
+  },
+}));
+
+const BlacklistAntTabs = styled(Tabs)({
+  borderBottom: '1px solid var(--palette-tab-border-color)',
+  '& .MuiTabs-indicator': {
+    backgroundColor: 'var(--palette-text-color)',
+    borderRadius: '1rem',
+  },
+});
+
+// Priority 颜色映射: Level 1 (最高) -> Level 5 (最低)
+const PRIORITY_COLORS: Record<number, { bg: string; text: string }> = {
+  1: { bg: 'rgba(255, 72, 66, 0.12)', text: '#B72136' },
+  2: { bg: 'rgba(255, 152, 0, 0.12)', text: '#B76E00' },
+  3: { bg: 'rgba(54, 179, 126, 0.12)', text: '#1B806A' },
+  4: { bg: 'rgba(24, 144, 255, 0.12)', text: '#0958A5' },
+  5: { bg: 'rgba(145, 158, 171, 0.12)', text: '#637381' },
+};
 
 // 格式化优先级显示
 const formatPriority = (priority: number): string => {
@@ -122,6 +167,7 @@ export default function Information() {
   const [openDeleteCluster, setOpenDeleteCluster] = useState(false);
   const [openUrlsDialog, setOpenUrlsDialog] = useState(false);
   const [currentUrls, setCurrentUrls] = useState<string[] | null>(null);
+  const [blacklistTabValue, setBlacklistTabValue] = useState(0);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -1006,25 +1052,34 @@ export default function Information() {
           </MuiTooltip>
         </Box>
 
-        <Box>
-          {groupBlacklistData.length > 0 ? (
-            groupBlacklistData.map((serviceTypeGroup, serviceIndex) => (
-              <Card key={`service-${serviceIndex}`} className={styles.blacklistServiceBlock}>
-                <Box className={styles.blacklistServiceHeader}>
-                  <Typography className={styles.blacklistServiceTitle}>{serviceTypeGroup.serviceType}</Typography>
-                </Box>
-                <Table className={styles.blacklistTable}>
+        {groupBlacklistData.length > 0 ? (
+          <Card className={styles.blacklistServiceBlock}>
+            <BlacklistAntTabs
+              value={blacklistTabValue}
+              onChange={(_e, newValue) => setBlacklistTabValue(newValue)}
+              sx={{ px: '1.2rem' }}
+            >
+              <BlacklistAntTab label="Client" />
+              <BlacklistAntTab label="Seed Client" />
+            </BlacklistAntTabs>
+
+            {groupBlacklistData.map((serviceTypeGroup, serviceIndex) => {
+              const tabIndex = serviceTypeGroup.serviceType === 'Client' ? 0 : 1;
+              if (blacklistTabValue !== tabIndex) return null;
+
+              return (
+                <Table key={`service-${serviceIndex}`} className={styles.blacklistTable}>
                   <TableHead
                     className={styles.blacklistTableHead}
                     sx={{ backgroundColor: 'var(--palette-table-title-color)' }}
                   >
                     <TableRow>
-                      <TableCell align="center" className={styles.blacklistTableHeader}>
+                      <TableCell align="center" className={`${styles.blacklistTableHeader} ${styles.blacklistColTaskType}`}>
                         <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
                           Task Type
                         </Typography>
                       </TableCell>
-                      <TableCell align="center" className={styles.blacklistTableHeader}>
+                      <TableCell align="center" className={`${styles.blacklistTableHeader} ${styles.blacklistColFeature}`}>
                         <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
                           Feature
                         </Typography>
@@ -1032,11 +1087,6 @@ export default function Information() {
                       <TableCell align="center" className={styles.blacklistTableHeader}>
                         <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
                           Applications
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="center" className={styles.blacklistTableHeader}>
-                        <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
-                          Urls
                         </Typography>
                       </TableCell>
                       <TableCell align="center" className={styles.blacklistTableHeader}>
@@ -1049,6 +1099,11 @@ export default function Information() {
                           Priorities
                         </Typography>
                       </TableCell>
+                      <TableCell align="left" className={styles.blacklistTableHeader}>
+                        <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
+                          Urls
+                        </Typography>
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -1056,11 +1111,11 @@ export default function Information() {
                       <TableRow key={`row-${serviceIndex}-${rowIndex}`} className={styles.blacklistTableRow}>
                         <TableCell
                           align="center"
-                          className={`${styles.blacklistTableCell} ${styles.blacklistTableTaskType}`}
+                          className={`${styles.blacklistTableCell} ${styles.blacklistTableTaskType} ${styles.blacklistColTaskType}`}
                         >
                           {row.taskType}
                         </TableCell>
-                        <TableCell align="center" className={styles.blacklistTableCell}>
+                        <TableCell align="center" className={`${styles.blacklistTableCell} ${styles.blacklistColFeature}`}>
                           <span className={styles.blacklistTableFeature}>{row.feature}</span>
                         </TableCell>
                         <TableCell align="center" className={styles.blacklistTableCell}>
@@ -1080,34 +1135,6 @@ export default function Information() {
                           </Typography>
                         </TableCell>
                         <TableCell align="center" className={styles.blacklistTableCell}>
-                          <Box className={styles.blacklistUrlCell}>
-                            {row.urls.length === 0 ? (
-                              <Typography variant="body2" className={styles.blacklistOptionEmpty}>
-                                -
-                              </Typography>
-                            ) : (
-                              <>
-                                {row.urls.slice(0, 4).map((url, index) => (
-                                  <Typography key={index} variant="body2" className={styles.blacklistUrlItem}>
-                                    {url}
-                                  </Typography>
-                                ))}
-                                {row.urls.length > 4 && (
-                                  <button
-                                    className={styles.blacklistUrlMoreButton}
-                                    onClick={() => {
-                                      setCurrentUrls(row.urls);
-                                      setOpenUrlsDialog(true);
-                                    }}
-                                  >
-                                    More
-                                  </button>
-                                )}
-                              </>
-                            )}
-                          </Box>
-                        </TableCell>
-                        <TableCell align="center" className={styles.blacklistTableCell}>
                           <Typography variant="body2" className={styles.blacklistCellText}>
                             <MuiTooltip title={row.tags.length > 0 ? row.tags.join(', ') : '-'} placement="top">
                               <span>
@@ -1121,43 +1148,92 @@ export default function Information() {
                           </Typography>
                         </TableCell>
                         <TableCell align="center" className={styles.blacklistTableCell}>
-                          <Typography variant="body2" className={styles.blacklistCellText}>
-                            <MuiTooltip
-                              title={
-                                row.priorities.length > 0
-                                  ? row.priorities.map((p) => formatPriority(p)).join(', ')
-                                  : '-'
-                              }
-                              placement="top"
-                            >
-                              <span>
-                                {row.priorities.length > 0 ? (
-                                  row.priorities.map((p) => formatPriority(p)).join(', ')
-                                ) : (
-                                  <span className={styles.blacklistOptionEmpty}>-</span>
+                          {row.priorities.length > 0 ? (
+                            <Box className={styles.blacklistPriorityCell}>
+                              {row.priorities.map((p, pIdx) => {
+                                const colorCfg = PRIORITY_COLORS[p] || PRIORITY_COLORS[5];
+                                return (
+                                  <Chip
+                                    key={pIdx}
+                                    label={formatPriority(p)}
+                                    size="small"
+                                    sx={{
+                                      backgroundColor: colorCfg.bg,
+                                      color: colorCfg.text,
+                                      fontFamily: 'mabry-bold',
+                                      fontSize: '0.75rem',
+                                      height: '1.5rem',
+                                      '& .MuiChip-label': { px: '0.5rem' },
+                                    }}
+                                  />
+                                );
+                              })}
+                            </Box>
+                          ) : (
+                            <span className={styles.blacklistOptionEmpty}>-</span>
+                          )}
+                        </TableCell>
+                        <TableCell align="left" className={styles.blacklistTableCell}>
+                          <Box className={styles.blacklistUrlCell}>
+                            {row.urls.length === 0 ? (
+                              <Typography variant="body2" className={styles.blacklistOptionEmpty}>
+                                -
+                              </Typography>
+                            ) : (
+                              <>
+                                {row.urls.slice(0, 3).map((url, index) => (
+                                  <Box key={index} className={styles.blacklistUrlItemCard}>
+                                    <span className={styles.blacklistUrlIndex}>{index + 1}</span>
+                                    <MuiTooltip title={url} placement="top">
+                                      <Typography variant="body2" className={styles.blacklistUrlText}>
+                                        {url}
+                                      </Typography>
+                                    </MuiTooltip>
+                                  </Box>
+                                ))}
+                                {row.urls.length > 3 && (
+                                  <button
+                                    className={styles.blacklistUrlMoreButton}
+                                    onClick={() => {
+                                      setCurrentUrls(row.urls);
+                                      setOpenUrlsDialog(true);
+                                    }}
+                                  >
+                                    +{row.urls.length - 3} more
+                                  </button>
                                 )}
-                              </span>
-                            </MuiTooltip>
-                          </Typography>
+                              </>
+                            )}
+                          </Box>
                         </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
-              </Card>
-            ))
-          ) : (
-            <Typography className={styles.blacklistEmpty}>No blacklist configuration.</Typography>
-          )}
-        </Box>
+              );
+            })}
+
+            {/* 当前tab没有数据时显示空状态 */}
+            {!groupBlacklistData.some(
+              (g) => (g.serviceType === 'Client' ? 0 : 1) === blacklistTabValue,
+            ) && (
+              <Typography className={styles.blacklistEmpty}>
+                No blacklist configuration for {blacklistTabValue === 0 ? 'Client' : 'Seed Client'}.
+              </Typography>
+            )}
+          </Card>
+        ) : (
+          <Typography className={styles.blacklistEmpty}>No blacklist configuration.</Typography>
+        )}
       </Box>
       <Dialog maxWidth="sm" fullWidth open={openUrlsDialog} onClose={() => setOpenUrlsDialog(false)}>
         <DialogTitle>URLs</DialogTitle>
         <DialogContent dividers className={styles.blacklistUrlDialogContainer}>
           {currentUrls?.map((url, index) => (
-            <Typography key={index} className={styles.blacklistUrlDialogItem}>
-              {url}
-            </Typography>
+            <Box key={index} className={styles.blacklistUrlItemCard}>
+              <span className={styles.blacklistUrlIndex}>{index + 1}</span>
+              <Typography className={styles.blacklistUrlDialogText}>{url}</Typography>
+            </Box>
           ))}
         </DialogContent>
       </Dialog>

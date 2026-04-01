@@ -379,24 +379,11 @@
   overflow: hidden;
 }
 
-.blacklistServiceHeader {
-  padding: 0.8rem 1.2rem;
-  background-color: transparent;
-  border-bottom: 1px solid var(--palette-divider-color);
-  margin-bottom: 0;
-}
-
-.blacklistServiceTitle {
-  font-family: 'mabry-bold' !important;
-  font-size: 0.95rem;
-  color: var(--palette-button-color);
-}
-
 /* 表格样式 */
 .blacklistTable {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: auto;
 }
 
 .blacklistTableHead {
@@ -418,30 +405,16 @@
   color: var(--palette-table-title-text-color);
 }
 
-/* 固定列宽，确保 Client 和 Seed Client 表格对齐 */
-.blacklistTableHeader:nth-child(1) {
-  width: 18%;
+/* 固定列宽 - 前两列缩短，Urls在最后自适应 */
+.blacklistColTaskType {
+  width: 12%;
 }
 
-.blacklistTableHeader:nth-child(2) {
-  width: 10%;
+.blacklistColFeature {
+  width: 8%;
 }
 
-.blacklistTableHeader:nth-child(3) {
-  width: 18%;
-}
-
-.blacklistTableHeader:nth-child(4) {
-  width: 18%;
-}
-
-.blacklistTableHeader:nth-child(5) {
-  width: 18%;
-}
-
-.blacklistTableHeader:nth-child(6) {
-  width: 18%;
-}
+/* 其他列（Applications, Tags, Priorities）均分中间空间，Urls列自适应剩余宽度 */
 
 .blacklistTableRow {
   border-bottom: 1px solid var(--palette-divider-color);
@@ -457,7 +430,6 @@
   color: var(--palette-text-secondary);
   border-bottom: none;
   overflow: hidden;
-  max-width: 0;
 }
 
 .blacklistCellText {
@@ -493,33 +465,76 @@
 .blacklistUrlCell {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0.3rem;
+  align-items: stretch;
+  gap: 0.4rem;
   max-width: 100%;
 }
 
-.blacklistUrlItem {
-  font-size: 0.85rem;
+.blacklistUrlItemCard {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  background-color: var(--palette-grey-background-color);
+  border-radius: 6px;
+  border: 1px solid var(--palette-divider-color);
+  transition: all 0.15s ease;
+}
+
+.blacklistUrlItemCard:hover {
+  background-color: rgba(0, 122, 255, 0.04);
+  border-color: var(--palette-button-color);
+}
+
+.blacklistUrlIndex {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background-color: var(--palette-button-color);
+  color: white;
+  font-size: 0.7rem;
+  font-family: 'mabry-bold';
+  flex-shrink: 0;
+}
+
+.blacklistUrlText {
+  font-size: 0.8rem;
   color: var(--palette-text-secondary);
   word-break: break-all;
   line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Priority 单元格样式 */
+.blacklistPriorityCell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  justify-content: center;
 }
 
 .blacklistUrlMoreButton {
   background: none;
-  border: none;
+  border: 1px dashed var(--palette-button-color);
+  border-radius: 6px;
   color: var(--palette-button-color);
   cursor: pointer;
-  font-size: 0.85rem;
-  padding: 0.2rem 0;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
   font-family: 'mabry-bold' !important;
   text-decoration: none;
   transition: all 0.2s ease;
+  text-align: center;
 }
 
 .blacklistUrlMoreButton:hover {
-  text-decoration: underline;
-  background-color: var(--palette-action-hover);
+  background-color: rgba(0, 122, 255, 0.06);
+  border-color: var(--palette-button-color);
 }
 
 /* URL 弹窗样式 */
@@ -527,36 +542,29 @@
   max-height: 60vh;
   overflow-y: auto;
   padding: 1rem 1.5rem !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.blacklistUrlDialogItem {
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--palette-divider-color);
+.blacklistUrlDialogText {
   word-break: break-all;
   line-height: 1.5;
   color: var(--palette-text-color);
-  font-size: 0.9rem;
-}
-
-.blacklistUrlDialogItem:last-child {
-  border-bottom: none;
+  font-size: 0.85rem;
 }
 
 /* 小屏幕隐藏次要列 */
 @media only screen and (max-width: 1199px) {
-  .blacklistTableHeader:nth-child(n+4),
-  .blacklistTableCell:nth-child(n+4) {
+  .blacklistTableHeader:nth-child(n+5),
+  .blacklistTableCell:nth-child(n+5) {
     display: none;
   }
-  /* 小屏幕时调整剩余列宽 */
-  .blacklistTableHeader:nth-child(1) {
-    width: 25%;
+  .blacklistColTaskType {
+    width: 18%;
   }
-  .blacklistTableHeader:nth-child(2) {
-    width: 15%;
-  }
-  .blacklistTableHeader:nth-child(3) {
-    width: 30%;
+  .blacklistColFeature {
+    width: 12%;
   }
 }
 
@@ -565,11 +573,10 @@
   .blacklistTableCell:nth-child(n+3) {
     display: none;
   }
-  /* 超小屏幕时调整剩余列宽 */
-  .blacklistTableHeader:nth-child(1) {
-    width: 35%;
+  .blacklistColTaskType {
+    width: 30%;
   }
-  .blacklistTableHeader:nth-child(2) {
-    width: 20%;
+  .blacklistColFeature {
+    width: 18%;
   }
 }

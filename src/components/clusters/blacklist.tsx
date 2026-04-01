@@ -75,7 +75,7 @@ const blacklistTypeOptions = ['Client', 'Seed Client'] as const;
 const AUTOCOMPLETE_TEXTFIELD_SX = {
   width: '100%',
   '& .MuiOutlinedInput-root': {
-    minHeight: '3.25rem',
+    // minHeight: '3.25rem',
     paddingRight: '14px !important',
     backgroundColor: 'rgba(255, 255, 255, 0.03)',
     '&:hover': {
@@ -92,6 +92,45 @@ const AUTOCOMPLETE_SX = {
   '& .MuiOutlinedInput-root': {
     paddingRight: '14px !important',
   },
+} as const;
+
+// 单个字段包装器样式 - 带右边框分隔线，表单项垂直水平居中
+const FIELD_WRAPPER_SX = {
+  flex: 1,
+  minWidth: 0,
+  p: 1.5,
+  paddingTop: 4,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  maxWidth: '50%',
+  '&:not(:last-child)': {
+    borderRight: '1px solid',
+    borderColor: 'divider',
+  },
+} as const;
+
+// 字段行容器样式 - 共享边框，只有底部边框线
+const FIELD_ROW_SX = {
+  display: 'flex',
+  alignItems: 'stretch',
+  borderBottom: '1px solid',
+  borderColor: 'divider',
+} as const;
+
+// 第一行字段包装器样式 - 无上边距
+const FIRST_FIELD_WRAPPER_SX = {
+  ...FIELD_WRAPPER_SX,
+  pt: 4,
+} as const;
+
+// 删除按钮区域样式 - 与字段区域共享边框
+const DELETE_BUTTON_ROW_SX = {
+  display: 'flex',
+  alignItems: 'center',
+  p: 1,
+  borderTop: '1px solid',
+  borderColor: 'divider',
 } as const;
 
 const FORM_HELPER_TEXT_SX = { minHeight: '1.25rem' } as const;
@@ -207,7 +246,7 @@ const BlacklistItemCard = memo(
         data-testid="blacklist-item"
         elevation={0}
         sx={{
-          p: 1.5,
+          width: '100%',
           backgroundColor: 'rgba(255, 255, 255, 0.02)',
           border: '1px solid',
           borderColor: 'divider',
@@ -221,93 +260,102 @@ const BlacklistItemCard = memo(
         }}
       >
         {/* 第一行: Type | Config | Sub Config */}
-        <Box sx={{ display: 'flex', gap: 1, mb: 1.5 }}>
-          <Autocomplete
-            size="small"
-            options={getAvailableTypes()}
-            value={item.type}
-            onChange={(_e, newValue) => handleFieldUpdate('type', newValue || '')}
-            renderInput={(params) =>
-              renderTextField(
-                params,
-                'Service',
-                'Select service',
-                'Select the type of service node this blacklist rule applies to.',
-                true,
-                item.type === '' || !!duplicateError,
-                duplicateError || (item.type === '' ? 'Service is required' : ' '),
-              )
-            }
-            sx={AUTOCOMPLETE_SX}
-          />
-          <Autocomplete
-            key={`${index}-${item.type}`}
-            size="small"
-            options={getConfigOptions(item.type, index)}
-            value={taskTypeOptions.find((opt) => opt.value === item.config) || null}
-            onChange={(_e, newValue) => {
-              const value = newValue ? (typeof newValue === 'string' ? newValue : newValue.value) : '';
-              handleFieldUpdate('config', value);
-            }}
-            getOptionLabel={(option) => {
-              if (typeof option === 'string') {
-                const found = taskTypeOptions.find((opt) => opt.value === option);
-                return found ? found.label : option;
+        <Box sx={FIELD_ROW_SX}>
+          <Box sx={FIRST_FIELD_WRAPPER_SX}>
+            <Autocomplete
+              size="small"
+              limitTags={3}
+              options={getAvailableTypes()}
+              value={item.type}
+              onChange={(_e, newValue) => handleFieldUpdate('type', newValue || '')}
+              renderInput={(params) =>
+                renderTextField(
+                  params,
+                  'Service',
+                  'Select service',
+                  'Select the type of service node this blacklist rule applies to.',
+                  true,
+                  item.type === '' || !!duplicateError,
+                  duplicateError || (item.type === '' ? 'Service is required' : ' '),
+                )
               }
-              return option.label;
-            }}
-            isOptionEqualToValue={(option, value) => {
-              if (typeof value === 'string') {
-                return option.value === value;
+              sx={AUTOCOMPLETE_SX}
+            />
+          </Box>
+          <Box sx={FIRST_FIELD_WRAPPER_SX}>
+            <Autocomplete
+              key={`${index}-${item.type}`}
+              size="small"
+              limitTags={3}
+              options={getConfigOptions(item.type, index)}
+              value={taskTypeOptions.find((opt) => opt.value === item.config) || null}
+              onChange={(_e, newValue) => {
+                const value = newValue ? (typeof newValue === 'string' ? newValue : newValue.value) : '';
+                handleFieldUpdate('config', value);
+              }}
+              getOptionLabel={(option) => {
+                if (typeof option === 'string') {
+                  const found = taskTypeOptions.find((opt) => opt.value === option);
+                  return found ? found.label : option;
+                }
+                return option.label;
+              }}
+              isOptionEqualToValue={(option, value) => {
+                if (typeof value === 'string') {
+                  return option.value === value;
+                }
+                return option.value === value.value;
+              }}
+              disabled={!item.type}
+              renderInput={(params) =>
+                renderTextField(
+                  params,
+                  'Task Type',
+                  'Select task type',
+                  'Select the type of task this blacklist rule applies to.',
+                  item.type !== '',
+                  (item.type !== '' && item.config === '') || !!duplicateError,
+                  duplicateError || (item.type !== '' && item.config === '' ? 'Task Type is required' : ' '),
+                )
               }
-              return option.value === value.value;
-            }}
-            disabled={!item.type}
-            renderInput={(params) =>
-              renderTextField(
-                params,
-                'Task Type',
-                'Select task type',
-                'Select the type of task this blacklist rule applies to.',
-                item.type !== '',
-                (item.type !== '' && item.config === '') || !!duplicateError,
-                duplicateError || (item.type !== '' && item.config === '' ? 'Task Type is required' : ' '),
-              )
-            }
-            sx={AUTOCOMPLETE_SX}
-          />
-          <Autocomplete
-            key={`${index}-${item.type}-${item.config}`}
-            size="small"
-            options={getSubConfigOptions(item.type, item.config, index)}
-            value={item.subConfig}
-            onChange={(_e, newValue) => handleFieldUpdate('subConfig', newValue || '')}
-            getOptionLabel={(option) => option.charAt(0).toUpperCase() + option.slice(1)}
-            disabled={!item.type || !item.config}
-            renderInput={(params) =>
-              renderTextField(
-                params,
-                'Feature',
-                'Select feature',
-                'Select the operation to block for matched tasks.',
-                item.type !== '' && item.config !== '',
-                (item.type !== '' && item.config !== '' && item.subConfig === '') || !!duplicateError,
-                duplicateError ||
-                  (item.type !== '' && item.config !== '' && item.subConfig === '' ? 'Feature is required' : ' '),
-              )
-            }
-            sx={AUTOCOMPLETE_SX}
-          />
+              sx={AUTOCOMPLETE_SX}
+            />
+          </Box>
+          <Box sx={FIRST_FIELD_WRAPPER_SX}>
+            <Autocomplete
+              key={`${index}-${item.type}-${item.config}`}
+              size="small"
+              limitTags={3}
+              options={getSubConfigOptions(item.type, item.config, index)}
+              value={item.subConfig}
+              onChange={(_e, newValue) => handleFieldUpdate('subConfig', newValue || '')}
+              getOptionLabel={(option) => option.charAt(0).toUpperCase() + option.slice(1)}
+              disabled={!item.type || !item.config}
+              renderInput={(params) =>
+                renderTextField(
+                  params,
+                  'Feature',
+                  'Select feature',
+                  'Select the operation to block for matched tasks.',
+                  item.type !== '' && item.config !== '',
+                  (item.type !== '' && item.config !== '' && item.subConfig === '') || !!duplicateError,
+                  duplicateError ||
+                    (item.type !== '' && item.config !== '' && item.subConfig === '' ? 'Feature is required' : ' '),
+                )
+              }
+              sx={AUTOCOMPLETE_SX}
+            />
+          </Box>
         </Box>
 
-        {/* 第二行+: Applications | URLs | Tags | Priorities */}
-        <Grid container spacing={1.5}>
-          {/* Applications */}
-          <Grid size={{ xs: 12, md: 6 }}>
+        {/* 第二行: Applications | Tags */}
+        <Box sx={FIELD_ROW_SX}>
+          <Box sx={FIELD_WRAPPER_SX}>
             <Autocomplete
               size="small"
               multiple
               freeSolo
+              limitTags={3}
               options={[]}
               value={item.applications}
               onChange={(_e, newValue) => handleFieldUpdate('applications', newValue || [])}
@@ -326,14 +374,55 @@ const BlacklistItemCard = memo(
               }
               sx={AUTOCOMPLETE_TEXTFIELD_SX}
             />
-          </Grid>
-
-          {/* URLs */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          </Box>
+          <Box
+            sx={{
+              ...FIELD_WRAPPER_SX,
+              width: '50%',
+              flex: 'none',
+              borderRight: 'none',
+            }}
+          >
             <Autocomplete
               size="small"
               multiple
               freeSolo
+              limitTags={3}
+              options={[]}
+              value={item.tags}
+              onChange={(_e, newValue) => handleFieldUpdate('tags', newValue || [])}
+              disabled={isFirstRowDisabled}
+              renderInput={(params) =>
+                renderTextField(
+                  params,
+                  'Tags',
+                  'Enter values or press Enter to add',
+                  'Specify tags to match against task tags.',
+                  false,
+                  false,
+                  ' ',
+                  true,
+                )
+              }
+              sx={AUTOCOMPLETE_TEXTFIELD_SX}
+            />
+          </Box>
+        </Box>
+
+        {/* 第三行: Urls | Priorities (download) 或 Urls | Delete (upload) */}
+        <Box sx={{ ...FIELD_ROW_SX, borderBottom: isSubConfigDownload ? '1px solid' : 'none', borderColor: 'divider' }}>
+          <Box
+            sx={{
+              ...FIELD_WRAPPER_SX,
+
+              borderRight: !isSubConfigDownload ? 'none !important' : '1px solid divider !important',
+            }}
+          >
+            <Autocomplete
+              size="small"
+              multiple
+              freeSolo
+              limitTags={3}
               options={[]}
               value={item.urls}
               onChange={handleURLsChange}
@@ -355,40 +444,14 @@ const BlacklistItemCard = memo(
               }}
               sx={AUTOCOMPLETE_TEXTFIELD_SX}
             />
-          </Grid>
+          </Box>
 
-          {/* Tags */}
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Autocomplete
-              size="small"
-              multiple
-              freeSolo
-              options={[]}
-              value={item.tags}
-              onChange={(_e, newValue) => handleFieldUpdate('tags', newValue || [])}
-              disabled={isFirstRowDisabled}
-              renderInput={(params) =>
-                renderTextField(
-                  params,
-                  'Tags',
-                  'Enter values or press Enter to add',
-                  'Specify tags to match against task tags.',
-                  false,
-                  false,
-                  ' ',
-                  true,
-                )
-              }
-              sx={AUTOCOMPLETE_TEXTFIELD_SX}
-            />
-          </Grid>
-
-          {/* Priorities - 仅当 subConfig 是 download 时显示 */}
           {isSubConfigDownload ? (
-            <Grid size={{ xs: 12, md: 6 }}>
+            <Box sx={{ ...FIELD_WRAPPER_SX, width: '50%', flex: 'none', borderRight: 'none' }}>
               <Autocomplete
                 size="small"
                 multiple
+                limitTags={5}
                 options={priorityOptions}
                 value={priorityValue}
                 onChange={handlePrioritiesChange}
@@ -409,32 +472,53 @@ const BlacklistItemCard = memo(
                 }
                 sx={AUTOCOMPLETE_TEXTFIELD_SX}
               />
-            </Grid>
+            </Box>
           ) : (
-            <Grid size={{ xs: 12, md: 6 }} />
+            /* 删除按钮 - upload 时与 Tags 同一行，无垂直边框 */
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', p: 1.5, flex: 1 }}>
+              <Button
+                size="small"
+                variant="outlined"
+                sx={{
+                  minWidth: 85,
+                  color: 'var(--palette-delete-button-color)',
+                  borderColor: 'var(--palette-delete-button-color)',
+                  ':hover': {
+                    backgroundColor: 'var(--palette-delete-button-hover-color)',
+                    color: 'var(--palette-common-white)',
+                  },
+                }}
+                onClick={handleRemove}
+              >
+                <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
+                <div style={{ paddingTop: '0.25rem' }}>Delete</div>
+              </Button>
+            </Box>
           )}
-        </Grid>
-
-        {/* 删除按钮 */}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1.5 }}>
-          <Button
-            size="small"
-            variant="outlined"
-            sx={{
-              minWidth: 85,
-              color: 'var(--palette-delete-button-color)',
-              borderColor: 'var(--palette-delete-button-color)',
-              ':hover': {
-                backgroundColor: 'var(--palette-delete-button-hover-color)',
-                color: 'var(--palette-common-white)',
-              },
-            }}
-            onClick={handleRemove}
-          >
-            <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-            <div style={{ paddingTop: '0.25rem' }}>Delete</div>
-          </Button>
         </Box>
+
+        {/* 第四行: Delete 按钮 - download 时单独一行 */}
+        {isSubConfigDownload && (
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 1.5 }}>
+            <Button
+              size="small"
+              variant="outlined"
+              sx={{
+                minWidth: 85,
+                color: 'var(--palette-delete-button-color)',
+                borderColor: 'var(--palette-delete-button-color)',
+                ':hover': {
+                  backgroundColor: 'var(--palette-delete-button-hover-color)',
+                  color: 'var(--palette-common-white)',
+                },
+              }}
+              onClick={handleRemove}
+            >
+              <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
+              <div style={{ paddingTop: '0.25rem' }}>Delete</div>
+            </Button>
+          </Box>
+        )}
       </Paper>
     );
   },

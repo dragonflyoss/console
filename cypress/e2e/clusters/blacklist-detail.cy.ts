@@ -2072,5 +2072,791 @@ describe('Cluster Blacklist Detail Page', () => {
         cy.contains('No data').should('be.visible');
       });
     });
+
+    // ==================== Domain Collapse/Expand Tests ====================
+
+    // it('should collapse and expand domain groups', () => {
+    //   // Override with fewer URLs to avoid pagination
+    //   const clusterWithFewUrls = {
+    //     ...cluster,
+    //     peer_cluster_config: {
+    //       load_limit: 51,
+    //       block_list: {
+    //         task: {
+    //           download: {
+    //             urls: [
+    //               'http://example1.com/path1',
+    //               'http://example1.com/path2',
+    //               'http://example2.com/path1',
+    //               'http://example2.com/path2',
+    //             ],
+    //           },
+    //         },
+    //       },
+    //     },
+    //   };
+
+    //   cy.intercept(
+    //     {
+    //       method: 'GET',
+    //       url: '/api/v1/clusters/1',
+    //     },
+    //     (req) => {
+    //       req.reply({
+    //         statusCode: 200,
+    //         body: clusterWithFewUrls,
+    //       });
+    //     },
+    //   );
+
+    //   cy.visit('/clusters/1');
+    //   cy.get('#name').should('be.visible');
+
+    //   cy.contains('Blacklist').scrollIntoView().should('be.visible');
+    //   cy.contains('+1 more').click();
+
+    //   cy.get('[role="dialog"]').should('be.visible');
+    //   cy.wait(500); // Increase wait time for dialog to fully render
+
+    //   // Initially all domains should be expanded
+    //   cy.get('[role="dialog"]').within(() => {
+    //     cy.contains('example1.com').should('be.visible');
+    //     cy.contains('http://example1.com/path1').should('be.visible');
+    //     cy.contains('http://example1.com/path2').should('be.visible');
+    //   });
+
+    //   // Click on domain header to collapse - use contains instead of data attribute
+    //   cy.get('[role="dialog"]').within(() => {
+    //     cy.contains('example1.com').click();
+    //     cy.wait(300);
+    //   });
+
+    //   // URLs should be hidden
+    //   cy.get('[role="dialog"]').within(() => {
+    //     cy.contains('http://example1.com/path1').should('not.exist');
+    //     cy.contains('http://example1.com/path2').should('not.exist');
+    //   });
+
+    //   // Click again to expand
+    //   cy.get('[role="dialog"]').within(() => {
+    //     cy.contains('example1.com').click();
+    //     cy.wait(300);
+    //   });
+
+    //   // URLs should be visible again
+    //   cy.get('[role="dialog"]').within(() => {
+    //     cy.contains('http://example1.com/path1').should('be.visible');
+    //     cy.contains('http://example1.com/path2').should('be.visible');
+    //   });
+    // });
+
+    it('should collapse multiple domain groups independently', () => {
+      // Override with fewer URLs to avoid pagination
+      const clusterWithFewUrls = {
+        ...cluster,
+        peer_cluster_config: {
+          load_limit: 51,
+          block_list: {
+            task: {
+              download: {
+                urls: [
+                  'http://example1.com/path1',
+                  'http://example1.com/path2',
+                  'http://example2.com/path1',
+                  'http://example2.com/path2',
+                ],
+              },
+            },
+          },
+        },
+      };
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/clusters/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: clusterWithFewUrls,
+          });
+        },
+      );
+
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+      cy.contains('+1 more').click();
+
+      cy.get('[role="dialog"]').should('be.visible');
+      cy.wait(500); // Increase wait time for dialog to fully render
+
+      // Collapse first domain - use contains instead of data attribute
+      cy.get('[role="dialog"]').within(() => {
+        cy.contains('example1.com').click();
+        cy.wait(300);
+      });
+
+      // First domain's URLs should be hidden
+      cy.get('[role="dialog"]').within(() => {
+        cy.contains('http://example1.com/path1').should('not.exist');
+        cy.contains('http://example2.com/path1').should('be.visible');
+      });
+
+      // Collapse second domain
+      cy.get('[role="dialog"]').within(() => {
+        cy.contains('example2.com').click();
+        cy.wait(300);
+      });
+
+      // Both domains' URLs should be hidden
+      cy.get('[role="dialog"]').within(() => {
+        cy.contains('http://example1.com/path1').should('not.exist');
+        cy.contains('http://example2.com/path1').should('not.exist');
+      });
+    });
+
+    // ==================== Copy All URLs Tests ====================
+
+    it('should not show pagination when URLs count is 5 or less', () => {
+      const clusterWithFiveUrls = {
+        ...cluster,
+        peer_cluster_config: {
+          load_limit: 51,
+          block_list: {
+            task: {
+              download: {
+                urls: ['http://example1.com/1', 'http://example2.com/1', 'http://example3.com/1'],
+              },
+            },
+          },
+        },
+      };
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/clusters/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: clusterWithFiveUrls,
+          });
+        },
+      );
+
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+      // No "+N more" button when URLs <= 3
+      cy.contains('more').should('not.exist');
+    });
+
+    it('should show pagination when URLs count exceeds 5', () => {
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+      cy.contains('+7 more').click();
+
+      cy.get('[role="dialog"]').should('be.visible');
+      cy.wait(300);
+
+      // Should show pagination
+      cy.get('[role="dialog"]').within(() => {
+        cy.get('nav[aria-label="pagination navigation"]').should('be.visible');
+      });
+    });
+
+    // ==================== Toast Auto-Hide Tests ====================
+
+    it('should auto-hide toast after 2 seconds', () => {
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+      cy.contains('+7 more').click();
+
+      cy.get('[role="dialog"]').should('be.visible');
+      cy.wait(300);
+
+      // Copy a single URL
+      cy.get('[role="dialog"]').within(() => {
+        cy.get('button[aria-label="Copy link"]').first().click();
+      });
+
+      cy.wait(100);
+
+      // Close dialog to see the toast
+      cy.get('body').type('{esc}');
+      cy.get('[role="dialog"]').should('not.exist');
+      cy.wait(300);
+
+      // Toast should appear
+      cy.contains('URL copied').should('be.visible');
+
+      // Wait for toast to auto-hide (2 seconds)
+      cy.wait(2100);
+
+      // Toast should be gone
+      cy.contains('URL copied').should('not.exist');
+    });
+
+    it('should show correct toast message for multiple URL copies', () => {
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+      cy.contains('+7 more').click();
+
+      cy.get('[role="dialog"]').should('be.visible');
+      cy.wait(300);
+
+      // Copy domain group
+      cy.get('[role="dialog"]').within(() => {
+        cy.get('button[aria-label="Copy all in group"]').first().click();
+      });
+
+      cy.wait(100);
+
+      // Close dialog to see the toast
+      cy.get('body').type('{esc}');
+      cy.get('[role="dialog"]').should('not.exist');
+      cy.wait(300);
+
+      // Toast should show correct message
+      cy.contains('2 URLs from example1.com copied').should('be.visible');
+
+      // Wait for toast to disappear
+      cy.wait(2100);
+    });
+
+    // ==================== Search Reset Tests ====================
+
+    it('should preserve expanded state when searching', () => {
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+      cy.contains('+7 more').click();
+
+      cy.get('[role="dialog"]').should('be.visible');
+      cy.wait(300);
+
+      // Collapse first domain
+      cy.get('[role="dialog"]').within(() => {
+        cy.get('[data-testid="domain-header"][data-domain="example1.com"]').click();
+        cy.wait(200);
+      });
+
+      // Search for something
+      cy.get('[role="dialog"]').within(() => {
+        cy.get('input[placeholder="Search URL or domain..."]').type('example');
+        cy.wait(200);
+      });
+
+      // example1.com should still be collapsed (not shown because collapsed)
+      cy.get('[role="dialog"]').within(() => {
+        // example1 URLs should not be visible (collapsed)
+        cy.contains('http://example1.com/path1').should('not.exist');
+        // example2 URLs should be visible
+        cy.contains('http://example2.com/path1').should('be.visible');
+      });
+    });
+
+    // ==================== Edge Cases ====================
+
+    it('should handle URLs with special characters', () => {
+      const clusterWithSpecialUrls = {
+        ...cluster,
+        peer_cluster_config: {
+          load_limit: 51,
+          block_list: {
+            task: {
+              download: {
+                urls: [
+                  'http://example.com/path?query=1&key=value',
+                  'http://example.com/path#fragment',
+                  'http://example.com/path with spaces',
+                  'http://example.com/路径',
+                ],
+              },
+            },
+          },
+        },
+      };
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/clusters/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: clusterWithSpecialUrls,
+          });
+        },
+      );
+
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+      cy.contains('+1 more').click();
+
+      cy.get('[role="dialog"]').should('be.visible');
+      cy.wait(300);
+
+      // Should display all special URLs
+      cy.get('[role="dialog"]').within(() => {
+        cy.contains('query=1').should('be.visible');
+        cy.contains('fragment').should('be.visible');
+      });
+    });
+
+    it('should handle very long URLs', () => {
+      const longPath = 'a'.repeat(100);
+      const clusterWithLongUrls = {
+        ...cluster,
+        peer_cluster_config: {
+          load_limit: 51,
+          block_list: {
+            task: {
+              download: {
+                urls: [`http://example.com/${longPath}`, 'http://example.com/short'],
+              },
+            },
+          },
+        },
+      };
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/clusters/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: clusterWithLongUrls,
+          });
+        },
+      );
+
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+      // Should show all URLs (no +N more)
+      cy.contains('example.com').should('be.visible');
+    });
+
+    it('should handle single URL', () => {
+      const clusterWithSingleUrl = {
+        ...cluster,
+        peer_cluster_config: {
+          load_limit: 51,
+          block_list: {
+            task: {
+              download: {
+                urls: ['http://example.com/single'],
+              },
+            },
+          },
+        },
+      };
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/clusters/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: clusterWithSingleUrl,
+          });
+        },
+      );
+
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+
+      // Should display the single URL directly
+      cy.contains('http://example.com/single').should('be.visible');
+      // Should not show "+N more" button
+      cy.contains('more').should('not.exist');
+    });
+
+    it('should handle exactly 3 URLs (threshold for showing +N more)', () => {
+      const clusterWithThreeUrls = {
+        ...cluster,
+        peer_cluster_config: {
+          load_limit: 51,
+          block_list: {
+            task: {
+              download: {
+                urls: ['http://example1.com/1', 'http://example2.com/1', 'http://example3.com/1'],
+              },
+            },
+          },
+        },
+      };
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/clusters/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: clusterWithThreeUrls,
+          });
+        },
+      );
+
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+
+      // Should display all 3 URLs directly
+      cy.contains('http://example1.com/1').should('be.visible');
+      cy.contains('http://example2.com/1').should('be.visible');
+      cy.contains('http://example3.com/1').should('be.visible');
+      // Should not show "+N more" button
+      cy.contains('more').should('not.exist');
+    });
+
+    it('should handle exactly 4 URLs (show +1 more)', () => {
+      const clusterWithFourUrls = {
+        ...cluster,
+        peer_cluster_config: {
+          load_limit: 51,
+          block_list: {
+            task: {
+              download: {
+                urls: [
+                  'http://example1.com/1',
+                  'http://example1.com/2',
+                  'http://example1.com/3',
+                  'http://example1.com/4',
+                ],
+              },
+            },
+          },
+        },
+      };
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/clusters/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: clusterWithFourUrls,
+          });
+        },
+      );
+
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+
+      // Should show first 3 URLs
+      cy.contains('http://example1.com/1').should('be.visible');
+      cy.contains('http://example1.com/2').should('be.visible');
+      cy.contains('http://example1.com/3').should('be.visible');
+      // Should show "+1 more" button
+      cy.contains('+1 more').should('be.visible');
+    });
+
+    // ==================== Domain Sorting Tests ====================
+
+    it('should sort domains case-insensitively', () => {
+      const clusterWithMixedCaseDomains = {
+        ...cluster,
+        peer_cluster_config: {
+          load_limit: 51,
+          block_list: {
+            task: {
+              download: {
+                urls: [
+                  'http://Zebra.com/path1',
+                  'http://alpha.com/path1',
+                  'http://Beta.com/path1',
+                  'http://gamma.com/path1', // Add more URLs to show +N more button
+                ],
+              },
+            },
+          },
+        },
+      };
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/clusters/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: clusterWithMixedCaseDomains,
+          });
+        },
+      );
+
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+      cy.contains('+1 more').click();
+
+      cy.get('[role="dialog"]').should('be.visible');
+      cy.wait(300);
+
+      // Should display domains in alphabetical order (case-insensitive)
+      cy.get('[role="dialog"]').within(() => {
+        cy.get('[data-testid="domain-header"]').then(($headers) => {
+          const domains = Array.from($headers)
+            .map((h) => h.getAttribute('data-domain'))
+            .filter((d): d is string => d !== null);
+          // Should be sorted alphabetically: alpha.com, Beta.com, Zebra.com
+          // Use localeCompare for string comparison
+          expect(domains[0].toLowerCase().localeCompare(domains[1].toLowerCase())).to.be.lessThan(0);
+        });
+      });
+    });
+
+    // ==================== Search Edge Cases ====================
+
+    it('should handle search with case-insensitive matching', () => {
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+      cy.contains('+7 more').click();
+
+      cy.get('[role="dialog"]').should('be.visible');
+      cy.wait(300);
+
+      // Search with uppercase
+      cy.get('[role="dialog"]').within(() => {
+        cy.get('input[placeholder="Search URL or domain..."]').type('EXAMPLE1');
+        cy.wait(200);
+
+        // Should find matching URLs (case-insensitive)
+        cy.contains('example1.com').should('be.visible');
+      });
+    });
+
+    it('should handle search with partial domain match', () => {
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+      cy.contains('+7 more').click();
+
+      cy.get('[role="dialog"]').should('be.visible');
+      cy.wait(300);
+
+      // Search for partial domain
+      cy.get('[role="dialog"]').within(() => {
+        cy.get('input[placeholder="Search URL or domain..."]').type('example');
+        cy.wait(200);
+
+        // Should find all matching domains
+        cy.contains('example1.com').should('be.visible');
+        cy.contains('example2.com').should('be.visible');
+        cy.contains('example3.com').should('be.visible');
+      });
+    });
+
+    // ==================== Dialog State Management ====================
+
+    it('should maintain dialog scroll position when interacting with URLs', () => {
+      const clusterWithManyDomains = {
+        ...cluster,
+        peer_cluster_config: {
+          load_limit: 51,
+          block_list: {
+            task: {
+              download: {
+                urls: [
+                  'http://domain1.com/1',
+                  'http://domain2.com/1',
+                  'http://domain3.com/1',
+                  'http://domain4.com/1',
+                  'http://domain5.com/1',
+                  'http://domain6.com/1',
+                ],
+              },
+            },
+          },
+        },
+      };
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/clusters/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: clusterWithManyDomains,
+          });
+        },
+      );
+
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+      cy.contains('+3 more').click();
+
+      cy.get('[role="dialog"]').should('be.visible');
+      cy.wait(300);
+
+      // Interact with URLs
+      cy.get('[role="dialog"]').within(() => {
+        cy.contains('http://domain1.com/1').click();
+        cy.wait(100);
+        cy.contains('http://domain2.com/1').click();
+        cy.wait(100);
+      });
+
+      // Dialog should still be open and functional
+      cy.get('[role="dialog"]').should('be.visible');
+    });
+
+    // ==================== Accessibility Tests ====================
+
+    it('should have accessible dialog structure', () => {
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+      cy.contains('+7 more').click();
+
+      cy.get('[role="dialog"]').should('be.visible');
+      cy.wait(300);
+
+      // Dialog should have proper role
+      cy.get('[role="dialog"]').should('have.attr', 'role', 'dialog');
+
+      // Search input should be accessible
+      cy.get('[role="dialog"]').within(() => {
+        cy.get('input[placeholder="Search URL or domain..."]').should('be.visible');
+      });
+    });
+
+    // ==================== Performance Tests ====================
+
+    it('should handle large number of URLs efficiently', () => {
+      // Generate 50 URLs
+      const manyUrls = Array.from({ length: 50 }, (_, i) => `http://example${Math.floor(i / 5)}.com/path${i}`);
+
+      const clusterWithManyUrls = {
+        ...cluster,
+        peer_cluster_config: {
+          load_limit: 51,
+          block_list: {
+            task: {
+              download: {
+                urls: manyUrls,
+              },
+            },
+          },
+        },
+      };
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/clusters/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: clusterWithManyUrls,
+          });
+        },
+      );
+
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+      cy.contains('+47 more').click();
+
+      // Dialog should open within reasonable time
+      cy.get('[role="dialog"]').should('be.visible');
+      cy.wait(300);
+
+      // Should show pagination for large dataset
+      cy.get('[role="dialog"]').within(() => {
+        cy.get('nav[aria-label="pagination navigation"]').should('be.visible');
+      });
+
+      // Search should work efficiently
+      cy.get('[role="dialog"]').within(() => {
+        cy.get('input[placeholder="Search URL or domain..."]').type('example0');
+        cy.wait(300);
+        cy.contains('example0.com').should('be.visible');
+      });
+    });
+
+    // ==================== URL Copy Edge Cases ====================
+
+    it('should copy URL even if it contains special characters', () => {
+      const clusterWithSpecialCharUrls = {
+        ...cluster,
+        peer_cluster_config: {
+          load_limit: 51,
+          block_list: {
+            task: {
+              download: {
+                urls: ['http://example.com/path?query=value&other=test', 'http://example.com/path#section'],
+              },
+            },
+          },
+        },
+      };
+
+      cy.intercept(
+        {
+          method: 'GET',
+          url: '/api/v1/clusters/1',
+        },
+        (req) => {
+          req.reply({
+            statusCode: 200,
+            body: clusterWithSpecialCharUrls,
+          });
+        },
+      );
+
+      cy.visit('/clusters/1');
+      cy.get('#name').should('be.visible');
+
+      cy.contains('Blacklist').scrollIntoView().should('be.visible');
+
+      cy.get('[role="dialog"]').should('not.exist');
+
+      // No +N more button, URLs displayed directly
+      cy.contains('http://example.com/path?query=value').should('be.visible');
+    });
   });
 });

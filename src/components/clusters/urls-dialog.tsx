@@ -6,8 +6,6 @@ import {
   DialogTitle,
   IconButton,
   InputBase,
-  Checkbox,
-  Button,
   Paper,
   Tooltip,
   Snackbar,
@@ -17,7 +15,6 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { ReactComponent as LinkIcon } from '../../assets/images/cluster/hostnames.svg';
 import { ReactComponent as CopyIcon } from '../../assets/images/tokens/copy.svg';
-import { ReactComponent as DoneIcon } from '../../assets/images/tokens/done.svg';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -85,7 +82,6 @@ function groupUrlsByDomain(urls: string[]): DomainGroup[] {
 export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: UrlsDialogProps) {
   const [, setCopyToClipboard] = useCopyToClipboard();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedUrlSet, setSelectedUrlSet] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
@@ -162,37 +158,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
     });
   }, []);
 
-  // Toggle single URL selection
-  const toggleUrlSelected = useCallback((url: string) => {
-    setSelectedUrlSet((prev) => {
-      const next = new Set(prev);
-      if (next.has(url)) {
-        next.delete(url);
-      } else {
-        next.add(url);
-      }
-      return next;
-    });
-  }, []);
-
-  // Toggle select all on current page
-  const toggleSelectAllPage = useCallback(
-    (checked: boolean) => {
-      setSelectedUrlSet((prev) => {
-        const next = new Set(prev);
-        paginatedUrls.forEach(({ url }) => {
-          if (checked) {
-            next.add(url);
-          } else {
-            next.delete(url);
-          }
-        });
-        return next;
-      });
-    },
-    [paginatedUrls],
-  );
-
   // Copy URL
   const copyUrl = useCallback(
     (url: string) => {
@@ -202,22 +167,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
     },
     [setCopyToClipboard],
   );
-
-  // Copy selected
-  const copySelected = useCallback(() => {
-    if (selectedUrlSet.size > 0) {
-      setCopyToClipboard(Array.from(selectedUrlSet).join('\n'));
-      setToastMessage(`${selectedUrlSet.size} URLs copied`);
-      setToastOpen(true);
-    }
-  }, [selectedUrlSet, setCopyToClipboard]);
-
-  // Copy all
-  const copyAll = useCallback(() => {
-    setCopyToClipboard(filteredUrls.join('\n'));
-    setToastMessage(`All ${filteredUrls.length} URLs copied`);
-    setToastOpen(true);
-  }, [filteredUrls, setCopyToClipboard]);
 
   // Copy domain group
   const copyDomainGroup = useCallback(
@@ -241,7 +190,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
   // Reset state on close
   const handleClose = useCallback(() => {
     setSearchQuery('');
-    setSelectedUrlSet(new Set());
     setCurrentPage(1);
     onClose();
   }, [onClose]);
@@ -281,15 +229,10 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
 
   // Render URL item
   const renderUrlItem = (url: string, domain: string) => {
-    const isSelected = selectedUrlSet.has(url);
     const globalIndex = getGlobalIndex(url);
 
     return (
-      <Box
-        key={url}
-        className={`${styles.urlItem} ${isSelected ? styles.urlItemSelected : ''}`}
-        onClick={() => toggleUrlSelected(url)}
-      >
+      <Box key={url} className={styles.urlItem}>
         <Box className={styles.urlIndex}>{globalIndex}</Box>
         <Box className={styles.urlContent} onClick={(e) => e.stopPropagation()}>
           <Typography className={styles.urlText}>{url}</Typography>

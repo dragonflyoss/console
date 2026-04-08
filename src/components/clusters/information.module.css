@@ -76,8 +76,18 @@
 
 .clusterWrap {
   display: flex;
-  width: 25%;
+  width: 30%;
   flex-direction: column;
+}
+
+.clusterWrapRight {
+  display: flex;
+  width: 30%;
+  flex-direction: column;
+}
+
+.clusterWrapRight:last-child {
+  padding-left: 0.5rem;
 }
 
 .clusterTitle {

@@ -480,7 +480,7 @@ export default function Information() {
                 </Typography>
               </Box>
             </Box>
-            <Box className={styles.clusterWrap}>
+            <Box className={styles.clusterWrapRight}>
               <Box className={styles.clusterTitle}>
                 <Typography variant="body2" component="div" className={styles.configLable}>
                   Scheduler Cluster ID
@@ -541,7 +541,7 @@ export default function Information() {
                 )}
               </Box>
             </Box>
-            <Box className={styles.clusterWrap}>
+            <Box className={styles.clusterWrapRight}>
               <Box className={styles.clusterTitle}>
                 <Typography variant="body2" component="div" className={styles.configLable}>
                   Create At
@@ -554,7 +554,6 @@ export default function Information() {
                 {isLoading ? <Skeleton className={styles.loading} /> : getDatetime(cluster.created_at)}
               </Typography>
             </Box>
-            <Box className={styles.clusterWrap} />
           </Box>
         </Card>
         <Box className={styles.wrapper}>

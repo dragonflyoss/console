@@ -216,40 +216,40 @@ interface getClustersParams {
 }
 
 /**
- * 任务类型配置枚举
- * - task: 普通任务
- * - persistent_cache_task: 持久化缓存任务
- * - persistent_task: 持久化任务
+ * Task configuration type enum
+ * - task: Regular task
+ * - persistent_cache_task: Persistent cache task
+ * - persistent_task: Persistent task
  */
 export type TaskConfigType = 'task' | 'persistent_cache_task' | 'persistent_task';
 
 /**
- * 子配置类型枚举
- * - download: 下载任务
- * - upload: 上传任务
+ * Sub-configuration type enum
+ * - download: Download task
+ * - upload: Upload task
  */
 export type SubConfigType = 'download' | 'upload';
 
 /**
- * 黑名单过滤规则
- * 用于匹配需要屏蔽的任务特征
+ * Blacklist filter rules
+ * Used to match task features that need to be blocked
  */
 export interface BlockListFilter {
-  /** 应用名称列表 */
+  /** List of application names */
   applications?: string[];
-  /** URL 正则表达式模式列表 */
+  /** List of URL regex patterns */
   urls?: string[];
-  /** 标签列表 */
+  /** List of tags */
   tags?: string[];
-  /** 优先级列表 (1-5) */
+  /** List of priorities (1-5) */
   priorities?: number[];
-  /** 索引签名，支持动态属性访问 */
+  /** Index signature for dynamic property access */
   [key: string]: string[] | number[] | undefined;
 }
 
 /**
- * 黑名单配置结构
- * 按任务类型和子配置类型组织过滤规则
+ * Blacklist configuration structure
+ * Organizes filter rules by task type and sub-configuration type
  *
  * @example
  * {
@@ -264,10 +264,10 @@ export interface BlockListFilter {
  * }
  */
 export interface BlockListConfig {
-  /** 任务配置类型的过滤规则映射 */
+  /** Filter rules mapping for task configuration types */
   [configType: string]:
     | {
-        /** 子配置类型的过滤规则映射 */
+        /** Filter rules mapping for sub-configuration types */
         [subConfig: string]: BlockListFilter;
       }
     | undefined;

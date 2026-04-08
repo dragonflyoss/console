@@ -118,6 +118,10 @@
   padding-left: 0.4rem;
 }
 
+[data-theme='dark'] .scopesLable {
+  color: var(--palette-label-text-color) !important;
+}
+
 .scopesTitle {
   display: flex;
   align-items: center;
@@ -156,6 +160,10 @@
 .totalText {
   color: var(--palette-description-color);
   padding-left: 0.3rem;
+}
+
+[data-theme='dark'] .totalText {
+  color: var(--palette-label-text-color);
 }
 
 .locationTitle {
@@ -273,6 +281,10 @@
   margin-right: 0.4rem !important;
   font-size: 1.2rem;
   color: var(--palette-text-color);
+}
+
+[data-theme='dark'] .informationTitle {
+  color: var(--palette-label-text-color);
 }
 
 .configTitle {
@@ -464,11 +476,13 @@
 /* Applications 和 Tags 斜杠分隔样式 */
 .blacklistSlashText {
   font-size: 0.85rem;
-  color: var(--palette-text-color);
+  color: var(--palette-label-text-color);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 200px;
+  margin: 0 auto;
+  display: block;
 }
 
 /* URL 单元格样式 */
@@ -500,7 +514,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #1B806A;
+  color: var(--palette-label-text-color);
   font-size: 0.8rem;
   font-family: 'mabry-bold';
 }
@@ -510,7 +524,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.3rem;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .blacklistPriorityTag {

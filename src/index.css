@@ -100,6 +100,7 @@ body {
 [data-theme='dark'] body {
   color: rgba(255, 255, 255, 0.8) !important;
   background-color: #0d121e !important;
+  --palette-label-text-color: #00f7c1;
   --palette-main-background-paper: #0d121e;
   --palette-color: rgba(255, 255, 255, 0.7);
   --palette-secondary-dark: #ececec;

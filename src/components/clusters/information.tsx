@@ -44,8 +44,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { getDatetime } from '../../lib/utils';
 import styles from './information.module.css';
 import ErrorHandler from '../error-handler';
+import UrlsDialog from './urls-dialog';
 
-// Blacklist Tabs 样式 - 与 show.tsx 中的 AntTabs/AntTab 保持一致
+// Blacklist Tabs style - consistent with AntTabs/AntTab in show.tsx
 const BlacklistAntTab = styled(Tab)(({ theme }) => ({
   textTransform: 'none',
   minWidth: 0,
@@ -64,7 +65,7 @@ const BlacklistAntTab = styled(Tab)(({ theme }) => ({
     opacity: 1,
   },
   '&.Mui-selected': {
-    color: 'var(--palette-text-color)',
+    color: 'var(--palette-label-text-color)',
     fontFamily: 'mabry-bold',
   },
 }));
@@ -72,26 +73,27 @@ const BlacklistAntTab = styled(Tab)(({ theme }) => ({
 const BlacklistAntTabs = styled(Tabs)({
   borderBottom: '1px solid var(--palette-tab-border-color)',
   '& .MuiTabs-indicator': {
-    backgroundColor: 'var(--palette-text-color)',
+    backgroundColor: 'var(--palette-label-text-color)',
     borderRadius: '1rem',
   },
 });
 
-// Priority 颜色映射: Level 1 (最高) -> Level 5 (最低)
+// Priority color mapping: Level 1 (highest) -> Level 5 (lowest)
+// Use brighter colors in dark theme for better readability
 const PRIORITY_COLORS: Record<number, { bg: string; text: string; border: string }> = {
-  1: { bg: 'rgba(255, 72, 66, 0.08)', text: '#B72136', border: 'rgba(255, 72, 66, 0.24)' },
-  2: { bg: 'rgba(255, 152, 0, 0.08)', text: '#B76E00', border: 'rgba(255, 152, 0, 0.24)' },
-  3: { bg: 'rgba(54, 179, 126, 0.08)', text: '#1B806A', border: 'rgba(54, 179, 126, 0.24)' },
-  4: { bg: 'rgba(24, 144, 255, 0.08)', text: '#0958A5', border: 'rgba(24, 144, 255, 0.24)' },
-  5: { bg: 'rgba(145, 158, 171, 0.08)', text: '#637381', border: 'rgba(145, 158, 171, 0.24)' },
+  1: { bg: 'rgba(255, 72, 66, 0.2)', text: '#FF9999', border: 'rgba(255, 72, 66, 0.5)' },
+  2: { bg: 'rgba(255, 152, 0, 0.2)', text: '#FFCC80', border: 'rgba(255, 152, 0, 0.5)' },
+  3: { bg: 'rgba(54, 179, 126, 0.2)', text: '#7BE0D0', border: 'rgba(54, 179, 126, 0.5)' },
+  4: { bg: 'rgba(24, 144, 255, 0.2)', text: '#85C1F5', border: 'rgba(24, 144, 255, 0.5)' },
+  5: { bg: 'rgba(145, 158, 171, 0.2)', text: '#C5D0DC', border: 'rgba(145, 158, 171, 0.5)' },
 };
 
-// 格式化优先级显示
+// Format priority display
 const formatPriority = (priority: number): string => {
   return `Level ${priority}`;
 };
 
-// 选项类型映射：显示名称 -> 字段名
+// Option type mapping: display name -> field name
 const OPTION_TYPE_MAP: Record<string, string> = {
   Applications: 'applications',
   Urls: 'urls',
@@ -99,7 +101,7 @@ const OPTION_TYPE_MAP: Record<string, string> = {
   Priorities: 'priorities',
 };
 
-// 黑名单数据项类型定义
+// Blacklist data item type definition
 interface BlacklistDataItem {
   type: 'Client' | 'Seed Client';
   config: string;
@@ -108,7 +110,7 @@ interface BlacklistDataItem {
   optionValues: Record<string, string[] | number[]>;
 }
 
-// 提取黑名单选项数据
+// Extract blacklist option data
 const extractOptions = (subConfigData: Record<string, unknown>): Record<string, string[] | number[]> => {
   const optionValues: Record<string, string[] | number[]> = {};
 
@@ -120,7 +122,7 @@ const extractOptions = (subConfigData: Record<string, unknown>): Record<string, 
   return optionValues;
 };
 
-// 处理单个 block_list 配置
+// Process single block_list configuration
 const processBlockList = (
   blockList: BlockListConfig | undefined,
   serviceType: 'Client' | 'Seed Client',
@@ -165,8 +167,8 @@ export default function Information() {
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [openDeleteCluster, setOpenDeleteCluster] = useState(false);
   const [openUrlsDialog, setOpenUrlsDialog] = useState(false);
-  const [currentUrls, setCurrentUrls] = useState<string[] | null>(null);
   const [blacklistTabValue, setBlacklistTabValue] = useState(0);
+  const [currentUrls, setCurrentUrls] = useState<string[]>([]);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -229,7 +231,7 @@ export default function Information() {
     }
   };
 
-  // 数据转换函数，将 blacklist 配置转换为展示格式
+  // Data transformation function to convert blacklist configuration to display format
   const reverseBlacklistFromData = useMemo(() => {
     const clientItems = processBlockList(cluster?.peer_cluster_config?.block_list, 'Client');
     const seedClientItems = processBlockList(cluster?.seed_peer_cluster_config?.block_list, 'Seed Client');
@@ -237,7 +239,7 @@ export default function Information() {
     return [...clientItems, ...seedClientItems];
   }, [cluster?.peer_cluster_config?.block_list, cluster?.seed_peer_cluster_config?.block_list]);
 
-  // 定义黑名单表格行数据结构
+  // Define blacklist table row data structure
   interface BlacklistTableRow {
     taskType: string; // 'Task' | 'Persistent Cache Task' | 'Persistent Task'
     feature: string; // 'download' | 'upload'
@@ -252,9 +254,9 @@ export default function Information() {
     rows: BlacklistTableRow[];
   }
 
-  // 将嵌套结构扁平化为表格行数据
+  // Flatten nested structure into table row data
   const groupBlacklistData = useMemo(() => {
-    // 定义服务类型和任务类型
+    // Define service types and task types
     const serviceTypes: Array<{ name: 'Client' | 'Seed Client'; source: 'peer' | 'seed' }> = [
       { name: 'Client', source: 'peer' },
       { name: 'Seed Client', source: 'seed' },
@@ -266,7 +268,7 @@ export default function Information() {
       { config: 'persistent_task', display: 'Persistent Task' },
     ];
 
-    // 定义每个任务类型对应的 subConfig
+    // Define subConfig for each task type
     const subConfigsByTaskType: Record<string, string[]> = {
       task: ['download'],
       persistent_cache_task: ['download', 'upload'],
@@ -275,21 +277,21 @@ export default function Information() {
 
     const groupedData: ServiceTypeGroup[] = [];
 
-    // 遍历服务类型
+    // Iterate through service types
     serviceTypes.forEach((serviceType) => {
       const rows: BlacklistTableRow[] = [];
 
-      // 遍历任务类型
+      // Iterate through task types
       taskTypes.forEach((taskType) => {
-        // 遍历 subConfig
+        // Iterate through subConfig
         subConfigsByTaskType[taskType.config].forEach((subConfig) => {
-          // 从 reverseBlacklistFromData 中查找匹配的数据
+          // Find matching data from reverseBlacklistFromData
           const matchedItem = reverseBlacklistFromData.find(
             (item: BlacklistDataItem) =>
               item.type === serviceType.name && item.config === taskType.config && item.subConfig === subConfig,
           );
 
-          // 如果找到匹配项，使用其数据；否则使用空数据
+          // If a match is found, use its data; otherwise use empty data
           const data = matchedItem
             ? {
                 applications: (matchedItem.optionValues['Applications'] || []) as string[],
@@ -304,14 +306,14 @@ export default function Information() {
                 priorities: [] as number[],
               };
 
-          // 检查是否为空（所有字段都为空）
+          // Check if empty (all fields are empty)
           const isEmpty =
             data.applications.length === 0 &&
             data.urls.length === 0 &&
             data.tags.length === 0 &&
             data.priorities.length === 0;
 
-          // 只添加有数据的行
+          // Only add rows with data
           if (!isEmpty) {
             rows.push({
               taskType: taskType.display,
@@ -325,7 +327,7 @@ export default function Information() {
         });
       });
 
-      // 只有当该服务类型有数据时才添加
+      // Only add when the service type has data
       if (rows.length > 0) {
         groupedData.push({
           serviceType: serviceType.name,
@@ -1213,7 +1215,7 @@ export default function Information() {
               );
             })}
 
-            {/* 当前tab没有数据时显示空状态 */}
+            {/* Display empty state when current tab has no data */}
             {!groupBlacklistData.some((g) => (g.serviceType === 'Client' ? 0 : 1) === blacklistTabValue) && (
               <Typography className={styles.blacklistEmpty}>
                 No blacklist configuration for {blacklistTabValue === 0 ? 'Client' : 'Seed Client'}.
@@ -1224,54 +1226,7 @@ export default function Information() {
           <Typography className={styles.blacklistEmpty}>No blacklist configuration.</Typography>
         )}
       </Box>
-      <Dialog maxWidth="md" fullWidth open={openUrlsDialog} onClose={() => setOpenUrlsDialog(false)}>
-        <DialogTitle>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Hostnames style={{ width: 20, height: 20 }} />
-              <Typography variant="h6" sx={{ fontFamily: 'mabry-bold' }}>
-                URLs
-              </Typography>
-            </Box>
-            <Typography
-              variant="caption"
-              sx={{
-                backgroundColor: 'var(--palette-button-color)',
-                color: 'white',
-                padding: '4px 12px',
-                borderRadius: '12px',
-                fontSize: '0.75rem',
-                fontFamily: 'mabry-bold',
-              }}
-            >
-              {currentUrls?.length || 0} URLs
-            </Typography>
-          </Box>
-        </DialogTitle>
-        <DialogContent dividers sx={{ padding: '1rem 1.5rem !important' }}>
-          <Box className={styles.urlDialogList}>
-            {currentUrls?.map((url, index) => (
-              <Box key={index} className={styles.urlDialogItem}>
-                <Box className={styles.urlDialogIndex}>{index + 1}</Box>
-                <Box className={styles.urlDialogContent}>
-                  <Typography variant="body2" className={styles.urlDialogText}>
-                    {url}
-                  </Typography>
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      setCopyToClipboard(url);
-                    }}
-                    className={styles.urlDialogCopyButton}
-                  >
-                    <Copy className={styles.copyIcon} />
-                  </IconButton>
-                </Box>
-              </Box>
-            ))}
-          </Box>
-        </DialogContent>
-      </Dialog>
+      <UrlsDialog open={openUrlsDialog} onClose={() => setOpenUrlsDialog(false)} urls={currentUrls || []} />
     </Box>
   );
 }

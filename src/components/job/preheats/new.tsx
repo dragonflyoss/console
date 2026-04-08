@@ -1269,6 +1269,9 @@ export default function NewPreheat() {
                       color: 'var(--palette-description-color)',
                       borderStyle: 'dashed',
                     },
+                    '[data-theme="dark"] &.MuiButton-root': {
+                      color: 'var(--palette-label-text-color)',
+                    },
                     width: '37rem',
                     m: '1rem 0',
                   }}

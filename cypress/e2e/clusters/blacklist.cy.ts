@@ -6,19 +6,19 @@ describe('Blacklist functionality', () => {
     cy.viewport(1440, 1080);
   });
 
-  // 辅助函数：更稳定地选择Autocomplete选项
+  // Helper function: more stable way to select Autocomplete options
   const selectAutocompleteOption = (labelText: any, optionText: any) => {
     cy.contains('label', labelText).parent().find('input').first().as('inputField');
     cy.get('@inputField').should('be.visible').click();
     cy.get('@inputField').type(optionText, { force: true });
     cy.get('.MuiAutocomplete-popper').should('be.visible');
-    // 等待下拉选项完全渲染
+    // Wait for dropdown options to fully render
     cy.get('.MuiAutocomplete-popper [role="option"]').should('exist');
-    // 使用更稳定的方式选择选项：先等待选项可见，然后断开链式调用
+    // Use a more stable way to select options: wait for the option to be visible, then break the chain
     cy.get('.MuiAutocomplete-popper').within(() => {
       cy.contains(optionText).should('be.visible').click();
     });
-    // 等待下拉关闭
+    // Wait for dropdown to close
     cy.get('.MuiAutocomplete-popper').should('not.exist');
   };
 
@@ -218,12 +218,12 @@ describe('Blacklist functionality', () => {
     it('should auto-set Feature to download when Task is selected', () => {
       cy.contains('Add blacklist').scrollIntoView().click();
 
-      // Select Service - 使用更稳定的选择器策略
+      // Select Service - use more stable selector strategy
       cy.contains('label', 'Service').parent().find('input').first().as('serviceInput');
       cy.get('@serviceInput').should('be.visible').click();
       cy.get('@serviceInput').type('Client', { force: true });
 
-      // 等待并选择下拉选项
+      // Wait and select dropdown option
       cy.get('.MuiAutocomplete-popper').should('be.visible');
       cy.get('.MuiAutocomplete-popper').contains('Client').should('be.visible').click();
       // Wait for Service selection to be processed and options to update
@@ -234,11 +234,11 @@ describe('Blacklist functionality', () => {
       cy.get('@taskInput').should('be.visible').click();
       cy.get('@taskInput').type('Task', { force: true });
 
-      // 等待并选择下拉选项
+      // Wait and select dropdown option
       cy.get('.MuiAutocomplete-popper').should('be.visible');
       cy.get('.MuiAutocomplete-popper').contains('Task').should('be.visible').click();
 
-      // 验证Feature自动设置为Download
+      // Verify Feature auto-sets to Download
       cy.contains('label', 'Feature').parent().find('input').first().should('have.value', 'Download');
     });
 

@@ -7,23 +7,23 @@ import AddIcon from '@mui/icons-material/Add';
 import type { BlockListConfig } from '../../lib/api';
 
 /**
- * 黑名单配置项
- * 用于前端表单展示和编辑
+ * Blacklist configuration item
+ * Used for frontend form display and editing
  */
 interface BlacklistItem {
-  /** 类型: Client 或 Seed Client */
+  /** Type: Client or Seed Client */
   type: string;
-  /** 任务配置类型: task, persistent_cache_task, persistent_task */
+  /** Task configuration type: task, persistent_cache_task, persistent_task */
   config: string;
-  /** 子配置类型: download, upload */
+  /** Sub-configuration type: download, upload */
   subConfig: string;
-  /** 应用名称列表 */
+  /** List of application names */
   applications: string[];
-  /** URL 正则表达式列表 */
+  /** List of URL regex patterns */
   urls: string[];
-  /** 标签列表 */
+  /** List of tags */
   tags: string[];
-  /** 优先级列表 (字符串格式,用于表单) */
+  /** List of priorities (string format, used for forms) */
   priorities: string[];
 }
 
@@ -41,9 +41,9 @@ interface Props {
   };
 }
 
-// URL 正则校验
+// URL regex validation - supports both domain names and IP addresses
 const URL_PATTERN =
-  /^(https?:\/\/)?(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}(?::\d{1,5})?(?:\/[^\s]*)?$/;
+  /^(https?:\/\/)?(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}|(?:\d{1,3}\.){3}\d{1,3}|localhost)(?::\d{1,5})?(?:\/[^\s]*)?$/;
 
 const isValidURL = (value: string): boolean => {
   return URL_PATTERN.test(value);
@@ -57,7 +57,7 @@ const priorityOptions = [
   { value: '5', label: 'Level 5' },
 ];
 
-// 任务类型选项类型定义
+// Task type option type definition
 interface TaskTypeOption {
   value: string;
   label: string;
@@ -69,7 +69,7 @@ const taskTypeOptions: TaskTypeOption[] = [
   { value: 'persistent_task', label: 'Persistent Task' },
 ];
 
-// 黑名单类型选项
+// Blacklist type options
 const blacklistTypeOptions = ['Client', 'Seed Client'] as const;
 
 const AUTOCOMPLETE_TEXTFIELD_SX = {
@@ -94,7 +94,7 @@ const AUTOCOMPLETE_SX = {
   },
 } as const;
 
-// 单个字段包装器样式 - 带右边框分隔线，表单项垂直水平居中
+// Single field wrapper style - with right border separator, form items vertically and horizontally centered
 const FIELD_WRAPPER_SX = {
   flex: 1,
   minWidth: 0,
@@ -110,7 +110,7 @@ const FIELD_WRAPPER_SX = {
   },
 } as const;
 
-// 字段行容器样式 - 共享边框，只有底部边框线
+// Field row container style - shared border, only bottom border line
 const FIELD_ROW_SX = {
   display: 'flex',
   alignItems: 'stretch',
@@ -118,13 +118,13 @@ const FIELD_ROW_SX = {
   borderColor: 'divider',
 } as const;
 
-// 第一行字段包装器样式 - 无上边距
+// First row field wrapper style - no top margin
 const FIRST_FIELD_WRAPPER_SX = {
   ...FIELD_WRAPPER_SX,
   pt: 4,
 } as const;
 
-// 删除按钮区域样式 - 与字段区域共享边框
+// Delete button area style - shares border with field area
 const DELETE_BUTTON_ROW_SX = {
   display: 'flex',
   alignItems: 'center',
@@ -159,7 +159,7 @@ const BlacklistItemCard = memo(
   }: BlacklistItemCardProps) => {
     const isSubConfigDownload = item.subConfig === 'download';
 
-    // 优先级选择器的值转换
+    // Priority selector value transformation
     const priorityValue = useMemo(
       () =>
         item.priorities
@@ -168,7 +168,7 @@ const BlacklistItemCard = memo(
       [item.priorities],
     );
 
-    // 统一的更新处理器
+    // Unified update handler
     const handleFieldUpdate = useCallback(
       (field: string, value: any) => {
         onUpdate(index, field, value);
@@ -176,12 +176,12 @@ const BlacklistItemCard = memo(
       [index, onUpdate],
     );
 
-    // 统一的删除处理器
+    // Unified delete handler
     const handleRemove = useCallback(() => {
       onRemove(index);
     }, [index, onRemove]);
 
-    // URL 校验处理器
+    // URL validation handler
     const handleURLsChange = useCallback(
       (_e: any, newValue: string[]) => {
         const validatedValues = (newValue || []).filter((v) => {
@@ -193,7 +193,7 @@ const BlacklistItemCard = memo(
       [handleFieldUpdate],
     );
 
-    // 优先级变更处理器
+    // Priority change handler
     const handlePrioritiesChange = useCallback(
       (_e: any, newValue: Array<{ value: string; label: string }>) => {
         const values = newValue.map((v) => v.value);
@@ -202,7 +202,7 @@ const BlacklistItemCard = memo(
       [handleFieldUpdate],
     );
 
-    // 公共的 TextField 渲染函数
+    // Common TextField render function
     const renderTextField = useCallback(
       (
         params: any,
@@ -237,7 +237,7 @@ const BlacklistItemCard = memo(
       [],
     );
 
-    // 第一行字段是否禁用
+    // Whether the first row fields are disabled
     const isFirstRowDisabled = !item.type || !item.config || !item.subConfig;
 
     return (
@@ -259,7 +259,7 @@ const BlacklistItemCard = memo(
           },
         }}
       >
-        {/* 第一行: Type | Config | Sub Config */}
+        {/* First row: Type | Config | Sub Config */}
         <Box sx={FIELD_ROW_SX}>
           <Box sx={FIRST_FIELD_WRAPPER_SX}>
             <Autocomplete
@@ -348,7 +348,7 @@ const BlacklistItemCard = memo(
           </Box>
         </Box>
 
-        {/* 第二行: Applications | Tags */}
+        {/* Second row: Applications | Tags */}
         <Box sx={FIELD_ROW_SX}>
           <Box sx={FIELD_WRAPPER_SX}>
             <Autocomplete
@@ -409,7 +409,7 @@ const BlacklistItemCard = memo(
           </Box>
         </Box>
 
-        {/* 第三行: Urls | Priorities (download) 或 Urls | Delete (upload) */}
+        {/* Third row: Urls | Priorities (download) or Urls | Delete (upload) */}
         <Box sx={{ ...FIELD_ROW_SX, borderBottom: isSubConfigDownload ? '1px solid' : 'none', borderColor: 'divider' }}>
           <Box
             sx={{
@@ -474,7 +474,7 @@ const BlacklistItemCard = memo(
               />
             </Box>
           ) : (
-            /* 删除按钮 - upload 时与 Tags 同一行，无垂直边框 */
+            /* Delete button - on the same row as Tags when upload, no vertical border */
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', p: 1.5, flex: 1 }}>
               <Button
                 size="small"
@@ -497,7 +497,7 @@ const BlacklistItemCard = memo(
           )}
         </Box>
 
-        {/* 第四行: Delete 按钮 - download 时单独一行 */}
+        {/* Fourth row: Delete button - separate row when download */}
         {isSubConfigDownload && (
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 1.5 }}>
             <Button
@@ -529,7 +529,7 @@ BlacklistItemCard.displayName = 'BlacklistItemCard';
 const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) => {
   const [blacklist, setBlacklist] = useState<BlacklistItem[]>([]);
 
-  // 获取重复的组合信息
+  // Get duplicate combination information
   const duplicateInfo = useMemo(() => {
     const combinations = new Map<string, number[]>();
 
@@ -555,7 +555,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     return duplicates;
   }, [blacklist]);
 
-  // 检查type+config+subconfig组合是否已存在
+  // Check if type+config+subconfig combination already exists
   const isCombinationExists = useCallback(
     (type: string, config: string, subConfig: string, excludeIndex?: number) => {
       return blacklist.some((item, index) => {
@@ -568,7 +568,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     [blacklist],
   );
 
-  // 获取子配置选项
+  // Get sub-configuration options
   const getSubConfigOptions = useCallback(
     (type: string, config: string, excludeIndex?: number) => {
       if (!type || !config) return [];
@@ -580,7 +580,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     [isCombinationExists],
   );
 
-  // 获取配置选项
+  // Get configuration options
   const getConfigOptions = useCallback(
     (type: string, excludeIndex?: number) => {
       if (!type) return [];
@@ -593,12 +593,12 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     [getSubConfigOptions],
   );
 
-  // 获取所有 Type 选项 - blacklistTypeOptions 是常量，无需 useCallback
+  // Get all Type options - blacklistTypeOptions is a constant, no need for useCallback
   const getAvailableTypes = useCallback(() => {
     return [...blacklistTypeOptions];
   }, []);
 
-  // 检查是否所有可能的组合都已被使用
+  // Check if all possible combinations have been used
   const isAllCombinationsUsed = useMemo(() => {
     for (const type of blacklistTypeOptions) {
       for (const taskType of taskTypeOptions) {
@@ -653,22 +653,22 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
         } else if (field === 'subConfig') {
           newSubConfig = value;
 
-          // 检查完整的组合是否重复
+          // Check if the complete combination is duplicate
           if (newType && newConfig && newSubConfig) {
             if (isCombinationExists(newType, newConfig, newSubConfig, index)) {
-              return prev; // 不更新
+              return prev; // Do not update
             }
           }
         }
 
-        // 对于 config 字段，检查是否会创建重复组合
+        // For config field, check if it would create a duplicate combination
         if (field === 'config' && newType && newConfig && newSubConfig) {
           if (isCombinationExists(newType, newConfig, newSubConfig, index)) {
-            return prev; // 不更新
+            return prev; // Do not update
           }
         }
 
-        // 应用更新
+        // Apply update
         if (field === 'type') {
           newBlacklist[index] = {
             ...newBlacklist[index],
@@ -697,7 +697,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     [isCombinationExists],
   );
 
-  // 处理blacklist数据转换
+  // Process blacklist data transformation
   const processBlacklist = (blacklist: BlacklistItem[]) => {
     const peerBlockList: BlockListConfig = {};
     const seedPeerBlockList: BlockListConfig = {};
@@ -707,7 +707,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
         return;
       }
 
-      // 检查是否有任何选项有值
+      // Check if any option has a value
       const hasAnyOption =
         item.applications.length > 0 || item.urls.length > 0 || item.tags.length > 0 || item.priorities.length > 0;
 
@@ -736,7 +736,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
         targetBlockList[configKey]![item.subConfig]!.tags = item.tags;
       }
       if (item.priorities.length > 0) {
-        // 将 priorities 从字符串数组转换为整数数组
+        // Convert priorities from string array to integer array
         targetBlockList[configKey]![item.subConfig]!.priorities = item.priorities.map((p) => parseInt(p, 10));
       }
     });
@@ -744,14 +744,14 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     return { peerBlockList, seedPeerBlockList };
   };
 
-  // 逆向转换：将 API 返回的 block_list 数据转换回原始格式
+  // Reverse transformation: convert API returned block_list data back to original format
   const reverseBlacklistFromData = (
     peerClusterConfig?: { block_list?: BlockListConfig },
     seedPeerClusterConfig?: { block_list?: BlockListConfig },
   ): BlacklistItem[] => {
     const result: BlacklistItem[] = [];
 
-    // 处理 peer_cluster_config.block_list (Client 类型)
+    // Process peer_cluster_config.block_list (Client type)
     const peerBlockList = peerClusterConfig?.block_list;
     if (peerBlockList && typeof peerBlockList === 'object') {
       Object.keys(peerBlockList).forEach((config) => {
@@ -786,7 +786,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
       });
     }
 
-    // 处理 seed_peer_cluster_config.block_list (Seed Client 类型)
+    // Process seed_peer_cluster_config.block_list (Seed Client type)
     const seedPeerBlockList = seedPeerClusterConfig?.block_list;
     if (seedPeerBlockList && typeof seedPeerBlockList === 'object') {
       Object.keys(seedPeerBlockList).forEach((config) => {
@@ -858,7 +858,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
         </Tooltip>
       </Box>
 
-      {/* ADD BLACKLIST 按钮 */}
+      {/* ADD BLACKLIST button */}
       <Box sx={{ mt: 1, mb: 1.5 }}>
         <Button
           id="create-cluster"
@@ -867,7 +867,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
           disabled={isAllCombinationsUsed}
           sx={{
             borderColor: 'var(--palette-button-color)',
-            color: 'var(--palette-button-color)',
+            color: 'var(--palette-label-text-color)',
             ':hover': {
               borderColor: 'var(--palette-hover-button-text-color)',
               backgroundColor: 'var(--palette-action-hover)',

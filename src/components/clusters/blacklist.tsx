@@ -813,60 +813,66 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     return { peerBlockList, seedPeerBlockList };
   };
 
-  const getBlacklistItemInfo = (targetBlockList: BlockListConfig, type: 'Client' | 'Seed Client'): BlacklistItem[] => {
-    const result: BlacklistItem[] = [];
-    if (isPlainObject(targetBlockList)) {
-      Object.keys(targetBlockList).forEach((config) => {
-        const configData = targetBlockList[config];
-        if (isPlainObject(configData)) {
-          Object.keys(configData).forEach((subConfig) => {
-            const subConfigData = configData[subConfig];
-            if (isPlainObject(subConfigData)) {
-              const item: BlacklistItem = {
-                type,
-                config,
-                subConfig,
-                applications: Array.isArray(subConfigData['applications']) ? subConfigData['applications'] : [],
-                urls: Array.isArray(subConfigData['urls']) ? subConfigData['urls'] : [],
-                tags: Array.isArray(subConfigData['tags']) ? subConfigData['tags'] : [],
-                priorities: Array.isArray(subConfigData['priorities'])
-                  ? subConfigData['priorities'].map((p: number) => String(p))
-                  : [],
-              };
+  const getBlacklistItemInfo = useCallback(
+    (targetBlockList: BlockListConfig, type: 'Client' | 'Seed Client'): BlacklistItem[] => {
+      const result: BlacklistItem[] = [];
+      if (isPlainObject(targetBlockList)) {
+        Object.keys(targetBlockList).forEach((config) => {
+          const configData = targetBlockList[config];
+          if (isPlainObject(configData)) {
+            Object.keys(configData).forEach((subConfig) => {
+              const subConfigData = configData[subConfig];
+              if (isPlainObject(subConfigData)) {
+                const item: BlacklistItem = {
+                  type,
+                  config,
+                  subConfig,
+                  applications: Array.isArray(subConfigData['applications']) ? subConfigData['applications'] : [],
+                  urls: Array.isArray(subConfigData['urls']) ? subConfigData['urls'] : [],
+                  tags: Array.isArray(subConfigData['tags']) ? subConfigData['tags'] : [],
+                  priorities: Array.isArray(subConfigData['priorities'])
+                    ? subConfigData['priorities'].map((p: number) => String(p))
+                    : [],
+                };
 
-              if (item.applications.length || item.urls.length || item.tags.length || item.priorities.length) {
-                result.push(item);
+                if (item.applications.length || item.urls.length || item.tags.length || item.priorities.length) {
+                  result.push(item);
+                }
               }
-            }
-          });
-        }
-      });
-    }
-    return result;
-  };
+            });
+          }
+        });
+      }
+      return result;
+    },
+    [],
+  );
 
   // Reverse transformation: convert API returned block_list data back to original format
-  const reverseBlacklistFromData = (
-    peerClusterConfig?: { block_list?: BlockListConfig },
-    seedPeerClusterConfig?: { block_list?: BlockListConfig },
-  ): BlacklistItem[] => {
-    let result: BlacklistItem[] = [];
+  const reverseBlacklistFromData = useCallback(
+    (
+      peerClusterConfig?: { block_list?: BlockListConfig },
+      seedPeerClusterConfig?: { block_list?: BlockListConfig },
+    ): BlacklistItem[] => {
+      let result: BlacklistItem[] = [];
 
-    const peerBlockList = peerClusterConfig?.block_list;
-    const seedPeerBlockList = seedPeerClusterConfig?.block_list;
+      const peerBlockList = peerClusterConfig?.block_list;
+      const seedPeerBlockList = seedPeerClusterConfig?.block_list;
 
-    if (peerBlockList) {
-      const peerBlacklistItemInfo = getBlacklistItemInfo(peerBlockList, 'Client');
-      result = [...result, ...(peerBlacklistItemInfo || [])];
-    }
+      if (peerBlockList) {
+        const peerBlacklistItemInfo = getBlacklistItemInfo(peerBlockList, 'Client');
+        result = [...result, ...(peerBlacklistItemInfo || [])];
+      }
 
-    if (seedPeerBlockList) {
-      const seedPeerBlacklistItemInfo = getBlacklistItemInfo(seedPeerBlockList, 'Seed Client');
-      result = [...result, ...(seedPeerBlacklistItemInfo || [])];
-    }
+      if (seedPeerBlockList) {
+        const seedPeerBlacklistItemInfo = getBlacklistItemInfo(seedPeerBlockList, 'Seed Client');
+        result = [...result, ...(seedPeerBlacklistItemInfo || [])];
+      }
 
-    return result;
-  };
+      return result;
+    },
+    [getBlacklistItemInfo],
+  );
 
   useImperativeHandle(ref, () => ({
     getBlacklist: () => processBlacklist(blacklist),

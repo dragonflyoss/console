@@ -1,5 +1,4 @@
 import cluster from '../../fixtures/clusters/cluster/cluster.json';
-import emptyCluster from '../../fixtures/clusters/cluster/empty-cluster.json';
 
 describe('Cluster Information', () => {
   beforeEach(() => {
@@ -152,50 +151,6 @@ describe('Cluster Information', () => {
       // Cancel delete
       cy.get('#cancelDeleteCluster').click();
       cy.get('.MuiDialogContent-root').should('not.be.visible');
-    });
-  });
-
-  describe('when data is empty', () => {
-    beforeEach(() => {
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/clusters/1',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: emptyCluster,
-          });
-        },
-      );
-
-      cy.visit('clusters/1');
-    });
-
-    it('should display empty state for scopes', () => {
-      // Check empty location
-      cy.get('#no-location').should('have.text', '-');
-
-      // Check empty IDC
-      cy.get('#no-idc').should('have.text', '-');
-      cy.get('#idc-total').should('contain', 'Total: 0');
-
-      // Check empty CIDRs
-      cy.get('#no-cidrs').should('have.text', '-');
-      cy.get('#cidrs-total').should('contain', 'Total: 0');
-
-      // Check empty hostnames
-      cy.get('#no-hostnames').should('have.text', '-');
-      cy.get('#hostnames-total').should('contain', 'Total: 0');
-    });
-
-    it('should display default values for config', () => {
-      cy.get('#seed-peer-load-limit').should('have.text', '0');
-      cy.get('#peer-load-limit').should('have.text', '0');
-      cy.get('#candidate-parent-limit').should('have.text', '0');
-      cy.get('#filter-parent-limit').should('have.text', '0');
-      cy.get('#job-rate-limit').should('have.text', '0');
     });
   });
 

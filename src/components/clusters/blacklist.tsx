@@ -220,7 +220,7 @@ const BlacklistItemCard = memo(
               limitTags={3}
               options={getAvailableTypes()}
               value={item.type}
-              onChange={(_e, newValue) => handleFieldUpdate('type', newValue || '')}
+              onChange={(_e, newValue) => handleFieldUpdate('Service', newValue || '')}
               renderInput={(params) =>
                 renderTextField(
                   params,
@@ -264,7 +264,7 @@ const BlacklistItemCard = memo(
               value={taskTypeOptions.find((opt) => opt.value === item.config) || null}
               onChange={(_e, newValue) => {
                 const value = newValue ? (typeof newValue === 'string' ? newValue : newValue.value) : '';
-                handleFieldUpdate('config', value);
+                handleFieldUpdate('Task Type', value);
               }}
               getOptionLabel={(option) => {
                 if (typeof option === 'string') {
@@ -321,7 +321,7 @@ const BlacklistItemCard = memo(
               limitTags={3}
               options={getSubConfigOptions(item.type, item.config, index)}
               value={item.subConfig}
-              onChange={(_e, newValue) => handleFieldUpdate('subConfig', newValue || '')}
+              onChange={(_e, newValue) => handleFieldUpdate('Feature', newValue || '')}
               getOptionLabel={(option) => option.charAt(0).toUpperCase() + option.slice(1)}
               disabled={!item.type || !item.config}
               renderInput={(params) =>
@@ -728,70 +728,40 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     });
   }, []);
 
+  const fieldStrategies = {
+    Service: (value: string) => ({ type: value, config: '', subConfig: '' }),
+    'Task Type': (value: string, current: BlacklistItem) => ({
+      type: current.type,
+      config: value,
+      subConfig: value === 'task' ? 'download' : '',
+    }),
+    Feature: (value: string, current: BlacklistItem) => ({
+      type: current.type,
+      config: current.config,
+      subConfig: value,
+    }),
+  };
   const handleUpdateBlacklist = useCallback(
     (index: number, field: string, value: any) => {
       setBlacklist((prev) => {
+        const currentItem = prev[index];
+        const fieldFn = fieldStrategies[field as keyof typeof fieldStrategies];
+        const newCurrentItem = fieldFn ? fieldFn(value, currentItem) : { ...currentItem, [field]: value };
+
+        const isComplete = newCurrentItem.type && newCurrentItem.config && newCurrentItem.subConfig;
+        if (
+          isComplete &&
+          isCombinationExists(newCurrentItem.type, newCurrentItem.config, newCurrentItem.subConfig, index)
+        ) {
+          return prev;
+        }
+
         const newBlacklist = [...prev];
-        const currentItem = newBlacklist[index];
-
-        let newType = currentItem.type;
-        let newConfig = currentItem.config;
-        let newSubConfig = currentItem.subConfig;
-
-        if (field === 'type') {
-          newType = value;
-          newConfig = '';
-          newSubConfig = '';
-        } else if (field === 'config') {
-          newConfig = value;
-          newSubConfig = '';
-          if (value === 'task') {
-            newSubConfig = 'download';
-          }
-        } else if (field === 'subConfig') {
-          newSubConfig = value;
-
-          // Check if the complete combination is duplicate
-          if (newType && newConfig && newSubConfig) {
-            if (isCombinationExists(newType, newConfig, newSubConfig, index)) {
-              return prev;
-            }
-          }
-        }
-
-        // For config field, check if it would create a duplicate combination
-        if (field === 'config' && newType && newConfig && newSubConfig) {
-          if (isCombinationExists(newType, newConfig, newSubConfig, index)) {
-            return prev;
-          }
-        }
-
-        if (field === 'type') {
-          newBlacklist[index] = {
-            ...newBlacklist[index],
-            type: newType,
-            config: newConfig,
-            subConfig: newSubConfig,
-          };
-        } else if (field === 'config') {
-          newBlacklist[index] = {
-            ...newBlacklist[index],
-            config: newConfig,
-            subConfig: newSubConfig,
-          };
-        } else if (field === 'subConfig') {
-          newBlacklist[index] = {
-            ...newBlacklist[index],
-            subConfig: newSubConfig,
-          };
-        } else {
-          newBlacklist[index] = { ...newBlacklist[index], [field]: value };
-        }
-
+        newBlacklist[index] = { ...currentItem, ...newCurrentItem };
         return newBlacklist;
       });
     },
-    [isCombinationExists],
+    [fieldStrategies, isCombinationExists],
   );
 
   // Process blacklist data transformation
@@ -840,24 +810,17 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     return { peerBlockList, seedPeerBlockList };
   };
 
-  // Reverse transformation: convert API returned block_list data back to original format
-  const reverseBlacklistFromData = (
-    peerClusterConfig?: { block_list?: BlockListConfig },
-    seedPeerClusterConfig?: { block_list?: BlockListConfig },
-  ): BlacklistItem[] => {
+  const getBlacklistItemInfo = (targetBlockList: BlockListConfig, type: 'Client' | 'Seed Client'): BlacklistItem[] => {
     const result: BlacklistItem[] = [];
-
-    // Process peer_cluster_config.block_list (Client type)
-    const peerBlockList = peerClusterConfig?.block_list;
-    if (isPlainObject(peerBlockList)) {
-      Object.keys(peerBlockList).forEach((config) => {
-        const configData = peerBlockList[config];
+    if (isPlainObject(targetBlockList)) {
+      Object.keys(targetBlockList).forEach((config) => {
+        const configData = targetBlockList[config];
         if (isPlainObject(configData)) {
           Object.keys(configData).forEach((subConfig) => {
             const subConfigData = configData[subConfig];
             if (isPlainObject(subConfigData)) {
               const item: BlacklistItem = {
-                type: 'Client',
+                type,
                 config,
                 subConfig,
                 applications: Array.isArray(subConfigData['applications']) ? subConfigData['applications'] : [],
@@ -876,35 +839,27 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
         }
       });
     }
+    return result;
+  };
 
-    // Process seed_peer_cluster_config.block_list (Seed Client type)
+  // Reverse transformation: convert API returned block_list data back to original format
+  const reverseBlacklistFromData = (
+    peerClusterConfig?: { block_list?: BlockListConfig },
+    seedPeerClusterConfig?: { block_list?: BlockListConfig },
+  ): BlacklistItem[] => {
+    let result: BlacklistItem[] = [];
+
+    const peerBlockList = peerClusterConfig?.block_list;
     const seedPeerBlockList = seedPeerClusterConfig?.block_list;
-    if (isPlainObject(seedPeerBlockList)) {
-      Object.keys(seedPeerBlockList).forEach((config) => {
-        const configData = seedPeerBlockList[config];
-        if (isPlainObject(configData)) {
-          Object.keys(configData).forEach((subConfig) => {
-            const subConfigData = configData[subConfig];
-            if (isPlainObject(subConfigData)) {
-              const item: BlacklistItem = {
-                type: 'Seed Client',
-                config,
-                subConfig,
-                applications: Array.isArray(subConfigData['applications']) ? subConfigData['applications'] : [],
-                urls: Array.isArray(subConfigData['urls']) ? subConfigData['urls'] : [],
-                tags: Array.isArray(subConfigData['tags']) ? subConfigData['tags'] : [],
-                priorities: Array.isArray(subConfigData['priorities'])
-                  ? subConfigData['priorities'].map((p: number) => String(p))
-                  : [],
-              };
 
-              if (item.applications.length || item.urls.length || item.tags.length || item.priorities.length) {
-                result.push(item);
-              }
-            }
-          });
-        }
-      });
+    if (peerBlockList) {
+      const peerBlacklistItemInfo = getBlacklistItemInfo(peerBlockList, 'Client');
+      result = [...result, ...(peerBlacklistItemInfo || [])];
+    }
+
+    if (seedPeerBlockList) {
+      const seedPeerBlacklistItemInfo = getBlacklistItemInfo(seedPeerBlockList, 'Seed Client');
+      result = [...result, ...(seedPeerBlacklistItemInfo || [])];
     }
 
     return result;

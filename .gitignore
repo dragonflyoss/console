@@ -50,5 +50,3 @@ tsconfig.tsbuildinfo
 #nyc
 /.nyc_output
 
-
-/scripts

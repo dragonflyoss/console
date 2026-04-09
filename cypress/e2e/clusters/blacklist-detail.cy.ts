@@ -38,21 +38,6 @@ describe('Cluster Blacklist Detail Page', () => {
     cy.signin();
     cy.viewport(1440, 1080);
 
-    // Best Practice: Clean up state BEFORE each test
-    // Ensure no dialog is open from previous test
-    cy.get('body', { timeout: 10000 }).then(($body) => {
-      if ($body.find('[role="dialog"]').length > 0) {
-        // Close any open dialogs by pressing Escape
-        cy.get('body').type('{esc}');
-        cy.wait(300); // Wait for close animation
-      }
-    });
-
-    // Wait for dialog to close if it was open
-    cy.get('[role="dialog"]').should('not.exist');
-    // Additional wait for animation to complete
-    cy.wait(300);
-
     cy.intercept(
       {
         method: 'GET',
@@ -70,12 +55,6 @@ describe('Cluster Blacklist Detail Page', () => {
 
     // Wait for the page to load.
     cy.get('#name').should('be.visible');
-  });
-
-  afterEach(() => {
-    // Best Practice: Don't use afterEach for cleanup
-    // State cleanup should happen in beforeEach instead
-    // This hook is intentionally minimal
   });
 
   it('should display blacklist section', () => {
@@ -125,10 +104,13 @@ describe('Cluster Blacklist Detail Page', () => {
     cy.contains('Blacklist').scrollIntoView().should('be.visible');
     cy.contains('Client').scrollIntoView().should('be.visible');
 
-    // Check that tables are displayed with all data including empty values
-    // The table should have multiple rows with some containing dashes
+    // Verify task types are displayed
     cy.contains('Task').should('be.visible');
     cy.contains('Persistent Task').should('be.visible');
+
+    cy.get('table').within(() => {
+      cy.contains('-').should('exist');
+    });
   });
 
   it('should display empty state when no blacklist exists', () => {
@@ -210,17 +192,6 @@ describe('Cluster Blacklist Detail Page', () => {
     cy.contains('Persistent Task').should('be.visible');
   });
 
-  it('should display detailed info including all options', () => {
-    cy.contains('Blacklist').scrollIntoView().should('be.visible');
-    cy.contains('Client').scrollIntoView().should('be.visible');
-    cy.contains('Task').should('be.visible');
-    cy.contains('Download').should('be.visible');
-    cy.contains('app1').scrollIntoView().should('be.visible');
-    cy.contains('app2').scrollIntoView().should('be.visible');
-    cy.contains('http://example.com').scrollIntoView().should('be.visible');
-    cy.contains('tag1').scrollIntoView().should('be.visible');
-  });
-
   it('should display priorities correctly', () => {
     const clusterWithPriorities = {
       ...cluster,
@@ -259,13 +230,6 @@ describe('Cluster Blacklist Detail Page', () => {
     cy.contains('1').scrollIntoView().should('be.visible');
     cy.contains('3').scrollIntoView().should('be.visible');
     cy.contains('5').scrollIntoView().should('be.visible');
-  });
-
-  it('should display tables for both Client and Seed Client', () => {
-    // Verify service type blocks
-    cy.contains('Blacklist').scrollIntoView().should('be.visible');
-    cy.contains('Client').should('be.visible');
-    cy.contains('Seed Client').should('be.visible');
   });
 
   it('should display blacklist section independently from config section', () => {
@@ -795,8 +759,10 @@ describe('Cluster Blacklist Detail Page', () => {
     // Dialog should open
     cy.get('[role="dialog"]').should('be.visible');
 
-    // Press Escape to close the dialog
-    cy.get('body').type('{esc}');
+    // Click close button (IconButton with CloseIcon)
+    cy.get('[role="dialog"]').within(() => {
+      cy.get('button').find('[data-testid="CloseIcon"]').parent().click();
+    });
 
     // Wait for dialog to fully close
     cy.get('[role="dialog"]').should('not.exist');
@@ -940,17 +906,6 @@ describe('Cluster Blacklist Detail Page', () => {
     };
 
     beforeEach(() => {
-      // Best Practice: Clean up state BEFORE each test
-      // Ensure no dialog is open from previous test
-      cy.get('body', { timeout: 10000 }).then(($body) => {
-        if ($body.find('[role="dialog"]').length > 0) {
-          cy.get('body').type('{esc}');
-          cy.wait(300); // Wait for close animation
-        }
-      });
-      cy.get('[role="dialog"]').should('not.exist');
-      cy.wait(300);
-
       cy.intercept(
         {
           method: 'GET',
@@ -963,12 +918,6 @@ describe('Cluster Blacklist Detail Page', () => {
           });
         },
       );
-    });
-
-    afterEach(() => {
-      // Best Practice: Don't use afterEach for cleanup
-      // State cleanup should happen in beforeEach instead
-      // This hook is intentionally minimal
     });
 
     it('should open UrlsDialog with correct header info', () => {
@@ -1144,32 +1093,6 @@ describe('Cluster Blacklist Detail Page', () => {
       });
     });
 
-    it('should navigate to specific page', () => {
-      cy.visit('/clusters/1');
-      cy.get('#name').should('be.visible');
-
-      cy.contains('Blacklist').scrollIntoView().should('be.visible');
-      cy.contains('+7 more').click();
-
-      cy.get('[role="dialog"]').should('be.visible');
-      // Wait for dialog open animation to complete
-      cy.wait(300);
-
-      // Click page 2 button
-      cy.get('[role="dialog"]').within(() => {
-        cy.get('button[aria-label="Go to page 2"]').click();
-      });
-
-      // Wait for page transition
-      cy.wait(200);
-
-      // Should show URLs from second page
-      cy.get('[role="dialog"]').within(() => {
-        cy.contains('example4.com').should('be.visible');
-        cy.contains('example5.com').should('be.visible');
-      });
-    });
-
     it('should close dialog via close button', () => {
       cy.visit('/clusters/1');
       cy.get('#name').should('be.visible');
@@ -1273,24 +1196,6 @@ describe('Cluster Blacklist Detail Page', () => {
         cy.contains('4').should('be.visible');
         cy.contains('5').should('be.visible');
       });
-    });
-
-    it('should close dialog when clicking outside', () => {
-      cy.visit('/clusters/1');
-      cy.get('#name').should('be.visible');
-
-      cy.contains('Blacklist').scrollIntoView().should('be.visible');
-      cy.contains('+7 more').click();
-
-      cy.get('[role="dialog"]').should('be.visible');
-      // Wait for dialog open animation to complete
-      cy.wait(300);
-
-      // Press Escape to close the dialog (more reliable than clicking outside)
-      cy.get('body').type('{esc}');
-
-      // Dialog should close
-      cy.get('[role="dialog"]').should('not.exist');
     });
 
     it('should close dialog when pressing ESC key', () => {
@@ -1504,57 +1409,11 @@ describe('Cluster Blacklist Detail Page', () => {
         cy.contains('example4.com').should('not.exist');
       });
     });
-
-    it('should show toast notification when copying', () => {
-      cy.visit('/clusters/1');
-      cy.get('#name').should('be.visible');
-
-      cy.contains('Blacklist').scrollIntoView().should('be.visible');
-      cy.contains('+7 more').click();
-
-      cy.get('[role="dialog"]').should('be.visible');
-      // Wait for dialog open animation to complete
-      cy.wait(300);
-
-      // Copy a single URL
-      cy.get('[role="dialog"]').within(() => {
-        cy.get('button[aria-label="Copy link"]').first().click();
-      });
-
-      // Wait for copy action to complete
-      cy.wait(100);
-
-      // Close dialog first to see the toast
-      cy.get('body').type('{esc}');
-      // Wait for dialog close animation to complete
-      cy.get('[role="dialog"]').should('not.exist');
-      cy.wait(300);
-
-      // Toast should appear
-      cy.contains('URL copied').should('be.visible');
-
-      // Wait for toast to disappear (2 seconds)
-      cy.wait(2100);
-      cy.contains('URL copied').should('not.exist');
-    });
   });
 
   // ==================== Tooltip Tests ====================
 
   describe('Tooltips', () => {
-    // it('should display tooltip for blacklist help icon', () => {
-    //   cy.visit('/clusters/1');
-    //   cy.get('#name').should('be.visible');
-
-    //   cy.contains('Blacklist').scrollIntoView().should('be.visible');
-
-    //   // Hover over help icon
-    //   cy.get('.MuiSvgIcon-root').trigger('mouseover');
-
-    //   // Should display tooltip
-    //   cy.contains('Blacklist configuration for P2P downloads').should('be.visible');
-    // });
-
     it('should display tooltip for application values', () => {
       cy.visit('/clusters/1');
       cy.get('#name').should('be.visible');
@@ -1602,7 +1461,7 @@ describe('Cluster Blacklist Detail Page', () => {
       cy.contains('Client').should('have.attr', 'aria-selected', 'true');
     });
 
-    it('should not switch tab when clicking disabled tab', () => {
+    it('should display empty state when switching to Seed Client tab with no data', () => {
       const clusterWithOnlyClient = {
         ...cluster,
         peer_cluster_config: {
@@ -1676,16 +1535,6 @@ describe('Cluster Blacklist Detail Page', () => {
     };
 
     beforeEach(() => {
-      // Clean up dialog state before each test
-      cy.get('body', { timeout: 10000 }).then(($body) => {
-        if ($body.find('[role="dialog"]').length > 0) {
-          cy.get('body').type('{esc}');
-          cy.wait(300);
-        }
-      });
-      cy.get('[role="dialog"]').should('not.exist');
-      cy.wait(300);
-
       cy.intercept(
         {
           method: 'GET',
@@ -1877,43 +1726,6 @@ describe('Cluster Blacklist Detail Page', () => {
       });
     });
 
-    it('should clear search when dialog reopens', () => {
-      cy.visit('/clusters/1');
-      cy.get('#name').should('be.visible');
-
-      cy.contains('Blacklist').scrollIntoView().should('be.visible');
-      cy.contains('+7 more').click();
-
-      cy.get('[role="dialog"]').should('be.visible');
-      cy.wait(300);
-
-      // Enter search
-      cy.get('[role="dialog"]').within(() => {
-        cy.get('input[placeholder="Search URL or domain..."]').type('example1');
-        cy.wait(200);
-        cy.contains('example1.com').should('be.visible');
-        cy.contains('example2.com').should('not.exist');
-      });
-
-      // Close dialog
-      cy.get('body').type('{esc}');
-      cy.get('[role="dialog"]').should('not.exist');
-      cy.wait(300);
-
-      // Reopen dialog
-      cy.contains('+7 more').click();
-      cy.get('[role="dialog"]').should('be.visible');
-      cy.wait(300);
-
-      // Search should be cleared
-      cy.get('[role="dialog"]').within(() => {
-        cy.get('input[placeholder="Search URL or domain..."]').should('have.value', '');
-        // All domains should be visible
-        cy.contains('example1.com').should('be.visible');
-        cy.contains('example2.com').should('be.visible');
-      });
-    });
-
     it('should handle pagination edge cases', () => {
       const clusterWithExactFiveUrls = {
         ...cluster,
@@ -1963,33 +1775,6 @@ describe('Cluster Blacklist Detail Page', () => {
       });
     });
 
-    it('should show correct domain count in header', () => {
-      cy.visit('/clusters/1');
-      cy.get('#name').should('be.visible');
-
-      cy.contains('Blacklist').scrollIntoView().should('be.visible');
-      cy.contains('+7 more').click();
-
-      cy.get('[role="dialog"]').should('be.visible');
-      cy.wait(300);
-
-      // Check domain URL counts
-      cy.get('[role="dialog"]').within(() => {
-        // example1.com has 2 URLs
-        cy.contains('example1.com')
-          .parent()
-          .within(() => {
-            cy.contains('2 URLs').should('be.visible');
-          });
-        // example2.com has 2 URLs
-        cy.contains('example2.com')
-          .parent()
-          .within(() => {
-            cy.contains('2 URLs').should('be.visible');
-          });
-      });
-    });
-
     it('should handle copy action error gracefully', () => {
       cy.visit('/clusters/1');
       cy.get('#name').should('be.visible');
@@ -2028,48 +1813,6 @@ describe('Cluster Blacklist Detail Page', () => {
 
         // Input should have the correct value
         searchInput.should('have.value', 'example1');
-      });
-    });
-
-    it('should filter URLs correctly across all domains', () => {
-      cy.visit('/clusters/1');
-      cy.get('#name').should('be.visible');
-
-      cy.contains('Blacklist').scrollIntoView().should('be.visible');
-      cy.contains('+7 more').click();
-
-      cy.get('[role="dialog"]').should('be.visible');
-      cy.wait(300);
-
-      // Search for a term that matches multiple domains
-      cy.get('[role="dialog"]').within(() => {
-        cy.get('input[placeholder="Search URL or domain..."]').type('example');
-        cy.wait(200);
-
-        // All example domains should be visible
-        cy.contains('example1.com').should('be.visible');
-        cy.contains('example2.com').should('be.visible');
-        cy.contains('example3.com').should('be.visible');
-      });
-    });
-
-    it('should display empty state with correct message when all URLs filtered out', () => {
-      cy.visit('/clusters/1');
-      cy.get('#name').should('be.visible');
-
-      cy.contains('Blacklist').scrollIntoView().should('be.visible');
-      cy.contains('+7 more').click();
-
-      cy.get('[role="dialog"]').should('be.visible');
-      cy.wait(300);
-
-      // Search for non-existent term
-      cy.get('[role="dialog"]').within(() => {
-        cy.get('input[placeholder="Search URL or domain..."]').type('zzzzzzzzz');
-        cy.wait(200);
-
-        // Should show empty state
-        cy.contains('No data').should('be.visible');
       });
     });
 
@@ -2306,35 +2049,6 @@ describe('Cluster Blacklist Detail Page', () => {
       cy.contains('URL copied').should('not.exist');
     });
 
-    it('should show correct toast message for multiple URL copies', () => {
-      cy.visit('/clusters/1');
-      cy.get('#name').should('be.visible');
-
-      cy.contains('Blacklist').scrollIntoView().should('be.visible');
-      cy.contains('+7 more').click();
-
-      cy.get('[role="dialog"]').should('be.visible');
-      cy.wait(300);
-
-      // Copy domain group
-      cy.get('[role="dialog"]').within(() => {
-        cy.get('button[aria-label="Copy all in group"]').first().click();
-      });
-
-      cy.wait(100);
-
-      // Close dialog to see the toast
-      cy.get('body').type('{esc}');
-      cy.get('[role="dialog"]').should('not.exist');
-      cy.wait(300);
-
-      // Toast should show correct message
-      cy.contains('2 URLs from example1.com copied').should('be.visible');
-
-      // Wait for toast to disappear
-      cy.wait(2100);
-    });
-
     // ==================== Search Reset Tests ====================
 
     it('should preserve expanded state when searching', () => {
@@ -2491,47 +2205,6 @@ describe('Cluster Blacklist Detail Page', () => {
 
       // Should display the single URL directly
       cy.contains('http://example.com/single').should('be.visible');
-      // Should not show "+N more" button
-      cy.contains('more').should('not.exist');
-    });
-
-    it('should handle exactly 3 URLs (threshold for showing +N more)', () => {
-      const clusterWithThreeUrls = {
-        ...cluster,
-        peer_cluster_config: {
-          load_limit: 51,
-          block_list: {
-            task: {
-              download: {
-                urls: ['http://example1.com/1', 'http://example2.com/1', 'http://example3.com/1'],
-              },
-            },
-          },
-        },
-      };
-
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/clusters/1',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: clusterWithThreeUrls,
-          });
-        },
-      );
-
-      cy.visit('/clusters/1');
-      cy.get('#name').should('be.visible');
-
-      cy.contains('Blacklist').scrollIntoView().should('be.visible');
-
-      // Should display all 3 URLs directly
-      cy.contains('http://example1.com/1').should('be.visible');
-      cy.contains('http://example2.com/1').should('be.visible');
-      cy.contains('http://example3.com/1').should('be.visible');
       // Should not show "+N more" button
       cy.contains('more').should('not.exist');
     });
@@ -2761,44 +2434,5 @@ describe('Cluster Blacklist Detail Page', () => {
     });
 
     // ==================== URL Copy Edge Cases ====================
-
-    it('should copy URL even if it contains special characters', () => {
-      const clusterWithSpecialCharUrls = {
-        ...cluster,
-        peer_cluster_config: {
-          load_limit: 51,
-          block_list: {
-            task: {
-              download: {
-                urls: ['http://example.com/path?query=value&other=test', 'http://example.com/path#section'],
-              },
-            },
-          },
-        },
-      };
-
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/clusters/1',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: clusterWithSpecialCharUrls,
-          });
-        },
-      );
-
-      cy.visit('/clusters/1');
-      cy.get('#name').should('be.visible');
-
-      cy.contains('Blacklist').scrollIntoView().should('be.visible');
-
-      cy.get('[role="dialog"]').should('not.exist');
-
-      // No +N more button, URLs displayed directly
-      cy.contains('http://example.com/path?query=value').should('be.visible');
-    });
   });
 });

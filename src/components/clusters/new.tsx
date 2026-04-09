@@ -597,7 +597,7 @@ export default function NewCluster() {
       name: String(name),
       peer_cluster_config: {
         load_limit: Number(peerLoadLimit),
-        ...(Object.keys(peerBlockList).length > 0 && { block_list: peerBlockList }),
+        ...(Object.keys(peerBlockList).length && { block_list: peerBlockList }),
       },
       scheduler_cluster_config: {
         candidate_parent_limit: Number(candidateParentLimit),
@@ -606,7 +606,7 @@ export default function NewCluster() {
       },
       seed_peer_cluster_config: {
         load_limit: Number(seedPeerLoadLimit),
-        ...(Object.keys(seedPeerBlockList).length > 0 && { block_list: seedPeerBlockList }),
+        ...(Object.keys(seedPeerBlockList).length && { block_list: seedPeerBlockList }),
       },
       bio: description,
       is_default: isDefault,

@@ -659,7 +659,7 @@ export default function EditCluster() {
       bio: String(bio),
       peer_cluster_config: {
         load_limit: Number(load_limit),
-        ...(Object.keys(peerBlockList).length > 0 && { block_list: peerBlockList }),
+        ...(Object.keys(peerBlockList).length && { block_list: peerBlockList }),
       },
       scheduler_cluster_config: {
         candidate_parent_limit: Number(candidate_parent_limit),
@@ -674,7 +674,7 @@ export default function EditCluster() {
       },
       seed_peer_cluster_config: {
         load_limit: Number(seed_peer_cluster_config.load_limit),
-        ...(Object.keys(seedPeerBlockList).length > 0 && { block_list: seedPeerBlockList }),
+        ...(Object.keys(seedPeerBlockList).length && { block_list: seedPeerBlockList }),
       },
     };
 

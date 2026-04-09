@@ -679,28 +679,3 @@
   transform: scale(1.1);
 }
 
-@media only screen and (max-width: 1199px) {
-  .blacklistTableHeader:nth-child(n+5),
-  .blacklistTableCell:nth-child(n+5) {
-    display: none;
-  }
-  .blacklistColTaskType {
-    width: 18%;
-  }
-  .blacklistColFeature {
-    width: 12%;
-  }
-}
-
-@media only screen and (max-width: 768px) {
-  .blacklistTableHeader:nth-child(n+3),
-  .blacklistTableCell:nth-child(n+3) {
-    display: none;
-  }
-  .blacklistColTaskType {
-    width: 30%;
-  }
-  .blacklistColFeature {
-    width: 18%;
-  }
-}

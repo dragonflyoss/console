@@ -689,6 +689,8 @@
   background: #f9fafb;
 }
 
+
+
 [data-theme='light'] .toast .MuiSnackbarContent-root {
   background: #10b981 !important;
   color: white !important;
@@ -696,39 +698,3 @@
   border: 1px solid rgba(16, 185, 129, 0.2) !important;
 }
 
-@media (max-width: 768px) {
-  .searchBar {
-    flex-direction: column;
-  }
-
-  .searchInputWrapper {
-    width: 100%;
-  }
-
-  .filterButtons {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .filterButton {
-    flex: 1;
-  }
-
-  .batchActionBar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .batchRight {
-    width: 100%;
-  }
-
-  .batchRight .batchButton {
-    flex: 1;
-  }
-
-  .pagination {
-    flex-direction: column;
-    gap: 12px;
-  }
-}

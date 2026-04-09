@@ -215,59 +215,21 @@ interface getClustersParams {
   name?: string;
 }
 
-/**
- * Task configuration type enum
- * - task: Regular task
- * - persistent_cache_task: Persistent cache task
- * - persistent_task: Persistent task
- */
 export type TaskConfigType = 'task' | 'persistent_cache_task' | 'persistent_task';
 
-/**
- * Sub-configuration type enum
- * - download: Download task
- * - upload: Upload task
- */
 export type SubConfigType = 'download' | 'upload';
 
-/**
- * Blacklist filter rules
- * Used to match task features that need to be blocked
- */
 export interface BlockListFilter {
-  /** List of application names */
   applications?: string[];
-  /** List of URL regex patterns */
   urls?: string[];
-  /** List of tags */
   tags?: string[];
-  /** List of priorities (1-5) */
   priorities?: number[];
-  /** Index signature for dynamic property access */
   [key: string]: string[] | number[] | undefined;
 }
 
-/**
- * Blacklist configuration structure
- * Organizes filter rules by task type and sub-configuration type
- *
- * @example
- * {
- *   "task": {
- *     "download": {
- *       "applications": ["app1", "app2"],
- *       "urls": ["https://example.com/.*"],
- *       "tags": ["tag1"],
- *       "priorities": [1, 2]
- *     }
- *   }
- * }
- */
 export interface BlockListConfig {
-  /** Filter rules mapping for task configuration types */
   [configType: string]:
     | {
-        /** Filter rules mapping for sub-configuration types */
         [subConfig: string]: BlockListFilter;
       }
     | undefined;

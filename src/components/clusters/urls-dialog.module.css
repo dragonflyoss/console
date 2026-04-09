@@ -1,4 +1,3 @@
-/* === Dialog 基础样式 === */
 .dialogPaper {
   background: #1e1e2e;
   border-radius: 20px;
@@ -19,7 +18,6 @@
   overflow-y: auto;
 }
 
-/* 自定义滚动条 */
 .dialogContent::-webkit-scrollbar {
   width: 6px;
 }
@@ -37,7 +35,6 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* === 头部样式 === */
 .dialogHeader {
   display: flex;
   align-items: center;
@@ -130,7 +127,6 @@
   height: 18px !important;
 }
 
-/* === 搜索栏样式 === */
 .searchBar {
   display: flex;
   gap: 10px;
@@ -177,7 +173,6 @@
   color: #6a6a7a !important;
 }
 
-/* === 批量操作栏样式 === */
 .batchActionBar {
   display: flex;
   align-items: center;
@@ -261,7 +256,6 @@
   margin-right: 6px !important;
 }
 
-/* === 域名分组样式 === */
 .domainGroup {
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
@@ -340,7 +334,6 @@
   padding: 8px 20px 8px 36px;
 }
 
-/* === URL 列表项样式 === */
 .urlItem {
   display: flex;
   align-items: center;
@@ -446,7 +439,6 @@
   color: white;
 }
 
-/* 通用图标按钮样式 */
 .iconButton {
   width: 28px !important;
   height: 28px !important;
@@ -472,7 +464,6 @@
   color: #a5a5b5;
 }
 
-/* === 空状态 === */
 .emptyState {
   display: flex;
   align-items: center;
@@ -486,7 +477,6 @@
   font-family: 'mabry' !important;
 }
 
-/* === 分页样式 === */
 .pagination {
   display: flex;
   align-items: center;
@@ -496,7 +486,6 @@
   background: rgba(0, 0, 0, 0.1);
 }
 
-/* === Toast 样式 === */
 .toast .MuiSnackbarContent-root {
   background: linear-gradient(135deg, #2d2d3d 0%, #1e1e2e 100%) !important;
   color: #f0f0f5 !important;
@@ -509,7 +498,6 @@
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
-/* === 浅色主题样式覆盖 === */
 [data-theme='light'] .dialogPaper {
   background: #ffffff;
   border-radius: 20px;
@@ -708,7 +696,6 @@
   border: 1px solid rgba(16, 185, 129, 0.2) !important;
 }
 
-/* === 响应式 === */
 @media (max-width: 768px) {
   .searchBar {
     flex-direction: column;

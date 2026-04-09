@@ -361,14 +361,12 @@
   padding: 0.4rem 0.8rem;
 }
 
-/* Blacklist 独立板块样式 */
 .blacklistSection {
   margin-top: 2rem;
   width: 100%;
   padding: 0 0.5rem;
 }
 
-/* Blacklist标题区容器 */
 .blacklistWrapper {
   display: flex;
   align-items: center;
@@ -388,20 +386,17 @@
   background: linear-gradient(90deg, var(--palette-button-color) 0%, transparent 100%);
 }
 
-/* 无配置提示 */
 .blacklistEmpty {
   color: var(--palette-text-secondary);
   padding: 2rem;
   text-align: center;
 }
 
-/* 服务类型区块 */
 .blacklistServiceBlock {
   margin-bottom: 1.5rem;
   overflow: hidden;
 }
 
-/* 表格样式 */
 .blacklistTable {
   width: 100%;
   border-collapse: collapse;
@@ -427,7 +422,6 @@
   color: var(--palette-table-title-text-color);
 }
 
-/* 固定列宽 - 前两列缩短，Urls在最后自适应 */
 .blacklistColTaskType {
   width: 12%;
 }
@@ -435,8 +429,6 @@
 .blacklistColFeature {
   width: 8%;
 }
-
-/* 其他列（Applications, Tags, Priorities）均分中间空间，Urls列自适应剩余宽度 */
 
 .blacklistTableRow {
   border-bottom: 1px solid var(--palette-divider-color);
@@ -483,7 +475,6 @@
   opacity: 0.5;
 }
 
-/* Applications 和 Tags 斜杠分隔样式 */
 .blacklistSlashText {
   font-size: 0.85rem;
   color: var(--palette-label-text-color);
@@ -495,7 +486,6 @@
   display: block;
 }
 
-/* URL 单元格样式 */
 .blacklistUrlCell {
   display: flex;
   flex-direction: column;
@@ -529,7 +519,6 @@
   font-family: 'mabry-bold';
 }
 
-/* Priority 单元格样式 */
 .blacklistPriorityCell {
   display: flex;
   flex-wrap: wrap;
@@ -548,6 +537,38 @@
   line-height: 1.6;
   border: 1px solid;
   white-space: nowrap;
+}
+
+.level-1{
+  background-color: rgba(255, 72, 66, 0.2);
+  color: #FF9999;
+  border-color: rgba(255, 72, 66, 0.5);
+}
+
+.level-2{
+  background-color: rgba(255, 152, 0, 0.2);
+  color: #FFCC80;
+  border-color: rgba(255, 152, 0, 0.5);
+}
+
+
+.level-3{
+  background-color: rgba(54, 179, 126, 0.2);
+  color: #7BE0D0;
+  border-color: rgba(54, 179, 126, 0.5);
+}
+
+
+.level-4{
+  background-color: rgba(24, 144, 255, 0.2);
+  color: #85C1F5;
+  border-color: rgba(24, 144, 255, 0.5);
+}
+
+.level-5{
+  background-color: rgba(145, 158, 171, 0.2);
+  color: #C5D0DC;
+  border-color: rgba(145, 158, 171, 0.5);
 }
 
 .blacklistUrlMoreButton {
@@ -569,7 +590,6 @@
   border-color: var(--palette-button-color);
 }
 
-/* URL 弹窗样式 - 优化列表布局 */
 .urlDialogList {
   display: flex;
   flex-direction: column;
@@ -579,7 +599,6 @@
   padding-right: 0.5rem;
 }
 
-/* 自定义滚动条 */
 .urlDialogList::-webkit-scrollbar {
   width: 6px;
 }
@@ -660,7 +679,6 @@
   transform: scale(1.1);
 }
 
-/* 小屏幕隐藏次要列 */
 @media only screen and (max-width: 1199px) {
   .blacklistTableHeader:nth-child(n+5),
   .blacklistTableCell:nth-child(n+5) {
@@ -686,3 +704,7 @@
     width: 18%;
   }
 }
+
+
+
+

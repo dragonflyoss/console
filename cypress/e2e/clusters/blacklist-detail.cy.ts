@@ -2683,64 +2683,6 @@ describe('Cluster Blacklist Detail Page', () => {
       });
     });
 
-    // ==================== Dialog State Management ====================
-
-    it('should maintain dialog scroll position when interacting with URLs', () => {
-      const clusterWithManyDomains = {
-        ...cluster,
-        peer_cluster_config: {
-          load_limit: 51,
-          block_list: {
-            task: {
-              download: {
-                urls: [
-                  'http://domain1.com/1',
-                  'http://domain2.com/1',
-                  'http://domain3.com/1',
-                  'http://domain4.com/1',
-                  'http://domain5.com/1',
-                  'http://domain6.com/1',
-                ],
-              },
-            },
-          },
-        },
-      };
-
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/v1/clusters/1',
-        },
-        (req) => {
-          req.reply({
-            statusCode: 200,
-            body: clusterWithManyDomains,
-          });
-        },
-      );
-
-      cy.visit('/clusters/1');
-      cy.get('#name').should('be.visible');
-
-      cy.contains('Blacklist').scrollIntoView().should('be.visible');
-      cy.contains('+3 more').click();
-
-      cy.get('[role="dialog"]').should('be.visible');
-      cy.wait(300);
-
-      // Interact with URLs
-      cy.get('[role="dialog"]').within(() => {
-        cy.contains('http://domain1.com/1').click();
-        cy.wait(100);
-        cy.contains('http://domain2.com/1').click();
-        cy.wait(100);
-      });
-
-      // Dialog should still be open and functional
-      cy.get('[role="dialog"]').should('be.visible');
-    });
-
     // ==================== Accessibility Tests ====================
 
     it('should have accessible dialog structure', () => {

@@ -46,48 +46,6 @@ import styles from './information.module.css';
 import ErrorHandler from '../error-handler';
 import UrlsDialog from './urls-dialog';
 
-// Blacklist Tabs style - consistent with AntTabs/AntTab in show.tsx
-const BlacklistAntTab = styled(Tab)(({ theme }) => ({
-  textTransform: 'none',
-  minWidth: 0,
-  [theme.breakpoints.up('sm')]: {
-    minWidth: 0,
-  },
-  minHeight: '2.8rem',
-  fontWeight: theme.typography.fontWeightRegular,
-  color: 'var(--palette-grey-tab)',
-  padding: '0',
-  marginRight: '2rem',
-  fontFamily: 'mabry-bold',
-  fontSize: '0.85rem',
-  '&:hover': {
-    color: 'primary',
-    opacity: 1,
-  },
-  '&.Mui-selected': {
-    color: 'var(--palette-label-text-color)',
-    fontFamily: 'mabry-bold',
-  },
-}));
-
-const BlacklistAntTabs = styled(Tabs)({
-  borderBottom: '1px solid var(--palette-tab-border-color)',
-  '& .MuiTabs-indicator': {
-    backgroundColor: 'var(--palette-label-text-color)',
-    borderRadius: '1rem',
-  },
-});
-
-// Priority color mapping: Level 1 (highest) -> Level 5 (lowest)
-// Use brighter colors in dark theme for better readability
-const PRIORITY_COLORS: Record<number, { bg: string; text: string; border: string }> = {
-  1: { bg: 'rgba(255, 72, 66, 0.2)', text: '#FF9999', border: 'rgba(255, 72, 66, 0.5)' },
-  2: { bg: 'rgba(255, 152, 0, 0.2)', text: '#FFCC80', border: 'rgba(255, 152, 0, 0.5)' },
-  3: { bg: 'rgba(54, 179, 126, 0.2)', text: '#7BE0D0', border: 'rgba(54, 179, 126, 0.5)' },
-  4: { bg: 'rgba(24, 144, 255, 0.2)', text: '#85C1F5', border: 'rgba(24, 144, 255, 0.5)' },
-  5: { bg: 'rgba(145, 158, 171, 0.2)', text: '#C5D0DC', border: 'rgba(145, 158, 171, 0.5)' },
-};
-
 // Format priority display
 const formatPriority = (priority: number): string => {
   return `Level ${priority}`;
@@ -1054,14 +1012,63 @@ export default function Information() {
 
         {groupBlacklistData.length > 0 ? (
           <Card className={styles.blacklistServiceBlock}>
-            <BlacklistAntTabs
+            <Tabs
               value={blacklistTabValue}
               onChange={(_e, newValue) => setBlacklistTabValue(newValue)}
-              sx={{ px: '1.2rem' }}
+              sx={{
+                px: '1.2rem',
+                borderBottom: '1px solid var(--palette-tab-border-color)',
+                '& .MuiTabs-indicator': {
+                  backgroundColor: 'var(--palette-label-text-color)',
+                  borderRadius: '1rem',
+                },
+              }}
             >
-              <BlacklistAntTab label="Client" />
-              <BlacklistAntTab label="Seed Client" />
-            </BlacklistAntTabs>
+              <Tab
+                label="Client"
+                sx={{
+                  textTransform: 'none',
+                  minWidth: 0,
+                  minHeight: '2.8rem',
+                  fontWeight: 400,
+                  color: 'var(--palette-grey-tab)',
+                  padding: 0,
+                  marginRight: '2rem',
+                  fontFamily: 'mabry-bold',
+                  fontSize: '0.85rem',
+                  '&:hover': {
+                    color: 'primary',
+                    opacity: 1,
+                  },
+                  '&.Mui-selected': {
+                    color: 'var(--palette-label-text-color)',
+                    fontFamily: 'mabry-bold',
+                  },
+                }}
+              />
+              <Tab
+                label="Seed Client"
+                sx={{
+                  textTransform: 'none',
+                  minWidth: 0,
+                  minHeight: '2.8rem',
+                  fontWeight: 400,
+                  color: 'var(--palette-grey-tab)',
+                  padding: 0,
+                  marginRight: '2rem',
+                  fontFamily: 'mabry-bold',
+                  fontSize: '0.85rem',
+                  '&:hover': {
+                    color: 'primary',
+                    opacity: 1,
+                  },
+                  '&.Mui-selected': {
+                    color: 'var(--palette-label-text-color)',
+                    fontFamily: 'mabry-bold',
+                  },
+                }}
+              />
+            </Tabs>
 
             {groupBlacklistData.map((serviceTypeGroup, serviceIndex) => {
               const tabIndex = serviceTypeGroup.serviceType === 'Client' ? 0 : 1;
@@ -1153,17 +1160,8 @@ export default function Information() {
                           {row.priorities.length > 0 ? (
                             <Box className={styles.blacklistPriorityCell}>
                               {row.priorities.map((p, pIdx) => {
-                                const colorCfg = PRIORITY_COLORS[p] || PRIORITY_COLORS[5];
                                 return (
-                                  <span
-                                    key={pIdx}
-                                    className={styles.blacklistPriorityTag}
-                                    style={{
-                                      backgroundColor: colorCfg.bg,
-                                      color: colorCfg.text,
-                                      borderColor: colorCfg.border,
-                                    }}
-                                  >
+                                  <span key={pIdx} className={`${styles.blacklistPriorityTag} ${styles['level-' + p]}`}>
                                     {formatPriority(p)}
                                   </span>
                                 );

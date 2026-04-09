@@ -228,7 +228,7 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
   );
 
   // Render URL item
-  const renderUrlItem = (url: string, domain: string) => {
+  const renderUrlItem = (url: string) => {
     const globalIndex = getGlobalIndex(url);
 
     return (
@@ -312,9 +312,7 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
                   <Box key={group.domain} className={styles.domainGroup}>
                     {renderDomainHeader(group)}
                     {group.isExpanded && (
-                      <Box className={styles.domainUrls}>
-                        {groupUrlsInPage.map(({ url }) => renderUrlItem(url, group.domain))}
-                      </Box>
+                      <Box className={styles.domainUrls}>{groupUrlsInPage.map(({ url }) => renderUrlItem(url))}</Box>
                     )}
                   </Box>
                 );

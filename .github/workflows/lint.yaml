@@ -19,6 +19,7 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '20.20.0'
+
       - run: yarn install
 
       - name: Linter

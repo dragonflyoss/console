@@ -6,24 +6,13 @@ import styles from './new.module.css';
 import AddIcon from '@mui/icons-material/Add';
 import type { BlockListConfig } from '../../lib/api';
 
-/**
- * Blacklist configuration item
- * Used for frontend form display and editing
- */
 interface BlacklistItem {
-  /** Type: Client or Seed Client */
   type: string;
-  /** Task configuration type: task, persistent_cache_task, persistent_task */
   config: string;
-  /** Sub-configuration type: download, upload */
   subConfig: string;
-  /** List of application names */
   applications: string[];
-  /** List of URL regex patterns */
   urls: string[];
-  /** List of tags */
   tags: string[];
-  /** List of priorities (string format, used for forms) */
   priorities: string[];
 }
 
@@ -49,6 +38,11 @@ const isValidURL = (value: string): boolean => {
   return URL_PATTERN.test(value);
 };
 
+// Strictly determine whether it is a plain object (excluding null, arrays, etc.)
+const isPlainObject = (value: unknown): value is Record<string, unknown> => {
+  return Object.prototype.toString.call(value) === '[object Object]';
+};
+
 const priorityOptions = [
   { value: '1', label: 'Level 1' },
   { value: '2', label: 'Level 2' },
@@ -71,69 +65,6 @@ const taskTypeOptions: TaskTypeOption[] = [
 
 // Blacklist type options
 const blacklistTypeOptions = ['Client', 'Seed Client'] as const;
-
-const AUTOCOMPLETE_TEXTFIELD_SX = {
-  width: '100%',
-  '& .MuiOutlinedInput-root': {
-    // minHeight: '3.25rem',
-    paddingRight: '14px !important',
-    backgroundColor: 'rgba(255, 255, 255, 0.03)',
-    '&:hover': {
-      backgroundColor: 'rgba(255, 255, 255, 0.06)',
-    },
-    '&.Mui-focused': {
-      backgroundColor: 'rgba(255, 255, 255, 0.06)',
-    },
-  },
-} as const;
-
-const AUTOCOMPLETE_SX = {
-  flex: 1,
-  '& .MuiOutlinedInput-root': {
-    paddingRight: '14px !important',
-  },
-} as const;
-
-// Single field wrapper style - with right border separator, form items vertically and horizontally centered
-const FIELD_WRAPPER_SX = {
-  flex: 1,
-  minWidth: 0,
-  p: 1.5,
-  paddingTop: 4,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  maxWidth: '50%',
-  '&:not(:last-child)': {
-    borderRight: '1px solid',
-    borderColor: 'divider',
-  },
-} as const;
-
-// Field row container style - shared border, only bottom border line
-const FIELD_ROW_SX = {
-  display: 'flex',
-  alignItems: 'stretch',
-  borderBottom: '1px solid',
-  borderColor: 'divider',
-} as const;
-
-// First row field wrapper style - no top margin
-const FIRST_FIELD_WRAPPER_SX = {
-  ...FIELD_WRAPPER_SX,
-  pt: 4,
-} as const;
-
-// Delete button area style - shares border with field area
-const DELETE_BUTTON_ROW_SX = {
-  display: 'flex',
-  alignItems: 'center',
-  p: 1,
-  borderTop: '1px solid',
-  borderColor: 'divider',
-} as const;
-
-const FORM_HELPER_TEXT_SX = { minHeight: '1.25rem' } as const;
 
 interface BlacklistItemCardProps {
   item: BlacklistItem;
@@ -222,7 +153,7 @@ const BlacklistItemCard = memo(
           required={required}
           error={error}
           helperText={helperText}
-          FormHelperTextProps={{ sx: FORM_HELPER_TEXT_SX }}
+          FormHelperTextProps={{ sx: { minHeight: '1.25rem' } }}
           InputLabelProps={shrink ? { shrink: true } : undefined}
           InputProps={{
             ...params.InputProps,
@@ -260,8 +191,30 @@ const BlacklistItemCard = memo(
         }}
       >
         {/* First row: Type | Config | Sub Config */}
-        <Box sx={FIELD_ROW_SX}>
-          <Box sx={FIRST_FIELD_WRAPPER_SX}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'stretch',
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+          }}
+        >
+          <Box
+            sx={{
+              flex: 1,
+              minWidth: 0,
+              p: 1.5,
+              pt: 4,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              maxWidth: '50%',
+              '&:not(:last-child)': {
+                borderRight: '1px solid',
+                borderColor: 'divider',
+              },
+            }}
+          >
             <Autocomplete
               size="small"
               limitTags={3}
@@ -279,10 +232,30 @@ const BlacklistItemCard = memo(
                   duplicateError || (item.type === '' ? 'Service is required' : ' '),
                 )
               }
-              sx={AUTOCOMPLETE_SX}
+              sx={{
+                flex: 1,
+                '& .MuiOutlinedInput-root': {
+                  paddingRight: '14px !important',
+                },
+              }}
             />
           </Box>
-          <Box sx={FIRST_FIELD_WRAPPER_SX}>
+          <Box
+            sx={{
+              flex: 1,
+              minWidth: 0,
+              p: 1.5,
+              pt: 4,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              maxWidth: '50%',
+              '&:not(:last-child)': {
+                borderRight: '1px solid',
+                borderColor: 'divider',
+              },
+            }}
+          >
             <Autocomplete
               key={`${index}-${item.type}`}
               size="small"
@@ -318,10 +291,30 @@ const BlacklistItemCard = memo(
                   duplicateError || (item.type !== '' && item.config === '' ? 'Task Type is required' : ' '),
                 )
               }
-              sx={AUTOCOMPLETE_SX}
+              sx={{
+                flex: 1,
+                '& .MuiOutlinedInput-root': {
+                  paddingRight: '14px !important',
+                },
+              }}
             />
           </Box>
-          <Box sx={FIRST_FIELD_WRAPPER_SX}>
+          <Box
+            sx={{
+              flex: 1,
+              minWidth: 0,
+              p: 1.5,
+              pt: 4,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              maxWidth: '50%',
+              '&:not(:last-child)': {
+                borderRight: '1px solid',
+                borderColor: 'divider',
+              },
+            }}
+          >
             <Autocomplete
               key={`${index}-${item.type}-${item.config}`}
               size="small"
@@ -343,14 +336,41 @@ const BlacklistItemCard = memo(
                     (item.type !== '' && item.config !== '' && item.subConfig === '' ? 'Feature is required' : ' '),
                 )
               }
-              sx={AUTOCOMPLETE_SX}
+              sx={{
+                flex: 1,
+                '& .MuiOutlinedInput-root': {
+                  paddingRight: '14px !important',
+                },
+              }}
             />
           </Box>
         </Box>
 
         {/* Second row: Applications | Tags */}
-        <Box sx={FIELD_ROW_SX}>
-          <Box sx={FIELD_WRAPPER_SX}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'stretch',
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+          }}
+        >
+          <Box
+            sx={{
+              flex: 1,
+              minWidth: 0,
+              p: 1.5,
+              paddingTop: 4,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              maxWidth: '50%',
+              '&:not(:last-child)': {
+                borderRight: '1px solid',
+                borderColor: 'divider',
+              },
+            }}
+          >
             <Autocomplete
               size="small"
               multiple
@@ -372,12 +392,29 @@ const BlacklistItemCard = memo(
                   true,
                 )
               }
-              sx={AUTOCOMPLETE_TEXTFIELD_SX}
+              sx={{
+                width: '100%',
+                '& .MuiOutlinedInput-root': {
+                  paddingRight: '14px !important',
+                  backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                  },
+                  '&.Mui-focused': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                  },
+                },
+              }}
             />
           </Box>
           <Box
             sx={{
-              ...FIELD_WRAPPER_SX,
+              minWidth: 0,
+              p: 1.5,
+              paddingTop: 4,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               width: '50%',
               flex: 'none',
               borderRight: 'none',
@@ -404,17 +441,42 @@ const BlacklistItemCard = memo(
                   true,
                 )
               }
-              sx={AUTOCOMPLETE_TEXTFIELD_SX}
+              sx={{
+                width: '100%',
+                '& .MuiOutlinedInput-root': {
+                  paddingRight: '14px !important',
+                  backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                  },
+                  '&.Mui-focused': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                  },
+                },
+              }}
             />
           </Box>
         </Box>
 
         {/* Third row: Urls | Priorities (download) or Urls | Delete (upload) */}
-        <Box sx={{ ...FIELD_ROW_SX, borderBottom: isSubConfigDownload ? '1px solid' : 'none', borderColor: 'divider' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'stretch',
+            borderBottom: isSubConfigDownload ? '1px solid' : 'none',
+            borderColor: 'divider',
+          }}
+        >
           <Box
             sx={{
-              ...FIELD_WRAPPER_SX,
-
+              flex: 1,
+              minWidth: 0,
+              p: 1.5,
+              paddingTop: 4,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              maxWidth: '50%',
               borderRight: !isSubConfigDownload ? 'none !important' : '1px solid divider !important',
             }}
           >
@@ -442,12 +504,36 @@ const BlacklistItemCard = memo(
                   true,
                 );
               }}
-              sx={AUTOCOMPLETE_TEXTFIELD_SX}
+              sx={{
+                width: '100%',
+                '& .MuiOutlinedInput-root': {
+                  paddingRight: '14px !important',
+                  backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                  },
+                  '&.Mui-focused': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                  },
+                },
+              }}
             />
           </Box>
 
           {isSubConfigDownload ? (
-            <Box sx={{ ...FIELD_WRAPPER_SX, width: '50%', flex: 'none', borderRight: 'none' }}>
+            <Box
+              sx={{
+                minWidth: 0,
+                p: 1.5,
+                paddingTop: 4,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '50%',
+                flex: 'none',
+                borderRight: 'none',
+              }}
+            >
               <Autocomplete
                 size="small"
                 multiple
@@ -470,7 +556,19 @@ const BlacklistItemCard = memo(
                     true,
                   )
                 }
-                sx={AUTOCOMPLETE_TEXTFIELD_SX}
+                sx={{
+                  width: '100%',
+                  '& .MuiOutlinedInput-root': {
+                    paddingRight: '14px !important',
+                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                    },
+                    '&.Mui-focused': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                    },
+                  },
+                }}
               />
             </Box>
           ) : (
@@ -656,7 +754,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
           // Check if the complete combination is duplicate
           if (newType && newConfig && newSubConfig) {
             if (isCombinationExists(newType, newConfig, newSubConfig, index)) {
-              return prev; // Do not update
+              return prev;
             }
           }
         }
@@ -664,11 +762,10 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
         // For config field, check if it would create a duplicate combination
         if (field === 'config' && newType && newConfig && newSubConfig) {
           if (isCombinationExists(newType, newConfig, newSubConfig, index)) {
-            return prev; // Do not update
+            return prev;
           }
         }
 
-        // Apply update
         if (field === 'type') {
           newBlacklist[index] = {
             ...newBlacklist[index],
@@ -708,8 +805,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
       }
 
       // Check if any option has a value
-      const hasAnyOption =
-        item.applications.length > 0 || item.urls.length > 0 || item.tags.length > 0 || item.priorities.length > 0;
+      const hasAnyOption = item.applications.length || item.urls.length || item.tags.length || item.priorities.length;
 
       if (!hasAnyOption) {
         return;
@@ -726,16 +822,16 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
         targetBlockList[configKey]![item.subConfig] = {};
       }
 
-      if (item.applications.length > 0) {
+      if (item.applications.length) {
         targetBlockList[configKey]![item.subConfig]!.applications = item.applications;
       }
-      if (item.urls.length > 0) {
+      if (item.urls.length) {
         targetBlockList[configKey]![item.subConfig]!.urls = item.urls;
       }
-      if (item.tags.length > 0) {
+      if (item.tags.length) {
         targetBlockList[configKey]![item.subConfig]!.tags = item.tags;
       }
-      if (item.priorities.length > 0) {
+      if (item.priorities.length) {
         // Convert priorities from string array to integer array
         targetBlockList[configKey]![item.subConfig]!.priorities = item.priorities.map((p) => parseInt(p, 10));
       }
@@ -753,13 +849,13 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
 
     // Process peer_cluster_config.block_list (Client type)
     const peerBlockList = peerClusterConfig?.block_list;
-    if (peerBlockList && typeof peerBlockList === 'object') {
+    if (isPlainObject(peerBlockList)) {
       Object.keys(peerBlockList).forEach((config) => {
         const configData = peerBlockList[config];
-        if (configData && typeof configData === 'object') {
+        if (isPlainObject(configData)) {
           Object.keys(configData).forEach((subConfig) => {
             const subConfigData = configData[subConfig];
-            if (subConfigData && typeof subConfigData === 'object') {
+            if (isPlainObject(subConfigData)) {
               const item: BlacklistItem = {
                 type: 'Client',
                 config,
@@ -772,12 +868,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                   : [],
               };
 
-              if (
-                item.applications.length > 0 ||
-                item.urls.length > 0 ||
-                item.tags.length > 0 ||
-                item.priorities.length > 0
-              ) {
+              if (item.applications.length || item.urls.length || item.tags.length || item.priorities.length) {
                 result.push(item);
               }
             }
@@ -788,13 +879,13 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
 
     // Process seed_peer_cluster_config.block_list (Seed Client type)
     const seedPeerBlockList = seedPeerClusterConfig?.block_list;
-    if (seedPeerBlockList && typeof seedPeerBlockList === 'object') {
+    if (isPlainObject(seedPeerBlockList)) {
       Object.keys(seedPeerBlockList).forEach((config) => {
         const configData = seedPeerBlockList[config];
-        if (configData && typeof configData === 'object') {
+        if (isPlainObject(configData)) {
           Object.keys(configData).forEach((subConfig) => {
             const subConfigData = configData[subConfig];
-            if (subConfigData && typeof subConfigData === 'object') {
+            if (isPlainObject(subConfigData)) {
               const item: BlacklistItem = {
                 type: 'Seed Client',
                 config,
@@ -807,12 +898,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
                   : [],
               };
 
-              if (
-                item.applications.length > 0 ||
-                item.urls.length > 0 ||
-                item.tags.length > 0 ||
-                item.priorities.length > 0
-              ) {
+              if (item.applications.length || item.urls.length || item.tags.length || item.priorities.length) {
                 result.push(item);
               }
             }

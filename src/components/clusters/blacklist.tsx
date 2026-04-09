@@ -728,19 +728,22 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     });
   }, []);
 
-  const fieldStrategies = {
-    Service: (value: string) => ({ type: value, config: '', subConfig: '' }),
-    'Task Type': (value: string, current: BlacklistItem) => ({
-      type: current.type,
-      config: value,
-      subConfig: value === 'task' ? 'download' : '',
-    }),
-    Feature: (value: string, current: BlacklistItem) => ({
-      type: current.type,
-      config: current.config,
-      subConfig: value,
-    }),
-  };
+  const fieldStrategies = useMemo(() => {
+    return {
+      Service: (value: string) => ({ type: value, config: '', subConfig: '' }),
+      'Task Type': (value: string, current: BlacklistItem) => ({
+        type: current.type,
+        config: value,
+        subConfig: value === 'task' ? 'download' : '',
+      }),
+      Feature: (value: string, current: BlacklistItem) => ({
+        type: current.type,
+        config: current.config,
+        subConfig: value,
+      }),
+    };
+  }, []);
+
   const handleUpdateBlacklist = useCallback(
     (index: number, field: string, value: any) => {
       setBlacklist((prev) => {
@@ -883,7 +886,7 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
       { block_list: seed_peer_cluster_config?.block_list },
     );
     setBlacklist(bl);
-  }, [clusterInfo]);
+  }, [clusterInfo, reverseBlacklistFromData]);
 
   return (
     <>

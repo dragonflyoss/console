@@ -285,7 +285,7 @@ export default function Information() {
       });
 
       // Only add when the service type has data
-      if (rows.length > 0) {
+      if (rows.length) {
         groupedData.push({
           serviceType: serviceType.name,
           rows,

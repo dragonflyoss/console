@@ -798,12 +798,15 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
       if (item.applications.length) {
         targetBlockList[configKey]![item.subConfig]!.applications = item.applications;
       }
+
       if (item.urls.length) {
         targetBlockList[configKey]![item.subConfig]!.urls = item.urls;
       }
+
       if (item.tags.length) {
         targetBlockList[configKey]![item.subConfig]!.tags = item.tags;
       }
+
       if (item.priorities.length) {
         // Convert priorities from string array to integer array
         targetBlockList[configKey]![item.subConfig]!.priorities = item.priorities.map((p) => parseInt(p, 10));

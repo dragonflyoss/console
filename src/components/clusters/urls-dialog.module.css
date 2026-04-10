@@ -689,12 +689,9 @@
   background: #f9fafb;
 }
 
-
-
 [data-theme='light'] .toast .MuiSnackbarContent-root {
   background: #10b981 !important;
   color: white !important;
   box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3) !important;
   border: 1px solid rgba(16, 185, 129, 0.2) !important;
 }
-

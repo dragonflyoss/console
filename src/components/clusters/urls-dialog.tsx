@@ -260,7 +260,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
             </Box>
           </Box>
         </DialogTitle>
-
         <Box className={styles.searchBar}>
           <Box className={styles.searchInputWrapper}>
             <SearchIcon className={styles.searchIcon} />
@@ -272,7 +271,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
             />
           </Box>
         </Box>
-
         <DialogContent classes={{ root: styles.dialogContent }}>
           {paginatedUrls.length === 0 ? (
             <Box className={styles.emptyState}>
@@ -295,7 +293,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
               })
           )}
         </DialogContent>
-
         {totalPages > 1 && (
           <Box className={styles.pagination}>
             <Pagination
@@ -308,7 +305,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
           </Box>
         )}
       </Dialog>
-
       <Snackbar
         open={toastOpen}
         autoHideDuration={2000}

@@ -545,7 +545,7 @@ export default function JobGC() {
             }}
           >
             <Edit className={styles.gcIcon} />
-            update
+            <div style={{ paddingTop: '0.25rem' }}>update</div>
           </Button>
           <Button
             loading={gcIsloading}
@@ -563,7 +563,7 @@ export default function JobGC() {
             }}
           >
             <GCIcon className={styles.gcIcon} />
-            Execute GC
+            <div style={{ paddingTop: '0.25rem' }}>Execute GC</div>
           </Button>
         </Box>
       </Box>
@@ -760,8 +760,8 @@ export default function JobGC() {
                                 item?.state === 'SUCCESS'
                                   ? '#228B22'
                                   : item?.state === 'FAILURE'
-                                  ? '#D42536'
-                                  : '#DBAB0A',
+                                    ? '#D42536'
+                                    : '#DBAB0A',
                               color: '#FFF',
                               fontFamily: 'mabry-bold',
                             }}

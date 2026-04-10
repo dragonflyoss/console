@@ -215,6 +215,26 @@ interface getClustersParams {
   name?: string;
 }
 
+export type TaskConfigType = 'task' | 'persistent_cache_task' | 'persistent_task';
+
+export type SubConfigType = 'download' | 'upload';
+
+export interface BlockListFilter {
+  applications?: string[];
+  urls?: string[];
+  tags?: string[];
+  priorities?: number[];
+  [key: string]: string[] | number[] | undefined;
+}
+
+export interface BlockListConfig {
+  [configType: string]:
+    | {
+        [subConfig: string]: BlockListFilter;
+      }
+    | undefined;
+}
+
 export interface getClusterResponse {
   id: number;
   name: string;
@@ -234,9 +254,11 @@ export interface getClusterResponse {
   };
   seed_peer_cluster_config: {
     load_limit: number;
+    block_list?: BlockListConfig;
   };
   peer_cluster_config: {
     load_limit: number;
+    block_list?: BlockListConfig;
   };
   created_at: string;
   updated_at: string;

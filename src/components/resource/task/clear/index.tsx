@@ -986,7 +986,7 @@ export default function Clear() {
             }}
           >
             <LinkOutlinedIcon sx={{ mr: '0.4rem' }} />
-            Search by URL
+            <div style={{ paddingTop: '0.25rem' }}>Search by URL</div>
           </ToggleButton>
           <ToggleButton
             id="serach-image-manifest-url"
@@ -1010,14 +1010,14 @@ export default function Clear() {
             }}
           >
             <ImageManifest className={styles.contentForCalculatingTaskIDIcon} />
-            Search by Image Manifest URL
+            <div style={{ paddingTop: '0.25rem' }}>Search by Image Manifest URL</div>
           </ToggleButton>
           <ToggleButton
             id="serach-task-id"
             value="task-id"
             size="small"
             sx={{
-               '&.Mui-selected': {
+              '&.Mui-selected': {
                 backgroundColor: 'var(--palette-button-color)',
                 color: '#FFFFFF',
                 boxShadow: 'rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px',
@@ -1034,7 +1034,7 @@ export default function Clear() {
             }}
           >
             <AssignmentOutlinedIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-            Search by Task ID
+            <div style={{ paddingTop: '0.25rem' }}>Search by Task ID</div>
           </ToggleButton>
           <ToggleButton
             id="serach-content-for-calculating-task-id"
@@ -1058,7 +1058,7 @@ export default function Clear() {
             }}
           >
             <ContentForCalculatingTaskID className={styles.contentForCalculatingTaskIDIcon} />
-            Search by Calculating Task ID
+            <div style={{ paddingTop: '0.25rem' }}>Search by Calculating Task ID</div>
           </ToggleButton>
         </StyledToggleButtonGroup>
       </Paper>
@@ -1246,7 +1246,7 @@ export default function Clear() {
                             }}
                           >
                             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-                            delete
+                            <div style={{ paddingTop: '0.25rem' }}>delete</div>
                           </Button>
                         </Box>
                         <Divider />

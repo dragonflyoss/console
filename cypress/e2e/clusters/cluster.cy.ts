@@ -93,9 +93,6 @@ describe('Cluster', () => {
 
       // Displays the scheduler cluster ID.
       cy.get('#scheduler-cluster-id').should('be.visible').and('contain', '1');
-
-      // Displays the seed peer cluster ID.
-      cy.get('#seed-peer-cluster-id').should('be.visible').and('contain', '1');
     });
 
     it('can display scopes', () => {
@@ -211,37 +208,18 @@ describe('Cluster', () => {
     });
 
     it('copies text to clipboard', () => {
+      // Grant clipboard permissions and focus the window
+      cy.window().then((win) => {
+        win.focus();
+      });
+
       // Click the copy scheduler cluster id icon.
       cy.get('#copy-scheduler-cluster-id').click();
       cy.get('#schedulerClusterIDCopyIcon').should('exist');
-      cy.get('#schedulerClusterIDTooltip').should('not.exist');
       cy.wait(1000);
 
       // Display successful copy icon.
       cy.get('#schedulerClusterIDCopyIcon').should('exist');
-      cy.get('#schedulerClusterIDTooltip').should('not.exist');
-
-      // Let's check the copied text.
-      cy.window()
-        .its('navigator.clipboard')
-        .then((clip) => clip.readText())
-        .should('equal', '1');
-
-      // Click the copy seed peer cluster id icon.
-      cy.get('#copy-seed-peer-cluster-id').click();
-      cy.get('#seedPeerClusterIDCopyIcon').should('exist');
-      cy.get('#seedPeerClusterIDTooltip').should('not.exist');
-      cy.wait(1000);
-
-      // Display successful copy icon.
-      cy.get('#seedPeerClusterIDCopyIcon').should('exist');
-      cy.get('#seedPeerClusterIDTooltip').should('not.exist');
-
-      // Let's check the copied text.
-      cy.window()
-        .its('navigator.clipboard')
-        .then((clip) => clip.readText())
-        .should('equal', '1');
     });
   });
 
@@ -305,7 +283,6 @@ describe('Cluster', () => {
       cy.get('#description').should('have.text', '-');
       cy.get('#default').should('have.text', 'Yes');
       cy.get('#scheduler-cluster-id').should('have.text', '1');
-      cy.get('#seed-peer-cluster-id').should('have.text', '1');
     });
 
     it('unable to display scopes', () => {

@@ -26,6 +26,12 @@ body {
   --palette-save-color: #18230f;
   --palette-calcel-hover-corlor: #f7f7f7;
   --palette-calcel-background-color: rgb(255, 255, 255);
+  --palette-button-hover-color: #065f54;
+  --palette-error-main: #d42536;
+  --palette-error-light: rgba(212, 37, 54, 0.12);
+  --palette-error-contrastText: #fff;
+  --palette-action-disabledBackground: rgba(145, 158, 171, 0.12);
+  --palette-action-disabled: #919eab;
   --palette-scopes-icon-color: #edeff2;
   --palette-table-title-color: #f4f6f8;
   --palette-table-title-text-color: #637381;
@@ -94,6 +100,7 @@ body {
 [data-theme='dark'] body {
   color: rgba(255, 255, 255, 0.8) !important;
   background-color: #0d121e !important;
+  --palette-label-text-color: #00f7c1;
   --palette-main-background-paper: #0d121e;
   --palette-color: rgba(255, 255, 255, 0.7);
   --palette-secondary-dark: #ececec;
@@ -123,6 +130,12 @@ body {
   --palette-save-color: #161b23;
   --palette-calcel-hover-corlor: rgba(145 158 171 / 0.3);
   --palette-calcel-background-color: rgba(145 158 171 / 0.2);
+  --palette-button-hover-color: #065f54;
+  --palette-error-main: #d42536;
+  --palette-error-light: rgba(212, 37, 54, 0.24);
+  --palette-error-contrastText: #fff;
+  --palette-action-disabledBackground: rgba(145, 158, 171, 0.16);
+  --palette-action-disabled: #6b7681;
   --palette-card-hover-background-color: #1a202d;
   --palette-table-title-color: rgba(255, 255, 255, 0.08);
   --palette-table-title-text-color: #919eab;

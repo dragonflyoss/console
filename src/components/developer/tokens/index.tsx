@@ -184,7 +184,7 @@ export default function PersonalAccessTokens() {
           }}
         >
           <AddIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-          Add Personal access tokens
+          <div style={{ paddingTop: '0.25rem' }}>Add Personal access tokens</div>
         </Button>
       </Box>
       <Breadcrumbs separator={<Box className={styles.breadcrumbs} />} aria-label="breadcrumb" sx={{ mb: '1rem' }}>

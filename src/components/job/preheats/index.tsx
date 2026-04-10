@@ -207,7 +207,7 @@ export default function Preheats() {
             navigate('/jobs/preheats/new');
           }}
         >
-          add preheat
+          <div style={{ paddingTop: '0.25rem' }}>add preheat</div>
         </Button>
       </Box>
       <Breadcrumbs

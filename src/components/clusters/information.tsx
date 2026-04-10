@@ -10,12 +10,19 @@ import {
   Snackbar,
   Button,
   Alert,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
 } from '@mui/material';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import Dialog from '@mui/material/Dialog';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Card from '../card';
 import HelpIcon from '@mui/icons-material/Help';
-import { useContext, useState } from 'react';
+import { useContext, useState, useMemo } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { MyContext } from './show';
 import { ReactComponent as InformationCluster } from '../../assets/images/cluster/information-cluster.svg';
@@ -23,6 +30,7 @@ import { ReactComponent as Done } from '../../assets/images/tokens/done.svg';
 import { ReactComponent as Copy } from '../../assets/images/tokens/copy.svg';
 import { ReactComponent as Edit } from '../../assets/images/user/edit.svg';
 import { ReactComponent as Location } from '../../assets/images/cluster/location.svg';
+import type { BlockListConfig } from '../../lib/api';
 import { ReactComponent as IDC } from '../../assets/images/cluster/idc.svg';
 import { ReactComponent as Total } from '../../assets/images/cluster/peer/total.svg';
 import { ReactComponent as CIDRs } from '../../assets/images/cluster/cidrs.svg';
@@ -35,6 +43,74 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { getDatetime } from '../../lib/utils';
 import styles from './information.module.css';
 import ErrorHandler from '../error-handler';
+import UrlsDialog from './urls-dialog';
+
+// Format priority display
+const formatPriority = (priority: number): string => {
+  return `Level ${priority}`;
+};
+
+// Option type mapping: display name -> field name
+const OPTION_TYPE_MAP: Record<string, string> = {
+  Applications: 'applications',
+  Urls: 'urls',
+  Tags: 'tags',
+  Priorities: 'priorities',
+};
+
+// Blacklist data item type definition
+interface BlacklistDataItem {
+  type: 'Client' | 'Seed Client';
+  config: string;
+  subConfig: string;
+  options: string[];
+  optionValues: Record<string, string[] | number[]>;
+}
+
+// Extract blacklist option data
+const extractOptions = (subConfigData: Record<string, unknown>): Record<string, string[] | number[]> => {
+  const optionValues: Record<string, string[] | number[]> = {};
+
+  Object.entries(OPTION_TYPE_MAP).forEach(([displayName, fieldName]) => {
+    const value = subConfigData[fieldName];
+    optionValues[displayName] = Array.isArray(value) ? value : [];
+  });
+
+  return optionValues;
+};
+
+// Process single block_list configuration
+const processBlockList = (
+  blockList: BlockListConfig | undefined,
+  serviceType: 'Client' | 'Seed Client',
+): BlacklistDataItem[] => {
+  if (!blockList || typeof blockList !== 'object') {
+    return [];
+  }
+
+  const items: BlacklistDataItem[] = [];
+
+  Object.entries(blockList).forEach(([config, configData]) => {
+    if (!configData || typeof configData !== 'object') return;
+
+    Object.entries(configData).forEach(([subConfig, subConfigData]) => {
+      if (!subConfigData || typeof subConfigData !== 'object') return;
+
+      const optionValues = extractOptions(subConfigData as Record<string, unknown>);
+      const options = Object.keys(OPTION_TYPE_MAP);
+
+      items.push({
+        type: serviceType,
+        config,
+        subConfig,
+        options,
+        optionValues,
+      });
+    });
+  });
+
+  return items;
+};
 
 export default function Information() {
   const [openCIDRs, setOpenCIDRs] = useState(false);
@@ -47,6 +123,9 @@ export default function Information() {
   const [errorMessageText, setErrorMessageText] = useState('');
   const [deleteLoadingButton, setDeleteLoadingButton] = useState(false);
   const [openDeleteCluster, setOpenDeleteCluster] = useState(false);
+  const [openUrlsDialog, setOpenUrlsDialog] = useState(false);
+  const [blacklistTabValue, setBlacklistTabValue] = useState(0);
+  const [currentUrls, setCurrentUrls] = useState<string[]>([]);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -109,6 +188,101 @@ export default function Information() {
     }
   };
 
+  // Data transformation function to convert blacklist configuration to display format
+  const reverseBlacklistFromData = useMemo(() => {
+    const clientItems = processBlockList(cluster?.peer_cluster_config?.block_list, 'Client');
+    const seedClientItems = processBlockList(cluster?.seed_peer_cluster_config?.block_list, 'Seed Client');
+
+    return [...clientItems, ...seedClientItems];
+  }, [cluster?.peer_cluster_config?.block_list, cluster?.seed_peer_cluster_config?.block_list]);
+
+  // Define blacklist table row data structure
+  interface BlacklistTableRow {
+    taskType: string; // 'Task' | 'Persistent Cache Task' | 'Persistent Task'
+    feature: string; // 'download' | 'upload'
+    applications: string[];
+    urls: string[];
+    tags: string[];
+    priorities: number[];
+  }
+
+  interface ServiceTypeGroup {
+    serviceType: 'Client' | 'Seed Client';
+    rows: BlacklistTableRow[];
+  }
+
+  const groupBlacklistData = useMemo(() => {
+    const serviceTypes: Array<{ name: 'Client' | 'Seed Client'; source: 'peer' | 'seed' }> = [
+      { name: 'Client', source: 'peer' },
+      { name: 'Seed Client', source: 'seed' },
+    ];
+
+    const taskTypes = [
+      { config: 'task', display: 'Task' },
+      { config: 'persistent_cache_task', display: 'Persistent Cache Task' },
+      { config: 'persistent_task', display: 'Persistent Task' },
+    ];
+
+    const subConfigsByTaskType: Record<string, string[]> = {
+      task: ['download'],
+      persistent_cache_task: ['download', 'upload'],
+      persistent_task: ['download', 'upload'],
+    };
+
+    const groupedData: ServiceTypeGroup[] = [];
+
+    serviceTypes.forEach((serviceType) => {
+      const rows: BlacklistTableRow[] = [];
+
+      taskTypes.forEach((taskType) => {
+        subConfigsByTaskType[taskType.config].forEach((subConfig) => {
+          const matchedItem = reverseBlacklistFromData.find((item: BlacklistDataItem) => {
+            return item.type === serviceType.name && item.config === taskType.config && item.subConfig === subConfig;
+          });
+
+          let data = {
+            applications: [] as string[],
+            urls: [] as string[],
+            tags: [] as string[],
+            priorities: [] as number[],
+          };
+
+          if (matchedItem) {
+            data = {
+              applications: (matchedItem.optionValues['Applications'] || []) as string[],
+              urls: (matchedItem.optionValues['Urls'] || []) as string[],
+              tags: (matchedItem.optionValues['Tags'] || []) as string[],
+              priorities: (matchedItem.optionValues['Priorities'] || []) as number[],
+            };
+          }
+
+          const isEmpty =
+            !data.applications.length && !data.urls.length && !data.tags.length && !data.priorities.length;
+
+          if (!isEmpty) {
+            rows.push({
+              taskType: taskType.display,
+              feature: subConfig.charAt(0).toUpperCase() + subConfig.slice(1),
+              applications: data.applications,
+              urls: data.urls,
+              tags: data.tags,
+              priorities: data.priorities,
+            });
+          }
+        });
+      });
+
+      if (rows.length) {
+        groupedData.push({
+          serviceType: serviceType.name,
+          rows,
+        });
+      }
+    });
+
+    return groupedData;
+  }, [reverseBlacklistFromData]);
+
   return (
     <Box>
       <Snackbar
@@ -168,7 +342,7 @@ export default function Information() {
             }}
           >
             <Edit className={styles.updateClusterIcon} />
-            Update
+            <div style={{ paddingTop: '0.25rem' }}>Update</div>
           </Button>
           <Button
             variant="contained"
@@ -188,7 +362,7 @@ export default function Information() {
             }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-            Delete
+            <div style={{ paddingTop: '0.25rem' }}>Delete</div>
           </Button>
         </Box>
       </Box>
@@ -218,7 +392,7 @@ export default function Information() {
             <Box className={styles.clusterWrap}>
               <Box className={styles.clusterTitle}>
                 <Typography variant="body2" component="div" className={styles.configLable}>
-                  Set as default cluster
+                  Set as Default Cluster
                 </Typography>
                 <MuiTooltip
                   title="When peer does not find a matching cluster based on scopes, the default cluster will be used."
@@ -250,10 +424,10 @@ export default function Information() {
                 </Typography>
               </Box>
             </Box>
-            <Box className={styles.clusterWrap}>
+            <Box className={styles.clusterWrapRight}>
               <Box className={styles.clusterTitle}>
                 <Typography variant="body2" component="div" className={styles.configLable}>
-                  Scheduler cluster ID
+                  Scheduler Cluster ID
                 </Typography>
                 <MuiTooltip
                   title="When the scheduler is deployed, the schedulerClusterID must be filled with this scheduler cluster ID in scheduler configuration. In this way, the scheduler will become the scheduling service of this cluster."
@@ -311,68 +485,7 @@ export default function Information() {
                 )}
               </Box>
             </Box>
-            <Box className={styles.clusterWrap}>
-              <Box className={styles.clusterTitle}>
-                <Typography variant="body2" component="div" className={styles.configLable}>
-                  Seed peer cluster ID
-                </Typography>
-                <MuiTooltip
-                  title="When the seed peer is deployed, the clusterID must be filled with this seed peer cluster ID in scheduler configuration. In this way, the seed peer will become the seed peer service of this cluster."
-                  placement="top"
-                >
-                  <HelpIcon className={styles.descriptionIcon} />
-                </MuiTooltip>
-              </Box>
-              <Box className={styles.schedulerClusterID}>
-                <Typography
-                  id="seed-peer-cluster-id"
-                  variant="body2"
-                  component="div"
-                  mr="0.5rem"
-                  className={styles.clusterContent}
-                >
-                  {isLoading ? (
-                    <Skeleton data-testid="cluster-loading" className={styles.loading} />
-                  ) : (
-                    cluster?.seed_peer_cluster_id || 0
-                  )}
-                </Typography>
-                {!isLoading && (
-                  <IconButton
-                    aria-label="copy"
-                    id="copy-seed-peer-cluster-id"
-                    sx={{
-                      width: '1.2rem',
-                      height: '1.2rem',
-                      p: 0,
-                    }}
-                    onClick={() => {
-                      copyClusterID('seedPeerClusterID', cluster?.seed_peer_cluster_id || 0);
-                    }}
-                  >
-                    {showSeedPeerClusterIDCopyIcon ? (
-                      <MuiTooltip
-                        placement="top"
-                        PopperProps={{
-                          disablePortal: true,
-                        }}
-                        open={showSeedPeerClusterIDCopyIcon}
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        title="copied!"
-                        id="seedPeerClusterIDTooltip"
-                      >
-                        <Done id="seedPeerClusterDoneIcon" className={styles.copyIcon} />
-                      </MuiTooltip>
-                    ) : (
-                      <Copy id="seedPeerClusterIDCopyIcon" className={styles.copyIcon} />
-                    )}
-                  </IconButton>
-                )}
-              </Box>
-            </Box>
-            <Box className={styles.clusterWrap}>
+            <Box className={styles.clusterWrapRight}>
               <Box className={styles.clusterTitle}>
                 <Typography variant="body2" component="div" className={styles.configLable}>
                   Create At
@@ -447,7 +560,7 @@ export default function Information() {
             <Card className={styles.cidrsContainer}>
               <Box className={styles.scopesTitle}>
                 <Box className={styles.cidrsTitle}>
-                  <IDC style={{width:'1.2rem',height:'1.2rem'}}  className={styles.scopesIcon} />
+                  <IDC style={{ width: '1.2rem', height: '1.2rem' }} className={styles.scopesIcon} />
                   <Typography variant="body2" component="p" className={styles.scopesLable}>
                     IDC
                   </Typography>
@@ -870,6 +983,232 @@ export default function Information() {
           </Card>
         </Box>
       </Box>
+      <Box className={styles.blacklistSection}>
+        <Box className={styles.blacklistWrapper}>
+          <Typography variant="body1" className={styles.informationTitle}>
+            Blacklist
+          </Typography>
+          <MuiTooltip
+            title="Blacklist configuration for P2P downloads. Blocks specified applications, URLs, tags or priorities."
+            placement="top"
+          >
+            <HelpIcon className={styles.descriptionIcon} />
+          </MuiTooltip>
+        </Box>
+
+        {groupBlacklistData.length > 0 ? (
+          <Card className={styles.blacklistServiceBlock}>
+            <Tabs
+              value={blacklistTabValue}
+              onChange={(_e, newValue) => setBlacklistTabValue(newValue)}
+              sx={{
+                px: '1.2rem',
+                borderBottom: '1px solid var(--palette-tab-border-color)',
+                '& .MuiTabs-indicator': {
+                  backgroundColor: 'var(--palette-label-text-color)',
+                  borderRadius: '1rem',
+                },
+              }}
+            >
+              <Tab
+                label="Client"
+                sx={{
+                  textTransform: 'none',
+                  minWidth: 0,
+                  minHeight: '2.8rem',
+                  fontWeight: 400,
+                  color: 'var(--palette-grey-tab)',
+                  padding: 0,
+                  marginRight: '2rem',
+                  fontFamily: 'mabry-bold',
+                  fontSize: '0.85rem',
+                  '&:hover': {
+                    color: 'primary',
+                    opacity: 1,
+                  },
+                  '&.Mui-selected': {
+                    color: 'var(--palette-label-text-color)',
+                    fontFamily: 'mabry-bold',
+                  },
+                }}
+              />
+              <Tab
+                label="Seed Client"
+                sx={{
+                  textTransform: 'none',
+                  minWidth: 0,
+                  minHeight: '2.8rem',
+                  fontWeight: 400,
+                  color: 'var(--palette-grey-tab)',
+                  padding: 0,
+                  marginRight: '2rem',
+                  fontFamily: 'mabry-bold',
+                  fontSize: '0.85rem',
+                  '&:hover': {
+                    color: 'primary',
+                    opacity: 1,
+                  },
+                  '&.Mui-selected': {
+                    color: 'var(--palette-label-text-color)',
+                    fontFamily: 'mabry-bold',
+                  },
+                }}
+              />
+            </Tabs>
+
+            {groupBlacklistData.map((serviceTypeGroup, serviceIndex) => {
+              const tabIndex = serviceTypeGroup.serviceType === 'Client' ? 0 : 1;
+              if (blacklistTabValue !== tabIndex) return null;
+
+              return (
+                <Table key={`service-${serviceIndex}`} className={styles.blacklistTable}>
+                  <TableHead
+                    className={styles.blacklistTableHead}
+                    sx={{ backgroundColor: 'var(--palette-table-title-color)' }}
+                  >
+                    <TableRow>
+                      <TableCell
+                        align="center"
+                        className={`${styles.blacklistTableHeader} ${styles.blacklistColTaskType}`}
+                      >
+                        <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
+                          Task Type
+                        </Typography>
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        className={`${styles.blacklistTableHeader} ${styles.blacklistColFeature}`}
+                      >
+                        <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
+                          Feature
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center" className={styles.blacklistTableHeader}>
+                        <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
+                          Applications
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center" className={styles.blacklistTableHeader}>
+                        <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
+                          Tags
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center" className={styles.blacklistTableHeader}>
+                        <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
+                          Priorities
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="left" className={styles.blacklistTableHeader}>
+                        <Typography variant="subtitle1" className={styles.blacklistTableHeaderText}>
+                          Urls
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {serviceTypeGroup.rows.map((row, rowIndex) => (
+                      <TableRow key={`row-${serviceIndex}-${rowIndex}`} className={styles.blacklistTableRow}>
+                        <TableCell
+                          align="center"
+                          className={`${styles.blacklistTableCell} ${styles.blacklistTableTaskType} ${styles.blacklistColTaskType}`}
+                        >
+                          {row.taskType}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          className={`${styles.blacklistTableCell} ${styles.blacklistColFeature}`}
+                        >
+                          <span className={styles.blacklistTableFeature}>{row.feature}</span>
+                        </TableCell>
+                        <TableCell align="center" className={styles.blacklistTableCell}>
+                          {row.applications.length > 0 ? (
+                            <MuiTooltip title={row.applications.join(' / ')} placement="top">
+                              <Typography variant="body2" className={styles.blacklistSlashText}>
+                                {row.applications.join(' / ')}
+                              </Typography>
+                            </MuiTooltip>
+                          ) : (
+                            <span className={styles.blacklistOptionEmpty}>-</span>
+                          )}
+                        </TableCell>
+                        <TableCell align="center" className={styles.blacklistTableCell}>
+                          {row.tags.length > 0 ? (
+                            <MuiTooltip title={row.tags.join(' / ')} placement="top">
+                              <Typography variant="body2" className={styles.blacklistSlashText}>
+                                {row.tags.join(' / ')}
+                              </Typography>
+                            </MuiTooltip>
+                          ) : (
+                            <span className={styles.blacklistOptionEmpty}>-</span>
+                          )}
+                        </TableCell>
+                        <TableCell align="center" className={styles.blacklistTableCell}>
+                          {row.priorities.length > 0 ? (
+                            <Box className={styles.blacklistPriorityCell}>
+                              {row.priorities.map((p, pIdx) => {
+                                return (
+                                  <span key={pIdx} className={`${styles.blacklistPriorityTag} ${styles['level-' + p]}`}>
+                                    {formatPriority(p)}
+                                  </span>
+                                );
+                              })}
+                            </Box>
+                          ) : (
+                            <span className={styles.blacklistOptionEmpty}>-</span>
+                          )}
+                        </TableCell>
+                        <TableCell align="left" className={styles.blacklistTableCell}>
+                          <Box className={styles.blacklistUrlCell}>
+                            {row.urls.length === 0 ? (
+                              <Typography variant="body2" className={styles.blacklistOptionEmpty}>
+                                -
+                              </Typography>
+                            ) : (
+                              <>
+                                <Box className={styles.blacklistUrlTagsWrapper}>
+                                  {row.urls.slice(0, 3).map((url, index) => (
+                                    <MuiTooltip key={index} title={url} placement="top">
+                                      <Paper elevation={0} className={styles.blacklistUrlTag}>
+                                        <Typography variant="body2" className={styles.blacklistUrlTagText}>
+                                          {url}
+                                        </Typography>
+                                      </Paper>
+                                    </MuiTooltip>
+                                  ))}
+                                </Box>
+                                {row.urls.length > 3 && (
+                                  <button
+                                    className={styles.blacklistUrlMoreButton}
+                                    onClick={() => {
+                                      setCurrentUrls(row.urls);
+                                      setOpenUrlsDialog(true);
+                                    }}
+                                  >
+                                    +{row.urls.length - 3} more
+                                  </button>
+                                )}
+                              </>
+                            )}
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              );
+            })}
+
+            {!groupBlacklistData.some((g) => (g.serviceType === 'Client' ? 0 : 1) === blacklistTabValue) && (
+              <Typography className={styles.blacklistEmpty}>
+                No blacklist configuration for {blacklistTabValue === 0 ? 'Client' : 'Seed Client'}.
+              </Typography>
+            )}
+          </Card>
+        ) : (
+          <Typography className={styles.blacklistEmpty}>No blacklist configuration.</Typography>
+        )}
+      </Box>
+      <UrlsDialog open={openUrlsDialog} onClose={() => setOpenUrlsDialog(false)} urls={currentUrls || []} />
     </Box>
   );
 }

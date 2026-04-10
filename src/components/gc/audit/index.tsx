@@ -539,7 +539,7 @@ export default function AuditGC() {
             }}
           >
             <Edit className={styles.gcIcon} />
-            update
+            <div style={{ paddingTop: '0.25rem' }}>update</div>
           </Button>
           <Button
             loading={gcIsloading}
@@ -558,7 +558,7 @@ export default function AuditGC() {
             }}
           >
             <GCIcon className={styles.gcIcon} />
-            Execute GC
+            <div style={{ paddingTop: '0.25rem' }}>Execute GC</div>
           </Button>
         </Box>
       </Box>

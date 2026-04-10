@@ -309,7 +309,7 @@ export default function PersistentCachetask() {
           }}
         >
           <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-          Delete
+          <div style={{ paddingTop: '0.25rem' }}>Delete</div>
         </Button>
       </Box>
       <Box className={styles.container}>

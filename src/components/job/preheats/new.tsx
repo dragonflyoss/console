@@ -141,7 +141,6 @@ export default function NewPreheat() {
   const [percentage, setPercentage] = useState(50);
   const [search, setSearch] = useState('file');
   const [platform, setPlatform] = useState('linux/amd64');
-  
 
   const formRef = useRef<HTMLFormElement | null>(null);
   const navigate = useNavigate();
@@ -886,15 +885,15 @@ export default function NewPreheat() {
 
       const canSubmit = Boolean(
         !informationForm.filter((item) => item.syncError).length &&
-          !argsForm.filter((item) => item.syncError).length &&
-          !urlForm.syncError &&
-          !ipsForm.syncError &&
-          !ipsText &&
-          clusterIDValidate &&
-          headerValidate &&
-          urlValidate &&
-          Boolean(!filterText) &&
-          (countValue ? validateCount : true),
+        !argsForm.filter((item) => item.syncError).length &&
+        !urlForm.syncError &&
+        !ipsForm.syncError &&
+        !ipsText &&
+        clusterIDValidate &&
+        headerValidate &&
+        urlValidate &&
+        Boolean(!filterText) &&
+        (countValue ? validateCount : true),
       );
 
       const formDate = {
@@ -946,15 +945,15 @@ export default function NewPreheat() {
 
       const canSubmit = Boolean(
         !informationForm.filter((item) => item.syncError).length &&
-          !imageArgsForm.filter((item) => item.syncError).length &&
-          !urlForm.syncError &&
-          clusterIDValidate &&
-          headerValidate &&
-          !ipsForm.syncError &&
-          !ipsText &&
-          Boolean(!filterText) &&
-          Boolean(!ipsText) &&
-          (countValue ? validateCount : true),
+        !imageArgsForm.filter((item) => item.syncError).length &&
+        !urlForm.syncError &&
+        clusterIDValidate &&
+        headerValidate &&
+        !ipsForm.syncError &&
+        !ipsText &&
+        Boolean(!filterText) &&
+        Boolean(!ipsText) &&
+        (countValue ? validateCount : true),
       );
 
       const formDate = {
@@ -1203,61 +1202,75 @@ export default function NewPreheat() {
                   />
                 </Tooltip>
               </Box>
-              <Box sx={{ width: '100%' }}>
-                <TextField {...urlForm.formProps} color="success" className={styles.filterInput} size="small" />
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  maxWidth: 'calc(37rem * 2 + 0.4rem * 2 + 2.4rem * 2 + 36px)',
+                  gap: '36px',
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '0.4rem' }}>
+                  <TextField {...urlForm.formProps} color="success" className={styles.urlInput} size="small" />
+                  <Box sx={{ width: '2.4rem', height: '2.4rem' }} />
+                </Box>
+                {URLs.length > 0 &&
+                  URLs.map((item, index) => {
+                    return (
+                      <Box key={index} sx={{ display: 'flex', alignItems: 'flex-start', gap: '0.4rem' }}>
+                        <TextField
+                          color="success"
+                          id={`url-${index}`}
+                          key={index}
+                          size="small"
+                          label="URL"
+                          name="urls"
+                          value={item.url}
+                          error={item.error}
+                          helperText={item.error && 'Fill in the characters, the length is 1-1000.'}
+                          placeholder="Enter your URL"
+                          className={styles.urlInput}
+                          onChange={(event) => {
+                            const newURL = [...URLs];
+                            newURL[index].url = event.target.value;
+
+                            const isValid = URLValidate(event.target.value);
+                            newURL[index].error = !isValid;
+
+                            setURLS(newURL);
+                          }}
+                        />
+                        <IconButton
+                          id={`clear-url-${index}`}
+                          sx={{
+                            width: '2.4rem',
+                            height: '2.4rem',
+                            p: '0.2rem',
+                          }}
+                          onClick={() => {
+                            const newURL = [...URLs];
+                            newURL.splice(index, 1);
+                            setURLS(newURL);
+                          }}
+                        >
+                          <DoNotDisturbOnOutlinedIcon
+                            sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--palette-button-color)' }}
+                          />
+                        </IconButton>
+                      </Box>
+                    );
+                  })}
               </Box>
-              {URLs.map((item, index) => {
-                return (
-                  <Box key={index} sx={{ display: 'inline-flex', alignItems: 'flex-start', m: '0.8rem 0' }}>
-                    <TextField
-                      color="success"
-                      id={`url-${index}`}
-                      key={index}
-                      size="small"
-                      label="URL"
-                      name="urls"
-                      value={item.url}
-                      error={item.error}
-                      helperText={item.error && 'Fill in the characters, the length is 1-1000.'}
-                      placeholder="Enter your URL"
-                      className={styles.urlInput}
-                      onChange={(event) => {
-                        const newURL = [...URLs];
-                        newURL[index].url = event.target.value;
-
-                        const isValid = URLValidate(event.target.value);
-                        newURL[index].error = !isValid;
-
-                        setURLS(newURL);
-                      }}
-                    />
-                    <IconButton
-                      id={`clear-url-${index}`}
-                      sx={{
-                        width: '2.4rem',
-                        height: '2.4rem',
-                        p: '0.2rem',
-                      }}
-                      onClick={() => {
-                        const newURL = [...URLs];
-                        newURL.splice(index, 1);
-                        setURLS(newURL);
-                      }}
-                    >
-                      <DoNotDisturbOnOutlinedIcon
-                        sx={{ width: '1.2rem', height: '1.2rem', color: 'var(--palette-button-color)' }}
-                      />
-                    </IconButton>
-                  </Box>
-                );
-              })}
-              <Box>
+              <Box sx={{ gridColumn: 'span 2' }}>
                 <Button
                   sx={{
                     '&.MuiButton-root': {
                       borderColor: 'var(--palette-description-color)',
                       color: 'var(--palette-description-color)',
                       borderStyle: 'dashed',
+                    },
+                    '[data-theme="dark"] &.MuiButton-root': {
+                      color: 'var(--palette-label-text-color)',
                     },
                     width: '37rem',
                     m: '1rem 0',
@@ -1270,7 +1283,7 @@ export default function NewPreheat() {
                     setURLS([...URLs, { url: '', error: false }]);
                   }}
                 >
-                  add URL
+                  <div style={{ paddingTop: '0.25rem' }}>add URL</div>
                 </Button>
               </Box>
             </Box>
@@ -1561,8 +1574,8 @@ export default function NewPreheat() {
                                 {scope === 'all_seed_peers'
                                   ? 'Preheat to each seed peer in the P2P cluster.'
                                   : scope === 'all_peers'
-                                  ? 'Preheat to each peer in the P2P cluster.'
-                                  : ''}
+                                    ? 'Preheat to each peer in the P2P cluster.'
+                                    : ''}
                               </Typography>
                             )}
                           </Box>
@@ -1674,7 +1687,7 @@ export default function NewPreheat() {
                       setHeaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
                     }}
                   >
-                    add headers
+                    <div style={{ paddingTop: '0.25rem' }}>add headers</div>
                   </Button>
                 </Paper>
               ) : (
@@ -1695,7 +1708,7 @@ export default function NewPreheat() {
                     setHeaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
                   }}
                 >
-                  add headers
+                  <div style={{ paddingTop: '0.25rem' }}>add headers</div>
                 </Button>
               )}
             </Box>
@@ -2028,8 +2041,8 @@ export default function NewPreheat() {
                                 {scope === 'all_seed_peers'
                                   ? 'Preheat to each seed peer in the P2P cluster.'
                                   : scope === 'all_peers'
-                                  ? 'Preheat to each peer in the P2P cluster.'
-                                  : ''}
+                                    ? 'Preheat to each peer in the P2P cluster.'
+                                    : ''}
                               </Typography>
                             )}
                           </Box>
@@ -2141,7 +2154,7 @@ export default function NewPreheat() {
                       setHeaders([...headers, { key: { key: '', error: false }, value: { value: '', error: false } }]);
                     }}
                   >
-                    add headers
+                    <div style={{ paddingTop: '0.25rem' }}>add headers</div>
                   </Button>
                 </Paper>
               ) : (

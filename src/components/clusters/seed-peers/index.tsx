@@ -542,7 +542,7 @@ export default function ShowCluster() {
             }}
           >
             <DeleteIcon fontSize="small" sx={{ mr: '0.4rem' }} />
-            DELETE INACTIVE INSTANCES
+            <div style={{ paddingTop: '0.25rem' }}>DELETE INACTIVE INSTANCES</div>
           </Button>
         </MuiTooltip>
       </Box>

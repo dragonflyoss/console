@@ -221,7 +221,7 @@ export default function Peer() {
           ],
     [theme.palette.mode],
   );
-// istanbul ignore next
+  // istanbul ignore next
   const getGradient = (ctx: CanvasRenderingContext2D, isHover = false) => {
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
     const colors =
@@ -503,7 +503,7 @@ export default function Peer() {
               refresh ? <RefreshLoading className={styles.refreshIcon} /> : <Refresh className={styles.refreshIcon} />
             }
           >
-            refresh
+            <div style={{ paddingTop: '0.25rem' }}>refresh</div>
           </Button>
           <Button
             id="export"
@@ -522,7 +522,7 @@ export default function Peer() {
             }}
             startIcon={<GetAppIcon />}
           >
-            Export
+            <div style={{ paddingTop: '0.25rem' }}>Export</div>
           </Button>
         </Box>
       </Box>

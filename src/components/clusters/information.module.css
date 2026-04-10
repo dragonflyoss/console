@@ -76,8 +76,18 @@
 
 .clusterWrap {
   display: flex;
-  width: 25%;
+  width: 30%;
   flex-direction: column;
+}
+
+.clusterWrapRight {
+  display: flex;
+  width: 30%;
+  flex-direction: column;
+}
+
+.clusterWrapRight:last-child {
+  padding-left: 0.5rem;
 }
 
 .clusterTitle {
@@ -118,6 +128,10 @@
   padding-left: 0.4rem;
 }
 
+[data-theme='dark'] .scopesLable {
+  color: var(--palette-label-text-color) !important;
+}
+
 .scopesTitle {
   display: flex;
   align-items: center;
@@ -150,12 +164,15 @@
   width: 1rem;
   height: 1rem;
   color: var(--palette-text-color);
-
 }
 
 .totalText {
   color: var(--palette-description-color);
   padding-left: 0.3rem;
+}
+
+[data-theme='dark'] .totalText {
+  color: var(--palette-label-text-color);
 }
 
 .locationTitle {
@@ -271,6 +288,12 @@
 .informationTitle {
   font-family: 'mabry-bold' !important;
   margin-right: 0.4rem !important;
+  font-size: 1.2rem;
+  color: var(--palette-text-color);
+}
+
+[data-theme='dark'] .informationTitle {
+  color: var(--palette-label-text-color);
 }
 
 .configTitle {
@@ -335,4 +358,320 @@
   align-items: center;
   justify-content: flex-start;
   padding: 0.4rem 0.8rem;
+}
+
+.blacklistSection {
+  margin-top: 2rem;
+  width: 100%;
+  padding: 0 0.5rem;
+}
+
+.blacklistWrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--palette-divider-color);
+  position: relative;
+}
+
+.blacklistWrapper::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--palette-button-color) 0%, transparent 100%);
+}
+
+.blacklistEmpty {
+  color: var(--palette-text-secondary);
+  padding: 2rem;
+  text-align: center;
+}
+
+.blacklistServiceBlock {
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.blacklistTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.blacklistTableHead {
+  background-color: var(--palette-grey-background-color);
+}
+
+.blacklistTableHeader {
+  padding: 0.8rem 1rem;
+  text-align: center;
+  font-family: 'mabry-bold' !important;
+  font-size: 0.85rem;
+  color: var(--palette-table-title-text-color);
+  border-bottom: 1px solid var(--palette-divider-color);
+}
+
+.blacklistTableHeaderText {
+  font-family: 'mabry-bold' !important;
+  font-size: 0.85rem;
+  color: var(--palette-table-title-text-color);
+}
+
+.blacklistColTaskType {
+  width: 12%;
+}
+
+.blacklistColFeature {
+  width: 8%;
+}
+
+.blacklistTableRow {
+  border-bottom: 1px solid var(--palette-divider-color);
+}
+
+.blacklistTableRow:hover {
+  background-color: rgba(0, 122, 255, 0.03);
+}
+
+.blacklistTableCell {
+  padding: 0.8rem 1rem;
+  font-size: 0.85rem;
+  color: var(--palette-text-secondary);
+  border-bottom: none;
+  overflow: hidden;
+}
+
+.blacklistCellText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
+  font-size: 0.85rem;
+  color: var(--palette-text-secondary);
+}
+
+.blacklistTableTaskType {
+  font-family: 'mabry-bold' !important;
+  color: var(--palette-text-color);
+}
+
+.blacklistTableFeature {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  background-color: var(--palette-button-color);
+  color: white;
+}
+
+.blacklistOptionEmpty {
+  color: var(--palette-text-secondary);
+  opacity: 0.5;
+}
+
+.blacklistSlashText {
+  font-size: 0.85rem;
+  color: var(--palette-label-text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  margin: 0 auto;
+  display: block;
+}
+
+.blacklistUrlCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  max-width: 100%;
+}
+
+.blacklistUrlTagsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  max-width: 100%;
+}
+
+.blacklistUrlTag {
+  background-color: rgba(54, 179, 126, 0.16) !important;
+  border: 1px solid rgba(54, 179, 126, 0.4);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  max-width: 500px;
+  cursor: default;
+}
+
+.blacklistUrlTagText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--palette-label-text-color);
+  font-size: 0.8rem;
+  font-family: 'mabry-bold';
+}
+
+.blacklistPriorityCell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  justify-content: flex-start;
+}
+
+.blacklistPriorityTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-family: 'mabry-bold';
+  line-height: 1.6;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.level-1 {
+  background-color: rgba(255, 72, 66, 0.2);
+  color: #ff9999;
+  border-color: rgba(255, 72, 66, 0.5);
+}
+
+.level-2 {
+  background-color: rgba(255, 152, 0, 0.2);
+  color: #ffcc80;
+  border-color: rgba(255, 152, 0, 0.5);
+}
+
+.level-3 {
+  background-color: rgba(54, 179, 126, 0.2);
+  color: #7be0d0;
+  border-color: rgba(54, 179, 126, 0.5);
+}
+
+.level-4 {
+  background-color: rgba(24, 144, 255, 0.2);
+  color: #85c1f5;
+  border-color: rgba(24, 144, 255, 0.5);
+}
+
+.level-5 {
+  background-color: rgba(145, 158, 171, 0.2);
+  color: #c5d0dc;
+  border-color: rgba(145, 158, 171, 0.5);
+}
+
+.blacklistUrlMoreButton {
+  background: none;
+  border: 1px dashed var(--palette-button-color);
+  border-radius: 6px;
+  color: var(--palette-button-color);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+  font-family: 'mabry-bold' !important;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.blacklistUrlMoreButton:hover {
+  background-color: rgba(0, 122, 255, 0.06);
+  border-color: var(--palette-button-color);
+}
+
+.urlDialogList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.urlDialogList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.urlDialogList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.urlDialogList::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 122, 255, 0.2);
+  border-radius: 3px;
+}
+
+.urlDialogList::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 122, 255, 0.4);
+}
+
+.urlDialogItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--palette-background-inactive);
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.urlDialogItem:hover {
+  background-color: rgba(0, 122, 255, 0.04);
+  border-color: rgba(0, 122, 255, 0.15);
+  transform: translateX(4px);
+}
+
+.urlDialogIndex {
+  min-width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.15) 0%, rgba(0, 122, 255, 0.08) 100%);
+  color: var(--palette-button-color);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-family: 'mabry-bold';
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.urlDialogContent {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.urlDialogText {
+  flex: 1;
+  color: var(--palette-text-color);
+  word-break: break-all;
+  line-height: 1.6;
+  font-size: 0.875rem;
+  font-family: 'mabry';
+  min-width: 0;
+}
+
+.urlDialogCopyButton {
+  padding: 6px !important;
+  flex-shrink: 0;
+  opacity: 0.4;
+  transition: all 0.2s ease;
+}
+
+.urlDialogCopyButton:hover {
+  opacity: 1;
+  background-color: rgba(0, 122, 255, 0.1) !important;
+  transform: scale(1.1);
 }

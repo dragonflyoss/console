@@ -30,7 +30,6 @@ interface Props {
   };
 }
 
-// URL regex validation - supports both domain names and IP addresses
 const URL_PATTERN =
   /^(https?:\/\/)?(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}|(?:\d{1,3}\.){3}\d{1,3}|localhost)(?::\d{1,5})?(?:\/[^\s]*)?$/;
 
@@ -38,7 +37,6 @@ const isValidURL = (value: string): boolean => {
   return URL_PATTERN.test(value);
 };
 
-// Strictly determine whether it is a plain object (excluding null, arrays, etc.)
 const isPlainObject = (value: unknown): value is Record<string, unknown> => {
   return Object.prototype.toString.call(value) === '[object Object]';
 };
@@ -51,7 +49,6 @@ const priorityOptions = [
   { value: '5', label: 'Level 5' },
 ];
 
-// Task type option type definition
 interface TaskTypeOption {
   value: string;
   label: string;
@@ -63,7 +60,6 @@ const taskTypeOptions: TaskTypeOption[] = [
   { value: 'persistent_task', label: 'Persistent Task' },
 ];
 
-// Blacklist type options
 const blacklistTypeOptions = ['Client', 'Seed Client'] as const;
 
 interface BlacklistItemCardProps {
@@ -90,7 +86,6 @@ const BlacklistItemCard = memo(
   }: BlacklistItemCardProps) => {
     const isSubConfigDownload = item.subConfig === 'download';
 
-    // Priority selector value transformation
     const priorityValue = useMemo(
       () =>
         item.priorities
@@ -99,7 +94,6 @@ const BlacklistItemCard = memo(
       [item.priorities],
     );
 
-    // Unified update handler
     const handleFieldUpdate = useCallback(
       (field: string, value: any) => {
         onUpdate(index, field, value);
@@ -107,12 +101,10 @@ const BlacklistItemCard = memo(
       [index, onUpdate],
     );
 
-    // Unified delete handler
     const handleRemove = useCallback(() => {
       onRemove(index);
     }, [index, onRemove]);
 
-    // URL validation handler
     const handleURLsChange = useCallback(
       (_e: any, newValue: string[]) => {
         const validatedValues = (newValue || []).filter((v) => {
@@ -124,7 +116,6 @@ const BlacklistItemCard = memo(
       [handleFieldUpdate],
     );
 
-    // Priority change handler
     const handlePrioritiesChange = useCallback(
       (_e: any, newValue: Array<{ value: string; label: string }>) => {
         const values = newValue.map((v) => v.value);
@@ -133,7 +124,6 @@ const BlacklistItemCard = memo(
       [handleFieldUpdate],
     );
 
-    // Common TextField render function
     const renderTextField = useCallback(
       (
         params: any,
@@ -168,7 +158,6 @@ const BlacklistItemCard = memo(
       [],
     );
 
-    // Whether the first row fields are disabled
     const isFirstRowDisabled = !item.type || !item.config || !item.subConfig;
 
     return (
@@ -190,7 +179,6 @@ const BlacklistItemCard = memo(
           },
         }}
       >
-        {/* First row: Type | Config | Sub Config */}
         <Box
           sx={{
             display: 'flex',
@@ -346,7 +334,6 @@ const BlacklistItemCard = memo(
           </Box>
         </Box>
 
-        {/* Second row: Applications | Tags */}
         <Box
           sx={{
             display: 'flex',
@@ -458,7 +445,6 @@ const BlacklistItemCard = memo(
           </Box>
         </Box>
 
-        {/* Third row: Urls | Priorities (download) or Urls | Delete (upload) */}
         <Box
           sx={{
             display: 'flex',
@@ -572,7 +558,6 @@ const BlacklistItemCard = memo(
               />
             </Box>
           ) : (
-            /* Delete button - on the same row as Tags when upload, no vertical border */
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', p: 1.5, flex: 1 }}>
               <Button
                 size="small"
@@ -595,7 +580,6 @@ const BlacklistItemCard = memo(
           )}
         </Box>
 
-        {/* Fourth row: Delete button - separate row when download */}
         {isSubConfigDownload && (
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 1.5 }}>
             <Button
@@ -653,7 +637,6 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     return duplicates;
   }, [blacklist]);
 
-  // Check if type+config+subconfig combination already exists
   const isCombinationExists = useCallback(
     (type: string, config: string, subConfig: string, excludeIndex?: number) => {
       return blacklist.some((item, index) => {
@@ -666,7 +649,6 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     [blacklist],
   );
 
-  // Get sub-configuration options
   const getSubConfigOptions = useCallback(
     (type: string, config: string, excludeIndex?: number) => {
       if (!type || !config) return [];
@@ -678,7 +660,6 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     [isCombinationExists],
   );
 
-  // Get configuration options
   const getConfigOptions = useCallback(
     (type: string, excludeIndex?: number) => {
       if (!type) return [];
@@ -691,12 +672,10 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     [getSubConfigOptions],
   );
 
-  // Get all Type options - blacklistTypeOptions is a constant, no need for useCallback
   const getAvailableTypes = useCallback(() => {
     return [...blacklistTypeOptions];
   }, []);
 
-  // Check if all possible combinations have been used
   const isAllCombinationsUsed = useMemo(() => {
     for (const type of blacklistTypeOptions) {
       for (const taskType of taskTypeOptions) {
@@ -767,7 +746,6 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     [fieldStrategies, isCombinationExists],
   );
 
-  // Process blacklist data transformation
   const processBlacklist = (blacklist: BlacklistItem[]) => {
     const peerBlockList: BlockListConfig = {};
     const seedPeerBlockList: BlockListConfig = {};
@@ -777,7 +755,6 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
         return;
       }
 
-      // Check if any option has a value
       const hasAnyOption = item.applications.length || item.urls.length || item.tags.length || item.priorities.length;
 
       if (!hasAnyOption) {
@@ -808,7 +785,6 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
       }
 
       if (item.priorities.length) {
-        // Convert priorities from string array to integer array
         targetBlockList[configKey]![item.subConfig]!.priorities = item.priorities.map((p) => parseInt(p, 10));
       }
     });
@@ -851,7 +827,6 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
     [],
   );
 
-  // Reverse transformation: convert API returned block_list data back to original format
   const reverseBlacklistFromData = useCallback(
     (
       peerClusterConfig?: { block_list?: BlockListConfig },
@@ -911,7 +886,6 @@ const BlacklistConfig = ({ clusterInfo }: Props, ref: Ref<unknown> | undefined) 
         </Tooltip>
       </Box>
 
-      {/* ADD BLACKLIST button */}
       <Box sx={{ mt: 1, mb: 1.5 }}>
         <Button
           id="create-cluster"

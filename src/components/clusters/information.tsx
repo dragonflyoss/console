@@ -211,9 +211,7 @@ export default function Information() {
     rows: BlacklistTableRow[];
   }
 
-  // Flatten nested structure into table row data
   const groupBlacklistData = useMemo(() => {
-    // Define service types and task types
     const serviceTypes: Array<{ name: 'Client' | 'Seed Client'; source: 'peer' | 'seed' }> = [
       { name: 'Client', source: 'peer' },
       { name: 'Seed Client', source: 'seed' },
@@ -225,7 +223,6 @@ export default function Information() {
       { config: 'persistent_task', display: 'Persistent Task' },
     ];
 
-    // Define subConfig for each task type
     const subConfigsByTaskType: Record<string, string[]> = {
       task: ['download'],
       persistent_cache_task: ['download', 'upload'],
@@ -234,43 +231,34 @@ export default function Information() {
 
     const groupedData: ServiceTypeGroup[] = [];
 
-    // Iterate through service types
     serviceTypes.forEach((serviceType) => {
       const rows: BlacklistTableRow[] = [];
 
-      // Iterate through task types
       taskTypes.forEach((taskType) => {
-        // Iterate through subConfig
         subConfigsByTaskType[taskType.config].forEach((subConfig) => {
-          // Find matching data from reverseBlacklistFromData
-          const matchedItem = reverseBlacklistFromData.find(
-            (item: BlacklistDataItem) =>
-              item.type === serviceType.name && item.config === taskType.config && item.subConfig === subConfig,
-          );
+          const matchedItem = reverseBlacklistFromData.find((item: BlacklistDataItem) => {
+            return item.type === serviceType.name && item.config === taskType.config && item.subConfig === subConfig;
+          });
 
-          // If a match is found, use its data; otherwise use empty data
-          const data = matchedItem
-            ? {
-                applications: (matchedItem.optionValues['Applications'] || []) as string[],
-                urls: (matchedItem.optionValues['Urls'] || []) as string[],
-                tags: (matchedItem.optionValues['Tags'] || []) as string[],
-                priorities: (matchedItem.optionValues['Priorities'] || []) as number[],
-              }
-            : {
-                applications: [] as string[],
-                urls: [] as string[],
-                tags: [] as string[],
-                priorities: [] as number[],
-              };
+          let data = {
+            applications: [] as string[],
+            urls: [] as string[],
+            tags: [] as string[],
+            priorities: [] as number[],
+          };
 
-          // Check if empty (all fields are empty)
+          if (matchedItem) {
+            data = {
+              applications: (matchedItem.optionValues['Applications'] || []) as string[],
+              urls: (matchedItem.optionValues['Urls'] || []) as string[],
+              tags: (matchedItem.optionValues['Tags'] || []) as string[],
+              priorities: (matchedItem.optionValues['Priorities'] || []) as number[],
+            };
+          }
+
           const isEmpty =
-            data.applications.length === 0 &&
-            data.urls.length === 0 &&
-            data.tags.length === 0 &&
-            data.priorities.length === 0;
+            !data.applications.length && !data.urls.length && !data.tags.length && !data.priorities.length;
 
-          // Only add rows with data
           if (!isEmpty) {
             rows.push({
               taskType: taskType.display,
@@ -284,7 +272,6 @@ export default function Information() {
         });
       });
 
-      // Only add when the service type has data
       if (rows.length) {
         groupedData.push({
           serviceType: serviceType.name,
@@ -1211,7 +1198,6 @@ export default function Information() {
               );
             })}
 
-            {/* Display empty state when current tab has no data */}
             {!groupBlacklistData.some((g) => (g.serviceType === 'Client' ? 0 : 1) === blacklistTabValue) && (
               <Typography className={styles.blacklistEmpty}>
                 No blacklist configuration for {blacklistTabValue === 0 ? 'Client' : 'Seed Client'}.

@@ -30,16 +30,14 @@ interface UrlsDialogProps {
 interface DomainGroup {
   domain: string;
   urls: string[];
-  originalUrls: string[]; // Keep original URLs for copying
+  originalUrls: string[];
   isExpanded: boolean;
 }
 
 const ITEMS_PER_PAGE = 5;
 
-// Extract domain from URL
 function extractDomain(url: string): string {
   try {
-    // Handle URL without protocol
     let urlToParse = url;
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
       urlToParse = 'http://' + url;
@@ -51,7 +49,6 @@ function extractDomain(url: string): string {
   }
 }
 
-// Group URLs by domain
 function groupUrlsByDomain(urls: string[]): DomainGroup[] {
   const groupsMap = new Map<string, DomainGroup>();
 
@@ -71,7 +68,6 @@ function groupUrlsByDomain(urls: string[]): DomainGroup[] {
     }
   });
 
-  // Sort by domain, 'other' at the end
   return Array.from(groupsMap.values()).sort((a, b) => {
     if (a.domain === 'other') return 1;
     if (b.domain === 'other') return -1;
@@ -86,32 +82,26 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
-  // Expanded domains state
   const [expandedDomains, setExpandedDomains] = useState<Set<string>>(new Set());
 
-  // Expand all domains when URLs change
   useEffect(() => {
     setExpandedDomains(new Set(urls.map(extractDomain)));
   }, [urls]);
 
-  // Filtered URLs
   const filteredUrls = useMemo(() => {
     if (!searchQuery.trim()) return urls;
     const query = searchQuery.toLowerCase();
     return urls.filter((url) => url.toLowerCase().includes(query));
   }, [urls, searchQuery]);
 
-  // Grouped URLs
   const groupedUrls = useMemo(() => {
     const groups = groupUrlsByDomain(filteredUrls);
-    // Restore expanded state
     return groups.map((group) => ({
       ...group,
       isExpanded: expandedDomains.has(group.domain),
     }));
   }, [filteredUrls, expandedDomains]);
 
-  // Flattened URLs for pagination
   const flattenedUrls = useMemo(() => {
     const result: { url: string; domain: string }[] = [];
     groupedUrls.forEach((group) => {
@@ -124,19 +114,16 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
     return result;
   }, [groupedUrls]);
 
-  // Paginated URLs
   const paginatedUrls = useMemo(() => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     return flattenedUrls.slice(startIndex, endIndex);
   }, [flattenedUrls, currentPage]);
 
-  // Total pages
   const totalPages = useMemo(() => {
     return Math.ceil(flattenedUrls.length / ITEMS_PER_PAGE) || 1;
   }, [flattenedUrls.length]);
 
-  // Get global index
   const getGlobalIndex = useCallback(
     (url: string) => {
       const index = flattenedUrls.findIndex((item) => item.url === url);
@@ -145,7 +132,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
     [flattenedUrls],
   );
 
-  // Toggle domain expand/collapse
   const toggleDomain = useCallback((domain: string) => {
     setExpandedDomains((prev) => {
       const next = new Set(prev);
@@ -158,7 +144,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
     });
   }, []);
 
-  // Copy URL
   const copyUrl = useCallback(
     (url: string) => {
       setCopyToClipboard(url);
@@ -168,7 +153,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
     [setCopyToClipboard],
   );
 
-  // Copy domain group
   const copyDomainGroup = useCallback(
     (domain: string) => {
       const group = groupedUrls.find((g) => g.domain === domain);
@@ -181,20 +165,17 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
     [groupedUrls, setCopyToClipboard],
   );
 
-  // Reset pagination when search changes
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
   }, []);
 
-  // Reset state on close
   const handleClose = useCallback(() => {
     setSearchQuery('');
     setCurrentPage(1);
     onClose();
   }, [onClose]);
 
-  // Render domain group header
   const renderDomainHeader = (group: DomainGroup) => (
     <Box
       className={styles.domainHeader}
@@ -227,7 +208,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
     </Box>
   );
 
-  // Render URL item
   const renderUrlItem = (url: string) => {
     const globalIndex = getGlobalIndex(url);
 
@@ -263,7 +243,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
         onClose={handleClose}
         classes={{ paper: styles.dialogPaper, root: styles.dialog }}
       >
-        {/* Header */}
         <DialogTitle className={styles.dialogTitle}>
           <Box className={styles.dialogHeader}>
             <Box className={styles.headerLeft}>
@@ -282,7 +261,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
           </Box>
         </DialogTitle>
 
-        {/* Search bar */}
         <Box className={styles.searchBar}>
           <Box className={styles.searchInputWrapper}>
             <SearchIcon className={styles.searchIcon} />
@@ -295,7 +273,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
           </Box>
         </Box>
 
-        {/* Content area */}
         <DialogContent classes={{ root: styles.dialogContent }}>
           {paginatedUrls.length === 0 ? (
             <Box className={styles.emptyState}>
@@ -305,7 +282,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
             groupedUrls
               .filter((group) => paginatedUrls.some((item) => item.domain === group.domain))
               .map((group) => {
-                // Get URLs in current page for this group
                 const groupUrlsInPage = paginatedUrls.filter((item) => item.domain === group.domain);
 
                 return (
@@ -320,7 +296,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
           )}
         </DialogContent>
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <Box className={styles.pagination}>
             <Pagination
@@ -334,7 +309,6 @@ export default function UrlsDialog({ open, onClose, urls, title = 'URLs' }: Urls
         )}
       </Dialog>
 
-      {/* Toast */}
       <Snackbar
         open={toastOpen}
         autoHideDuration={2000}

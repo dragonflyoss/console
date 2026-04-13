@@ -31,7 +31,7 @@
     "@mui/icons-material": "^7.0.1",
     "@mui/lab": "^7.0.0-beta.10",
     "@mui/material": "^7.0.1",
-    "@mui/styled-engine": "^7.0.1",
+    "@mui/styled-engine": "^9.0.0",
     "@testing-library/jest-dom": "^6.0.1",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.1",

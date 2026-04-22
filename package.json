@@ -78,7 +78,7 @@
     "chart.js": "^4.4.0",
     "cypress": "^14.3.0",
     "cypress-split": "^1.24.25",
-    "eslint": "^9.0.0",
+    "eslint": "^10.2.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-cypress": "^6.2.1",

@@ -100,6 +100,10 @@ export default function PersistentCacheTask() {
 
       setTotalPages(totalPage);
       setAllClusters(currentPageData);
+
+      return () => {
+        window.removeEventListener('resize', updatePageSize);
+      };
     } else if (cluster === null || cluster) {
       setTotalPages(1);
       setAllClusters([]);

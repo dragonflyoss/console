@@ -4,7 +4,7 @@ on: push
 
 jobs:
   cypress-run:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         containers: [0, 1, 2, 3, 4, 5]

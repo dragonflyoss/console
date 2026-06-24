@@ -129,6 +129,10 @@ export default function Clusters() {
 
       setTotalPages(totalPage);
       setAllClusters(currentPageData);
+
+      return () => {
+        window.removeEventListener('resize', updatePageSize);
+      };
     } else if (cluster === null || cluster) {
       setTotalPages(1);
       setAllClusters([]);

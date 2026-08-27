@@ -169,6 +169,10 @@ export default function Information(props: InformationProps) {
       setTotalPages(totalPage);
       setAllPersistentCacheTasks(currentPageData);
       setTaskIsLoading(true);
+
+      return () => {
+        window.removeEventListener('resize', updatePageSize);
+      };
     } else if (persistentCacheTasksCount === null || persistentCacheTasksCount) {
       setTotalPages(1);
       setAllPersistentCacheTasks([]);

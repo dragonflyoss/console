@@ -211,23 +211,22 @@ export default function ShowCluster() {
         }
       });
 
+      const updatePageSize = () => {
+        if (window.matchMedia('(max-width: 1440px)').matches) {
+          setPageSize(9);
+        } else if (window.matchMedia('(max-width: 1600px)').matches) {
+          setPageSize(9);
+        } else if (window.matchMedia('(max-width: 1920px)').matches) {
+          setPageSize(12);
+        } else if (window.matchMedia('(max-width: 2048px)').matches) {
+          setPageSize(12);
+        } else if (window.matchMedia('(max-width: 2560px)').matches) {
+          setPageSize(15);
+        }
+      };
+
       if (alignment === 'card') {
-        const updatePageSize = () => {
-          if (window.matchMedia('(max-width: 1440px)').matches) {
-            setPageSize(9);
-          } else if (window.matchMedia('(max-width: 1600px)').matches) {
-            setPageSize(9);
-          } else if (window.matchMedia('(max-width: 1920px)').matches) {
-            setPageSize(12);
-          } else if (window.matchMedia('(max-width: 2048px)').matches) {
-            setPageSize(12);
-          } else if (window.matchMedia('(max-width: 2560px)').matches) {
-            setPageSize(15);
-          }
-        };
-
         updatePageSize();
-
         window.addEventListener('resize', updatePageSize);
       }
 
@@ -261,6 +260,10 @@ export default function ShowCluster() {
 
       setSeedPeerTotalPages(totalPage);
       setAllSeedPeers(currentPageData);
+
+      return () => {
+        window.removeEventListener('resize', updatePageSize);
+      };
     } else {
       setSeedPeerTotalPages(1);
       setAllSeedPeers([]);

@@ -201,7 +201,7 @@ export default function PersonalAccessTokens() {
           </Typography>
           <IconButton
             id="copy-button"
-            aria-label="delete"
+            aria-label="copy"
             sx={{
               p: '0',
               width: '1.6rem',

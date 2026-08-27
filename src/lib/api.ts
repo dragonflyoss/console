@@ -855,6 +855,7 @@ interface createJobRequest {
     username: string;
     password: string;
     platform: string;
+    enable_task_id_based_blob_digest?: boolean;
   };
   scheduler_cluster_ids: Array<number>;
 }
